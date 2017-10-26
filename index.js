@@ -1,3 +1,3 @@
-exports.sayHello =function(){
-	return 'Hello World';
-}
+import TY from './buildingblock/ty';
+
+exports.TY = TY;
