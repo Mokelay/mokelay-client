@@ -1,11 +1,16 @@
 {
   "name": "ty-client-core",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "TY Client Core",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
+    "build": "rm -rf lib && babel src --out-dir lib && cp -R src/buildingblock  lib/buildingblock",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iamcarlchen/ty-client-core.git"
@@ -49,7 +54,7 @@
   },
   "devDependencies": {
     "autoprefixer-loader": "^2.0.0",
-    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-runtime": "^6.12.0",
