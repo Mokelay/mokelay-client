@@ -10,7 +10,7 @@
       }
       return createElement(
           'el-menu',
-          {props:{mode:t.horizontal,router:t.router,'default-active':t.defaultActive,'unique-opened':false,collapse:t.collapse}},
+          {props:{mode:t.horizontal,router:t.router,'default-active':t.defaultActive,'unique-opened':false,collapse:t.collapse,'default-openeds':t.defaultOpeneds}},
           t.menuList
       );
     },
@@ -47,6 +47,12 @@
         type:Boolean,
         default:false
       },
+      defaultOpeneds:{
+        type: Array,
+        default: function () {
+          return null
+        }
+      }
     },
     data() {
       return {
