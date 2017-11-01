@@ -40,12 +40,19 @@
           var rowElement = createElement('el-row', {props:{gutter:20}},[colElement]);
           pbbElementList.push(rowElement);
       }
-
-      return createElement(
+      if(pbbElementList.length){
+        return createElement(
           'div',
           {},
           pbbElementList
-      );
+        );
+      }else{
+        return createElement(
+          'div',
+          {},
+          []
+        );
+      }
     },
     props: {
       pageAlias:{
