@@ -1,5 +1,5 @@
 <template>
-    <el-button class="m10" :type="button.type" :disabled="button.disabled" :icon="button.icon" @click.native.prevent="click(button)">{{button.selectText || button.text}}</el-button>
+    <el-button class="bb-button" :type="button.type" :disabled="button.disabled" :icon="button.icon" @click.native.prevent="click(button)">{{button.selectText || button.text}}</el-button>
 </template>
 
 <script>
@@ -35,7 +35,7 @@
     }
 </script>
 <style scoped>
-    .m10 {
+    .bb-button {
         margin: 10px 0;
     }
 </style>

@@ -29,6 +29,12 @@ import Vue from 'vue';
                     rules: [],
                     props: {}
                 }, {
+                    name: '表头宽度',
+                    attributeName: 'width',
+                    et: 'bb-input',
+                    rules: [],
+                    props: {}
+                }, {
                     name: '表头类型',
                     attributeName: 'type',
                     et: 'bb-select',

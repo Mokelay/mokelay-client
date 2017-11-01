@@ -228,6 +228,7 @@
         },
         created: function () {
             this.getData();
+            sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
         },
         methods: {
             getData: function (dataHandler) {
