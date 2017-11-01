@@ -1,5 +1,5 @@
 <template>
-    <el-select placeholder="请选择" v-model="valueBase" :multiple="multiple" @change='change' :ref="refName">
+    <el-select placeholder="请选择" v-model="valueBase" :multiple="multiple" @change='change' ref="ref">
       <el-option
               v-for="option in items"
               :key="option.value"
@@ -39,9 +39,6 @@
               type:String
             },
             valueField:{
-              type:String
-            },
-            refName:{
               type:String
             },
             ds: {

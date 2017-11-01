@@ -63,7 +63,7 @@
       }
     },
     methods: {
-      getUserInfo:function(){
+      getSessionStorage:function(){
           const t = this;
           let data = {};
           if(t.valueKey == 'sessionStorage'){
@@ -85,7 +85,7 @@
               data = this.parentParams;
               break;
             default:
-              data = this.getUserInfo();
+              data = this.getSessionStorage();
               break;
           }
           if(t.templateProp){
