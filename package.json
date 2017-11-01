@@ -43,7 +43,6 @@
     "moment": "^2.18.1",
     "qs": "^6.5.0",
     "rasterizehtml": "^1.2.4",
-    "ty-client-core": "^1.0.1",
     "vue": "^2.2.6",
     "vue-i18n": "^5.0.3",
     "vue-json-tree-view": "^2.1.1",
