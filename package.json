@@ -1,6 +1,6 @@
 {
   "name": "ty-client-core",
-  "version": "1.0.20",
+  "version": "1.0.22",
   "description": "TY Client Core",
   "main": "./dist/index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "dragula": "^3.7.2",
     "echarts": "^3.4.0",
     "element-tree-grid": "0.0.15",
-    "element-ui": "^1.4.3",
+    "element-ui": "^1.4.9",
     "html2canvas": "^0.5.0-beta4",
     "iview": "^2.0.0-rc.13",
     "jquery": "^3.2.1",
