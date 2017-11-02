@@ -187,17 +187,17 @@ util.resolveButton = function(button, valueobj, callback) {
                     message: messageInfo
                 });
                 util.buttonCallback(button, valueobj, callback, map);
-            }, function(err) {
+            }, function(err, msg) {
                 t.$message({
-                    type: 'success',
-                    message: messageInfo
+                    type: 'warning',
+                    message: msg || messageInfo
                 });
                 util.buttonCallback(button, valueobj, callback, err);
             });
         }).catch(() => {
             t.$message({
                 type: 'info',
-                message: '操作失败'
+                message: '操作未完成'
             });
         });
     } else if (button['action'] == 'dialog-page') {

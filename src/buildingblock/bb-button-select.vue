@@ -137,6 +137,11 @@ import Vue from 'vue';
                     et: 'bb-input',
                     props: {}
                 }, {
+                    name: '操作成功后系统提示信息',
+                    attributeName: 'callBackStaticWords',
+                    et: 'bb-input',
+                    props: {}
+                }, {
                     name: '是否显示选择结果',
                     attributeName: 'showResult',
                     et: 'bb-editor-switch',

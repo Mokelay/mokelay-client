@@ -62,7 +62,8 @@
                         callback:'custom',//refresh
                         valueKey:null,
                         selectText:"选择",
-                        icon:null
+                        icon:null,
+                        callBackStaticWords:null
                     }
                 }
             },
@@ -160,7 +161,7 @@
 </script>
 <style lang="less">
     .popup-selection{
-        max-width: 420px;
+        //max-width: 420px;
         display: inline-block;
         .el-dialog__body {
             padding: 10px 20px;
@@ -173,6 +174,15 @@
         color: #0091EA;
     }
     .popup-selection .dialog>div{
-        min-width: 400px;
+        min-width: 500px;
     }
 </style>
+
+
+
+
+
+
+
+
+
