@@ -79,8 +79,8 @@
 
 <style lang="less">
     .pic_preview_bb{
-        height: 100%;
-        text-align: center;
+        display: flex;
+        padding: 10px 0px;
     }
     .pic_content{
         img{
@@ -158,6 +158,9 @@
         width: 60px;
         height: 100%;
         position: relative;
+        flex:1;
+        float: left;
+        margin-right: 10px;
         .pic_des{
             border: 1px dashed #E4E4E4;
             display: inline-block;
@@ -178,6 +181,7 @@
             width: 60px;
             max-width: 100%;
             max-height: 100%;
+            vertical-align: middle;
         }
     }
 </style>

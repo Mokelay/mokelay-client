@@ -42,7 +42,7 @@
         type:String,
       },
       parentParams:{
-        type:Object,
+        type:[String,Array,Object,Number,Boolean]
       },
       templateProp:{
         type:Array,
@@ -59,6 +59,9 @@
     },
     watch:{
       text(val){
+        this.tansferTpl();
+      },
+      parentParams(val){
         this.tansferTpl();
       }
     },

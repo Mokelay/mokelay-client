@@ -15,7 +15,7 @@
             </div>
         </el-row>
         <el-row>
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" border style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55"></el-table-column>
 
@@ -65,14 +65,12 @@
                                 <div class="staticWords">{{column['staticWords']}}</div>
                             </div>
                             <div v-if="column['template'] == 'custom'">
-                                <!-- <bb-tag :showButton="false" :column="column" :prop="scope['row'][column.prop]"></bb-tag> -->
                                 <bb-words :text="scope['row'][column.prop]" :parentParams="scope['row']" :templateProp="column.templateProp" :valueKey="column.valueKey"></bb-words>
                             </div>
                             <div v-if="column['template'] == 'customIcon'">
                                 <i  v-for="(item,index) in column.showValue" :class="scope['row'][column.prop] == item?column.iconClass[index]:''"></i>
                             </div>
                             <div v-if="column['template'] == 'file'">
-                                <!-- TODO Row data 传入bb-custom -> custom vue -->
                                 <bb-custom :customFile="column['file']" :parentData="{row:scope['row'],column:column}"></bb-custom>
                             </div>
                         </div>
@@ -217,6 +215,10 @@
                     }
                 }
             },
+            border:{
+                type:Boolean,
+                default:true
+            }
         },
         data() {
             return {
@@ -233,9 +235,9 @@
             }
         },
         watch: {
-            // value(val) {  
-            //     this.tableData = val; 
-            // }
+            value(val) {  
+                this.tableData = val; 
+            }
         },
         created: function () {
             this.getData();
