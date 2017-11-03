@@ -71,6 +71,10 @@
                             <div v-if="column['template'] == 'customIcon'">
                                 <i  v-for="(item,index) in column.showValue" :class="scope['row'][column.prop] == item?column.iconClass[index]:''"></i>
                             </div>
+                            <div v-if="column['template'] == 'file'">
+                                <!-- TODO Row data 传入bb-custom -> custom vue -->
+                                <bb-custom :customFile="column['file']" :parentData="{row:scope['row'],column:column}"></bb-custom>
+                            </div>
                         </div>
                         <div v-else>
                             {{scope['row'][column.prop]}}
@@ -218,13 +222,14 @@
                 selectArr: [],
                 loading: false,
                 treeParentId:0,
-                toChildParams:null
+                toChildParams:null,
+                showPopIsShow:false
             }
         },
         watch: {
-            value(val) {  
-                this.tableData = val; 
-            }
+            // value(val) {  
+            //     this.tableData = val; 
+            // }
         },
         created: function () {
             this.getData();
@@ -368,6 +373,11 @@
             },
             confirmSelect:function(){
                 this.$emit("list-select", this.selectArr);
+            },
+            // 事件触发
+            showPopFn:function(row, index, column) {
+                this.clickPopIsShow = true;
+                this.$emit("clickProp", row, index,column);
             }
         }
 

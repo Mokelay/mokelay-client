@@ -101,9 +101,7 @@
         z-index: 1;
     }
     .pic___right {
-        overflow-y: scroll;
         height: 400px;
-        //width: 200px;
         margin-left: 20px;
         position: relative;
         a {

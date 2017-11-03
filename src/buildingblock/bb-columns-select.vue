@@ -378,10 +378,13 @@ import Vue from 'vue';
                             text: '判断'
                         }, {
                             value: 'custom',
-                            text: '自定义'
+                            text: '自定义键值对'
                         }, {
                             value: 'staticWords',
                             text: '静态字段'
+                        }, {
+                            value: 'file',
+                            text: '自定义模板'
                         }]
                     }
                 }, {
@@ -404,6 +407,12 @@ import Vue from 'vue';
                             props: {}
                         }]
                     }
+                }, {
+                    name: '自定义模板路径',
+                    attributeName: 'file',
+                    et: 'bb-input',
+                    rules: [],
+                    props: {}
                 }, {
                     name: '静态字段填写',
                     attributeName: 'staticWords',
