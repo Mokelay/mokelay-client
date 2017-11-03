@@ -21,7 +21,7 @@
                 type: Boolean,
                 default: false
             },
-	          className: {
+	        className: {
             	  type: String,
                 default: ""
             }

@@ -196,6 +196,12 @@
             parentParams:{
                 type:Object
             },
+            hiddenValueKey:{
+                type:String
+            },
+            hiddenItems:{
+                type:Array
+            },
             confirmButton:{
                 type: Object,
                 default:function(){
@@ -264,7 +270,15 @@
                                     }
                                     t[item['dataKey']] = [];
                                     for (var i in list) {
-                                        t[item['dataKey']].push(list[i]);
+                                        if(t.hiddenValueKey){
+                                            t.hiddenItems.forEach((ele)=>{//前端支持列表筛选
+                                                if(list[i][t.hiddenValueKey] != ele ){
+                                                    t[item['dataKey']].push(list[i]);
+                                                }
+                                            })
+                                        }else{
+                                            t[item['dataKey']].push(list[i]);
+                                        }
                                     }
                                     t.totalItems = item['value']['totalRecords'];
                                 });

@@ -9,7 +9,7 @@
             <el-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</el-button>
         </el-input>
         <el-dialog class="dialog" :title="title" :visible.sync="popupVisible" :modal="showModal" size="tiny">
-          <bb-list :ds="popupGrid.ds" search :popup="true" :parentParams="parentParams" :columns="popupGrid.columns" :selection="popupGrid.selection" :pagination="popupGrid.pagination" @list-select="listSelect" :searchConfig="popupGrid.searchConfig" :showHeader="popupGrid.showHeader" :highlightCurrent="highlightCurrent" :stripe="stripe"></bb-list>
+          <bb-list :ds="popupGrid.ds" search :popup="true" :parentParams="parentParams" :columns="popupGrid.columns" :selection="popupGrid.selection" :pagination="popupGrid.pagination" @list-select="listSelect" :searchConfig="popupGrid.searchConfig" :showHeader="popupGrid.showHeader" :highlightCurrent="highlightCurrent" :stripe="stripe" :hiddenValueKey="hiddenValueKey" :hiddenItems="hiddenItems"></bb-list>
         </el-dialog>
     </div>
 </template>
@@ -85,6 +85,12 @@
             },
             parentParams:{
                 type:Object
+            },
+            hiddenValueKey:{
+                type:String,
+            },
+            hiddenItems:{
+                type:Array,
             }
         },
         data() {
