@@ -1,5 +1,7 @@
 <template>
-  {{value}} <el-button type="primary" @click="generate">生成UUID</el-button>
+  <div>
+      {{v}} <el-button type="primary" @click="generate">生成UUID</el-button>
+  </div>
 </template>
 
 <script>
@@ -18,10 +20,12 @@
         },
         data() {
             return {
+                v:null
             }
         },
         watch: {
             value(val){
+                this.v = val;
             }
         },
         created: function () {
@@ -53,6 +57,7 @@
                 }
 
                 var val = uuid(this.length,this.radix);
+                this.v = val;
                 this.$emit('input',val);
             }
         }
