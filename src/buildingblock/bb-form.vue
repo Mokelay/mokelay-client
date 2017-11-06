@@ -1,4 +1,6 @@
 <script>
+    // var _PBB_PREFIX = "pbb_form_";
+
     import Util from '../libs/util';
     export default {
         name: 'bb-form',
@@ -26,18 +28,27 @@
                     }
                 }
                 var defaultOn = {
-                        input: function (val) {
-                            t.formData[field['attributeName']] = val;
-                        }
+                    input: function (val) {
+                        t.formData[field['attributeName']] = val;
                     }
-                var propsOn = Object.assign({},props.on, defaultOn);//传入事件监听
+                };
+
+                var pbbId = field['pbbId'];
+                var itemOn = Object.assign({}, defaultOn);//传入事件监听
+                var on = t.on;
+                if(on){
+                    on.forEach(function(_on,index){
+                        if(pbbId == _on['pbbId']){
+                            itemOn[_on['triggerEventName']] = t.$refs[_on['executePbbId']]?t.$refs[_on['executePbbId']][_on['executeBBMethodName']] : ''
+                        }
+                    });
+                }
+
+                var ref = pbbId;
                 var item = createElement(field['et'],{
                     props:props,
-                    // domProps: {
-                    //     value: t.formData[field['attributeName']]
-                    // },
-                    on: propsOn,
-                    ref:props.ref
+                    on: itemOn,
+                    ref:ref
                 });
 
                 var className = field['et'] == 'bb-hidden'?'form-item-hidden':'form-item';
@@ -101,6 +112,14 @@
         },
         props: {
             fields:{
+                type:Array,
+                default:function(){
+                    return [];
+                }
+            },
+            //处理fields之间的交互
+            //[{pbbId:'',triggerEventName:'',executePbbId:'',executeBBMethodName:''}]
+            on :{
                 type:Array,
                 default:function(){
                     return [];

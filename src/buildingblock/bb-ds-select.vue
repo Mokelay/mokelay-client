@@ -64,6 +64,7 @@ import Vue from 'vue';
             },
             ds(val){
                 this.$emit("input",val);
+                //TODO 通过ds的api去获取input fields list，并且fire出事件
             }
         },
         created: function () {
