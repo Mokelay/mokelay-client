@@ -25,18 +25,19 @@
                         value:t.formData[field['attributeName']]
                     }
                 }
+                var defaultOn = {
+                        input: function (val) {
+                            t.formData[field['attributeName']] = val;
+                        }
+                    }
+                var propsOn = Object.assign({},props.on, defaultOn);//传入事件监听
                 var item = createElement(field['et'],{
                     props:props,
                     // domProps: {
                     //     value: t.formData[field['attributeName']]
                     // },
-                    on:{
-                        input: function (val) {
-                            // t.value = val;
-                            t.formData[field['attributeName']] = val;
-                            // t.$emit('input', val);
-                        }
-                    }
+                    on: propsOn,
+                    ref:props.ref
                 });
 
                 var className = field['et'] == 'bb-hidden'?'form-item-hidden':'form-item';

@@ -1,5 +1,5 @@
 <template>
-    <el-select placeholder="请选择" v-model="valueBase" :multiple="multiple" @change='change' ref="ref">
+    <el-select placeholder="请选择" v-model="valueBase" :multiple="multiple" @change='change'>
       <el-option
               v-for="option in items"
               :key="option.value"
@@ -46,7 +46,7 @@
                 default: function () {
                     return null
                 }
-            },
+            }
         },
         data() {
             return {
@@ -61,6 +61,9 @@
             },
             value(val){
                 this.valueBase = val;
+            },
+            ds(val){
+                this.getData();
             }
         },
         created: function () {
@@ -103,6 +106,9 @@
             change:function(val){
               this.$emit('input',val)
               this.$emit('change',val)
+            },
+            clean:function(val){
+              this.valueBase = null;
             }
         }
     }
