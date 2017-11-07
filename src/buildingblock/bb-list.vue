@@ -110,6 +110,10 @@
     export default {
         name: 'bb-list',
         props: {
+            lazy:{//初始不加载数据
+                type:Boolean,
+                default: false
+            },
             index: {
                 type: Boolean,
                 default: false
@@ -240,7 +244,9 @@
             }
         },
         created: function () {
-            this.getData();
+            if(!this.lazy){
+                this.getData();
+            }
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
         },
         methods: {
