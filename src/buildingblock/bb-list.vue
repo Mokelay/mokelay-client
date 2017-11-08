@@ -32,12 +32,12 @@
                     <template scope="scope">
                         <div v-if="column['type'] == 'button-group'">
                             <bb-popup-selection v-for="(button,index) in column.buttons" v-if="hideBtn(button,scope.row) && button['buttonType'] == 'popup'"
-                                        :valueField="button['popupConfig']['valueField']" 
-                                        :textField="button['popupConfig']['textField']" 
-                                        :popupGrid="button['popupConfig']['popupGrid']" 
-                                        :buttonConfig="button['popupConfig']['buttonConfig']" 
-                                        :showModal="button['popupConfig']['showModal']" 
-                                        :parentParams="toChildParams" 
+                                        :valueField="button['popupConfig']['valueField']"
+                                        :textField="button['popupConfig']['textField']"
+                                        :popupGrid="button['popupConfig']['popupGrid']"
+                                        :buttonConfig="button['popupConfig']['buttonConfig']"
+                                        :showModal="button['popupConfig']['showModal']"
+                                        :parentParams="toChildParams"
                                         :title="button['popupConfig']['title']"
                                         @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
                             <el-button v-for="(button,index) in column.buttons" v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'"
@@ -79,7 +79,7 @@
                         </div>
                     </template>
                 </el-table-column>
-            </el-table> 
+            </el-table>
         </el-row>
         <el-row v-if="pagination" type="flex" justify='end'>
             <div >
@@ -239,8 +239,8 @@
             }
         },
         watch: {
-            value(val) {  
-                this.tableData = val; 
+            value(val) {
+                this.tableData = val;
             }
         },
         created: function () {
@@ -255,6 +255,25 @@
                 if (this.ds) {
                     t.loading = true;
                     var routerParams = t.$route?t.$route.params : {};
+                    if(t.treeConfig&&t.treeConfig.support){
+                        //树形
+                        let inputs = t.ds.inputs;
+                        let hasParam = false;
+                        inputs.forEach(function(item){
+                            if(item.paramName==t.treeConfig.parentKey){
+                                hasParam=true;
+                                item.constant=t.treeParentId;
+                            }
+                        });
+                        if(!hasParam){
+                            //没有这个参数
+                            inputs.push({
+                                paramName: t.treeConfig.parentKey,
+                                valueType: "constant",
+                                constant: t.treeParentId
+                            });
+                        }
+                    }
                     Util.getDSData(t.ds, {"bb": t, "router": routerParams,'row-data':t.parentParams}, function (map) {
                         if(dataHandler && typeof dataHandler == 'function'){
                             dataHandler(map);
