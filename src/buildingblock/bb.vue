@@ -10,14 +10,24 @@
         },
         attributes:{
             type:Array
+        },
+        config:{
+          type:[String,Object]
         }
     },
-    data() {},
+    data() {
+      return {}
+    },
     computed:{
         props:function(){
             var props = {};
-            var attributes = this.attributes || [];
-            for (var j in attributes) {
+            if(this.config){
+              var config = this.config;
+              props = typeof config == 'string'?JSON.parse(config):config;
+              debugger
+            }else{
+              var attributes = this.attributes || [];
+              for (var j in attributes) {
                 var attribute = attributes[j];
                 var attributeValue = null;
                 if(attribute['dt'] == 'object' || attribute['dt'] == 'array'){
@@ -29,7 +39,9 @@
                 }
 
                 props[attribute['attributeName']] = attributeValue;
+              }
             }
+
             return props;
         }
     },
