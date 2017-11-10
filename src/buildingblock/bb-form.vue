@@ -10,7 +10,7 @@
             
 
             //创建FormItem
-            this.fields.forEach(function(field){
+            this.realFields.forEach(function(field){
                 //支持etProps
                 var props = field['props'];
                 var etProps = field['etProps'];
@@ -148,7 +148,8 @@
                     }
                 }
             },
-            ds:null
+            ds:null,//表单值
+            dsFields:null//获取表单项
         },
         watch: {
             value(val){
@@ -162,10 +163,12 @@
         },
         data() {
             return {
-                formData:this.value
+                formData:this.value,
+                realFields:this.fields
             }
         },
         created: function () {
+            this.getFields();
             this.getData();
         },
         mounted:function(){
@@ -196,12 +199,20 @@
                     t.$router.push(button.goUrl);
                 }
             },
+            getFields: function () {
+                var t = this;
+                if (t.dsFields) {
+                    Util.getDSData(t.dsFields, {"bb": t, "router": t.$route.params}, function (map) {
+                        t.realFields = map[0].value;
+                    }, function (code, msg) {
+                    });
+                }
+            },
             getData: function () {
                 var t = this;
                 if (t.ds) {
                     Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
                         t.formData = map[0].value;
-                        console.log('t.formData:',t.formData);
                     }, function (code, msg) {
                     });
                 }
