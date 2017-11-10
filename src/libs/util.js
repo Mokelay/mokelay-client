@@ -242,5 +242,6 @@ util.buttonCallback = function(button, valueobj, callback, map) {
     }
 }
 
+window._TY_Tool = util;
 
 export default util;
