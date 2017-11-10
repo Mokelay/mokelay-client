@@ -24,7 +24,6 @@
             if(this.config){
               var config = this.config;
               props = typeof config == 'string'?JSON.parse(config):config;
-              debugger
             }else{
               var attributes = this.attributes || [];
               for (var j in attributes) {
