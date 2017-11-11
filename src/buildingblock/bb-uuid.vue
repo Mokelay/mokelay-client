@@ -29,6 +29,9 @@
             }
         },
         created: function () {
+            if(!this.value){
+                this.generate()
+            }
         },
         mounted:function(){
         },
