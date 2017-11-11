@@ -91,10 +91,8 @@
             if(!t.showCleanButton){
                 cleanButton = null
             }
-            //设置按钮
-            formItems.push(createElement('el-form-item',{
-                    props:{}
-                },[cancelButton,cleanButton,createElement('el-button',{
+            //提交按钮
+            var submitButton = createElement('el-button',{
                     domProps:{
                         innerHTML:this.settingButtonText
                     },
@@ -103,7 +101,14 @@
                     on:{
                         click:t.formCommit
                     }
-                })]));
+                })
+            if(t.hideSubmitButton){
+                submitButton = null
+            }
+            //设置按钮
+            formItems.push(createElement('el-form-item',{
+                    props:{}
+                },[cancelButton,cleanButton,submitButton]));
 
             //创建Form
             return createElement('el-form',{
@@ -166,6 +171,10 @@
             showCleanButton:{
                 type:Boolean,
                 default:false
+            },
+            hideSubmitButton:{
+                type:Boolean,
+                default:false
             }
         },
         watch: {
@@ -179,6 +188,11 @@
             },
             fields(val){
                 this.realFields = this.fields;
+            },
+            formData:{
+                handler:(val,oldVal)=>{
+                },
+                deep:true
             }
         },
         data() {
