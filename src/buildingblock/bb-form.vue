@@ -64,7 +64,7 @@
                 formItems.push(formItem);
             });
             //取消按钮
-            var cancelButton  = createElement('el-button',{
+            var cancelButton = createElement('el-button',{
                     domProps:{
                         innerHTML:'取消'
                     },
@@ -74,8 +74,11 @@
                         click:t.cancelCommit
                     }
                 })
+            if(!t.showCancelButton){
+                cancelButton = null
+            }
             //清空表单内容
-            var cleanButton  = createElement('el-button',{
+            var cleanButton = createElement('el-button',{
                     domProps:{
                         innerHTML:'清空内容'
                     },
@@ -85,7 +88,9 @@
                         click:t.clearForm
                     }
                 })
-
+            if(!t.showCleanButton){
+                cleanButton = null
+            }
             //设置按钮
             formItems.push(createElement('el-form-item',{
                     props:{}
@@ -148,8 +153,20 @@
                     }
                 }
             },
-            ds:null,//表单值
-            dsFields:null//获取表单项
+            ds:{//表单值
+                type:Object
+            },
+            dsFields:{//获取表单项
+                type:Object
+            },
+            showCancelButton:{
+                type:Boolean,
+                default:false
+            },
+            showCleanButton:{
+                type:Boolean,
+                default:false
+            }
         },
         watch: {
             value(val){
@@ -159,6 +176,9 @@
                     this.formData = (val ? JSON.parse(val) : {});
                 }
                 this.$emit("input",val);
+            },
+            fields(val){
+                this.realFields = this.fields;
             }
         },
         data() {

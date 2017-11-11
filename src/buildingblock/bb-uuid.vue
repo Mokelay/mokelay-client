@@ -20,7 +20,7 @@
         },
         data() {
             return {
-                v:null
+                v:this.value
             }
         },
         watch: {
