@@ -20,6 +20,24 @@ import Util from '../libs/util';
             },
             formDescTpl:{
                 type:String
+            },
+            buttonConfig:{
+                type:Object
+            },
+            valueDs:{
+                type:Object
+            },
+            dsFields:{
+                type:Object
+            },
+            showCancelButton:{
+                type:Boolean
+            },
+            showCleanButton:{
+                type:Boolean
+            },
+            hideSubmitButton:{
+                type:Boolean
             }
         },
 
@@ -64,7 +82,13 @@ import Util from '../libs/util';
                                 // },
                                 props:{
                                     fields:t.fields,
-                                    value:t.formData //传入value
+                                    value:t.formData, //传入value
+                                    buttonConfig:t.buttonConfig,
+                                    ds:t.valueDs,
+                                    dsFields:t.dsFields,
+                                    showCancelButton:t.showCancelButton,
+                                    showCleanButton:t.showCleanButton,
+                                    hideSubmitButton:t.hideSubmitButton
                                 },
                                 on:{
                                     commit: function(formData){
