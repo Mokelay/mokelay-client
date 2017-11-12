@@ -8,14 +8,17 @@
                 let treeDom = createElement('el-tree', {
                     'class': 'bn',
                     attrs: {
+
                         'show-checkbox': true,
                         'node-key': t.nodeValue,
                         'highlight-current': true,
                         'default-checked-keys': t.checkedField
                     },
+//                    domProps:{
+//                        value:t.value
+//                    },
                     props: {
                         data: t.data,
-//                        load:t.openNode,
                         props:{
                             children: 'children',
                             label: t.nodeText,
@@ -89,10 +92,10 @@
             }
         },
         created: function () {
-        },
-        mounted:function(){
             const t=this;
             t.getData();
+        },
+        mounted:function(){
         },
         methods: {
             openNode: function (node) {
