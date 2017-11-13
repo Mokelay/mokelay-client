@@ -23,7 +23,7 @@
             var props = {};
             if(this.config){
               var config = this.config;
-              props = typeof config == 'string'?JSON.parse(config):config;
+              props = typeof config == 'string'?eval("("+config+")"):config;
             }else{
               var attributes = this.attributes || [];
               for (var j in attributes) {
