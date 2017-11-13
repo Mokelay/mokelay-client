@@ -30,22 +30,25 @@
                 <el-table-column v-for="column in columns" :fixed="column.fixed" :width="column.width" :prop="column.prop" :label="column.label"
                                  :key="column.prop" :align="column.align">
                     <template scope="scope">
-                        <div v-if="column['type'] == 'button-group'">
-                            <bb-popup-selection v-for="(button,index) in column.buttons" v-if="hideBtn(button,scope.row) && button['buttonType'] == 'popup'"
-                                        :valueField="button['popupConfig']['valueField']"
-                                        :textField="button['popupConfig']['textField']"
-                                        :popupGrid="button['popupConfig']['popupGrid']"
-                                        :buttonConfig="button['popupConfig']['buttonConfig']"
-                                        :showModal="button['popupConfig']['showModal']"
-                                        :parentParams="toChildParams"
-                                        :title="button['popupConfig']['title']"
-                                        @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
-                            <el-button v-for="(button,index) in column.buttons" v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'"
-                                       :type="button.type" :key="index"
-                                       :style="{'color':button.wordColor,'user-select':'all'}"
-                                       :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)">
-                                {{button.text?button.text:scope['row'][column.prop]}}
-                            </el-button>
+                        <div v-if="column['type'] == 'button-group'" >
+                            <span v-for="(button,index) in column.buttons">
+                                <bb-popup-selection v-if="hideBtn(button,scope.row) && button['buttonType'] == 'popup'"
+                                            :valueField="button['popupConfig']['valueField']"
+                                            :textField="button['popupConfig']['textField']"
+                                            :popupGrid="button['popupConfig']['popupGrid']"
+                                            :buttonConfig="button['popupConfig']['buttonConfig']"
+                                            :showModal="button['popupConfig']['showModal']"
+                                            :parentParams="toChildParams"
+                                            :title="button['popupConfig']['title']"
+                                            @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
+                                <el-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
+                                           :type="button.type" :key="index"
+                                           :style="{'color':button.wordColor,'user-select':'all'}"
+                                           :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)">
+                                    {{button.text?button.text:scope['row'][column.prop]}}
+                                </el-button>
+                                <bb v-if="button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']"></bb>
+                            </span>
                         </div>
                         <div v-else-if="column['type'] == 'edit'">
                             <el-input :value="scope['row'][column.prop]"

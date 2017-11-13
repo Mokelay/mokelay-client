@@ -1,5 +1,5 @@
 <template>
-    <div class="m10">{{formDesc}}<el-button @click="setting">{{settingText}}</el-button></div>
+    <div class="m10">{{formDesc}}<el-button :type="startButtonType" :icon="startButtonIcon" @click="setting">{{settingText}}</el-button></div>
 </template>
 
 <script>
@@ -13,6 +13,12 @@ import Util from '../libs/util';
             },
             fields:{
                 type:[String,Array]
+            },
+            startButtonType:{
+                type:String
+            },
+            startButtonIcon:{
+                type:String
             },
             settingText:{
                 type:String,

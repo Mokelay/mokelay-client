@@ -82,6 +82,9 @@ import Vue from 'vue';
                                     text: '默认',
                                     value: 'default'
                                 }, {
+                                    text: '弹窗',
+                                    value: 'dialog'
+                                }, {
                                     text: '弹窗选择器',
                                     value: 'popup'
                                 }]
@@ -207,6 +210,22 @@ import Vue from 'vue';
                             name: '按钮显示变量值',
                             attributeName: 'showValue',
                             et: 'bb-input',
+                        }, {
+                            name: '弹窗配置',
+                            attributeName: 'dialog',
+                            et: 'bb-button-form',
+                            props: {
+                                fields: [{
+                                    name: '弹窗积木名称',
+                                    attributeName: 'alias',
+                                    et: 'bb-bblist-select',
+                                },{
+                                    name: '弹窗积木配置',
+                                    attributeName: 'config',
+                                    et: 'bb-editor-code',
+                                }]
+                            }
+
                         }, {
                             name: '弹窗选择器配置',
                             attributeName: 'popupConfig',
