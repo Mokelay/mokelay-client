@@ -24,7 +24,9 @@
         		}
         	}
         },
-        data() {return{}},
+        data() {
+            return{}
+        },
         computed: {},
         watch: {},
         methods: {
@@ -38,5 +40,21 @@
     }
 </script>
 <style lang="less" scoped>
-    
+    .bb-preview{
+        .bb-preview-item{
+            display: flex;
+            flex:1;
+        }
+        .buttonInfo{
+            background: #eef1f6;
+            border: 1px solid #E4E4E4;
+            border-right: none;
+            margin-top: 10px;
+            padding: 10px;
+            .button-item{
+              display: block;
+              margin: auto;
+            }
+        }
+  }
 </style>

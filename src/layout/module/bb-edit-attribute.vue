@@ -1,6 +1,6 @@
 <template>
 	<div class='edit-attribute'>
-		<bb-form :value="bbValue" :fields="bbEditFields" :settingButtonText="settingButtonText" @commit="commit"></bb-form>
+		<bb-form :value="bbValue" :fields="bbEditFields" settingButtonText="保存" @commit="commit"></bb-form>
 	</div>
 </template>
 <script>
@@ -14,9 +14,11 @@
                 type:Array
             }
         },
-        data() {return{
+        data() {
+            return{
 
-        }},
+            }
+        },
         computed: {},
         watch: {},
         methods: {

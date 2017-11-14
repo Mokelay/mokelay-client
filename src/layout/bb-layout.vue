@@ -1,8 +1,10 @@
 <template>
 	<div class="bb-layout">
-		<tool :toolListDs="toolListDs"></tool>
-		<preview :bbPreviewList="bbPreviewList" @edit="edit" @delete="remove"></preview>
-		<edit :bbEditFields="bbEditFields" :bbValue="bbValue" @commit="commit"></edit>
+        <el-row class='question-layout-content'>
+    		<el-col :span="3"><tool :toolListDs="toolListDs" @add="addBB"></tool></el-col>
+    		<el-col :span="previewWidth"><preview :bbPreviewList="bbPreviewList" @edit="editItem" @delete="removeItem"></preview></el-col>
+    		<el-col :span="editWidth" v-if="showEdit"><edit :bbEditFields="bbEditFields" :bbValue="bbValue" @commit="commit"></edit></el-col>
+        </el-row>
 	</div>
 </template>
 <script>
@@ -27,6 +29,9 @@
         },
         data() {
         	return{
+                showEdit:false,
+                previewWidth:21,
+                editWidth:0,
         		//bb-tool 配置
 				toolListDs:{
 					api: "list-bb",
@@ -47,15 +52,33 @@
         computed: {},
         watch: {},
         methods: {
-        	editItem:function(bbItem){
+        	addBB:function(bbItem){
+                this.$emit('add',bbItem)
+            },
+            editItem:function(bbItem){
+                this.showEditor();
         		this.$emit('edit',bbItem)
         	},
         	removeItem:function(bbItem){
+                this.hideEditor();
         		this.$emit('delete',bbItem)
         	},
             commit:function(formData){
                 const t = this;
+                t.hideEditor();
                 t.$emit('commit',formData);
+            },
+            showEditor:function(){
+                const t = this;
+                t.previewWidth = 15;
+                t.editWidth = 6;
+                t.showEdit = true;
+            },
+            hideEditor:function(){
+                const t = this;
+                t.previewWidth = 21;
+                t.editWidth = 0;
+                t.showEdit = false;
             }
         },
         components:{
