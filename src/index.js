@@ -46,6 +46,7 @@ import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbuuid from './buildingblock/bb-uuid.vue';
 import bbtree from './buildingblock/bb-tree.vue';
 import bbtreeselect from './buildingblock/bb-tree-select.vue';
+import bblayout from './layout/bb-layout.vue';
 
 
 let ty = {
@@ -99,6 +100,7 @@ let ty = {
 		Vue.component('bb-uuid', bbuuid);
 		Vue.component('bb-tree', bbtree);
 		Vue.component('bb-tree-select', bbtreeselect);
+		Vue.component('bb-layout', bblayout);
 		console.log("finish ty bb init....");
 	}
 };
