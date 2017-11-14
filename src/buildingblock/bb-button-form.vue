@@ -129,4 +129,13 @@ import Util from '../libs/util';
     .m10 {
         margin: 10px 0;
     }
+    .db{
+        display: block;
+    }
+    .dib{
+        display: inline-block;
+    }
+    .di{
+        display: inline;
+    }
 </style>
