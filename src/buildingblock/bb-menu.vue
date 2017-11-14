@@ -126,7 +126,7 @@
             {props:{index:item.url,key:item.url,route:{path:item.url}},title:item.title,class:item.class,on:{
               click:function(){
                 t.$emit('click')
-                if(item.value){
+                if(item.value && item.clickHide){
                   t.$refs[item['url']].hide();
                 }
               }
@@ -144,7 +144,7 @@
               {props:{index:item.url,key:item.url,route:{path:item.url}},on:{
                 click:function(){
                   t.$emit('click')
-                  if(item.value){
+                  if(item.value && item.clickHide){
                     t.$refs[item['url']].hide();
                   }
                 }
