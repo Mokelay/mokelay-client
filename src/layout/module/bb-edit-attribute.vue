@@ -9,7 +9,7 @@
         props: {
             bbValue:{
                 type:[Object,String]
-            }
+            },
             bbEditFields:{
                 type:Array
             }
