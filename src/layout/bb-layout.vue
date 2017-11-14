@@ -2,7 +2,7 @@
 	<div class="bb-layout">
         <el-row class='question-layout-content'>
     		<el-col :span="3"><tool :toolListDs="toolListDs" @add="addBB"></tool></el-col>
-    		<el-col :span="previewWidth"><preview :bbPreviewList="bbPreviewList" @edit="editItem" @delete="removeItem"></preview></el-col>
+    		<el-col :span="previewWidth"><preview :bbPreviewList="bbPreviewList" @edit="editItem" @delete="removeItem" @drop="drop"></preview></el-col>
     		<el-col :span="editWidth" v-if="showEdit"><edit :bbEditFields="bbEditFields" :bbValue="bbValue" @commit="commit"></edit></el-col>
         </el-row>
 	</div>
@@ -54,6 +54,9 @@
         methods: {
         	addBB:function(bbItem){
                 this.$emit('add',bbItem)
+            },
+            drop:function(bbItem){
+                this.$emit('drop',bbItem)
             },
             editItem:function(bbItem){
                 this.showEditor();
