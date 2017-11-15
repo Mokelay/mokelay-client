@@ -1,5 +1,4 @@
 <script>
-  import Vue from 'vue';
   import Util from '../libs/util.js';
 
   export default {
