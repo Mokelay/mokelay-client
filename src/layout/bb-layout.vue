@@ -32,13 +32,15 @@
     ></bb-layout>
 
 //uuid为bb中内部生成的uuid
-addBB = function(uuid,alais){
-    //调用后台接口
+//alias 为添加的BB别名
+//layout为布局，如果没有定下布局也可以传空，当有更新的时候使用updateBBLayout
+addBB = function(uuid,alais,layout){
+    //调用后台保存布局中的BB接口
 }
 
 //uuid为bb中内部生成的uuid
 removeBB = function(uuid){
-    //调用后台接口
+    //调用后台删除布局中的BB的接口
 }
 
 //uuid为bb中内部生成的uuid
@@ -52,13 +54,20 @@ updateBBLayout = function(uuid,layout){
 }
 
 //interactive对象结构参考 value中的interactives
-addInteractive = function(interactive){}
+addInteractive = function(interactive){
+    //调用后台添加交互接口
+}
 
 //uuid为interactive的uuid
-removeInteractive = function(uuid){}
+removeInteractive = function(uuid){
+    //调用后台删除交互接口
+}
 
 //value为bb-layout的vlaue，当点击保存的时候获取到
-commit = function(value){}
+commit = function(value){
+    //全局保存，如果业务已经实现上述6个event，基本commit就不用调后台接口了
+    //如果没有实现上述6个event，那只需要实现这个commit就可以全局保存了
+}
 
 
 当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
