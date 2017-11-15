@@ -1,6 +1,6 @@
 <template>
   <div>
-      {{v}} <el-button type="primary" @click="generate">生成UUID</el-button>
+      {{v}} <el-button v-if="showButton" type="primary" @click="generate">生成UUID</el-button>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import Util from '../libs/util';
         name: 'bb-uuid',
         props: {
             value:{
-              type:String
+              type:[String,Number]
             },
             length:{
               type:Number
@@ -22,7 +22,8 @@ import Util from '../libs/util';
         },
         data() {
             return {
-                v:this.value
+                v:this.value,
+                showButton:true
             }
         },
         watch: {
@@ -32,7 +33,10 @@ import Util from '../libs/util';
         },
         created: function () {
             if(!this.value){
-                this.generate()
+                this.generate();
+                this.showButton = true
+            }else{
+                this.showButton = false;
             }
         },
         mounted:function(){
