@@ -5,7 +5,7 @@
 			<div class="buttonInfo">
 				<p>{{(index+1)}}</p>
 				<el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>
-				<el-button type="text" icon="delete" @click="removeItem(bbItem)" class="button-item"></el-button>
+				<el-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></el-button>
 			</div>
 			<bb :alias="bbItem.alias" :config="bbItem.attributes"></bb>
 		</div>
@@ -28,17 +28,18 @@
         computed: {
             bbPreviewList:function(){
                 let newArr = [];
-                // if(this.value.content.length > 0){
-                //    this.value.content.forEach((val,key)=>{
-                //         let y = val.layout[0];
-                //         newArr.splice(y,0,val);
-                //     }); 
-                // }
                 newArr = this.value.content
                 return newArr
             }
         },
-        watch: {},
+        watch: {
+            value:{
+                handler:(val,oldVal)=>{
+                    return val
+                },
+                deep:true
+            }
+        },
         mounted(){
             const t = this;
             require.ensure(['dragula/dragula', 'jquery'], function (require) {
@@ -53,7 +54,7 @@
                     },
                 });
                 t.drake.on('drop', function (el, target, source, sibling) {
-                    t.$emit('drop',{
+                    t.$emit('updateBBLayout',{
                         el:el,
                         target:target,
                         source:source,
@@ -66,8 +67,21 @@
         	editItem:function(bbItem){
         		this.$emit('edit',bbItem)
         	},
-        	removeItem:function(bbItem){
-        		this.$emit('delete',bbItem)
+        	removeBB:function(bbItem){
+                const t = this;
+                t.$confirm('确认删除此项','提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    t.$emit('removeBB',bbItem)
+                }).catch((err) => {
+                    t.$message({
+                        type: 'info',
+                        message: '操作已取消'
+                    });
+                });
+        		
         	}
         }    
     }

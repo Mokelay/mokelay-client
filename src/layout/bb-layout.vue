@@ -1,11 +1,11 @@
 <template>
-	<div class="bb-layout">
+    <div class="bb-layout">
         <el-row class='question-layout-content'>
-    		<el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
-    		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @delete="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
-    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
+            <el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
+            <el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
+            <el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
-	</div>
+    </div>
 </template>
 <script>
 /**
@@ -73,9 +73,9 @@ commit = function(value){
 **/
 
 
-	import tool from './module/bb-tool.vue'
-	import preview from './module/bb-preview.vue'
-	import edit from './module/bb-edit-attribute.vue'
+    import tool from './module/bb-tool.vue'
+    import preview from './module/bb-preview.vue'
+    import edit from './module/bb-edit-attribute.vue'
     export default {
         name: 'bb-layout',
         props: {
@@ -87,14 +87,14 @@ commit = function(value){
             }
         },
         data() {
-        	return{
+            return{
                 showEdit:false,
                 previewWidth:21,
                 editWidth:0,
                 editFields:[],
                 editValue:null,
-                maxNumber:this.value.content.length
-        	}
+                maxNumber:this.value.content.length,
+            }
         },
         computed: {},
         watch: {
@@ -102,22 +102,42 @@ commit = function(value){
             }
         },
         methods: {
-        	addBB:function(bbItem){//添加积木
+            addBB:function(bbItem){//添加积木
                 this.value.content.push(bbItem);
                 this.$emit('addBB',bbItem)
             },
             updateBBLayout:function(bbItem){//更新layout
-                this.$emit('updateBBLayout',bbItem)
+                const t = this;
+                let index1 = 0;
+                let index2 = 0;
+                t.value.content.forEach((val,key)=>{
+                    if(bbItem.el.id == val.uuid){
+                        index2 = key;
+                    }else if(bbItem.sibling.id == val.uuid){
+                        index1 = key;
+                    }
+                });
+                const defalutArr = t.value.content;
+                t.value.content = [];
+                t.value.content = t.swapItems(defalutArr,index1,index2);
+                t.$emit('updateBBLayout',bbItem)
             },
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
                 t.editValue = bbItem;
                 t.showEditor();
-        	},
-        	removeBB:function(bbItem){//删除积木
-                this.hideEditor();
-        		this.$emit('removeBB',bbItem)
-        	},
+            },
+            removeBB:function(bbItem){//删除积木
+                const t = this;
+                t.value.content.push(bbItem);
+                t.value.content.forEach((val,key)=>{
+                    if(val.uuid == bbItem.uuid){
+                        t.value.content.splice(key,1);
+                    }
+                })
+                t.hideEditor();
+                t.$emit('removeBB',bbItem)
+            },
             updateBBAttributes:function(formData){//更新积木属性
                 const t = this;
                 t.hideEditor();
@@ -144,12 +164,27 @@ commit = function(value){
                 t.previewWidth = 21;
                 t.editWidth = 0;
                 t.showEdit = false;
-            }
+            },
+            // 交换数组元素
+            swapItems: function (arrDefault, index1, index2) {
+                const t = this;
+                if(index2 <0){
+                    index2 = arrDefault.length - 1;
+                }
+                let arr = arrDefault;
+                const ele = arr.splice(index1, 1)[0];
+                if (index1 - index2) {
+                    arr.splice(index2, 0, ele);
+                } else {
+                    arr.splice(index2 - 1, 0, ele);
+                }
+                return arr
+            },
         },
         components:{
-        	tool,
-        	preview,
-        	edit
+            tool,
+            preview,
+            edit
         }
     }
 </script>
