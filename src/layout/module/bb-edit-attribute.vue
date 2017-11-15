@@ -31,7 +31,6 @@
         },
         data() {
             const t = this;
-            debugger
             return{
                 bbAlias:this.value.alias,
                 attributeFields:[],

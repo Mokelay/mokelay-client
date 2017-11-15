@@ -1,11 +1,11 @@
 <template>
-    <div class="bb-layout">
+	<div class="bb-layout">
         <el-row class='question-layout-content'>
-            <el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
-            <el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
-            <el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
+    		<el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
+    		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
+    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
-    </div>
+	</div>
 </template>
 <script>
 /**
@@ -73,9 +73,9 @@ commit = function(value){
 **/
 
 
-    import tool from './module/bb-tool.vue'
-    import preview from './module/bb-preview.vue'
-    import edit from './module/bb-edit-attribute.vue'
+	import tool from './module/bb-tool.vue'
+	import preview from './module/bb-preview.vue'
+	import edit from './module/bb-edit-attribute.vue'
     export default {
         name: 'bb-layout',
         props: {
@@ -87,14 +87,14 @@ commit = function(value){
             }
         },
         data() {
-            return{
+        	return{
                 showEdit:false,
                 previewWidth:21,
                 editWidth:0,
                 editFields:[],
                 editValue:null,
                 maxNumber:this.value.content.length,
-            }
+        	}
         },
         computed: {},
         watch: {
@@ -102,7 +102,7 @@ commit = function(value){
             }
         },
         methods: {
-            addBB:function(bbItem){//添加积木
+        	addBB:function(bbItem){//添加积木
                 this.value.content.push(bbItem);
                 this.$emit('addBB',bbItem)
             },
@@ -125,7 +125,7 @@ commit = function(value){
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
                 const bbInteractive = [];
-                t.value.interactive.forEach((val,key)=>{//读取当前积木交互数据
+                t.value.interactives.forEach((val,key)=>{//读取当前积木交互数据
                     if(val.fromContentUUID == bbItem.uuid){
                         bbInteractive.push(val);
                     }
@@ -138,8 +138,8 @@ commit = function(value){
                     interactive:bbInteractive
                 }
                 t.showEditor();
-            },
-            removeBB:function(bbItem){//删除积木
+        	},
+        	removeBB:function(bbItem){//删除积木
                 const t = this;
                 t.value.content.push(bbItem);
                 t.value.content.forEach((val,key)=>{
@@ -148,8 +148,8 @@ commit = function(value){
                     }
                 })
                 t.hideEditor();
-                t.$emit('removeBB',bbItem)
-            },
+        		t.$emit('removeBB',bbItem)
+        	},
             updateBBAttributes:function(formData){//更新积木属性
                 const t = this;
                 t.hideEditor();
@@ -195,9 +195,9 @@ commit = function(value){
             },
         },
         components:{
-            tool,
-            preview,
-            edit
+        	tool,
+        	preview,
+        	edit
         }
     }
 </script>
