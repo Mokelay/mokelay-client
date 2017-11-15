@@ -8,6 +8,62 @@
 	</div>
 </template>
 <script>
+
+/**
+使用场景
+1. 直接使用 
+<bb-layout></bb-layout>
+
+2. 初始化layout数据
+<bb-layout :value="{
+    layoutObject:{title:''},
+    content:[{uuid:'',alias:'',attributes:{},layout:""}],
+    interactives:[{uuid:'',fromContentUUID:'',fromContentEvent:'',executeContentUUID:'',executeContentMethodName:''}]}"></bb-layout>
+
+3. 把积木数据能够保存后端
+<bb-layout ref="layout"
+    @addBB="addBB"
+    @removeBB="removeBB"
+    @updateBBAttributes="updateBBAttributes" 
+    @updateBBLayout="updateBBLayout"
+    @addInteractive="addInteractive"
+    @removeInteractive="removeInteractive"
+    @commit = "commit"
+    ></bb-layout>
+
+//uuid为bb中内部生成的uuid
+addBB = function(uuid,alais){
+    //调用后台接口
+}
+
+//uuid为bb中内部生成的uuid
+removeBB = function(uuid){
+    //调用后台接口
+}
+
+//uuid为bb中内部生成的uuid
+updateBBAttributes = function(uuid,attributes){
+    //调用后台接口保存
+}
+
+//uuid为bb中内部生成的uuid
+updateBBLayout = function(uuid,layout){
+    //调用后台接口保存
+}
+
+//interactive对象结构参考 value中的interactives
+addInteractive = function(interactive){}
+
+//uuid为interactive的uuid
+removeInteractive = function(uuid){}
+
+//value为bb-layout的vlaue，当点击保存的时候获取到
+commit = function(value){}
+
+
+当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
+**/
+
 	import tool from './module/bb-tool.vue'
 	import preview from './module/bb-preview.vue'
 	import edit from './module/bb-edit-attribute.vue'
