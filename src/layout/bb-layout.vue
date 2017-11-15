@@ -158,7 +158,6 @@ commit = function(value){
             addInteractive:function(formData){//添加交互
                 const t = this;
                 t.value.interactives.push(formData);//更新value
-                t.hideEditor();
                 t.$emit('addInteractive',formData);
             },
             removeInteractive:function(formData){//删除交互

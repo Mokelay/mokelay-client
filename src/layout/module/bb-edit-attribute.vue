@@ -99,21 +99,11 @@
                 },
             }
         },
-        computed: {
-            interactiveList(){
-                let newArr = [];
-            }
-        },
         watch: {
             value(val){
                 const t = this;
-                t.interactivefields.forEach((ele,index)=>{
-                    if(attributeName == 'fromContentUUID'){
-                        const newEle = ele;
-                        newEle.props.value = val.uuid;
-                        t.interactivefields.splice(index,0,newEle);
-                    }
-                })
+                t.bbAlias = val.alias;
+                t.readBB();
             }
         },
         created:function(){

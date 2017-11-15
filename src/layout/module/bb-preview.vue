@@ -24,7 +24,6 @@
             return{
                 title: this.value.layoutObject.title,
                 realValue:this.value.content
-
             }
         },
         watch: {
