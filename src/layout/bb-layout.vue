@@ -124,7 +124,19 @@ commit = function(value){
             },
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
-                t.editValue = bbItem;
+                const bbInteractive = [];
+                t.value.interactive.forEach((val,key)=>{//读取当前积木交互数据
+                    if(val.fromContentUUID == bbItem.uuid){
+                        bbInteractive.push(val);
+                    }
+                })
+                t.editValue = {
+                    uuid:bbItem.uuid,
+                    alias:bbItem.alias,
+                    attributes:bbItem.attributes,
+                    layout:bbItem.layout,
+                    interactive:bbInteractive
+                }
                 t.showEditor();
             },
             removeBB:function(bbItem){//删除积木
@@ -132,7 +144,7 @@ commit = function(value){
                 t.value.content.push(bbItem);
                 t.value.content.forEach((val,key)=>{
                     if(val.uuid == bbItem.uuid){
-                        t.value.content.splice(key,1);
+                        t.value.content.splice(key,1);//更新value
                     }
                 })
                 t.hideEditor();
@@ -145,6 +157,7 @@ commit = function(value){
             },
             addInteractive:function(formData){//添加交互
                 const t = this;
+                t.value.interactives.push(formData);//更新value
                 t.hideEditor();
                 t.$emit('addInteractive',formData);
             },

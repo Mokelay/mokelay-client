@@ -1,25 +1,27 @@
 <template>
-    <el-tabs type="card" active-name="attribute">
+    <el-tabs type="card" active-name="attribute" class="bb-edit">
         <el-tab-pane label="属性" name="attribute">
             <div class='edit-attribute'>
-                <bb-form :value="value.attributes" settingButtonText="保存" @commit="commit"></bb-form>
+                <bb-form :value="value.attributes" :fields="attributeFields" settingButtonText="保存" @commit="updateBBAttributes"></bb-form>
             </div>
         </el-tab-pane>
         <el-tab-pane label="交互" name="event">
             <div class="edit-interactive">
                 <bb-button-form
                     :fields="interactivefields" 
+                    :value="interactiveFormData"
                     :on="interactiveOn" 
                     settingText="添加"
                     startButtonIcon="plus"
                     startButtonType="text"
                     @commit="addInteractive"></bb-button-form>
-                <bb-list :ds="ds" :value="interactiveList" :columns="columns" ref="InteractivesLsit"></bb-list>
+                <bb-list :value="value.interactive" :columns="columns" ref="InteractivesLsit"></bb-list>
             </div>
         </el-tab-pane>
     </el-tabs>
 </template>
 <script>
+    const Util = window._TY_Tool;
     export default {
         name: 'bb-edit',
         props: {
@@ -28,20 +30,29 @@
             }
         },
         data() {
+            const t = this;
+            debugger
             return{
-                    //添加交互字段配置
+                bbAlias:this.value.alias,
+                attributeFields:[],
+                uuidLenght:5,
+                uuidRadix:8,
+                addInteractiveUUID:null,
+                interactiveFormData:{
+                    fromContentUUID:this.value.uuid
+                },
+                //添加交互字段配置
                 columns:[
-                    {prop: 'name',label: '事件名称'},
-                    {prop: 'triggerEventName',label: '事件'},
-                    {prop: 'executeType',label: '执行类型'},
-                    {prop: 'bbName',label: '目标积木'},
-                    {prop: 'executeBBMethodName',label: '目标事件'},
-                    {prop: 'executeScript',label: '自定义方法'},
-                    {props:'',label:'操作',type: 'button-group',buttons:[{text: '删除',type: 'text',icon: 'delete',action: 'code',method: this.deleteInteractive}]}],
+                    {prop: 'uuid',label: '交互的UUID'},
+                    {prop: 'fromContentUUID',label: '触发事件的积木UUID'},
+                    {prop: 'fromContentEvent',label: '事件'},
+                    {prop: 'executeContentUUID',label: '目标积木的uuid'},
+                    {prop: 'executeContentMethodName',label: '目标方法'},
+                    {props:'',label:'操作',type: 'button-group',buttons:[{text: '删除',type: 'text',icon: 'delete',action: 'code',method: this.removeInteractive}]}],
                 interactivefields:[
-                    {name: "名称", attributeName: 'name', dt: '', et: 'bb-input'},
-                    {name: "描述", attributeName: 'description', dt: '', et: 'bb-input'},
-                    {name: "事件", attributeName: 'triggerEventName', dt: '', et: 'bb-select',props:{ds:{
+                    {name: "交互的UUID", attributeName: 'uuid', dt: '', et: 'bb-uuid',props:{length:5,radix:8}},
+                    {name: "触发事件的积木UUID", attributeName: 'fromContentUUID', dt: '', et: 'bb-uuid',props:{length:5,radix:8}},
+                    {name: "事件", attributeName: 'fromContentEvent', dt: '', et: 'bb-select',props:{ds:{
                         api: "/list-ed-by-pbb-id",
                         method: "get",
                         inputs: [
@@ -51,11 +62,6 @@
                             {dataKey: "fields", valueKey: "data_list"}
                         ]
                     },textField:'name',valueField:"eventName"}},
-                    {name: "方法类型", attributeName: 'executeType', dt: '', et: 'bb-select',props:{fields:[
-                        {text:'预定义方法',value:'trigger_method'},
-                        {text:'自定义方法',value:'custom_script'}
-                    ]}},
-
                     {pbbId:'executePbb',name: "目标积木", attributeName: 'executePbb', dt: '', et: 'bb-select',props:{ds:{
                         api: "/list-pbb-by-page",
                         method: "get",
@@ -75,21 +81,10 @@
                         outputs: [
                             {dataKey: "fields", valueKey: "data_list"}
                         ]
-                    },textField:'name',valueField:"methodName"}},
-
-
-                    {name: "巴斯方法", attributeName: 'executeScript', dt: '', et: 'bb-select',props:{ds:{
-                        api: "/list-buzz",
-                        method: "get",
-                        inputs: [],
-                        outputs: [
-                            {dataKey: "fields", valueKey: "data_list"}
-                        ]
-                    },textField:'name',valueField:"alias"}},
-
+                    },textField:'name',valueField:"methodName"}}
                 ],
                 interactiveOn:[
-                    {pbbId:'executePbb',triggerEventName:'change',executePbbId:'methodName',executeBBMethodName:'linkage'}
+                    {pbbId:'executePbb',triggerEventName:'change',executePbbId:'methodName',executeContentMethodName:'linkage'}
                 ],
                 readBBDs:{
                     api: "cms-list-bb-by-alias",
@@ -101,7 +96,7 @@
                         valueKey: 'bb',
                         variable:'bbAlias'
                     }],
-                    outputs: [{dataKey: "tableData", valueKey: "data_list.list"}]
+                    outputs: [{dataKey: "attributeFields", valueKey: "data_list.list"}]
                 },
             }
         },
@@ -110,22 +105,40 @@
                 let newArr = [];
             }
         },
-        watch: {},
+        watch: {
+            value(val){
+                const t = this;
+                t.interactivefields.forEach((ele,index)=>{
+                    if(attributeName == 'fromContentUUID'){
+                        const newEle = ele;
+                        newEle.props.value = val.uuid;
+                        t.interactivefields.splice(index,0,newEle);
+                    }
+                })
+            }
+        },
         created:function(){
             this.readBB();
         },
         methods: {
-            commit:function(formData){
+            updateBBAttributes:function(formData){
                 const t = this;
-                t.$emit('commit',formData);
+                t.$emit('updateBBAttributes',formData);
             },
             addInteractive:function(formData){
                 const t = this;
                 t.$emit('addInteractive',formData);
+                //初始化表单值
+                t.interactiveFormData = {
+                    fromContentUUID:this.value.uuid
+                }
+            },
+            removeInteractive:function(formData){
+                const t = this;
+                t.$emit('removeInteractive',formData);
             },
             readBB:function(){
                 const t = this;
-                t.formDataJSON = JSON.stringify(formData);
                 if (t.readBBDs) {
                   Util.getDSData(t.readBBDs, {"bb": t, "router": t.$route.params}, function (map) {
                     map.forEach((val,key)=>{
@@ -138,6 +151,9 @@
     }
 </script>
 <style lang="less" scoped>
+    .bb-edit{
+        padding-left: 10px;
+    }
     .edit-attribute{
         padding: 11px;
         padding-bottom: 0;
