@@ -10,18 +10,29 @@ const Util = window._TY_Tool;
 export default {
 	name: "bb-tool",
 	props: {
-		toolListDs:{
-			type: Object
+		maxNumber:{
+			type:[String,Number]
 		}
 	},
 	data() {
 		return {
 			toolList: [],
-			clickTimes:null
+			toolListDs:{
+				api: "list-bb",
+				category:'config',
+				method: "post",
+				inputs: [],
+				outputs: [{
+					dataKey: "type",
+					valueKey: "data_list"
+				}]
+			},
+			length:5,
+			radix:8
 		};
 	},
 	created() {
-	this.getData();
+		this.getData();
 	},
 	methods:{
 	//获取线上bb组件列表
@@ -36,10 +47,13 @@ export default {
 		    }
 		},
 		addBB:function(bb){
-			this.clickTimes ++ ;
-			this.$emit('add',{
-				bb:bb,
-				key:this.clickTimes
+			const t = this;
+			const uuid = Util.uuid(this.length,this.radix)
+			t.$emit('addBB',{
+				uuid:uuid,
+				alias:bb.alias,
+				attributes:'',
+				layout:t.maxNumber+1
 			});
 		}
 	}
@@ -49,6 +63,8 @@ export default {
 .tool-list{
 	padding: 11px;
 	max-width: 150px;
+	max-height: 100vh;
+	overflow-y: auto;
 	.bb{
 		margin-bottom: 4px;
 		background: #FFFFFF;

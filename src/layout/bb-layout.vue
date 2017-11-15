@@ -1,14 +1,13 @@
 <template>
 	<div class="bb-layout">
         <el-row class='question-layout-content'>
-    		<el-col :span="3"><tool :toolListDs="toolListDs" @add="addBB"></tool></el-col>
-    		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @delete="removeItem" @drop="drop"></preview></el-col>
-    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @commitAttributes="commitAttributes" @addInteractive="addInteractive" @deleteInteractive="deleteInteractive"></edit></el-col>
+    		<el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
+    		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @delete="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
+    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
 	</div>
 </template>
 <script>
-
 /**
 使用场景
 1. 直接使用 
@@ -73,6 +72,7 @@ commit = function(value){
 当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
 **/
 
+
 	import tool from './module/bb-tool.vue'
 	import preview from './module/bb-preview.vue'
 	import edit from './module/bb-edit-attribute.vue'
@@ -82,40 +82,18 @@ commit = function(value){
             value:{
                 type:Object,
                 default:function(){
-                    return {
-                        layout:{},
-                        content:[],
-                        interactive:[],
-                    }
+                    return null
                 }
-            },
-            listType:{//切换积木列表显示的内容
-                type:String
             }
         },
         data() {
-            const t = this;
         	return{
                 showEdit:false,
                 previewWidth:21,
                 editWidth:0,
                 editFields:[],
                 editValue:null,
-        		//bb-tool 配置
-				toolListDs:{
-					api: "list-bb",
-					category:'config',
-					method: "post",
-					inputs: [{
-						paramName: "type",
-						valueType: "constant",
-						constant: this.listType
-					}],
-					outputs: [{
-						dataKey: "type",
-						valueKey: "data_list"
-					}]
-				},
+                maxNumber:this.value.content.length
         	}
         },
         computed: {},
@@ -125,35 +103,35 @@ commit = function(value){
         },
         methods: {
         	addBB:function(bbItem){//添加积木
-                this.$emit('add',bbItem)
+                this.value.content.push(bbItem);
+                this.$emit('addBB',bbItem)
             },
-            drop:function(bbItem){//更新layout
-                this.$emit('drop',bbItem)
+            updateBBLayout:function(bbItem){//更新layout
+                this.$emit('updateBBLayout',bbItem)
             },
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
                 t.editValue = bbItem;
                 t.showEditor();
-        		t.$emit('edit',bbItem)
         	},
-        	removeItem:function(bbItem){//删除积木
+        	removeBB:function(bbItem){//删除积木
                 this.hideEditor();
-        		this.$emit('delete',bbItem)
+        		this.$emit('removeBB',bbItem)
         	},
-            commitAttributes:function(formData){//更新积木属性
+            updateBBAttributes:function(formData){//更新积木属性
                 const t = this;
                 t.hideEditor();
-                t.$emit('commitAttributes',formData);
+                t.$emit('updateBBAttributes',formData);
             },
             addInteractive:function(formData){//添加交互
                 const t = this;
                 t.hideEditor();
                 t.$emit('addInteractive',formData);
             },
-            deleteInteractive:function(formData){//删除交互
+            removeInteractive:function(formData){//删除交互
                 const t = this;
                 t.hideEditor();
-                t.$emit('deleteInteractive',formData);
+                t.$emit('removeInteractive',formData);
             },
             showEditor:function(){
                 const t = this;
