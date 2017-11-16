@@ -27,7 +27,6 @@
         },
         watch: {
             'value.content'(val){
-                this.realValue = [];
                 this.realValue = val;
             }
         },
@@ -55,6 +54,7 @@
                         source:source,
                         sibling:sibling
                     });
+                    t.drake.cancel('drop');
                 })
             })
         },

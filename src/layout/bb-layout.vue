@@ -1,7 +1,7 @@
 <template>
 	<div class="bb-layout">
         <el-row class='question-layout-content'>
-    		<el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
+    		<el-col :span="3"><tool :value="value" @addBB="addBB"></tool></el-col>
     		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
     		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
@@ -91,35 +91,46 @@ commit = function(value){
                 showEdit:false,
                 previewWidth:21,
                 editWidth:0,
-                editFields:[],
-                editValue:null,
-                maxNumber:this.value.content.length,
+                editValue:null,//当前编辑的积木
+                layoutArray:null//排序数组用于更新排序
         	}
         },
-        computed: {},
         methods: {
         	addBB:function(bbItem){//添加积木
                 this.value.content.push(bbItem);
+                this.hideEditor();
                 this.$emit('addBB',bbItem.uuid,bbItem.alias,bbItem.layout)
             },
             updateBBLayout:function(bbItem){//更新layout
                 const t = this;
+                //初始化排序数组
+                if(!t.layoutArray){
+                    t.getLayoutArray();
+                }
                 let index1 = 0;
                 let index2 = 0;
-                t.value.content.forEach((val,key)=>{
+                t.layoutArray.forEach((val,key)=>{
                     if(bbItem.el.id == val.uuid){
-                        index2 = key;
-                    }else if(bbItem.sibling.id == val.uuid){
                         index1 = key;
+                    }else if(bbItem.sibling.id == val.uuid){
+                        index2 = key;
                     }
                 });
-                const siblingLayout = t.value.content[index1].layout;
-                t.value.content[index1].layout = t.value.content[index2].layout;
-                t.value.content[index2].layout = siblingLayout;
-                const defalutArr = t.value.content;
-                t.value.content = [];
-                t.value.content = t.swapItems(defalutArr,index1,index2);//积木调换位置
-                t.$emit('updateBBLayout',bbItem.el.id,siblingLayout)
+                //更新layoutArray数组
+                t.layoutArray = t.swapItems(t.layoutArray,index1,index2);
+                //更新value.content中的排序
+                let newContent = [];
+                t.layoutArray.forEach((val,index)=>{
+                    val.layout = index;
+                    t.value.content.forEach((ele,key)=>{
+                        if(val.uuid == ele.uuid){
+                            ele.layout = index;
+                            newContent.splice(index,0,ele);
+                        }
+                    })
+                })
+                t.value.content = newContent;
+                t.$emit('updateBBLayout','大积木uuid',t.layoutArray)
             },
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
@@ -150,7 +161,6 @@ commit = function(value){
         		t.$emit('removeBB',bbItem.uuid)
         	},
             updateBBAttributes:function(uuid,attributes){//更新积木属性
-                debugger
                 const t = this;
                 t.hideEditor();
                 t.$emit('updateBBAttributes',uuid,attributes);
@@ -189,13 +199,25 @@ commit = function(value){
                 }
                 let arr = arrDefault;
                 const ele = arr.splice(index1, 1)[0];
-                if (index1 - index2) {
+                const down = index1 - index2;
+                if (down > 0) {//下移
                     arr.splice(index2, 0, ele);
-                } else {
+                } else {//上移
                     arr.splice(index2 - 1, 0, ele);
                 }
                 return arr
             },
+            getLayoutArray:function(){
+                const t = this;
+                t.layoutArray = [];
+                t.value.content.forEach((val,index)=>{
+                    let layout = {
+                        uuid:val.uuid,
+                        layout:val.layout
+                    };
+                    t.layoutArray.push(layout);
+                })
+            }
         },
         components:{
         	tool,

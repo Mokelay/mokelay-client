@@ -10,8 +10,8 @@ const Util = window._TY_Tool;
 export default {
 	name: "bb-tool",
 	props: {
-		maxNumber:{
-			type:[String,Number]
+		value:{
+			type:Object
 		}
 	},
 	data() {
@@ -60,7 +60,7 @@ export default {
 					alias:bb.alias,
 					aliasName:value,
 					attributes:'',
-					layout:t.maxNumber+1
+					layout:t.value.content.length+1
 				});
 			}).catch(() => {
 				t.$message({
