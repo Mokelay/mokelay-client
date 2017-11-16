@@ -5,6 +5,7 @@
     		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
     		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
+        <el-button @click="commit">提交</el-button> 
 	</div>
 </template>
 <script>
@@ -99,7 +100,7 @@ commit = function(value){
         methods: {
         	addBB:function(bbItem){//添加积木
                 this.value.content.push(bbItem);
-                this.$emit('addBB',bbItem)
+                this.$emit('addBB',bbItem.uuid,bbItem.alias,bbItem.layout)
             },
             updateBBLayout:function(bbItem){//更新layout
                 const t = this;
@@ -118,7 +119,7 @@ commit = function(value){
                 const defalutArr = t.value.content;
                 t.value.content = [];
                 t.value.content = t.swapItems(defalutArr,index1,index2);//积木调换位置
-                t.$emit('updateBBLayout',bbItem)
+                t.$emit('updateBBLayout',bbItem.el.id,siblingLayout)
             },
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
@@ -140,29 +141,33 @@ commit = function(value){
         	},
         	removeBB:function(bbItem){//删除积木
                 const t = this;
-                t.value.content.push(bbItem);
                 t.value.content.forEach((val,key)=>{
                     if(val.uuid == bbItem.uuid){
                         t.value.content.splice(key,1);//更新value
                     }
                 })
                 t.hideEditor();
-        		t.$emit('removeBB',bbItem)
+        		t.$emit('removeBB',bbItem.uuid)
         	},
-            updateBBAttributes:function(formData){//更新积木属性
+            updateBBAttributes:function(uuid,attributes){//更新积木属性
+                debugger
                 const t = this;
                 t.hideEditor();
-                t.$emit('updateBBAttributes',formData);
+                t.$emit('updateBBAttributes',uuid,attributes);
             },
             addInteractive:function(formData){//添加交互
                 const t = this;
                 t.value.interactives.push(formData);//更新value
                 t.$emit('addInteractive',formData);
             },
-            removeInteractive:function(formData){//删除交互
+            removeInteractive:function(uuid){//删除交互
+                const t = this;
+                t.$emit('removeInteractive',uuid);
+            },
+            commit:function(){//删除交互
                 const t = this;
                 t.hideEditor();
-                t.$emit('removeInteractive',formData);
+                t.$emit('commit',t.value);
             },
             showEditor:function(){
                 const t = this;

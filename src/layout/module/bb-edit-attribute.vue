@@ -15,7 +15,7 @@
                     startButtonIcon="plus"
                     startButtonType="text"
                     @commit="addInteractive"></bb-button-form>
-                <bb-list :value="value.interactive" :columns="columns" ref="InteractivesLsit"></bb-list>
+                <bb-list :value="interactiveValue" :columns="columns" ref="InteractivesLsit"></bb-list>
             </div>
         </el-tab-pane>
     </el-tabs>
@@ -43,6 +43,7 @@
                 interactiveFormData:{
                     fromContentUUID:this.value.uuid
                 },
+                interactiveValue:this.value.interactive,
                 //添加交互字段配置
                 columns:[
                     {prop: 'uuid',label: '交互的UUID'},
@@ -107,6 +108,9 @@
                 const t = this;
                 t.bbAlias = val.alias;
                 t.readBB();
+            },
+            'value.interactive':function(val){
+                this.interactiveValue = val;
             }
         },
         created:function(){
@@ -116,10 +120,11 @@
         methods: {
             updateBBAttributes:function(formData){
                 const t = this;
-                t.$emit('updateBBAttributes',formData);
+                t.$emit('updateBBAttributes',t.value.uuid,formData);
             },
             addInteractive:function(formData){
                 const t = this;
+                this.interactiveValue.push(formData);
                 t.$emit('addInteractive',formData);
                 //初始化表单值
                 t.interactiveFormData = {
@@ -128,7 +133,7 @@
             },
             removeInteractive:function(formData){
                 const t = this;
-                t.$emit('removeInteractive',formData);
+                t.$emit('removeInteractive',formData.uuid);
             },
             readBB:function(){
                 const t = this;
