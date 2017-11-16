@@ -72,7 +72,6 @@ commit = function(value){
 当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
 **/
 
-
 	import tool from './module/bb-tool.vue'
 	import preview from './module/bb-preview.vue'
 	import edit from './module/bb-edit-attribute.vue'
@@ -97,10 +96,6 @@ commit = function(value){
         	}
         },
         computed: {},
-        watch: {
-            value(val){
-            }
-        },
         methods: {
         	addBB:function(bbItem){//添加积木
                 this.value.content.push(bbItem);
@@ -117,9 +112,12 @@ commit = function(value){
                         index1 = key;
                     }
                 });
+                const siblingLayout = t.value.content[index1].layout;
+                t.value.content[index1].layout = t.value.content[index2].layout;
+                t.value.content[index2].layout = siblingLayout;
                 const defalutArr = t.value.content;
                 t.value.content = [];
-                t.value.content = t.swapItems(defalutArr,index1,index2);
+                t.value.content = defalutArr;
                 t.$emit('updateBBLayout',bbItem)
             },
             editItem:function(bbItem){//编辑积木属性
@@ -176,22 +174,7 @@ commit = function(value){
                 t.previewWidth = 21;
                 t.editWidth = 0;
                 t.showEdit = false;
-            },
-            // 交换数组元素
-            swapItems: function (arrDefault, index1, index2) {
-                const t = this;
-                if(index2 <0){
-                    index2 = arrDefault.length - 1;
-                }
-                let arr = arrDefault;
-                const ele = arr.splice(index1, 1)[0];
-                if (index1 - index2) {
-                    arr.splice(index2, 0, ele);
-                } else {
-                    arr.splice(index2 - 1, 0, ele);
-                }
-                return arr
-            },
+            }
         },
         components:{
         	tool,

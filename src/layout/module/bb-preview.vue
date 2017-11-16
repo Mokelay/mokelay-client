@@ -1,15 +1,15 @@
 <template>
-	<div class="bb-preview" id="bb-preview">
+    <div class="bb-preview" id="bb-preview">
         <p class="title">{{title}}</p>
-		<div class='bb-preview-item' v-for="(bbItem,index) in realValue" :id="bbItem.uuid" :key="index">
-			<div class="buttonInfo">
-				<p>{{(index+1)}}</p>
-				<el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>
-				<el-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></el-button>
-			</div>
-			<bb :alias="bbItem.alias" :config="bbItem.attributes"></bb>
-		</div>
-	</div>
+        <div class='bb-preview-item' v-for="(bbItem,index) in realValue" :id="bbItem.uuid" :key="index">
+            <div class="buttonInfo">
+                <p>{{(bbItem.layout+1)}}</p>
+                <el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>
+                <el-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></el-button>
+            </div>
+            <bb :alias="bbItem.alias" :config="bbItem.attributes"></bb>
+        </div>
+    </div>
 </template>
 <script>
     export default {
@@ -28,7 +28,8 @@
         },
         watch: {
             'value.content'(val){
-                this.realValue = val
+                this.realValue = [];
+                this.realValue = val;
             }
         },
         mounted(){
@@ -43,6 +44,9 @@
                     accepts: function (el, target) {
                         return target === source
                     },
+                    moves: function (el, target) {
+                        return true
+                    },
                 });
                 t.drake.on('drop', function (el, target, source, sibling) {
                     t.$emit('updateBBLayout',{
@@ -55,10 +59,10 @@
             })
         },
         methods: {
-        	editItem:function(bbItem){
-        		this.$emit('edit',bbItem)
-        	},
-        	removeBB:function(bbItem){
+            editItem:function(bbItem){
+                this.$emit('edit',bbItem)
+            },
+            removeBB:function(bbItem){
                 const t = this;
                 t.$confirm('确认删除此项','提示', {
                     confirmButtonText: '确定',
@@ -72,8 +76,8 @@
                         message: '操作已取消'
                     });
                 });
-        		
-        	}
+                
+            }
         }    
     }
 </script>
