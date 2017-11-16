@@ -13,6 +13,9 @@
         },
         config:{
           type:[String,Object]
+        },
+        parentData:{
+          type:Object
         }
     },
     data() {
@@ -24,6 +27,7 @@
             if(this.config){
               var config = this.config;
               props = typeof config == 'string'?eval("("+config+")"):config;
+              props.parentData = this.parentData;
             }else{
               var attributes = this.attributes || [];
               for (var j in attributes) {

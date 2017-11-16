@@ -47,7 +47,7 @@
                                            :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)">
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
-                                <bb v-if="button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']"></bb>
+                                <bb v-if="button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row']}"></bb>
                             </span>
                         </div>
                         <div v-else-if="column['type'] == 'edit'">

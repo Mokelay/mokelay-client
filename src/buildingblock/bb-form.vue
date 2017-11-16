@@ -175,6 +175,17 @@
             hideSubmitButton:{
                 type:Boolean,
                 default:false
+            },
+            parentData:{
+                type:[String,Object],
+                default:function(){
+                    return {
+                        'bb':null,
+                        "router": null,
+                        'row-data':null,
+                        'getData':null
+                    }
+                }
             }
         },
         watch: {
@@ -221,7 +232,7 @@
                         Util.resolveButton(t.buttonConfig,{
                                 'bb':t,
                                 "router": t.$route.params,
-                                'row-data':null,
+                                'row-data':t.parentData['row-data'],
                                 'getData':t.getData
                             },t.afterCommit);
                     }
@@ -236,7 +247,7 @@
             getFields: function () {
                 var t = this;
                 if (t.dsFields) {
-                    Util.getDSData(t.dsFields, {"bb": t, "router": t.$route.params}, function (map) {
+                    Util.getDSData(t.dsFields, {"bb": t, "router": t.$route.params,'row-data':t.parentData['row-data']}, function (map) {
                         t.realFields = map[0].value;
                     }, function (code, msg) {
                     });
@@ -245,7 +256,7 @@
             getData: function () {
                 var t = this;
                 if (t.ds) {
-                    Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
+                    Util.getDSData(t.ds, {"bb": t, "router": t.$route.params,'row-data':t.parentData['row-data']}, function (map) {
                         t.formData = map[0].value;
                     }, function (code, msg) {
                     });

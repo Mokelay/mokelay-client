@@ -48,6 +48,12 @@ import Util from '../libs/util';
             buttonFormClass:{
                 type:String,
                 default:'m10'
+            },
+            on:{
+                type:Array
+            },
+            parentData:{
+                type:Object
             }
         },
 
@@ -98,7 +104,9 @@ import Util from '../libs/util';
                                     dsFields:t.dsFields,
                                     showCancelButton:t.showCancelButton,
                                     showCleanButton:t.showCleanButton,
-                                    hideSubmitButton:t.hideSubmitButton
+                                    hideSubmitButton:t.hideSubmitButton,
+                                    on:t.on,
+                                    parentData:t.parentData
                                 },
                                 on:{
                                     commit: function(formData){
