@@ -27,6 +27,9 @@
         props: {
             value:{
                 type:[String,Object]
+            },
+            content:{
+                type:Array
             }
         },
         data() {
@@ -52,30 +55,21 @@
                     {name: "交互的UUID", attributeName: 'uuid', dt: '', et: 'bb-uuid',props:{length:5,radix:8}},
                     {name: "触发事件的积木UUID", attributeName: 'fromContentUUID', dt: '', et: 'bb-uuid',props:{length:5,radix:8}},
                     {name: "事件", attributeName: 'fromContentEvent', dt: '', et: 'bb-select',props:{ds:{
-                        api: "/list-ed-by-pbb-id",
+                        api: "/list-edByBbAlias",
                         method: "get",
                         inputs: [
-                            {paramName: 'pbbId',valueType:"constant",constant:this.pbbId}
+                            {paramName: 'bbAlias',valueType:"constant",constant:this.value.alias}
                         ],
                         outputs: [
                             {dataKey: "fields", valueKey: "data_list"}
                         ]
                     },textField:'name',valueField:"eventName"}},
-                    {pbbId:'executePbb',name: "目标积木", attributeName: 'executePbb', dt: '', et: 'bb-select',props:{ds:{
-                        api: "/list-pbb-by-page",
+                    {pbbId:'executeContent',name: "目标积木", attributeName: 'executeContent', dt: '', et: 'bb-select',props:{fields:this.contentSelect}},
+                    {pbbId:'executeContentMethodName',name: "目标方法", attributeName: 'executeContentMethodName', dt: '', et: 'bb-select',props:{ds:{
+                        api: "/list-mdByBbAlias",
                         method: "get",
                         inputs: [
-                            {paramName: 'pageAlias',valueType:"constant",constant:this.pageAlias}
-                        ],
-                        outputs: [
-                            {dataKey: "fields", valueKey: "data_list"}
-                        ]
-                    },textField:'bbName',valueField:"id"}},
-                    {pbbId:'methodName',name: "目标方法", attributeName: 'methodName', dt: '', et: 'bb-select',props:{ds:{
-                        api: "/list-md-by-pbb-id",
-                        method: "get",
-                        inputs: [
-                            {paramName: 'pbbId',valueType:"inputValueObj",valueKey:"external",variable:'linkage'}
+                            {paramName: 'bbAlias',valueType:"inputValueObj",valueKey:"external",variable:'linkage'}
                         ],
                         outputs: [
                             {dataKey: "fields", valueKey: "data_list"}
@@ -83,7 +77,7 @@
                     },textField:'name',valueField:"methodName"}}
                 ],
                 interactiveOn:[
-                    {pbbId:'executePbb',triggerEventName:'change',executePbbId:'methodName',executeContentMethodName:'linkage'}
+                    {pbbId:'executeContent',triggerEventName:'change',executePbbId:'executeContentMethodName',executeBBMethodName:'linkage'}
                 ],
                 readBBDs:{
                     api: "cms-list-bb-by-alias",
@@ -99,6 +93,15 @@
                 },
             }
         },
+        computed:{
+            contentSelect:function(){
+                const fields = [];
+                this.content.forEach((val,index)=>{
+                    fields.push({text:val.aliasName,value:val.alias})
+                })
+                return fields;
+            }
+        },
         watch: {
             value(val){
                 const t = this;
@@ -108,6 +111,7 @@
         },
         created:function(){
             this.readBB();
+            this.setNewInteractiveFields();
         },
         methods: {
             updateBBAttributes:function(formData){
@@ -135,6 +139,17 @@
                     });
                   }, function (code, msg) {});
                 }
+            },
+            setNewInteractiveFields:function(){
+                const t = this;
+                let newInteractivefields = t.interactivefields;
+                t.interactivefields = [];
+                newInteractivefields.forEach((val,index)=>{
+                    if(val.attributeName == 'executeContent'){//更新当前页面积木下拉列表
+                        val.props.fields = t.contentSelect;
+                    }
+                });
+                t.interactivefields = newInteractivefields
             }
         }    
     }
