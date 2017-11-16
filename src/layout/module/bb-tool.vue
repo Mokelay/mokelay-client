@@ -49,11 +49,24 @@ export default {
 		addBB:function(bb){
 			const t = this;
 			const uuid = Util.uuid(this.length,this.radix)
-			t.$emit('addBB',{
-				uuid:uuid,
-				alias:bb.alias,
-				attributes:'',
-				layout:t.maxNumber+1
+			//创建积木名称  默认积木name
+			t.$prompt('请输入积木名称', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				inputValue:bb.name
+			}).then(({ value }) => {
+				t.$emit('addBB',{
+					uuid:uuid,
+					alias:bb.alias,
+					aliasName:value,
+					attributes:'',
+					layout:t.maxNumber+1
+				});
+			}).catch(() => {
+				t.$message({
+					type: 'info',
+					message: '取消输入'
+				});       
 			});
 		}
 	}

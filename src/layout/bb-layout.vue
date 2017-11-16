@@ -3,7 +3,7 @@
         <el-row class='question-layout-content'>
     		<el-col :span="3"><tool :maxNumber="maxNumber" @addBB="addBB"></tool></el-col>
     		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
-    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
+    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
 	</div>
 </template>
@@ -16,7 +16,7 @@
 2. 初始化layout数据
 <bb-layout :value="{
     layoutObject:{title:''},
-    content:[{uuid:'',alias:'',attributes:{},layout:""}],
+    content:[{uuid:'',alias:'',aliasName:'',attributes:{},layout:""}],
     interactives:[{uuid:'',fromContentUUID:'',fromContentEvent:'',executeContentUUID:'',executeContentMethodName:''}]}"></bb-layout>
 
 3. 把积木数据能够保存后端
@@ -117,7 +117,7 @@ commit = function(value){
                 t.value.content[index2].layout = siblingLayout;
                 const defalutArr = t.value.content;
                 t.value.content = [];
-                t.value.content = defalutArr;
+                t.value.content = t.swapItems(defalutArr,index1,index2);//积木调换位置
                 t.$emit('updateBBLayout',bbItem)
             },
             editItem:function(bbItem){//编辑积木属性
@@ -131,6 +131,7 @@ commit = function(value){
                 t.editValue = {
                     uuid:bbItem.uuid,
                     alias:bbItem.alias,
+                    aliasName:bbItem.aliasName,
                     attributes:bbItem.attributes,
                     layout:bbItem.layout,
                     interactive:bbInteractive
@@ -174,7 +175,22 @@ commit = function(value){
                 t.previewWidth = 21;
                 t.editWidth = 0;
                 t.showEdit = false;
-            }
+            },
+            // 交换数组元素
+            swapItems: function (arrDefault, index1, index2) {
+                const t = this;
+                if(index2 <0){
+                    index2 = arrDefault.length - 1;
+                }
+                let arr = arrDefault;
+                const ele = arr.splice(index1, 1)[0];
+                if (index1 - index2) {
+                    arr.splice(index2, 0, ele);
+                } else {
+                    arr.splice(index2 - 1, 0, ele);
+                }
+                return arr
+            },
         },
         components:{
         	tool,
