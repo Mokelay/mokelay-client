@@ -148,13 +148,13 @@
                 const t = this;
                 return new Promise((resolve) => {
                     if (t.ds) {
-                        t._parentId = node[t.nodeValue] || 0;//默认是0 ，查询根列表
+                        const _parentId = node.level === 0 ? 0 : node[t.nodeValue];//默认是0 ，查询根列表
                         let inputs = t.ds.inputs || [];
                         let hasParam = false;
                         inputs.forEach(function (item) {
                             if (item.paramName == t.parentKey) {
                                 hasParam = true;
-                                item.constant = t._parentId;
+                                item.constant = _parentId;
                             }
                         });
                         if (!hasParam) {
@@ -162,7 +162,7 @@
                             inputs.push({
                                 paramName: t.parentKey,
                                 valueType: "constant",
-                                constant: t._parentId
+                                constant: _parentId
                             });
                         }
                         Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
@@ -172,7 +172,7 @@
                                 return;
                             }
                             map[0]['value'].forEach((item, key) => {
-                                const childNum = item['child_num']
+                                const childNum = item['child_num'];
                                 if (childNum && childNum > 0) {
 
                                 } else {
