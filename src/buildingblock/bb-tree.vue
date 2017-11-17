@@ -77,10 +77,20 @@
             }
         },
         created: function () {
+            //如果不是懒加载，则获取全部节点数据，暂时不提供此类接口
             if (!this.lazy) {
                 this.getData({}).then((data) => {
                     this.data = data;
                 })
+            }
+        },
+        watch: {
+            //value如果为空，取消勾选所有选中节点
+            value(val) {
+                if (!val) {
+                    const checkedNodes = this.$refs.tree.getCheckedNodes();
+                    this.uncheckNodes(checkedNodes);
+                }
             }
         },
         computed: {
@@ -114,6 +124,13 @@
                 //往上级传送选择的字段
                 this.$emit("tree-commit", newCheckedNode);
             },
+            //取消勾选选中节点
+            uncheckNodes(nodes) {
+                const treeInstance = this.$refs.tree;
+                nodes.forEach((node) => {
+                    treeInstance.setChecked(node, false, true);
+                })
+            },
             //勾选改变后
             checkChange(data, check, childCheck) {
                 const t = this;
@@ -124,11 +141,7 @@
                     const filterNodes = checkedkNodes.filter((node) => {
                         return node[nodeValue] !== data[nodeValue];
                     });
-                    if (filterNodes.length) {
-                        filterNodes.forEach((node) => {
-                            treeInstance.setChecked(node, false, true);
-                        })
-                    }
+                    this.uncheckNodes(filterNodes);
                 }
             },
             getData(node) {
