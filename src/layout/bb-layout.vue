@@ -1,12 +1,12 @@
 <template>
-	<div class="bb-layout">
+    <div class="bb-layout">
         <el-row class='question-layout-content'>
-    		<el-col :span="3"><tool :value="value" @addBB="addBB"></tool></el-col>
-    		<el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
-    		<el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
+            <el-col :span="3"><tool :value="value" @addBB="addBB"></tool></el-col>
+            <el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
+            <el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
         <el-button @click="commit">提交</el-button> 
-	</div>
+    </div>
 </template>
 <script>
 /**
@@ -49,7 +49,7 @@ updateBBAttributes = function(uuid,attributes){
 }
 
 //uuid为bb中内部生成的uuid
-updateBBLayout = function(uuid,layout){
+updateBBLayout = function(layout){
     //调用后台接口保存
 }
 
@@ -73,9 +73,9 @@ commit = function(value){
 当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
 **/
 
-	import tool from './module/bb-tool.vue'
-	import preview from './module/bb-preview.vue'
-	import edit from './module/bb-edit-attribute.vue'
+    import tool from './module/bb-tool.vue'
+    import preview from './module/bb-preview.vue'
+    import edit from './module/bb-edit-attribute.vue'
     export default {
         name: 'bb-layout',
         props: {
@@ -87,16 +87,16 @@ commit = function(value){
             }
         },
         data() {
-        	return{
+            return{
                 showEdit:false,
                 previewWidth:21,
                 editWidth:0,
                 editValue:null,//当前编辑的积木
                 layoutArray:null//排序数组用于更新排序
-        	}
+            }
         },
         methods: {
-        	addBB:function(bbItem){//添加积木
+            addBB:function(bbItem){//添加积木
                 this.value.content.push(bbItem);
                 this.hideEditor();
                 this.$emit('addBB',bbItem.uuid,bbItem.alias,bbItem.layout)
@@ -130,7 +130,7 @@ commit = function(value){
                     })
                 })
                 t.value.content = newContent;
-                t.$emit('updateBBLayout','大积木uuid',t.layoutArray)
+                t.$emit('updateBBLayout',t.layoutArray)
             },
             editItem:function(bbItem){//编辑积木属性
                 const t = this;
@@ -149,8 +149,8 @@ commit = function(value){
                     interactive:bbInteractive
                 }
                 t.showEditor();
-        	},
-        	removeBB:function(bbItem){//删除积木
+            },
+            removeBB:function(bbItem){//删除积木
                 const t = this;
                 t.value.content.forEach((val,key)=>{
                     if(val.uuid == bbItem.uuid){
@@ -158,8 +158,8 @@ commit = function(value){
                     }
                 })
                 t.hideEditor();
-        		t.$emit('removeBB',bbItem.uuid)
-        	},
+                t.$emit('removeBB',bbItem.uuid)
+            },
             updateBBAttributes:function(uuid,attributes){//更新积木属性
                 const t = this;
                 t.hideEditor();
@@ -172,6 +172,11 @@ commit = function(value){
             },
             removeInteractive:function(uuid){//删除交互
                 const t = this;
+                t.value.interactives.forEach((val,key)=>{
+                    if(val.uuid == uuid){
+                        t.value.interactives.splice(key,1);
+                    }
+                })
                 t.$emit('removeInteractive',uuid);
             },
             commit:function(){//删除交互
@@ -220,9 +225,9 @@ commit = function(value){
             }
         },
         components:{
-        	tool,
-        	preview,
-        	edit
+            tool,
+            preview,
+            edit
         }
     }
 </script>
