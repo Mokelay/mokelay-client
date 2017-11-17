@@ -1,52 +1,33 @@
+<template>
+    <div>
+        <el-tree
+                class="bn"
+                :data="data"
+                :lazy="lazy"
+                :load="loadData"
+                :node-key="nodeValue"
+                :props="{
+                    children: 'children',
+                    label: nodeText,
+                    isLeaf: 'leaf'
+                }"
+                :default-checked-keys="checkedField"
+                :show-checkbox="showCheckbox"
+                highlight-current
+                ref="tree"
+                :key="randomKey"
+                @check-change="checkChange"
+        >
+        </el-tree>
+        <el-button class="fr mt20" type="primary" @click="formCommit">确定</el-button>
+    </div>
+</template>
+
 <script>
     import Util from '../libs/util.js'
 
     export default {
         name: 'bb-tree',
-        render: function (createElement) {
-            const t = this;
-            if (t.canRender) {
-                let treeDom = createElement('el-tree', {
-                    'class': 'bn',
-                    attrs: {
-
-                        'show-checkbox': true,
-                        'node-key': t.nodeValue,
-                        'highlight-current': true,
-                        'default-checked-keys': t.checkedField
-                    },
-//                    domProps:{
-//                        value:t.value
-//                    },
-                    props: {
-                        data: t.data,
-                        props: {
-                            children: 'children',
-                            label: t.nodeText,
-                            isLeaf: 'leaf'
-                        }
-                    },
-                    on: {
-                        'node-expand': t.openNode,
-                        'check-change': t.checkChange
-                    },
-                    key: t.randomKey,
-                    ref: 'tree'
-                }, []);
-                let confirmBtn = createElement('el-button', {
-                    'class': 'fr',
-                    domProps: {
-                        innerHTML: '确定'
-                    },
-                    attrs: {type: 'primary'},
-                    on: {
-                        click: t.formCommit
-                    }
-                }, []);
-
-                return createElement('div', {}, [treeDom, confirmBtn]);
-            }
-        },
         props: {
             value: {
                 type: String
@@ -71,6 +52,14 @@
                 type: Boolean,
                 default: false
             },
+            showCheckbox: {
+                type: Boolean,
+                default: true
+            },
+            lazy: {
+                type: Boolean,
+                default: true
+            },
             checkedField: {
                 type: Array
             },
@@ -82,9 +71,16 @@
             }
         },
         data() {
+            const t = this;
             return {
-                data: null,
-                canRender: false
+                data: []
+            }
+        },
+        created: function () {
+            if (!this.lazy) {
+                this.getData({}).then((data) => {
+                    this.data = data;
+                })
             }
         },
         computed: {
@@ -92,19 +88,9 @@
                 return "" + Math.floor(Math.random() * 10000);
             }
         },
-        created: function () {
-            const t = this;
-            t.getData();
-        },
         mounted: function () {
         },
         methods: {
-            openNode: function (node) {
-                const t = this;
-                if (node && node[t.nodeValue]) {
-                    t.getData(node[t.nodeValue]);
-                }
-            },
             formCommit() {
                 const t = this;
                 let checkedNode = t.$refs.tree.getCheckedNodes();
@@ -131,89 +117,69 @@
             //勾选改变后
             checkChange(data, check, childCheck) {
                 const t = this;
-                if (check && !this.multiple) {//多选的话
-                    this.$refs.tree.setCheckedKeys([]);
-                    this.$refs.tree.setCheckedKeys([data[t.nodeValue]]);
-                }
-            },
-            getData: function (parentId) {
-                var t = this;
-                if (t.ds) {
-                    t._parentId = parentId || 0;//默认是0 ，查询根列表
-                    let inputs = t.ds.inputs || [];
-                    let hasParam = false;
-                    inputs.forEach(function (item) {
-                        if (item.paramName == t.parentKey) {
-                            hasParam = true;
-                            item.constant = t._parentId;
-                        }
+                if (check && !t.multiple) {//多选的话
+                    const nodeValue = t.nodeValue;
+                    const treeInstance = t.$refs.tree;
+                    const checkedkNodes = treeInstance.getCheckedNodes();
+                    const filterNodes = checkedkNodes.filter((node) => {
+                        return node[nodeValue] !== data[nodeValue];
                     });
-                    if (!hasParam) {
-                        //没有这个参数
-                        inputs.push({
-                            paramName: t.parentKey,
-                            valueType: "constant",
-                            constant: t._parentId
-                        });
+                    if (filterNodes.length) {
+                        filterNodes.forEach((node) => {
+                            treeInstance.setChecked(node, false, true);
+                        })
                     }
-                    Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
-                        let list = [];
-                        if (!map || map.length <= 0) {
-                            return;
-                        }
-                        map[0]['value'].forEach((item, key) => {
-                            if (item['child_num'] && item['child_num'] > 0) {
-                                //非叶子节点
-                                item.children = [{
-                                    id: ''//随便加一条  能显示下拉按钮就行
-                                }]
-                            } else {
-                                item.leaf = true;
-                            }
-                            list.push(item);
-                        });
-                        if (t._parentId && t._parentId != 0) {
-                            //说明不是根
-                            if (t.data && t.data.length > 0) {
-                                t._fillChild(t.data, t._parentId, list);
-                            }
-                        } else {
-                            //是根节点
-                            t.data = list;
-                        }
-                        t.canRender = true;
-                    }, function (code, msg) {
-                    });
-                } else if (t.opts && t.opts.length > 0) {
-                    t.data = t.opts;
-                    t.canRender = true;
                 }
             },
-            _fillChild(data, parentId, list) {
+            getData(node) {
                 const t = this;
-                if (!data) {
-                    return;
-                }
-                let found = false;
-                data.forEach(function (item, index) {
-                    if (item[t.nodeValue] == parentId) {
-                        item.children = list;
-                        found = true;
+                return new Promise((resolve) => {
+                    if (t.ds) {
+                        t._parentId = node[t.nodeValue] || 0;//默认是0 ，查询根列表
+                        let inputs = t.ds.inputs || [];
+                        let hasParam = false;
+                        inputs.forEach(function (item) {
+                            if (item.paramName == t.parentKey) {
+                                hasParam = true;
+                                item.constant = t._parentId;
+                            }
+                        });
+                        if (!hasParam) {
+                            //没有这个参数
+                            inputs.push({
+                                paramName: t.parentKey,
+                                valueType: "constant",
+                                constant: t._parentId
+                            });
+                        }
+                        Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
+                            let list = [];
+                            if (!map || map.length <= 0) {
+                                resolve([]);
+                                return;
+                            }
+                            map[0]['value'].forEach((item, key) => {
+                                const childNum = item['child_num']
+                                if (childNum && childNum > 0) {
+
+                                } else {
+                                    item.leaf = true;
+                                }
+                                list.push(item);
+                            });
+
+                            resolve(list);
+                        }, function (code, msg) {
+                        });
+                    } else if (t.opts && t.opts.length > 0) {
+                        resolve(t.opts);
                     }
                 });
-                if (!found) {
-                    //没有找到
-                    data.forEach(function (item, index) {
-                        if (item.children && item.children.length > 0) {
-                            let hasFound = t._fillChild(item.children, parentId, list);
-                            if (hasFound) {
-                                found = true;
-                                return true;
-                            }
-                        }
-                    });
-                }
-                return found;
+            },
+            loadData: function (node, resolve) {
+                this.getData(node).then((data) => {
+                    resolve(data);
+                })
             }
         }
     }
@@ -227,6 +193,10 @@
 
     .fr {
         float: right;
+    }
+
+    .mt20 {
+        margin-top: 20px;
     }
 
 </style>
