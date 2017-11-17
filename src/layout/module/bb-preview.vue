@@ -28,6 +28,9 @@
         watch: {
             'value.content'(val){
                 this.realValue = val;
+            },
+            'value.layoutObject'(val){
+                this.title =  val.title
             }
         },
         mounted(){
