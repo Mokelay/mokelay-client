@@ -11,7 +11,7 @@
                     label: nodeText,
                     isLeaf: 'leaf'
                 }"
-                :default-checked-keys="checkedField"
+                :default-checked-keys="checkedKeys"
                 :show-checkbox="showCheckbox"
                 highlight-current
                 ref="tree"
@@ -96,6 +96,22 @@
         computed: {
             randomKey() {
                 return "" + Math.floor(Math.random() * 10000);
+            },
+            checkedKeys() {
+                let checkedField = this.checkedField;
+                if (checkedField && checkedField.length) {
+                    if (!this.multiple) { //单选默认取最后一个元素
+                        checkedField = checkedField.slice(-1);
+                    }
+                    if (Object.keys(checkedField[0]).length) {
+                        const nodeValue = this.nodeValue;
+                        return checkedField.map((item) => {
+                            return item[nodeValue];
+                        });
+                    }
+                    return checkedField;
+                }
+                return [];
             }
         },
         mounted: function () {
@@ -152,7 +168,7 @@
                         let inputs = t.ds.inputs || [];
                         let hasParam = false;
                         inputs.forEach(function (item) {
-                            if (item.paramName == t.parentKey) {
+                            if (item.paramName === t.parentKey) {
                                 hasParam = true;
                                 item.constant = _parentId;
                             }

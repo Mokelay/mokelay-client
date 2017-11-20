@@ -70,23 +70,24 @@
         },
         data() {
             return {
-                p_value: this.p_value,
-                p_checkedField: this.checkedField
+                p_value: this.p_value
             }
         },
         created: function () {
-            this.getCheckedField();
+
         },
         mounted: function () {
         },
-        methods: {
-            getCheckedField() {
+        computed: {
+            p_checkedField() {
                 let result = [];
                 if (typeof this.value === 'string') {
                     result = this.value.split(",");
                 }
-                this.p_checkedField = result;
-            },
+                return result;
+            }
+        },
+        methods: {
             treeCommit(checkedNode) {
                 let t = this;
                 let checkedNodeVal = [];//只有配置的主键字段
