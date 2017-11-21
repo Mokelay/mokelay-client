@@ -1,11 +1,11 @@
 <template>
     <div class="bb-layout">
-        <el-row class='question-layout-content'>
+        <div class="bb-layout-topbar"><el-button type="primary" @click="commit">提交</el-button></div>
+        <el-row class='bb-layout-content'>
             <el-col :span="3"><tool :value="value" @addBB="addBB"></tool></el-col>
             <el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
             <el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
         </el-row>
-        <el-button @click="commit">提交</el-button> 
     </div>
 </template>
 <script>
@@ -233,6 +233,11 @@ commit = function(value){
 </script>
 <style lang="less" scoped>
 .bb-layout{
-    min-height:~'calc(100vh - 135px)';
+    height:~'calc(100vh - 155px)';
+    overflow-y: hidden;
+    .bb-layout-topbar{
+        text-align: right;
+        margin-bottom: 10px;
+    }
 }
 </style>

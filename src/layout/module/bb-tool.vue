@@ -76,8 +76,8 @@ export default {
 .tool-list{
 	padding: 11px;
 	max-width: 150px;
-	max-height: 100vh;
 	overflow-y: auto;
+	max-height:~'calc(100vh - 210px)';
 	.bb{
 		margin-bottom: 4px;
 		background: #FFFFFF;

@@ -23,7 +23,7 @@ import Util from '../libs/util';
         data() {
             return {
                 v:this.value,
-                showButton:true
+                showButton:false
             }
         },
         watch: {
@@ -34,9 +34,6 @@ import Util from '../libs/util';
         created: function () {
             if(!this.value){
                 this.generate();
-                this.showButton = true
-            }else{
-                this.showButton = false;
             }
         },
         mounted:function(){

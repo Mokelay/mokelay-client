@@ -134,7 +134,7 @@
             columns: {
                 type: Array,
                 default: function () {
-                    return []
+                    return [{prop:null,label:'默认表单'}]
                 }
             },
             value: {
@@ -434,6 +434,8 @@
     }
     .searchInput{
         max-width: 400px;
+        float: left;
+        margin-right: 20px;
     }
     .el-row{
         margin-bottom: 20px;

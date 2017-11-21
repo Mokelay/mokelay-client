@@ -12,8 +12,12 @@
       );
     },
     props: {
+      value:{
+        type:String
+      },
       text: {
-        type: String
+        type: String,
+        default:'文字组件支持模板'
       },
       tagName:{
         type:String,
@@ -50,13 +54,22 @@
     data() {
       return {
         content:null,
-        realText:this.text
+        realText:this.value || this.text
       };
     },
     created: function () {
         this.tansferTpl();
     },
     watch:{
+      realText(val){
+        this.tansferTpl();
+      },
+      value: {
+        handler: function (val, oldVal) {
+          this.realText = val;
+        },
+        deep: true
+      },
       text(val){
         this.tansferTpl();
       },
