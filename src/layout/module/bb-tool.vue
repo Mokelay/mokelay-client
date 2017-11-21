@@ -59,7 +59,7 @@ export default {
 					uuid:uuid,
 					alias:bb.alias,
 					aliasName:value,
-					attributes:'',
+					attributes:{},
 					layout:t.value.content.length+1
 				});
 			}).catch(() => {
