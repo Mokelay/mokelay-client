@@ -156,7 +156,7 @@
             //勾选改变后
             checkChange(data, check, childCheck) {
                 const t = this;
-                if (check && !t.multiple) {//多选的话
+                if (check && !t.multiple) {//单选的话
                     const nodeValue = t.nodeValue;
                     const treeInstance = t.$refs.tree;
                     const checkedkNodes = treeInstance.getCheckedNodes();

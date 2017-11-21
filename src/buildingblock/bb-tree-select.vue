@@ -118,7 +118,7 @@
             },
             linkage: function (data) { //提供给外部调用
                 if (data) {
-                    this.external['linkage'] = data;
+                    this.external = Object.assign({}, {linkage: data});
                 }
             },
         }
