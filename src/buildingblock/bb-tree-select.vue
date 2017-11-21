@@ -16,6 +16,7 @@
                     :checkedField="p_checkedField"
                     :opts="opts"
                     :ds="ds"
+                    :external="external"
                     @tree-commit="treeCommit"
                     ref="bbtree">
             </bb-tree>
@@ -29,14 +30,13 @@
 </template>
 
 <script>
-    import _ from 'lodash';
     import Util from '../libs/util.js'
 
     export default {
         name: 'bb-tree-select',
         props: {
             value: {
-                type: String
+                type: [String, Number]
             },
             nodeValue: {
                 type: String,
@@ -70,7 +70,8 @@
         },
         data() {
             return {
-                p_value: this.p_value
+                p_value: this.value,
+                external: {}
             }
         },
         created: function () {
@@ -81,8 +82,10 @@
         computed: {
             p_checkedField() {
                 let result = [];
-                if (typeof this.value === 'string') {
-                    result = this.value.split(",");
+                try {
+                    result = `${this.value}`.split(",");
+                } catch (e) {
+                    console.log('类型错误');
                 }
                 return result;
             }
@@ -104,7 +107,7 @@
                     value = checkedNodeVal.join(",");
                 }
 
-                this.p_value = _.toString(value);
+                this.p_value = value;
                 //触发到父组件处理
                 this.$emit("input", value);//让父组件能用v-model
 
@@ -112,7 +115,12 @@
                 this.$emit("tree-commit", checkedNode);
 
                 this.$refs.popover.doClose();
-            }
+            },
+            linkage: function (data) { //提供给外部调用
+                if (data) {
+                    this.external['linkage'] = data;
+                }
+            },
         }
     }
 </script>

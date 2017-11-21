@@ -30,7 +30,7 @@
         name: 'bb-tree',
         props: {
             value: {
-                type: String
+                type: [String, Number]
             },
             nodeValue: {
                 type: String,
@@ -68,6 +68,9 @@
             },
             ds: {
                 type: Object
+            },
+            external: {
+                type: Object
             }
         },
         data() {
@@ -79,7 +82,7 @@
         created: function () {
             //如果不是懒加载，则获取全部节点数据，暂时不提供此类接口
             if (!this.lazy) {
-                this.getData({}).then((data) => {
+                this.getRootData().then((data) => {
                     this.data = data;
                 })
             }
@@ -89,8 +92,11 @@
             value(val) {
                 if (!val) {
                     const checkedNodes = this.$refs.tree.getCheckedNodes();
-                    this.uncheckNodes(checkedNodes);
+                    !!checkedNodes.length && this.uncheckNodes(checkedNodes);
                 }
+            },
+            external() {
+                this.getRootData()
             }
         },
         computed: {
@@ -160,11 +166,18 @@
                     this.uncheckNodes(filterNodes);
                 }
             },
+            //获取根节点数据
+            getRootData() {
+                return this.getData({
+                    level: 0
+                })
+            },
+            //获取某个节点的子节点数据
             getData(node) {
                 const t = this;
                 return new Promise((resolve) => {
                     if (t.ds) {
-                        const _parentId = node.level === 0 ? 0 : node[t.nodeValue];//默认是0 ，查询根列表
+                        const _parentId = node.level === 0 ? 0 : node['data'][t.nodeValue];//默认是0 ，查询根列表
                         let inputs = t.ds.inputs || [];
                         let hasParam = false;
                         inputs.forEach(function (item) {
@@ -181,7 +194,11 @@
                                 constant: _parentId
                             });
                         }
-                        Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
+                        Util.getDSData(t.ds, {
+                            "bb": t,
+                            "router": t.$route.params,
+                            "external": t.external
+                        }, function (map) {
                             let list = [];
                             if (!map || map.length <= 0) {
                                 resolve([]);
@@ -205,7 +222,11 @@
                     }
                 });
             },
+            //懒加载执行
             loadData: function (node, resolve) {
+                if (node.parent && node.isLeaf) {
+                    return resolve([]);
+                }
                 this.getData(node).then((data) => {
                     resolve(data);
                 })
