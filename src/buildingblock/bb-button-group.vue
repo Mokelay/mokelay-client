@@ -13,7 +13,14 @@
             buttons:{
                 type: Array,
                 default:function(){
-                    return []
+                    return [{
+                        type:'primary',
+                        text:'初始化按钮',
+                        button:{
+                            type:'primary',
+                            text:'初始化按钮',
+                        }
+                    }]
                 }
             }
         },

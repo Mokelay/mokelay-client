@@ -25,7 +25,7 @@
             steps: {
                 type:Array,
                 default:function(){
-                    return [];
+                    return [{fields:null,title:'初始化标题',description:'初始化描述'}];
                 }
             }
         },
