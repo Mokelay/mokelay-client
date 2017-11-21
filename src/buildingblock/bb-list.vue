@@ -377,7 +377,7 @@
             },
             globalSearch(){
                 const t = this;
-                if(t.dateTimePicker[0]){
+                if(t.dateTimePicker && t.dateTimePicker[0]){
                     t.dateTimePickerJSON = JSON.stringify(t.dateTimePicker);
                 }
                 t.getData();

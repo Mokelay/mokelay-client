@@ -28,11 +28,11 @@
             };
         },
         watch: {
-//            value(){
-//                if(this.editor){
-//                    this.editor.txt.html(this.value);
-//                }
-//            }
+           value(){
+               if(this.editor){
+                   this.editor.txt.html(this.value);
+               }
+           }
         },
         computed: {},
         beforeCreate: function () {
