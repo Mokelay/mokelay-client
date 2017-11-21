@@ -1,15 +1,6 @@
 <template>
     <div>
         <el-row v-if="search">
-            <div v-if="searchConfig.showDateTimePicker" class="searchInput">
-                <el-date-picker
-                    v-model="dateTimePicker"
-                    type="datetimerange"
-                    align="left"
-                    @change="globalSearch"
-                    placeholder="选择时间范围">
-                </el-date-picker>
-            </div>
             <div v-if="searchConfig.searchType == 'searchInput'" class="searchInput">
                 <el-input v-model="keywords" @keyup.native.enter="globalSearch"
                        style="width: 100%;" placeholder="请输入搜索内容">
@@ -243,8 +234,6 @@
                 pageSize: 10,
                 page: 1,
                 keywords: '',
-                dateTimePicker:null,
-                dateTimePickerJSON:null,
                 selectArr: [],
                 loading: false,
                 treeParentId:0,
@@ -376,11 +365,7 @@
                 //this.$emit("list-select", row);
             },
             globalSearch(){
-                const t = this;
-                if(t.dateTimePicker && t.dateTimePicker[0]){
-                    t.dateTimePickerJSON = JSON.stringify(t.dateTimePicker);
-                }
-                t.getData();
+                this.getData();
             },
             cellSubmit: function (event, column, row) {
                 let t=this;
