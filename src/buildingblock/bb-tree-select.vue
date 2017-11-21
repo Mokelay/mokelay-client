@@ -70,12 +70,12 @@
         },
         data() {
             return {
-                p_value: this.value,
+                p_value: '',
                 external: {}
             }
         },
         created: function () {
-
+            this.p_value = this.value;
         },
         mounted: function () {
         },
