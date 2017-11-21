@@ -121,7 +121,8 @@
       createMenuItem:function(createElement,item){
         var t = this;
         var titleEle = createElement('span',{slot:"title"},[item.title,createElement('bb-badge',{props:{value:item.value},ref:item['url'],class:'bb-menu-badge'},[])]);
-        var templateChild = item.icon?createElement('i',{class:'el-icon-'+item.icon},[]):'';
+          var iconClass = (item.icon&&item.icon.indexOf("el-icon-")>=0)?item.icon:'el-icon-'+item.icon;
+          var templateChild = item.icon?createElement('i',{class:iconClass},[]):'';
         return createElement('el-menu-item',
             {props:{index:item.url,key:item.url,route:{path:item.url}},title:item.title,class:item.class,on:{
               click:function(){
@@ -135,8 +136,9 @@
       },
       createSubmenu:function(createElement,item){
         var t = this;
-        var child = []
-        var icon = item.icon?createElement('i',{class:'el-icon-'+item.icon},[]):'';
+        var child = [];
+          var iconClass = (item.icon&&item.icon.indexOf("el-icon-")>=0)?item.icon:'el-icon-'+item.icon;
+        var icon = item.icon?createElement('i',{class:iconClass},[]):'';
         var title = createElement('span',{slot:"title"},[item.title]);
         var groupSpan = createElement('span',{slot:"title"},[item.title,createElement('bb-badge',{props:{value:item.value},ref:item['url'],class:'bb-menu-badge'},[])]);
         return createElement(
