@@ -7,8 +7,9 @@
 				<el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>
                 <el-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></el-button>
 			</div>
-			<bb :alias="bbItem.alias" :config="bbItem.attributes"></bb>
+			<div class="bb-preview-content"><bb :alias="bbItem.alias" :config="bbItem.attributes"></bb></div>
 		</div>
+        <div class="bb-preview-suggess" v-if="realValue.length<1">请从工具栏添加积木</div>
 	</div>
 </template>
 <script>
@@ -91,12 +92,23 @@
         .bb-preview-item{
             display: flex;
             flex:1;
+            margin-bottom: 10px;
+            .bb-preview-content{
+                display: flex;
+                flex:1;
+                padding:10px;
+                border: 1px solid #e4e4e4;
+            }
+        }
+        .bb-preview-suggess{
+            text-align: center;
+            line-height: 300px;
         }
         .buttonInfo{
             background: #eef1f6;
             border: 1px solid #E4E4E4;
             border-right: none;
-            margin-top: 10px;
+            //margin-top: 10px;
             padding: 10px;
             .button-item{
               display: block;
