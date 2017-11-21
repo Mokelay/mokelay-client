@@ -77,7 +77,7 @@ export default {
 	padding: 11px;
 	max-width: 150px;
 	overflow-y: auto;
-	max-height:~'calc(100vh - 210px)';
+	max-height:~'calc(100vh - 100px)';
 	.bb{
 		margin-bottom: 4px;
 		background: #FFFFFF;

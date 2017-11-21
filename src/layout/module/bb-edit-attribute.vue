@@ -162,7 +162,7 @@
 <style lang="less" scoped>
     .bb-edit{
         padding-left: 10px;
-        max-height:~'calc(100vh - 210px)';
+        max-height:~'calc(100vh - 100px)';
         overflow-y: auto;
     }
     .edit-attribute{

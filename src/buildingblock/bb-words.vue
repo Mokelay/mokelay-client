@@ -105,7 +105,8 @@
           if(t.templateProp){
             t.getText();
           }
-          t.content = Util.tpl(t.realText,data)
+          const words = t.realText?t.realText:'';
+          t.content = Util.tpl(words,data);
       },
       getText:function(){
         const t = this;

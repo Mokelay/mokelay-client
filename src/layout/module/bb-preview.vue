@@ -87,7 +87,7 @@
 </script>
 <style lang="less" scoped>
     .bb-preview{
-        max-height:~'calc(100vh - 210px)';
+        max-height:~'calc(100vh - 100px)';
         overflow-y: auto;
         .bb-preview-item{
             display: flex;

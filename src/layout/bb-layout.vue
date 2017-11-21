@@ -109,13 +109,18 @@ commit = function(value){
                 }
                 let index1 = 0;
                 let index2 = 0;
+            
                 t.layoutArray.forEach((val,key)=>{
                     if(bbItem.el.id == val.uuid){
                         index1 = key;
-                    }else if(bbItem.sibling.id == val.uuid){
+                    }
+                    if(bbItem.sibling && bbItem.sibling.id == val.uuid){
                         index2 = key;
                     }
                 });
+                if(!bbItem.sibling){
+                    index2 = t.layoutArray.length;
+                }
                 //更新layoutArray数组
                 t.layoutArray = t.swapItems(t.layoutArray,index1,index2);
                 //更新value.content中的排序
@@ -233,7 +238,7 @@ commit = function(value){
 </script>
 <style lang="less" scoped>
 .bb-layout{
-    height:~'calc(100vh - 155px)';
+    padding:5px;
     overflow-y: hidden;
     .bb-layout-topbar{
         text-align: right;
