@@ -96,7 +96,9 @@
                 }
             },
             external() {
-                this.getRootData()
+                this.getRootData().then((data) => {
+                    this.data = data;
+                })
             }
         },
         computed: {
