@@ -16,8 +16,7 @@
         type:String
       },
       text: {
-        type: String,
-        default:'文字组件支持模板'
+        type: String
       },
       tagName:{
         type:String,
