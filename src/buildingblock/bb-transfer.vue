@@ -2,8 +2,8 @@
     <el-transfer
             v-model="bb_value"
             :props="{
-                key,
-                label
+                key:itemKey,
+                label:itemLabel
             }"
             :data="datas"
             @change="change">
@@ -19,11 +19,11 @@
             value: {
                 type: Array
             },
-            key: {
+            itemKey: {
                 type: String,
                 default: 'key'
             },
-            label: {
+            itemLabel: {
                 type: String,
                 default: 'label'
             },
@@ -36,7 +36,7 @@
         },
         data() {
             return {
-                bb_value: '',
+                bb_value: [],
                 datas: []
             }
         },
