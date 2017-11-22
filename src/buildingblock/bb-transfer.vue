@@ -27,6 +27,9 @@
                 type: String,
                 default: 'label'
             },
+            staticData: {
+                type: Array
+            },
             props: {
                 type: Object
             },
@@ -56,12 +59,15 @@
                     Util.getDSData(t.ds, {
                         "bb": t,
                         "router": t.$route.params
-                    }, function (map) {
-                        this.datas = map || [];
+                    }, function (data) {
+                        data.forEach((item) => {
+                            const {dataKey, value} = item;
+                            t[dataKey] = value;
+                        });
                     }, function (code, msg) {
                     });
                 } else {
-                    this.datas = this.data;
+                    this.datas = this.staticData;
                 }
             },
             change(value, direction, movedKeys) {
