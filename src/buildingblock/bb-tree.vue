@@ -13,6 +13,7 @@
                 :default-checked-keys="checkedKeys"
                 :show-checkbox="showCheckbox"
                 highlight-current
+                lazy
                 ref="tree"
                 :key="randomKey"
                 @check-change="checkChange"
@@ -191,15 +192,15 @@
                             "router": t.$route.params,
                             "external": t.external
                         }, function (map) {
-                            let list = [];
-                            if (!map || map.length <= 0) {
+                            const list = [];
+                            if (!map || !map.length) {
                                 resolve([]);
                                 return;
                             }
                             map[0]['value'].forEach((item, key) => {
                                 const childNum = item['child_num'];
                                 if (childNum && childNum > 0) {
-                                    if (!multiple) {
+                                    if (!t.multiple) {
                                         item.disabled = true;
                                     }
                                 } else {
