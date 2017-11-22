@@ -23,7 +23,7 @@
         </el-popover>
         <div>
             <el-input class="wa" placeholder="请选择" disabled v-model="p_value"></el-input>
-            <el-button v-popover:popover :value="p_value"><i class="el-icon-search"></i></el-button>
+            <el-button v-popover:popover><i class="el-icon-search"></i></el-button>
             <el-button class="ml0" @click="p_value = ''"><i class="el-icon-delete"></i></el-button>
         </div>
     </div>

@@ -30,9 +30,6 @@
             staticData: {
                 type: Array
             },
-            props: {
-                type: Object
-            },
             ds: {
                 type: Object
             }
