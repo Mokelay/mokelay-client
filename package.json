@@ -1,6 +1,6 @@
 {
   "name": "ty-client-core",
-  "version": "1.0.52",
+  "version": "1.0.53",
   "description": "TY Client Core",
   "main": "./dist/index.js",
   "scripts": {
