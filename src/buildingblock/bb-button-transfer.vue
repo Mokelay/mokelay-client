@@ -11,7 +11,7 @@
                     :itemKey="itemKey"
                     :itemLabel="itemLabel"
                     :ds="ds"
-                    :data="staticData">
+                    :staticData="staticData">
             </el-transfer>
             <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
         </el-popover>
