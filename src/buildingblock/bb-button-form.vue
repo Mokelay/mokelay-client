@@ -46,14 +46,24 @@ import Util from '../libs/util';
                 type:Boolean
             },
             buttonFormClass:{
-                type:String,
-                default:'m10'
+                type:String
             },
             on:{
                 type:Array
             },
             parentData:{
                 type:Object
+            },
+            formButtonName:{
+                type:String
+            },
+            labelWidth:{
+                type:String,
+                default:'auto'
+            },
+            labelInline:{
+                type:Boolean,
+                default:false
             }
         },
 
@@ -100,17 +110,21 @@ import Util from '../libs/util';
                                     fields:t.fields,
                                     value:t.formData, //传入value
                                     buttonConfig:t.buttonConfig,
+                                    settingButtonText:t.formButtonName,
                                     ds:t.valueDs,
                                     dsFields:t.dsFields,
                                     showCancelButton:t.showCancelButton,
                                     showCleanButton:t.showCleanButton,
                                     hideSubmitButton:t.hideSubmitButton,
                                     on:t.on,
-                                    parentData:t.parentData
+                                    parentData:t.parentData,
+                                    labelWidth:t.labelWidth,
+                                    labelInline:t.labelInline
                                 },
                                 on:{
                                     commit: function(formData){
                                         t.formData = formData;
+
                                         t.$emit('input', formData);
                                         t.$emit('commit', formData);
                                         t.dialog.close().remove();

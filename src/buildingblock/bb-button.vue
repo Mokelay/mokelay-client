@@ -12,7 +12,10 @@
             button:{
                 type:Object,
                 default: function(){
-                    return {};
+                    return {
+                        type:'primary',
+                        text:'请设置按钮属性'
+                    };
                 }
             }
         },

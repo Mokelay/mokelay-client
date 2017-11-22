@@ -114,7 +114,8 @@
             return createElement('el-form',{
                 props:{
                     model:t.formData,
-                    labelWidth:"100px"
+                    labelWidth:t.labelWidth,
+                    inline:t.labelInline
                 },on:{
                     submit:"return false;"
                 },ref:"form"
@@ -186,6 +187,14 @@
                         'getData':null
                     }
                 }
+            },
+            labelWidth:{
+                type:String,
+                default:'auto'
+            },
+            labelInline:{
+                type:Boolean,
+                default:false
             }
         },
         watch: {
@@ -225,10 +234,10 @@
             },
             formCommit:function(){
                 var t = this;
-                this.$emit('input', this.formData);
-                this.$refs['form'].validate(function(valid){
+                t.$emit('input', t.formData);
+                t.$emit('commit', t.formData);
+                t.$refs['form'].validate(function(valid){
                     if(valid){
-                        t.$emit('commit', t.formData);
                         Util.resolveButton(t.buttonConfig,{
                                 'bb':t,
                                 "router": t.$route.params,
