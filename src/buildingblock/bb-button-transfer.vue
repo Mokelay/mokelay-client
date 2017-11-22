@@ -25,7 +25,7 @@
     import Util from '../libs/util';
 
     export default {
-        name: 'bb-transfer-select',
+        name: 'bb-button-transfer',
         props: {
             value: {
                 type: Array

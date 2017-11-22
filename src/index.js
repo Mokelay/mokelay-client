@@ -49,6 +49,7 @@ import bbtreeselect from './buildingblock/bb-tree-select.vue';
 import bblayout from './layout/bb-layout.vue';
 import bbicon from './buildingblock/bb-icon.vue';
 import bbiconselect from './buildingblock/bb-icon-select.vue';
+import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 
 
 let ty = {
@@ -105,6 +106,7 @@ let ty = {
 		Vue.component('bb-layout', bblayout);
 		Vue.component('bb-icon', bbicon);
 		Vue.component('bb-icon-select', bbiconselect);
+		Vue.component('bb-button-transfer', bbbuttontransfer);
 		console.log("finish ty bb init....");
 	}
 };
