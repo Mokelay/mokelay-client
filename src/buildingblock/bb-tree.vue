@@ -3,7 +3,6 @@
         <el-tree
                 class="bn"
                 :data="data"
-                :lazy="lazy"
                 :load="loadData"
                 :node-key="nodeValue"
                 :props="{
@@ -56,10 +55,6 @@
                 type: Boolean,
                 default: true
             },
-            lazy: {
-                type: Boolean,
-                default: true
-            },
             checkedField: {
                 type: Array
             },
@@ -80,12 +75,7 @@
             }
         },
         created: function () {
-            //如果不是懒加载，则获取全部节点数据，暂时不提供此类接口
-            if (!this.lazy) {
-                this.getRootData().then((data) => {
-                    this.data = data;
-                })
-            }
+
         },
         watch: {
             //value如果为空，取消勾选所有选中节点
@@ -209,7 +199,9 @@
                             map[0]['value'].forEach((item, key) => {
                                 const childNum = item['child_num'];
                                 if (childNum && childNum > 0) {
-
+                                    if (!multiple) {
+                                        item.disabled = true;
+                                    }
                                 } else {
                                     item.leaf = true;
                                 }
@@ -224,7 +216,7 @@
                     }
                 });
             },
-            //懒加载执行
+            //懒加载
             loadData: function (node, resolve) {
                 if (node.parent && node.isLeaf) {
                     return resolve([]);

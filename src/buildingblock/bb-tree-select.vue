@@ -75,13 +75,21 @@
             }
         },
         created: function () {
-            this.p_value = this.value;
+
         },
         mounted: function () {
+        },
+        watch: {
+            value(val) {
+                this.p_value = val;
+            }
         },
         computed: {
             p_checkedField() {
                 let result = [];
+                if (typeof value === 'undefined') {
+                    return result;
+                }
                 try {
                     result = `${this.value}`.split(",");
                 } catch (e) {
@@ -120,7 +128,7 @@
                 if (data) {
                     this.external = Object.assign({}, {linkage: data});
                 }
-            },
+            }
         }
     }
 </script>
