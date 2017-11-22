@@ -183,17 +183,29 @@
                 );
             },
             //外部调用，app打开后菜单  执行巴斯代码，调用buildBadge
-            buildBadge(key,val,clickHide){
-                const t=this;
-                console.log("key="+key);
-                console.log("t.items.length="+t.items.length);
-                if(t.items&&t.items.length>0){
-                    t.items.forEach(function(item,index){
-                        if(item.url&&item.url==key){
+            buildBadge(key, val, clickHide){
+                const t = this;
+                //构建正确的items数据
+                if (t.items && t.items.length > 0) {
+                    t._buildBadge(t, t.items, key, val, clickHide);
+                }
+                //调用badge组件方法设置
+                t.$refs[key].buildValue(val);
+            },
+            _buildBadge(t, items, key, val, clickHide){
+                if (items && items.length > 0) {
+                    items.forEach(function (item, index) {
+                        if (item.url && item.url == key) {
                             item.value = val;
-                            if(clickHide){
-                                item.clickHide=clickHide;
+                            if (clickHide) {
+                                item.clickHide = clickHide;
                             }
+                        }
+                        for (var i in item) {
+                            console.log(i + "=" + item[i] + "...");
+                        }
+                        if (item && item[t.childName] && item[t.childName].length > 0) {
+                            t._buildBadge(t,item[t.childName], key, val, clickHide);
                         }
                     });
                 }
