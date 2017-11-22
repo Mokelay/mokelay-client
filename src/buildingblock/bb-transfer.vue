@@ -1,8 +1,12 @@
 <template>
     <el-transfer
             v-model="bb_value"
-            :props="props"
-            :data="datas">
+            :props="{
+                key,
+                label
+            }"
+            :data="datas"
+            @change="change">
     </el-transfer>
 </template>
 
@@ -14,6 +18,14 @@
         props: {
             value: {
                 type: Array
+            },
+            key: {
+                type: String,
+                default: 'key'
+            },
+            label: {
+                type: String,
+                default: 'label'
             },
             props: {
                 type: Object
@@ -51,6 +63,14 @@
                 } else {
                     this.datas = this.data;
                 }
+            },
+            change(value, direction, movedKeys) {
+                const result = {value, direction, movedKeys};
+                console.log(result);
+                //v-model
+                this.$emit('input', value);
+                //触发prop change事件
+                this.$emit('change', value);
             }
         }
     }
