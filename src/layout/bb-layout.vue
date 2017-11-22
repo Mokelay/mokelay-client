@@ -82,7 +82,11 @@ commit = function(value){
             value:{
                 type:Object,
                 default:function(){
-                    return null
+                    return {
+                        layoutObject:{},
+                        content:[],
+                        interactives:[]
+                    }
                 }
             }
         },
