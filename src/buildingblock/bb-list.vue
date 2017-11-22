@@ -13,6 +13,14 @@
                 <bb-radio-group v-if="searchConfig.type == 'radio'" v-model="keywords" type="button" @input="globalSearch" :options="searchConfig.searchKeys" :ds="searchConfig.ds" :optionValue="searchConfig.optionValue" :optionText="searchConfig.optionText" class='searchSelection'>
                 </bb-radio-group>
             </div>
+            <bb-button-form 
+                class="advancedSearch"
+                @commit="advancedSearchFn"
+                v-if="advancedSearch" 
+                :fields="advancedSearchConfig.fields" 
+                :startButtonIcon="advancedSearchConfig.startButtonIcon" 
+                :settingText="advancedSearchConfig.settingText" 
+                :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
         </el-row>
         <el-row>
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
@@ -225,7 +233,18 @@
             border:{
                 type:Boolean,
                 default:true
-            }
+            },
+            advancedSearch:{
+                type:Boolean,
+                default:false
+            },
+            advancedSearchConfig: {
+                type: Object,
+                default: function () {
+                    return {
+                    }
+                }
+            },
         },
         data() {
             return {
@@ -238,7 +257,8 @@
                 loading: false,
                 treeParentId:0,
                 toChildParams:null,
-                showPopIsShow:false
+                showPopIsShow:false,
+                searchFormData:null
             }
         },
         watch: {
@@ -422,6 +442,11 @@
             showPopFn:function(row, index, column) {
                 this.clickPopIsShow = true;
                 this.$emit("clickProp", row, index,column);
+            },
+            advancedSearchFn:function(data){
+                const t = this;
+                t.searchFormData = data;
+                t.getData();
             }
         }
 
@@ -432,7 +457,7 @@
     .m10 {
         width: 100%;
     }
-    .searchInput{
+    .searchInput,.advancedSearch{
         max-width: 400px;
         float: left;
         margin-right: 20px;
