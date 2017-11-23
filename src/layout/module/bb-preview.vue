@@ -31,8 +31,11 @@
         },
         watch: {
             'value.content'(val){
-                this.getTimeKey();
-                this.realValue = val;
+                const t = this;
+                t.getTimeKey();
+                val.forEach((ele,index)=>{
+                    t.$set(t.realValue,index,ele);
+                })
             },
             'value.layoutObject'(val){
                 this.title =  val.title
@@ -41,7 +44,9 @@
         created(){
             const t = this;
             t.title = t.value.layoutObject.title;
-            t.realValue = t.value.content;
+            t.value.content.forEach((ele,index)=>{
+                t.$set(t.realValue,index,ele);
+            })
             t.getTimeKey();
         },
         mounted(){
