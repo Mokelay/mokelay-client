@@ -1,34 +1,34 @@
 <template>
     <div>
         <el-popover
-                width="400"
+                width="500"
                 placement="right"
                 trigger="click"
                 ref="popover"
         >
-            <el-transfer
+            <bb-transfer
                     v-model="bb_value"
                     :itemKey="itemKey"
                     :itemLabel="itemLabel"
                     :ds="ds"
-                    :staticData="staticData">
-            </el-transfer>
+                    :staticData="staticData"
+            >
+            </bb-transfer>
             <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
         </el-popover>
-        <el-input class="wa" placeholder="请选择" disabled v-model="bb_value"></el-input>
+        <el-input class="wa" placeholder="请选择" disabled v-model="bb_input_value" @change="change"></el-input>
         <el-button v-popover:popover><i class="el-icon-search"></i></el-button>
-        <el-button class="ml0" @click="bb_value = []"><i class="el-icon-delete"></i></el-button>
+        <el-button class="ml0" @click="clear"><i class="el-icon-delete"></i></el-button>
     </div>
 </template>
 
 <script>
-    import Util from '../libs/util';
 
     export default {
         name: 'bb-button-transfer',
         props: {
             value: {
-                type: Array
+                type: [String, Number]
             },
             itemKey: {
                 type: String,
@@ -47,7 +47,8 @@
         },
         data() {
             return {
-                bb_value: []
+                bb_input_value: '',
+                bb_value: ''
             }
         },
         created: function () {
@@ -55,25 +56,25 @@
         },
         watch: {
             value(val) {
+                this.bb_input_value = val;
                 this.bb_value = val;
             }
         },
-        computed: {},
         methods: {
             commit() {
+                this.bb_input_value = this.bb_value;
                 //v-model
-                this.$emit('input', this.bb_value);
-                //触发prop change事件
-                this.$emit('change', this.bb_value);
+                this.$emit('input', this.bb_input_value);
 
                 this.$refs.popover.doClose();
             },
             change(value) {
-                console.log(value);
-                //v-model
-                this.$emit('input', value);
                 //触发prop change事件
                 this.$emit('change', value);
+            },
+            clear() {
+                this.bb_input_value = '';
+                this.bb_value = '';
             }
         }
     }

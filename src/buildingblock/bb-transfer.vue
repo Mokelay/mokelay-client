@@ -17,7 +17,7 @@
         name: 'bb-transfer',
         props: {
             value: {
-                type: Array
+                type: [String, Number]
             },
             itemKey: {
                 type: String,
@@ -45,7 +45,15 @@
         },
         watch: {
             value(val) {
-                this.bb_value = val;
+                this.bb_value = val.split(',');
+                if (val && this.datas.length) {
+                    this.formatData();
+                }
+            },
+            datas(val) {
+                if (val.length && this.bb_value.length) {
+                    this.formatData();
+                }
             }
         },
         computed: {},
@@ -54,8 +62,8 @@
                 const t = this;
                 if (t.ds) {
                     Util.getDSData(t.ds, {
-                        "bb": t,
-                        "router": t.$route.params
+                        bb: t,
+                        router: t.$route.params
                     }, function (data) {
                         data.forEach((item) => {
                             const {dataKey, value} = item;
@@ -67,11 +75,23 @@
                     this.datas = this.staticData;
                 }
             },
+            transformResult(val) {
+                return val.join(',');
+            },
+            formatData() { //转换数据格式
+                if (typeof this.datas[0][this.itemKey] === 'number') {
+                    if (typeof this.bb_value[0] === 'string') {
+                        this.bb_value = this.bb_value.map((item) => {
+                            return +item;
+                        })
+                    }
+                }
+            },
             change(value, direction, movedKeys) {
-                const result = {value, direction, movedKeys};
+                const result = this.transformResult(value);
                 console.log(result);
                 //v-model
-                this.$emit('input', value);
+                this.$emit('input', result);
                 //触发prop change事件
                 this.$emit('change', value);
             }
