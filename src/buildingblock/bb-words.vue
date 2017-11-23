@@ -5,9 +5,13 @@
     name:'bb-words',
     render:function(createElement){
       var t = this;
+
       return createElement(
           t.tagName,
-          {style:{fontSize:t.fontSize,fontFamily:t.fontFamily,color:t.fontColor,textAlign:t.textAlign,lineHeight:t.lineHeight}},
+          {
+            style:{fontSize:t.fontSize,fontFamily:t.fontFamily,color:t.fontColor,textAlign:t.textAlign,lineHeight:t.lineHeight},
+            attrs:t.realTagAttributes
+          },
           t.content
       );
     },
@@ -48,12 +52,16 @@
       },
       templateProp:{
         type:Array,
+      },
+      tagAttributes:{
+        type:[Object,String]
       }
     },
     data() {
       return {
         content:null,
-        realText:this.value || this.text
+        realText:this.value || this.text,
+        realTagAttributes:null
       };
     },
     created: function () {
@@ -85,6 +93,7 @@
           }
           return data;
       },
+      //解析模板
       tansferTpl:function(){
           const t = this;
           let data = t;
@@ -102,19 +111,32 @@
               data = this.getSessionStorage();
               break;
           }
-          if(t.templateProp){
-            t.getText();
-          }
-          const words = t.realText?t.realText:'';
-          t.content = Util.tpl(words,data);
+          t.getText(data);
+          t.getTagAttributes(data);
       },
-      getText:function(){
+      //获取标签文字
+      getText:function(data){
         const t = this;
-        t.templateProp.forEach((item,key)=>{
-          if(item.alias == t.text){
-            t.realText = item.name
-          }
-        })
+        if(t.templateProp){
+          t.templateProp.forEach((item,key)=>{
+            if(item.alias == t.text){
+              t.realText = item.name
+            }
+          })
+        }
+        const words = t.realText?t.realText:'';
+        t.content = Util.tpl(words,data)
+      },
+      //获取标签属性
+      getTagAttributes:function(data){
+        const t = this;
+        if(t.tagAttributes){
+          const tagAttributes = typeof t.tagAttributes == 'string'?eval("("+t.tagAttributes+")"):t.tagAttributes;
+          t.realTagAttributes = {};
+          Object.keys(tagAttributes).forEach((val,key)=>{
+            t.realTagAttributes[val] = Util.tpl(tagAttributes[val],data);
+          })
+        }
       }
     }
   }

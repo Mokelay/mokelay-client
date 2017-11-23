@@ -201,9 +201,6 @@
                                 item.clickHide = clickHide;
                             }
                         }
-                        for (var i in item) {
-                            console.log(i + "=" + item[i] + "...");
-                        }
                         if (item && item[t.childName] && item[t.childName].length > 0) {
                             t._buildBadge(t,item[t.childName], key, val, clickHide);
                         }
