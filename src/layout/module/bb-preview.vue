@@ -7,7 +7,8 @@
 				<el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>
                 <el-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></el-button>
 			</div>
-			<div class="bb-preview-content"><bb :alias="bbItem.alias" :config="bbItem.attributes"></bb></div>
+            <div class="bb-preview-content"><bb :alias="bbItem.alias" :key="timestamp" :config="bbItem.attributes"></bb></div>
+			<!-- <div class="bb-preview-content"><bb :alias="bbItem.alias" :config="realValue[0].attributes"></bb></div> -->
 		</div>
         <div class="bb-preview-suggess" v-if="realValue.length<1">请从工具栏添加积木</div>
 	</div>
@@ -21,18 +22,27 @@
             }
         },
         data() {
+            const t = this;
             return{
-                title: this.value.layoutObject.title,
-                realValue:this.value.content
+                title: '',
+                realValue:[],
+                timestamp:null
             }
         },
         watch: {
             'value.content'(val){
+                this.getTimeKey();
                 this.realValue = val;
             },
             'value.layoutObject'(val){
                 this.title =  val.title
             }
+        },
+        created(){
+            const t = this;
+            t.title = t.value.layoutObject.title;
+            t.realValue = t.value.content;
+            t.getTimeKey();
         },
         mounted(){
             const t = this;
@@ -80,8 +90,10 @@
                         message: '操作已取消'
                     });
                 });
-        		
-        	}
+        	},
+            getTimeKey:function(){
+                this.timestamp = Date.parse(new Date());
+            }
         }    
     }
 </script>
@@ -94,10 +106,10 @@
             flex:1;
             margin-bottom: 10px;
             .bb-preview-content{
-                display: flex;
-                flex:1;
                 padding:10px;
                 border: 1px solid #e4e4e4;
+                width: 100%;
+                overflow-y: auto;
             }
         }
         .bb-preview-suggess{

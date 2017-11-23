@@ -172,6 +172,14 @@ commit = function(value){
             updateBBAttributes:function(uuid,attributes){//更新积木属性
                 const t = this;
                 t.hideEditor();
+                const content = t.value.content;
+                t.value.content = [];
+                content.forEach((val,key)=>{
+                    if(val.uuid == uuid){
+                        val.attributes = attributes;
+                    }
+                });
+                t.value.content = content;
                 t.$emit('updateBBAttributes',uuid,attributes);
             },
             addInteractive:function(formData){//添加交互
