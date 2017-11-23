@@ -66,6 +66,8 @@
                 //v-model
                 this.$emit('input', this.bb_input_value);
 
+                this.change(this.bb_input_value);
+
                 this.$refs.popover.doClose();
             },
             change(value) {

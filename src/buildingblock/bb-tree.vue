@@ -5,8 +5,8 @@
                 :data="data"
                 :load="loadData"
                 :node-key="nodeValue"
+                :current-node-key="nodeValue"
                 :props="{
-                    children: 'children',
                     label: nodeText,
                     isLeaf: 'leaf'
                 }"
@@ -14,12 +14,12 @@
                 :show-checkbox="showCheckbox"
                 highlight-current
                 lazy
+                accordion
                 ref="tree"
                 :key="randomKey"
                 @check-change="checkChange"
         >
         </el-tree>
-        <el-button class="fr mt20" type="primary" @click="formCommit">确定</el-button>
     </div>
 </template>
 
@@ -82,8 +82,9 @@
             //value如果为空，取消勾选所有选中节点
             value(val) {
                 if (!val) {
-                    const checkedNodes = this.$refs.tree.getCheckedNodes();
-                    !!checkedNodes.length && this.uncheckNodes(checkedNodes);
+                    const treeInstance = this.$refs.tree;
+                    const checkedKeys = treeInstance.getCheckedKeys();
+                    this.uncheckedKeys(checkedKeys);
                 }
             },
             external() {
@@ -116,48 +117,55 @@
         mounted: function () {
         },
         methods: {
-            formCommit() {
+            commit() {
                 const t = this;
                 let checkedNode = t.$refs.tree.getCheckedNodes();
-                let newCheckedNode = [];//所有字段
                 let checkedNodeVal = [];//只有配置的主键字段
-                //过滤掉空字段的数据  element的bug
+                //过滤掉空字段的数据
                 if (checkedNode && checkedNode.length > 0) {
                     checkedNode.forEach(function (item) {
                         if (item[t.nodeValue]) {
-                            newCheckedNode.push(item);
                             checkedNodeVal.push(item[t.nodeValue]);
                         }
                     });
                 }
-                //触发到父组件处理
+                let result = '';
+                //v-model
                 if (!this.multiple) {
-                    this.$emit("input", checkedNodeVal[0]);//让父组件能用v-model
+                    result = checkedNodeVal[0];
                 } else {
-                    this.$emit("input", checkedNodeVal.join(","));//让父组件能用v-model
+                    result = checkedNodeVal.join(",");
                 }
+                this.$emit('input', result);
+
                 //往上级传送选择的字段
-                this.$emit("tree-commit", newCheckedNode);
+                this.$emit("change", result);
             },
-            //取消勾选选中节点
-            uncheckNodes(nodes) {
+            uncheckedKeys(keys) {
                 const treeInstance = this.$refs.tree;
-                nodes.forEach((node) => {
-                    treeInstance.setChecked(node, false, true);
+                keys.forEach((key) => {
+                    treeInstance.setChecked(key, false, true);
                 })
             },
             //勾选改变后
             checkChange(data, check, childCheck) {
                 const t = this;
-                if (check && !t.multiple) {//单选的话
-                    const nodeValue = t.nodeValue;
-                    const treeInstance = t.$refs.tree;
-                    const checkedkNodes = treeInstance.getCheckedNodes();
-                    const filterNodes = checkedkNodes.filter((node) => {
-                        return node[nodeValue] !== data[nodeValue];
-                    });
-                    this.uncheckNodes(filterNodes);
+                const {disabled} = data;
+                if (!t.multiple) { //单选
+                    if (!disabled) {
+                        if (check) { //单选
+                            const nodeValue = t.nodeValue;
+                            const treeInstance = t.$refs.tree;
+                            let checkedKeys = treeInstance.getCheckedKeys(true);
+                            checkedKeys = checkedKeys.filter((key) => {
+                                return key !== data[nodeValue];
+                            });
+                            t.uncheckedKeys(checkedKeys);
+                        }
+                    }
                 }
+
+                this.commit();
             },
             //获取根节点数据
             getRootData() {
@@ -234,14 +242,6 @@
 
     .bn {
         border: none
-    }
-
-    .fr {
-        float: right;
-    }
-
-    .mt20 {
-        margin-top: 20px;
     }
 
 </style>
