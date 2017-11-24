@@ -4,7 +4,7 @@
         :disabled="option.disabled"
         :editable="option.editable"
         @change="change"
-        type="datetime" placeholder="选择日期时间"></el-date-picker>
+        :type="type" placeholder="选择日期时间"></el-date-picker>
 </template>
 
 <script>
@@ -24,6 +24,10 @@
             },
             value:{
                 type:String
+            },
+            type:{
+                type:String,
+                default:'datetime'
             }
         },
         data() {
