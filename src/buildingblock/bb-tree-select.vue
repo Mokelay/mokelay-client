@@ -7,13 +7,13 @@
                 ref="popover"
         >
             <bb-tree
-                    :value="p_value"
+                    v-model="bb_value"
                     :nodeValue="nodeValue"
                     :nodeText="nodeText"
                     :parentKey="parentKey"
                     :mainKey="mainKey"
+                    :checkedField="checkedField"
                     :multiple="multiple"
-                    :checkedField="p_checkedField"
                     :opts="opts"
                     :ds="ds"
                     :external="external"
@@ -21,11 +21,12 @@
                     :check-strictly="checkStrictly"
                     ref="bbtree">
             </bb-tree>
+            <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
         </el-popover>
         <div>
-            <el-input class="wa" placeholder="请选择" disabled v-model="p_value"></el-input>
+            <el-input class="wa" placeholder="请选择" disabled v-model="bb_input_value"></el-input>
             <el-button v-popover:popover><i class="el-icon-search"></i></el-button>
-            <el-button class="ml0" @click="p_value = ''"><i class="el-icon-delete"></i></el-button>
+            <el-button class="ml0" @click="clear"><i class="el-icon-delete"></i></el-button>
         </div>
     </div>
 </template>
@@ -55,6 +56,9 @@
                 type: String,
                 default: 'id'
             },
+            checkedField: {
+                type: Array
+            },
             multiple: {
                 type: Boolean,
                 default: false
@@ -62,9 +66,6 @@
             checkStrictly: {//是否父子不级联选择
                 type: Boolean,
                 default: false
-            },
-            checkedField: {
-                type: Array
             },
             opts: {
                 type: Array
@@ -75,9 +76,10 @@
         },
         data() {
             return {
-                p_value: '',
+                bb_value: '',
+                bb_input_value: '',
                 external: {
-                    linkage:'test'//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
+                    linkage: 'test'//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
                 }
             }
         },
@@ -88,48 +90,28 @@
         },
         watch: {
             value(val) {
-                this.p_value = val;
+                this.bb_value = val;
+                this.bb_input_value = val;
             }
         },
-        computed: {
-            p_checkedField() {
-                let result = [];
-                if (typeof value === 'undefined') {
-                    return result;
-                }
-                try {
-                    result = `${this.value}`.split(",");
-                } catch (e) {
-                    console.log('类型错误');
-                }
-                return result;
-            }
-        },
+        computed: {},
         methods: {
-            treeCommit(checkedNode) {
-                let t = this;
-                let checkedNodeVal = [];//只有配置的主键字段
-                //过滤掉空字段的数据  element的bug
-                if (checkedNode && checkedNode.length > 0) {
-                    checkedNode.forEach(function (item) {
-                        checkedNodeVal.push(item[t.nodeValue]);
-                    });
-                }
-                let value = '';
-                if (!this.multiple) {
-                    value = checkedNode[0][this.nodeValue];
-                } else {
-                    value = checkedNodeVal.join(",");
-                }
-
-                this.p_value = value;
+            commit() {
+                this.bb_input_value = this.bb_value;
                 //触发到父组件处理
-                this.$emit("input", value);//让父组件能用v-model
+                this.$emit("input", this.bb_input_value);//让父组件能用v-model
 
-                //往上级传送选择的字段
-                this.$emit("tree-commit", checkedNode);
+                this.change(this.bb_input_value);
 
                 this.$refs.popover.doClose();
+            },
+            change(value) {
+                //触发上级change事件
+                this.$emit('change', value);
+            },
+            clear() {
+                this.bb_value = '';
+                this.bb_input_value = '';
             },
             linkage: function (data) { //提供给外部调用
                 if (data) {
@@ -148,6 +130,14 @@
 
     .ml0 {
         margin-left: 0;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .mt20 {
+        margin-top: 20px;
     }
 
 </style>
