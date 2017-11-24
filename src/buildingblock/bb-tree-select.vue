@@ -18,6 +18,7 @@
                     :ds="ds"
                     :external="external"
                     @tree-commit="treeCommit"
+                    :check-strictly="checkStrictly"
                     ref="bbtree">
             </bb-tree>
         </el-popover>
@@ -58,6 +59,10 @@
                 type: Boolean,
                 default: false
             },
+            checkStrictly: {//是否父子不级联选择
+                type: Boolean,
+                default: false
+            },
             checkedField: {
                 type: Array
             },
@@ -71,7 +76,9 @@
         data() {
             return {
                 p_value: '',
-                external: {}
+                external: {
+                    linkage:'test'//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
+                }
             }
         },
         created: function () {

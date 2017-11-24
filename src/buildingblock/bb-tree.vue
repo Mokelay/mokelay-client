@@ -12,6 +12,7 @@
                 }"
                 :default-checked-keys="checkedKeys"
                 :show-checkbox="showCheckbox"
+                :check-strictly="checkStrictly"
                 highlight-current
                 lazy
                 ref="tree"
@@ -49,6 +50,10 @@
                 default: 'id'
             },
             multiple: {
+                type: Boolean,
+                default: false
+            },
+            checkStrictly: {//是否父子不级联选择
                 type: Boolean,
                 default: false
             },
@@ -200,9 +205,10 @@
                             map[0]['value'].forEach((item, key) => {
                                 const childNum = item['child_num'];
                                 if (childNum && childNum > 0) {
-                                    if (!t.multiple) {
-                                        item.disabled = true;
-                                    }
+                                    //单选去掉禁用复选框
+//                                    if (!t.multiple) {
+//                                        item.disabled = true;
+//                                    }
                                 } else {
                                     item.leaf = true;
                                 }
