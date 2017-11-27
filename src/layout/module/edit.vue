@@ -15,6 +15,7 @@
                         settingText="添加"
                         startButtonIcon="plus"
                         startButtonType="text"
+                        labelWidth="100px"
                         @commit="addInteractive"></bb-button-form>
                     <bb-list :value="interactiveValue" :columns="columns" ref="InteractivesLsit"></bb-list>
                 </div>

@@ -8,9 +8,8 @@
                 <el-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></el-button>
 			</div>
             <div class="bb-preview-content"><bb :alias="bbItem.alias" :key="timestamp" :config="bbItem.attributes"></bb></div>
-			<!-- <div class="bb-preview-content"><bb :alias="bbItem.alias" :config="realValue[0].attributes"></bb></div> -->
 		</div>
-        <div class="bb-preview-suggess" v-if="value.content.length<1">请从工具栏添加积木</div>
+        <div class="bb-preview-suggess" v-if="!value.content.length">请从工具栏添加积木</div>
 	</div>
 </template>
 <script>

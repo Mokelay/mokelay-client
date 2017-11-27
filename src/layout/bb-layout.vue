@@ -1,11 +1,18 @@
 <template>
     <div class="bb-layout">
-        <div class="bb-layout-topbar"><tool :value="value" @addBB="addBB"></tool><el-button type="primary" @click="commit">提交</el-button></div>
+        <el-row class="bb-layout-topbar">
+            <el-col :span="19"><tool :value="value" @addBB="addBB"></tool></el-col>
+            <el-col :span="5" class="topbar-button"><el-button type="primary" @click="showPreview">预览</el-button><el-button type="primary" @click="commit">提交</el-button></el-col>
+        </el-row>
         
         <el-row class='bb-layout-content'>
             <el-col :span="24"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
         </el-row>
         <edit v-if="showEdit" :isEditShow="showEdit" :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive" @closeDia="hideEditor"></edit>
+        <bb-dialog :isShow="isShowPreview" size="large" title="预览" @closeDia="closePreview">
+            <bb-preview :value="value"></bb-preview>
+        </bb-dialog>
+
     </div>
 </template>
 <script>
@@ -93,6 +100,7 @@ commit = function(value){
         data() {
             return{
                 showEdit:false,
+                isShowPreview:false,
                 previewWidth:21,
                 editWidth:0,
                 editValue:null,//当前编辑的积木
@@ -235,6 +243,14 @@ commit = function(value){
                     };
                     t.layoutArray.push(layout);
                 })
+            },
+            showPreview:function(){
+                const t = this;
+                t.isShowPreview = true;
+            },
+            closePreview:function(){
+                const t = this;
+                t.isShowPreview = false;
             }
         },
         components:{
@@ -246,14 +262,18 @@ commit = function(value){
 </script>
 <style lang="less" scoped>
 .bb-layout{
-    padding:5px;
-    //overflow-y: hidden;
     .bb-layout-topbar{
         text-align: right;
         margin-bottom: 10px;
+        line-height: 60px;
+        background: #eef1f6;
+        .topbar-button{
+            padding: 0 10px;
+        }
     }
     .bb-layout-content{
-        margin: 10px;
+        padding: 10px;
+        border:1px dashed #e4e4e4;
     }
 }
 </style>
