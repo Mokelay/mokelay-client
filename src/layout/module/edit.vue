@@ -1,40 +1,46 @@
 <template>
-    <el-tabs type="card" active-name="attribute" class="bb-edit">
-        <el-tab-pane label="属性" name="attribute">
-            <div class='edit-attribute'>
-                <bb-form :value="value.attributes" :fields="attributeFields" settingButtonText="保存" @commit="updateBBAttributes"></bb-form>
-            </div>
-        </el-tab-pane>
-        <el-tab-pane label="交互" name="event">
-            <div class="edit-interactive">
-                <bb-button-form
-                    :fields="interactivefields" 
-                    :value="interactiveFormData"
-                    :on="interactiveOn" 
-                    settingText="添加"
-                    startButtonIcon="plus"
-                    startButtonType="text"
-                    @commit="addInteractive"></bb-button-form>
-                <bb-list :value="interactiveValue" :columns="columns" ref="InteractivesLsit"></bb-list>
-            </div>
-        </el-tab-pane>
-    </el-tabs>
+    <bb-dialog :isShow="isShow" size="large" title="编辑积木" @closeDia="closeDia">
+        <el-tabs type="card" active-name="attribute" class="bb-edit">
+            <el-tab-pane label="属性" name="attribute">
+                <div class='edit-attribute'>
+                    <bb-form :value="value.attributes" :fields="attributeFields" settingButtonText="保存" @commit="updateBBAttributes"></bb-form>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="交互" name="event">
+                <div class="edit-interactive">
+                    <bb-button-form
+                        :fields="interactivefields" 
+                        :value="interactiveFormData"
+                        :on="interactiveOn" 
+                        settingText="添加"
+                        startButtonIcon="plus"
+                        startButtonType="text"
+                        @commit="addInteractive"></bb-button-form>
+                    <bb-list :value="interactiveValue" :columns="columns" ref="InteractivesLsit"></bb-list>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+    </bb-dialog>
 </template>
 <script>
     const Util = window._TY_Tool;
     export default {
-        name: 'bb-edit',
+        name: 'edit',
         props: {
             value:{
                 type:[String,Object]
             },
             content:{
                 type:Array
+            },
+            isEditShow:{
+                type:Boolean
             }
         },
         data() {
             const t = this;
             return{
+                isShow:this.isEditShow,
                 bbAlias:this.value.alias,
                 attributeFields:[],
                 uuidLenght:5,
@@ -104,6 +110,9 @@
             }
         },
         watch: {
+            isEditShow(val){
+                this.isShow = val;
+            },
             value(val){
                 const t = this;
                 t.bbAlias = val.alias;
@@ -155,6 +164,9 @@
                     }
                 });
                 t.interactivefields = newInteractivefields
+            },
+            closeDia:function(){
+                this.$emit('closeDia');
             }
         }    
     }

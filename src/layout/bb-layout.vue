@@ -1,11 +1,11 @@
 <template>
     <div class="bb-layout">
-        <div class="bb-layout-topbar"><el-button type="primary" @click="commit">提交</el-button></div>
+        <div class="bb-layout-topbar"><tool :value="value" @addBB="addBB"></tool><el-button type="primary" @click="commit">提交</el-button></div>
+        
         <el-row class='bb-layout-content'>
-            <el-col :span="3"><tool :value="value" @addBB="addBB"></tool></el-col>
-            <el-col :span="previewWidth"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
-            <el-col :span="editWidth" v-if="showEdit"><edit :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive"></edit></el-col>
+            <el-col :span="24"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
         </el-row>
+        <edit v-if="showEdit" :isEditShow="showEdit" :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive" @closeDia="hideEditor"></edit>
     </div>
 </template>
 <script>
@@ -73,9 +73,9 @@ commit = function(value){
 当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
 **/
 
-    import tool from './module/bb-tool.vue'
-    import preview from './module/bb-preview.vue'
-    import edit from './module/bb-edit-attribute.vue'
+    import tool from './module/tool.vue'
+    import preview from './module/preview.vue'
+    import edit from './module/edit.vue'
     export default {
         name: 'bb-layout',
         props: {
@@ -203,14 +203,10 @@ commit = function(value){
             },
             showEditor:function(){
                 const t = this;
-                t.previewWidth = 15;
-                t.editWidth = 6;
                 t.showEdit = true;
             },
             hideEditor:function(){
                 const t = this;
-                t.previewWidth = 21;
-                t.editWidth = 0;
                 t.showEdit = false;
             },
             // 交换数组元素
@@ -251,10 +247,13 @@ commit = function(value){
 <style lang="less" scoped>
 .bb-layout{
     padding:5px;
-    overflow-y: hidden;
+    //overflow-y: hidden;
     .bb-layout-topbar{
         text-align: right;
         margin-bottom: 10px;
+    }
+    .bb-layout-content{
+        margin: 10px;
     }
 }
 </style>

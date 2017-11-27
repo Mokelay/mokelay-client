@@ -1,7 +1,7 @@
 <template>
 	<div class="bb-preview" id="bb-preview">
         <p class="title">{{title}}</p>
-		<div class='bb-preview-item' v-for="(bbItem,index) in realValue" :id="bbItem.uuid" :key="index">
+		<div class='bb-preview-item' v-for="(bbItem,index) in value.content" :id="bbItem.uuid" :key="index">
 			<div class="buttonInfo">
                 <p>{{(index+1)}}</p>
 				<el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>
@@ -10,12 +10,12 @@
             <div class="bb-preview-content"><bb :alias="bbItem.alias" :key="timestamp" :config="bbItem.attributes"></bb></div>
 			<!-- <div class="bb-preview-content"><bb :alias="bbItem.alias" :config="realValue[0].attributes"></bb></div> -->
 		</div>
-        <div class="bb-preview-suggess" v-if="realValue.length<1">请从工具栏添加积木</div>
+        <div class="bb-preview-suggess" v-if="value.content.length<1">请从工具栏添加积木</div>
 	</div>
 </template>
 <script>
     export default {
-        name: 'bb-preview',
+        name: 'preview',
         props: {
             value:{
                 type:[String,Object]
