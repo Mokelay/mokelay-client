@@ -61,11 +61,14 @@
                 default: function () {
                     return null
                 }
-            }
+            },
+            router: {
+                type: Boolean,
+                default: false
+            },
         },
         data() {
             return {
-                router: true,
                 items: this.fields,
                 newMenu: true,
                 menuList: [],
@@ -143,7 +146,7 @@
                             class: item.class,
                             on: {
                                 click: function () {
-                                    t.$emit('click')
+                                    t.$emit('click',item)
                                     if (item.value && item.clickHide) {
                                         t.$refs[item['url']].hide();
                                     }
