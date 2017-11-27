@@ -102,7 +102,6 @@ export default {
 					alias:bb.url,
 					aliasName:value,
 					attributes:{},
-					layout:t.value.content.length+1
 				});
 			}).catch(() => {
 				t.$message({

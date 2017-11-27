@@ -1,7 +1,7 @@
 <template>
 	<div class="bb-preview" id="bb-preview">
         <p class="title">{{title}}</p>
-		<div class='bb-preview-item' v-for="(bbItem,index) in value.content" :id="bbItem.uuid" :key="index">
+		<div class='bb-preview-item' v-for="(bbItem,index) in value.content" :id="bbItem.uuid" :key="timestamp">
 			<div class="buttonInfo">
                 <p>{{(index+1)}}</p>
 				<el-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></el-button>

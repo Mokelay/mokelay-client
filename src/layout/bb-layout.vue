@@ -109,32 +109,30 @@ commit = function(value){
         },
         methods: {
             addBB:function(bbItem){//添加积木
-                this.value.content.push(bbItem);
+                bbItem.layout = this.value.content.length
+                this.$set(this.value.content,this.value.content.length,bbItem);
                 this.hideEditor();
                 this.$emit('addBB',bbItem.uuid,bbItem.alias,bbItem.layout)
             },
             updateBBLayout:function(bbItem){//更新layout
                 const t = this;
                 //初始化排序数组
-                if(!t.layoutArray){
-                    t.getLayoutArray();
-                }
-                let index1 = 0;
-                let index2 = 0;
-            
+                t.getLayoutArray();
+                let sourceKey = 0;
+                let targetKey = 0;
                 t.layoutArray.forEach((val,key)=>{
                     if(bbItem.el.id == val.uuid){
-                        index1 = key;
+                        sourceKey = key;
                     }
                     if(bbItem.sibling && bbItem.sibling.id == val.uuid){
-                        index2 = key;
+                        targetKey = key;
                     }
                 });
                 if(!bbItem.sibling){
-                    index2 = t.layoutArray.length;
+                    targetKey = t.layoutArray.length;
                 }
                 //更新layoutArray数组
-                t.layoutArray = t.swapItems(t.layoutArray,index1,index2);
+                t.layoutArray = t.swapItems(t.layoutArray,sourceKey,targetKey);
                 //更新value.content中的排序
                 let newContent = [];
                 t.layoutArray.forEach((val,index)=>{
@@ -218,18 +216,18 @@ commit = function(value){
                 t.showEdit = false;
             },
             // 交换数组元素
-            swapItems: function (arrDefault, index1, index2) {
+            swapItems: function (arrDefault, sourceKey, targetKey) {
                 const t = this;
-                if(index2 <0){
-                    index2 = arrDefault.length - 1;
+                if(targetKey <0){
+                    targetKey = arrDefault.length - 1;
                 }
                 let arr = arrDefault;
-                const ele = arr.splice(index1, 1)[0];
-                const down = index1 - index2;
-                if (down > 0) {//下移
-                    arr.splice(index2, 0, ele);
-                } else {//上移
-                    arr.splice(index2 - 1, 0, ele);
+                const ele = arr.splice(sourceKey, 1)[0];
+                const down = sourceKey - targetKey;
+                if (down > 0) {//上移
+                    arr.splice(targetKey, 0, ele);
+                } else {//下移
+                    arr.splice(targetKey - 1, 0, ele);
                 }
                 return arr
             },
