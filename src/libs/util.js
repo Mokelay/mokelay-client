@@ -134,7 +134,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                         paramValue = _inputData[paramArr[0]];
                         paramArr.splice(0, 1);
                         paramArr.forEach(function(key) {
-                            paramValue = paramValue[key];
+                            paramValue = paramValue ? paramValue[key] : '';
                         });
                     } else {
                         paramValue = _inputData[input['variable']];

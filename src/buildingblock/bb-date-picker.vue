@@ -35,6 +35,11 @@
                 valueBase: this.value,
             }
         },
+        watch:{
+            valueBase(val){
+                this.change(val);
+            }
+        },
         created: function () {
         },
         mounted:function(){
