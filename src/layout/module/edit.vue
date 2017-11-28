@@ -1,27 +1,25 @@
 <template>
-    <bb-dialog :isShow="isShow" size="large" title="编辑积木" @closeDia="closeDia">
-        <el-tabs type="card" active-name="attribute" class="bb-edit">
-            <el-tab-pane label="属性" name="attribute">
-                <div class='edit-attribute'>
-                    <bb-form :value="value.attributes" :fields="attributeFields" settingButtonText="保存" @commit="updateBBAttributes"></bb-form>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="交互" name="event">
-                <div class="edit-interactive">
-                    <bb-button-form
-                        :fields="interactivefields" 
-                        :value="interactiveFormData"
-                        :on="interactiveOn" 
-                        settingText="添加"
-                        startButtonIcon="plus"
-                        startButtonType="text"
-                        labelWidth="100px"
-                        @commit="addInteractive"></bb-button-form>
-                    <bb-list :value="interactiveValue" :columns="columns" ref="InteractivesLsit"></bb-list>
-                </div>
-            </el-tab-pane>
-        </el-tabs>
-    </bb-dialog>
+    <el-tabs type="card" active-name="attribute" class="bb-tabs">
+        <el-tab-pane label="属性" name="attribute" class="bb-pane">
+            <div class='edit-attribute'>
+                <bb-form :value="value.attributes" :fields="attributeFields" settingButtonText="保存" @commit="updateBBAttributes"></bb-form>
+            </div>
+        </el-tab-pane>
+        <el-tab-pane label="交互" name="event" class="bb-pane">
+            <div class="edit-interactive">
+                <bb-button-form
+                    :fields="interactivefields" 
+                    :value="interactiveFormData"
+                    :on="interactiveOn" 
+                    settingText="添加"
+                    startButtonIcon="plus"
+                    startButtonType="text"
+                    labelWidth="100px"
+                    @commit="addInteractive"></bb-button-form>
+                <bb-list :value="interactiveValue" :columns="columns" ref="InteractivesLsit"></bb-list>
+            </div>
+        </el-tab-pane>
+    </el-tabs>
 </template>
 <script>
     const Util = window._TY_Tool;
@@ -175,8 +173,6 @@
 <style lang="less" scoped>
     .bb-edit{
         padding-left: 10px;
-        max-height:~'calc(100vh - 100px)';
-        overflow-y: auto;
     }
     .edit-attribute{
         padding: 11px;

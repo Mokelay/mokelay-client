@@ -8,7 +8,7 @@
         <el-row class='bb-layout-content'>
             <el-col :span="24"><preview :value="value" @edit="editItem" @removeBB="removeBB" @updateBBLayout="updateBBLayout"></preview></el-col>
         </el-row>
-        <edit v-if="showEdit" :isEditShow="showEdit" :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive" @closeDia="hideEditor"></edit>
+        <!-- <edit v-if="showEdit" :isEditShow="showEdit" :value="editValue" :content="value.content" @updateBBAttributes="updateBBAttributes" @addInteractive="addInteractive" @removeInteractive="removeInteractive" @closeDia="hideEditor"></edit> -->
         <bb-dialog :isShow="isShowPreview" size="large" title="预览" @closeDia="closePreview">
             <bb-preview :value="value"></bb-preview>
         </bb-dialog>
@@ -79,7 +79,7 @@ commit = function(value){
 
 当然通过 vue.$refs.layout.value 也可以获取到最新的布局数据
 **/
-
+    import Vue from 'vue';
     import tool from './module/tool.vue'
     import preview from './module/preview.vue'
     import edit from './module/edit.vue'
@@ -186,6 +186,7 @@ commit = function(value){
                     }
                 });
                 t.value.content = content;
+                t.dialog.close().remove();
                 t.$emit('updateBBAttributes',uuid,attributes);
             },
             addInteractive:function(formData){//添加交互
@@ -210,6 +211,7 @@ commit = function(value){
             showEditor:function(){
                 const t = this;
                 t.showEdit = true;
+                t.setting();
             },
             hideEditor:function(){
                 const t = this;
@@ -249,6 +251,42 @@ commit = function(value){
             closePreview:function(){
                 const t = this;
                 t.isShowPreview = false;
+            },
+            setting:function(){
+                const t = this;
+                require.ensure(["art-dialog","jquery"],function(require){
+                    const layoutEdit = new Vue({
+                        router: t.$router,
+                        components:{edit},
+                        render: function(createElement){
+                            const formItem = createElement('edit',{
+                                props:{
+                                    isEditShow:t.showEdit,
+                                    value:t.editValue,
+                                    content:t.value.content
+                                },
+                                on:{
+                                    updateBBAttributes:t.updateBBAttributes,
+                                    addInteractive:t.addInteractive,
+                                    removeInteractive:t.removeInteractive,
+                                    closeDia:t.hideEditor
+                                },
+                                ref:"layoutEdit"
+                            },[]);
+                            return createElement('div',{class:'layout-edit-content'},[formItem])
+                        }
+                    }).$mount();
+                    const dialog = require('art-dialog');
+                    const d = dialog({
+                        width:800,
+                        //height:500,
+                        zIndex:1,
+                        title: '设置',
+                        content: layoutEdit.$el
+                    });
+                    d.showModal();
+                    t.dialog = d;
+                });
             }
         },
         components:{
@@ -258,7 +296,7 @@ commit = function(value){
         }
     }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .bb-layout{
     .bb-layout-topbar{
         text-align: right;
@@ -272,6 +310,10 @@ commit = function(value){
     .bb-layout-content{
         padding: 10px;
         border:1px dashed #e4e4e4;
+    }
+    .layout-edit-content{
+        height: 500px;
+        overflow-y: auto;
     }
 }
 </style>

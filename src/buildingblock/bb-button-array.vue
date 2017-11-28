@@ -93,7 +93,7 @@ import Util from '../libs/util';
                     var dialog = require('art-dialog');
                     var d = dialog({
                         width:800,
-                        // zIndex:2100,
+                        zIndex:1,
                         // height:'100%',
                         title: '设置',
                         content: _array.$el

@@ -58,8 +58,7 @@ import Util from '../libs/util';
                 type:String
             },
             labelWidth:{
-                type:String,
-                default:'auto'
+                type:String
             },
             labelInline:{
                 type:Boolean,
@@ -102,10 +101,7 @@ import Util from '../libs/util';
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
-                            return createElement('bb-form',{
-                                // domProps: {
-                                //     value: t.formData
-                                // },
+                            const formItem = createElement('bb-form',{
                                 props:{
                                     fields:t.fields,
                                     value:t.formData, //传入value
@@ -133,14 +129,13 @@ import Util from '../libs/util';
                                 },
                                 ref:"form"
                             },[]);
+                            return createElement('div',{class:'bb-button-form-content'},[formItem])
                         }
                     }).$mount();
-
                     var dialog = require('art-dialog');
                     var d = dialog({
                         width:800,
-                        // zIndex:2100,
-                        // height:'100%',
+                        zIndex:1,
                         title: '设置',
                         content: _form.$el
                     });
@@ -151,17 +146,9 @@ import Util from '../libs/util';
         }
     }
 </script>
-<style scoped>
-    .m10 {
-        margin: 10px 0;
-    }
-    .db{
-        display: block;
-    }
-    .dib{
-        display: inline-block;
-    }
-    .di{
-        display: inline;
+<style>
+    .bb-button-form-content{
+        height: 500px;
+        overflow-y: auto;
     }
 </style>

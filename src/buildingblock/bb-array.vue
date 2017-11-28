@@ -79,7 +79,7 @@ import Vue from 'vue';
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
-                            return createElement('bb-form',{
+                            const formItem = createElement('bb-form',{
                                 props:{
                                     fields:t.fields,
                                     value:value
@@ -91,11 +91,14 @@ import Vue from 'vue';
                                 },
                                 ref:"object_form"
                             },[]);
+                            return createElement('div',{class:'bb-array-content'},[formItem])
                         }
                     }).$mount();
 
                     var dialog = require('art-dialog');
                     var d = dialog({
+                        zIndex:1,
+                        width:800,
                         title: '添加',
                         content: _form.$el
                     });
@@ -174,3 +177,9 @@ import Vue from 'vue';
         }
     }
 </script>
+<style>
+    .bb-array-content{
+        height: 500px;
+        overflow-y: auto;
+    }
+</style>
