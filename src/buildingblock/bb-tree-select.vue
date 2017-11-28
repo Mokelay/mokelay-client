@@ -117,6 +117,9 @@
                 if (data) {
                     this.external = Object.assign({}, {linkage: data});
                 }
+            },
+            treeCommit(data){
+                //完整数据
             }
         }
     }
