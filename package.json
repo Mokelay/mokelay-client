@@ -34,7 +34,7 @@
     "dragula": "^3.7.2",
     "echarts": "^3.4.0",
     "element-tree-grid": "0.0.15",
-    "element-ui": "^1.4.9",
+    "element-ui": "^2.0.6",
     "html2canvas": "^0.5.0-beta4",
     "iview": "^2.0.0-rc.13",
     "jquery": "^3.2.1",
