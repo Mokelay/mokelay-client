@@ -114,7 +114,6 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         return;
     }
     var method = ds['method'] || 'post';
-
     var requestParam = {};
     var inputs = ds['inputs'] || [];
     var outputs = ds['outputs'] || [];
@@ -130,12 +129,13 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                 var _inputData = inputValueObj[input['valueKey']];
                 if (_inputData && typeof input['variable'] == 'string') {
                     var paramArr = input['variable'].split('.');
-                    if (paramArr.length > 1) { //支持参数形式 a.b.c.d
-                        paramValue = _inputData[paramArr[0]];
-                        paramArr.splice(0, 1);
-                        paramArr.forEach(function(key) {
-                            paramValue = paramValue ? paramValue[key] : '';
-                        });
+                    if (paramArr.length > 1) { //支持参数形式 a.b[1].c.d[0][0].e
+                        var paramValueStr = '_inputData' + '.' + input['variable'];
+                        try {
+                            paramValue = eval("(" + paramValueStr + ")");
+                        } catch (error) {
+                            console.log('DS上传参数配置有误:', error);
+                        }
                     } else {
                         paramValue = _inputData[input['variable']];
                     }
@@ -155,12 +155,13 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             var realDataMap = data['data'];
             outputs.forEach(function(output) {
                 var paramArr = output['valueKey'].split('.');
-                if (paramArr.length > 1) { //支持参数形式 a.b.c.d
-                    output['value'] = realDataMap[paramArr[0]];
-                    paramArr.splice(0, 1);
-                    paramArr.forEach(function(key) {
-                        output['value'] = output['value'][key];
-                    });
+                if (paramArr.length > 1) { //支持参数形式  a.b[1].c.d[0][0].e
+                    var paramValueStr = "realDataMap" + '.' + output['valueKey'];
+                    try {
+                        output['value'] = eval("(" + paramValueStr + ")");
+                    } catch (error) {
+                        console.log('DS取值参数配置有误:', error);
+                    }
                 } else {
                     output['value'] = realDataMap[output['valueKey']];
                 }
