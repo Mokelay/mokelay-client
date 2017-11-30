@@ -52,10 +52,10 @@
         computed: {
             list: function() {
                 const t = this;
-                if(typeof t.imgList == 'string'){
+                if(t.imgList && typeof t.imgList == 'string'){
                     const newArr = t.imgList.split(',');
                     return newArr;
-                }else{
+                }else if(t.imgList){
                     return t.imgList;
                 }
             }
