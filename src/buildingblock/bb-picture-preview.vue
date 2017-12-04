@@ -13,8 +13,8 @@
                             <img :src="list[current]" alt="">
                             <span class="pic_index">{{current+1 +'/'+list.length}}</span>
 
-                            <el-button class="pic_arrow_left" icon="arrow-left" @click="pic_arrow_left"></el-button>
-                            <el-button class="pic_arrow_right" icon="arrow-right" @click="pic_arrow_right"></el-button>
+                            <bb-button class="pic_arrow_left" type="text" icon="arrow-left" @click="pic_arrow_left"></bb-button>
+                            <bb-button class="pic_arrow_right" type="text" icon="arrow-right" @click="pic_arrow_right"></bb-button>
                         </div>
                     </el-col>
                     <el-col :span="10">
@@ -149,7 +149,7 @@
         width: 40px;
         height: 40px;
     }
-    .pic_arrow_left:hover,.pic_arrow_right:hover{
+    .pic_arrow_left:hover,.pic_arrow_right:hover,.pic_arrow_left:focus,.pic_arrow_right:focus{
         background: rgba(0,0,0,0.40);
     }
     .pic_min{

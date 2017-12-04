@@ -1,5 +1,5 @@
 <template>
-    <el-button class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
+    <el-button class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
 </template>
 
 <script>
@@ -30,6 +30,9 @@
             },
             text:{
                 type:String
+            },
+            size:{
+                type:String
             }
         },
         data() {
@@ -51,6 +54,7 @@
                     button.type = t.type;
                     button.disabled = t.disabled;
                     button.text = t.text;
+                    button.size = t.size;
                 }
                 return button
             }

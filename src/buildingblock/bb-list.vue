@@ -4,7 +4,7 @@
             <div v-if="searchConfig.searchType == 'searchInput'" class="searchInput">
                 <el-input v-model="keywords" @keyup.native.enter="globalSearch"
                        style="width: 100%;" placeholder="请输入搜索内容">
-                    <el-button type="primary" slot="append" icon="search" @click="globalSearch">{{searchConfig.searchButtonName}}</el-button>
+                    <bb-button type="primary" slot="append" icon="search" @click="globalSearch">{{searchConfig.searchButtonName}}</bb-button>
                 </el-input>
             </div>
             <div v-if="searchConfig.searchType == 'searchSelection'" class="m10">
@@ -16,11 +16,19 @@
             <bb-button-form 
                 class="advancedSearch"
                 @commit="advancedSearchFn"
-                v-if="advancedSearch" 
+                v-if="advancedSearch && advancedSearchConfig.layoutType != 'inline-form'" 
                 :fields="advancedSearchConfig.fields" 
                 :startButtonIcon="advancedSearchConfig.startButtonIcon" 
                 :settingText="advancedSearchConfig.settingText" 
                 :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
+            <bb-form
+                class="advancedSearch"
+                @commit="advancedSearchFn"
+                v-if="advancedSearch && advancedSearchConfig.layoutType == 'inline-form'"
+                :fields="advancedSearchConfig.fields" 
+                :settingButtonText="advancedSearchConfig.formButtonName"
+                :labelInline="true"
+                ></bb-form>
         </el-row>
         <el-row>
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
@@ -49,12 +57,13 @@
                                             :parentParams="toChildParams"
                                             :title="button['popupConfig']['title']"
                                             @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
-                                <el-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
+                                <bb-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
                                            :type="button.type" :key="index"
                                            :style="{'color':button.wordColor,'user-select':'all'}"
-                                           :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)">
+                                           :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)"
+                                           >
                                     {{button.text?button.text:scope['row'][column.prop]}}
-                                </el-button>
+                                </bb-button>
                                 <bb v-if="button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row']}"></bb>
                             </span>
                         </div>
@@ -107,8 +116,8 @@
         </el-row>
         <el-row v-if="popup" type="flex" justify='end'>
             <div>
-                <el-button @click="cancelSelect">取消</el-button>
-                <el-button type="primary" @click="confirmSelect">确定</el-button>
+                <bb-button type="default" @click="cancelSelect">取消</bb-button>
+                <bb-button type="primary" @click="confirmSelect">确定</bb-button>
             </div>
         </el-row>
     </div>

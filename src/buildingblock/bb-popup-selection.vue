@@ -1,12 +1,12 @@
 <template>
     <div class="popup-selection">
         <span v-if="!showSearchInput" class="showResult">{{buttonConfig.showResult ? text : ''}}</span>
-        <el-button v-if="!showSearchInput" @click="showSelect" :type="buttonConfig.type" :icon="buttonConfig.icon">{{buttonName}}</el-button>
+        <bb-button v-if="!showSearchInput" @click="showSelect" :type="buttonConfig.type" :icon="buttonConfig.icon">{{buttonName}}</bb-button>
 
 
         <el-input v-if="showSearchInput" v-model="text" @keyup.native.enter="showSelect"
                   style="width: 100%;" placeholder="请输入搜索内容" @focus="showSelect">
-            <el-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</el-button>
+            <bb-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</bb-button>
         </el-input>
         <el-dialog class="dialog" :title="title" :visible.sync="popupVisible" :modal="showModal" size="tiny">
             <bb-list :ds="popupGrid.ds" search :popup="true" :parentParams="parentParams" :columns="popupGrid.columns"
