@@ -1,5 +1,5 @@
 <template>
-    <el-button class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}</el-button>
+    <el-button class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
 </template>
 
 <script>
@@ -72,7 +72,4 @@
     }
 </script>
 <style scoped>
-    .bb-button {
-        margin: 10px 0;
-    }
 </style>
