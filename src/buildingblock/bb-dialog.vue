@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="active" @close="closeFn" :size="size" :custom-class="className">
+    <el-dialog :title="title" :visible.sync="active" @close="closeFn" :width="realWidth" :custom-class="className" :append-to-body="appendToBody" :modal-append-to-body="modalAppendToBody">
         <slot></slot>
     </el-dialog>
 </template>
@@ -21,28 +21,71 @@
                 type: Boolean,
                 default: false
             },
-	        className: {
-            	  type: String,
+            className: {
+                  type: String,
                 default: ""
+            },
+            appendToBody:{
+                type:Boolean
+            },
+            modalAppendToBody:{
+                type:Boolean
+            },
+            width:{
+                type:String
+            },
+            modal:{
+                type:Boolean
+            },
+            visible:{
+                type:Boolean
+            },
+            fullscreen:{
+                type:Boolean
             }
         },
         data() {
-        	return {
-        		active: false
+            return {
+                active: false
           }
+        },
+        computed: {
+            realWidth:function(){
+                const t = this;
+                let width = "50%"
+                switch(t.size){
+                    case "tiny":
+                        width = "25%";
+                        break;
+                    case "small":
+                        width = "50%";
+                        break;
+                    case "large":
+                        width = "75%";
+                        break;
+                    case "full":
+                        width = "100%";
+                        break;
+                }
+                if(t.width){
+                    width = t.width
+                }
+                return width
+            }
         },
         watch: {
-	          isShow: function (val, oldVal) {
-	        	    this.active = val;
-	        }
+            isShow: function (val, oldVal) {
+                this.active = val;
+            }
         },
         mounted() {
-        	this.active = this.isShow;
+            this.active = this.isShow;
         },
         methods: {
-	        closeFn() {
-            this.$emit('closeDia');
-          }
+            closeFn() {
+                this.$emit('closeDia');
+                this.$emit('update:isShow', false)
+            }
         }
     }
 </script>
