@@ -1,5 +1,5 @@
 <template>
-    <el-switch on-text="是" off-text="否" v-model="p_value" @change="switchChange"></el-switch>
+    <el-switch active-text="是" inactive-text="否" v-model="p_value" @change="switchChange"></el-switch>
 </template>
 
 <script>
