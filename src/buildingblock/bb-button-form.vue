@@ -147,6 +147,19 @@ import Util from '../libs/util';
     }
 </script>
 <style>
+    .m10 {
+        margin: 10px 0;
+    }
+    .db{
+        display: block;
+    }
+    .dib{
+        display: inline-block;
+    }
+    .di {
+        display: inline;
+    }
+
     .bb-button-form-content{
         height: 500px;
         overflow-y: auto;
