@@ -1,5 +1,5 @@
 <template>
-    <div :class="buttonFormClass">{{formDesc}}<el-button :type="startButtonType" :icon="startButtonIcon" @click="setting">{{settingText}}</el-button></div>
+    <div :class="buttonFormClass">{{formDesc}}<bb-button :type="startButtonType" :icon="startButtonIcon" @click="setting" :text="settingText"></bb-button></div>
 </template>
 
 <script>

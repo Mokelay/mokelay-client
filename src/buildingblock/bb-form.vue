@@ -64,7 +64,7 @@
                 formItems.push(formItem);
             });
             //取消按钮
-            var cancelButton = createElement('el-button',{
+            var cancelButton = createElement('bb-button',{
                     domProps:{
                         innerHTML:'取消'
                     },
@@ -78,7 +78,7 @@
                 cancelButton = null
             }
             //清空表单内容
-            var cleanButton = createElement('el-button',{
+            var cleanButton = createElement('bb-button',{
                     domProps:{
                         innerHTML:'清空内容'
                     },
@@ -92,7 +92,7 @@
                 cleanButton = null
             }
             //提交按钮
-            var submitButton = createElement('el-button',{
+            var submitButton = createElement('bb-button',{
                     domProps:{
                         innerHTML:this.settingButtonText
                     },

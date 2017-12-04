@@ -114,21 +114,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-// .tool-list{
-// 	padding: 11px;
-// 	max-width: 150px;
-// 	overflow-y: auto;
-// 	max-height:~'calc(100vh - 100px)';
-// 	.bb{
-// 		margin-bottom: 4px;
-// 		background: #FFFFFF;
-// 		border: 1px solid #E4E4E4;
-// 		font-family: '.PingFangSC-Regular';
-// 		font-size: 14px;
-// 		color: #444444;
-// 		.el-button{
-// 			width: 100%;
-// 		}
-// 	}
-// }
+	.tool-list{
+		ul{
+			background-color: #eef1f6;
+		}
+	}
 </style>

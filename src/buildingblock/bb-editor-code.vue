@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button type="primary" class="m10" @click="submit">代码确认</el-button>
+        <bb-button type="primary" class="m10" @click="submit">代码确认</bb-button>
 
     </div>
 </template>

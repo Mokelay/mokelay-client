@@ -21,8 +21,8 @@
                 type: Boolean,
                 default: false
             },
-            className: {
-                  type: String,
+	        className: {
+            	  type: String,
                 default: ""
             },
             appendToBody:{
@@ -45,8 +45,8 @@
             }
         },
         data() {
-            return {
-                active: false
+        	return {
+        		active: false
           }
         },
         computed: {
@@ -79,10 +79,10 @@
             }
         },
         mounted() {
-            this.active = this.isShow;
+        	this.active = this.isShow;
         },
         methods: {
-            closeFn() {
+	        closeFn() {
                 this.$emit('closeDia');
                 this.$emit('update:isShow', false)
             }

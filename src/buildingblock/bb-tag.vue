@@ -9,7 +9,7 @@
         >
         {{tag}}
         </el-tag>
-        <div v-if="showButton">
+        <div v-if="showButton" class="addButton">
           <el-input :style="{width:'100px'}"
             v-if="inputVisible"
             v-model="inputValue"
@@ -19,7 +19,7 @@
             @blur="handleInputConfirm"
           >
           </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+          <bb-button v-else class="button-new-tag" type="default" size="small" @click="showInput">+</bb-button>
         </div>
     </div>
 </template>
@@ -43,7 +43,7 @@
             },
             showButton:{
               type:Boolean,
-              default:false
+              default:true
             },
             prop:{
               type:String,
@@ -96,3 +96,8 @@
         }
     }
 </script>
+<style scoped>
+.addButton{
+  display: inline-block;
+}
+</style>

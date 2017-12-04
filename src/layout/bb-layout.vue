@@ -2,7 +2,7 @@
     <div class="bb-layout">
         <el-row class="bb-layout-topbar">
             <el-col :span="19"><tool :value="value" @addBB="addBB"></tool></el-col>
-            <el-col :span="5" class="topbar-button"><el-button type="primary" @click="showPreview">预览</el-button><el-button type="primary" @click="commit">提交</el-button></el-col>
+            <el-col :span="5" class="topbar-button"><bb-button type="primary" @click="showPreview">预览</bb-button><bb-button type="primary" @click="commit">提交</bb-button></el-col>
         </el-row>
         
         <el-row class='bb-layout-content'>

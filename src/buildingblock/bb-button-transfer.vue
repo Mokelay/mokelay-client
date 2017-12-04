@@ -14,11 +14,11 @@
                     :staticData="staticData"
             >
             </bb-transfer>
-            <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
+            <bb-button class="fr mt20" type="primary" @click="commit">确定</bb-button>
         </el-popover>
         <el-input class="wa" placeholder="请选择" disabled v-model="bb_input_value" @change="change"></el-input>
-        <el-button v-popover:popover><i class="el-icon-search"></i></el-button>
-        <el-button class="ml0" @click="clear"><i class="el-icon-delete"></i></el-button>
+        <bb-button type="text" v-popover:popover><i class="el-icon-search"></i></bb-button>
+        <bb-button type="text" class="ml0" @click="clear"><i class="el-icon-delete"></i></bb-button>
     </div>
 </template>
 
