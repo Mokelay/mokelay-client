@@ -8,7 +8,7 @@
                   style="width: 100%;" placeholder="请输入搜索内容" @focus="showSelect">
             <el-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</el-button>
         </el-input>
-        <el-dialog class="dialog" :title="title" :visible.sync="popupVisible" :modal="showModal" size="tiny">
+        <el-dialog v-if="popupVisible" class="dialog" :title="title" :visible.sync="popupVisible" :modal="showModal" size="tiny">
             <bb-list :ds="popupGrid.ds" search :popup="true" :parentParams="parentParams" :columns="popupGrid.columns"
                      :selection="popupGrid.selection" :pagination="popupGrid.pagination" @list-select="listSelect"
                      :searchConfig="popupGrid.searchConfig" :showHeader="popupGrid.showHeader"
