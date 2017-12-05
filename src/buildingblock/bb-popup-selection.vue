@@ -1,14 +1,12 @@
 <template>
     <div class="popup-selection">
         <span v-if="!showSearchInput" class="showResult">{{buttonConfig.showResult ? text : ''}}</span>
-        <bb-button v-if="!showSearchInput" @click="showSelect" :type="buttonConfig.type" :icon="buttonConfig.icon">{{buttonName}}</bb-button>
-
-
+        <bb-button v-if="!showSearchInput" @click="showSelect" :button="searchButton"></bb-button>
         <el-input v-if="showSearchInput" v-model="text" @keyup.native.enter="showSelect"
                   style="width: 100%;" placeholder="请输入搜索内容" @focus="showSelect">
-            <bb-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</bb-button>
+            <el-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</el-button>
         </el-input>
-        <bb-dialog class="dialog" :title="title" :isShow.sync="popupVisible" :modal="showModal" size="tiny">
+        <bb-dialog v-if="popupVisible" class="dialog" :title="title" :isShow.sync="popupVisible" :modal="showModal" size="tiny">
             <bb-list :ds="popupGrid.ds" search :popup="true" :parentParams="parentParams" :columns="popupGrid.columns"
                      :selection="popupGrid.selection" :pagination="popupGrid.pagination" @list-select="listSelect"
                      :searchConfig="popupGrid.searchConfig" :showHeader="popupGrid.showHeader"
@@ -108,6 +106,16 @@
         watch: {
             value(val) {
                 this.text = val;
+            }
+        },
+        computed: {
+            searchButton:function(){
+                let button = {
+                    type:this.buttonConfig.type,
+                    icon:this.buttonConfig.icon,
+                    text:this.buttonConfig.selectText
+                }
+                return button
             }
         },
         created: function () {
