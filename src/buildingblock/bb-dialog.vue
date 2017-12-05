@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="active" @close="closeFn" :width="realWidth" :custom-class="className" :append-to-body="appendToBody" :modal-append-to-body="modalAppendToBody">
+    <el-dialog :title="title" :visible.sync="active" @close="closeFn" :width="realWidth" :custom-class="className" :append-to-body="appendToBody" :modal-append-to-body="modalAppendToBody" :fullscreen="fullscreen" :modal="modal">
         <slot></slot>
     </el-dialog>
 </template>
@@ -35,9 +35,6 @@
                 type:String
             },
             modal:{
-                type:Boolean
-            },
-            visible:{
                 type:Boolean
             },
             fullscreen:{
