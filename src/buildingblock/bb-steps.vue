@@ -1,10 +1,9 @@
 <template>
     <div>
-        <el-steps :space="space" :active="active" center>
+        <el-steps :space="realSpace" :active="active" :align-center="alignCenter">
             <el-step v-for="step in steps" :title="step.title" :description="step.description" :key="step.title">
             </el-step>
         </el-steps>
-        <!-- <bb-page v-if="steps[active] && steps[active].pageAlias" :pageAlias="steps[active].pageAlias"></bb-page> -->
         <bb-read-bb :fields="steps[active-1].fields" ></bb-read-bb>
     </div>
 </template>
@@ -27,10 +26,23 @@
                 default:function(){
                     return [{fields:null,title:'初始化标题',description:'初始化描述'}];
                 }
+            },
+            alignCenter:{
+                type:Boolean,
+                default:true
             }
         },
         data() {
             return {
+            }
+        },
+        computed: {
+            realSpace: function () {
+                let space = this.space;
+                if(this.alignCenter){
+                    space = null
+                }
+                return space
             }
         },
         created: function () {
