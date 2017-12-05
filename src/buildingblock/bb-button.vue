@@ -17,22 +17,6 @@
                         text:'请设置按钮属性'
                     };
                 }
-            },
-            type:{
-                type:String
-            },
-            disabled:{
-                type:Boolean,
-                default:false
-            },
-            icon:{
-                type:String
-            },
-            text:{
-                type:String
-            },
-            size:{
-                type:String
             }
         },
         data() {
@@ -46,15 +30,6 @@
                 var button = this.button;
                 if(button.icon && button.icon.indexOf('el-icon') == -1){//老配置兼容el-icon
                     button.icon = 'el-icon-' + button.icon;
-                }
-                if(t.icon && t.icon.indexOf('el-icon') == -1){ //新配置兼容el-icon
-                    button.icon = 'el-icon-' + t.icon;
-                }
-                if(t.text || t.type){  //新配置覆盖老配置
-                    button.type = t.type;
-                    button.disabled = t.disabled;
-                    button.text = t.text;
-                    button.size = t.size;
                 }
                 return button
             }
