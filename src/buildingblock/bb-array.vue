@@ -2,7 +2,7 @@
     <div>
         <div style="margin-bottom:10px;">
             <el-button-group>
-                <bb-button type="text" icon="plus" @click="showForm">添加</bb-button>
+                <el-button type="text" icon="el-icon-plus" @click="showForm">添加</el-button>
             </el-button-group>
         </div>
         <el-table :data="array" border style="width: 100%" :height="height" stripe>
@@ -14,18 +14,18 @@
             </el-table-column>
             <el-table-column label="操作" key="operation">
                 <template scope="scope">
-                    <bb-button type="text" icon="edit"
-                               @click.native.prevent="editData(scope.$index)">修改</bb-button>
-                    <bb-button type="text" icon="delete"
-                               @click.native.prevent="deleteData(scope.$index)">删除</bb-button>
-                    <bb-button type="text" icon="caret-top"
-                               @click.native.prevent="upData(scope.$index)">上移</bb-button>
-                    <bb-button type="text" icon="caret-bottom"
-                               @click.native.prevent="downData(scope.$index)">下移</bb-button>
+                    <el-button type="text" icon="el-icon-edit"
+                               @click.native.prevent="editData(scope.$index)">修改</el-button>
+                    <el-button type="text" icon="el-icon-delete"
+                               @click.native.prevent="deleteData(scope.$index)">删除</el-button>
+                    <el-button type="text" icon="el-icon-caret-top"
+                               @click.native.prevent="upData(scope.$index)">上移</el-button>
+                    <el-button type="text" icon="el-icon-caret-bottom"
+                               @click.native.prevent="downData(scope.$index)">下移</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <bb-button v-if="showCommit" @click="commit" :style="{display:'block',margin:'auto',marginTop:'50px'}">设置数组</bb-button>
+        <el-button v-if="showCommit" @click="commit" :style="{display:'block',margin:'auto',marginTop:'50px'}">设置数组</el-button>
     </div>
 </template>
 

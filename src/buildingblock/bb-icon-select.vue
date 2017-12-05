@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-input v-model="p_value" placeholder="请选择" :disabled="true" class="wa"></el-input>
-        <bb-button type="text" @click="choose"><i class="el-icon-search"></i></bb-button>
-        <bb-button type="text" @click="p_value=''" class="ml0"><i class="el-icon-delete"></i></bb-button>
+        <el-button @click="choose"><i class="el-icon-search"></i></el-button>
+        <el-button @click="p_value=''" class="ml0"><i class="el-icon-delete"></i></el-button>
 
     </div>
 </template>

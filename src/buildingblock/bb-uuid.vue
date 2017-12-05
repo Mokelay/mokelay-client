@@ -1,6 +1,6 @@
 <template>
   <div>
-      {{v}} <bb-button v-if="showButton" type="primary" @click="generate">生成UUID</bb-button>
+      {{v}} <el-button v-if="showButton" type="primary" @click="generate">生成UUID</el-button>
   </div>
 </template>
 

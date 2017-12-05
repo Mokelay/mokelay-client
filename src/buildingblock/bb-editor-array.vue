@@ -2,7 +2,7 @@
     <div>
         <div style="margin-bottom:10px;">
             <el-button-group>
-                <bb-button type="text" icon="plus" @click="showForm">添加</bb-button>
+                <el-button type="text" icon="el-icon-plus" @click="showForm">添加</el-button>
             </el-button-group>
         </div>
         <el-table :data="p_value" border style="width: 100%"
@@ -20,8 +20,8 @@
             </el-table-column>
             <el-table-column label="操作" key="operation">
                 <template scope="scope">
-                    <bb-button type="text" icon="delete"
-                               @click.native.prevent="deleteData(scope.$index)"></bb-button>
+                    <el-button type="text" icon="el-icon-delete"
+                               @click.native.prevent="deleteData(scope.$index)"></el-button>
                 </template>
             </el-table-column>
         </el-table>

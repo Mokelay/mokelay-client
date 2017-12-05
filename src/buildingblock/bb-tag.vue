@@ -19,7 +19,7 @@
             @blur="handleInputConfirm"
           >
           </el-input>
-          <bb-button v-else class="button-new-tag" type="default" size="small" @click="showInput">+</bb-button>
+          <el-button v-else class="button-new-tag" type="default" size="small" @click="showInput">+</el-button>
         </div>
     </div>
 </template>

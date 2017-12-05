@@ -1,5 +1,5 @@
 <template>
-    <div>{{arrayDesc}}<bb-button type="default" @click="setting" :text="settingText"></bb-button></div>
+    <div>{{arrayDesc}}<el-button @click="setting">{{settingText}}</el-button></div>
 </template>
 
 <script>
