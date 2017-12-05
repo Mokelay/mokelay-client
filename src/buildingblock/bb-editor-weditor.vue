@@ -83,7 +83,7 @@
                 this.editor.customConfig.uploadImgParams = {  // 自定义上传参数配置
 //                    usersecret: usersecret
                 };
-                this.editor.customConfig.onchange = function (html) {
+                this.editor.customConfig.onblur = function (html) {
                     t.$emit("input",html);
                 }
                 this.editor.customConfig.zIndex=1;
