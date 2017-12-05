@@ -21,29 +21,34 @@
                 type: Boolean,
                 default: false
             },
-	        className: {
-            	  type: String,
+            className: {
+                type: String,
                 default: ""
             },
             appendToBody:{
-                type:Boolean
+                type:Boolean,
+                default:true
             },
             modalAppendToBody:{
-                type:Boolean
+                type:Boolean,
+                default:true
             },
             width:{
-                type:String
+                type:String,
+                default:"50%"
             },
             modal:{
-                type:Boolean
+                type:Boolean,
+                default:true
             },
             fullscreen:{
-                type:Boolean
+                type:Boolean,
+                default:false
             }
         },
         data() {
-        	return {
-        		active: false
+            return {
+                active: false
           }
         },
         computed: {
@@ -76,10 +81,10 @@
             }
         },
         mounted() {
-        	this.active = this.isShow;
+            this.active = this.isShow;
         },
         methods: {
-	        closeFn() {
+            closeFn() {
                 this.$emit('closeDia');
                 this.$emit('update:isShow', false)
             }

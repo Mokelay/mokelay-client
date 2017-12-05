@@ -1,16 +1,16 @@
 <template>
-	<div class="bb-preview" id="bb-preview">
+    <div class="bb-preview" id="bb-preview">
         <p class="title">{{title}}</p>
-		<div class='bb-preview-item' v-for="(bbItem,index) in value.content" :id="bbItem.uuid" :key="timestamp">
-			<div class="buttonInfo">
+        <div class='bb-preview-item' v-for="(bbItem,index) in value.content" :id="bbItem.uuid" :key="timestamp">
+            <div class="buttonInfo">
                 <p>{{(index+1)}}</p>
-				<bb-button type="text" icon="edit" @click="editItem(bbItem)" class="button-item"></bb-button>
-                <bb-button type="text" icon="delete" @click="removeBB(bbItem)" class="button-item"></bb-button>
-			</div>
+                <el-button type="text" icon="el-icon-edit" @click="editItem(bbItem)" class="button-item"></el-button>
+                <el-button type="text" icon="el-icon-delete" @click="removeBB(bbItem)" class="button-item"></el-button>
+            </div>
             <div class="bb-preview-content"><bb :alias="bbItem.alias" :key="timestamp" :config="bbItem.attributes"></bb></div>
-		</div>
+        </div>
         <div class="bb-preview-suggess" v-if="!value.content.length">请从工具栏添加积木</div>
-	</div>
+    </div>
 </template>
 <script>
     export default {
@@ -77,10 +77,10 @@
             })
         },
         methods: {
-        	editItem:function(bbItem){
-        		this.$emit('edit',bbItem)
-        	},
-        	removeBB:function(bbItem){
+            editItem:function(bbItem){
+                this.$emit('edit',bbItem)
+            },
+            removeBB:function(bbItem){
                 const t = this;
                 t.$confirm('确认删除此项','提示', {
                     confirmButtonText: '确定',
@@ -94,7 +94,7 @@
                         message: '操作已取消'
                     });
                 });
-        	},
+            },
             getTimeKey:function(){
                 this.timestamp = Date.parse(new Date());
             }
