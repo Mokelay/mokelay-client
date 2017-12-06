@@ -27,11 +27,11 @@
             },
             appendToBody:{
                 type:Boolean,
-                default:true
+                default:false
             },
             modalAppendToBody:{
                 type:Boolean,
-                default:true
+                default:false
             },
             width:{
                 type:String,
