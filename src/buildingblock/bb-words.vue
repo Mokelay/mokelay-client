@@ -85,11 +85,14 @@
       }
     },
     methods: {
-      getSessionStorage:function(){
+      getStorage:function(){
           const t = this;
           let data = {};
           if(t.valueKey == 'sessionStorage'){
             data = JSON.parse(sessionStorage.getItem(t.sessionKey));
+          }
+          if(t.valueKey == 'localStorage'){
+            data = JSON.parse(localStorage.getItem(t.sessionKey));
           }
           return data;
       },
@@ -108,7 +111,7 @@
               data = this.parentParams;
               break;
             default:
-              data = this.getSessionStorage();
+              data = this.getStorage();
               break;
           }
           t.getText(data);
