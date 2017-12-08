@@ -1,26 +1,35 @@
 <template>
-    <div>
+    <div class="bb-list">
         <el-row v-if="search">
+            <!-- 全局搜索 -->
             <div v-if="searchConfig.searchType == 'searchInput'" class="searchInput">
                 <el-input v-model="keywords" @keyup.native.enter="globalSearch"
                        style="width: 100%;" placeholder="请输入搜索内容">
                     <el-button type="primary" slot="append" icon="el-icon-search" @click="globalSearch">{{searchConfig.searchButtonName}}</el-button>
                 </el-input>
             </div>
+            <!-- 关键词选择搜索 -->
             <div v-if="searchConfig.searchType == 'searchSelection'" class="m10">
                 <bb-checkbox-group v-if="searchConfig.type == 'checkbox'" v-model="keywords" type="button" @input="globalSearch" :options="searchConfig.searchKeys" :ds="searchConfig.ds" :optionValue="searchConfig.optionValue" :optionText="searchConfig.optionText" class='searchSelection'>
                 </bb-checkbox-group>
                 <bb-radio-group v-if="searchConfig.type == 'radio'" v-model="keywords" type="button" @input="globalSearch" :options="searchConfig.searchKeys" :ds="searchConfig.ds" :optionValue="searchConfig.optionValue" :optionText="searchConfig.optionText" class='searchSelection'>
                 </bb-radio-group>
             </div>
+            <!-- 高级搜索 -->
             <bb-button-form 
                 class="advancedSearch"
                 @commit="advancedSearchFn"
-                v-if="advancedSearch" 
+                v-if="advancedSearch && advancedSearchConfig.layoutType == 'bb-button-form'" 
                 :fields="advancedSearchConfig.fields" 
                 :startButtonIcon="advancedSearchConfig.startButtonIcon" 
                 :settingText="advancedSearchConfig.settingText" 
                 :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
+            <bb-form 
+                @commit="advancedSearchFn"
+                v-if="advancedSearch && advancedSearchConfig.layoutType == 'inline-form'"
+                :labelInline="true"
+                :fields="advancedSearchConfig.fields"
+                :settingButtonText="advancedSearchConfig.formButtonName"></bb-form>
         </el-row>
         <el-row>
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
@@ -242,6 +251,7 @@
                 type: Object,
                 default: function () {
                     return {
+                        layoutType:'bb-button-form'
                     }
                 }
             },
@@ -453,7 +463,7 @@
     }
 </script>
 
-<style scoped>
+<style lang='less' scoped>
     .m10 {
         width: 100%;
     }
