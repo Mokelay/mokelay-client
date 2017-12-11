@@ -21,7 +21,7 @@
                 }
                 //创建InputField
                 if(props){
-                    props.value = t.formData[field['attributeName']];
+                    props.value = t.formData[field['attributeName']] || props.value;
                 }else{
                     props = {
                         value:t.formData[field['attributeName']]
