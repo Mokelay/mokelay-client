@@ -12,6 +12,8 @@
                      :searchConfig="popupGrid.searchConfig" :showHeader="popupGrid.showHeader"
                      :highlightCurrent="highlightCurrent" :stripe="stripe" :hiddenValueKey="hiddenValueKey"
                      :hiddenItems="hiddenItems"></bb-list>
+
+            <!-- TODO 渲染操作按钮 <bb-button-group/> 数据来自内在的确定，取消按钮的配置，再加上props中的popupButtons配置，同时bb-list去掉popup的配置-->
         </bb-dialog>
     </div>
 </template>
@@ -22,6 +24,10 @@
     export default {
         name: 'bb-popup-selection',
         props: {
+            popupButtons:{
+                type:Array,
+                default:[]
+            },
             value: {
                 type: [String, Number]
             },
