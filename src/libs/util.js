@@ -96,7 +96,8 @@ DS配置案例
         {paramName:'d',valueType:"inputValueObj",valueKey:"row-data",variable:"alias"},
     ],
     outputs:[
-        {dataKey:"tableData",valueKey:"data-list-1"}
+        {dataKey:"tableData",valueKey:"data-list-1"},
+        {dataKey:"obj",valueKey:"data-obj-1",handle:"${buzzCode}"}
     ]
 }
 
@@ -154,16 +155,25 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         if (data['ok']) {
             var realDataMap = data['data'];
             outputs.forEach(function(output) {
+                var _outputValue = null;
                 var paramArr = output['valueKey'].split('.');
                 if (paramArr.length > 1) { //支持参数形式  a.b[1].c.d[0][0].e
                     var paramValueStr = "realDataMap" + '.' + output['valueKey'];
                     try {
-                        output['value'] = eval("(" + paramValueStr + ")");
+                        _outputValue = eval("(" + paramValueStr + ")");
                     } catch (error) {
                         console.log('DS取值参数配置有误:', error);
                     }
                 } else {
-                    output['value'] = realDataMap[output['valueKey']];
+                    _outputValue = realDataMap[output['valueKey']];
+                }
+                if(output['handle']){
+                    //加载handle对应的buzz函数，进行执行
+                    util.loadBuzz(output['handle'],function(code){
+                        output['value'] = eval(code)(_outputValue);
+                    })
+                }else{
+                    output['value'] = _outputValue;
                 }
             });
             success(outputs);
@@ -180,7 +190,10 @@ util.resolveButton = function(button, valueobj, callback) {
     var t = valueobj['bb'];
     if (button['action'] == 'url') {
         //URL跳转
-        var url = util.tpl(button['url'], valueobj['row-data']);
+        //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
+        var dataParam = valueobj['row-data'];
+        dataParam = Object.assign(dataParam,valueobj);
+        var url = util.tpl(button['url'], dataParam);
         if (button['urlType'] == 'openWindow') {
             window.open(url);
         } else {
@@ -241,18 +254,27 @@ util.resolveButton = function(button, valueobj, callback) {
         button['method'].call(this, valueobj['row-data']);
     } else if (button['action'] == 'buzz') {
         //如果是巴斯代码，远程加载
-        //TODO
-        var params = {
-            alias: button.buzz
-        };
-        util.get(window._TY_ContentPath + '/read-buzz-by-alias', params).then(function(map) {
-            var data = map.data.data.data;
-            var code = data.code;
+        util.loadBuzz(button.buzz,function(code){
             t.util = util;
             eval(code)(t);
-        }).catch(function(err) {});;
+        });
     }
 }
+
+util.loadBuzz = function(buzz,handle){
+    var params = {
+        alias: buzz
+    };
+    util.get(window._TY_ContentPath + '/read-buzz-by-alias', params).then(function(map) {
+        var data = map.data.data.data;
+        if(handle){
+            handle(data.code);
+        }
+    }).catch(function(err) {
+        console.log(err);
+    });;
+}
+
 util.buttonCallback = function(button, valueobj, callback, map) {
     switch (button['callback']) {
         case 'refresh':
