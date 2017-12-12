@@ -167,12 +167,12 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                 } else {
                     _outputValue = realDataMap[output['valueKey']];
                 }
-                if(output['handle']){
+                if (output['handle']) {
                     //加载handle对应的buzz函数，进行执行
-                    util.loadBuzz(output['handle'],function(code){
+                    util.loadBuzz(output['handle'], function(code) {
                         output['value'] = eval(code)(_outputValue);
                     })
-                }else{
+                } else {
                     output['value'] = _outputValue;
                 }
             });
@@ -191,8 +191,8 @@ util.resolveButton = function(button, valueobj, callback) {
     if (button['action'] == 'url') {
         //URL跳转
         //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
-        var dataParam = valueobj['row-data'];
-        dataParam = Object.assign(dataParam,valueobj);
+        var dataParam = valueobj['row-data'] || {};
+        dataParam = Object.assign(dataParam, valueobj);
         var url = util.tpl(button['url'], dataParam);
         if (button['urlType'] == 'openWindow') {
             window.open(url);
@@ -254,20 +254,20 @@ util.resolveButton = function(button, valueobj, callback) {
         button['method'].call(this, valueobj['row-data']);
     } else if (button['action'] == 'buzz') {
         //如果是巴斯代码，远程加载
-        util.loadBuzz(button.buzz,function(code){
+        util.loadBuzz(button.buzz, function(code) {
             t.util = util;
             eval(code)(t);
         });
     }
 }
 
-util.loadBuzz = function(buzz,handle){
+util.loadBuzz = function(buzz, handle) {
     var params = {
         alias: buzz
     };
     util.get(window._TY_ContentPath + '/read-buzz-by-alias', params).then(function(map) {
         var data = map.data.data.data;
-        if(handle){
+        if (handle) {
             handle(data.code);
         }
     }).catch(function(err) {
