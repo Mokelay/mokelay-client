@@ -1,5 +1,5 @@
 <template>
-    <el-input-number v-model="valueBase" @change="change"></el-input-number>
+    <el-input-number v-model="valueBase" @change="change" :min="min" :max="max"></el-input-number>
 </template>
 
 <script>
@@ -13,6 +13,13 @@
             },
             value:{
                 type:[Number,String]
+            },
+            min:{
+                type:Number,
+                default:0
+            },
+            max:{
+                type:Number
             }
         },
         data() {
