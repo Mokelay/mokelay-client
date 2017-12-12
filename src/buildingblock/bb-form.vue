@@ -11,6 +11,7 @@
 
             //创建FormItem
             this.realFields.forEach(function(field){
+                console.log('field:',field);
                 //支持etProps
                 var props = field['props'];
                 var etProps = field['etProps'];
@@ -21,9 +22,6 @@
                 }
                 //创建InputField
                 if(props){
-                    if(t.formData[field['attributeName']] == undefined){
-                        t.formData[field['attributeName']] = props.value;
-                    }
                     props.value = t.formData[field['attributeName']];
                 }else{
                     props = {
