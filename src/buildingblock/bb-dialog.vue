@@ -34,8 +34,7 @@
                 default:false
             },
             width:{
-                type:String,
-                default:"50%"
+                type:String
             },
             modal:{
                 type:Boolean,
