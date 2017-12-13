@@ -52,6 +52,7 @@ import bbiconselect from './buildingblock/bb-icon-select.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 import bbpreview from './buildingblock/bb-preview.vue';
 import bbechartsselect from './buildingblock/bb-echarts-select.vue';
+import bbbillboard from './buildingblock/bb-billboard.vue';
 
 let ty = {
 	install: function(Vue) {
@@ -110,6 +111,7 @@ let ty = {
 		Vue.component('bb-button-transfer', bbbuttontransfer);
 		Vue.component('bb-preview', bbpreview);
 		Vue.component('bb-echarts-select', bbechartsselect);
+		Vue.component('bb-billboard', bbbillboard);
 		console.log("finish ty bb init....");
 	}
 };
