@@ -1,26 +1,26 @@
 <script>
+    import Vue from 'vue'
+    import line from 'v-charts/lib/line'
     export default {
         name: 'bb-echarts',
-        render: function (createElement) {
-            var t = this;
-            return createElement(
-                t.chartType,
-                {
-                    props: {
-                        publicConfig:t.publicConfig,
-                        rows:t.realRows,
-                        columns:t.realColumns,
-                        settings:t.realSettings,
-                        columnsDs:t.columnsDs,
-                        dataDs:t.dataDs
-                    }
-                }
-            );
+        render: function(createElement){
+            const t = this;
+            if(t.canRender){
+                const chart = createElement(t.chartType,{
+                    props:Object.assign(t.publicConfig,{
+                            data:{columns:t.realColumns,rows:t.realRows},
+                            settings:t.realSettings
+                        }),
+                    on:{},
+                    ref:""
+                },[]);
+                return createElement('div',{class:''},[chart])
+            }
         },
         props: {
             chartType:{
                 type:String,
-                default:'bb-echarts-line'
+                default:'ve-pie'
             },
             publicConfig:{
                 type:Object,
@@ -48,31 +48,53 @@
             columns:{
                 type:[Array,String]
             },
-            settings:{
-                type:[Array,String]
-            },
             columnsDs:{
                 type:Object
             },
-            dataDs:{
+            rowsDs:{
                 type:Object
+            },
+            settings:{
+                type:[Object,String]
             },
         },
         data() {
             return{
                 realRows:typeof this.rows == 'string'?eval("("+this.rows+")"):this.rows,
                 realColumns:typeof this.columns == 'string'?eval("("+this.columns+")"):this.columns,
-                realSettings:typeof this.settings == 'string'?eval("("+this.settings+")"):this.settings
+                realSettings:typeof this.settings == 'string'?eval("("+this.settings+")"):this.settings,
+                canRender:false
             }
         },
         created: function () {
+            this.getData();
         },
         mounted: function () {
         },
         methods: {
-        },
-        components: {
+            getData: function () {
+                const t = this;
+                if (t.rowsDs) {
+                    _TY_Tool.getDSData(t.rowsDs, {"bb": t, "router": t.$route.params}, function (map) {
+                        map.forEach((val,key)=>{
+                           const dataKey = val.dataKey
+                            t[dataKey] = val.value.list;
+                        })
+                        t.loadCahrts()
+                    }, function (code, msg) {
+                    });
+                }
+            },
+            //按需加载和渲染ve-line
+            loadCahrts:function(){
+                const t = this;
+                require.ensure(['v-charts'],function(require){
+                    const veChart = require('v-charts');
+                    Vue.use(veChart)
+                    t.canRender = true;
+                },'v-charts')
+              
+            }
         },
     }
-
 </script>
