@@ -73,6 +73,16 @@ removeInteractive = function(uuid){
     //调用后台删除交互接口
 }
 
+//参数为apiAlias
+addDS = function(apiAlias){
+    //调用后台接口添加DS
+}
+
+//参数为apiAlias
+removeDS = function(apiAlias){
+    //调用后台接口删除DS
+}
+
 //value为bb-layout的vlaue，当点击保存的时候获取到
 commit = function(value){
     //全局保存，如果业务已经实现上述6个event，基本commit就不用调后台接口了
