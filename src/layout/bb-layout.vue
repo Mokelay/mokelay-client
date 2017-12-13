@@ -24,6 +24,7 @@
 2. 初始化layout数据
 <bb-layout :value="{
     layoutObject:{title:''},
+    ds:["api-alias-1","api-alias-1"],
     content:[{uuid:'',alias:'',aliasName:'',attributes:{},layout:""}],
     interactives:[{uuid:'',fromContentUUID:'',fromContentEvent:'',executeContentUUID:'',executeContentMethodName:''}]}"></bb-layout>
 
@@ -35,6 +36,8 @@
     @updateBBLayout="updateBBLayout"
     @addInteractive="addInteractive"
     @removeInteractive="removeInteractive"
+    @addDS="addDS"
+    @removeDS="removeDS"
     @commit = "commit"
     ></bb-layout>
 
