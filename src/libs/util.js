@@ -154,29 +154,39 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         var data = response['data'];
         if (data['ok']) {
             var realDataMap = data['data'];
-            outputs.forEach(function(output) {
-                var _outputValue = null;
-                var paramArr = output['valueKey'].split('.');
-                if (paramArr.length > 1) { //支持参数形式  a.b[1].c.d[0][0].e
-                    var paramValueStr = "realDataMap" + '.' + output['valueKey'];
-                    try {
-                        _outputValue = eval("(" + paramValueStr + ")");
-                    } catch (error) {
-                        console.log('DS取值参数配置有误:', error);
+            new Promise(function(resolve, reject){
+                const promiseArr = [];
+                outputs.forEach(function(output) {
+                    var _outputValue = null;
+                    var paramArr = output['valueKey'].split('.');
+                    if (paramArr.length > 1) { //支持参数形式  a.b[1].c.d[0][0].e
+                        var paramValueStr = "realDataMap" + '.' + output['valueKey'];
+                        try {
+                            _outputValue = eval("(" + paramValueStr + ")");
+                        } catch (error) {
+                            console.log('DS取值参数配置有误:', error);
+                        }
+                    } else {
+                        _outputValue = realDataMap[output['valueKey']];
                     }
-                } else {
-                    _outputValue = realDataMap[output['valueKey']];
-                }
-                if (output['handle']) {
-                    //加载handle对应的buzz函数，进行执行
-                    util.loadBuzz(output['handle'], function(code) {
-                        output['value'] = eval(code)(_outputValue);
-                    })
-                } else {
-                    output['value'] = _outputValue;
-                }
-            });
-            success(outputs);
+                    if (output['handle']) {
+                        //加载handle对应的buzz函数，进行执行，异步操作统一通过Promise处理
+                        const item = new Promise((resolve, reject) => {
+                            util.loadBuzz(output['handle'], function(code) {
+                                output['value'] = eval(code);
+                                resolve();
+                            });
+                        });
+                        promiseArr.push(item);
+                    } else {
+                        output['value'] = _outputValue;
+                    }
+                });
+                //等待forEach中的异步全部执行完
+                Promise.all(promiseArr).then(values => { 
+                    resolve(outputs); 
+                });
+            }).then((outputs)=>{success(outputs)});
         } else {
             error(data['code'], data['message']);
         }
