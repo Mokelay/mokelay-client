@@ -43,7 +43,7 @@
                 this.vue = Vue;
                 Util.resolveButton(button,{
                     'bb':this,
-                    "router": this.$route.params});
+                    "router": this.$route.params},button.afterClick);
                 this.$emit('buttonClick',button);
                 this.$emit('click',button);
             }

@@ -1,7 +1,7 @@
 <template>
-    <el-button-group>
-        <bb-button v-for="(button,index) in buttons" :key="button.text" :button="button.button"></bb-button>
-    </el-button-group>
+    <div>
+        <bb-button v-for="(button,index) in buttons" :key="index" :button="button.button || button" @click="click"></bb-button>
+    </div>
 </template>
 
 <script>
@@ -15,11 +15,7 @@
                 default:function(){
                     return [{
                         type:'primary',
-                        text:'初始化按钮',
-                        button:{
-                            type:'primary',
-                            text:'初始化按钮',
-                        }
+                        text:'初始化按钮'
                     }]
                 }
             }
@@ -32,6 +28,10 @@
         },
         mounted:function(){
         },
-        methods: {}
+        methods: {
+            click:function(button){
+                this.$emit('click',button);
+            }
+        }
     }
 </script>
