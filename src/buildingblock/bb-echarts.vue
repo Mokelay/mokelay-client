@@ -60,14 +60,18 @@
         },
         data() {
             return{
-                realRows:typeof this.rows == 'string'?eval("("+this.rows+")"):this.rows,
-                realColumns:typeof this.columns == 'string'?eval("("+this.columns+")"):this.columns,
-                realSettings:typeof this.settings == 'string'?eval("("+this.settings+")"):this.settings,
+                realRows:null,
+                realColumns:null,
+                realSettings:null,
                 canRender:false
             }
         },
         created: function () {
-            this.getData();
+            const t = this;
+            t.realRows = typeof t.rows == 'string' && t.rows.length?eval("("+t.rows+")"):t.rows,
+            t.realColumns = typeof t.columns == 'string' && t.columns.length?eval("("+t.columns+")"):t.columns,
+            t.realSettings = typeof t.settings == 'string' && t.settings.length?eval("("+t.settings+")"):t.settings,
+            t.getData();
         },
         mounted: function () {
         },

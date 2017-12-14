@@ -27,8 +27,9 @@
         watch: {
         },
         created: function () {
-            this.realData = typeof this.dataStatic == 'string'?eval("("+this.dataStatic+")"):this.dataStatic;
-            this.getData();
+            const t = this;
+            t.realData = typeof t.dataStatic == 'string' && t.dataStatic.length?eval("("+t.dataStatic+")"):t.dataStatic;
+            t.getData();
         },
         mounted:function(){
         },
@@ -38,10 +39,9 @@
                 if (t.dataDs) {
                     _TY_Tool.getDSData(t.dataDs, {"bb": t, "router": t.$route.params}, function (map) {
                         map.forEach((val,key)=>{
-                           const dataKey = val.dataKey
+                            const dataKey = val.dataKey
                             t[dataKey] = val.value.list;
                         })
-                        t.loadCahrts()
                     }, function (code, msg) {
                     });
                 }
