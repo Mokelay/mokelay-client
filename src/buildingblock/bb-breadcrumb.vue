@@ -2,7 +2,7 @@
     <div class="m10">
         <h3 v-if="h1" class="title">{{h1}}</h3>
         <el-breadcrumb separator="/" >
-            <el-breadcrumb-item v-for="field in fields" key='field.name' :to="{ path: field.path }" >{{field.name}}</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="field in fields" :key='field.name' :to="{path:field.path}" >{{field.name}}</el-breadcrumb-item>
         </el-breadcrumb>
     </div>
 </template>
