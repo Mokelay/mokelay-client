@@ -14,6 +14,7 @@
                      :hiddenItems="hiddenItems"></bb-list>
 
             <!-- TODO 渲染操作按钮 <bb-button-group/> 数据来自内在的确定，取消按钮的配置，再加上props中的popupButtons配置，同时bb-list去掉popup的配置-->
+            <bb-button-group :buttons="realPopupButtons" @click="popupButtonsClick" :style="{textAlign:'right'}"></bb-button-group>
         </bb-dialog>
     </div>
 </template>
@@ -54,7 +55,7 @@
                         columns: null,
                         selection: false,
                         pagination: false,
-                        searchConfig: null,
+                        //searchConfig: null,
                         showHeader: true //是否显示表头
                     }
                 }
@@ -105,13 +106,21 @@
             },
             fullscreen:{
                 type:Boolean
+            },
+            popupButtons:{
+                type:Array
             }
         },
         data() {
             return {
                 text: this.value,
                 popupVisible: false,
-                buttonName: this.buttonConfig.selectText
+                buttonName: this.buttonConfig.selectText,
+                selectRow:null,
+                realPopupButtons:[
+                        {type:'defalut',text:'取消',alias:'cancel'},
+                        {type:'primary',text:'确认',alias:'confirm'}
+                    ]
             }
         },
         watch: {
@@ -130,59 +139,52 @@
             }
         },
         created: function () {
+            const t  = this;
+            if(t.popupButtons){
+                t.realPopupButtons = t.realPopupButtons.concat(t.popupButtons);
+            }
+            t.realPopupButtons.forEach((val,key)=>{
+                val.afterClick = t.afterCommit;
+                if(val.button){
+                   val.button.afterClick = t.afterCommit;
+                }
+                if(val.alias == 'confirm'){
+                    //用buttonConfig 覆盖确认过按钮  兼容老配置
+                    val = Object.assign({},t.buttonConfig,val);
+                    val.type = 'primary';
+                };
+                t.realPopupButtons[key] = val;
+            })
         },
         methods: {
             showSelect: function (row) {
                 this.popupVisible = true;
                 this.$emit('showPopup');
             },
-            confirmSelect: function (row) {
-                const t = this;
-                t.row = row;
-                if (row == 'cancelSelect') {
-                    t.popupVisible = false;
-                } else if (t.buttonConfig.action == 'execute-ds') {
-                    row.parentParams = t.parentParams;
-                    Util.resolveButton(t.buttonConfig, {
-                        'bb': t,
-                        "router": t.$route.params,
-                        'row-data': row,
-                        'getData': t.getData
-                    }, t.afterCommit);
-                } else {
-                    row.parentParams = t.parentParams;
-                    this.$confirm('确认选择?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        t.outPutValue();
-                    }).catch(() => {
-                    });
-                }
-            },
             listSelect: function (row) {
                 const t = this;
                 if (typeof row != 'array' && row.length != 0) {
-                    t.confirmSelect(row)
+                    t.selectRow = row;
                 }
             },
             afterCommit: function (button) {
                 const t = this;
-                t.popupVisible = false;
                 if (button['refreshParent'] && t.parentParams) {
                     t.parentParams.getData();
                 }
                 if (button.goUrl) {
                     t.$router.push(button.goUrl);
                 }
-                t.outPutValue();
+                if(t.selectRow){
+                    t.outPutValue();
+                }
                 t.$emit('afterCommit', t);
             },
             outPutValue: function () {
                 const t = this;
-                const row = t.row
+                const row = t.selectRow
                 t.popupVisible = false;
+                t.selectRow = null;
                 t.text = row[t.textField];
                 if (t.buttonConfig.showResult) {
                     t.buttonName = '修改';
@@ -191,6 +193,15 @@
                 const data = row[t.valueField2] ? row[t.valueField2] : row[t.valueField];//兼容接口选择列表的alias 和 url  支持多参数输出
                 t.$emit('input', data);
                 t.$emit('change', row);
+            },
+            popupButtonsClick:function(button){
+                const t = this;
+                switch(button.alias){
+                    case 'cancel':
+                        t.popupVisible = false;
+                        t.selectRow = null;
+                        break;
+                }
             }
         }
     }

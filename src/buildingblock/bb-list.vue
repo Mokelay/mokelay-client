@@ -115,12 +115,6 @@
                 </el-pagination>
             </div>
         </el-row>
-        <el-row v-if="popup" type="flex" justify='end'>
-            <div>
-                <el-button @click="cancelSelect">取消</el-button>
-                <el-button type="primary" @click="confirmSelect">确定</el-button>
-            </div>
-        </el-row>
     </div>
 </template>
 
@@ -439,18 +433,13 @@
                     this.selectArr = val;
                 }
                 sessionStorage.setItem(this.alias+'_selection',JSON.stringify(val));
+                this.$emit("list-select", this.selectArr);
             },
             radioChange:function(val){
                 if(!this.selection){
                     this.selectArr = val;
                 }
                 sessionStorage.setItem(this.alias+'_selection',JSON.stringify(val));
-            },
-            cancelSelect:function(){
-                this.$refs[this.alias].clearSelection()
-                this.$emit("list-select", 'cancelSelect');
-            },
-            confirmSelect:function(){
                 this.$emit("list-select", this.selectArr);
             },
             // 事件触发
