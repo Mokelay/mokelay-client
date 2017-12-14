@@ -26,6 +26,7 @@
                 :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
             <bb-form 
                 @commit="advancedSearchFn"
+                v-model="searchFormData"
                 v-if="advancedSearch && advancedSearchConfig.layoutType == 'inline-form'"
                 :labelInline="true"
                 :fields="advancedSearchConfig.fields"
@@ -251,7 +252,8 @@
                 type: Object,
                 default: function () {
                     return {
-                        layoutType:'bb-button-form'
+                        layoutType:'bb-button-form',
+                        searchFormData:null
                     }
                 }
             },
@@ -277,8 +279,11 @@
             }
         },
         created: function () {
-            if(!this.lazy){
-                this.getData();
+            const t = this;
+            const searchFormData = t.advancedSearchConfig.searchFormData
+            t.searchFormData = typeof searchFormData == 'string' && searchFormData.length?eval("("+searchFormData+")"):searchFormData;
+            if(!t.lazy){
+                t.getData();
             }
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
         },
@@ -459,7 +464,6 @@
                 t.getData();
             }
         }
-
     }
 </script>
 

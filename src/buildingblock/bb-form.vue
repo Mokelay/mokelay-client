@@ -7,11 +7,8 @@
         render: function (createElement) {
             var t =this;
             var formItems = [];
-            
-
             //创建FormItem
             this.realFields.forEach(function(field){
-                console.log('field:',field);
                 //支持etProps
                 var props = field['props'];
                 var etProps = field['etProps'];
@@ -203,7 +200,7 @@
                 if (typeof val === 'object') {
                     this.formData = val;
                 } else if (typeof val === 'string') {
-                    this.formData = (val ? JSON.parse(val) : {});
+                    this.formData = (val ? eval("("+t.value+")") : {});
                 }
                 this.$emit("input",val);
             },
@@ -218,13 +215,16 @@
         },
         data() {
             return {
-                formData:this.value,
-                realFields:this.fields
+                formData:null,
+                realFields:null
             }
         },
         created: function () {
-            this.getFields();
-            this.getData();
+            const t = this;
+            t.formData = typeof t.value == 'string' && t.value.length?eval("("+t.value+")"):t.value
+            t.realFields = t.fields
+            t.getFields();
+            t.getData();
         },
         mounted:function(){
         },
