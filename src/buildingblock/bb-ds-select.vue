@@ -45,7 +45,8 @@
                     {name:'响应数据',attributeName:'outputs',et:'bb-array',props:{
                             fields:[
                                 {name:'数据变量',attributeName:'dataKey',et:'bb-input'},
-                                {name:'响应变量',attributeName:'valueKey',et:'bb-input'}
+                                {name:'响应变量',attributeName:'valueKey',et:'bb-input'},
+                                {name:'数据处理中间件',attributeName:'handle',et:'bb-input'}
                             ]
                     }}
                 ],
