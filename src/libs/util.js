@@ -196,7 +196,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
 }
 
 //统一的解析按钮逻辑
-util.resolveButton = function(button, valueobj, callback) {
+util.resolveButton = function(button, valueobj) {
     var t = valueobj['bb'];
     if (button['action'] == 'url') {
         //URL跳转
@@ -214,6 +214,8 @@ util.resolveButton = function(button, valueobj, callback) {
                 t.$router.push(url);
             }
         }
+        //触发按钮执行完成事件
+        t.$emit("button-finish",button,valueobj);
     } else if (button['action'] == 'execute-ds') {
         var ds = button['ds'];
         var valueKey = button.valueKey || 'row-data';
@@ -232,13 +234,17 @@ util.resolveButton = function(button, valueobj, callback) {
                     type: 'success',
                     message: messageInfo
                 });
-                util.buttonCallback(button, valueobj, callback, map);
+                // util.buttonCallback(button, valueobj, callback, map);
+                //触发按钮执行完成事件
+                t.$emit("button-finish",button,valueobj,map);
             }, function(err, msg) {
                 t.$message({
                     type: 'warning',
                     message: msg || messageInfo
                 });
-                util.buttonCallback(button, valueobj, callback, err);
+                // util.buttonCallback(button, valueobj, callback, err);
+                //触发按钮执行完成事件
+                t.$emit("button-finish",button,valueobj,map);
             });
         }).catch(() => {
             t.$message({
@@ -258,16 +264,22 @@ util.resolveButton = function(button, valueobj, callback) {
             }, []),
             beforeClose: function(action, instance, done) {
                 done();
+                //触发按钮执行完成事件
+                t.$emit("button-finish",button,valueobj);
             }
         });
     } else if (button['action'] == 'code') {
         //执行代码
         button['method'].call(this, valueobj['row-data']);
+        //触发按钮执行完成事件
+        t.$emit("button-finish",button,valueobj);
     } else if (button['action'] == 'buzz') {
         //如果是巴斯代码，远程加载
         util.loadBuzz(button.buzz, function(code) {
             t.util = util;
             eval(code)(t);
+            //触发按钮执行完成事件
+            t.$emit("button-finish",button,valueobj);
         });
     }
 }
@@ -284,17 +296,6 @@ util.loadBuzz = function(buzz, handle) {
     }).catch(function(err) {
         console.log(err);
     });;
-}
-
-util.buttonCallback = function(button, valueobj, callback, map) {
-    switch (button['callback']) {
-        case 'refresh':
-            valueobj.getData();
-            break;
-        case 'custom':
-            callback(button, valueobj, map)
-            break;
-    }
 }
 
 window._TY_Tool = util;
