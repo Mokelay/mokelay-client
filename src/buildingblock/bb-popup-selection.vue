@@ -1,11 +1,7 @@
 <template>
     <div class="popup-selection">
-        <span v-if="!showSearchInput" class="showResult">{{buttonConfig.showResult ? text : ''}}</span>
-        <bb-button v-if="!showSearchInput" @click="showSelect" :button="searchButton"></bb-button>
-        <el-input v-if="showSearchInput" v-model="text" @keyup.native.enter="showSelect"
-                  style="width: 100%;" placeholder="请输入搜索内容" @focus="showSelect">
-            <el-button type="primary" slot="append" icon="search" @click="showSelect">{{buttonName}}</el-button>
-        </el-input>
+        <span class="showResult">{{buttonConfig.showResult ? text : ''}}</span>
+        <bb-button @click="showSelect" :button="searchButton"></bb-button>
         <bb-dialog v-if="popupVisible" class="dialog" :title="title" :isShow.sync="popupVisible" :modal="showModal" size="tiny" :fullscreen="fullscreen">
             <bb-list :ds="popupGrid.ds" search :popup="true" :parentParams="parentParams" :columns="popupGrid.columns"
                      :selection="popupGrid.selection" :pagination="popupGrid.pagination" @list-select="listSelect"
@@ -88,10 +84,6 @@
                 default: true
             },
             stripe: {
-                type: Boolean,
-                default: false
-            },
-            showSearchInput: {
                 type: Boolean,
                 default: false
             },
