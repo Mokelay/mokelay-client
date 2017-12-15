@@ -14,7 +14,7 @@ import bbtransfer from './buildingblock/bb-transfer';
 import bbtag from './buildingblock/bb-tag';
 import bbrelationchart from './buildingblock/bb-relation-chart';
 import bbtabs from './buildingblock/bb-tabs';
-import bbpopupselection from './buildingblock/bb-popup-selection';
+import bbpopselect from './buildingblock/bb-pop-select';
 import bbeditorwe from './buildingblock/bb-editor-weditor';
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbselect from './buildingblock/bb-select';
@@ -74,7 +74,7 @@ let ty = {
 		Vue.component('bb-tag', bbtag);
 		Vue.component('bb-relation-chart', bbrelationchart);
 		Vue.component('bb-tabs', bbtabs);
-		Vue.component('bb-popup-selection', bbpopupselection);
+		Vue.component('bb-pop-select', bbpopselect);
 		Vue.component('bb-editor-weditor', bbeditorwe);
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-select', bbselect);
