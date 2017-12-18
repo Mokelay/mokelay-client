@@ -158,7 +158,7 @@
         var t = this;
         var fnArr = t.onInteractiveFn[interactive];
         fnArr.forEach((fn,key)=>{
-          fn(linkageParams);
+          fn(...linkageParams);
         })
       }
     }
