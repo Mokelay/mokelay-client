@@ -28,15 +28,23 @@
           var pbb = pbbs[i];
           var props = pbb['attributes'] || {};
           var on = {};
+          //onInteractiveFn 存储所有事件的方法
+          t.onInteractiveFn = t.onInteractiveFn?t.onInteractiveFn:{};
           var interactives = pbb['interactives'] || [];
           for (var j in interactives) {
               var interactive = interactives[j];
               var executePbbId = interactive['executePbbId'];
               var executeBBMethodName = interactive['executeBBMethodName'];
-              on[interactive['triggerEventName']] = this.$refs[_PBB_PREFIX+executePbbId]?this.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : '';
+              on[interactive['triggerEventName']] = t.publicEmmit.bind(t,interactive['triggerEventName']);
+              //给相同事件的创建方法数组
+              t.onInteractiveFn[interactive['triggerEventName']] = t.onInteractiveFn[interactive['triggerEventName']]?t.onInteractiveFn[interactive['triggerEventName']]:[];
+              var fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
+              if(fn){
+                t.onInteractiveFn[interactive['triggerEventName']].push(fn)
+              }
           }
           var element = createElement(pbb['bbAlias'], {ref:_PBB_PREFIX+pbb['id'], props:props, on:on});
-          var colElement = createElement('el-col', {props:{span:24},style:this.layoutStyle},[element]);
+          var colElement = createElement('el-col', {props:{span:24},style:t.layoutStyle},[element]);
           var rowElement = createElement('el-row', {props:{gutter:20}},[colElement]);
           pbbElementList.push(rowElement);
       }
@@ -141,6 +149,17 @@
             title: '错误',
             message: error.message+"\n"+error.stack});
         });
+      },
+      /*公共方法处理绑定事件
+        interactive:当前触发事件名称
+        linkageParams:事件出发时传递给fn的参数
+      */
+      publicEmmit:function(interactive,...linkageParams){
+        var t = this;
+        var fnArr = t.onInteractiveFn[interactive];
+        fnArr.forEach((fn,key)=>{
+          fn(linkageParams);
+        })
       }
     }
   }
