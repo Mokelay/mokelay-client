@@ -35,7 +35,7 @@
               var interactive = interactives[j];
               var executePbbId = interactive['executePbbId'];
               var executeBBMethodName = interactive['executeBBMethodName'];
-              on[interactive['triggerEventName']] = t.publicEmmit.bind(t,interactive['triggerEventName']);
+              on[interactive['triggerEventName']] = t.publicEmit.bind(t,interactive['triggerEventName']);
               //给相同事件的创建方法数组
               t.onInteractiveFn[interactive['triggerEventName']] = t.onInteractiveFn[interactive['triggerEventName']]?t.onInteractiveFn[interactive['triggerEventName']]:[];
               var fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
@@ -154,11 +154,11 @@
         interactive:当前触发事件名称
         linkageParams:事件出发时传递给fn的参数
       */
-      publicEmmit:function(interactive,...linkageParams){
+      publicEmit:function(interactive,...params){
         var t = this;
         var fnArr = t.onInteractiveFn[interactive];
         fnArr.forEach((fn,key)=>{
-          fn(...linkageParams);
+          fn(...params);
         })
       }
     }
