@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-form :fields="fields" settingText="设置按钮" v-model="btn" formDescTpl="按钮:<%text%>"></bb-button-form>
+        <bb-button-form :fields="fields" settingText="设置按钮" v-model="btn" formDescTpl="按钮:<%=text%>"></bb-button-form>
     </div>
 </template>
 

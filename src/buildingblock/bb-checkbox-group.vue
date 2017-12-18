@@ -36,6 +36,9 @@ import Util from '../libs/util';
             type:{
                 type:String,
                 default:'checkbox'
+            },
+            defaultValTpl:{
+                type:[String,Number,Boolean]
             }
         },
         data() {
@@ -61,6 +64,8 @@ import Util from '../libs/util';
                     }, function (code, msg) {
                     });
             }
+
+            _TY_Tool.buildDefaultValTpl(t,"p_value");
         },
         methods: {
            checkboxChange(val){

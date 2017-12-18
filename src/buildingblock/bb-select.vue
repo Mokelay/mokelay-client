@@ -46,6 +46,9 @@
                 default: function () {
                     return null
                 }
+            },
+            defaultValTpl:{
+                type:[String,Number,Boolean]
             }
         },
         data() {
@@ -68,6 +71,10 @@
         },
         created: function () {
           this.getData();
+        },
+        mounted(){
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");
         },
         methods: {
             getData: function () {

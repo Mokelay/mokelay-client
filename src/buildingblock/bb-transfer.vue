@@ -32,6 +32,9 @@
             },
             ds: {
                 type: Object
+            },
+            defaultValTpl:{
+                type:[String,Number,Boolean]
             }
         },
         data() {
@@ -57,6 +60,10 @@
             }
         },
         computed: {},
+        mounted:function(){
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"bb_value");
+        },
         methods: {
             getData(node) {
                 const t = this;

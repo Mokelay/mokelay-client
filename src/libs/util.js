@@ -287,6 +287,21 @@ util.loadBuzz = function(buzz, handle) {
     });;
 }
 
+/**
+ * 构建form表单组件 默认值
+ * @param t
+ * @param p_value
+ */
+util.buildDefaultValTpl=function(t,p_value){
+    if(!t.value&&t.defaultValTpl){
+        t[p_value]=util.tpl(t.defaultValTpl,{
+            bb:t,
+            router:t.$route ? t.$route.params : {}
+        });
+        t.$emit('input',t[p_value]);
+    }
+}
+
 window._TY_Tool = util;
 //非常全的工具类，放到window对象中
 window._ = _;

@@ -20,6 +20,9 @@
             },
             max:{
                 type:Number
+            },
+            defaultValTpl:{
+                type:[String,Number,Boolean]
             }
         },
         data() {
@@ -35,6 +38,8 @@
         created: function () {
         },
         mounted:function(){
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");
         },
         methods: {
             change:function(val){

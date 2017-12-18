@@ -21,7 +21,7 @@
                 type:[String,Number]
             },
             defaultValTpl:{
-                type:[String,Number]
+                type:[String,Number,Boolean]
             }
         },
         data() {
@@ -37,14 +37,8 @@
         created: function () {
         },
         mounted:function(){
-            const t=this;
-            if(!t.value&&t.defaultValTpl){
-                t.valueBase=_TY_Tool.tpl(t.defaultValTpl,{
-                    bb:t,
-                    router:t.$route ? t.$route.params : {}
-                });
-                this.$emit('input',t.valueBase);
-            }
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");
         },
         methods: {
             change:function(val){

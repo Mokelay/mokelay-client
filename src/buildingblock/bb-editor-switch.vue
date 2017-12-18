@@ -9,6 +9,9 @@
             value:{
                 type:[Boolean,String],
                 default:false
+            },
+            defaultValTpl:{
+                type:[String,Number,Boolean]
             }
         },
         data() {
@@ -20,6 +23,10 @@
             value(val){
                 this.p_value = (typeof val==='boolean')?val:(val=='true')
             }
+        },
+        mounted:function(){
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"p_value");
         },
         methods: {
            switchChange(val){
