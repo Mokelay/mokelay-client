@@ -43,7 +43,11 @@ util.get = function(url, param) {
 }
 
 util.tpl = function(tpl, data) {
-    return _.template(tpl)(data);
+    try{
+        return _.template(tpl)(data);
+    }catch(e){
+        return "";
+    }
 };
 
 util.uuid = function(len, radix) {

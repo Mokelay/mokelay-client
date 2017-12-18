@@ -19,6 +19,9 @@
             },
             value:{
                 type:[String,Number]
+            },
+            defaultValTpl:{
+                type:[String,Number]
             }
         },
         data() {
@@ -34,6 +37,14 @@
         created: function () {
         },
         mounted:function(){
+            const t=this;
+            if(!t.value&&t.defaultValTpl){
+                t.valueBase=_TY_Tool.tpl(t.defaultValTpl,{
+                    bb:t,
+                    router:t.$route ? t.$route.params : {}
+                });
+                this.$emit('input',t.valueBase);
+            }
         },
         methods: {
             change:function(val){
