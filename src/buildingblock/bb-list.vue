@@ -47,8 +47,10 @@
                 <el-table-column v-for="column in columns" :fixed="column.fixed" :width="column.width" :prop="column.prop" :label="column.label"
                                  :key="column.prop" :align="column.align">
                     <template scope="scope">
+                        <!-- type=button-group 不再扩展 -->
                         <div v-if="column['type'] == 'button-group'" >
                             <span v-for="(button,index) in column.buttons">
+                                <!-- 仅针对表单操作 其他业务禁止使用 -->
                                 <bb-popup-selection v-if="hideBtn(button,scope.row) && button['buttonType'] == 'popup'"
                                             :valueField="button['popupConfig']['valueField']"
                                             :textField="button['popupConfig']['textField']"
@@ -57,6 +59,7 @@
                                             :showModal="button['popupConfig']['showModal']"
                                             :parentParams="toChildParams"
                                             :title="button['popupConfig']['title']"
+                                            @button-finish="hidePopup"
                                             @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
                                 <el-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
                                            :type="button.type" :key="index"
@@ -262,7 +265,8 @@
                 treeParentId:0,
                 toChildParams:null,
                 showPopIsShow:false,
-                searchFormData:null
+                searchFormData:null,
+                external:{}
             }
         },
         watch: {
@@ -301,7 +305,7 @@
                             });
                         }
                     }
-                    Util.getDSData(t.ds, {"bb": t, "router": routerParams,'row-data':t.parentParams}, function (map) {
+                    Util.getDSData(t.ds, {"bb": t, "router": routerParams,'row-data':t.parentParams,"external":t.external}, function (map) {
                         if(dataHandler && typeof dataHandler == 'function'){
                             dataHandler(map);
                         }else{
@@ -446,6 +450,15 @@
                 const t = this;
                 t.searchFormData = data;
                 t.getData();
+            },
+            hidePopup:function(button,objValue){
+                objValue['bb'].afterCommit(button);
+            },
+            linkage:function(data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.getData();
+                }
             }
         }
     }
