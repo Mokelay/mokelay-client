@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Qs from 'qs';
+import _ from 'underscore';
 
 let util = {};
 
@@ -42,23 +43,7 @@ util.get = function(url, param) {
 }
 
 util.tpl = function(tpl, data) {
-    var re = /<%([^%>]+)?%>/g,
-        re2 = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g;
-    var code = 'var r=[];\n',
-        cursor = 0;
-    var add = function(line, js) {
-        js ? code += line.match(re2) ? line + '\n' : 'r.push(' + line + ');\n' :
-            code += 'r.push("' + line.replace(/"/g, '\\"') + '");\n';
-    };
-    var match = null;
-    while (match = re.exec(tpl)) {
-        add(tpl.slice(cursor, match.index));
-        re2.test(match[1]) ? add(match[1], true) : add("this." + match[1], true);
-        cursor = match.index + match[0].length;
-    }
-    add(tpl.substr(cursor, tpl.length - cursor));
-    code += 'return r.join("");';
-    return new Function(code.replace(/[\r\t\n]/g, '')).apply(data);
+    return _.template(tpl)(data);
 };
 
 util.uuid = function(len, radix) {
@@ -299,5 +284,7 @@ util.loadBuzz = function(buzz, handle) {
 }
 
 window._TY_Tool = util;
+//非常全的工具类，放到window对象中
+window._ = _;
 
 export default util;
