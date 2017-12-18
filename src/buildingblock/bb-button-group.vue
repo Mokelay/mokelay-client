@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <bb-button v-for="(button,index) in buttons" :key="index" :button="button.button || button" @click="click"></bb-button>
-    </div>
+    <el-button-group>
+        <bb-button v-for="(button,index) in buttons" :key="index" :button="button" @click="click"></bb-button>
+    </el-button-group>
 </template>
 
 <script>
