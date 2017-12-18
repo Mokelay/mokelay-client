@@ -21,7 +21,8 @@
         data() {
             return {
                 realData:null,
-                defaultBgColor:'#63B8FF'
+                defaultBgColor:'#63B8FF',
+                external:{}
             }
         },
         watch: {
@@ -37,7 +38,7 @@
             getData: function () {
                 const t = this;
                 if (t.dataDs) {
-                    _TY_Tool.getDSData(t.dataDs, {"bb": t, "router": t.$route.params}, function (map) {
+                    _TY_Tool.getDSData(t.dataDs, {"bb": t, "router": t.$route.params,"external":t.external}, function (map) {
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
                             t[dataKey] = val.value.list;
@@ -45,7 +46,13 @@
                     }, function (code, msg) {
                     });
                 }
-            }
+            },
+            linkage:function(data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.getData();
+                }
+            },
         }
     }
 </script>
