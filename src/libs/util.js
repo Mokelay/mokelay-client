@@ -219,10 +219,10 @@ util.resolveButton = function(button, valueobj) {
     } else if (button['action'] == 'execute-ds') {
         var ds = button['ds'];
         var valueKey = button.valueKey || 'row-data';
-        var confirmTitle = util.tpl(button['confirmTitle'], valueobj[valueKey]) || "提示";
-        var confirmText = util.tpl(button['confirmText'], valueobj[valueKey]) || "是否执行此操作";
+        var confirmTitle = button['confirmTitle']?util.tpl(button['confirmTitle'], valueobj[valueKey]) : "提示";
+        var confirmText = button['confirmText']?util.tpl(button['confirmText'], valueobj[valueKey]) : "是否执行此操作";
         button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
-        var messageInfo = util.tpl(button['callBackStaticWords'], valueobj[valueKey]) || "操作成功";
+        var messageInfo = button['callBackStaticWords']?util.tpl(button['callBackStaticWords'], valueobj[valueKey]) : "操作成功";
         t.$confirm(confirmText, confirmTitle, {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
