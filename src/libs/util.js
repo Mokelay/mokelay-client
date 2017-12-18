@@ -244,7 +244,7 @@ util.resolveButton = function(button, valueobj) {
                 });
                 // util.buttonCallback(button, valueobj, callback, err);
                 //触发按钮执行完成事件
-                t.$emit("button-finish",button,valueobj,map);
+                t.$emit("button-finish",button,valueobj,err);
             });
         }).catch(() => {
             t.$message({
@@ -277,7 +277,7 @@ util.resolveButton = function(button, valueobj) {
         //如果是巴斯代码，远程加载
         util.loadBuzz(button.buzz, function(code) {
             t.util = util;
-            eval(code)(t);
+            eval(code);
             //触发按钮执行完成事件
             t.$emit("button-finish",button,valueobj);
         });
