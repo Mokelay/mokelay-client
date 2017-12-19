@@ -97,7 +97,7 @@ import Vue from 'vue';
 
                     var dialog = require('art-dialog');
                     var d = dialog({
-                        zIndex:1,
+                        zIndex:100,
                         width:800,
                         title: '添加',
                         content: _form.$el
