@@ -1,8 +1,7 @@
 <template>
     <div>
         <el-upload
-            :http-request = "uploadFile"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://hxwy.dev.rs.com/wy/uploadMany"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove">
