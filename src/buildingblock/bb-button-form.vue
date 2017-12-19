@@ -135,7 +135,7 @@ import Util from '../libs/util';
                     var dialog = require('art-dialog');
                     var d = dialog({
                         width:800,
-                        zIndex:1,
+                        zIndex:100,
                         title: '设置',
                         content: _form.$el
                     });
