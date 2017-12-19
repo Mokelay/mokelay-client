@@ -303,7 +303,5 @@ util.buildDefaultValTpl=function(t,p_value){
 }
 
 window._TY_Tool = util;
-//非常全的工具类，放到window对象中
-window._ = _;
 
 export default util;
