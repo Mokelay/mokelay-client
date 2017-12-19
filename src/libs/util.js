@@ -26,6 +26,9 @@ util.invoke = function(method, url, param) {
             if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401) {
                 //未登录
                 location.href = window._TY_SSOURL;
+            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
+                //TY未登录
+                location.href = window._TY_APIHost+"/%23/ty-login";
             } else {
                 resolve(response);
             }
