@@ -227,6 +227,10 @@
             t.getData();
         },
         mounted:function(){
+            const t = this;
+            //after-render 执行过早，找到解决方法后立即删除setTimeout
+            //after-render bb-form初次渲染回填初始化值后 触发此事件 
+            setTimeout(()=>{t.$emit("after-render",t.formData,{bb:t})},500);
         },
         methods: {
             clean: function () {
