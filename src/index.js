@@ -54,6 +54,7 @@ import bbpreview from './buildingblock/bb-preview.vue';
 import bbechartsselect from './buildingblock/bb-echarts-select.vue';
 import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
+import ElTreeGrid from 'element-tree-grid';
 
 let ty = {
 	install: function(Vue) {
@@ -114,6 +115,8 @@ let ty = {
 		Vue.component('bb-echarts-select', bbechartsselect);
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-upload', bbupload);
+
+		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
 	}
 };
