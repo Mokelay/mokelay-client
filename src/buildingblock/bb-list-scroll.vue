@@ -15,9 +15,8 @@
                 type: String,
                 default: ""
             },
-	          keyprop: {
-            	type: String,
-              require: true
+            keyprop: {
+            	type: String
             },
             isShow: {
                 type: Boolean,
