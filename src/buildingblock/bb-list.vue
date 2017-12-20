@@ -454,7 +454,7 @@
             hidePopup:function(button,objValue){
                 objValue['bb'].afterCommit(button);
             },
-            linkage:function(data){
+            linkage:function(...data){
                 if(data){
                     this.external['linkage'] = data;
                     this.getData();
