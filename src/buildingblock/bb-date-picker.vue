@@ -3,6 +3,8 @@
         v-model="valueBase"
         :disabled="option.disabled"
         :editable="option.editable"
+        :picker-options="option.pickerOptions"
+        :value-format="option.valueFormat"
         @change="change"
         :type="type" placeholder="选择日期时间"></el-date-picker>
 </template>
@@ -23,7 +25,7 @@
                 }
             },
             value:{
-                type:String
+                type:[String,Date]
             },
             type:{
                 type:String,
