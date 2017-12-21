@@ -228,9 +228,10 @@
         },
         mounted:function(){
             const t = this;
-            //after-render 执行过早，找到解决方法后立即删除setTimeout
-            //after-render bb-form初次渲染回填初始化值后 触发此事件 
-            setTimeout(()=>{t.$emit("after-render",t.formData,{bb:t})},500);
+            /*bb-mounted 
+                bb-form初次渲染回填初始化值后 触发此事件 
+                设置setTimeout防止事件触发时目标方法积木还未渲染*/
+            setTimeout(()=>{t.$emit('bb-mounted',null,{bb:t})},0);
         },
         methods: {
             clean: function () {
@@ -243,6 +244,9 @@
                 t.$emit('commit', t.formData);
                 t.$refs['form'].validate(function(valid){
                     if(valid){
+                        /*buttonConfig
+                            提交按钮的配置
+                            此处需要用bb-button重构*/
                         Util.resolveButton(t.buttonConfig,{
                                 'bb':t,
                                 "router": t.$route.params,
