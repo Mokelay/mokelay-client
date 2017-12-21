@@ -24,23 +24,25 @@
       //处理配置UI
       var t = this;
       var pbbs = this.pbbs;
+      //onInteractiveFn 存储所有事件的方法
+      t.onInteractiveFn = {};
       for (var i in pbbs) {
           var pbb = pbbs[i];
           var props = pbb['attributes'] || {};
           var on = {};
-          //onInteractiveFn 存储所有事件的方法
-          t.onInteractiveFn = t.onInteractiveFn?t.onInteractiveFn:{};
           var interactives = pbb['interactives'] || [];
+          var pbbId = pbb['id'];
           for (var j in interactives) {
               var interactive = interactives[j];
               var executePbbId = interactive['executePbbId'];
               var executeBBMethodName = interactive['executeBBMethodName'];
-              on[interactive['triggerEventName']] = t.publicEmit.bind(t,interactive['triggerEventName']);
+              on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
               //给相同事件的创建方法数组
-              t.onInteractiveFn[interactive['triggerEventName']] = t.onInteractiveFn[interactive['triggerEventName']]?t.onInteractiveFn[interactive['triggerEventName']]:[];
               var fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
               if(fn){
-                t.onInteractiveFn[interactive['triggerEventName']].push(fn)
+                t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId]?t.onInteractiveFn[pbbId] : {};
+                t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']]?t.onInteractiveFn[pbbId][interactive['triggerEventName']]:[];
+                t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
               }
           }
           var element = createElement(pbb['bbAlias'], {ref:_PBB_PREFIX+pbb['id'], props:props, on:on});
@@ -154,9 +156,10 @@
         interactive:当前触发事件名称
         linkageParams:事件出发时传递给fn的参数
       */
-      publicEmit:function(interactive,...params){
+      publicEmit:function(pbb,interactive,...params){
         var t = this;
-        var fnArr = t.onInteractiveFn[interactive];
+        var pbbId = pbb.id;
+        var fnArr = t.onInteractiveFn[pbbId][interactive];
         fnArr.forEach((fn,key)=>{
           fn(...params);
         })
