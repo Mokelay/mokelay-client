@@ -20,7 +20,7 @@
         type:String
       },
       text: {
-        type: String
+        type: [String,Number]
       },
       tagName:{
         type:String,
