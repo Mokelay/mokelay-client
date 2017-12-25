@@ -9,6 +9,7 @@
             :list-type="listType"
             :limit="limit"
             :accept="fileType"
+            :file-list="realFileList"
             >
             <i class="el-icon-plus"></i>
         </el-upload>
@@ -21,6 +22,10 @@
     export default {
         name: 'bb-upload',
         props: {
+            //默认值
+            value:{
+                type:[Array,String]
+            },
             //上传接口配置
             uploadDs:{
                 type:Object
@@ -48,16 +53,24 @@
             return {
                 dialogImageUrl: '',
                 dialogVisible: false,
-                uploadUrl:''
+                uploadUrl:'',
+                realFileList:[]
             }
         },
         watch: {
+            value(val){
+                const t = this;
+                t.setFileList(val,t);
+            }
         },
         created: function () {
-            if(this.uploadDs){
-                this.uploadUrl = this.uploadDs.api
+            const t = this;
+            if(t.uploadDs){
+                t.uploadUrl = t.uploadDs.api
             }
-            
+            if(t.value){
+                t.setFileList(t.value,t) 
+            }
         },
         mounted:function(){
         },
@@ -84,11 +97,32 @@
             },
             handleFileList:function(emit,fileList){
                 const t = this;
-                _TY_Tool.loadBuzz(t.handle, function(code) {
-                    fileList = eval(code);
+                //无handle情况下正常输出
+                if(t.handle){
+                    _TY_Tool.loadBuzz(t.handle, function(code) {
+                        fileList = eval(code);
+                        t.$emit(emit,fileList);
+                        t.$emit('input',fileList);
+                    });
+                }else{
                     t.$emit(emit,fileList);
                     t.$emit('input',fileList);
-                });
+                }
+            },
+            //回填图片
+            setFileList:function(val,t){
+                let list = val;
+                if(typeof list == 'string'){
+                    list = list.split(',');
+                    list.forEach((ele,key)=>{
+                        const item = {
+                            url:ele
+                        }
+                        t.realFileList.push(item);
+                    })
+                }else{
+                    t.realFileList = list
+                }
             }
         }
     }
