@@ -10,6 +10,7 @@
             :limit="limit"
             :accept="fileType"
             :file-list="realFileList"
+            :on-exceed="onExceed"
             >
             <i class="el-icon-plus"></i>
         </el-upload>
@@ -88,11 +89,13 @@
             //上传成功
             onSuccess:function(response,file,fileList){
                 const t = this;
+                this.$message.success('文件上传成功');
                 t.handleFileList('success',fileList)
             },
             //上传失败
             onError:function(err,file,fileList){
                 const t = this;
+                this.$message.success('文件上传失败');
                 t.handleFileList('err',fileList)
             },
             handleFileList:function(emit,fileList){
@@ -123,6 +126,10 @@
                 }else{
                     t.realFileList = list
                 }
+            },
+            //文件超出个数限制时的钩子
+            onExceed:function(files, fileList){
+                this.$message.error('文件超出个数限制');
             }
         }
     }
