@@ -125,6 +125,11 @@ import Util from '../libs/util';
                                         t.$emit('commit', formData);
                                         t.dialog.close().remove();
                                         t.dialog = null;
+                                    },
+                                    cancel:function(formData){
+                                        t.$emit('cancel',formData);
+                                        t.dialog.close().remove();
+                                        t.dialog = null;
                                     }
                                 },
                                 ref:"form"

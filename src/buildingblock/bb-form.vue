@@ -284,20 +284,7 @@
             },
             cancelCommit:function(){
                 const t = this;
-                t.$msgbox({
-                    title: '消息',
-                    message: '确认取消？',
-                    showCancelButton: true,
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    beforeClose: (action, instance, done) => {
-                        done();
-                    }
-                }).then(()=>{
-                    t.$router.back()
-                }).catch((err)=>{
-                    console.log('err:',err);
-                })
+                t.$emit('cancel',t.formData);
             },
             clearForm:function(){
                 const t = this;
