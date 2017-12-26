@@ -50,7 +50,7 @@
                 });
 
                 var className = field['et'] == 'bb-hidden'?'form-item-hidden':'form-item';
-                field['rules'] = typeof field['rules'] == 'string'?[]:field['rules']
+                field['rules'] = typeof field['rules'] == 'string'?eval(field['rules']):field['rules'];
                 var formItem = createElement('el-form-item',{
                     class:className,
                     props:{
@@ -262,6 +262,7 @@
                     t.$router.push(button.goUrl);
                 }
             },
+            //获取表单项
             getFields: function () {
                 var t = this;
                 if (t.dsFields) {
@@ -271,6 +272,7 @@
                     });
                 }
             },
+            //获取表单值
             getData: function () {
                 var t = this;
                 if (t.ds) {
