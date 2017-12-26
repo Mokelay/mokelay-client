@@ -251,9 +251,13 @@
                                     attributeName: 'showModal',
                                     et: 'bb-editor-switch'
                                 }, {
-                                    name: '按钮配置',
+                                    name: '主按钮配置',
                                     attributeName: 'buttonConfig',
                                     et: 'bb-button-select'
+                                }, {
+                                    name: '确认按钮组配置',
+                                    attributeName: 'popupButtons',
+                                    et: 'bb-editor-code'
                                 }, {
                                     name: '数据源',
                                     attributeName: 'popupGrid',

@@ -59,6 +59,7 @@
                                             :showModal="button['popupConfig']['showModal']"
                                             :parentParams="toChildParams"
                                             :title="button['popupConfig']['title']"
+                                            :popupButtons="button['popupConfig']['popupButtons']"
                                             @button-finish="hidePopup"
                                             @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
                                 <el-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
