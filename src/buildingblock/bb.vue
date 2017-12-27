@@ -2,15 +2,19 @@
   export default {
     name: 'bb',
     render: function (createElement) {
-        return createElement(this.alias, {props: this.props});
+        return createElement(this.alias, {props: this.props, on : this.on});
     },
     props: {
         alias:{
             type:String
         },
+        //TODO 后面优化需要删除
         attributes:{
             type:Array
         },
+        on:{
+          type:Object
+        }
         config:{
           type:[String,Object]
         },
