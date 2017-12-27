@@ -46,7 +46,8 @@ import Util from '../libs/util';
                 type:Boolean
             },
             buttonFormClass:{
-                type:String
+                type:String,
+                default:'bb-button-form'
             },
             on:{
                 type:Array
@@ -168,5 +169,8 @@ import Util from '../libs/util';
     .bb-button-form-content{
         height: 500px;
         overflow-y: auto;
+    }
+    .bb-button-form{
+        display: inline-block;
     }
 </style>
