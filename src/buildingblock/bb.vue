@@ -14,7 +14,7 @@
         },
         on:{
           type:Object
-        }
+        },
         config:{
           type:[String,Object]
         },

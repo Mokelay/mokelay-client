@@ -81,6 +81,7 @@
     .pic_preview_bb{
         display: flex;
         padding: 10px 0px;
+        min-width: 150px;
     }
     .pic_content{
         img{
