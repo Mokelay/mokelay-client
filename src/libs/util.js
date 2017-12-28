@@ -246,34 +246,51 @@ util.resolveButton = function(button, valueobj) {
         });
     } else if (button['action'] == 'dialog-page') {
         //TODO 弹出一个页面对话框
-        var h = t.$createElement;
-        t.$msgbox({
-            title: '消息',
-            message: h('bb-page', {
-                props: {
-                    pageAlias: button['dialogPage']
+        require.ensure(["art-dialog", "jquery"], function(require) {
+            var Vue = valueobj['bb'].vue;
+            var _page = new Vue({
+                router: t.$router,
+                render: function(createElement) {
+                    const pageItem = createElement('bb-page', {
+                        props: {
+                            pageAlias: button['dialogPage'],
+                            params: valueobj
+                        },
+                        on: {
+                            'after-unload': (val) => {
+                                //触发按钮执行完成事件
+                                t.$emit("button-finish", button, valueobj);
+                                //关闭并销毁dialog
+                                t.dialog.close().remove();
+                                t.dialog = null;
+                            }
+                        }
+                    }, []);
+                    return createElement('div', {}, [pageItem])
                 }
-            }, []),
-            beforeClose: function(action, instance, done) {
-                done();
-                //触发按钮执行完成事件
-                t.$emit("button-finish",button,valueobj);
-            }
+            }).$mount();
+            var dialog = require('art-dialog');
+            var d = dialog({
+                width: 800,
+                zIndex: 100,
+                title: '消息',
+                content: _page.$el
+            });
+            d.showModal();
+            t.dialog = d;
         });
-    } else if (button['action'] == 'dialog-form') {
-        //TODO 生成一个Dialog对象，里面放Form
     } else if (button['action'] == 'code') {
         //执行代码
         button['method'].call(this, valueobj['row-data']);
         //触发按钮执行完成事件
-        t.$emit("button-finish",button,valueobj);
+        t.$emit("button-finish", button, valueobj);
     } else if (button['action'] == 'buzz') {
         //如果是巴斯代码，远程加载
         util.loadBuzz(button.buzz, function(code) {
             t.util = util;
             eval(code);
             //触发按钮执行完成事件
-            t.$emit("button-finish",button,valueobj);
+            t.$emit("button-finish", button, valueobj);
         });
     }
 }
