@@ -81,6 +81,9 @@
             width:'100%'
           }
         }
+      },
+      params:{
+        type:[Object,Array]
       }
     },
     data() {
@@ -91,6 +94,8 @@
       };
     },
     created: function () {
+      //把bb-page的全局对象注册到window下
+      window._TY_Page_Data[this.pageAlias] = this;
       this.loadData();
     },
     methods: {
@@ -126,8 +131,6 @@
           //配置UI
           var pbbs = [];
           pbbList.forEach(function(_pbb){
-//            _pbb = _pbb['data'];
-
             var _pbbId = _pbb['id'];
             var attributes = _pbb['attributes'];
             if(attributes && typeof attributes == "string"){
