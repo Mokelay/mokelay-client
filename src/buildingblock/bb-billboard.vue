@@ -16,6 +16,10 @@
             },
             dataStatic:{
                 type:[Object,String]
+            },
+            lazy:{//初始不加载数据
+                type:Boolean,
+                default: false
             }
         },
         data() {
@@ -29,8 +33,15 @@
         },
         created: function () {
             const t = this;
-            t.realData = typeof t.dataStatic == 'string' && t.dataStatic.length?eval("("+t.dataStatic+")"):t.dataStatic;
-            t.getData();
+            if(t.dataDs){
+                //加载动态数据
+                if(!t.lazy){
+                    t.getData();
+                }
+            }else{
+                //加载静态数据
+                t.realData = typeof t.dataStatic == 'string' && t.dataStatic.length?eval("("+t.dataStatic+")"):t.dataStatic; 
+            }
         },
         mounted:function(){
         },
@@ -52,7 +63,7 @@
                     this.external['linkage'] = data;
                     this.getData();
                 }
-            },
+            }
         }
     }
 </script>
