@@ -260,6 +260,8 @@ util.resolveButton = function(button, valueobj) {
                 t.$emit("button-finish",button,valueobj);
             }
         });
+    } else if (button['action'] == 'dialog-form') {
+        //TODO 生成一个Dialog对象，里面放Form
     } else if (button['action'] == 'code') {
         //执行代码
         button['method'].call(this, valueobj['row-data']);

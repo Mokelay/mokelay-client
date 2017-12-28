@@ -68,6 +68,7 @@
                                            :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)">
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
+                                <!-- 后续业务禁止应用 -->
                                 <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row']}"></bb>
                             </span>
                         </div>
