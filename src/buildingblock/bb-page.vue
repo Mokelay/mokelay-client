@@ -34,15 +34,29 @@
           var pbbId = pbb['id'];
           for (var j in interactives) {
               var interactive = interactives[j];
-              var executePbbId = interactive['executePbbId'];
-              var executeBBMethodName = interactive['executeBBMethodName'];
-              on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
-              //给相同事件的创建方法数组
-              var fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
-              if(fn){
-                t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId]?t.onInteractiveFn[pbbId] : {};
-                t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']]?t.onInteractiveFn[pbbId][interactive['triggerEventName']]:[];
-                t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
+              var executeType = interactive['executeType'];
+              if(executeType == 'trigger_method'){
+                //预定义方法
+                var executePbbId = interactive['executePbbId'];
+                var executeBBMethodName = interactive['executeBBMethodName'];
+                on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
+                //给相同事件的创建方法数组
+                var fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
+                if(fn){
+                  t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId]?t.onInteractiveFn[pbbId] : {};
+                  t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']]?t.onInteractiveFn[pbbId][interactive['triggerEventName']]:[];
+                  t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
+                }
+              }else if(executeType == 'custom_script'){
+                //自定义方法
+                var buzz = interactive['executeScript'];
+                on[interactive['triggerEventName']] = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
+                  eval(code);
+                })
+              }else if(executeType == 'container_method'){
+                //容器方法
+                var containerMethodName = interactive['containerMethodName'];
+                on[interactive['triggerEventName']] = t[containerMethodName];
               }
           }
           var element = createElement(pbb['bbAlias'], {ref:_PBB_PREFIX+pbb['id'], props:props, on:on});
@@ -163,6 +177,11 @@
         fnArr.forEach((fn,key)=>{
           fn(...params);
         })
+      },
+      //页面卸载
+      unload:function(){
+        //触发页面卸载事件
+        this.$emit('after-unload', this);
       }
     }
   }
