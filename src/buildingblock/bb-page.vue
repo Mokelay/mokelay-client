@@ -35,28 +35,30 @@
           for (var j in interactives) {
               var interactive = interactives[j];
               var executeType = interactive['executeType'];
+              on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
+              var fn = null;
               if(executeType == 'trigger_method'){
                 //预定义方法
                 var executePbbId = interactive['executePbbId'];
                 var executeBBMethodName = interactive['executeBBMethodName'];
-                on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
                 //给相同事件的创建方法数组
-                var fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
-                if(fn){
-                  t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId]?t.onInteractiveFn[pbbId] : {};
-                  t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']]?t.onInteractiveFn[pbbId][interactive['triggerEventName']]:[];
-                  t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
-                }
+                fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
               }else if(executeType == 'custom_script'){
                 //自定义方法
                 var buzz = interactive['executeScript'];
-                on[interactive['triggerEventName']] = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
+                fn = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
                   eval(code);
                 })
               }else if(executeType == 'container_method'){
                 //容器方法
                 var containerMethodName = interactive['containerMethodName'];
-                on[interactive['triggerEventName']] = t[containerMethodName];
+                fn = t[containerMethodName];
+              }
+              if(fn){
+                //将获得的方法推送到数组中
+                t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId] || {};
+                t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']] || [];
+                t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
               }
           }
           var element = createElement(pbb['bbAlias'], {ref:_PBB_PREFIX+pbb['id'], props:props, on:on});
