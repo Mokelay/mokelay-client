@@ -1,6 +1,8 @@
 <template>
     <div class="bbPopSelect">
-        <bb-button :button="startButton" @click="showDia">选择</bb-button>
+    <!-- 选择文本显示，编译textTpl -->
+    <!-- 清空按钮 -->
+        <bb-button :button="{type:'text',icon:'',size:'normal'}" @click="choose">选择</bb-button>
         <bb-dialog
             class="bbPopSelectDia"
             :isShow.sync="popupVisible" 
@@ -20,7 +22,7 @@
                 @list-select="listSelect" 
                 :showHeader="selectionGridConfig.showHeader"></bb-list>
             <span class="buttons">
-               <bb-button v-for="(button,index) in selectionButtonGroup" :key="index" :button="button" @button-finish="buttonFinish"></bb-button> 
+            <!-- 放一个确认和一个取消按钮 -->
             </span>
         </bb-dialog>
     </div>
@@ -30,23 +32,24 @@
     export default {
         name: 'bb-pop-select',
         props: {
-            /*
-                支持v-model
-            */
+            /*支持v-model*/
             value:{
                 type:[String,Number,Boolean]
             },
-            /*
-                表单显示模板
-            */
+            /*表单显示模板*/
             valueTpl:{
                 type:[String,Number,Boolean]
-            },/*
-                表单显示模板
-            */
+            },
+            /*表单显示模板*/
             textTpl:{
                 type:[String,Number,Boolean]
             },
+            /*默认值模版*/
+            defaultValTpl:{
+                type:[String,Number,Boolean]
+            },
+            /*选择列的DS*/
+            selectRowDS:{},
             /*
                 selectionDialogConfig 选择器弹窗配置
                 字段:{
@@ -55,13 +58,12 @@
                     appendToBody:弹窗基于body标签
                     modalAppendToBody:背景基于body标签
                 }
-
             */
             selectionDialogConfig:{
                 type:Object,
                 default:function(){
                     return {
-                        title:'弹窗选择器',
+                        title:'选择',
                         size:'tiny',
                         appendToBody:true,
                         modalAppendToBody:true
@@ -102,78 +104,76 @@
                         showHeader: true
                     }
                 }
-            },
-            /*
-                selectionButtonGroup 按钮组配置
-                字段:{
-                    buttons: [{
-                        type:primary  按钮风格类型,
-                        text:按钮文字,
-                        disabled:true || false  按钮是否禁用,
-                        size:small large  按钮大小,
-                        icon: 按钮图标,
-                        action:url || execute-ds || dialog-page || code || buzz,
-                        //action = url
-                        url:跳转地址,
-                        //action = execute-ds
-                        ds:{},
-                        confirmTitle:提交确认标题,
-                        confirmText：提交确认内容,
-                        callBackStaticWords:执行成功系统提示,
-                        //action = dialog-page
-                        dialogPage:页面别名,
-                        //action = code
-                        method = function
-                        //action = buzz
-                        buzz:巴斯名称
-                    }]
-                }
-            */
-            selectionButtonGroup:{
-                type:Array,
-                default:function(){
-                    return [{
-                        type:'default',
-                        text:'取消',
-                        action:'buzz',
-                        buzz:'buzzNull'
-                    },{
-                        type:'primary',
-                        text:'确认',
-                        action:'buzz',
-                        buzz:'buzzNull'
-                    }]
-                }
-            },
+            }
         },
         data() {
             return {
-                startButton:{
-                    type:'text',
-                    icon:'',
-                    size:'normal'
-                },
+                showText:null,
                 popupVisible:false,
                 valueBase:this.value,
-                selectValue:this.value,
+                selectRow:null,
+            }
+        },
+        mounted:function(){
+            let t=this;
+            // 1. 处理defaultValueTpl
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");
+
+            // 2. 如何显示showText
+            var param = {
+                "bb": t, 
+                "router": t.$route.params
+            };
+            if(t.selectRowDS){
+                Util.getDSData(t.selectRowDS, {"bb": t, "router": t.$route.params}, function (map) {
+                    //RowData从map中获取
+                    var rowData = null;
+                    param['row-data'] = rowData;
+                    t.showText = _TY_Tool.tpl(t.textTpl,param);
+                }, function (code, msg) {
+                    //TODO
+                });
+            }else{
+                t.showText = _TY_Tool.tpl(t.textTpl,param);
             }
         },
         methods: {
-            showDia:function(){
+            //开始选择
+            choose:function(){
                 this.popupVisible = true;
             },
+            //清空
+            clean:function(){
+                this.showText = null;
+                this.$emit('input',null);
+                this.$emit('change',null);
+            },
+            //选择取消
             cancel:function(){
                 this.popupVisible = false;
+                this.selectRow = null;
             },
-            buttonFinish:function(button, valueobj){
+            //选择确认
+            confirm:function(){
                 const t = this;
                 t.popupVisible = false;
-                t.$emit("button-finish", button, valueobj);
-                t.$emit('input',t.selectValue);
-                t.$emit('change',t.selectValue);
+                //编译Value
+
+                var param = {
+                    "bb": t, 
+                    "router": t.$route.params,
+                    "row-data":selectRow
+                };
+
+                var _value = _TY_Tool.tpl(t.valueTpl,param);
+                t.$emit('input',_value);
+                t.$emit('change',_value);
+
+                t.showText = _TY_Tool.tpl(t.textTpl,param);
             },
+            //选中数据缓存
             listSelect:function(row){
-                this.selectValue = _TY_Tool.tpl(this.valueTpl,row);
+                this.selectRow = row;
             }
         }
     }
