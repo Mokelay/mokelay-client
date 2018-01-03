@@ -1,8 +1,10 @@
 <template>
     <div class="bbPopSelect">
     <!-- 选择文本显示，编译textTpl -->
+        <bb-words class="showText" v-model="showText" tagName="span"></bb-words>
     <!-- 清空按钮 -->
-        <bb-button :button="{type:'text',icon:'',size:'normal'}" @click="choose">选择</bb-button>
+        <bb-button :button="{type:'default',size:'normal'}" @click="clean">清空</bb-button>
+        <bb-button :button="{type:'primary',size:'normal'}" @click="choose">选择</bb-button>
         <bb-dialog
             class="bbPopSelectDia"
             :isShow.sync="popupVisible" 
@@ -22,7 +24,9 @@
                 @list-select="listSelect" 
                 :showHeader="selectionGridConfig.showHeader"></bb-list>
             <span class="buttons">
-            <!-- 放一个确认和一个取消按钮 -->
+                <!-- 放一个确认和一个取消按钮 -->
+                <bb-button :button="{type:'defalut',size:'normal'}" @click="cancel">取消</bb-button>
+                <bb-button :button="{type:'primary',size:'normal'}" @click="confirm">确认</bb-button>
             </span>
         </bb-dialog>
     </div>
@@ -120,16 +124,18 @@
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
 
             // 2. 如何显示showText
-            var param = {
+            const param = {
                 "bb": t, 
                 "router": t.$route.params
             };
             if(t.selectRowDS){
-                Util.getDSData(t.selectRowDS, {"bb": t, "router": t.$route.params}, function (map) {
-                    //RowData从map中获取
-                    var rowData = null;
-                    param['row-data'] = rowData;
-                    t.showText = _TY_Tool.tpl(t.textTpl,param);
+                _TY_Tool.getDSData(t.selectRowDS, {"bb": t, "router": t.$route.params}, function (map) {
+                    map.forEach((val,key)=>{
+                        //RowData从map中获取
+                        const rowData = val.value;
+                        param['rowData'] = rowData;
+                        t.showText = _TY_Tool.tpl(t.textTpl,param);
+                    })
                 }, function (code, msg) {
                     //TODO
                 });
@@ -158,14 +164,12 @@
                 const t = this;
                 t.popupVisible = false;
                 //编译Value
-
-                var param = {
+                const param = {
                     "bb": t, 
                     "router": t.$route.params,
-                    "row-data":selectRow
+                    "row-data":t.selectRow
                 };
-
-                var _value = _TY_Tool.tpl(t.valueTpl,param);
+                const _value = _TY_Tool.tpl(t.valueTpl,param);
                 t.$emit('input',_value);
                 t.$emit('change',_value);
 
@@ -184,6 +188,9 @@
             display: inline-block;
             width: 100%;
             text-align: right;
+        }
+        .showText{
+            margin: 0 5px;
         }
     }
 </style>
