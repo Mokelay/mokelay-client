@@ -95,7 +95,7 @@
             //上传失败
             onError:function(err,file,fileList){
                 const t = this;
-                this.$message.success('文件上传失败');
+                this.$message.error('文件上传失败');
                 t.handleFileList('err',fileList)
             },
             handleFileList:function(emit,fileList){
