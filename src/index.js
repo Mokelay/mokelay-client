@@ -56,6 +56,9 @@ import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
 import ElTreeGrid from 'element-tree-grid';
 
+//引入TYiconfont
+import './libs/iconfont/ty/iconfont.css';
+
 let ty = {
 	install: function(Vue) {
 		console.log("begin ty bb init....");

@@ -137,7 +137,7 @@
                     ref: item['url'],
                     class: 'bb-menu-badge'
                 }, [])]);
-                var iconClass = (item.icon && item.icon.indexOf("el-icon-") >= 0) ? item.icon : 'el-icon-' + item.icon;
+                var iconClass = (item.icon && item.icon.indexOf("ty-") >= 0) ? item.icon : 'ty-' + item.icon;
                 var templateChild = item.icon ? createElement('i', {class: iconClass}, []) : '';
                 return createElement('el-menu-item',
                         {
@@ -158,7 +158,7 @@
             createSubmenu: function (createElement, item) {
                 var t = this;
                 var child = [];
-                var iconClass = (item.icon && item.icon.indexOf("el-icon-") >= 0) ? item.icon : 'el-icon-' + item.icon;
+                var iconClass = (item.icon && item.icon.indexOf("ty-") >= 0) ? item.icon : 'ty-' + item.icon;
                 var icon = item.icon ? createElement('i', {class: iconClass}, []) : '';
                 var title = createElement('span', {slot: "title"}, [item.title]);
                 var groupSpan = createElement('span', {slot: "title"}, [item.title, createElement('bb-badge', {
