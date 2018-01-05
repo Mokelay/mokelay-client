@@ -167,7 +167,7 @@
                 const param = {
                     "bb": t, 
                     "router": t.$route.params,
-                    "row-data":t.selectRow
+                    "rowData":t.selectRow
                 };
                 const _value = _TY_Tool.tpl(t.valueTpl,param);
                 t.$emit('input',_value);
