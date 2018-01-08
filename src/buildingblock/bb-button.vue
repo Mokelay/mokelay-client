@@ -26,12 +26,7 @@
         },
         computed: {
             relButton: function () {
-                const t = this;
-                var button = this.button;
-                if(button.icon && button.icon.indexOf('ty') == -1){//老配置兼容ty
-                    button.icon = 'ty-' + button.icon;
-                }
-                return button
+                return this.button;
             }
         },
         created: function () {
