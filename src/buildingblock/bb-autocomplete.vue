@@ -7,7 +7,7 @@
       @change="change"
       @select="handleSelect"
       >
-    </el-input>
+    </el-autocomplete>
 </template>
 
 <script>
@@ -76,29 +76,43 @@
                 this.$emit('input',val)
                 this.$emit('select',val)
             },
-            getData: function () {
+            getData: function (queryString,cb) {
                 const t = this;
                 if (t.suggestionsDs) {
                     _TY_Tool.getDSData(t.suggestionsDs, {"bb": t, "router": t.$route.params}, function (map) {
                         map.forEach((val,key)=>{
-                            const dataKey = val.dataKey
                             t.suggestionsBase = val.value.list;
+                            t.getResults(queryString,cb);
                         })
                     }, function (code, msg) {
                     });
                 }
             },
+            //异步检索补全提示
             querySearchAsync:function(queryString, cb){
                 const t = this;
                 if(t.suggestionsDs){
-                    t.getData();
+                    //动态查询
+                    t.getData(queryString,cb);
+                }else{
+                    //静态查询
+                    t.getResults(queryString,cb);
                 }
             },
+            //遍历查询输入字符是否在数据中
             createStateFilter:function(queryString) {
                 return (state) => {
-                  return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                    return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
                 };
             },
+            //输出补全提示
+            getResults:function(queryString,cb){
+                const t = this;
+                //如果有字符串判断 数据中哪些项包含该字符串
+                const results = queryString ? t.suggestionsBase.filter(t.createStateFilter(queryString)) : t.suggestionsBase;
+                //返回查询结果
+                cb(results);
+            }
         }
     }
 </script>

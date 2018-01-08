@@ -55,6 +55,7 @@ import bbechartsselect from './buildingblock/bb-echarts-select.vue';
 import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
 import ElTreeGrid from 'element-tree-grid';
+import bbautocomplete from './buildingblock/bb-autocomplete'
 
 //引入TYiconfont
 import './libs/iconfont/ty/iconfont.css';
@@ -118,6 +119,7 @@ let ty = {
 		Vue.component('bb-echarts-select', bbechartsselect);
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-upload', bbupload);
+		Vue.component('bb-autocomplete', bbautocomplete);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
