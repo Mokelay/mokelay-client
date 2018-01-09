@@ -62,11 +62,9 @@
                                 },
                                 on: {
                                     change: function (data, render) {
-                                        console.log("data=" + data);
                                         t.$emit('input', data);
                                     },
                                     save: function (data, render) {
-                                        console.log("render=" + render);
                                         t.$emit('save', data, render);
                                     }
                                 },
