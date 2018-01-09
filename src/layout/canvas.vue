@@ -21,12 +21,30 @@
         }
     },
     ds:["api-1","api-2"],           //数据源
-    content:[{
+    content:[{                      //页面内容
         uuid:'',
         alias:'',                   //积木别名
         aliasName:'',               //中文名称
         attributes:{},              //积木属性
         animation:[{                //动画
+            style:"",               //方式
+            time:0,                 //时间
+            delay:0,                //延迟时间
+            playNum:1               //播放次数
+            loop:true|false,        //循环
+            direction:""            //方向
+        }],
+        interactives:[{             //触发交互
+            uuid:'',
+            fromContentEvent:'',    //触发积木的事件,fromContentUUID为当前content的UUID
+            executeType:'',         //执行类型(预定义方法 trigger_method,
+                                    //自定义方法 custom_script,
+                                    //容器类方法 container_method)
+            executeScript:'',       //执行脚本 executeType = custom_script
+            executeContentUUID:'',  //执行积木的UUID executeType = trigger_method
+            executeContentMethodName:'',
+                                    //执行积木的方法
+            containerMethodName:''  //容器方法 executeType = container_method
         }],
         layout:{                    //积木布局
             bgColor:"",             //背景颜色
@@ -48,18 +66,6 @@
                 vague:''            //阴影模糊
             }
         }
-    }],
-    interactives:[{
-        uuid:'',
-        fromContentUUID:'',         //触发积木的UUID
-        fromContentEvent:'',        //触发积木的事件
-        executeType:'',             //执行类型(预定义方法 trigger_method,
-                                    //自定义方法 custom_script,
-                                    //容器类方法 container_method)
-        executeScript:'',           //执行脚本 executeType = custom_script
-        executeContentUUID:'',      //执行积木的UUID executeType = trigger_method
-        executeContentMethodName:'',//执行积木的方法
-        containerMethodName:''      //容器方法 executeType = container_method
     }]
 }"></canvas>
 **/
