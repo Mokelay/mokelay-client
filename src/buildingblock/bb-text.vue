@@ -1,5 +1,5 @@
 <template>
-    <span class="bb-text" :style="realStyle" :contenteditable="contenteditable" v-on:dblclick="dblclick" v-on:blur="blur" v-html="valueBase"></span>
+    <span class="bb-text" :style="realStyle" :contenteditable="contenteditable" v-on:dblclick="dblclick" v-on:blur="blur" v-html="relValueBase"></span>
 </template>
 
 <script>
@@ -50,7 +50,8 @@
         data() {
             return {
                 valueBase: this.value,
-                contenteditable:false
+                contenteditable:false,
+                relValueBase:null
             }
         },
         computed:{
@@ -79,13 +80,15 @@
             let t=this;
             //渲染默认值模板
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
+            //处理字符串中的空格和换行
+            t.relValueBase = this.valueBase.replace(/\r{0,}\n/g,"<br/>").replace(/\s/g,"&nbsp;");
         },
         methods: {
             dblclick:function(params){
-                this.emit('dblclick');
+                this.$emit('bb-dblclick');
             },
             blur:function(params){
-                this.emit('blur');
+                this.$emit('bb-blur');
             },
             edit:function(params){
                 this.contenteditable = true;
