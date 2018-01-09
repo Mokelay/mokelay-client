@@ -45,10 +45,6 @@
                         letterSpacing:0
                     }
                 }
-            },
-            status:{
-                type:String,
-                default:'edit'
             }
         },
         data() {
