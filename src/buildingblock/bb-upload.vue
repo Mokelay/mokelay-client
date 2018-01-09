@@ -83,8 +83,11 @@
             },
             //预览图片
             picturePreview:function(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+                //当上传文件格式为图片时可以预览
+                if(this.fileType.indexOf('image') != -1){
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                }
             },
             //上传成功
             onSuccess:function(response,file,fileList){
