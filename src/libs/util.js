@@ -1,25 +1,9 @@
 import axios from 'axios';
-import Qs from 'qs';
 import _ from 'underscore';
 
 let util = {};
 
-//为了能请求第三方或自定义额接口，保证图片上传到第三方文件服务器，这里不设置baseURL
-util.axios = axios.create({
-    timeout: 30000,
-    withCredentials: true
-});
-
-util.invoke = function(method, url, param) {
-    let params;
-    if (method == 'get') {
-        params = {
-            params: param
-        }
-    } else {
-        params = Qs.stringify(param);
-    }
-
+util.invoke = function(options) {
     return new Promise((resolve, reject) => {
         if (!util.ajax) {
             util.ajax = axios.create({
@@ -28,7 +12,7 @@ util.invoke = function(method, url, param) {
                 withCredentials: true
             });
         }
-        util.ajax[method](url, params).then(function(response) {
+        util.ajax(options).then(function(response) {
             if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401) {
                 //未登录
                 location.href = window._TY_SSOURL;
@@ -44,11 +28,21 @@ util.invoke = function(method, url, param) {
     });
 }
 
-util.post = function(url, param) {
-    return util.invoke("post", url, param);
+//为了能请求第三方或自定义额接口，保证图片上传到第三方文件服务器，这里不设置baseURL
+util.post = function(url, param,options) {
+    return util.invoke(_.extend({
+        url:url,
+        method:'post',
+        params:param
+    },options));
 }
-util.get = function(url, param) {
-    return util.invoke("get", url, param);
+
+util.get = function(url, param,options) {
+    return util.invoke(_.extend({
+        url:url,
+        method:'get',
+        params:param
+    },options));
 }
 
 util.tpl = function(tpl, data) {
@@ -181,8 +175,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                     }
                 });
                 //等待forEach中的异步全部执行完
-                Promise.all(promiseArr).then(values => { 
-                    resolve(outputs); 
+                Promise.all(promiseArr).then(values => {
+                    resolve(outputs);
                 });
             }).then((outputs)=>{success(outputs)});
         } else {
