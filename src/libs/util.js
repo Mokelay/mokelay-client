@@ -4,6 +4,12 @@ import _ from 'underscore';
 
 let util = {};
 
+//为了能请求第三方或自定义额接口，保证图片上传到第三方文件服务器，这里不设置baseURL
+util.axios = axios.create({
+    timeout: 30000,
+    withCredentials: true
+});
+
 util.invoke = function(method, url, param) {
     let params;
     if (method == 'get') {
