@@ -90,7 +90,7 @@
                                             _uploadUrl=window._TY_APIHost+window._TY_ContentPath+'/ty-upload';
                                             downloadUrl=window._TY_APIHost+window._TY_ContentPath+'/ty-download';
                                         }
-                                        window._TY_Tool.axios({
+                                        window._TY_Tool.invoke({
                                             url: _uploadUrl,//完整的url,支持tpl操作，主要是为了访问同根域的接口地址
                                             method: 'post',
                                             data: formdata,
