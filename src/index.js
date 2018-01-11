@@ -58,9 +58,12 @@ import ElTreeGrid from 'element-tree-grid';
 import bbautocomplete from './buildingblock/bb-autocomplete'
 import bbtext from './buildingblock/bb-text.vue';
 import bbeditormd from './buildingblock/bb-editor-md.vue';
+import bbphotos from './buildingblock/bb-photos.vue';
+import bbvideo from './buildingblock/bb-video.vue';
 
 //引入TYiconfont
 import './libs/iconfont/ty/iconfont.css';
+import 'animate.css/animate.min.css'
 
 let ty = {
 	install: function(Vue) {
@@ -124,6 +127,8 @@ let ty = {
 		Vue.component('bb-autocomplete', bbautocomplete);
 		Vue.component('bb-text', bbtext);
 		Vue.component('bb-editor-md', bbeditormd);
+		Vue.component('bb-photos', bbphotos);
+		Vue.component('bb-video', bbvideo);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
