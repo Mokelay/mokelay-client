@@ -36,11 +36,3 @@ const press = Vue.directive("press", {
         new vueTouch(el, "press", binding);
     }
 });
-
-//导出需要的指令  
-export {
-    tap,
-    swipeleft,
-    swiperight,
-    press
-}
