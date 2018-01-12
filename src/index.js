@@ -63,7 +63,11 @@ import bbvideo from './buildingblock/bb-video.vue';
 
 //引入TYiconfont
 import './libs/iconfont/ty/iconfont.css';
+//引入动画组件
 import 'animate.css/animate.min.css'
+//引入移动端手势组件
+import './libs/touch.js'
+
 
 let ty = {
 	install: function(Vue) {
