@@ -25,6 +25,12 @@
                 },
                 //required: true
             },
+            ds: {
+                type: Object,
+                default: function () {
+                    return null
+                }
+            },
             data: {
                 type: Object,
                 default: function () {
@@ -70,11 +76,35 @@
         created: function () {
         },
         mounted: function () {
-            this.getData();
+            const t=this;
+            t.loadData(function(){
+                t.getData();
+            });
         },
         methods: {
-            getData() {
-                var t = this;
+            loadData(callback){
+                let t=this;
+                if (t.ds) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.ds, {"bb": t, "router": t.$route.params,'local':window.localStorage,'session':window.sessionStorage}, function (map) {
+                        map.forEach(function (item) {
+                            t.data = item['value'];
+                        });
+                        t.loading = false;
+                        if(callback){
+                            callback(t);
+                        }
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }else{
+                    if(callback){
+                        callback(t);
+                    }
+                }
+            },
+            getData(self) {
+                var t = self||this;
                 var json = this.data;
                 require.ensure(['echarts'], function (require) {
                     if (!t._chart) {
