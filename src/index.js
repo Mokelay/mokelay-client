@@ -60,6 +60,7 @@ import bbtext from './buildingblock/bb-text.vue';
 import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbphotos from './buildingblock/bb-photos.vue';
 import bbvideo from './buildingblock/bb-video.vue';
+import bbscore from './buildingblock/bb-score.vue';
 
 //引入TYiconfont
 import './libs/iconfont/ty.css';
@@ -133,6 +134,7 @@ let ty = {
 		Vue.component('bb-editor-md', bbeditormd);
 		Vue.component('bb-photos', bbphotos);
 		Vue.component('bb-video', bbvideo);
+		Vue.component('bb-score', bbscore);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
