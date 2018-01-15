@@ -62,8 +62,15 @@ import bbphotos from './buildingblock/bb-photos.vue';
 import bbvideo from './buildingblock/bb-video.vue';
 import bbscore from './buildingblock/bb-score.vue';
 
+//引入minireset
+import './css/minireset.css';
+
+//引入Element UI的css库
+import './css/theme-MOF/index.css';
+
 //引入TYiconfont
-import './libs/iconfont/ty/iconfont.css';
+import './css/iconfont/iconfont.css';
+
 //引入动画组件
 import 'animate.css/animate.min.css'
 //引入移动端手势组件
