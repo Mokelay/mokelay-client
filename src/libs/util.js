@@ -45,13 +45,74 @@ util.get = function(url, param,options) {
     },options));
 }
 
-util.tpl = function(tpl, data) {
+//深拷贝  对象/数组
+util.deepClone=function(obj){
+    let cloneObj;
+    if (!_.isObject(obj) || typeof obj === 'function') {
+        return obj;
+    }
+    cloneObj = _.isArray(obj) ? [] : {};
+    for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            if (!_.isObject(obj[i])) {
+                // obj[i]为null和undefined都会进入这里
+                cloneObj[i] = obj[i];
+            } else {
+                cloneObj[i] = util.deepClone(obj[i]);
+            }
+        }
+    }
+    return cloneObj;
+}
+
+util._resovleTpl=function(str,data){
     try{
-        return _.template(tpl)(data);
+        return _.template(str)(data);
     }catch(e){
         return "";
     }
+}
+
+util._tpl = function(tpl, data) {
+    if(typeof tpl === 'string'){
+        //字符串
+        return util._resovleTpl(tpl, data);
+    }else if(_.isArray(tpl)){
+        //数组
+        for(let i=0;i<tpl.length;i++){
+            let newObj = util._tpl(tpl[i], data);
+            if(typeof newObj ==='object'){
+                tpl[i] = newObj;
+            }
+        }
+    }else if(_.isObject(tpl)){
+        //对象 js 对象和数组 都是object类型，不过上面已经过滤掉array了
+        for(let o in tpl){
+            if (tpl.hasOwnProperty(o)) {
+                let val = util._tpl(tpl[o], data);
+                if (typeof val === 'string') {
+                    //除string类型外，其他类型不需要返回
+                    tpl[o] = val;
+                }
+            }
+        }
+    }
+    return tpl;
 };
+/**
+ * 模板解析工具  支持对象，数组，字符串
+ * @param tpl
+ * @param data
+ */
+util.tpl = function(tpl, data) {
+    let result =tpl;
+    if(typeof tpl ==='object'){
+        //对象或者数组,为保证不改变请求参数值，先深拷贝
+        result = util.deepClone(tpl);
+    }
+    //深拷贝对象 模板解析
+    return util._tpl(result,data);
+}
 
 util.uuid = function(len, radix) {
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
