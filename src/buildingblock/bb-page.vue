@@ -85,7 +85,7 @@
         }
       },
       params:{
-        type:[Object,Array]
+        type:[String,Object,Array]
       }
     },
     data() {
