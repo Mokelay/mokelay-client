@@ -69,7 +69,7 @@ import './css/minireset.css';
 import './css/theme-MOF/index.css';
 
 //引入TYiconfont
-import './css/iconfont/iconfont.css';
+import './css/iconfont/ty.css';
 
 //引入动画组件
 import 'animate.css/animate.min.css'
