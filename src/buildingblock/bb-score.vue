@@ -42,6 +42,9 @@
                     }
                 }
             },
+            /*
+                commitDs 提交接口设置
+            */
             commitDs:{
                 type:Object
             }
