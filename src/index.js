@@ -61,6 +61,9 @@ import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbphotos from './buildingblock/bb-photos.vue';
 import bbvideo from './buildingblock/bb-video.vue';
 import bbscore from './buildingblock/bb-score.vue';
+import bbcount from './buildingblock/bb-count.vue';
+import bbcountdown from './buildingblock/bb-countdown.vue';
+import bbvote from './buildingblock/bb-vote.vue';
 
 //引入minireset
 import './css/minireset.css';
@@ -142,6 +145,9 @@ let ty = {
 		Vue.component('bb-photos', bbphotos);
 		Vue.component('bb-video', bbvideo);
 		Vue.component('bb-score', bbscore);
+		Vue.component('bb-count', bbcount);
+		Vue.component('bb-countdown', bbcountdown);
+		Vue.component('bb-vote', bbvote);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
