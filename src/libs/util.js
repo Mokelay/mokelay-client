@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'underscore';
+import Qs from 'qs';
 
 let util = {};
 
@@ -18,7 +19,7 @@ util.invoke = function(options) {
                 location.href = window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
                 //TY未登录
-                location.href = window._TY_APIHost+"/#/ty-login";
+                location.href = window._TY_APIHost + "/#/ty-login";
             } else {
                 resolve(response);
             }
@@ -29,24 +30,24 @@ util.invoke = function(options) {
 }
 
 //为了能请求第三方或自定义额接口，保证图片上传到第三方文件服务器，这里不设置baseURL
-util.post = function(url, param,options) {
+util.post = function(url, param, options) {
     return util.invoke(_.extend({
-        url:url,
-        method:'post',
-        params:param
-    },options));
+        url: url,
+        method: 'post',
+        data: Qs.stringify(param)
+    }, options));
 }
 
-util.get = function(url, param,options) {
+util.get = function(url, param, options) {
     return util.invoke(_.extend({
-        url:url,
-        method:'get',
-        params:param
-    },options));
+        url: url,
+        method: 'get',
+        params: param
+    }, options));
 }
 
 //深拷贝  对象/数组
-util.deepClone=function(obj){
+util.deepClone = function(obj) {
     let cloneObj;
     if (!_.isObject(obj) || typeof obj === 'function') {
         return obj;
@@ -65,29 +66,29 @@ util.deepClone=function(obj){
     return cloneObj;
 }
 
-util._resovleTpl=function(str,data){
-    try{
+util._resovleTpl = function(str, data) {
+    try {
         return _.template(str)(data);
-    }catch(e){
+    } catch (e) {
         return "";
     }
 }
 
 util._tpl = function(tpl, data) {
-    if(typeof tpl === 'string'){
+    if (typeof tpl === 'string') {
         //字符串
         return util._resovleTpl(tpl, data);
-    }else if(_.isArray(tpl)){
+    } else if (_.isArray(tpl)) {
         //数组
-        for(let i=0;i<tpl.length;i++){
+        for (let i = 0; i < tpl.length; i++) {
             let newObj = util._tpl(tpl[i], data);
-            if(typeof newObj ==='object'){
+            if (typeof newObj === 'object') {
                 tpl[i] = newObj;
             }
         }
-    }else if(_.isObject(tpl)){
+    } else if (_.isObject(tpl)) {
         //对象 js 对象和数组 都是object类型，不过上面已经过滤掉array了
-        for(let o in tpl){
+        for (let o in tpl) {
             if (tpl.hasOwnProperty(o)) {
                 let val = util._tpl(tpl[o], data);
                 if (typeof val === 'string') {
@@ -105,13 +106,13 @@ util._tpl = function(tpl, data) {
  * @param data
  */
 util.tpl = function(tpl, data) {
-    let result =tpl;
-    if(typeof tpl ==='object'){
+    let result = tpl;
+    if (typeof tpl === 'object') {
         //对象或者数组,为保证不改变请求参数值，先深拷贝
         result = util.deepClone(tpl);
     }
     //深拷贝对象 模板解析
-    return util._tpl(result,data);
+    return util._tpl(result, data);
 }
 
 util.uuid = function(len, radix) {
@@ -207,7 +208,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         var data = response['data'];
         if (data['ok']) {
             var realDataMap = data['data'];
-            new Promise(function(resolve, reject){
+            new Promise(function(resolve, reject) {
                 const promiseArr = [];
                 outputs.forEach(function(output) {
                     var _outputValue = null;
@@ -239,7 +240,9 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                 Promise.all(promiseArr).then(values => {
                     resolve(outputs);
                 });
-            }).then((outputs)=>{success(outputs)});
+            }).then((outputs) => {
+                success(outputs)
+            });
         } else {
             error(data['code'], data['message']);
         }
@@ -255,8 +258,8 @@ util.resolveButton = function(button, valueobj) {
         //URL跳转
         //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
         var dataParam = valueobj['row-data'] || {};
-        dataParam = Object.assign({},dataParam, valueobj);
-        var url = util.tpl(button['url'],dataParam);
+        dataParam = Object.assign({}, dataParam, valueobj);
+        var url = util.tpl(button['url'], dataParam);
         url = encodeURI(url);
         if (button['urlType'] == 'openWindow') {
             window.open(url);
@@ -268,14 +271,14 @@ util.resolveButton = function(button, valueobj) {
             }
         }
         //触发按钮执行完成事件
-        t.$emit("button-finish",button,valueobj);
+        t.$emit("button-finish", button, valueobj);
     } else if (button['action'] == 'execute-ds') {
         var ds = button['ds'];
         var valueKey = button.valueKey || 'row-data';
-        var confirmTitle = button['confirmTitle']?util.tpl(button['confirmTitle'], valueobj[valueKey]) : "提示";
-        var confirmText = button['confirmText']?util.tpl(button['confirmText'], valueobj[valueKey]) : "是否执行此操作";
+        var confirmTitle = button['confirmTitle'] ? util.tpl(button['confirmTitle'], valueobj[valueKey]) : "提示";
+        var confirmText = button['confirmText'] ? util.tpl(button['confirmText'], valueobj[valueKey]) : "是否执行此操作";
         button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
-        var messageInfo = button['callBackStaticWords']?util.tpl(button['callBackStaticWords'], valueobj[valueKey]) : "操作成功";
+        var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], valueobj[valueKey]) : "操作成功";
         t.$confirm(confirmText, confirmTitle, {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -289,7 +292,7 @@ util.resolveButton = function(button, valueobj) {
                 });
                 // util.buttonCallback(button, valueobj, callback, map);
                 //触发按钮执行完成事件
-                t.$emit("button-finish",button,valueobj,map);
+                t.$emit("button-finish", button, valueobj, map);
             }, function(err, msg) {
                 t.$message({
                     type: 'warning',
@@ -297,7 +300,7 @@ util.resolveButton = function(button, valueobj) {
                 });
                 // util.buttonCallback(button, valueobj, callback, err);
                 //触发按钮执行完成事件
-                t.$emit("button-finish",button,valueobj,err);
+                t.$emit("button-finish", button, valueobj, err);
             });
         }).catch(() => {
             t.$message({
@@ -375,13 +378,13 @@ util.loadBuzz = function(buzz, handle) {
  * @param t
  * @param p_value
  */
-util.buildDefaultValTpl=function(t,p_value){
-    if(!t.value&&t.defaultValTpl){
-        t[p_value]=util.tpl(t.defaultValTpl,{
-            bb:t,
-            router:t.$route ? t.$route.params : {}
+util.buildDefaultValTpl = function(t, p_value) {
+    if (!t.value && t.defaultValTpl) {
+        t[p_value] = util.tpl(t.defaultValTpl, {
+            bb: t,
+            router: t.$route ? t.$route.params : {}
         });
-        t.$emit('input',t[p_value]);
+        t.$emit('input', t[p_value]);
     }
 }
 
