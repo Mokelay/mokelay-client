@@ -65,14 +65,15 @@
             router: {
                 type: Boolean,
                 default: true
-            },
+            }
         },
         data() {
             return {
                 items: this.fields,
                 newMenu: true,
                 menuList: [],
-                shouldUpdate: true
+                shouldUpdate: true,
+                defaultActive: null
             };
         },
         watch: {
@@ -85,13 +86,11 @@
             }
         },
         computed: {
-            defaultActive: function () {
-                return this.$route.fullPath;
-            }
         },
         components: {},
         created: function () {
             this.getData();
+            this.defaultActive = this.$route.fullPath;
         },
         methods: {
             getData: function () {
