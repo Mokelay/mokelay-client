@@ -81,7 +81,9 @@
             //渲染默认值模板
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
             //处理字符串中的空格和换行
-            t.relValueBase = this.valueBase.replace(/\r{0,}\n/g,"<br/>").replace(/\s/g,"&nbsp;");
+            if(t.valueBase){
+                t.relValueBase = t.valueBase.replace(/\r{0,}\n/g,"<br/>").replace(/\s/g,"&nbsp;");
+            }
         },
         methods: {
             dblclick:function(params){
