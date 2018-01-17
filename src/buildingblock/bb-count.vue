@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-count" :style="{color:countConfig.color,'font-size':countConfig.size}">
+    <div class="bb-count" :style="{color:countConfig.color,'font-size':countConfig.size,'text-align':styles.align}">
         <img v-if="countConfig.buttonType == 'custom'" :src="countConfig.imgUrl" alt="" v-tap="tap">
         <i v-else :class="countConfig.icon" v-tap="tap"></i>
         <transition 
@@ -9,7 +9,7 @@
             :duration="200"
             @after-leave="afterLeave"
         >
-            <p v-show="show" :style="{'line-height':lineHeight}">{{valueBase}}</p>
+            <p v-show="show" :style="{'line-height':styles.height,'display':styles.display}">{{valueBase}}</p>
         </transition>
         
     </div>
@@ -24,7 +24,7 @@
             */
             value:{
                 type:Number,
-                default:100
+                default:0
             },
             /*
                 defaultValTpl 模板默认值
@@ -71,13 +71,24 @@
         },
         computed:{
             //如果按钮是图片则控制字体行高
-            lineHeight:function(){
+            styles:function(){
                 const t = this;
                 let height = 'auto';
                 if(t.countConfig.buttonType == 'custom'){
                     height = '115px';
                 }
-                return height;
+                let display = 'inline-block';
+                let align = 'inherit';
+                if(t.countConfig.layout == 'vertical'){
+                    display = 'block';
+                    align = 'center';
+                }
+                let styles = {
+                    height:height,
+                    display:display,
+                    align:align
+                }
+                return styles;
             }
         },
         watch: {
