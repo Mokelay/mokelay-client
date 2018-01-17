@@ -45,6 +45,9 @@
             }
         },
         watch:{
+            value(val){
+                this.valueBase = val
+            },
             valueBase(val){
                 this.change(val);
             }
