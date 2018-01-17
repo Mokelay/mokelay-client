@@ -64,20 +64,15 @@
                         break;
                     }
                 }
-                document.getElementById('pane-' + alias).innerHTML='';
-                if(!document.getElementById('tab_pane_'+alias)){
-                    let divDom =document.createElement("div");
-                    divDom.id = 'tab_pane_'+alias;
-                    document.getElementById('pane-' + alias).appendChild(divDom)
+                if(!currentTab.dom.componentInstance){
+                  //渲染content
+                    let dom = new Vue({
+                        router: t.$router,
+                        render: function(createElement) {
+                            return currentTab.dom;
+                        }
+                    }).$mount('#tab_pane_' + alias);
                 }
-
-                //渲染content
-                let dom = new Vue({
-                    router: t.$router,
-                    render: function(createElement) {
-                        return currentTab.dom;
-                    }
-                }).$mount('#tab_pane_' + alias);
             },
             renderTabPanes: function (createElement) {
                 const t = this;

@@ -118,30 +118,35 @@
                 selectRow:null,
             }
         },
-        mounted:function(){
-            let t=this;
-            // 1. 处理defaultValueTpl
-            _TY_Tool.buildDefaultValTpl(t,"valueBase");
+         watch: {
+            value(val){
+                let t=this;
+                t.valueBase=val;
+                // 1. 处理defaultValueTpl
+                _TY_Tool.buildDefaultValTpl(t,"valueBase");
 
-            // 2. 如何显示showText
-            const param = {
-                "bb": t, 
-                "router": t.$route.params
-            };
-            if(t.selectRowDS){
-                _TY_Tool.getDSData(t.selectRowDS, {"bb": t, "router": t.$route.params}, function (map) {
-                    map.forEach((val,key)=>{
-                        //RowData从map中获取
-                        const rowData = val.value;
-                        param['rowData'] = rowData;
-                        t.showText = _TY_Tool.tpl(t.textTpl,param);
-                    })
-                }, function (code, msg) {
-                    //TODO
-                });
-            }else{
-                t.showText = _TY_Tool.tpl(t.textTpl,param);
+                // 2. 如何显示showText
+                const param = {
+                    "bb": t, 
+                    "router": t.$route.params
+                };
+                if(t.selectRowDS){
+                    _TY_Tool.getDSData(t.selectRowDS, {"bb": t, "router": t.$route.params}, function (map) {
+                        map.forEach((val,key)=>{
+                            //RowData从map中获取
+                            const rowData = val.value;
+                            param['rowData'] = rowData;
+                            t.showText = _TY_Tool.tpl(t.textTpl,param);
+                        })
+                    }, function (code, msg) {
+                        //TODO
+                    });
+                }else{
+                    t.showText = _TY_Tool.tpl(t.textTpl,param);
+                }
             }
+        },
+        mounted:function(){
         },
         methods: {
             //开始选择
