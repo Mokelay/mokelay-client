@@ -126,6 +126,11 @@
                     et: 'bb-input',
                     props: {}
                 }, {
+                    name: '弹窗页面地址',
+                    attributeName: 'dialogPage',
+                    et: 'bb-input',
+                    props: {}
+                },  {
                     name: '确认弹窗标题',
                     attributeName: 'confirmTitle',
                     et: 'bb-input',
