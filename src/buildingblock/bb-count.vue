@@ -1,7 +1,7 @@
 <template>
     <div class="bb-count" :style="{color:countConfig.color,'font-size':countConfig.size}">
         <img v-if="countConfig.buttonType == 'custom'" :src="countConfig.imgUrl" alt="" v-tap="tap">
-        <i v-else :class="countConfig.icon" ></i>
+        <i v-else :class="countConfig.icon" v-tap="tap"></i>
         <transition 
             name="custom-classes-transition"
             enter-active-class="animated bounceInUp"
@@ -9,7 +9,7 @@
             :duration="200"
             @after-leave="afterLeave"
         >
-            <p v-show="show">{{valueBase}}</p>
+            <p v-show="show" :style="{'line-height':lineHeight}">{{valueBase}}</p>
         </transition>
         
     </div>
@@ -35,6 +35,7 @@
             /*
                 countConfig 计数设置
                 {
+                    countType:'count' 计数器 || statistics 静态展示
                     buttonType:'default || custom', 默认 或者自定义图片
                     layout:'horizontal || vertical   布局
                     color:'#333'  会改变图标和字体的颜色
@@ -46,17 +47,18 @@
             */
             countConfig:{
                 type:Object,
-                default:function(){
-                    return {
-                        buttonType:'custom',
-                        layout:'horizontal',
-                        color:'#3d3d3d',
-                        size:'20px',
-                        icon:'ty-star-on',
-                        repeat:false,
-                        imgUrl:'http://img1.imgtn.bdimg.com/it/u=4074159533,3671406090&fm=27&gp=0.jpg'
-                    }
-                }
+                // default:function(){
+                //     return {
+                //         countType:'count',
+                //         buttonType:'custom',
+                //         layout:'horizontal',
+                //         color:'#3d3d3d',
+                //         size:'20px',
+                //         icon:'ty-star-on',
+                //         repeat:false,
+                //         imgUrl:'http://img1.imgtn.bdimg.com/it/u=4074159533,3671406090&fm=27&gp=0.jpg'
+                //     }
+                // }
             },
             /*
                 readDs 读取动态统计数据
@@ -68,12 +70,7 @@
                 commitDs 上传当前统计数据
             */
             commitDs:{
-                type:Object,
-                default:function(){
-                    return {
-
-                    }
-                }
+                type:Object
             }
 
         },
@@ -81,16 +78,26 @@
             return {
                 valueBase: this.value,
                 show:true,
-                taped:false,
+                taped:false
             }
         },
         computed:{
+            //如果按钮是图片则控制字体行高
+            lineHeight:function(){
+                const t = this;
+                let height = 'auto';
+                if(t.countConfig.buttonType == 'custom'){
+                    height = '115px';
+                }
+                return height;
+            }
         },
         watch: {
         },
         mounted:function(){
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
+            t.getData();
         },
         methods: {
             //读取统计数据
@@ -101,7 +108,7 @@
                         function (map) {
                             map.forEach((val,key)=>{
                                 const dataKey = val.dataKey
-                                t[dataKey] = val.value.list;
+                                t[dataKey] = val.value;
                             })
                         }, function (code, msg) {
                     });
@@ -112,10 +119,6 @@
                 const t = this;
                 if (t.commitDs) {
                     _TY_Tool.getDSData(t.commitDs, {"bb": t, "router": t.$route.params,"external":t.external}, function (map) {
-                            map.forEach((val,key)=>{
-                                const dataKey = val.dataKey
-                                t[dataKey] = val.value.list;
-                            })
                         }, function (code, msg) {
                     });
                 }
@@ -123,7 +126,7 @@
             //上传统计 事件  commit
             tap:function(){
                 const t = this;
-                if(t.commitDs){
+                if(t.countConfig.countType != 'statistics'){
                     t.show = !t.show;
                 }
             },
@@ -131,12 +134,20 @@
             afterLeave:function(){
                 const t = this;
                 t.show = !t.show;
+                //如果不可重复 则重复点击为取消
                 if(!t.countConfig.repeat && t.taped){
                     t.valueBase --;
                     t.taped = false;
+                    t.$emit('input',t.valueBase);
+                    t.$emit('commit',t.valueBase);
+                    t.commitData();
                 }else{
+                    //点击 值 增加1
                     t.valueBase ++;
                     t.taped = true;
+                    t.$emit('input',t.valueBase);
+                    t.$emit('commit',t.valueBase);
+                    t.commitData();
                 }
             }
         }
@@ -144,8 +155,6 @@
 </script>
 <style lang='less' scoped>
     .bb-count{
-        max-height: 100px;
-        overflow:hidden;
         i,img{
             vertical-align: baseline
         }
@@ -154,10 +163,8 @@
             vertical-align: bottom;
         }
         img{
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
+            width: 115px;
+            height: 115px;
         }
     }
 </style>
