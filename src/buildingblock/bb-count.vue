@@ -47,18 +47,6 @@
             */
             countConfig:{
                 type:Object,
-                // default:function(){
-                //     return {
-                //         countType:'count',
-                //         buttonType:'custom',
-                //         layout:'horizontal',
-                //         color:'#3d3d3d',
-                //         size:'20px',
-                //         icon:'ty-star-on',
-                //         repeat:false,
-                //         imgUrl:'http://img1.imgtn.bdimg.com/it/u=4074159533,3671406090&fm=27&gp=0.jpg'
-                //     }
-                // }
             },
             /*
                 readDs 读取动态统计数据
