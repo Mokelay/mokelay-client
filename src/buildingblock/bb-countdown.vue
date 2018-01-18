@@ -1,5 +1,5 @@
 <template>
-
+    <span :style="style" v-html="countDownTime"></span>
 </template>
 
 <script>
@@ -10,13 +10,10 @@
                 countdownConfig 计时器设置
                 {
                     type:'reverse' 倒计时|| 'order' 正计时
-                    startTime:'', 开始时间  //正计时有效
-                    beforeStartWords:'还没开始！', //开始前显示 正计时有效
-                    endTime:'',结束时间  //倒计时有效
-                    startWords:'开始啦！', //截止后显示 倒计时有效
-                    precision:'day,hour,minte,second', 显示精度
+                    time:'', 开始时间 //正计时有效 || 结束时间 //倒计时
+                    words:'开始啦！', //截止后显示 倒计时有效
                     integral:'chinese',//分割样式
-                    showOrder:'order' //显示顺序
+                    showOrder:'order' || reverse //显示顺序
                 }
             */
             countdownConfig:{
@@ -24,14 +21,11 @@
                 default:function(){
                     return {
                         type:'reverse',
-                        startTime:'',
-                        endTime:'',
-                        beforeStartWords:'还没开始！',
-                        startWords:'开始啦！',
-                        precision:'day,hour,minte,second',
+                        time:null,
+                        words:'即将开始！',
                         integral:'chinese',
                         showOrder:'order'
-                    }
+                    } 
                 }
             },
             /*
@@ -51,10 +45,11 @@
                     }
                 }
             }
-
         },
         data() {
             return {
+                countDownTime:null,
+                style:null
             }
         },
         computed:{
@@ -62,11 +57,105 @@
         watch: {
         },
         mounted:function(){
+            const t = this;
+            t.setStyle();
+            t.getCountDown();
         },
         methods: {
-            //倒计时结束 事件 reverse-finish
-            //正计时结束 事件 order-finish
-            //bengin 方法
+            //bengin 触发倒计时
+            bengin:function(){
+                this.getCountDown();
+            },
+            //设置字体样式
+            setStyle:function(){
+                const t = this;
+                const style = {
+                    'font-size':t.styleConfig.fontSize,
+                    'color':t.styleConfig.fontColor
+                };
+                t.style = style;
+            },
+            //倒计时
+            getCountDown:function(){
+                const t = this;
+                //获取时间节点
+                const timestamp = t.countdownConfig.time;
+                t.setInterval = setInterval(function(){
+                    const nowTime = new Date();
+                    const endTime = new Date(timestamp);
+                    let time = '';
+                    if(t.countdownConfig.type == 'order'){
+                        //正序
+                        time = nowTime.getTime() - endTime.getTime();
+                    }else{
+                        //倒序
+                        time = endTime.getTime() - nowTime.getTime();
+                    }
+                    //计算 天 时 分 秒
+                    const day = Math.floor(time/1000/60/60/24);
+                    let hour = Math.floor(time/1000/60/60%24);
+                    let min = Math.floor(time/1000/60%60);
+                    let sec = Math.floor(time/1000%60);
+                    if (hour < 10) {
+                         hour = "0" + hour;
+                    }
+                    if (min < 10) {
+                         min = "0" + min;
+                    }
+                    if (sec < 10) {
+                         sec = "0" + sec;
+                    }
+                    const timeArr = [];
+                    timeArr.push(day,hour,min,sec);
+                    if(time > 0){
+                        //时间差于0 继续计时
+                        t.setCountDownStyle(timeArr);
+                    }else{
+                        //时间差小于等于0 计时结束 显示文字
+                        clearInterval(t.setInterval);
+                        t.countDownTime = t.countdownConfig.words;
+                        //计时结束 事件 countdown-finish
+                        t.$emit('countdown-finish');
+                    }
+                },1000);
+            },
+            //设置倒计时样式
+            setCountDownStyle:function(timeArr){
+                const t = this;
+                const chinese = ["天","小时","分钟","秒"];
+                const english = [" days "," hours "," miniutes "," seconds "];
+                const code = ["天 ",":",":",":"];
+                //获取显示长度并根据长度遍历
+                const length = t.countdownConfig.precision.split(',');
+                let countDownTime = '';
+                length.forEach((val,key)=>{
+                    let realKey = key;
+                    //倒序显示
+                    if(t.countdownConfig.showOrder == 'reverse'){
+                        realKey = length.length - 1 - key;
+                    }
+                    switch(t.countdownConfig.integral){
+                        case "chinese":
+                            countDownTime = countDownTime + timeArr[realKey] + chinese[realKey];
+                            break;
+                        case "english":
+                            countDownTime = countDownTime + timeArr[realKey] + english[realKey];
+                            break;
+                        case "code":
+                            countDownTime = countDownTime + timeArr[realKey] + code[realKey];
+                            break;
+                    }
+                });
+                //处理编码显示状态多出 ':'
+                if(t.countdownConfig.integral == "code"){
+                    if(t.countdownConfig.showOrder == 'reverse'){
+                        countDownTime = countDownTime.slice(0,countDownTime.length);
+                    }else{
+                        countDownTime = countDownTime.slice(0,countDownTime.length - 1);
+                    }
+                };
+                t.countDownTime = countDownTime;
+            }
         }
     }
 </script>
