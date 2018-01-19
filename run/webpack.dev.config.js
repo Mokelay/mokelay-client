@@ -16,7 +16,7 @@ const vuxLoader = require('vux-loader');
 var wc = merge(webpackBaseConfig, {
     devtool: '#source-map',
     output: {
-        publicPath: '/dist/',
+        publicPath: '/run_dist/',
         filename: '[name].js',
         chunkFilename: '[name].chunk.js'
     },
@@ -30,7 +30,7 @@ var wc = merge(webpackBaseConfig, {
         compress: true
     },
     plugins: [
-	      // new webpack.HotModuleReplacementPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin({
             filename: '[name].css',
             allChunks: true
@@ -51,5 +51,5 @@ var wc = merge(webpackBaseConfig, {
 });
 
 module.exports = vuxLoader.merge(wc, {
-    plugins:['vux-ui']
+    plugins: ['vux-ui']
 });

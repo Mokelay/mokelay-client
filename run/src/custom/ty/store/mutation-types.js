@@ -1,0 +1,37 @@
+//  获取所有lego
+export const SET_CURRENT_APILEGO = 'SET_CURRENT_APILEGO';//设置当前apiLego
+
+//API接口
+export const ADD_API = 'ADD_API';
+export const GET_API_INFO = 'GET_API_INFO';
+export const ADD_APILEGO = 'ADD_APILEGO';
+
+export const UPDATE_APILEGO = 'UPDATE_APILEGO';
+export const ADD_APILEGO_INPUTFIELD = 'ADD_APILEGO_INPUTFIELD';
+export const ADD_APILEGO_OUTPUTFIELD = 'ADD_APILEGO_OUTPUTFIELD';
+export const UPDATE_APILEGO_INPUTFIELD = 'UPDATE_APILEGO_INPUTFIELD';
+export const UPDATE_APILEGO_OUTPUTFIELD = 'UPDATE_APILEGO_OUTPUTFIELD';
+export const ADD_BATCH_INPUTFIELD = 'ADD_BATCH_INPUTFIELD';//批量添加inputfield
+export const ADD_BATCH_OUTPUTFIELD = 'ADD_BATCH_OUTPUTFIELD';//批量添加outputfield
+
+export const UPDATE_BATCH_API_LEGO_INDEX = 'UPDATE_BATCH_API_LEGO_INDEX';//批量更新apiLego的index
+
+
+
+export const CLEAR_STATE_API_CACHE = 'CLEAR_STATE_API';//清除缓存
+
+export const DELETE_APILEGO = 'DELETE_APILEGO';//删除apiLego
+export const DELETE_INPUTOUTFIELD = 'DELETE_INPUTOUTFIELD';//删除字段
+
+//page相关
+export const GET_PAGE = 'GET_PAGE';
+export const ADD_PAGE = 'ADD_PAGE';
+export const GET_LIST_BB = 'GET_LIST_BB';
+export const ADD_PBB = 'ADD_PBB';
+export const DELATE_PBB = 'DELATE_PBB';
+export const GET_BB_INFO = 'GET_BB_INFO';
+export const GET_BB_CHILD_INFO = 'GET_BB_CHILD_INFO';
+export const ADD_BATCH_PBBA = 'ADD_BATCH_PBBA';
+export const GET_ATTR_BY_PBBID = 'GET_ATTR_BY_PBBID';
+export const UPDATE_PAGE_LAYOUT = 'UPDATE_PAGE_LAYOUT';
+

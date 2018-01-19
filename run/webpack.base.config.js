@@ -7,7 +7,7 @@ module.exports = {
         main: './src/main'
     },
     output: {
-        path: path.join(__dirname, './dist')
+        path: path.join(__dirname, './run_dist')
     },
     module: {
         rules: [{
@@ -76,7 +76,7 @@ module.exports = {
         extensions: ['.js', '.vue'],
         alias: {
             'vue': 'vue/dist/vue.esm.js',
-            jQuery: 'jquery',//解决art-dialog打包报错的问题
+            jQuery: 'jquery', //解决art-dialog打包报错的问题
             jquery: 'jquery',
         }
     }
