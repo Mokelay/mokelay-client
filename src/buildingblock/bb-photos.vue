@@ -1,6 +1,5 @@
 <template>
     <div class="bb-photos" v-swipeleft="swipe" v-swiperight="swipe">
-        
         <ul>
             <li v-for="(pic,index) in realFields" :key="index">
                 <transition 
@@ -46,8 +45,7 @@
                     return {
                         transformMode:'auto', 
                         transformTime:5000,
-                        transformAnimate:'fadeInRight,fadeOutLeft',
-                        show:true
+                        transformAnimate:'fadeInRight,fadeOutLeft,fadeInLeft,fadeOutRight'
                     }
                 }
             }
@@ -178,7 +176,9 @@
                     clearInterval(t.setInterval);
                     t.nextPhoto();
                     t.autoTransform();
-                }  
+                }
+                //滑动事件
+                t.$emit('swipe',{key:t.nowItem,item:t.realFields[t.nowItem]});
             },
             //出动画之后纠正轮播状态为向前
             afterLeave:function(){
