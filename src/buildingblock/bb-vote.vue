@@ -18,7 +18,7 @@
             <!-- 图集投票 -->
             <div v-if="vote.voteType == 'picture'" class="picture">
                 <!-- 图集 -->
-                <bb-photos :fields="realFields" :transformConfig="transformConfig" @swipe="swipe"></bb-photos>
+                <bb-photos :fields="realFields" :fieldsDs="fieldsDs" :transformConfig="transformConfig" @swipe="swipe"></bb-photos>
                 <div class="picture-info" v-if="vote.voteType == 'picture'">
                     <div v-for="(val,key) in realFields" :key="key" v-if="val.show">
                         <!-- 选择按钮 -->
@@ -33,12 +33,11 @@
                             <span v-if="val.show" :class="nowItem == index?'item active':'item'" ></span>
                         </span>
                     </div>
-                    
                 </div>
             </div>
         </div>
         <!-- 投票按钮 -->
-        <div class="bb-vote-submit" v-tap="submit">投票</div>
+        <div class="bb-vote-submit" :style="{'background-color':vote.buttonColor}" v-tap="submit">投票</div>
     </div>
 </template>
 <script>
@@ -74,7 +73,7 @@
                         voteType:'picture',
                         maxSelection:1,
                         endTime:'',
-                        buttonColor:'#333'
+                        buttonColor:''
                     }
                 }
             },
@@ -85,7 +84,7 @@
                 type:Object
             },
             /*
-                commitDs 投票记过提交接口
+                commitDs 投票提交接口
             */
             commitDs:{
                 type:Object
@@ -116,11 +115,16 @@
             if(t.realFields){
                 t.setRealFields();
             }
+            t.getData();
+
         },
         methods: {
             //滑动图片
             swipe:function(param){
-                this.nowItem = param.key;
+                const t = this;
+                t.realFields[t.nowItem].show = false;
+                t.nowItem = param.key;
+                t.realFields[t.nowItem].show = true;
             },
             //点击选项
             tapOption:function(key){
@@ -144,8 +148,9 @@
                 const t = this;
                 t.realFields.forEach((val,key)=>{
                     val.select = false;
+                    val.show = false;
                 });
-                t.$set(t.realFields,0,t.realFields[0]);
+                t.realFields[0].show = true;
             },
             //获取选中值
             getValue:function(){
@@ -178,7 +183,7 @@
                                 t.realFields = val.value.list;
                                 //触发积木更新
                                 if(t.realFields){
-                                    t.setShow();
+                                    t.setRealFields();
                                 }
                             })
                         }, function (code, msg) {
@@ -216,7 +221,6 @@
             border-right: 1px solid #ccd5db;
             border-left: 1px solid #ccd5db;
             position: relative;
-            background-color: #f0f3f4;
             i{
                 position: absolute;
                 right: 2%;
