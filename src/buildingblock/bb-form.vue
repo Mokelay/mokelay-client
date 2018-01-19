@@ -247,12 +247,10 @@
                         /*buttonConfig
                             提交按钮的配置
                             此处需要用bb-button重构*/
-                        Util.resolveButton(t.buttonConfig,{
-                                'bb':t,
-                                "router": t.$route.params,
+                        Util.resolveButton(t.buttonConfig,_TY_Tool.buildTplParams(t,{
                                 'row-data':t.parentData['row-data'],
                                 'getData':t.getData
-                            },t.afterCommit);
+                            }),t.afterCommit);
                     }
                 });
             },

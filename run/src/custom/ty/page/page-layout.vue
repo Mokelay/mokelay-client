@@ -54,7 +54,7 @@
         },
         computed:{
             pageAlias:function(){
-                return this.$route.params.param2;
+                return this.$route.query.param2;
             }
         },
         components: {
@@ -101,7 +101,7 @@
                         var params = {
                             alias: $(el).attr("alias"),
                             name: $(el).attr("name"),
-                            pageAlias: t.$route.params.param2,
+                            pageAlias: t.$route.query.param2,
                             buildingBlockAlias: $(el).attr("alias")
                         };
                         t.$store.dispatch('addPbb', params).then(data => {
@@ -136,7 +136,7 @@
             getPage: function () {
                 const t = this;
                 const params = {
-                    alias: t.$route.params.param2
+                    alias: t.$route.query.param2
                 };
                 t.loading = true;
                 t.$store.dispatch('getPage', params).then(function (data) {

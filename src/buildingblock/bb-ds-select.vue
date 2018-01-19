@@ -34,6 +34,7 @@
                                         fields:[
                                             {text:'组件对象',value:'bb'},
                                             {text:'路由数据',value:'router'},
+                                            {text:'根路由数据',value:'route'},
                                             {text:'外部数据',value:'external'},
                                             {text:'Local存储',value:'local'},
                                             {text:'Session存储',value:'session'},

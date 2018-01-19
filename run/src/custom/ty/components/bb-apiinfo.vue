@@ -1,8 +1,8 @@
 <template>
     <div class="w70 pr">
         <div class="top_btn">
-            <el-button type="text" @click="goto('/ty/index/ty-api/ty-api-add/'+apiInfo.alias)">编辑API</el-button>
-            <el-button type="text" @click="goto('/ty/index/ty-api/ty-api-config/'+apiInfo.alias)">编辑乐高</el-button>
+            <!-- <el-button type="text" @click="goto('/ty/index/ty-api/ty-api-add/'+apiInfo.alias)">编辑API</el-button> -->
+            <el-button type="text" @click="goto('/ty/index/ty-api?param=ty-api-config&param2='+apiInfo.alias)">编辑乐高</el-button>
         </div>
         <el-form label-position="right" label-width="80px" :model="apiInfo" class="b1">
             <el-form-item class="nom bb1">
@@ -98,7 +98,7 @@
             return {
                 apiInfo: {
                     name: '',
-                    url: this.$route.params.param2,
+                    url: this.$route.query.param2,
                     method: 'POST',
                     category:'config',
                     description: ''
@@ -130,7 +130,7 @@
             let t = this;
             this.$store.commit(types.CLEAR_STATE_API_CACHE, {});
             //查询api信息
-            const apiAlias = this.$route.params.param2;
+            const apiAlias = this.$route.query.param2;
             this.$store.dispatch('getApiInfo', {
                 alias: apiAlias
             }).then(function (data) {

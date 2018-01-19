@@ -86,7 +86,7 @@
         },
         mounted: function () {
             let t = this;
-            const apiAlias = this.$route.params.param2;
+            const apiAlias = this.$route.query.param2;
             this.$store.dispatch('getApiInfo', {
                 alias: apiAlias
             }).then(function (data) {
@@ -216,7 +216,7 @@
                 let t = this;
                 //恢复css样式
                 t.recoverCss();
-                t.$router.push("/ty/index/ty-api-doc/ty-api-info/" + this.$route.params.param2);
+                t.$router.push("/ty/index/ty-api-doc?param=ty-api-info&param2=" + this.$route.query.param2);
             },
             desChange(row, val){
                 let t = this;

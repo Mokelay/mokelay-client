@@ -356,12 +356,10 @@
             btnClick: function (button, row) {
                 var t = this;
                 t.vue = Vue;
-                Util.resolveButton(button,{
-                    'bb':t,
-                    "router": t.$route.params,
+                Util.resolveButton(button,_TY_Tool.buildTplParams(t,{
                     'row-data':row,
                     'getData':t.getData
-                });
+                }));
             },
             popupClick: function (button, row) {
                 var t = this;

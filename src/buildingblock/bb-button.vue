@@ -36,9 +36,7 @@
         methods: {
             click:function(button){
                 this.vue = Vue;
-                Util.resolveButton(button,{
-                    'bb':this,
-                    "router": this.$route.params},button.afterClick);
+                Util.resolveButton(button,_TY_Tool.buildTplParams(this),button.afterClick);
                 this.$emit('buttonClick',button);
                 this.$emit('click',button);
             }
