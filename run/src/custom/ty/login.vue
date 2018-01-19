@@ -116,7 +116,7 @@
                 }).then(function (response) {
                     let dataMap = response['data'];
                     if (dataMap['ok']) {
-                        t.$router.push("/ty/index/ty-index");
+                        t.$router.push("/home");
                     }else{
                         t.$message.error(dataMap['message']);
                     }

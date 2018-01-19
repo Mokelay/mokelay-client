@@ -73,8 +73,8 @@
         watch: {},
         computed: {
             gb(){
-                return true;
-                // return _TY_ENV.name=='gb';
+                // return true;
+                return _TY_ENV.name=='gb';
             }
         },
         beforeCreate: function () {
