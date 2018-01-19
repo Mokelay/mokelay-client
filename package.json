@@ -6,7 +6,6 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "rm -rf dist && babel src --out-dir dist && cp -R src/buildingblock  dist/buildingblock && cp -R src/layout  dist/layout && cp -R src/css/*  dist/css",
-    "local": "webpack-dev-server --content-base ./ --hot --config run/webpack.dev.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [

@@ -98,7 +98,7 @@
                                     "bb": t,
                                     "router": t.$route.params,
                                     "tab": {//静态配置只传过去name和value
-                                        name: tabPane.label,
+                                        label: tabPane.label,
                                         name: tabPane.name
                                     }
                                 })

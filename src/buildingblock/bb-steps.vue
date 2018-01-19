@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-steps :space="realSpace" :active="active" :align-center="alignCenter">
+        <el-steps :space="realSpace" :active="p_active" :align-center="alignCenter">
             <el-step v-for="step in steps" :title="step.title" :description="step.description" :key="step.title">
             </el-step>
         </el-steps>
-        <bb-read-bb :fields="steps[active-1].fields" ></bb-read-bb>
+        <bb-read-bb :fields="steps[p_active-1].fields" ></bb-read-bb>
     </div>
 </template>
 
@@ -34,6 +34,7 @@
         },
         data() {
             return {
+                 p_active:this.active
             }
         },
         computed: {
@@ -57,8 +58,7 @@
                 
             },
             next: function() {
-                //TODO 用于测试互动，后面可以删除
-                if (this.active++ > 2) this.active = 0;
+                if (this.p_active++ > (this.steps.length)) this.p_active = 1;
             }
         }
     }
