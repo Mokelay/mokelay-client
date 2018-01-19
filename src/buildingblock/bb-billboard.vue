@@ -49,7 +49,7 @@
             getData: function () {
                 const t = this;
                 if (t.dataDs) {
-                    _TY_Tool.getDSData(t.dataDs, {"bb": t, "router": t.$route.params,"external":t.external}, function (map) {
+                    _TY_Tool.getDSData(t.dataDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
                             t[dataKey] = val.value.list;

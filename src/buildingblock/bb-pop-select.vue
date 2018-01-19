@@ -131,7 +131,7 @@
                     "router": t.$route.params
                 };
                 if(t.selectRowDS){
-                    _TY_Tool.getDSData(t.selectRowDS, {"bb": t, "router": t.$route.params}, function (map) {
+                    _TY_Tool.getDSData(t.selectRowDS, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             //RowData从map中获取
                             const rowData = val.value;
@@ -169,11 +169,9 @@
                 const t = this;
                 t.popupVisible = false;
                 //编译Value
-                const param = {
-                    "bb": t, 
-                    "router": t.$route.params,
+                const param = _TY_Tool.buildTplParams(t,{
                     "rowData":t.selectRow
-                };
+                });
                 const _value = _TY_Tool.tpl(t.valueTpl,param);
                 t.$emit('input',_value);
                 t.$emit('change',_value);

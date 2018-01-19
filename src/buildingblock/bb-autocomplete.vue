@@ -79,7 +79,7 @@
             getData: function (queryString,cb) {
                 const t = this;
                 if (t.suggestionsDs) {
-                    _TY_Tool.getDSData(t.suggestionsDs, {"bb": t, "router": t.$route.params}, function (map) {
+                    _TY_Tool.getDSData(t.suggestionsDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             t.suggestionsBase = val.value.list;
                             t.getResults(queryString,cb);

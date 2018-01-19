@@ -59,7 +59,7 @@
                     t.loading = true;
                     var routerParams = t.$route ? t.$route.params : {};
 
-                    Util.getDSData(t.ds, {"bb": t, "router": routerParams, 'row-data': t.parentParams}, function (map) {
+                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data': t.parentParams}), function (map) {
                         map.forEach(function (item) {
                             var list = [];
                             if (item['valueKey'].split('.').length > 1) {//支持定制接口

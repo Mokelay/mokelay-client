@@ -146,7 +146,7 @@
             readBB:function(){
                 const t = this;
                 if (t.readBBDs) {
-                  Util.getDSData(t.readBBDs, {"bb": t, "router": t.$route.params}, function (map) {
+                  Util.getDSData(t.readBBDs, _TY_Tool.buildTplParams(t), function (map) {
                     map.forEach((val,key)=>{
                       t[val.dataKey] = val.value;
                     });

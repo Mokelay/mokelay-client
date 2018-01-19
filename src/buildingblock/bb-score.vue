@@ -105,7 +105,7 @@
             commitData:function(){
                 const t = this;
                 if (t.commitDs) {
-                    _TY_Tool.getDSData(t.commitDs, {"bb": t, "router": t.$route.params}, function (map) {
+                    _TY_Tool.getDSData(t.commitDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
                             t[dataKey] = val.value.list;

@@ -81,11 +81,9 @@
                                         let _uploadUrl='';
                                         let downloadUrl = '';
                                         if(t.uploadUrl){
-                                            _uploadUrl = window._TY_Tool.tpl(t.uploadUrl,{
-                                                bb: t,
-                                                router: t.$route ? t.$route.params : {},
+                                            _uploadUrl = window._TY_Tool.tpl(t.uploadUrl,_TY_Tool.buildTplParams(t,{
                                                 host:location.host
-                                            })
+                                            }))
                                         }else{
                                             _uploadUrl=window._TY_APIHost+window._TY_ContentPath+'/ty-upload';
                                             downloadUrl=window._TY_APIHost+window._TY_ContentPath+'/ty-download';

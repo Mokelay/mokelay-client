@@ -266,7 +266,7 @@
             getFields: function () {
                 var t = this;
                 if (t.dsFields) {
-                    Util.getDSData(t.dsFields, {"bb": t, "router": t.$route.params,'row-data':t.parentData['row-data']}, function (map) {
+                    Util.getDSData(t.dsFields, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
                         t.realFields = map[0].value;
                     }, function (code, msg) {
                     });
@@ -276,7 +276,7 @@
             getData: function () {
                 var t = this;
                 if (t.ds) {
-                    Util.getDSData(t.ds, {"bb": t, "router": t.$route.params,'row-data':t.parentData['row-data']}, function (map) {
+                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
                         t.formData = map[0].value;
                     }, function (code, msg) {
                     });

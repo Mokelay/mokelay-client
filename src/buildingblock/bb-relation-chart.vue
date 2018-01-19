@@ -86,7 +86,7 @@
                 let t=this;
                 if (t.ds) {
                     t.loading = true;
-                    _TY_Tool.getDSData(t.ds, {"bb": t, "router": t.$route.params,'local':window.localStorage,'session':window.sessionStorage}, function (map) {
+                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach(function (item) {
                             t.data = item['value'];
                         });

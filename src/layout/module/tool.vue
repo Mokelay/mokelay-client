@@ -49,7 +49,7 @@ export default {
 		getType:function () {
 		    const t = this;
 		    if (t.toolTypeDs) {
-		        Util.getDSData(t.toolTypeDs, {"bb": t, "router": t.$route.params}, function (map) {
+		        Util.getDSData(t.toolTypeDs, _TY_Tool.buildTplParams(t), function (map) {
 		            const list = map[0].value.list;
 		            t.toolType = list;
 		            t.getData();
@@ -60,7 +60,7 @@ export default {
 		getData:function () {
 		    const t = this;
 		    if (t.toolListDs) {
-		        Util.getDSData(t.toolListDs, {"bb": t, "router": t.$route.params}, function (map) {
+		        Util.getDSData(t.toolListDs, _TY_Tool.buildTplParams(t), function (map) {
 		            const list = map[0].value.list;
 		            t.toolList = list;
 		            t.setMenu();

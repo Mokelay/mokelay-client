@@ -200,11 +200,7 @@
                                 constant: _parentId
                             });
                         }
-                        Util.getDSData(t.ds, {
-                            "bb": t,
-                            "router": t.$route.params,
-                            "external": t.external
-                        }, function (map) {
+                        Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                             const list = [];
                             if (!map || !map.length) {
                                 resolve([]);

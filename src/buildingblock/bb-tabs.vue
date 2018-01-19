@@ -94,14 +94,12 @@
                         tabPane.fields.forEach((field, index)=> {
                             let etProps = typeof field['etProps'] == 'string' ? eval("(" + field['etProps'] + ")") : field['etProps'];
                             let currentDom = createElement(field['et'], {
-                                props: _TY_Tool.tpl(etProps, {
-                                    "bb": t,
-                                    "router": t.$route.params,
+                                props: _TY_Tool.tpl(etProps, _TY_Tool.buildTplParams(t,{
                                     "tab": {//静态配置只传过去name和value
                                         label: tabPane.label,
                                         name: tabPane.name
                                     }
-                                })
+                                }))
                             }, []);
                             _paneBox.push({
                                 rendered:activeTab,
@@ -132,7 +130,7 @@
             getBadge: function () {
                 var t = this;
                 if (t.badgeDs) {
-                    Util.getDSData(t.badgeDs, {"bb": t, "router": t.$route.params}, function (map) {
+                    Util.getDSData(t.badgeDs, _TY_Tool.buildTplParams(t), function (map) {
                         t.badgeData = [];
                         map.forEach((item, key)=> {
                             const badge = {
@@ -151,7 +149,7 @@
             getTabList(){
                 let t=this;
                 if(t.tabDs){
-                    Util.getDSData(t.tabDs, {"bb": t, "router": t.$route.params}, function (map) {
+                    Util.getDSData(t.tabDs, _TY_Tool.buildTplParams(t), function (map) {
                         map[0].value.forEach((item, key)=> {
                             const tab = {
                                 label: item.text,
@@ -160,14 +158,12 @@
                             }
                             if(t.tabDsContent){
                                 let props = typeof t.tabDsContent == 'string' ? eval("("+t.tabDsContent+")") : t.tabDsContent;
-                                let newProps=_TY_Tool.tpl(props,{
-                                    "bb": t,
-                                    "router": t.$route.params,
+                                let newProps=_TY_Tool.tpl(props,_TY_Tool.buildTplParams(t,{
                                     "tab": {//动态可以传其他值
                                         label: item.text,
                                         name: item.value
-                                    },
-                                });
+                                    }
+                                }));
                                 tab.fields.push(newProps);
                             }
                             t.tabPanes.push(tab);

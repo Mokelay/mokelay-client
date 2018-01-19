@@ -307,7 +307,7 @@
                             });
                         }
                     }
-                    Util.getDSData(t.ds, {"bb": t, "router": routerParams,'row-data':t.parentParams,"external":t.external}, function (map) {
+                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentParams}), function (map) {
                         if(dataHandler && typeof dataHandler == 'function'){
                             dataHandler(map);
                         }else{
@@ -407,7 +407,7 @@
                 //列表的更新操作
                 if (column.ds) {
                     t.loading = true;
-                    Util.getDSData(column.ds, {"bb": t, "router": t.$route.params,"row-data":newRow}, function (map) {
+                    Util.getDSData(column.ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;

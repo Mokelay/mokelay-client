@@ -68,10 +68,7 @@
             getData(node) {
                 const t = this;
                 if (t.ds) {
-                    Util.getDSData(t.ds, {
-                        bb: t,
-                        router: t.$route.params
-                    }, function (data) {
+                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
                             const {dataKey, value} = item;
                             t[dataKey] = value;

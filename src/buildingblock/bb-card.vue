@@ -61,7 +61,7 @@
             getData: function () {
                   var t = this;
                   if (this.ds) {
-                      Util.getDSData(t.ds, {"bb": t, "router": t.$route.params}, function (map) {
+                      Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                           var newArr = [];
                           map.forEach(function (item) {
                                   var list = item['value']['list'];

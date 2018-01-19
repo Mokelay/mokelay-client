@@ -136,6 +136,20 @@ util.uuid = function(len, radix) {
     return uuid.join('');
 };
 
+/**
+ *  组装模板或者getDsData方法的参数
+ */
+util.buildTplParams = function(t, obj) {
+    return _.extend({
+        "bb": t,
+        "router": t.$route.params,
+        "route": t.$route,
+        "external": t.external,
+        "local": window.localStorage,
+        "session": window.sessionStorage
+    }, (obj ? obj : {}));
+};
+
 //获取DS
 /**
 DS配置案例
