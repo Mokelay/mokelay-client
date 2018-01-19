@@ -1,37 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-var env = process.env.ENV;
 
 module.exports = {
     entry: {
-        // main: './src/index'
-        main: './src/buildingblock/bb-tag'
+        main: './src/main'
     },
     output: {
-        path: path.join(__dirname, './dist'),
-        publicPath: '/',
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js'
+        path: path.join(__dirname, './dist')
     },
-    plugins: [
-        new ExtractTextPlugin({
-            filename: '[name].css',
-            allChunks: true
-        }),
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: '"prd"'
-            }
-        }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     }
-        // })
-    ],
     module: {
         rules: [{
                 test: /\.vue$/,

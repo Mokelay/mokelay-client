@@ -22,12 +22,12 @@ window._TY_SSOURL = _env.ssoURL;
 window._TY_Page_Data = {};
 
 
-//单独注册定制化文件的积木
+//定制化VUE
 // import bbcustom from './custom/bb-custom';
 // Vue.component('bb-custom', bbcustom);
 
 //引用TY核心
-import TY from './index';
+import TY from '../../src/index';
 TY.install(Vue);
 
 // 路由配置
