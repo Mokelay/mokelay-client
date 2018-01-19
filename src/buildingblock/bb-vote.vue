@@ -165,7 +165,7 @@
             //提交数据
             submit:function(){
                 const t = this;
-                if(t.getTime > 0){
+                if(t.getTime() > 0){
                    t.$emit('commit',t.valueBase);
                     const length = t.valueBase.split(',').length - 1;
                     if(length){
