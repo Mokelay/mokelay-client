@@ -37,7 +37,9 @@
             </div>
         </div>
         <!-- 投票按钮 -->
-        <div class="bb-vote-submit" :style="{'background-color':vote.buttonColor}" v-tap="submit">投票</div>
+        <div class="bb-vote-submit" :style="{'background-color':vote.buttonColor}" v-tap="submit">
+            {{buttonText}}
+        </div>
     </div>
 </template>
 <script>
@@ -92,10 +94,7 @@
         },
         data() {
             return {
-                selectIconClass:'el-icon-circle-check-outline',
-                color:'#999999',
                 realFields:this.fields,
-                selected:null,
                 valueBase:'',
                 lastKey:null,
                 transformConfig:{
@@ -103,7 +102,7 @@
                     transformAnimate:'fadeInRight,fadeOutLeft,fadeInLeft,fadeOutRight'
                 },
                 nowItem:0,
-
+                buttonText:'请投票'
             }
         },
         computed:{
@@ -112,6 +111,7 @@
         },
         mounted:function(){
             const t = this;
+            t.getTime();
             if(t.realFields){
                 t.setRealFields();
             }
@@ -165,11 +165,18 @@
             //提交数据
             submit:function(){
                 const t = this;
-                t.$emit('commit',t.valueBase);
-                const length = t.valueBase.split(',').length - 1;
-                if(length){
-                    console.log('t.valueBase:',t.valueBase);
-                    t.commitData();
+                if(t.getTime > 0){
+                   t.$emit('commit',t.valueBase);
+                    const length = t.valueBase.split(',').length - 1;
+                    if(length){
+                        console.log('t.valueBase:',t.valueBase);
+                        t.commitData();
+                    } 
+                }else{
+                    t.$message({
+                        type: 'info',
+                        message: '投票已结束'
+                    });
                 }
             },
             //提交统计
@@ -199,6 +206,16 @@
                         }, function (code, msg) {
                     });
                 }
+            },
+            //计算是否超过投票截止时间
+            getTime:function(){
+                const t = this;
+                const timestamp = t.vote.endTime;
+                const nowTime = new Date();
+                const endTime = new Date(timestamp);
+                const time = endTime.getTime() - nowTime.getTime();
+                t.buttonText = time < 0?'投票已结束':t.buttonText;
+                return time;
             }
         }
     }
