@@ -34,6 +34,28 @@ TY.install(Vue);
 const router = new VueRouter({
 	mode: 'hash',
 	routes: [{
+        path: '/',
+        redirect: to => {
+            return "/home";
+        }
+    }, {
+        path: '/home',
+        meta: {
+            title: 'TY应用'
+        },
+        component: (resolve) => require(['./custom/home.vue'], resolve)
+    },{
+        path: '/:appAlias/index',
+        meta: {
+            title: '应用首页'
+        },
+        component: (resolve) => require(['./custom/index.vue'], resolve),
+        children: [{
+            path: '/:appAlias/index/:pageAlias',
+            meta: {},
+            component: (resolve) => require(['./ty.vue'], resolve)
+        }]
+    },{
         path: '/:pageAlias',
         meta: {},
         component: (resolve) => require(['./ty.vue'], resolve)
