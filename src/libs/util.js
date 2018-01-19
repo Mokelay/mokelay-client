@@ -394,10 +394,7 @@ util.loadBuzz = function(buzz, handle) {
  */
 util.buildDefaultValTpl = function(t, p_value) {
     if (!t.value && t.defaultValTpl) {
-        t[p_value] = util.tpl(t.defaultValTpl, {
-            bb: t,
-            router: t.$route ? t.$route.params : {}
-        });
+        t[p_value] = util.tpl(t.defaultValTpl, util.buildTplParams(t));
         t.$emit('input', t[p_value]);
     }
 }
