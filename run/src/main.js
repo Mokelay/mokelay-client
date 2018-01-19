@@ -12,9 +12,13 @@ Vue.use(ElementUI);
 
 
 //常量配置
-import env from './env/env';
-import envConfig from './env/env_config';
-var _env = env[envConfig];
+var _env = {
+	name: 'local',
+	apiHost: "http://hxwy.dev.rs.com",
+	ssoURL: "http://urms.dev.rs.com/passport/login?service=http://hxwy.dev.rs.com/urmscallback", 
+	h5Host: '/dist',
+	questionnaireHost: 'http://questionnaire.dev.rs.com'
+};
 window._TY_ENV = _env;
 window._TY_ContentPath = "/config";
 window._TY_APIHost = _env.apiHost;
@@ -23,8 +27,8 @@ window._TY_Page_Data = {};
 
 
 //定制化VUE
-// import bbcustom from './custom/bb-custom';
-// Vue.component('bb-custom', bbcustom);
+import bbcustom from './custom/bb-custom';
+Vue.component('bb-custom', bbcustom);
 
 //引用TY核心
 import TY from '../../src/index';
