@@ -48,7 +48,7 @@
     "rasterizehtml": "^1.2.4",
     "underscore": "^1.8.3",
     "v-charts": "^1.13.3",
-    "vue": "^2.5.10",
+    "vue": "^2.5.13",
     "vue-i18n": "^5.0.3",
     "vue-json-tree-view": "^2.1.1",
     "vue-router": "2.8.1",
