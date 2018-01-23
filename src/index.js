@@ -1,3 +1,4 @@
+//pc 端积木
 import bb from './buildingblock/bb';
 import bbpage from './buildingblock/bb-page';
 import bbbuttongroup from './buildingblock/bb-button-group';
@@ -56,14 +57,18 @@ import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
 import ElTreeGrid from 'element-tree-grid';
 import bbautocomplete from './buildingblock/bb-autocomplete'
-import bbtext from './buildingblock/h5/bb-text.vue';
 import bbeditormd from './buildingblock/bb-editor-md.vue';
+import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
+
+//移动端积木
+import bbtext from './buildingblock/h5/bb-text.vue';
 import bbphotos from './buildingblock/h5/bb-photos.vue';
 import bbvideo from './buildingblock/h5/bb-video.vue';
 import bbscore from './buildingblock/h5/bb-score.vue';
 import bbcount from './buildingblock/h5/bb-count.vue';
 import bbcountdown from './buildingblock/h5/bb-countdown.vue';
 import bbvote from './buildingblock/h5/bb-vote.vue';
+
 
 //引入minireset
 import './css/minireset.css';
@@ -148,6 +153,7 @@ let ty = {
 		Vue.component('bb-count', bbcount);
 		Vue.component('bb-countdown', bbcountdown);
 		Vue.component('bb-vote', bbvote);
+		Vue.component('bb-portal-item-list', bbportalitemlist);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
