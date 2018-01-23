@@ -4,7 +4,7 @@
             <bb-button :button="field.actionConfig" @button-finish='buttonFinish' :style="{width:styleConfig.imgWidth}">
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:styleConfig.imgHeight}">
-                    <i v-if="field.icon" class="ty-flower-off ty-font" :style="{'line-height':styleConfig.imgHeight,'font-size':styleConfig.imgWidth}"></i>
+                    <i v-if="field.icon" :class="field.icon + ' ty-font'" :style="{'line-height':styleConfig.imgHeight,'font-size':styleConfig.imgWidth}"></i>
                     <img v-else  class="item-image" :src="field.src" alt="">
                 </div>
                 <!-- 主标题 -->
