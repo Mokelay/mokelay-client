@@ -116,11 +116,8 @@ export const fvt = [{
     text: "来自前一个节点",
     value: "output",
 }, {
-    text: "计算逻辑",
-    value: "calculation",
-}, {
-    text: "表达式",
-    value: "expression",
+    text: "模板",
+    value: "template",
 }];
 
 export const et = [{
