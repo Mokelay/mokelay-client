@@ -67,7 +67,14 @@
         created: function () {
             const t = this;
             if(t.uploadDs){
-                t.uploadUrl = t.uploadDs.api
+                const api = t.uploadDs['api'];
+                const type = t.uploadDs['category'] || 'config'; //默认是配置接口
+                let apiUrl = api;
+                if (type == 'config') {
+                    //如果不是自定义接口
+                    apiUrl = window._TY_ContentPath + "/" + api;
+                }
+                t.uploadUrl = apiUrl;
             }
             if(t.value){
                 t.setFileList(t.value,t) 
