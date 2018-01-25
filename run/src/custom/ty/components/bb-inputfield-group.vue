@@ -186,7 +186,7 @@
                     name: "数据类型",
                     attributeName: "dt",
                     dt: "",
-                    // et: "hide",
+                    et: "select",
                     options: dt
                 }, {
                     name: "输入类型",
@@ -227,6 +227,11 @@
                 }, {
                     name: "常量值",
                     attributeName: "constant",
+                    dt: "",
+                    et: "hide"
+                }, {
+                    name: "模板参数",
+                    attributeName: "fieldTpl",
                     dt: "",
                     et: "hide"
                 }, {
@@ -319,7 +324,7 @@
                     name: "数据类型",
                     attributeName: "dt",
                     dt: "",
-                    // et: "hide",
+                    et: "select",
                     options: dt
                 }, {
                     name: "输出类型",
@@ -369,6 +374,7 @@
                     connectorPath: '',
                     ct: '',
                     dt: "string",
+                    fieldTpl:'',
                     fieldName: '',
                     fvt: '',
                     id: '',
@@ -735,6 +741,7 @@
                     connectorPath: '',
                     ct: '',
                     dt: "string",
+                    fieldTpl:'',
                     fieldName: '',
                     fvt: '',
                     id: '',
@@ -908,6 +915,8 @@
                                         fvt: this.ioft != 'read' ? 'request' : '',
                                         ift: this.ioft,
                                         ct: 'eq',
+                                        dt: node.dt||'string',
+                                        fieldTpl:'',
                                         apiLegoId: this.apiLegoId,
                                         connectorPath: t._transferConnAliasToJsonAlias(node.connectorAlias),
                                         requestParamName: node.fieldName
@@ -1017,8 +1026,12 @@
                 this._changeFormEditor(this.iFields, this.ioft, "fromApiLegoOutputFieldAlias", "hide", "input");
                 this._changeFormEditor(this.iFields, this.ioft, "requestParamName", "hide", "input");
                 this._changeFormEditor(this.iFields, this.ioft, "sessionParamName", "hide", "input");
-                if (fvt == 'output') {
-                    this._changeFormEditor(this.iFields, this.ioft, "fromApiLegoOutputFieldAlias", "input", "hide");
+                if (fvt == 'output'||fvt == 'template') {
+                    if(fvt == 'output'){
+                        this._changeFormEditor(this.iFields, this.ioft, "fromApiLegoOutputFieldAlias", "input", "hide");
+                    }else if(fvt == 'template'){
+                         this._changeFormEditor(this.iFields, this.ioft, "fieldTpl", "input", "hide");
+                    }
                     this._changeFormEditor(this.iFields, this.ioft, "fromApiLegoId", "select", "hide");
                     //如果是output，发请求获取这个api下的所有apilego
                     let apiLegoList = this.$store.state.api.api.apiLego;
