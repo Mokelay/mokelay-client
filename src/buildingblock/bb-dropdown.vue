@@ -128,17 +128,11 @@
         border:none;
         .content{
             cursor: pointer;
-            display: -webkit-box;
-            display: -ms-flexbox;
             display: flex;
             position: relative;
             height: 100%;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
             align-items: center;
-            -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
-            justify-content: space-between
+            justify-content: center;
         }
         .photo{
             width: 36px;
