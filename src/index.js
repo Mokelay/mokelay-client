@@ -59,6 +59,8 @@ import ElTreeGrid from 'element-tree-grid';
 import bbautocomplete from './buildingblock/bb-autocomplete'
 import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
+import bbbar from './buildingblock/bb-bar.vue';
+import bbdropdown from './buildingblock/bb-dropdown.vue';
 
 //移动端积木
 import bbtext from './buildingblock/h5/bb-text.vue';
@@ -154,6 +156,8 @@ let ty = {
 		Vue.component('bb-countdown', bbcountdown);
 		Vue.component('bb-vote', bbvote);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
+		Vue.component('bb-bar', bbbar);
+		Vue.component('bb-dropdown', bbdropdown);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
