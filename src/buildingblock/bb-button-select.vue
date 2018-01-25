@@ -71,6 +71,11 @@
                     et: 'bb-input',
                     props: {}
                 }, {
+                    name: '字体大小',
+                    attributeName: 'fontSize',
+                    et: 'bb-input',
+                    props: {}
+                }, {
                     name: '执行动作',
                     attributeName: 'action',
                     et: 'bb-select',
