@@ -68,7 +68,7 @@
             const t = this;
             if(t.uploadDs){
                 const api = t.uploadDs['api'];
-                const type = t.uploadDs['category'] || 'config'; //默认是配置接口
+                const type = t.uploadDs['category'];
                 let apiUrl = api;
                 if (type == 'config') {
                     //如果不是自定义接口
