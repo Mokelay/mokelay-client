@@ -66,6 +66,11 @@
                     et: 'bb-input',
                     props: {}
                 }, {
+                    name: '字体颜色',
+                    attributeName: 'color',
+                    et: 'bb-input',
+                    props: {}
+                }, {
                     name: '执行动作',
                     attributeName: 'action',
                     et: 'bb-select',
