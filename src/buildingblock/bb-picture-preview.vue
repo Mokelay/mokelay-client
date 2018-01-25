@@ -139,7 +139,7 @@
     }
     .pic_arrow_left,.pic_arrow_right{
         position: absolute;
-        margin: auto;
+        margin: auto !important;
         top: 0;
         bottom:0;
         max-width: 100%;
