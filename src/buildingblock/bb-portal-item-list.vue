@@ -1,6 +1,6 @@
 <template>
-    <div :class="'bb-portal-item-list ' + styleConfig.transitionType">
-        <div class="grid-item" v-for="(field,key) in realFields">
+    <div :class="'bb-portal-item-list ' + styleConfig.transitionType" :style="{'max-width':styleConfig.width}">
+        <div class="grid-item" v-for="(field,key) in realFields" :style="{'margin': '20px '+ styleConfig.margin}">
             <bb-button :button="field.actionConfig" @button-finish='buttonFinish' :style="{width:styleConfig.imgWidth}">
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:styleConfig.imgHeight}">
@@ -23,7 +23,7 @@
                 fields 静态数据源
                 [{
                     icon:'ty-flower-off ty-font',  //图标名称 同时存在 icon和 src 默认优先显示图标
-                    :'', 图片地址
+                    src:'', 图片地址
                     title:'',标题
                     subtitle:'',副标题
                     actionConfig:{  //点击后执行的动作
@@ -54,6 +54,10 @@
                     imgHeight:'', 图片高度
                     fontColor:'', 标题字体颜色
                     fontSize:'',    标题字体大小
+                    
+                    新增
+                    width:'500px',  整体宽度
+                    margin:'50px' 入口按钮的间距
                 }
             */
             styleConfig:{
@@ -64,7 +68,9 @@
                         imgWidth:'118px',
                         imgHeight:'118px',
                         fontColor:'#666666',
-                        fontSize:'14px'
+                        fontSize:'14px',
+                        width:'500px',
+                        margin:'50px'
                     }
                 }
             }
@@ -106,7 +112,7 @@
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
-                            t.realFields = val.value.list;
+                            t.realFields = val.value;
                             t.setRealFields();
                         })
                     }, function (code, msg) {
@@ -144,7 +150,6 @@
                 border-radius: 6px;
                 box-shadow: 0 4px 8px 0 rgba(0,0,0,.06);
                 overflow: visible;
-                cursor: pointer;
                 transition: bottom .3s ease;
                 background: #fff;
                 .item-image{
@@ -165,7 +170,6 @@
                 font-size: 14px;
                 color: #434343;
                 margin: 16px 0 4px;
-                cursor: pointer;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -199,7 +203,6 @@
         .grid-item{
             display: inline-block;
             text-align: center;
-            cursor: pointer;
             margin-right: 23px;
             margin-bottom: 23px;
             .item-container{
