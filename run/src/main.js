@@ -44,12 +44,6 @@ const router = new VueRouter({
             return "/home";
         }
     }, {
-        path: '/home',
-        meta: {
-            title: 'TY应用'
-        },
-        component: (resolve) => require(['./custom/home.vue'], resolve)
-    }, {
         path: '/:appAlias/index',
         meta: {
             title: '应用首页'
