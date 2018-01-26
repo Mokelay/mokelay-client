@@ -137,7 +137,6 @@
             }
         }
         .bb-list{
-            cursor: pointer;
             display: flex;
             position: relative;
             height: 100%;

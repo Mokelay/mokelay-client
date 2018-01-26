@@ -127,7 +127,6 @@
     .bb-dropdown{
         border:none;
         .content{
-            cursor: pointer;
             display: flex;
             position: relative;
             height: 100%;
