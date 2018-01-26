@@ -1,6 +1,5 @@
 //pc 端积木
 import bb from './buildingblock/bb';
-import bbpage from './buildingblock/bb-page';
 import bbbuttongroup from './buildingblock/bb-button-group';
 import bblist from './buildingblock/bb-list';
 import bbdialog from './buildingblock/bb-dialog'; // 2017-10-11 season add
@@ -47,7 +46,6 @@ import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbuuid from './buildingblock/bb-uuid.vue';
 import bbtree from './buildingblock/bb-tree.vue';
 import bbtreeselect from './buildingblock/bb-tree-select.vue';
-import bblayout from './layout/bb-layout.vue';
 import bbicon from './buildingblock/bb-icon.vue';
 import bbiconselect from './buildingblock/bb-icon-select.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
@@ -70,6 +68,10 @@ import bbscore from './buildingblock/h5/bb-score.vue';
 import bbcount from './buildingblock/h5/bb-count.vue';
 import bbcountdown from './buildingblock/h5/bb-countdown.vue';
 import bbvote from './buildingblock/h5/bb-vote.vue';
+
+//布局相关
+import bbpage from './layout/bb-page';
+import bblayout from './layout/bb-layout.vue';
 
 
 //引入minireset
