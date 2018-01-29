@@ -1,22 +1,21 @@
 <template>
     <div>
         <el-popover
-                width="500"
+                width="524"
                 placement="right"
                 trigger="click"
-                ref="popover"
-        >
+                ref="popover">
             <bb-transfer
                     v-model="bb_value"
                     :itemKey="itemKey"
                     :itemLabel="itemLabel"
                     :ds="ds"
                     :staticData="staticData"
-            >
+                    @change="transferChange">
             </bb-transfer>
             <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
         </el-popover>
-        <el-input class="wa" placeholder="请选择" disabled v-model="bb_input_value" @change="change"></el-input>
+        <el-input class="wa" placeholder="请选择" disabled v-model="bb_input_text" @change="change"></el-input>
         <el-button v-popover:popover><i class="el-icon-search"></i></el-button>
         <el-button class="ml0" @click="clear"><i class="el-icon-delete"></i></el-button>
     </div>
@@ -47,36 +46,30 @@
         },
         data() {
             return {
-                bb_input_value: '',
+                bb_input_text: '',
                 bb_value: ''
             }
         },
         created: function () {
 
         },
-        watch: {
-            value(val) {
-                this.bb_input_value = val;
-                this.bb_value = val;
-            }
-        },
         methods: {
             commit() {
-                this.bb_input_value = this.bb_value;
                 //v-model
-                this.$emit('input', this.bb_input_value);
-
-                this.change(this.bb_input_value);
+                this.$emit('input', this.bb_value);
 
                 this.$refs.popover.doClose();
+            },
+            transferChange(keys, text) {
+                this.bb_input_text = text.join(',');
             },
             change(value) {
                 //触发prop change事件
                 this.$emit('change', value);
             },
             clear() {
-                this.bb_input_value = '';
                 this.bb_value = '';
+                this.bb_input_text = '';
             }
         }
     }

@@ -33,8 +33,8 @@
             ds: {
                 type: Object
             },
-            defaultValTpl:{
-                type:[String,Number,Boolean]
+            defaultValTpl: {
+                type: [String, Number, Boolean]
             }
         },
         data() {
@@ -48,7 +48,7 @@
         },
         watch: {
             value(val) {
-                this.bb_value = val.split(',');
+                this.bb_value = val ? val.split(',') : [];
                 if (val && this.datas.length) {
                     this.formatData();
                 }
@@ -60,9 +60,9 @@
             }
         },
         computed: {},
-        mounted:function(){
-            let t=this;
-            _TY_Tool.buildDefaultValTpl(t,"bb_value");
+        mounted: function () {
+            let t = this;
+            _TY_Tool.buildDefaultValTpl(t, "bb_value");
         },
         methods: {
             getData(node) {
@@ -82,6 +82,21 @@
             transformResult(val) {
                 return val.join(',');
             },
+            transformResultLabels(keys) {
+                const labels = [];
+                if (keys && keys.length) {
+                    keys.forEach((key) => {
+                        this.datas.some((data) => {
+                            if (data[this.itemKey] === key) {
+                                labels.push(data[this.itemLabel]);
+                                return true;
+                            }
+                            return false;
+                        })
+                    });
+                }
+                return labels;
+            },
             formatData() { //转换数据格式
                 if (typeof this.datas[0][this.itemKey] === 'number') {
                     if (typeof this.bb_value[0] === 'string') {
@@ -93,11 +108,12 @@
             },
             change(value, direction, movedKeys) {
                 const result = this.transformResult(value);
+                const labels = this.transformResultLabels(value);
                 console.log(result);
                 //v-model
                 this.$emit('input', result);
                 //触发prop change事件
-                this.$emit('change', value);
+                this.$emit('change', value, labels);
             }
         }
     }
