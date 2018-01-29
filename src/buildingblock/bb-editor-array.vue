@@ -14,12 +14,12 @@
             <el-table-column type="index" width="50" v-if="arrayProps.showIndex == true"></el-table-column>
             <el-table-column v-for="field in fields" :prop="field.attributeName" :label="field.name"
                              :key="field.attributeName">
-                <template scope="scope">
+                <template slot-scope="scope">
                     {{scope['row'][field.attributeName]}}
                 </template>
             </el-table-column>
             <el-table-column label="操作" key="operation">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <el-button type="text" icon="el-icon-delete"
                                @click.native.prevent="deleteData(scope.$index)"></el-button>
                 </template>

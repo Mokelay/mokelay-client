@@ -46,7 +46,7 @@
 
                 <el-table-column v-for="column in columns" :fixed="column.fixed" :width="column.width" :prop="column.prop" :label="column.label"
                                  :key="column.prop" :align="column.align">
-                    <template scope="scope">
+                    <template slot-scope="scope">
                         <!-- type=button-group 不再扩展 -->
                         <div v-if="column['type'] == 'button-group'" >
                             <span v-for="(button,index) in column.buttons">

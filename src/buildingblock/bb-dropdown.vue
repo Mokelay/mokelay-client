@@ -6,8 +6,8 @@
             <img class="photo" v-else-if="realBasicConfig.imgSrc" :src="realBasicConfig.imgSrc" alt="">
             <i class="el-icon-arrow-down el-icon--right"></i>
         </div>
-        <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(field,key) in realFields" 
+        <el-dropdown-menu slot-scope="dropdown">
+            <el-dropdown-item v-for="(field,key) in realFields" :key="key" 
                     :command="field.button" 
                     :disabled="field.disabled" 
                     :divided="field.divided" >

@@ -42,7 +42,7 @@
                     label="描述">
             </el-table-column>
             <el-table-column label="测试请求参数">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <el-input v-model="params[scope.row.param]" placeholder="请输入内容"></el-input>
                 </template>
             </el-table-column>

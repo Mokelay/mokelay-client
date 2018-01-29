@@ -8,12 +8,12 @@
         <el-table :data="array" border style="width: 100%" :height="height" stripe>
             <el-table-column v-for="field in fields" :prop="field.attributeName" :label="field.name"
                              :key="field.attributeName">
-                <template scope="scope">
+                <template slot-scope="scope">
                     {{scope['row'][field.attributeName]}}
                 </template>
             </el-table-column>
             <el-table-column label="操作" key="operation">
-                <template scope="scope">
+                <template slot-scope="scope">
                     <el-button type="text" icon="el-icon-edit"
                                @click.native.prevent="editData(scope.$index)">修改</el-button>
                     <el-button type="text" icon="el-icon-delete"
