@@ -149,6 +149,7 @@
                                     if (item.value && item.clickHide) {
                                         t.$refs[item['url']].hide();
                                     }
+                                    t.forwardThirdUrl(item.url);
                                 }
                             }
                         },
@@ -174,6 +175,7 @@
                                 if (item.value && item.clickHide) {
                                     t.$refs[item['url']].hide();
                                 }
+                                t.forwardThirdUrl(item.url);
                             }
                         }
                         },
@@ -183,6 +185,11 @@
                             class: 'bb-menu-badge'
                         }, [])]), createElement('el-menu-item-group', {}, [t.createMenu(createElement, item[t.childName])])]
                 );
+            },
+            forwardThirdUrl:function(url){
+                if(url.indexOf("http://")>=0){
+                    location.href=url;
+                }
             },
             //外部调用，app打开后菜单  执行巴斯代码，调用buildBadge
             buildBadge(key, val, clickHide){
