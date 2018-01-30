@@ -69,6 +69,7 @@ import bbcount from './buildingblock/h5/bb-count.vue';
 import bbcountdown from './buildingblock/h5/bb-countdown.vue';
 import bbvote from './buildingblock/h5/bb-vote.vue';
 import bbhtml from './buildingblock/h5/bb-html.vue';
+import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
 
 //布局相关
 import bbpage from './layout/bb-page';
@@ -162,6 +163,7 @@ let ty = {
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-dropdown', bbdropdown);
 		Vue.component('bb-html', bbhtml);
+		Vue.component('bb-photo-single', bbphotosingle);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
