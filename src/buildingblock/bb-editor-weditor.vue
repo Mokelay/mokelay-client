@@ -83,9 +83,9 @@
                 this.editor.customConfig.uploadImgParams = {  // 自定义上传参数配置
 //                    usersecret: usersecret
                 };
-                this.editor.customConfig.onblur = function (html) {
+                this.editor.customConfig.onchange = function (html) {
                     t.$emit("input",html);
-                }
+                };
                 this.editor.customConfig.zIndex=1;
             },
             getEditorContent(){  // 获取编辑器 内容区内容
