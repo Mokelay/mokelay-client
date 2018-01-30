@@ -112,7 +112,7 @@
         },
         data() {
             return {
-                showText:null,
+                showText:this.value,
                 popupVisible:false,
                 valueBase:this.value,
                 selectRow:null,
@@ -142,6 +142,9 @@
                         //TODO
                     });
                 }else{
+                    const param = _TY_Tool.buildTplParams(t,{
+                        "rowData":t.selectRow
+                    });
                     t.showText = _TY_Tool.tpl(t.textTpl,param);
                 }
             }
