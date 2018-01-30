@@ -16,8 +16,9 @@
         data() {
             return {
                 fields:[
-                    {name:'API',attributeName:'api',et:'bb-popup-selection',props:{
-                        textField:'name',valueField:'alias',valueField2:'url',popupGrid:{ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},columns:[{prop:'alias',label:'别名'},{prop:'name',label:'名称'},{prop:'url',label:'地址'}]}
+                    {name:'API',attributeName:'api',et:'bb-pop-select',props:{
+                        textTpl:'<%=rowData.name%>',valueTpl:"<%print((()=>{var valueData = rowData.category == 'config'?rowData.alias:rowData.url;return valueData})())%>",valueField2:'url',selectionGridConfig:{ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},columns:[{prop:'alias',label:'别名'},{prop:'name',label:'名称'},{prop:'url',label:'地址'}],selection: false,
+                        pagination: false,searchConfig: {search:true,searchType:'searchInput',searchButtonName:'搜索',type:'checkbox'},showHeader: true}
                     }},
                     {name:'接口分类',attributeName:'category',et:'bb-select',props:{fields:[{text:'TY配置',value:'config'},{text:'定制',value:'custom'}]}},
                     {name:'方法',attributeName:'method',et:'bb-select',props:{fields:[{text:'POST',value:'post'},{text:'GET',value:'get'}]}},
