@@ -24,8 +24,8 @@
             <el-col :span="4" class="card-border">
                 <div id="location_canvas">
                     <h3 class="droa-text" v-if="showDragText">请拖动左边的积木到此区域</h3>
-                    <bb-pbb v-for="(pbb,index) in pbbList" :key="index"  :pageAlias="pageAlias"
-                            :bb="{alias:pbb.alias,name:pbb.name,pageBuildingBlockId:pbb.pbbId,attributes:pbb.attributes}" :index="index" 
+                    <bb-pbb v-for="(pbb,index) in pbbList" :key="pbb.pbbId"  :pageAlias="pageAlias"
+                            :bb="{alias:pbb.alias,name:pbb.name,pageBuildingBlockId:pbb.pbbId,attributes:pbb.attributes}":index="index" 
                             :attributes = "pbb.attributes"
                             :attributeDescribeList = "pbb.attributeDescribeList"
                             :pbbId="parseInt(pbb.pbbId)"
@@ -104,18 +104,24 @@
                             pageAlias: t.$route.query.param2,
                             buildingBlockAlias: $(el).attr("alias")
                         };
-                        t.$store.dispatch('addPbb', params).then(data => {
-                            //params.unique_value = data.data.unique_value;
-                            params.pbbId = data.data.unique_value;
-                            if (siblingIndex >= 0) {
-                                t.pbbList.splice(siblingIndex, 0, params);
+                        _TY_Tool.post(_TY_ContentPath + "/add_pbb", {
+                            pageAlias: params.pageAlias,
+                            buildingBlockAlias: params.buildingBlockAlias
+                        }).then(function(response) {
+                            let data = response.data;
+                            if (data.ok) {
+                                params.pbbId = data.data.unique_value;
+                                if (siblingIndex >= 0) {
+                                    t.pbbList.splice(siblingIndex, 0, params);
+                                } else {
+                                    t.pbbList.push(params);
+                                }
+                                t.showDragText = !(t.pbbList.length > 0);
+                                t.setLayout();
+                                t.refresh();
                             } else {
-                                t.pbbList.push(params);
+                                t.$message.error(data.message);
                             }
-                            t.showDragText = !(t.pbbList.length > 0);
-                            t.$store.state.page.pbbList.data = t.pbbList;
-                            t.setLayout();
-                            t.refresh();
                         });
                         el.remove();
                     } else {
@@ -125,7 +131,7 @@
                             siblingIndex = parseInt($(sibling).find('.bb-setting').attr('index'));
                         }
                         var sourceIndex = parseInt($(el).find('.bb-setting').attr('index'));
-                        t.$store.state.page.pbbList.data = t.swapItems(t.pbbList, sourceIndex, siblingIndex);
+                        t.swapItems(t.pbbList, sourceIndex, siblingIndex);
                         t.setLayout();
                         t.refresh();
                     }
@@ -135,19 +141,22 @@
         methods: {//初始化页面获取pbb列表
             getPage: function () {
                 const t = this;
-                const params = {
-                    alias: t.$route.query.param2
-                };
                 t.loading = true;
-                t.$store.dispatch('getPage', params).then(function (data) {
-                    const layoutArray = JSON.parse(data.layout) || [];
-                    t.createPbbList(layoutArray);
+                t.pbbList = [];
+                 _TY_Tool.get(_TY_ContentPath + "/read-page", {
+                    alias: t.$route.query.param2,
+                }).then(function(response) {
                     t.loading = false;
-                }, function (data) {
-                    t.$message.error(data.message);
-                });
-                t.$store.state.page.global.refresh = t.refresh;
-                t.loading = false;
+                    let data = response.data.data.data;
+                    if (response.data.ok) {
+                        //更新pageKeys数据
+                        const layoutArray = JSON.parse(data.layout) || [];
+                        t.createPbbList(layoutArray);
+                        t.pageKeys = data;
+                    } else {
+                        t.$message.error(response.data.message);
+                    }
+                })
             },
             //初始化pbb列表
             createPbbList: function (layoutArray) {
@@ -188,7 +197,6 @@
                             }
                         })
                         t.showDragText = !(t.pbbList.length > 0);
-                        t.$store.state.page.pbbList.data = t.pbbList;
                         t.readPbbItem(pbbItems,a)
                     }).catch((err)=>{
                         t.$message({
@@ -203,14 +211,19 @@
                 var params = {
                     id: t.pbbList[index].pbbId
                 };
-                t.$store.dispatch('delatePbb', params).then(function (data) {
-                    t.pbbList.splice(index, 1);
-                    t.showDragText = !(t.pbbList.length > 0);
-                    t.$store.state.page.pbbList.data = t.pbbList;
-                    t.setLayout();
-                    t.refresh();
-                }, function (data) {
-                    t.$message.error(data.message);
+
+                _TY_Tool.post(_TY_ContentPath + "/delete-pbb", {
+                    id: params.id
+                }).then(function(response) {
+                    let data = response.data;
+                    if (data.ok) {
+                        t.pbbList.splice(index, 1);
+                        t.showDragText = !(t.pbbList.length > 0);
+                        t.setLayout();
+                        t.refresh();
+                    } else {
+                        t.$message.error(data.message);
+                    }
                 });
             },
             refresh: function () {
@@ -219,22 +232,38 @@
             //获取线上bb组件列表
             getData: function () {
                 const t = this;
-                t.$store.dispatch('getListBB').then(function (data) {
-                    const newList = data.data.data_list.list;
-                    newList.forEach((list, index) => {
-                        t.$set(t.bbList, index, list);
-                    });
-                }, function (data) {
-                    t.$message.error(data.message);
+                _TY_Tool.post(_TY_ContentPath + "/list-bb", {
+                    type:''
+                }).then(function(response) {
+                    let data = response.data;
+                    if (data.ok) {
+                        //更新pageKeys数据
+                        const newList = data.data.data_list.list;
+                        newList.forEach((list, index) => {
+                            t.$set(t.bbList, index, list);
+                        });
+                    } else {
+                        t.$message.error(data.message);
+                    }
                 });
             },
             //选中bb组件到列表
             addPbb: function (params) {
                 const t = this;
-                t.$store.dispatch('addPbb', params).then(function (data) {
 
-                }, function (data) {
-                    t.$message.error(data.message);
+                _TY_Tool.post(_TY_ContentPath + "/add_pbb", {
+                    pageAlias: params.pageAlias,
+                    buildingBlockAlias: params.buildingBlockAlias
+                }).then(function(response) {
+                    let data = response.data;
+                    if (data.ok) {
+                        params.unique_value = data.data.unique_value;
+                        //更新pageKeys数据
+                        commit(types.ADD_PBB, params);
+                        resolve(data);
+                    } else {
+                        t.$message.error(data.message);
+                    }
                 });
             },
             // 交换数组元素
@@ -244,31 +273,36 @@
                     index2 = arrDefault.length - 1;
                 }
                 let arr = arrDefault;
-                //const ele = arr.splice(index1, 1)[0];
                 const ele2 = t.pbbList.splice(index1, 1)[0];
                 if (index1 - index2) {
-                    //arr.splice(index2, 0, ele);
                     t.pbbList.splice(index2, 0, ele2);
                 } else {
-                    //arr.splice(index2 - 1, 0, ele);
                     t.pbbList.splice(index2 - 1, 0, ele2);
                 }
-                return arr
             },
             // 设置layout 同步到服务端
             setLayout: function () {
                 const t = this;
-                t.$store.state.page.pageKeys.layout = [];
+                t.layout = [];
                 t.pbbList.forEach((val, key) => {
                     let newArr = [];
                     newArr.push(val.pbbId, key, 0);
-                    t.$store.state.page.pageKeys.layout.push(newArr);
+                    t.layout.push(newArr);
                 });
-                const params = t.$store.state.page.pageKeys;
-                t.$store.dispatch('updatePageLayout', params).then(data => {
-                }, function (data) {
-                    t.$message.error(data.message);
-                })
+                const params = t.pageKeys;
+                _TY_Tool.post(_TY_ContentPath + "/update-page-layout", {
+                    name: params.name,
+                    alias: params.alias,
+                    description: params.description,
+                    layout: JSON.stringify(t.layout),
+                    layoutType: params.layoutType
+                }).then(function(response) {
+                    let data = response.data;
+                    if (data.ok) {
+                    } else {
+                        t.$message.error(data.message);
+                    }
+                });
             },
 
         }
