@@ -4,9 +4,9 @@
             <span v-if="realBasicConfig.title">{{realBasicConfig.title}}</span>
             <i v-else-if="realBasicConfig.icon" :class="realBasicConfig.icon"></i>
             <img class="photo" v-else-if="realBasicConfig.imgSrc" :src="realBasicConfig.imgSrc" alt="">
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <i class="el-icon-arrow-down"></i>
         </div>
-        <el-dropdown-menu slot-scope="dropdown">
+        <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="(field,key) in realFields" :key="key" 
                     :command="field.button" 
                     :disabled="field.disabled" 
@@ -83,19 +83,23 @@
         },
         mounted:function(){
             const t = this;
+            console.log('t.fields:',t.fields);
             t.getBasicConfig();
             t.getFields();
         },
         methods: {
-            //事件  visibleChange 下拉菜单显示隐藏事件   item-click  选项点击    
+            //事件  visibleChange 下拉菜单显示隐藏事件   item-click  选项点击
+            //选项点击  
             handleCommand:function(command) {
                 const t = this;
                 t.$emit('item-click',command)
             },
+            //下拉按钮显示隐藏变换
             visibleChange:function(params){
                 const t = this;
                 t.$emit('visible-change',params)
             },
+            //获取默配置信息
             getBasicConfig: function () {
                 const t = this;
                 if (t.basicConfigDs) {
@@ -108,6 +112,7 @@
                     });
                 }
             },
+            //获取下拉选项
             getFields: function () {
                 const t = this;
                 if (t.fieldsDs) {
