@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-photo-single" :style="realStyle">
+    <div class="bb-photo-single" :style="realStyle" v-tap="tap">
         <img :src="valueBase" alt="">
     </div>
 </template>
@@ -87,6 +87,11 @@
                     'border-radius': t.styleConfig.borderRadian,
                     'box-shadow':'black 0px 0px ' + t.styleConfig.shadowSize,
                 }
+            },
+            tap:function(){
+                const t = this;
+                //图片点击事件
+                t.$emit('click',t);
             }
         }
     }
