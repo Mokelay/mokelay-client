@@ -96,7 +96,6 @@
     import tool from './module/tool.vue'
     import preview from './module/preview.vue'
     import edit from './module/edit.vue';
-//    import GridDrag from '../libs/grid-drag';
     import interact from 'interactjs';
 
     export default {
