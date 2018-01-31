@@ -9,7 +9,7 @@
             if (t.canRender) {
                 const paneArr = t.renderTabPanes(createElement);
                 return createElement('el-tabs', {
-                    props: {value: t.value, 'active-name': t.activeName}, on: {
+                    props: {value: t.value, 'active-name': t.p_activeName}, on: {
                         'tab-click': t.tabClick
                     }
                 }, [paneArr]);
@@ -46,6 +46,12 @@
                 badgeData: null,
                 canRender: false,
                 // paneBox: []
+            }
+        },
+        computed: {
+            p_activeName(){
+                debugger;
+                return _TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this));
             }
         },
         created: function () {
@@ -88,7 +94,7 @@
                             })
                         }
                         //当前tab是否默认选中的tab
-                        const activeTab = t.activeName&&tabPane.name==t.activeName;
+                        const activeTab = t.p_activeName&&tabPane.name==t.p_activeName;
                         const activeTabDom =[];
                         tabPane.fields = tabPane.fields ? tabPane.fields : [];
                         tabPane.fields.forEach((field, index)=> {

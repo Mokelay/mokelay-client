@@ -54,7 +54,11 @@
                                 }
                                 param=param+dsts[i];
                             }
-                            _TY_Tool.get(_TY_ContentPath+"/list-ds-by-dst",{
+                            var dsUrl = _TY_ContentPath+"/list-ds-by-dst";
+                            if(t.$route.path.indexOf("-self")>=0){
+                                dsUrl = _TY_ContentPath+"/list-ds-by-dst-self";
+                            }
+                            _TY_Tool.get(dsUrl,{
                                 dst:param
                             }).then(function (response) {
                                 let data = response['data'];
