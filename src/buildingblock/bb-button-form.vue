@@ -119,6 +119,9 @@ import Util from '../libs/util';
                                     labelInline:t.labelInline
                                 },
                                 on:{
+                                    "button-finish":function(button, valueobj){
+                                        t.$emit('button-finish', button, valueobj);
+                                    },
                                     commit: function(formData){
                                         t.formData = formData;
 
