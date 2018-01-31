@@ -63,7 +63,11 @@
                 this.items = val;
             },
             value(val){
-                this.valueBase = val;
+                if(this.multiple){
+                  this.valueBase = JSON.parse(val);
+                }else{
+                  this.valueBase = val;
+                }
             },
             ds(val){
                 this.getData();
@@ -111,8 +115,14 @@
               }
             },
             change:function(val){
-              this.$emit('input',val)
-              this.$emit('change',val)
+              if(Array.isArray(val)){
+                this.$emit('input',JSON.stringify(val))
+                this.$emit('change',JSON.stringify(val))
+              }else{
+                this.$emit('input',val)
+                this.$emit('change',val)
+              }
+             
             },
             clean:function(val){
               this.valueBase = null;

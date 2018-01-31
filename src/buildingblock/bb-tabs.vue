@@ -50,7 +50,6 @@
         },
         computed: {
             p_activeName(){
-                debugger;
                 return _TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this));
             }
         },
