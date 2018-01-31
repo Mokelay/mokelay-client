@@ -2,7 +2,7 @@
     <div class="w70 pr">
         <div class="top_btn">
             <!-- <el-button type="text" @click="goto('/ty/index/ty-api/ty-api-add/'+apiInfo.alias)">编辑API</el-button> -->
-            <el-button type="text" @click="goto('/ty/index/ty-api?param=ty-api-config&param2='+apiInfo.alias)">编辑乐高</el-button>
+            <el-button type="text" @click="goto()">编辑乐高</el-button>
         </div>
         <el-form label-position="right" label-width="80px" :model="apiInfo" class="b1">
             <el-form-item class="nom bb1">
@@ -249,7 +249,12 @@
                     });
                 });
             },
-            goto(url){
+            goto(){
+                var t=this;
+                var url = '/ty/index/ty-api?param=ty-api-config&param2='+apiInfo.alias;
+                if(t.$route.path.indexOf("-self")>=0){
+                    url = '/ty/index/ty-api-self?param=ty-api-config-self&param2='+apiInfo.alias;
+                }
                 this.$router.push(url);
             },
             //验重

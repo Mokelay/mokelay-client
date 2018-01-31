@@ -216,7 +216,13 @@
                 let t = this;
                 //恢复css样式
                 t.recoverCss();
-                t.$router.push("/ty/index/ty-api-doc?param=ty-api-info&param2=" + this.$route.query.param2);
+                // t.$router.push("/ty/index/ty-api-doc?param=ty-api-info&param2=" + this.$route.query.param2);
+                if(t.$route.path.indexOf("-self")>=0){
+                    t.$router.push("/ty/index/ty-api-doc-self?param=ty-api-info-self&param2=" + this.$route.query.param2);
+                }else{
+                    t.$router.push("/ty/index/ty-api-doc?param=ty-api-info&param2=" + this.$route.query.param2);
+                }
+
             },
             desChange(row, val){
                 let t = this;
