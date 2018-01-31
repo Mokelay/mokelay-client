@@ -2,7 +2,7 @@
   <div class="bb-preview">
     <p class="title">{{title}}</p>
     <div class='bb-preview-item' v-for="(bbItem,index) in value.content" :id="bbItem.uuid" :key="index">
-        <bb :alias="bbItem.alias" :key="timestamp" :config="bbItem.attributes"></bb>
+        <bb :alias="bbItem.alias" :key="timestamp" :config="bbItem.attributes" :style="bbItem.style"></bb>
     </div>
   </div>
 </template>

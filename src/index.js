@@ -74,7 +74,7 @@ import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
 //布局相关
 import bbpage from './layout/bb-page';
 import bblayout from './layout/bb-layout.vue';
-
+import bbgrid from './layout/bb-grid.vue';
 
 //引入minireset
 import './css/minireset.css';
@@ -164,6 +164,7 @@ let ty = {
 		Vue.component('bb-dropdown', bbdropdown);
 		Vue.component('bb-html', bbhtml);
 		Vue.component('bb-photo-single', bbphotosingle);
+        Vue.component('bb-grid', bbgrid);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
