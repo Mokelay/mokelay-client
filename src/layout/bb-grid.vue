@@ -205,10 +205,27 @@
                 target.setAttribute('data-y', y);
             },
             addBB:function(bbItem){//添加积木
+
+                const t = this;
                 bbItem.layout = this.value.content.length
                 this.$set(this.value.content,this.value.content.length,bbItem);
                 this.hideEditor();
-                this.$emit('addBB',bbItem.uuid,bbItem.alias,bbItem.layout)
+                this.$emit('addBB',bbItem.uuid,bbItem.alias,bbItem.layout);
+
+                setTimeout(function () {
+                    let item = document.getElementById(bbItem.uuid);
+
+                    let size = item.getBoundingClientRect();
+                    let style = 'width: ' + size.width + 'px; height: ' + size.height + 'px; transform: translate(0, 0);';
+
+                    item.style = style;
+
+                    t.value.content.forEach((ele, index)=>{
+                        if(bbItem.uuid == ele.uuid){
+                            t.$set(t.value.content[index], 'style' , style);
+                        }
+                    });
+                }, 0)
             },
             updateBBLayout:function(item){//更新layout
                 const t = this;
@@ -225,7 +242,6 @@
                     if(itemObj.getAttribute('id') == ele.uuid){
                         size = document.getElementById(ele.uuid).getBoundingClientRect();
                         style = item.style && item.style.width ? item.style.cssText : 'width: ' + size.width + 'px; height: ' + size.height + 'px; transform: translate(0, 0);';
-                        t.$set(t.value.content[index], 'style' , null);
                         t.$set(t.value.content[index], 'style' , style);
                     }
                 });
