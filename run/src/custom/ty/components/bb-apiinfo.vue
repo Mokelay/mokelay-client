@@ -251,9 +251,9 @@
             },
             goto(){
                 var t=this;
-                var url = '/ty/index/ty-api?param=ty-api-config&param2='+apiInfo.alias;
+                var url = '/ty/index/ty-api?param=ty-api-config&param2='+t.apiInfo.alias;
                 if(t.$route.path.indexOf("-self")>=0){
-                    url = '/ty/index/ty-api-self?param=ty-api-config-self&param2='+apiInfo.alias;
+                    url = '/ty/index/ty-api-self?param=ty-api-config-self&param2='+t.apiInfo.alias;
                 }
                 this.$router.push(url);
             },
