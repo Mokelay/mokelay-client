@@ -54,7 +54,7 @@
                 let t = this;
                 require.ensure(['mavon-editor', 'mavon-editor/dist/css/index.css'], function (require) {
                     require('mavon-editor/dist/css/index.css');
-                    var mavonEditor = require('mavon-editor')
+                    var mavonEditor = require('mavon-editor');
                     var _mdEditor = new Vue({
                         router: t.$router,
                         components: {
@@ -118,7 +118,7 @@
                             )
                         }
                     }).$mount('#' + t.editorId);
-                })
+                },'mavon-editor');
             }
         }
     }

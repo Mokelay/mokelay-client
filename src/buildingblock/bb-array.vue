@@ -75,7 +75,7 @@ import Vue from 'vue';
                 var t = this;
                 var value = param.value?param.value:null;
                 var index = param.index || param.index ==0?param.index:'add';
-                require.ensure(["art-dialog","jquery"],function(require){
+                require.ensure(["art-dialog"],function(require){
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
@@ -104,7 +104,7 @@ import Vue from 'vue';
                     });
                     d.showModal();
                     t.formDialog = d;
-                });
+                },'art-dialog');
             },
             deleteData: function (index) {
                 const t = this;

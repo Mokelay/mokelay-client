@@ -267,7 +267,7 @@ commit = function(value){
             },
             setting:function(){
                 const t = this;
-                require.ensure(["art-dialog","jquery"],function(require){
+                require.ensure(["art-dialog"],function(require){
                     const layoutEdit = new Vue({
                         router: t.$router,
                         components:{edit},
@@ -299,7 +299,7 @@ commit = function(value){
                     });
                     d.showModal();
                     t.dialog = d;
-                });
+                },'art-dialog');
             }
         },
         components:{

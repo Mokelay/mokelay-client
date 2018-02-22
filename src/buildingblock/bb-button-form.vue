@@ -98,7 +98,7 @@ import Util from '../libs/util';
         methods: {
             setting:function(){
                 var t = this;
-                require.ensure(["art-dialog","jquery"],function(require){
+                require.ensure(["art-dialog"],function(require){
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
@@ -150,7 +150,7 @@ import Util from '../libs/util';
                     });
                     d.showModal();
                     t.dialog = d;
-                });
+                },'art-dialog');
             }
         }
     }

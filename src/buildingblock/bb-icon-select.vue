@@ -40,7 +40,7 @@
         methods: {
             choose(){
                 const t = this;
-                require.ensure(["art-dialog","jquery"],function(require){
+                require.ensure(["art-dialog"],function(require){
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
@@ -71,7 +71,7 @@
                     });
                     d.showModal();
                     t.dialog = d;
-                });
+                },'art-dialog');
             }
         }
     }

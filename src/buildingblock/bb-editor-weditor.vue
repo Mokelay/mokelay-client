@@ -47,7 +47,7 @@
                 var JQUERY = require("jquery");
                 t.editor = new WangEditor('#weditor');
                 t.createEditor(JQUERY);
-            });
+            },'wangeditor_jquery');
         },
         beforeDestroy() {
             this.destroyEditor();

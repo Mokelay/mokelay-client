@@ -51,7 +51,7 @@ import 'codemirror/lib/codemirror.css';
 //                            t.$emit("input",c.getValue());
 //                        });
                         callback();
-                    });
+                    },'codemirror');
                 }else{
                     // t.codeObj.setValue(v);
                     callback();

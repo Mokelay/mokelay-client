@@ -324,7 +324,7 @@ util.resolveButton = function(button, valueobj) {
         });
     } else if (button['action'] == 'dialog-page') {
         //TODO 弹出一个页面对话框
-        require.ensure(["art-dialog", "jquery"], function(require) {
+        require.ensure(["art-dialog"], function(require) {
             var Vue = valueobj['bb'].vue;
             var _page = new Vue({
                 router: t.$router,
@@ -356,7 +356,7 @@ util.resolveButton = function(button, valueobj) {
             });
             d.showModal();
             t.dialog = d;
-        });
+        },'art-dialog');
     } else if (button['action'] == 'code') {
         //执行代码
         button['method'].call(this, valueobj['row-data']);

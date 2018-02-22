@@ -93,7 +93,7 @@
             // },
             showForm:function(){
                 var t = this;
-                require.ensure(["art-dialog","jquery"],function(require){
+                require.ensure(["art-dialog"],function(require){
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
@@ -121,7 +121,7 @@
                     });
                     d.showModal();
                     t.dsDialog = d;
-                });
+                },'art-dialog');
             },
             deleteData: function (index) {
                 const t = this;

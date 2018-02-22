@@ -259,7 +259,7 @@
                         ]
                     };
                     t._chart.setOption(option, true);
-                });
+                },'echarts');
             }
         }
     }

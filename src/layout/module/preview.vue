@@ -50,7 +50,7 @@
         },
         mounted(){
             const t = this;
-            require.ensure(['dragula/dragula', 'jquery'], function (require) {
+            require.ensure(['dragula/dragula'], function (require) {
                 const dragula = require("dragula/dragula");
                 const source = document.getElementById('bb-preview');
                 const dragulaButton = document.getElementsByClassName('buttonInfo');
@@ -74,7 +74,7 @@
                     });
                     t.drake.cancel('drop');
                 })
-            })
+            },'dragula');
         },
         methods: {
             editItem:function(bbItem){
