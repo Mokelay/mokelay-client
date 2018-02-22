@@ -1,6 +1,5 @@
 <script>
     import Vue from 'vue'
-    import line from 'v-charts/lib/line'
     export default {
         name: 'bb-echarts',
         render: function(createElement){
