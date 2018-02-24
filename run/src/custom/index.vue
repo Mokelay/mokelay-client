@@ -46,7 +46,7 @@
         data() {
             return {
                 fields:[],
-                fieldsBanner:{title:'',url:_TY_ENV.apiHost+'/urmscallback',icon:'ty-icon_M_b ty-font',class:'wy-banner-left wy-banner-lg'},
+                fieldsBanner:{title:'',url:"http://" + document.location.host + "/#/home",icon:'ty-icon_M_b ty-font',class:'wy-banner-left wy-banner-lg'},
 
 //                fieldsIndex:{title:'首页',url:'/wy/wy-index',icon:'icon_home wy-font'},
 //                fieldsInspectionTPList:{title:'巡检表单管理',url:'/wy/wy-inspectionTPList',icon:'icon_biaodan1 wy-font'},
