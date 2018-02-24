@@ -136,7 +136,7 @@
                         t.refresh();
                     }
                 });
-            });
+            },'dragula_jquery');
         },
         methods: {//初始化页面获取pbb列表
             getPage: function () {

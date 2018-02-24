@@ -141,7 +141,7 @@
                     }
                     t.updateIndex(JQUERY);
                 });
-            });
+            },'dragula_jquery');
             //解决拖拽和滚动条的冲突问题
             t.changeCss();
         },

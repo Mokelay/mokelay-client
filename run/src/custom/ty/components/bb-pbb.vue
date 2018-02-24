@@ -92,7 +92,7 @@
             showForm:function(){
                 var t = this;
                 if(t.attrDescribeList){
-                    require.ensure(["art-dialog","jquery"],function(require){
+                    require.ensure(["art-dialog"],function(require){
                         Vue.component('bb-pbb-tabs', bbPbbTabs);
                         var _form = new Vue({
                             router: t.$router,
@@ -123,7 +123,7 @@
                         });
                         d.showModal();
                         t.dsDialog = d;
-                    }); 
+                    },'art-dialog'); 
                 }
  
             },

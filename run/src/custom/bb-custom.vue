@@ -29,7 +29,7 @@
         require.ensure([],function(require){
           let f = t.customFile;
           t.cf = require(`${f}`);
-        });
+        },"ty_custom");
       }
     },
     methods: {
