@@ -59,7 +59,7 @@ import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbdropdown from './buildingblock/bb-dropdown.vue';
-import bbcontainer from './buildingblock/bb-container.vue';
+
 
 //移动端积木
 import bbtext from './buildingblock/h5/bb-text.vue';
@@ -76,6 +76,7 @@ import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
 import bbpage from './layout/bb-page';
 import bblayout from './layout/bb-layout.vue';
 import bbgrid from './layout/bb-grid.vue';
+import bbcontainer from './layout/bb-container.vue';
 
 //引入minireset
 import './css/minireset.css';
