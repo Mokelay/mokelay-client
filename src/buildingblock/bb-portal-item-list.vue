@@ -112,7 +112,7 @@
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
-                            t.realFields = val.value;
+                            t.realFields = t.realFields.concat(val.value);
                             t.setRealFields();
                         })
                     }, function (code, msg) {
