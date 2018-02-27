@@ -111,7 +111,6 @@
               return [];
             }
           }
-
         },
         data() {
             return {
@@ -130,18 +129,26 @@
             handleItemChange(value){
               console.log('active item:', value);
               let t=this;
+              const index = value.length+1;
+              let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
               setTimeout(_ => {
-                // t.options2[0].cities = [{
-                //   label: '南京'
-                // }];
-
+                // 只有changeOnSelect 为false时，handleItemChange 才会起作用，参考级联选择器属性注释
+                if(!t.changeOnSelect&&t.dsList&&t.dsList.length>0){
+                  //有动态请求数据的配置
+                  t.getNextData(index,param);
+                }
               }, 300);
             },
             //选项改变后触发事件
             handleChange(value){
-              let t=this;
               console.log('active:', value);
-
+              let t=this;
+              const index = value.length+1;
+              let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
+              if(t.changeOnSelect&&t.dsList&&t.dsList.length>0){
+                  //有动态请求数据的配置
+                  t.getNextData(index,param);
+              }
               //向上提供change事件
               t.$emit('change',value);
               t.$emit('input',value);
@@ -154,8 +161,7 @@
                     let item = t.dsList[i];
                     if(item.index&&item.index==index){
                         //有这一级数据来源配置
-
-
+                        t._excuteNextOpt();
                         break;
                     }
                   }
@@ -164,33 +170,58 @@
             //获取下一级数据 param 为当前级选项值
             _excuteNextOpt(item,param){
               let t=this;
-              //需要改动的options下标值
-              const index = item.index-1;
               const type = item.type;
               if(type=='ds'){
                 //接口获取
                 Util.getDSData(item.ds, _TY_Tool.buildTplParams(t,{'prev':param}), function (map) {
-                        map.forEach((item, key)=> {
-                          let list= item.value;
-                           
-
+                        map.forEach((mapItem, key)=> {
+                           t.__fillNextOptions(item,mapItem.value);
                            return;   //只有一层
                         });
-
                     }, function (code, msg) {
                     });
               }else if(type=='method'){
                 //方法获取
-
+                let method = item.method;
+                let uuidVueObj = _TY_Tool.findBBByUuid(param);//直接从根路径去找这个uuid
+                let list =[];
+                if(uuidVueObj&&uuidVueObj!=null){
+                    list = uuidVueObj[method]();
+                }
+                //填充下一级数据
+                t.__fillNextOptions(item,list);
               }else{
-
+                //目前没有涉及到
               }
             },
             //填充到下一级数组
-            __fillNextOptions(index,list){
+            __fillNextOptions(item,list){
               let t=this;
+              //需要改动的options下标值
+              const index = item.index-1;
+              const props = item.props;
+              let result = [];
+              if(list&&list.length>0){
+                list.forEach(function(data,i){
+                  let temp={};
+                  if(props){
+                    //有属性字段转换配置
+                    if(props.value){
+                      temp[t.casProps.value]=data[props.value];
+                    }
+                    if(props.label){
+                      temp[t.casProps.label]=data[props.label];
+                    }
+                    if((props.children&&data[props.children])||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
+                      //如果有  并且不是叶子节点
+                      temp[t.casProps.children]=[];
+                    }
+                  }
+                  result.push(Object.assign({},data,temp));
+                });
+              }
               if(t.optionData&&t.optionData.length>=index){
-                t.optionData[index][t.casProps.children]=list;
+                t.optionData[index][t.casProps.children]=result;
               }
             }
 

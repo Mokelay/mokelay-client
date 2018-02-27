@@ -356,7 +356,7 @@ util.resolveButton = function(button, valueobj) {
             });
             d.showModal();
             t.dialog = d;
-        },'art-dialog');
+        }, 'art-dialog');
     } else if (button['action'] == 'code') {
         //执行代码
         button['method'].call(this, valueobj['row-data']);
@@ -372,6 +372,85 @@ util.resolveButton = function(button, valueobj) {
         });
     }
 }
+
+//检查vue对象是否含有uuid,需要通过$refs来找，不能通过$children来找
+util._checkVueHasRef = function(uuid, vueObj) {
+    // if (vueObj && vueObj.$refs) {
+    //     if (vueObj.$refs.hasOwnProperty(uuid)) {
+    //         return vueObj.$refs[uuid];
+    //     } else {
+    //         let resultVue; //查找到的目标vue对象
+    //         for (let i in vueObj.$refs) {
+    //             let refItem = vueObj.$refs[i];
+    //             if (!refItem._isVue) { //不是vue组件 就不往下找了
+    //                 continue;
+    //             }
+    //             resultVue = util._checkVueHasRef(uuid, refItem);
+    //         }
+    //         if (resultVue && resultVue != null) {
+    //             return resultVue;
+    //         }
+    //     }
+    // }
+
+    //上面是通过$refs来找组件的，逻辑比较麻烦，下面简单一点
+    //判断vue对象是否是该uuid组件逻辑
+    if (vueObj && vueObj.$vnode && vueObj.$vnode.data && vueObj.$vnode.data.ref && vueObj.$vnode.data.ref == uuid) {
+        return vueObj;
+    }
+    return null;
+}
+
+//深度遍历，可能会影响性能，后面考虑改成层级遍历
+util._findChildBB = function(uuid, children) {
+    let resultVue = null;
+    if (children && children.length > 0) {
+        for (let i = 0; i < children.length; i++) {
+            let vueItem = children[i];
+            resultVue = util._checkVueHasRef(uuid, vueItem);
+            if (resultVue && resultVue != null) {
+                return resultVue;
+            }
+            if (vueItem.$children && vueItem.$children.length > 0) {
+                //还有子 则继续遍历
+                resultVue = util._findChildBB(uuid, vueItem.$children);
+            }
+        }
+    }
+    return resultVue;
+}
+
+/**
+    根据pageAlias和uuid 查询这个uuid的积木vue对象
+**/
+util.findBBByUuid = function(uuid, pageAlias) {
+    const pages = window._TY_Page_Data;
+    if (!pages) {
+        return null; //没有页面存储
+    }
+    let root = pages[pageAlias]; //初始根
+    if (!pageAlias) {
+        //没有传pageAlias,直接从根找    如果页面已经切换，$children 是不会保留切换前的页面vue对象的，所以这里可以任意获取一个页面，然后找到根，再往下找
+        for (let o in pages) {
+            pageAlias = o;
+            break;
+        }
+        //如果不传pageAlias  就从根找起  ,否则从传过来的page开始找起
+        while (root.$parent) {
+            root = root.$parent;
+        }
+    }
+    //判断当前vue对象是不是要找的vue组件
+    let resultVue = util._checkVueHasRef(uuid, root);
+    if (resultVue && resultVue != null) {
+        return resultVue;
+    } else if (root.$children && root.$children.length > 0) {
+        resultVue = util._findChildBB(uuid, root.$children);
+    }
+    return resultVue;
+}
+
+
 
 util.loadBuzz = function(buzz, handle) {
     var params = {
