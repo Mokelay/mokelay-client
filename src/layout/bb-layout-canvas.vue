@@ -41,12 +41,25 @@
                                     //自定义方法 custom_script,
                                     //容器类方法 container_method)
             executeScript:'',       //执行脚本 executeType = custom_script
+            executeSource:'',       //目标积木路径（配置环境和实际环境路径不同）
+                                    {
+                                        uuid:xxx,
+                                        bbAlias:xxxx,
+                                        children:[{
+                                            uuid:xxx,
+                                            bbAlias:xxx,
+                                            children:[{...}]
+                                        }]
+                                    }
+                                    //配置环境中通过$parent的方式获取目标积木
+                                    //实际环境中通过路径的获取目标积木
             executeContentUUID:'',  //执行积木的UUID executeType = trigger_method
             executeContentMethodName:'',
                                     //执行积木的方法
             containerMethodName:''  //容器方法 executeType = container_method
         }],
         layout:{                    //积木布局
+            sort:0,                 //排序 顺序排列布局下有效
             bgColor:"",             //背景颜色
             rotate:0,               //旋转
             transparency:0,         //透明度
