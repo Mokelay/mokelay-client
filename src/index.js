@@ -60,6 +60,7 @@ import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbdropdown from './buildingblock/bb-dropdown.vue';
 import bbcontainer from './buildingblock/bb-container.vue';
+import bbcascader from './buildingblock/bb-cascader.vue';
 
 //移动端积木
 import bbtext from './buildingblock/h5/bb-text.vue';
@@ -167,6 +168,8 @@ let ty = {
 		Vue.component('bb-photo-single', bbphotosingle);
 		Vue.component('bb-grid', bbgrid);
 		Vue.component('bb-container', bbcontainer);
+		Vue.component('bb-cascader', bbcascader);
+
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
