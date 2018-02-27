@@ -14,8 +14,8 @@ Vue.use(ElementUI);
 //常量配置
 var _env = {
     name: 'local',
-    apiHost: "http://hxwy.dev.rs.com",
-    ssoURL: "http://urms.dev.rs.com/passport/login?service=http://hxwy.dev.rs.com/urmscallback",
+    apiHost: "http://longyan.dev.rs.com",
+    ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
     h5Host: '/dist',
     questionnaireHost: 'http://questionnaire.dev.rs.com'
 };
