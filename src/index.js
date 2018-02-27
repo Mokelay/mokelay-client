@@ -77,6 +77,7 @@ import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
 import bbpage from './layout/bb-page';
 import bblayout from './layout/bb-layout.vue';
 import bbgrid from './layout/bb-grid.vue';
+import bbcontainer from './layout/bb-container.vue';
 
 //引入minireset
 import './css/minireset.css';
@@ -169,7 +170,6 @@ let ty = {
 		Vue.component('bb-grid', bbgrid);
 		Vue.component('bb-container', bbcontainer);
 		Vue.component('bb-cascader', bbcascader);
-
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
