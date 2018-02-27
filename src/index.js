@@ -59,7 +59,6 @@ import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbdropdown from './buildingblock/bb-dropdown.vue';
-import bbcontainer from './buildingblock/bb-container.vue';
 import bbcascader from './buildingblock/bb-cascader.vue';
 
 //移动端积木

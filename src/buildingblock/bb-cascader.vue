@@ -121,7 +121,7 @@
         },
         methods: {
             //单级选项改变后触发, 远程获取下级数据
-            handleItemChange(...values){
+            handleItemChange(value,param){
               debugger;
               console.log("handle item change");
               console.log('active item:', value);
@@ -134,7 +134,7 @@
               }, 300);
             },
             //选项改变后触发事件
-            handleChange(...values){
+            handleChange(value,param){
               let t=this;
               debugger;
               console.log("handle change");
