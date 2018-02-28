@@ -24,7 +24,6 @@ import bbradiogroup from './buildingblock/bb-radio-group';
 import bbcheckboxgroup from './buildingblock/bb-checkbox-group';
 import bbdatepicker from './buildingblock/bb-date-picker';
 import bbcolorpicker from './buildingblock/bb-color-picker';
-import bbdsselect from './buildingblock/bb-ds-select';
 import bbform from './buildingblock/bb-form';
 import bbarray from './buildingblock/bb-array';
 import bbtextarea from './buildingblock/bb-textarea';
@@ -35,19 +34,13 @@ import bbbutton from './buildingblock/bb-button';
 import bbbuttonform from './buildingblock/bb-button-form';
 import bbbuttonarray from './buildingblock/bb-button-array';
 import bbcard from './buildingblock/bb-card';
-import bbbuttonselect from './buildingblock/bb-button-select';
-import bbcolumnsselect from './buildingblock/bb-columns-select';
 import bbbadge from './buildingblock/bb-badge';
-import bbbblistselect from './buildingblock/bb-bblist-select';
-import bbbbtypeselect from './buildingblock/bb-bbtype-select';
 import bbreadbb from './buildingblock/bb-read-bb';
 import bbwords from './buildingblock/bb-words.vue';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbuuid from './buildingblock/bb-uuid.vue';
 import bbtree from './buildingblock/bb-tree.vue';
 import bbtreeselect from './buildingblock/bb-tree-select.vue';
-import bbicon from './buildingblock/bb-icon.vue';
-import bbiconselect from './buildingblock/bb-icon-select.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 import bbpreview from './buildingblock/bb-preview.vue';
 import bbechartsselect from './buildingblock/bb-echarts-select.vue';
@@ -71,6 +64,15 @@ import bbcountdown from './buildingblock/h5/bb-countdown.vue';
 import bbvote from './buildingblock/h5/bb-vote.vue';
 import bbhtml from './buildingblock/h5/bb-html.vue';
 import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
+
+//Module相关
+import bbbblistselect from './module/bb-bblist-select';
+import bbbbtypeselect from './module/bb-bbtype-select';
+import bbbuttonselect from './module/bb-button-select';
+import bbcolumnsselect from './module/bb-columns-select';
+import bbdsselect from './module/bb-ds-select';
+import bbiconselect from './module/bb-icon-select.vue';
+import bbicon from './module/bb-icon.vue';
 
 //布局相关
 import bbpage from './layout/bb-page';
