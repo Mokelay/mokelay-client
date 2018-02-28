@@ -111,7 +111,7 @@
                         let onArr = t.setEventMethod(bb);
                         //渲染积木属性和动画
                         const style = t.setStyle(bb);
-                        const bbele = createElement(bb['alias'], {ref:t._BB_PREFIX+bb['uuid'], props:attributes, on:onArr,style:style},[]);
+                        const bbele = createElement(bb['alias'], {ref:bb['uuid'], props:attributes, on:onArr,style:style},[]);
                         const bbItem = createElement('div', {style:{flex:1}},[bbele]);
                         //控制排序 TODO
                         //bbList.splice(bb.layout.sort - 1,1,bbItem);
@@ -145,7 +145,10 @@
                             const executeContentUUID = interactive['executeContentUUID'];
                             const executeContentMethodName = interactive['executeContentMethodName'];
                             //给相同事件的创建方法数组
-                            fn = t.$refs[t._BB_PREFIX+executeContentUUID]?t.$refs[t._BB_PREFIX+executeContentUUID][executeContentMethodName] : null;
+                            const targetUUID = executeContentUUID;
+                            //通过uuid查找目标积木
+                            const executeContent = _TY_Tool.findBBByUuid(executeContentUUID);
+                            fn = executeContent?executeContent[executeContentMethodName] : null;
                         }else if(executeType == 'custom_script'){
                         //自定义方法
                             const buzz = interactive['executeScript'];
