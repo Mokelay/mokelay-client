@@ -74,7 +74,6 @@ import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
 
 //布局相关
 import bbpage from './layout/bb-page';
-import bblayout from './layout/bb-layout.vue';
 import bblayoutgrid from './layout/bb-layout-grid.vue';
 import bblayoutseriation from './layout/bb-layout-seriation.vue';
 import bblayoutcanvas from './layout/bb-layout-canvas.vue';
@@ -146,7 +145,6 @@ let ty = {
 		Vue.component('bb-uuid', bbuuid);
 		Vue.component('bb-tree', bbtree);
 		Vue.component('bb-tree-select', bbtreeselect);
-		Vue.component('bb-layout', bblayout);
 		Vue.component('bb-icon', bbicon);
 		Vue.component('bb-icon-select', bbiconselect);
 		Vue.component('bb-button-transfer', bbbuttontransfer);
