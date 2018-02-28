@@ -65,8 +65,6 @@
                             bgColor:"",             //背景颜色
                             rotate:0,               //旋转
                             transparency:0,         //透明度
-                            size:{width:0,height:0},//大小
-                            position:{x:0,y:0},     //位置
                             border:{                //边框
                                 style:"",           //边框样式
                                 color:"",           //边框颜色

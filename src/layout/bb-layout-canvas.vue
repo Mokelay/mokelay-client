@@ -59,7 +59,6 @@
             containerMethodName:''  //容器方法 executeType = container_method
         }],
         layout:{                    //积木布局
-            sort:0,                 //排序 顺序排列布局下有效
             bgColor:"",             //背景颜色
             rotate:0,               //旋转
             transparency:0,         //透明度
