@@ -1,7 +1,7 @@
 <template>
-    <div class="bb-container template">
+    <div class="bb-layout-container template">
         <!-- 上下布局 -->
-        <el-container v-if="realLayout == 'layout1'">
+        <el-container v-if="realLayout == 'h-f'">
             <el-header>
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
@@ -10,7 +10,7 @@
             </el-main>
         </el-container>
         <!-- 上中下布局 -->
-        <el-container v-if="realLayout == 'layout2'">
+        <el-container v-if="realLayout == 'h-m-f'">
             <el-header>
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
@@ -22,7 +22,7 @@
             </el-footer>
         </el-container>
         <!-- 左右布局 -->
-        <el-container v-if="realLayout == 'layout3'">
+        <el-container v-if="realLayout == 'r-m'">
             <el-aside width="20%">
                 <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
@@ -31,7 +31,7 @@
             </el-main>
         </el-container>
         <!-- 上下左右布局 -->
-        <el-container v-if="realLayout == 'layout4'">
+        <el-container v-if="realLayout == 'h-l-m'">
             <el-header>
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
@@ -45,7 +45,7 @@
             </el-container>
         </el-container>
         <!-- 上下左右上下布局 -->
-        <el-container v-if="realLayout == 'layout5'">
+        <el-container v-if="realLayout == 'h-l-m-f'">
             <el-header>
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
@@ -64,7 +64,7 @@
             </el-container>
         </el-container>
         <!-- 左右上下布局 -->
-        <el-container v-if="realLayout == 'layout6'">
+        <el-container v-if="realLayout == 'l-h-m'">
             <el-aside width="20%">
                 <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
@@ -78,7 +78,7 @@
             </el-container>
         </el-container>
         <!-- 左右上中下布局 -->
-        <el-container v-if="realLayout == 'layout7'">
+        <el-container v-if="realLayout == 'l-h-m-f'">
             <el-aside width="20%">
                 <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
@@ -95,7 +95,7 @@
             </el-container>
         </el-container>
         <!-- 上下左中右布局 -->
-        <el-container v-if="realLayout == 'layout8'">
+        <el-container v-if="realLayout == 'h-l-m-r'">
             <el-header>
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
@@ -115,19 +115,19 @@
 </template>
 <script>
     export default {
-        name: 'bb-container',
+        name: 'bb-layout-container',
         props: {
             /*
                 layout 布局样式配置
                 //通过bb-portal-item-list 图文入口 展示选项
-                layout1:'上下布局',
-                layout2:'上中下布局',
-                layout3:'左右布局',
-                layout4:'上下左右布局',
-                layout5:'上下左右上下布局',
-                layout6:'左右上下布局',
-                layout7:'左右上中下布局'                
-                layout8:'上下左中右布局'                
+                h-f:'上下布局',
+                h-m-f:'上中下布局',
+                r-m:'左右布局',
+                h-l-m:'上下左右布局',
+                h-l-m-f:'上下左右上下布局',
+                l-h-m:'左右上下布局',
+                l-h-m-f:'左右上中下布局'                
+                h-l-m-r:'上下左中右布局'                
             */
             layout:{
                 type:String,
