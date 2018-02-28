@@ -414,6 +414,9 @@ util._findChildBB = function(uuid, children) {
             if (vueItem.$children && vueItem.$children.length > 0) {
                 //还有子 则继续遍历
                 resultVue = util._findChildBB(uuid, vueItem.$children);
+                if (resultVue && resultVue != null) {
+                    return resultVue;
+                }
             }
         }
     }
@@ -433,6 +436,7 @@ util.findBBByUuid = function(uuid, pageAlias) {
         //没有传pageAlias,直接从根找    如果页面已经切换，$children 是不会保留切换前的页面vue对象的，所以这里可以任意获取一个页面，然后找到根，再往下找
         for (let o in pages) {
             pageAlias = o;
+            root = pages[pageAlias];
             break;
         }
         //如果不传pageAlias  就从根找起  ,否则从传过来的page开始找起
