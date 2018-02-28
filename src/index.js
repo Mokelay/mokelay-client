@@ -77,6 +77,7 @@ import bbpage from './layout/bb-page';
 import bblayout from './layout/bb-layout.vue';
 import bblayoutgrid from './layout/bb-layout-grid.vue';
 import bblayoutseriation from './layout/bb-layout-seriation.vue';
+import bblayoutcanvas from './layout/bb-layout-canvas.vue';
 import bbcontainer from './layout/bb-container.vue';
 
 //引入minireset
@@ -168,6 +169,7 @@ let ty = {
 		Vue.component('bb-html', bbhtml);
 		Vue.component('bb-photo-single', bbphotosingle);
 		Vue.component('bb-layout-grid', bblayoutgrid);
+		Vue.component('bb-layout-canvas', bblayoutcanvas);
 		Vue.component('bb-container', bbcontainer);
 		Vue.component('bb-cascader', bbcascader);
 		Vue.component('bb-layout-seriation', bblayoutseriation);
