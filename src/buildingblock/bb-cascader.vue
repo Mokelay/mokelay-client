@@ -8,7 +8,7 @@
         :show-all-levels="showAllLevels"
         @active-item-change="handleItemChange"
         @change="handleChange"
-        :props="casProps"
+        :props="p_casProps"
         v-model="selectedOptions"
       ></el-cascader>
     </div>
@@ -78,6 +78,7 @@
             dsList:[{
               type:'ds',                            //级联数据获取方式  接口获取
               index:1,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
+              isleaf:false,                       //是否叶子节点
               ds:{                                //ds配置
                 "api": "xxx",
                 "category": "config",
@@ -97,6 +98,7 @@
               type:'method',                        //级联数据获取方式  接口获取
               index:2,                              //级联第几层接口，比如第一层数据的获取接口  
              // uuid:'xxx',                         //需要执行方法的积木uuid  根据uuid获取vue对象，然后调用方法，
+              isleaf:false,                       //是否叶子节点
               method:'loadChildBB',                //获取数据的方法名
               props:{                               //方法返回字段和级联选择器的字段对应（字段名转换）
                 value:'uuid',
@@ -115,12 +117,27 @@
         data() {
             return {
                 optionData:(JSON.parse(this.staticOptions)||[]),
-                selectedOptions:[]
+                selectedOptions:[],
+                itemVal:''//当前点击的记录
             }
         },
-        watch:{},
+        computed:{
+          p_casProps:function(){
+            return Object.assign({
+                value: 'value',
+                label: 'label',
+                children: 'children'
+              },this.casProps)
+          }
+        },
+        watch:{
+        },
         created: function () {
           let t=this;
+          if(t.dsList&&t.dsList.length>0){
+            //有动态请求数据的配置  第一级
+            t.getNextData(1,t);
+          }
         },
         mounted:function(){
         },
@@ -131,13 +148,11 @@
               let t=this;
               const index = value.length+1;
               let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
-              setTimeout(_ => {
-                // 只有changeOnSelect 为false时，handleItemChange 才会起作用，参考级联选择器属性注释
-                if(!t.changeOnSelect&&t.dsList&&t.dsList.length>0){
-                  //有动态请求数据的配置
-                  t.getNextData(index,param);
-                }
-              }, 300);
+              // 只有changeOnSelect 为false时，handleItemChange 才会起作用，参考级联选择器属性注释
+              if(!t.changeOnSelect&&t.dsList&&t.dsList.length>0){
+                //有动态请求数据的配置
+                t.getNextData(index,param,value);
+              }
             },
             //选项改变后触发事件
             handleChange(value){
@@ -147,35 +162,36 @@
               let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
               if(t.changeOnSelect&&t.dsList&&t.dsList.length>0){
                   //有动态请求数据的配置
-                  t.getNextData(index,param);
+                  t.getNextData(index,param,value);
               }
               //向上提供change事件
               t.$emit('change',value);
               t.$emit('input',value);
             },
             //获取下一级数据，动态获取下一级数据时有效
-            getNextData(index,param){
+            getNextData(index,lastSelectedVal,selectedValArray){
                let t=this;
+               t.itemVal = lastSelectedVal;
                if(t.dsList&&t.dsList.length>0){
                   for(let i=0;i<t.dsList.length;i++){
                     let item = t.dsList[i];
                     if(item.index&&item.index==index){
                         //有这一级数据来源配置
-                        t._excuteNextOpt();
+                        t._excuteNextOpt(item,lastSelectedVal,selectedValArray);
                         break;
                     }
                   }
                }
             },
-            //获取下一级数据 param 为当前级选项值
-            _excuteNextOpt(item,param){
+            //获取下一级数据 lastSelectedVal 为当前级选项值   selectedValArray 选择的全部选项 array
+            _excuteNextOpt(item,lastSelectedVal,selectedValArray){
               let t=this;
               const type = item.type;
               if(type=='ds'){
                 //接口获取
-                Util.getDSData(item.ds, _TY_Tool.buildTplParams(t,{'prev':param}), function (map) {
+                _TY_Tool.getDSData(item.ds, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((mapItem, key)=> {
-                           t.__fillNextOptions(item,mapItem.value);
+                           t.__fillNextOptions(item,mapItem.value,selectedValArray);
                            return;   //只有一层
                         });
                     }, function (code, msg) {
@@ -183,23 +199,27 @@
               }else if(type=='method'){
                 //方法获取
                 let method = item.method;
-                let uuidVueObj = _TY_Tool.findBBByUuid(param);//直接从根路径去找这个uuid
+                let uuidVueObj = _TY_Tool.findBBByUuid(lastSelectedVal);//直接从根路径去找这个uuid
                 let list =[];
                 if(uuidVueObj&&uuidVueObj!=null){
                     list = uuidVueObj[method]();
                 }
+                if(!item.index){
+                  console.log('item index is null');
+                }
                 //填充下一级数据
-                t.__fillNextOptions(item,list);
+                t.__fillNextOptions(item,list,selectedValArray);
               }else{
                 //目前没有涉及到
               }
             },
             //填充到下一级数组
-            __fillNextOptions(item,list){
+            __fillNextOptions(item,list,selectedValArray){
               let t=this;
               //需要改动的options下标值
               const index = item.index-1;
               const props = item.props;
+              const isleaf = item.isleaf;
               let result = [];
               if(list&&list.length>0){
                 list.forEach(function(data,i){
@@ -207,21 +227,41 @@
                   if(props){
                     //有属性字段转换配置
                     if(props.value){
-                      temp[t.casProps.value]=data[props.value];
+                      temp[t.p_casProps.value]=data[props.value];
                     }
                     if(props.label){
-                      temp[t.casProps.label]=data[props.label];
+                      temp[t.p_casProps.label]=data[props.label];
                     }
-                    if((props.children&&data[props.children])||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
+                    if((props.children&&data[props.children])||!isleaf||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
                       //如果有  并且不是叶子节点
-                      temp[t.casProps.children]=[];
+                      temp[t.p_casProps.children]=[];
                     }
                   }
                   result.push(Object.assign({},data,temp));
                 });
               }
-              if(t.optionData&&t.optionData.length>=index){
-                t.optionData[index][t.casProps.children]=result;
+              if(t.optionData&&t.optionData.length>=0){
+                if(index==0){
+                  //表示根
+                  t.optionData=result;
+                }else{
+                  if(selectedValArray&&selectedValArray.length>0){
+                    let resultOptionItem = t.optionData;
+                    for(let i=0;i<selectedValArray.length;i++){
+                      let dataTemp = t.optionData;
+                        for(let j=0;j<dataTemp.length;j++){
+                          if(selectedValArray[i]==t.optionData[j][t.p_casProps.value]){
+                            //找到了   如果还有下一层，继续找他的子
+                            dataTemp=dataTemp[j][t.p_casProps.children];
+                            resultOptionItem = resultOptionItem[j];
+                            break;
+                          }
+                        }
+                    }
+                    resultOptionItem[t.p_casProps.children]=result;
+                  }
+                  
+                }
               }
             }
 
