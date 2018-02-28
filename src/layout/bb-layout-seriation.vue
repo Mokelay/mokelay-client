@@ -13,7 +13,11 @@
         render:function(createElement){
             const t = this;
             const bbList = t.renderBB(createElement);
-            return createElement('div',{},bbList);
+            //控制水平排列
+            const style = {
+                display:t.horizontal?'flex':'block'
+            }
+            return createElement('div',{style:style},bbList);
         },
         props: {
             /*水平排列*/
@@ -69,7 +73,7 @@
                                 style:"",           //边框样式
                                 color:"",           //边框颜色
                                 size:"",            //边框尺寸
-                                radian:"",          //边框弧度
+                                radius:"",          //边框弧度
                                 margin:""           //边距
                             },
                             shadow:{                //阴影
@@ -105,12 +109,13 @@
                     t.content.forEach((bb,key)=>{
                         const attributes = bb['attributes'];
                         let onArr = t.setEventMethod(bb);
-                        //渲染积木属性
-                        const bbContent = createElement(bb['alias'], {ref:t._BB_PREFIX+bb['uuid'], props:attributes, on:onArr},[])
-                        //渲染积木动画 TODO
-                        const bbItem = createElement('transition', {style:{display:'inline-block',width:'auto'}},[bbContent]);
+                        //渲染积木属性和动画
+                        const style = t.setStyle(bb);
+                        const bbele = createElement(bb['alias'], {ref:t._BB_PREFIX+bb['uuid'], props:attributes, on:onArr,style:style},[]);
+                        const bbItem = createElement('div', {style:{flex:1}},[bbele]);
                         //控制排序 TODO
-                        bbList.push(bbItem);
+                        //bbList.splice(bb.layout.sort - 1,1,bbItem);
+                        bbList.push(bbItem); 
                     });
                 }
                 return bbList;
@@ -172,6 +177,40 @@
                 fnArr.forEach((fn,key)=>{
                     fn(...params);
                 })
+            },
+            //设置积木样式
+            setStyle:function(bb){
+                const t = this;
+                const layout = bb.layout;
+                let style = {};
+                if(layout){
+                    style = {
+                        'background-color':layout.bgColor,
+                        'transform':`rotate(${layout.bgColor})`,
+                        'opacity':layout.transparency,
+                        'width':layout.size.width,
+                        'height':layout.size.height,
+                        'border-style':layout.border.style,
+                        'border-color':layout.border.color,
+                        'border-size':layout.border.size,
+                        'border-radius':layout.border.radius,
+                        'margin':layout.border.margin,
+                        'box-shadow':`${layout.shadow.size} ${layout.shadow.direction} ${layout.shadow.vague} ${layout.shadow.color}`,
+                    }
+                }
+                const animation = t.setAnimation(bb);
+                style.animation = animation;
+                return style;
+            },
+            //设置积木动画
+            setAnimation:function(bb){
+                const animations = bb['animation'];
+                let animation = null;
+                animations.forEach((ani,key)=>{
+                    const playNum = ani.loop?'infinite':ani.playNum;
+                    animation = animation?`${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`:`${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
+                })
+                return animation;
             }
         },
         components:{
