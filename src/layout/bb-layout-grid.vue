@@ -99,7 +99,7 @@
     import interact from 'interactjs';
 
     export default {
-        name: 'bb-layout',
+        name: 'bb-layout-grid',
         props: {
             value:{
                 type:Object,
