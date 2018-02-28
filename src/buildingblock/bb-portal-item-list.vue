@@ -38,7 +38,10 @@
                 }]
             */
             fields:{
-                type:Array
+                type:Array,
+                default:function(){
+                    return []
+                }
             },
             /*
                 fieldsDs 动态数据源
@@ -84,7 +87,7 @@
         },
         created: function () {
             const t = this;
-            if(t.realFields){
+            if(t.realFields.length){
                 t.setRealFields();
             }
             t.getData();
