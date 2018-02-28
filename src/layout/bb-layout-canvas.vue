@@ -82,7 +82,7 @@
 }"></canvas>
 **/
     export default {
-        name: 'canvas',
+        name: 'bb-layout-canvas',
         props: {
             //画布宽度
             width:{
