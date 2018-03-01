@@ -118,7 +118,8 @@
             return {
                 optionData:(typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]),
                 selectedOptions:[],
-                itemVal:''//当前点击的记录    用于接口配置
+                itemVal:'',//当前点击的记录    用于接口配置
+                external:{}//外部参数
             }
         },
         computed:{
@@ -142,6 +143,14 @@
         mounted:function(){
         },
         methods: {
+            linkage(data){
+              let t=this;
+              if(data){
+                this.external['linkage'] = data;
+                //刷新选项
+                t.getNextData(1);
+              }
+            },
             //单级选项改变后触发, 远程获取下级数据
             handleItemChange(value){
               console.log('active item:', value);
@@ -198,7 +207,6 @@
             getNextData(index,lastSelectedVal,selectedValArray){
                let t=this;
                t.itemVal = lastSelectedVal;
-               debugger;
                if(t.dsList&&t.dsList.length>0){
                   for(let i=0;i<t.dsList.length;i++){
                     let item = t.dsList[i];
@@ -277,14 +285,16 @@
                   t.optionData=result;
                 }else{
                   if(selectedValArray&&selectedValArray.length>0){
-                    let resultOptionItem = t.optionData;
+                    let resultOptionItem;
+                    let dataTemp = t.optionData;
                     for(let i=0;i<selectedValArray.length;i++){
-                      let dataTemp = t.optionData;
                         for(let j=0;j<dataTemp.length;j++){
-                          if(selectedValArray[i]==t.optionData[j][t.p_casProps.value]){
+                          if(selectedValArray[i]==dataTemp[j][t.p_casProps.value]){
                             //找到了   如果还有下一层，继续找他的子
-                            dataTemp=dataTemp[j][t.p_casProps.children];
-                            resultOptionItem = resultOptionItem[j];
+                            if(dataTemp[j][t.p_casProps.children]&&dataTemp[j][t.p_casProps.children].length>0){
+                              dataTemp=dataTemp[j][t.p_casProps.children];
+                            }
+                            resultOptionItem=dataTemp[j];
                             break;
                           }
                         }

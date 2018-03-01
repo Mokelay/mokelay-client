@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-cascader placeholder="请选择字段" @change="change" :dsList="dsList" v-model="field"></bb-cascader>
+        <bb-cascader :ref="uuid" placeholder="请选择字段" @change="change" :dsList="dsList" v-model="field"></bb-cascader>
     </div>
 </template>
 
@@ -20,6 +20,7 @@
             return {
                 field:this.value,
                 p_apiAlias:this.apiAlias,
+                uuid:_TY_Tool.uuid(),//生成uuid
                 dsList:[{
                   type:'ds',                            //级联数据获取方式  接口获取
                   index:1,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
@@ -31,8 +32,8 @@
                     "inputs": [{
                         "paramName": "aliass",
                         "valueType": "inputValueObj",
-                        "valueKey": "bb",
-                        "variable": "apiAlias"
+                        "valueKey": "external",
+                        "variable": "linkage"
                     }],
                     "outputs": [{
                         "dataKey": "data",
@@ -93,14 +94,26 @@
             }
         },
         watch: {
+            apiAlias(val){
+                this.getFirstData(val);
+            }
         },
         created: function () {
-            let t=this;
-            
         },
         mounted:function(){
+            let t=this;
+            t.getFirstData(t.apiAlias);
         },
         methods: {
+            //获取第一级数据
+            getFirstData(val){
+                let t=this;
+                if(val){
+                    let cascader = t.$refs[t.uuid];
+                    //刷新级联选择器 第一级
+                    cascader.linkage(val);
+                }
+            },
             change(value){
                 let t=this;
                 console.log("change value:",value);
