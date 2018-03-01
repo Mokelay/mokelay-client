@@ -1,20 +1,20 @@
 <template>
-    <div class="bb-layout-container template">
+    <div class="bb-layout-container">
         <!-- 上下布局 -->
         <el-container v-if="realLayout == 'h-f'">
-            <el-header>
+            <el-header :style="{background:realBgColor.header}">
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
-            <el-main>
+            <el-main :style="{background:realBgColor.main}">
                 <bb-layout-seriation :content="realMain"></bb-layout-seriation>
             </el-main>
         </el-container>
         <!-- 上中下布局 -->
         <el-container v-if="realLayout == 'h-m-f'">
-            <el-header>
+            <el-header :style="{background:realBgColor.header}">
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
-            <el-main>
+            <el-main :style="{background:realBgColor.main}">
                 <bb-layout-seriation :content="realMain"></bb-layout-seriation>
             </el-main>
             <el-footer>
@@ -23,38 +23,38 @@
         </el-container>
         <!-- 左右布局 -->
         <el-container v-if="realLayout == 'r-m'">
-            <el-aside width="20%">
+            <el-aside width="20%" :style="{background:realBgColor.leftAside}">
                 <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
-            <el-main>
+            <el-main :style="{background:realBgColor.main}">
                 <bb-layout-seriation :content="realMain"></bb-layout-seriation>
             </el-main>
         </el-container>
         <!-- 上下左右布局 -->
         <el-container v-if="realLayout == 'h-l-m'">
-            <el-header>
+            <el-header :style="{background:realBgColor.header}">
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside width="20%">
+                <el-aside width="20%" :style="{background:realBgColor.leftAside}">
                     <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
-                <el-main>
+                <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation :content="realMain"></bb-layout-seriation>
                 </el-main>
             </el-container>
         </el-container>
         <!-- 上下左右上下布局 -->
         <el-container v-if="realLayout == 'h-l-m-f'">
-            <el-header>
+            <el-header :style="{background:realBgColor.header}">
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside width="20%">
+                <el-aside width="20%" :style="{background:realBgColor.leftAside}">
                     <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-container>
-                    <el-main>
+                    <el-main :style="{background:realBgColor.main}">
                         <bb-layout-seriation :content="realMain"></bb-layout-seriation>
                     </el-main>
                     <el-footer>
@@ -65,48 +65,48 @@
         </el-container>
         <!-- 左右上下布局 -->
         <el-container v-if="realLayout == 'l-h-m'">
-            <el-aside width="20%">
+            <el-aside width="20%" :style="{background:realBgColor.leftAside}">
                 <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-container>
-                <el-header>
+                <el-header :style="{background:realBgColor.header}">
                     <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
                 </el-header>
-                <el-main>
+                <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation :content="realMain"></bb-layout-seriation>
                 </el-main>
             </el-container>
         </el-container>
         <!-- 左右上中下布局 -->
         <el-container v-if="realLayout == 'l-h-m-f'">
-            <el-aside width="20%">
+            <el-aside width="20%" :style="{background:realBgColor.leftAside}">
                 <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-container>
-                <el-header>
+                <el-header :style="{background:realBgColor.header}">
                     <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
                 </el-header>
-                <el-main>
+                <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-footer>
+                <el-footer :style="{background:realBgColor.footer}">
                     <bb-layout-seriation :content="realFooter" :horizontal="true"></bb-layout-seriation>
                 </el-footer>
             </el-container>
         </el-container>
         <!-- 上下左中右布局 -->
         <el-container v-if="realLayout == 'h-l-m-r'">
-            <el-header>
+            <el-header :style="{background:realBgColor.header}">
                 <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside width="20%">
+                <el-aside width="20%" :style="{background:realBgColor.leftAside}">
                     <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
-                <el-main>
+                <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-aside width="20%">
+                <el-aside width="20%" :style="{background:realBgColor.rightAside}">
                     <bb-layout-seriation :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
@@ -119,7 +119,7 @@
         props: {
             /*
                 layout 布局样式配置
-                //通过bb-portal-item-list 图文入口 展示选项
+                //通过bb-portal-item-list 图文入口 展示选项 
                 h-f:'上下布局',
                 h-m-f:'上中下布局',
                 r-m:'左右布局',
@@ -127,11 +127,26 @@
                 h-l-m-f:'上下左右上下布局',
                 l-h-m:'左右上下布局',
                 l-h-m-f:'左右上中下布局'                
-                h-l-m-r:'上下左中右布局'                
+                h-l-m-r:'上下左中右布局'
+                {
+                    type:'', 
+                    bgColor:{}//布局背景色
+                }               
             */
             layout:{
-                type:String,
-                default:'layout8'
+                type:Object,
+                default:function(){
+                    return {
+                        type:'h-l-m-r',
+                        bgColor:{
+                            header:"#B3C0D1",
+                            leftAside:"#D3DCE6",
+                            main:"#E9EEF3",
+                            rightAside:"#D3DCE6",
+                            footer:"#B3C0D1"
+                        }
+                    }
+                }
             },
             /*
                 header leftAside rightAside main footer 头部积木静态数据配置
@@ -199,14 +214,14 @@
             rightAside:{
                 type:Array,
                 default:function(){
-                    return[{uuid:'rightAside',alias:'bb-words',aliasName:'',attributes:{value:'RightAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
+                    return[{uuid:'rightAside',alias:'bb-words',aliasName:'',attributes:{value:'rightAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
                 }
             },
             /*main 头部积木配置*/
             main:{
                 type:Array,
                 default:function(){
-                    return[{uuid:'main',alias:'bb-words',aliasName:'',attributes:{value:'Main',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
+                    return[{uuid:'main',alias:'bb-words',aliasName:'',attributes:{value:'main',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
                 }
             },
             /*footer 底部积木配置*/
@@ -218,15 +233,17 @@
             },
             /*
                 containerDs 动态数据源配置 
-                返回数据包含 header leftAside rightAside      
+                返回数据包含 header leftAside rightAside main footer     
             */
             containerDs:{
                 type:Object
             }
+
         },
         data() {
             return {
-                realLayout:this.layout,
+                realLayout:this.layout.type,
+                realBgColor:this.layout.bgColor,
                 realHeader:this.header,
                 realLeftAside:this.leftAside,
                 realRightAside:this.rightAside,
@@ -265,16 +282,4 @@
     }
 </script>
 <style lang='less' scoped>
-    .template{
-        .el-header, .el-footer {
-            background-color: #B3C0D1;
-        }
-        .el-aside {
-            min-width:200px;
-            background-color: #D3DCE6;
-        }
-        .el-main {
-            background-color: #E9EEF3;
-        }
-    }
 </style>
