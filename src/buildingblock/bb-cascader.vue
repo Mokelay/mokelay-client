@@ -118,7 +118,7 @@
             return {
                 optionData:(typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]),
                 selectedOptions:[],
-                itemVal:''//当前点击的记录
+                itemVal:''//当前点击的记录    用于接口配置
             }
         },
         computed:{
