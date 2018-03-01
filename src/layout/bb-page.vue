@@ -21,50 +21,42 @@
         pbbElementList.push(createElement('bb-custom',{props:{customFile:this.customFile}}));
       }
 
-      //处理配置UI
-      var t = this;
-      var pbbs = this.pbbs;
-      //onInteractiveFn 存储所有事件的方法
-      t.onInteractiveFn = {};
-      for (var i in pbbs) {
-          var pbb = pbbs[i];
-          var props = pbb['attributes'] || {};
-          var on = {};
-          var interactives = pbb['interactives'] || [];
-          var pbbId = pbb['id'];
-          for (var j in interactives) {
-              var interactive = interactives[j];
-              var executeType = interactive['executeType'];
-              on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
-              var fn = null;
-              if(executeType == 'trigger_method'){
-                //预定义方法
-                var executePbbId = interactive['executePbbId'];
-                var executeBBMethodName = interactive['executeBBMethodName'];
-                //给相同事件的创建方法数组
-                fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
-              }else if(executeType == 'custom_script'){
-                //自定义方法
-                var buzz = interactive['executeScript'];
-                fn = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
-                  eval(code);
-                })
-              }else if(executeType == 'container_method'){
-                //容器方法
-                var containerMethodName = interactive['containerMethodName'];
-                fn = t[containerMethodName];
-              }
-              if(fn){
-                //将获得的方法推送到数组中
-                t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId] || {};
-                t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']] || [];
-                t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
-              }
+      var uuid = this.layoutObject?this.layoutObject['uuid'] : null;
+      //根据布局类型展示不同布局
+      switch(this.layoutType){
+        case 'seriation':
+        //顺序排列布局 seriation
+            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
+            pbbElementList.push(element);
+            break;
+        //容器布局 container
+        case 'container':
+        var props = {};
+        if(this.content){
+          //获取布局容器中的 内容
+          props = {
+            layout:this.content[0].attributes.layout,
+            header:this.content[0].attributes.header,
+            leftAside:this.content[0].attributes.leftAside,
+            main:this.content[0].attributes.main,
+            rightAside:this.content[0].attributes.rightAside,
+            footer:this.content[0].attributes.footer
           }
-          var element = createElement(pbb['bbAlias'], {ref:_PBB_PREFIX+pbb['id'], props:props, on:on});
-          var colElement = createElement('el-col', {props:{span:24},style:t.layoutStyle},[element]);
-          var rowElement = createElement('el-row', {props:{gutter:20}},[colElement]);
-          pbbElementList.push(rowElement);
+          var element = createElement('bb-layout-container', {ref:uuid,props:props});
+            pbbElementList.push(element);
+        }
+        break;
+        //自由式布局 canvas
+        //TODO
+
+        //网格布局 grid
+        //TODO
+
+        default:
+            //顺序排列布局 seriation
+            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
+            pbbElementList.push(element);
+            break;
       }
       return createElement(
           'div',
@@ -92,7 +84,9 @@
       return {
         templatePageAlias:null,
         pbbs:[],
-        customFile:null
+        customFile:null,
+        layoutObject:null,
+        content:null
       };
     },
     created: function () {
@@ -124,6 +118,12 @@
           //模板文件
           t.templatePageAlias = page['templatePageAlias'];
 
+          //获取页面信息
+          t.layoutObject = page.layoutObject || {};
+
+          //指定布局类型
+          t.layoutType = page.layoutType;
+
           //判断是否定制化
           if(page['custom']){
             //加载定制化文件的配置
@@ -131,57 +131,55 @@
           }
 
           //配置UI
-          var pbbs = [];
-          pbbList.forEach(function(_pbb){
-            var _pbbId = _pbb['id'];
-            var attributes = _pbb['attributes'];
-            if(attributes && typeof attributes == "string"){
-              attributes = JSON.parse(attributes);
-            }
-            var pbb = {
-              bbAlias: _pbb['alias'],
-              attributes:attributes,
-              id:_pbb['id'],
-              interactives:[]
-            };
-
-            interactives.forEach((item,key)=>{//添加交互
-              if(item.pbbId == _pbbId){
-                pbb['interactives'].push(item);
+          //var pbbs = [];
+          var contentArr = [];
+          if(page.content){
+            //积木内容 content
+            t.content = JSON.parse(page.content);
+          }else{
+            //积木内容 content
+            let content = [];
+            pbbList.forEach(function(_pbb){
+              var _pbbId = _pbb['id'];
+              var attributes = _pbb['attributes'];
+              if(attributes && typeof attributes == "string"){
+                attributes = JSON.parse(attributes);
               }
-            })
-            pbbs.push(pbb);
-          });
-          let newPbbs = pbbs;
-          //根据layout中的位置对pbbs重新排序
-          if(page.layout){
-            newPbbs = [];
-            JSON.parse(page.layout).forEach((val,key)=>{
-              pbbs.forEach((value,index)=>{
-                  if(parseInt(val[0]) == value.id){
-                    newPbbs.splice(val[1],0,value);
-                  }
+              var contentItem = {
+                alias: _pbb['alias'],
+                aliasName:'',
+                attributes:attributes,
+                uuid:_pbb['id'],
+                interactives:[],
+                animation:[],
+                layout:null
+              }
+              interactives.forEach((item,key)=>{//添加交互
+                if(item.pbbId == _pbbId){
+                  contentItem['interactives'].push(item);
+                }
               })
-            })
+              contentArr.push(contentItem);
+            });
+            content = contentArr;
+            //根据layout中的位置对content重新排序
+            if(page.layout){
+              t.content = [];
+              JSON.parse(page.layout).forEach((val,key)=>{
+                contentArr.forEach((value,index)=>{
+                    if(parseInt(val[0]) == value.id){
+                      content.splice(val[1],0,value);
+                    }
+                })
+              })
+            }
+            t.content = content;
           }
-          t.pbbs = newPbbs;
         }).catch(function (error) {
           t.$notify.error({
             title: '错误',
             message: error.message+"\n"+error.stack});
         });
-      },
-      /*公共方法处理绑定事件
-        interactive:当前触发事件名称
-        linkageParams:事件出发时传递给fn的参数
-      */
-      publicEmit:function(pbb,interactive,...params){
-        var t = this;
-        var pbbId = pbb.id;
-        var fnArr = t.onInteractiveFn[pbbId][interactive];
-        fnArr.forEach((fn,key)=>{
-          fn(...params);
-        })
       },
       //页面卸载
       unload:function(){
@@ -192,13 +190,4 @@
   }
 </script>
 <style scoped>
-  .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  .el-col {
-    border-radius: 4px;
-  }
 </style>
