@@ -19,7 +19,7 @@
         name: 'bb-cascader',
         props: {
           value:{
-            type:[Number,String]
+            type:[Number,String,Array]
           },
           placeholder:{
               type:String,
@@ -53,7 +53,7 @@
             }]
            **/
           staticOptions:{
-            type:String,
+            type:[String,Array],
             default:"[]"
           },
           /**
@@ -96,7 +96,7 @@
               }
             },{
               type:'method',                        //级联数据获取方式  接口获取
-              index:2,                              //级联第几层接口，比如第一层数据的获取接口  
+              index:2,                              //级联第几层接口，比如第一层数据的获取接口   -1表示无限级联
              // uuid:'xxx',                         //需要执行方法的积木uuid  根据uuid获取vue对象，然后调用方法，
               isleaf:false,                       //是否叶子节点
               method:'loadChildBB',                //获取数据的方法名
@@ -116,7 +116,7 @@
         },
         data() {
             return {
-                optionData:(JSON.parse(this.staticOptions)||[]),
+                optionData:(typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]),
                 selectedOptions:[],
                 itemVal:''//当前点击的记录
             }
@@ -160,22 +160,54 @@
               let t=this;
               const index = value.length+1;
               let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
-              if(t.changeOnSelect&&t.dsList&&t.dsList.length>0){
-                  //有动态请求数据的配置
+              if(t.changeOnSelect&&t.dsList&&t.dsList.length>0&&!t._isLeaf(value)){
+                  //有动态请求数据的配置    不是叶子节点则调用
                   t.getNextData(index,param,value);
               }
               //向上提供change事件
               t.$emit('change',value);
               t.$emit('input',value);
             },
+            //判断是否选中叶子节点
+            _isLeaf(value){
+              let t=this;
+              if(value&&value.length>0){
+                const lastVal = value[value.length-1];//最后一个选择项的val值
+                let tempVal=t.optionData;
+                for(let i=0;i< value.length;i++){
+                  for(let j=0;j<tempVal.length;j++){
+                    if(value[i]==tempVal[j][t.p_casProps.value]){
+                        //找到那一级
+                        if(tempVal[j]&&!tempVal[j][t.p_casProps.children]){
+                          //没有children属性，表示为叶子节点
+                          tempVal = null;
+                        }else{
+                          tempVal = tempVal[j][t.p_casProps.children];
+                        }
+                        break;
+                    }
+                  }
+                }
+                if(tempVal==null){
+                    return true;
+                }
+              }
+              return false;
+            },
             //获取下一级数据，动态获取下一级数据时有效
             getNextData(index,lastSelectedVal,selectedValArray){
                let t=this;
                t.itemVal = lastSelectedVal;
+               debugger;
                if(t.dsList&&t.dsList.length>0){
                   for(let i=0;i<t.dsList.length;i++){
                     let item = t.dsList[i];
-                    if(item.index&&item.index==index){
+                    if(!item.index){
+                      console.log('item index is null');
+                      item.index=1;//默认为第一级
+                    }
+                    //index为-1表示无限级联
+                    if((item.index&&item.index==index)||item.index==-1){
                         //有这一级数据来源配置
                         t._excuteNextOpt(item,lastSelectedVal,selectedValArray);
                         break;
@@ -204,9 +236,6 @@
                 if(uuidVueObj&&uuidVueObj!=null){
                     list = uuidVueObj[method]();
                 }
-                if(!item.index){
-                  console.log('item index is null');
-                }
                 //填充下一级数据
                 t.__fillNextOptions(item,list,selectedValArray);
               }else{
@@ -232,7 +261,9 @@
                     if(props.label){
                       temp[t.p_casProps.label]=data[props.label];
                     }
-                    if((props.children&&data[props.children])||!isleaf||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
+                    if(data.hasOwnProperty('isleaf')&&data['isleaf']){
+                        //如果含有isLeaf字段，并且为true 就不存children属性,没有children属性，表示是叶子节点
+                    }else if((props.children&&data[props.children])||!isleaf||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
                       //如果有  并且不是叶子节点
                       temp[t.p_casProps.children]=[];
                     }
