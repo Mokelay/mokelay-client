@@ -1,4 +1,24 @@
 <script>
+  /*实现功能
+    1.通过bb-layout-seriation基础组件解析标准格式数据，渲染积木的属性，动画，交互
+    2.兼容老格式数据
+    3.标准格式数据
+    {
+      layoutObject:[],
+      ds:[],
+      content: [{ //页面内容
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      }]
+    }
+  */
   import Util from '../libs/util';
 
   var _PBB_PREFIX = "pbb_";
@@ -22,41 +42,10 @@
       }
 
       var uuid = this.layoutObject?this.layoutObject['uuid'] : null;
-      //根据布局类型展示不同布局
-      switch(this.layoutType){
-        case 'seriation':
-        //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
-            pbbElementList.push(element);
-            break;
-        //容器布局 container
-        case 'container':
-        var props = {};
-        if(this.content){
-          //获取布局容器中的 内容
-          props = {
-            layout:this.content[0].attributes.layout,
-            header:this.content[0].attributes.header,
-            leftAside:this.content[0].attributes.leftAside,
-            main:this.content[0].attributes.main,
-            rightAside:this.content[0].attributes.rightAside,
-            footer:this.content[0].attributes.footer
-          }
-          var element = createElement('bb-layout-container', {ref:uuid,props:props});
-            pbbElementList.push(element);
-        }
-        break;
-        //自由式布局 canvas
-        //TODO
-
-        //网格布局 grid
-        //TODO
-
-        default:
-            //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
-            pbbElementList.push(element);
-            break;
+      //bb-page负责通过bb-layout-seriation绑定交互动画
+      if(this.content){
+        var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content}});
+        pbbElementList.push(element);
       }
       return createElement(
           'div',
