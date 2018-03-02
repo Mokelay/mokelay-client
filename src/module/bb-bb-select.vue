@@ -22,7 +22,7 @@
                   method:'loadChildBB',                //获取数据的方法名
                   props:{                               //方法返回字段和级联选择器的字段对应（字段名转换）
                     value:'uuid',
-                    label:'bbAlias',
+                    label:'name',
                     children:'children'
                   }
                 }]
@@ -42,7 +42,7 @@
             for(let i in uuidList){
                 t.firstOpts.push({
                     value:i,
-                    label:uuidList[i].$vnode.componentOptions.tag,//获取组件名
+                    label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
                     children:[]
                 });
             }

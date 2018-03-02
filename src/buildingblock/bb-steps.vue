@@ -64,11 +64,11 @@
                 let t=this;
                 return [{
                     uuid:1,
-                    bbAlias:'测试1',
+                    name:'测试1',
                     isleaf:true
                 },{
                     uuid:'pbb_2219',
-                    bbAlias:'测试2',
+                    name:'测试2',
                     isleaf:false
                 }]
             }

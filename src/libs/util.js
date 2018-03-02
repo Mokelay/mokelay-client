@@ -373,27 +373,8 @@ util.resolveButton = function(button, valueobj) {
     }
 }
 
-//检查vue对象是否含有uuid,需要通过$refs来找，不能通过$children来找
+//检查vue对象是否含有uuid,通过$children来找
 util._checkVueHasRef = function(uuid, vueObj) {
-    // if (vueObj && vueObj.$refs) {
-    //     if (vueObj.$refs.hasOwnProperty(uuid)) {
-    //         return vueObj.$refs[uuid];
-    //     } else {
-    //         let resultVue; //查找到的目标vue对象
-    //         for (let i in vueObj.$refs) {
-    //             let refItem = vueObj.$refs[i];
-    //             if (!refItem._isVue) { //不是vue组件 就不往下找了
-    //                 continue;
-    //             }
-    //             resultVue = util._checkVueHasRef(uuid, refItem);
-    //         }
-    //         if (resultVue && resultVue != null) {
-    //             return resultVue;
-    //         }
-    //     }
-    // }
-
-    //上面是通过$refs来找组件的，逻辑比较麻烦，下面简单一点
     //判断vue对象是否是该uuid组件逻辑
     if (vueObj && vueObj.$vnode && vueObj.$vnode.data && vueObj.$vnode.data.ref && vueObj.$vnode.data.ref == uuid) {
         return vueObj;
@@ -452,6 +433,32 @@ util.findBBByUuid = function(uuid, pageAlias) {
         resultVue = util._findChildBB(uuid, root.$children);
     }
     return resultVue;
+}
+
+/**
+    获取当前容器组件的子积木列表
+**/
+util.loadChildBB = function(t) {
+    let result = [];
+    if (t && t.$refs) {
+        //不是空对象
+        for (let i in t.$refs) {
+            let item = {
+                uuid: i
+            };
+            item.name = t.$refs[i].$attrs.aliasName || t.$refs[i].$vnode.componentOptions.tag; //设置组件名称
+            item.bbAlias = t.$refs[i].$vnode.componentOptions.tag; //设置积木别名
+            if (JSON.stringify(t.$refs[i].$refs) === '{}') {
+                //说明没有子组件了
+                item.isleaf = true;
+            } else {
+                //说明还有子
+                item.children = [];
+            }
+            result.push(item);
+        }
+    }
+    return result;
 }
 
 

@@ -102,7 +102,7 @@
               method:'loadChildBB',                //获取数据的方法名
               props:{                               //方法返回字段和级联选择器的字段对应（字段名转换）
                 value:'uuid',
-                label:'bbAlias',
+                label:'name',
                 children:'children'
               }
             }]
