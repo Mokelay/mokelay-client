@@ -74,6 +74,7 @@ import bbdsselect from './module/bb-ds-select';
 import bbiconselect from './module/bb-icon-select.vue';
 import bbicon from './module/bb-icon.vue';
 import bbbbselect from './module/bb-bb-select.vue';
+import bbfieldselect from './module/bb-field-select.vue';
 
 //布局相关
 import bbpage from './layout/bb-page';
@@ -175,6 +176,7 @@ let ty = {
 		Vue.component('bb-cascader', bbcascader);
 		Vue.component('bb-layout-seriation', bblayoutseriation);
 		Vue.component('bb-bb-select', bbbbselect);
+		Vue.component('bb-field-select', bbfieldselect);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");

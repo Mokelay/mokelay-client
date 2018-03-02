@@ -155,7 +155,7 @@ util.buildTplParams = function(t, obj) {
 DS配置案例
 {
     api:"/list-data",
-    type:'config',
+    category:'config',//ds选择器 不是type字段而是category字段
     method:"post",
     inputs:[
         {paramName:'a',valueType:"constant",constant:123},
