@@ -42,7 +42,7 @@
       }
 
       var uuid = this.layoutObject?this.layoutObject['uuid'] : null;
-      //bb-page负责通过bb-layout-seriation绑定交互动画
+      //通过bb-layout-seriation绑定交互动画
       if(this.content){
         var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content}});
         pbbElementList.push(element);

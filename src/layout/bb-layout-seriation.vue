@@ -111,7 +111,7 @@
                         let onArr = t.setEventMethod(bb);
                         //渲染积木属性和动画
                         const style = t.setStyle(bb);
-                        const bbele = createElement(bb['alias'], {ref:bb['uuid'], props:attributes, on:onArr,style:style},[]);
+                        const bbele = createElement(bb['alias'], {ref:bb['uuid'], props:attributes,attrs:{aliasName:bb['aliasName']}, on:onArr,style:style},[]);
                         const bbItem = createElement('div', {style:{flex:1}},[bbele]);
                         //控制排序 TODO
                         //bbList.splice(bb.layout.sort - 1,1,bbItem);
