@@ -55,7 +55,7 @@
     },
     props: {
       root:{
-        type:Boolean
+        type:Boolean,
         default:function(){
           return false;
         }
