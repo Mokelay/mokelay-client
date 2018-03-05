@@ -374,7 +374,7 @@ util.resolveButton = function(button, valueobj) {
 }
 
 //检查vue对象是否含有uuid,通过$children来找
-util._checkVueHasRef = function(uuid, vueObj) {
+let _checkVueHasRef = function(uuid, vueObj) {
     //判断vue对象是否是该uuid组件逻辑
     if (vueObj && vueObj.$vnode && vueObj.$vnode.data && vueObj.$vnode.data.ref && vueObj.$vnode.data.ref == uuid) {
         return vueObj;
@@ -383,18 +383,18 @@ util._checkVueHasRef = function(uuid, vueObj) {
 }
 
 //深度遍历，可能会影响性能，后面考虑改成层级遍历
-util._findChildBB = function(uuid, children) {
+let _findChildBB = function(uuid, children) {
     let resultVue = null;
     if (children && children.length > 0) {
         for (let i = 0; i < children.length; i++) {
             let vueItem = children[i];
-            resultVue = util._checkVueHasRef(uuid, vueItem);
+            resultVue = _checkVueHasRef(uuid, vueItem);
             if (resultVue && resultVue != null) {
                 return resultVue;
             }
             if (vueItem.$children && vueItem.$children.length > 0) {
                 //还有子 则继续遍历
-                resultVue = util._findChildBB(uuid, vueItem.$children);
+                resultVue = _findChildBB(uuid, vueItem.$children);
                 if (resultVue && resultVue != null) {
                     return resultVue;
                 }
@@ -426,11 +426,11 @@ util.findBBByUuid = function(uuid, pageAlias) {
         }
     }
     //判断当前vue对象是不是要找的vue组件
-    let resultVue = util._checkVueHasRef(uuid, root);
+    let resultVue = _checkVueHasRef(uuid, root);
     if (resultVue && resultVue != null) {
         return resultVue;
     } else if (root.$children && root.$children.length > 0) {
-        resultVue = util._findChildBB(uuid, root.$children);
+        resultVue = _findChildBB(uuid, root.$children);
     }
     return resultVue;
 }
@@ -443,12 +443,21 @@ util.loadChildBB = function(t) {
     if (t && t.$refs) {
         //不是空对象
         for (let i in t.$refs) {
+            if (!t.$refs[i] || !t.$refs[i]._isVue) {
+                //为undefined 或者 不是vue对象 
+                continue;
+            }
             let item = {
                 uuid: i
             };
             item.name = t.$refs[i].$attrs.aliasName || t.$refs[i].$vnode.componentOptions.tag; //设置组件名称
             item.bbAlias = t.$refs[i].$vnode.componentOptions.tag; //设置积木别名
-            if (JSON.stringify(t.$refs[i].$refs) === '{}') {
+            let isNull = false;
+            for (let j in t.$refs[i].$refs) {
+                isNull = true;
+                break;
+            }
+            if (isNull) {
                 //说明没有子组件了
                 item.isleaf = true;
             } else {

@@ -101,6 +101,10 @@ import Util from '../libs/util';
                     d.showModal();
                     t.dialog = d;
                 },'art-dialog');
+            },
+             loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

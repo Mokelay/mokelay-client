@@ -459,6 +459,10 @@
                     this.external['linkage'] = data;
                     this.getData();
                 }
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

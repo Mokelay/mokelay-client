@@ -94,6 +94,7 @@ import Util from '../libs/util';
         created: function () {
         },
         mounted:function(){
+
         },
         methods: {
             setting:function(){
@@ -149,8 +150,16 @@ import Util from '../libs/util';
                         content: _form.$el
                     });
                     d.showModal();
+
+                    //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
+                    // t.$refs[_TY_Tool.uuid()]=_form.$children[0];//把bb-form 设置到$refs中
+
                     t.dialog = d;
                 },'art-dialog');
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

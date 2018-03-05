@@ -198,6 +198,10 @@
         mounted:function(){
         },
         methods: {
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
+            }
         }
     }
 </script>

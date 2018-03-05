@@ -39,6 +39,10 @@
                 Util.resolveButton(button,_TY_Tool.buildTplParams(this),button.afterClick);
                 this.$emit('buttonClick',button);
                 this.$emit('click',button);
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

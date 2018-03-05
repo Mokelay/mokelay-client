@@ -176,6 +176,10 @@
                     }, function (code, msg) {
                     });
                 }
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

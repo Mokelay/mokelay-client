@@ -174,6 +174,10 @@
       unload:function(){
         //触发页面卸载事件
         this.$emit('after-unload', this);
+      },
+      loadChildBB(){
+        let t=this;
+        return _TY_Tool.loadChildBB(t);
       }
     }
   }

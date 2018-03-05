@@ -214,6 +214,10 @@
                     animation = animation?`${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`:`${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
                 })
                 return animation;
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         },
         components:{

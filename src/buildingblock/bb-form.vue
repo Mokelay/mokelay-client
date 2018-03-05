@@ -45,8 +45,11 @@
                 var ref = pbbId;
                 var item = createElement(field['et'],{
                     props:props,
+                    attrs:{
+                        aliasName:field['name']
+                    },
                     on: itemOn,
-                    ref:ref
+                    ref:ref||_TY_Tool.uuid()
                 });
 
                 var className = field['et'] == 'bb-hidden'?'form-item-hidden':'form-item';
@@ -225,7 +228,7 @@
             t.realFields = t.fields
             t.getFields();
             t.getData();
-        },
+        }, 
         mounted:function(){
             const t = this;
             /*bb-mounted 
@@ -302,6 +305,10 @@
                 }).catch((err)=>{
                     console.log('err:',err);
                 })
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

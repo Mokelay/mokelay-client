@@ -86,6 +86,10 @@
             closeFn() {
                 this.$emit('closeDia');
                 this.$emit('update:isShow', false)
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

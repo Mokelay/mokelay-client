@@ -62,15 +62,7 @@
             },
             loadChildBB(){
                 let t=this;
-                return [{
-                    uuid:1,
-                    name:'测试1',
-                    isleaf:true
-                },{
-                    uuid:'pbb_2219',
-                    name:'测试2',
-                    isleaf:false
-                }]
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

@@ -173,6 +173,10 @@ import Vue from 'vue';
             commit:function(){
                 var t = this;
                 this.$emit('commit', t.array);
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }
