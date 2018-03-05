@@ -56,6 +56,9 @@
     props: {
       root:{
         type:Boolean
+        default:function(){
+          return false;
+        }
       },
       pageAlias:{
         type: String
