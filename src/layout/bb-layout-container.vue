@@ -155,6 +155,8 @@
                         uuid:'',
                         alias:'',                   //积木别名
                         aliasName:'',               //中文名称
+                        group:'',                   //积木分组 bb-layout-container中控制积木的显示的位置
+                                                    //header leftAside rightAside main footer 五种分类
                         attributes:{},              //积木属性
                         animation:[{                //动画
                             style:"",               //方式
