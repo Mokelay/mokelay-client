@@ -77,133 +77,18 @@
                 type:Array
             }
         },
-        data() {
-            return{
-            }
-        },
-        mounted:function(){
-            const t = this;
-            //等待DOM元素渲染完成后 根据ref取得方法
-            t.setEventListener();
-        },
         methods: {
             renderBB:function(createElement){
                 const t = this;
-                t._BB_PREFIX = "bb_";
-                const bbList = [];
-                //onInteractiveFn 存储每个事件的方法数组
-                t.onInteractiveFn = {};
-                if(t.content){
-                    t.content.forEach((bb,key)=>{
-                        const attributes = bb['attributes'];
-                        let onArr = t.setEventMethod(bb);
-                        //渲染积木属性和动画
-                        const style = t.setStyle(bb);
-                        const bbele = createElement(bb['alias'], {ref:bb['uuid'], props:attributes,attrs:{aliasName:bb['aliasName']}, on:onArr,style:style},[]);
-                        const bbItem = createElement('div', {style:{flex:1}},[bbele]);
-                        //控制排序 TODO
-                        //bbList.splice(bb.layout.sort - 1,1,bbItem);
-                        bbList.push(bbItem); 
-                    });
-                }
+                const bbList = _TY_Tool.bbRender(t.content, createElement, t);
+                //水平排列垂直排列控制
+                bbList.forEach((bbEle,index)=>{
+                    const bbItem = createElement('div', {style:{flex:1}},[bbEle]);
+                    bbList.splice(index,1,bbItem);
+                    //控制排序 TODO
+                    //bbList.splice(bb.layout.sort - 1,1,bbItem);
+                })
                 return bbList;
-            },
-            //绑定公共方法到事件
-            setEventMethod:function(bb){
-                const t = this;
-                let on = {};
-                const uuid = bb['uuid'];
-                bb.interactives.forEach((interactive,index)=>{
-                    on[interactive['fromContentEvent']] = t.publicEmit.bind(t,bb,interactive['fromContentEvent']);
-                });
-                return on;
-            },
-            //将方法放入对应事件的方法数组中，事件触发公共方法，执行方法数组（一个事件可能对应多个方法）;
-            setEventListener:function(){
-                const t = this;
-                if(t.content){
-                    t.content.forEach((bb,key)=>{
-                        const uuid = bb['uuid'];
-                        bb.interactives.forEach((interactive,index)=>{
-                            const executeType = interactive['executeType'];
-                            //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
-                            //事件所要执行的方法
-                            let fn = null;
-                            if(executeType == 'trigger_method'){
-                            //预定义方法
-                                const executeContentUUID = interactive['executeContentUUID'];
-                                const executeContentMethodName = interactive['executeContentMethodName'];
-                                //给相同事件的创建方法数组
-                                const targetUUID = executeContentUUID;
-                                //通过uuid查找目标积木
-                                const executeContent = _TY_Tool.findBBByUuid(executeContentUUID);
-                                fn = executeContent?executeContent[executeContentMethodName] : null;
-                            }else if(executeType == 'custom_script'){
-                            //自定义方法
-                                const buzz = interactive['executeScript'];
-                                fn = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
-                                    eval(code);
-                                })
-                            }else if(executeType == 'container_method'){
-                            //容器方法
-                                const containerMethodName = interactive['containerMethodName'];
-                                fn = t[containerMethodName];
-                            }
-                            if(fn){
-                            //将获得的方法推送到数组中
-                                t.onInteractiveFn[uuid] = t.onInteractiveFn[uuid] || {};
-                                t.onInteractiveFn[uuid][interactive['fromContentEvent']] = t.onInteractiveFn[uuid][interactive['fromContentEvent']] || [];
-                                t.onInteractiveFn[uuid][interactive['fromContentEvent']].push(fn);
-                            }
-                        });
-                    }) 
-                }
-            },
-            /*公共方法处理绑定事件
-                bb:触发事件的积木
-                fromContentEvent:当前触发事件名称
-            */
-            publicEmit:function(bb,fromContentEvent,...params){
-                const t = this;
-                const uuid = bb['uuid'];
-                const fnArr = t.onInteractiveFn[uuid][fromContentEvent];
-                fnArr.forEach((fn,key)=>{
-                    fn(...params);
-                })
-            },
-            //设置积木样式
-            setStyle:function(bb){
-                const t = this;
-                const layout = bb.layout;
-                let style = {};
-                if(layout){
-                    style = {
-                        'background-color':layout.bgColor,
-                        'transform':`rotate(${layout.bgColor})`,
-                        'opacity':layout.transparency,
-                        'width':layout.size.width,
-                        'height':layout.size.height,
-                        'border-style':layout.border.style,
-                        'border-color':layout.border.color,
-                        'border-size':layout.border.size,
-                        'border-radius':layout.border.radius,
-                        'margin':layout.border.margin,
-                        'box-shadow':`${layout.shadow.size} ${layout.shadow.direction} ${layout.shadow.vague} ${layout.shadow.color}`,
-                    }
-                }
-                const animation = t.setAnimation(bb);
-                style.animation = animation;
-                return style;
-            },
-            //设置积木动画
-            setAnimation:function(bb){
-                const animations = bb['animation'];
-                let animation = null;
-                animations.forEach((ani,key)=>{
-                    const playNum = ani.loop?'infinite':ani.playNum;
-                    animation = animation?`${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`:`${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
-                })
-                return animation;
             },
             loadChildBB(){
                 let t=this;
