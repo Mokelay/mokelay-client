@@ -405,26 +405,17 @@ let _findChildBB = function(uuid, children) {
 }
 
 /**
-    根据pageAlias和uuid 查询这个uuid的积木vue对象
+    根据uuid 查询这个uuid的积木vue对象
 **/
-util.findBBByUuid = function(uuid, pageAlias) {
-    const pages = window._TY_Page_Data;
-    if (!pages) {
-        return null; //没有页面存储
+util.findBBByUuid = function(uuid) {
+    let root = window._TY_Root; //初始根
+    if (!root) {
+        return null; //没有页面
     }
-    let root = pages[pageAlias]; //初始根
-    if (!pageAlias) {
-        //没有传pageAlias,直接从根找    如果页面已经切换，$children 是不会保留切换前的页面vue对象的，所以这里可以任意获取一个页面，然后找到根，再往下找
-        for (let o in pages) {
-            pageAlias = o;
-            root = pages[pageAlias];
-            break;
-        }
-        //如果不传pageAlias  就从根找起  ,否则从传过来的page开始找起
-        while (root.$parent) {
-            root = root.$parent;
-        }
-    }
+    ////从root开始找，比如弹窗中的子积木就查询不到，所以还是从根dom开始找
+    // while (root.$parent) {
+    //     root = root.$parent;
+    // }
     //判断当前vue对象是不是要找的vue组件
     let resultVue = _checkVueHasRef(uuid, root);
     if (resultVue && resultVue != null) {

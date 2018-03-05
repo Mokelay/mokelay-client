@@ -32,20 +32,7 @@
         },
         created: function () {
             let t=this;
-            t.firstOpts = [];
-            const pageAlias = t.$route.params.pageAlias;
-            if(!pageAlias){
-                console.log("router pageAlias is null");
-            }
-            //获取根数据
-            const uuidList = window._TY_Page_Data[pageAlias].$refs;
-            for(let i in uuidList){
-                t.firstOpts.push({
-                    value:i,
-                    label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
-                    children:[]
-                });
-            }
+            t.loadFirstData();
         },
         mounted:function(){
         },
@@ -56,6 +43,19 @@
 
                 t.$emit('change',value);
                 t.$emit('input',value);
+            },
+            loadFirstData(){
+                let t=this;
+                t.firstOpts = [];
+                //获取根数据
+                const uuidList = window._TY_Root.$refs;
+                for(let i in uuidList){
+                    t.firstOpts.push({
+                        value:i,
+                        label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
+                        children:[]
+                    });
+                }
             }
         }
     }
