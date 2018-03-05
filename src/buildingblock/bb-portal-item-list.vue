@@ -1,14 +1,15 @@
 <template>
-    <div :class="'bb-portal-item-list ' + styleConfig.transitionType" :style="{'max-width':styleConfig.width}">
-        <div class="grid-item" v-for="(field,key) in realFields" :style="{'margin': '20px '+ styleConfig.margin}">
-            <bb-button :button="field.actionConfig" @button-finish='buttonFinish' :style="{width:styleConfig.imgWidth}">
+    <div :class="'bb-portal-item-list ' + p_styleConfig.transitionType" :style="{'max-width':p_styleConfig.width}">
+        <div class="grid-item" v-for="(field,key) in realFields" :style="{'margin': '20px '+ p_styleConfig.margin}">
+            <bb-button :button="field.actionConfig" @button-finish='buttonFinish' @click='btnClick(field)' :style="{width:p_styleConfig.imgWidth}">
                 <!-- 图片或者图标 -->
-                <div class="item-container" :style="{height:styleConfig.imgHeight}">
-                    <i v-if="field.icon" :class="field.icon + ' ty-font'" :style="{'line-height':styleConfig.imgHeight,'font-size':styleConfig.imgWidth}"></i>
+                <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
+                    <i v-if="p_value&&p_value==field.value" class="el-icon-check"></i>
+                    <i v-if="field.icon" :class="field.icon + ' ty-font'" :style="{'line-height':p_styleConfig.imgHeight,'font-size':p_styleConfig.imgWidth}"></i>
                     <img v-else  class="item-image" :src="field.src" alt="">
                 </div>
                 <!-- 主标题 -->
-                <div class="item-title" :style="{color:styleConfig.fontColor,'font-size':styleConfig.fontSize}">{{field.title}}</div>
+                <div class="item-title" :style="{color:p_styleConfig.fontColor,'font-size':p_styleConfig.fontSize}">{{field.title}}</div>
                 <!-- 副标题 -->
                 <div class="item-subtitle">{{field.subtitle}}</div>
             </bb-button>
@@ -19,6 +20,10 @@
     export default {
         name: 'bb-portal-item-list',
         props: {
+            value:{
+                type:String,
+                default:''
+            },
             /*
                 fields 静态数据源
                 [{
@@ -80,10 +85,24 @@
         },
         data() {
             return {
-                realFields:this.fields
+                realFields:this.fields,
+                p_value:this.value
             }
         },
         watch: {
+        },
+        computed:{
+            p_styleConfig(){
+                return Object.assign({
+                        transitionType:'portal-move-up',
+                        imgWidth:'118px',
+                        imgHeight:'118px',
+                        fontColor:'#666666',
+                        fontSize:'14px',
+                        width:'500px',
+                        margin:'50px'
+                    },this.styleConfig);
+            }
         },
         created: function () {
             const t = this;
@@ -100,7 +119,9 @@
                 const t = this;
                 const newFields = t.realFields;
                 t.realFields.forEach((val,key)=>{
-                    val.actionConfig.type = 'text'
+                    if(val.actionConfig){
+                        val.actionConfig.type = 'text'
+                    }
                 });
             },
             //传递bb-button返回的 button-finish 事件
@@ -121,6 +142,11 @@
                     }, function (code, msg) {
                     });
                 }
+            },
+            btnClick:function(field){
+                let t=this;
+                t.p_value=field.value||'';
+                t.$emit('input',field.value||'');
             }
         }
     }
@@ -139,6 +165,16 @@
             }
         }
     }
+    .portal-move-up .grid-item .item-container>i.el-icon-check{
+        position: absolute;
+        font-size: 15px;
+        right: -3px;
+        top: 0;
+        line-height: 1;
+        color: #0091ea;
+        font-weight: bold;
+    }
+
     //默认样式  入口上移动画
     .portal-move-up{
         .grid-item{
@@ -189,6 +225,8 @@
             button{
                 box-sizing: content-box;
                 display: block;
+                background: transparent;
+                border-color: transparent;
                 margin: 0;
                 padding:0;
             }
