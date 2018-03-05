@@ -42,10 +42,38 @@
       }
 
       var uuid = this.layoutObject?this.layoutObject['uuid'] : null;
-      //通过bb-layout-seriation绑定交互动画
-      if(this.content){
-        var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content}});
-        pbbElementList.push(element);
+
+      //根据布局类型展示不同布局
+      switch(this.layoutType){
+        case 'seriation':
+        //顺序排列布局 seriation
+            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
+            pbbElementList.push(element);
+            break;
+        //容器布局 container
+        case 'container':
+        var props = {};
+        if(this.content){
+          //获取布局容器中的 内容
+          props = {
+            content:this.content,
+            layoutObject:this.layoutObject
+          }
+          var element = createElement('bb-layout-container', {ref:uuid,props:props});
+            pbbElementList.push(element);
+        }
+        break;
+        //自由式布局 canvas
+        //TODO
+
+        //网格布局 grid
+        //TODO
+
+        default:
+            //顺序排列布局 seriation
+            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content}});
+            pbbElementList.push(element);
+            break;
       }
       return createElement(
           'div',
