@@ -120,7 +120,7 @@
             /*
                 layout 布局样式配置
                 //通过bb-portal-item-list 图文入口 展示选项 
-                h-f:'上下布局',
+                h-m:'上下布局',
                 h-m-f:'上中下布局',
                 r-m:'左右布局',
                 h-l-m:'上下左右布局',
@@ -133,7 +133,7 @@
                     bgColor:{}//布局背景色
                 }               
             */
-            layout:{
+            layoutObject:{
                 type:Object,
                 default:function(){
                     return {
@@ -148,7 +148,7 @@
                     }
                 }
             },
-            /*
+            /*  content
                 header leftAside rightAside main footer 头部积木静态数据配置
                     //积木数组
                     content:[{                      //页面内容
@@ -199,63 +199,34 @@
                         }
                     }]
             */
-            header:{
+            content:{
                 type:Array,
                 default:function(){
-                    return[{uuid:'header',alias:'bb-words',aliasName:'',attributes:{value:'Header',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
+                    return [
+                        {uuid:'header',alias:'bb-words',group:'header',aliasName:'',attributes:{value:'Header',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
+                        {uuid:'leftAside',alias:'bb-words',group:'leftAside',aliasName:'',attributes:{value:'LeftAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
+                        {uuid:'main',alias:'bb-words',aliasName:'',group:'main',attributes:{value:'main',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
+                        {uuid:'rightAside',alias:'bb-words',aliasName:'',group:'rightAside',attributes:{value:'rightAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
+                        {uuid:'footer',alias:'bb-words',aliasName:'',group:'footer',attributes:{value:'Footer',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}
+                    ]
                 }
-            },
-            /*leftAside 侧边栏积木配置*/
-            leftAside:{
-                type:Array,
-                default:function(){
-                    return[{uuid:'leftAside',alias:'bb-words',aliasName:'',attributes:{value:'LeftAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
-                }
-            },
-            /*rightAside 侧边栏积木配置*/
-            rightAside:{
-                type:Array,
-                default:function(){
-                    return[{uuid:'rightAside',alias:'bb-words',aliasName:'',attributes:{value:'rightAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
-                }
-            },
-            /*main 头部积木配置*/
-            main:{
-                type:Array,
-                default:function(){
-                    return[{uuid:'main',alias:'bb-words',aliasName:'',attributes:{value:'main',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
-                }
-            },
-            /*footer 底部积木配置*/
-            footer:{
-                type:Array,
-                default:function(){
-                    return[{uuid:'footer',alias:'bb-words',aliasName:'',attributes:{value:'Footer',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}]
-                }
-            },
-            /*
-                containerDs 动态数据源配置 
-                返回数据包含 header leftAside rightAside main footer     
-            */
-            containerDs:{
-                type:Object
             }
-
         },
         data() {
             return {
-                realLayout:this.layout.type,
-                realBgColor:this.layout.bgColor,
-                realHeader:this.header,
-                realLeftAside:this.leftAside,
-                realRightAside:this.rightAside,
-                realMain:this.main,
-                realFooter:this.footer
+                realLayout:this.layoutObject.type,
+                realBgColor:this.layoutObject.bgColor,
+                realHeader:[],
+                realLeftAside:[],
+                realRightAside:[],
+                realMain:[],
+                realFooter:[]
             }
         },
         watch: {
         },
         created: function () {
+            this.setData();
         },
         mounted:function(){
             const t = this;
@@ -283,6 +254,34 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //通过group获取各部分积木
+            setData:function(){
+                const t = this;
+                if(t.content){
+                    t.content.forEach((ele,key)=>{
+                        switch(ele.group){
+                            case 'header':
+                                t.realHeader.push(ele);
+                                break;
+                            case 'leftAside':
+                                t.realLeftAside.push(ele);
+                                break;
+                            case 'main':
+                                t.realMain.push(ele);
+                                break;
+                            case 'rightAside':
+                                t.realRightAside.push(ele);
+                                break;
+                            case 'footer':
+                                t.realFooter.push(ele);
+                                break;
+                            default:
+                                t.realMain.push(ele);
+                                break;
+                        }
+                    })
+                }
             }
         }
     }
