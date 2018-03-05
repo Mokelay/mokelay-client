@@ -54,6 +54,9 @@
         );
     },
     props: {
+      root:{
+        type:Boolean
+      },
       pageAlias:{
         type: String
       },
@@ -81,6 +84,9 @@
     created: function () {
       //把bb-page的全局对象注册到window下
       window._TY_Page_Data[this.pageAlias] = this;
+      if(this.root){
+        window._TY_Root = this;
+      }
       this.loadData();
     },
     methods: {
