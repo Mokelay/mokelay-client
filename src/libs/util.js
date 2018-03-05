@@ -489,6 +489,184 @@ util.buildDefaultValTpl = function(t, p_value) {
     }
 }
 
+/**
+ * 渲染标准数据格式
+ * @content: [{ //页面内容
+        uuid: '',
+        alias: 'bb-layout-canvas', //积木别名
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+    }]
+ * @createElement: fn vue的方法
+ * @t:当前容器积木的实例化对象
+ */
+util.bbRender = function(content, createElement, t) {
+    const bbList = [];
+    //onInteractiveFn 存储每个事件的方法数组
+    if (content) {
+        content.forEach((bb, key) => {
+            const attributes = bb['attributes'];
+            let onArr = _setEventMethod(bb, t);
+            //渲染积木属性和动画
+            const style = _setStyle(bb, t);
+            const bbele = createElement(bb['alias'], {
+                ref: bb['uuid'],
+                props: attributes,
+                attrs: {
+                    aliasName: bb['aliasName']
+                },
+                on: onArr,
+                style: style
+            }, []);
+            const bbItem = createElement('div', {
+                style: {
+                    flex: 1
+                }
+            }, [bbele]);
+            //控制排序 TODO
+            //bbList.splice(bb.layout.sort - 1,1,bbItem);
+            bbList.push(bbItem);
+        });
+    }
+    return bbList;
+}
+/**
+ *_setEventMethod
+ *绑定公共方法到事件
+ *私有只在bbRender中使用
+ * @t:当前容器积木的实例化对象
+ * @bb:{ //需要解析交互的积木
+        uuid: '',
+        alias: 'bb-layout-canvas', //积木别名
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+    }
+    @t:
+ */
+let _setEventMethod = function(bb, t) {
+    let on = {};
+    const uuid = bb['uuid'];
+    if (bb.interactives) {
+        bb.interactives.forEach((interactive, index) => {
+            on[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
+        });
+    }
+    return on;
+}
+/**
+ *setStyle 设置积木样式
+ *私有只在bbRender中使用
+ * @t:当前容器积木的实例化对象
+ * @bb:{ //需要解析交互的积木
+    uuid: '',
+    alias: 'bb-layout-canvas', //积木别名
+    aliasName: '自由式布局', //中文名称
+    attributes: {}, //积木属性
+    animation: [{ //动画
+    }],
+    interactives: [{ //触发交互
+    }],
+    layout: {} //积木布局
+}
+ */
+let _setStyle = function(bb, t) {
+    const layout = bb.layout;
+    let style = {};
+    if (layout) {
+        style = {
+            'background-color': layout.bgColor,
+            'transform': `rotate(${layout.bgColor})`,
+            'opacity': layout.transparency,
+            'width': layout.size.width,
+            'height': layout.size.height,
+            'border-style': layout.border.style,
+            'border-color': layout.border.color,
+            'border-size': layout.border.size,
+            'border-radius': layout.border.radius,
+            'margin': layout.border.margin,
+            'box-shadow': `${layout.shadow.size} ${layout.shadow.direction} ${layout.shadow.vague} ${layout.shadow.color}`,
+        }
+    }
+    const animation = _setAnimation(bb);
+    style.animation = animation;
+    return style;
+}
+/**
+ *setAnimation 设置积木动画 
+ *私有只在bbRender中使用
+ * @bb:{ //需要解析交互的积木
+    uuid: '',
+    alias: 'bb-layout-canvas', //积木别名
+    aliasName: '自由式布局', //中文名称
+    attributes: {}, //积木属性
+    animation: [{ //动画
+    }],
+    interactives: [{ //触发交互
+    }],
+    layout: {} //积木布局
+}
+ */
+let _setAnimation = function(bb) {
+    const animations = bb['animation'];
+    let animation = null;
+    animations.forEach((ani, key) => {
+        const playNum = ani.loop ? 'infinite' : ani.playNum;
+        animation = animation ? `${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}` : `${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
+    })
+    return animation;
+}
+/**
+ *公共方法处理绑定事件
+ *私有只在bbRender中使用
+    @t:当前容器积木的实例化对象
+    @bb:触发事件的积木
+    @fromContentEvent:当前触发事件名称
+*/
+let _publicEmit = function(t, bb, fromContentEvent, ...params) {
+    const uuid = bb['uuid'];
+    bb.interactives.forEach((interactive, index) => {
+        const executeType = interactive['executeType'];
+        const t = this;
+        //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
+        //事件所要执行的方法
+        let fn = null;
+        if (executeType == 'trigger_method') {
+            //预定义方法
+            const executeContentUUID = interactive['executeContentUUID'];
+            const executeContentMethodName = interactive['executeContentMethodName'];
+            //给相同事件的创建方法数组
+            const targetUUID = executeContentUUID;
+            //通过uuid查找目标积木
+            const executeContent = util.findBBByUuid(executeContentUUID);
+            fn = executeContent ? executeContent[executeContentMethodName] : null;
+        } else if (executeType == 'custom_script') {
+            //自定义方法
+            const buzz = interactive['executeScript'];
+            fn = util.loadBuzz.bind(this, buzz, function(code) {
+                eval(code);
+            })
+        } else if (executeType == 'container_method') {
+            //容器方法
+            const containerMethodName = interactive['containerMethodName'];
+            fn = t[containerMethodName];
+        }
+        if (fn) {
+            //执行目标方法
+            fn(...params);
+        }
+    });
+}
+
 window._TY_Tool = util;
 
 export default util;
