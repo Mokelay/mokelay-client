@@ -7,63 +7,94 @@
         render: function (createElement) {
             var t =this;
             var formItems = [];
+            var bbContent = [];
             //创建FormItem
-            this.realFields.forEach(function(field){
-                //支持etProps
-                var props = field['props'];
-                var etProps = field['etProps'];
-                t.formData = t.formData?t.formData : {};
-                if(etProps){
-                    etProps = eval("("+etProps+")");
-                    props = etProps;
-                }
-                //创建InputField
-                if(props){
-                    props.value = t.formData[field['attributeName']];
-                }else{
-                    props = {
-                        value:t.formData[field['attributeName']]
+            if(t.content){
+                bbContent = t.content;
+            }else{
+                t.realFields.forEach(function(field){
+                    //支持etProps
+                    var props = field['props'];
+                    var etProps = field['etProps'];
+                    t.formData = t.formData?t.formData : {};
+                    if(etProps){
+                        etProps = eval("("+etProps+")");
+                        props = etProps;
                     }
-                }
-                var defaultOn = {
-                    input: function (val) {
-                        t.formData[field['attributeName']] = val;
-                    }
-                };
-
-                var pbbId = field['pbbId'];
-                var itemOn = Object.assign({}, defaultOn);//传入事件监听
-                var on = t.on;
-                if(on){
-                    on.forEach(function(_on,index){
-                        if(pbbId == _on['pbbId']){
-                            itemOn[_on['triggerEventName']] = t.$refs[_on['executePbbId']]?t.$refs[_on['executePbbId']][_on['executeBBMethodName']] : ''
+                    //创建InputField
+                    if(props){
+                        props.value = t.formData[field['attributeName']];
+                    }else{
+                        props = {
+                            value:t.formData[field['attributeName']]
                         }
-                    });
-                }
+                    }
+                    var defaultOn = {
+                        input: function (val) {
+                            t.formData[field['attributeName']] = val;
+                        }
+                    };
+                    var pbbId = field['pbbId'];
+                    var itemOn = Object.assign({}, defaultOn);//传入事件监听
+                    var on = t.on;
+                    var interactives = [];
+                    if(on){
+                        on.forEach(function(_on,index){
+                            if(pbbId == _on['pbbId']){
+                                var newInteractives = {       //触发交互
+                                    uuid:_TY_Tool.uuid(),
+                                    fromContentEvent:_on['triggerEventName'],
+                                    executeType:'trigger_method',         //执行类型(预定义方法 trigger_method,
+                                    executeContentUUID:_on['executePbbId'],  //执行积木的UUID executeType = trigger_method
+                                    executeContentMethodName:_on['executeBBMethodName']
+                                }
+                                interactives.push(newInteractives);
+                            }
+                        });
+                    }
+                    props['rules'] = field['rules'];
+                    props['attributeName'] = field['attributeName'];
 
-                var ref = pbbId;
-                var item = createElement(field['et'],{
-                    props:props,
-                    attrs:{
-                        aliasName:field['name']
-                    },
-                    on: itemOn,
-                    ref:ref||_TY_Tool.uuid()
+                    const bbEle = {
+                        uuid: field['pbbId'],
+                        alias: field['et'], //积木别名
+                        aliasName: field['name'], //中文名称
+                        attributes: props, //积木属性
+                        animation: [], //动画
+                        interactives: interactives, //触发交互
+                        layout: null //积木布局
+                    }
+                    bbContent.push(bbEle);
                 });
-
-                var className = field['et'] == 'bb-hidden'?'form-item-hidden':'form-item';
-                field['rules'] = typeof field['rules'] == 'string'?eval(field['rules']):field['rules'];
+            }
+            //为每一项添加默认的输入事件
+            bbContent.forEach((field,key)=>{
+                field['interactives'].push({
+                    uuid:_TY_Tool.uuid(),
+                    fromContentEvent:'input',
+                    executeType:'custom_script',         //执行类型(预定义方法 trigger_method,
+                    executeScript:function (val) {
+                        t.formData[field['attributes']['attributeName']] = val;
+                    }
+                })
+            })
+            const bbList = _TY_Tool.bbRender(bbContent, createElement, t);
+            bbContent.forEach((field,key)=>{
+                const bbItem = bbList[key];
+                var className = field['alias'] == 'bb-hidden'?'form-item-hidden':'form-item';
+                field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
                 var formItem = createElement('el-form-item',{
                     class:className,
                     props:{
-                        label:field['name'],
-                        prop:field['attributeName'],
+                        label:field['aliasName'],
+                        prop:field['attributes']['attributeName'],
                         rules:field['rules']
                     }
-                },[item]);
+                },[bbItem]);
                 formItems.push(formItem);
-            });
+            })
+
+
             //取消按钮
             var cancelButton = createElement('el-button',{
                     domProps:{
@@ -123,6 +154,7 @@
             },formItems);
         },
         props: {
+            //不在使用，被content代替
             fields:{
                 type:Array,
                 default:function(){
@@ -131,6 +163,7 @@
             },
             //处理fields之间的交互
             //[{pbbId:'',triggerEventName:'',executePbbId:'',executeBBMethodName:''}]
+            //不在使用，被content代替
             on :{
                 type:Array,
                 default:function(){
@@ -196,6 +229,61 @@
             labelInline:{
                 type:Boolean,
                 default:false
+            },
+            /*
+                content:积木数据,
+                content:[{                      //页面内容
+                        uuid:'',
+                        alias:'',                   //积木别名
+                        aliasName:'',               //中文名称
+                        attributes:{
+                            attributeName:''    //表单项键值别名
+                            rules:[]            //验证规则
+                            ........            //其他积木属性
+                        },              //积木属性
+                        animation:[{                //动画
+                            style:"",               //方式
+                            time:0,                 //时间
+                            delay:0,                //延迟时间
+                            playNum:1               //播放次数
+                            loop:true|false,        //循环
+                            direction:""            //方向
+                        }],
+                        interactives:[{             //触发交互
+                            uuid:'',
+                            fromContentEvent:'',    //触发积木的事件,fromContentUUID为当前content的UUID
+                            executeType:'',         //执行类型(预定义方法 trigger_method,
+                                                    //自定义方法 custom_script,
+                                                    //容器类方法 container_method)
+                            executeScript:'',       //执行脚本 executeType = custom_script
+                            executeContentUUID:'',  //执行积木的UUID executeType = trigger_method
+                            executeContentMethodName:'',
+                                                    //执行积木的方法
+                            containerMethodName:''  //容器方法 executeType = container_method
+                        }],
+                        layout:{                    //积木布局
+                            sort:0,                 //排序 顺序排列布局下有效
+                            bgColor:"",             //背景颜色
+                            rotate:0,               //旋转
+                            transparency:0,         //透明度
+                            border:{                //边框
+                                style:"",           //边框样式
+                                color:"",           //边框颜色
+                                size:"",            //边框尺寸
+                                radius:"",          //边框弧度
+                                margin:""           //边距
+                            },
+                            shadow:{                //阴影
+                                color:"",           //阴影颜色
+                                size:"",            //阴影大小
+                                direction:'',       //阴影方向
+                                vague:''            //阴影模糊
+                            }
+                        }
+                    }]
+            */
+            content:{
+                type:Array
             }
         },
         watch: {
