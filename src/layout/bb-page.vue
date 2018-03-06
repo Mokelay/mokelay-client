@@ -41,7 +41,7 @@
         pbbElementList.push(createElement('bb-custom',{props:{customFile:this.customFile}}));
       }
 
-      var uuid = this.layoutObject?this.layoutObject['uuid'] : _TY_Tool.uuid();
+      var uuid = this.layoutObject&&this.layoutObject['uuid']?this.layoutObject['uuid'] : _TY_Tool.uuid();
 
       //根据布局类型展示不同布局
       switch(this.layoutType){

@@ -443,9 +443,9 @@ util.loadChildBB = function(t) {
             };
             item.name = t.$refs[i].$attrs.aliasName || t.$refs[i].$vnode.componentOptions.tag; //设置组件名称
             item.bbAlias = t.$refs[i].$vnode.componentOptions.tag; //设置积木别名
-            let isNull = false;
+            let isNull = true;
             for (let j in t.$refs[i].$refs) {
-                isNull = true;
+                isNull = false;
                 break;
             }
             if (isNull) {

@@ -132,6 +132,9 @@
           }
         },
         watch:{
+          staticOptions(val){
+            this.optionData = typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]
+          }
         },
         created: function () {
           let t=this;
@@ -290,12 +293,14 @@
                     for(let i=0;i<selectedValArray.length;i++){
                         for(let j=0;j<dataTemp.length;j++){
                           if(selectedValArray[i]==dataTemp[j][t.p_casProps.value]){
-                            //找到了   如果还有下一层，继续找他的子
+                            //找到了  
+                            resultOptionItem=dataTemp[j];
+                            break;
+                          }else{
+                            //如果还有下一层，继续找他的子
                             if(dataTemp[j][t.p_casProps.children]&&dataTemp[j][t.p_casProps.children].length>0){
                               dataTemp=dataTemp[j][t.p_casProps.children];
                             }
-                            resultOptionItem=dataTemp[j];
-                            break;
                           }
                         }
                     }

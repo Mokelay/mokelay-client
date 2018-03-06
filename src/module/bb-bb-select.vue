@@ -31,10 +31,12 @@
         watch: {
         },
         created: function () {
-            let t=this;
-            t.loadFirstData();
         },
         mounted:function(){
+             let t=this;
+             window.setTimeout(function(){
+                t.loadFirstData();
+             },500);
         },
         methods: {
             change(value){
@@ -49,12 +51,17 @@
                 t.firstOpts = [];
                 //获取根数据
                 const uuidList = window._TY_Root.$refs;
+
+                console.log("uuidList",uuidList);
                 for(let i in uuidList){
-                    t.firstOpts.push({
-                        value:i,
-                        label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
-                        children:[]
-                    });
+                    if(uuidList[i]&&uuidList[i]._isVue){//是vue对象
+                        let len = t.firstOpts.length;
+                        t.firstOpts.push({
+                            value:i,
+                            label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
+                            children:[]
+                        });
+                    }
                 }
             }
         }
