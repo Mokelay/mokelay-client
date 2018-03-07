@@ -103,6 +103,13 @@
                     }
                 }
             },
+            //关系图表刷新
+            refresh(){
+                const t = this;
+                t.loadData(function(){
+                    t.getData();
+                });
+            },
             getData(self) {
                 var t = self||this;
                 var json = this.data;
