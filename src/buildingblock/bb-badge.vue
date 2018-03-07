@@ -1,16 +1,31 @@
 <template>
-    <el-badge :is-dot="isDot" :value="showValue" class="item" :hidden="hidden"><span>{{text}}</span></el-badge>
+    <el-badge :is-dot="isDot" :value="showValue" class="item" :hidden="hidden"><span @click="click">{{text}}</span></el-badge>
 </template>
 <script>
     export default {
         name: 'bb-badge',
         props: {
+            //红点内容
             value: {
                 type: [Number, String, Boolean],
                 default: null
             },
+            //标题
             text: {
                 type: String,
+            },
+            //标题动态数据源
+            textDs: {
+                type: Object,
+            },
+            //自动刷新时间间隔
+            intervalTime: {
+                type: Number
+            },
+            //是否可以点击消失
+            clickable: {
+                type: Boolean,
+                default:false
             }
         },
         data() {
@@ -20,31 +35,75 @@
             };
         },
         computed: {
+            //标记显示控制
             isDot: function () {
                 var p_value = (typeof eval(this.baseValue) === 'boolean') ? eval(this.baseValue) : false;
                 return p_value;
             },
+            //标记显示内容
             showValue: function () {
                 var p_value = (typeof eval(this.baseValue) === 'boolean') ? '' : this.baseValue;
                 return p_value;
             }
         },
         created: function () {
+            this.autoRefresh();
         },
         methods: {
+            //隐藏标记
             hide: function () {
                 this.baseValue = null;
                 this.hidden = true;
+                if(this.setTime){
+                    this.stopRefresh();
+                }
             },
+            //初始化标记
             buildValue(val){
                 const t=this;
                 this.baseValue = val;
-//                this.showValue = (typeof eval(this.baseValue) === 'boolean') ? '' : this.baseValue;
                 if(val){
                     this.hidden = false;
                 }
-            }
-        },
+            },
+            //接收点击事件
+            click:function(){
+                const t = this;
+                t.$emit('click');
+                if(t.clickable){
+                    t.hide();
+                }
+            },
+            //获取动态数据
+            getData:function () {
+                const t = this;
+                if (t.textDs) {
+                    _TY_Tool.getDSData(t.textDs, _TY_Tool.buildTplParams(t), function (map) {
+                        map.forEach((val,key)=>{
+                            t.baseValue = val.value;
+                        })
+                    }, function (code, msg) {
+                    });
+                }
+            },
+            //开始刷新
+            autoRefresh:function(){
+                const t = this;
+                if(t.intervalTime == undefined){
+                    t.getData();
+                }else{
+                    if(!t.setTime){
+                        t.setTime = setInterval(t.getData,t.intervalTime);
+                    }
+                }
+            },
+            //停止自动刷新
+            stopRefresh:function(){
+                const t = this;
+                clearInterval(t.setTime);
+                t.setTime = null;
+            },
+        }
     }
 </script>
 <style>
