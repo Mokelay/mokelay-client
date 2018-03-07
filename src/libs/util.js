@@ -581,7 +581,9 @@ let _setEventMethod = function(bb, t) {
  */
 let _setStyle = function(bb, t) {
     const layout = bb.layout;
-    let style = {};
+    let style = {
+        'margin': '2px',
+    };
     if (layout) {
         style = {
             'background-color': layout.bgColor,
