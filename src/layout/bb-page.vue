@@ -180,9 +180,18 @@
                 animation:[],
                 layout:null
               }
-              interactives.forEach((item,key)=>{//添加交互
-                if(item.pbbId == _pbbId){
-                  contentItem['interactives'].push(item);
+              interactives.forEach((interactive,key)=>{//添加交互
+                if(interactive.pbbId == _pbbId){
+                  const newInteractive = {       //触发交互
+                      uuid:interactive.id || _TY_Tool.uuid(),
+                      fromContentEvent:interactive['triggerEventName'],
+                      executeType:interactive['executeType'],         //执行类型(预定义方法 trigger_method,
+                      executeScript:interactive['executeScript'],
+                      executeContentUUID:interactive['executePbbId'],  //执行积木的UUID executeType = trigger_method
+                      executeBBMethodName:interactive['executeBBMethodName'],
+                      executeContentMethodName:interactive['executeBBMethodName']
+                  }
+                  contentItem['interactives'].push(newInteractive);
                 }
               })
               contentArr.push(contentItem);
