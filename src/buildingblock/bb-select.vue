@@ -1,5 +1,13 @@
 <template>
-    <el-select placeholder="请选择" v-model="valueBase" :multiple="multiple" @change='change'>
+    <el-select 
+      placeholder="请选择" 
+      v-model="valueBase" 
+      :multiple="multiple"
+      :filterable="filterable"
+      allow-create
+      default-first-option
+      @change='change'
+      >
       <el-option
               v-for="option in items"
               :key="option.value"
@@ -15,40 +23,53 @@
     export default {
         name: 'bb-select',
         props: {
+            /*实现v-model*/
             value:{
               type: [String,Array,Number],
               default:''
             },
+            /*选项静态数据源*/
             fields:{
               type: Array,
               default:function(){
                   return [];
               }
             },
+            /*是否多选*/
             multiple:{
               type: Boolean,
               default:false
             },
+            /*选项静态数据源  不在使用*/
             options:{
               type: Array,
               default:function(){
                   return [];
               }
             },
+            /*选项名关键字 配合DS接口使用，从返回数据中获取需要的值*/
             textField:{
               type:String
             },
+            /*选项值关键字 配合DS接口使用，从返回数据中获取需要的值*/
             valueField:{
               type:String
             },
+            /*选项动态数据源*/
             ds: {
                 type: Object,
                 default: function () {
                     return null
                 }
             },
+            /*模板默认值*/
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            /*是否可搜索*/
+            filterable:{
+              type:Boolean,
+              default:true
             }
         },
         data() {
