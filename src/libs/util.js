@@ -536,34 +536,6 @@ util.bbRender = function(content, createElement, t) {
     return bbList;
 }
 /**
- *_setEventMethod
- *绑定公共方法到事件
- *私有只在bbRender中使用
- * @t:当前容器积木的实例化对象
- * @bb:{ //需要解析交互的积木
-        uuid: '',
-        alias: 'bb-layout-canvas', //积木别名
-        aliasName: '自由式布局', //中文名称
-        attributes: {}, //积木属性
-        animation: [{ //动画
-        }],
-        interactives: [{ //触发交互
-        }],
-        layout: {} //积木布局
-    }
-    @t:
- */
-let _setEventMethod = function(bb, t) {
-    let on = {};
-    const uuid = bb['uuid'];
-    if (bb.interactives) {
-        bb.interactives.forEach((interactive, index) => {
-            on[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
-        });
-    }
-    return on;
-}
-/**
  *setStyle 设置积木样式
  *私有只在bbRender中使用
  * @t:当前容器积木的实例化对象
@@ -628,12 +600,40 @@ let _setAnimation = function(bb) {
     return animation;
 }
 /**
+ *_setEventMethod
+ *绑定公共方法到事件
+ *私有只在bbRender中使用
+ * @t:当前容器积木的实例化对象
+ * @bb:{ //需要解析交互的积木
+        uuid: '',
+        alias: 'bb-layout-canvas', //积木别名
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+    }
+    @t:
+ */
+let _setEventMethod = function(bb, t) {
+    let on = {};
+    const uuid = bb['uuid'];
+    if (bb.interactives) {
+        bb.interactives.forEach((interactive, index) => {
+            on[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
+        });
+    }
+    return on;
+}
+/**
  *公共方法处理绑定事件
  *私有只在bbRender中使用
     @t:当前容器积木的实例化对象
     @bb:触发事件的积木
     @fromContentEvent:当前触发事件名称
-    @params:积木触发事件时积木传给方法的参数
+    @params:积木触发事件时传给方法的参数[data,data2....],例如linkage(data)
 */
 let _publicEmit = function(t, bb, fromContentEvent, ...params) {
     const uuid = bb['uuid'];
@@ -667,13 +667,12 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             /**
              *执行目标方法 
              *私有只在bbRender中使用
-                @params[0]:第一位多为编辑器返回的值,例如表单联动时传给linkage(data)
-                @params:积木触发事件时带的参数
+                @params:积木触发事件时传给方法的参数[data,data2....],例如linkage(data)
                 @t:当前容器积木的实例化对象
                 @bb:触发事件的积木
                 @fromContentEvent:当前触发事件名称
             */
-            fn(params[0], t, bb, fromContentEvent, params);
+            fn(params, t, bb, fromContentEvent);
         }
     });
 }
