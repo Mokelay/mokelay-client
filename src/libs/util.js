@@ -633,6 +633,7 @@ let _setAnimation = function(bb) {
     @t:当前容器积木的实例化对象
     @bb:触发事件的积木
     @fromContentEvent:当前触发事件名称
+    @params:积木触发事件时积木传给方法的参数
 */
 let _publicEmit = function(t, bb, fromContentEvent, ...params) {
     const uuid = bb['uuid'];
@@ -647,8 +648,9 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             const executeContentMethodName = interactive['executeContentMethodName'];
             //给相同事件的创建方法数组
             const targetUUID = executeContentUUID;
-            //通过uuid查找目标积木
-            const executeContent = util.findBBByUuid(executeContentUUID);
+            //通过uuid查找目标积木 
+            //优先查找当前容器积木内的实例对象，找不到再通过util.findBBByUuid全局查找,加快查找速度
+            const executeContent = t.$refs[executeContentUUID] || util.findBBByUuid(executeContentUUID);
             fn = executeContent ? executeContent[executeContentMethodName] : null;
         } else if (executeType == 'custom_script') {
             //自定义方法
@@ -662,8 +664,16 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             fn = t[containerMethodName];
         }
         if (fn) {
-            //执行目标方法
-            fn(t, bb, fromContentEvent, params);
+            /**
+             *执行目标方法 
+             *私有只在bbRender中使用
+                @params[0]:第一位多为编辑器返回的值,例如表单联动时传给linkage(data)
+                @params:积木触发事件时带的参数
+                @t:当前容器积木的实例化对象
+                @bb:触发事件的积木
+                @fromContentEvent:当前触发事件名称
+            */
+            fn(params[0], t, bb, fromContentEvent, params);
         }
     });
 }
