@@ -581,7 +581,9 @@ let _setEventMethod = function(bb, t) {
  */
 let _setStyle = function(bb, t) {
     const layout = bb.layout;
-    let style = {};
+    let style = {
+        'margin': '2px',
+    };
     if (layout) {
         style = {
             'background-color': layout.bgColor,
@@ -636,7 +638,6 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
     const uuid = bb['uuid'];
     bb.interactives.forEach((interactive, index) => {
         const executeType = interactive['executeType'];
-        const t = this;
         //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
         //事件所要执行的方法
         let fn = null;
@@ -662,7 +663,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
         }
         if (fn) {
             //执行目标方法
-            fn(...params);
+            fn(t, bb, fromContentEvent, params);
         }
     });
 }

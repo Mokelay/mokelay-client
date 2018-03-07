@@ -187,19 +187,18 @@
               })
               contentArr.push(contentItem);
             });
-            content = contentArr;
+            t.content = contentArr;
             //根据layout中的位置对content重新排序
             if(page.layout){
               t.content = [];
               JSON.parse(page.layout).forEach((val,key)=>{
                 contentArr.forEach((value,index)=>{
-                    if(parseInt(val[0]) == value.id){
-                      content.splice(val[1],0,value);
+                    if(parseInt(val[0]) == value.uuid){
+                      t.content.splice(val[1],0,value);
                     }
                 })
               })
             }
-            t.content = content;
           }
         }).catch(function (error) {
           t.$notify.error({
