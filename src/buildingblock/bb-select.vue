@@ -4,7 +4,6 @@
       v-model="valueBase" 
       :multiple="multiple"
       :filterable="filterable"
-      allow-create
       default-first-option
       @change='change'
       >
