@@ -295,18 +295,15 @@
                           if(selectedValArray[i]==dataTemp[j][t.p_casProps.value]){
                             //找到了  
                             resultOptionItem=dataTemp[j];
-                            break;
-                          }else{
-                            //如果还有下一层，继续找他的子
-                            if(dataTemp[j][t.p_casProps.children]&&dataTemp[j][t.p_casProps.children].length>0){
+                            if(i!=selectedValArray.length-1&&dataTemp[j][t.p_casProps.children]&&dataTemp[j][t.p_casProps.children].length>0){
                               dataTemp=dataTemp[j][t.p_casProps.children];
                             }
+                            break;
                           }
                         }
                     }
                     resultOptionItem[t.p_casProps.children]=result;
                   }
-                  
                 }
               }
             }
