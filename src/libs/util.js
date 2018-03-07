@@ -413,9 +413,9 @@ util.findBBByUuid = function(uuid) {
         return null; //没有页面
     }
     ////从root开始找，比如弹窗中的子积木就查询不到，所以还是从根dom开始找
-    // while (root.$parent) {
-    //     root = root.$parent;
-    // }
+    while (root.$parent) {
+        root = root.$parent;
+    }
     //判断当前vue对象是不是要找的vue组件
     let resultVue = _checkVueHasRef(uuid, root);
     if (resultVue && resultVue != null) {
@@ -515,7 +515,7 @@ util.bbRender = function(content, createElement, t) {
             //渲染积木属性和动画
             const style = _setStyle(bb, t);
             const bbele = createElement(bb['alias'], {
-                ref: bb['uuid'],
+                ref: bb['uuid'] || util.uuid(),
                 props: attributes,
                 attrs: {
                     aliasName: bb['aliasName']
