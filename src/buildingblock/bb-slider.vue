@@ -1,5 +1,4 @@
 <template>
-    <div>
          <el-slider
           v-model="valueBase"
           :min="min"
@@ -19,7 +18,6 @@
           @change="change"
           >
         </el-slider>
-    </div>
 </template>
 
 <script>

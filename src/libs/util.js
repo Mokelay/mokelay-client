@@ -556,7 +556,7 @@ let _setStyle = function(bb, t) {
     let style = {
         'margin': '2px',
     };
-    if (layout) {
+    if (layout && JSON.stringify(layout) != '{}') {
         style = {
             'background-color': layout.bgColor,
             'transform': `rotate(${layout.bgColor})`,

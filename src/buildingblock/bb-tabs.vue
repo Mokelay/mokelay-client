@@ -1,4 +1,52 @@
 <script>
+    /**
+        //bb-tabs
+        {
+            uuid: '123',
+            alias: 'bb-tabs',
+            aliasName: '标签',
+            attributes: [{
+                tabPosition: 'left',
+                activeName: 'all',
+                badgeDs: {
+                    ...
+                },
+                tabPanes: [{ //tabPanes属性逐渐下架，后面用content和tabs
+                    label: '全部',
+                    name: 'all',
+                    fields: [{
+                        et: 'bb-page',
+                        etProps: '{...}'
+                    }]
+                }],
+                tabDs: {...},//tabPanes属性逐渐下架，后面用content和tabs
+                tabDsContent:[{...}],//模板  //tabPanes属性逐渐下架，后面用content和tabs
+                tabs:[{
+                    type:'static',
+                    label:'全部',
+                    name:'all'
+                },{
+                    type:'dynamic',
+                    name:'d',//content中的group
+                    ds:{
+                        ...
+                    }
+                }],
+                content:[{
+                    uuid:'234',
+                    alias:'bb-page',
+                    aliasName:'全部页',
+                    group:'all',//d 静态的tab一个panel一条记录，动态的tab一条记录包含多个panel
+                    attributes:{...},//etProps的内容
+                    animation:[{...}],
+                    interactives:[{...}],
+                    layout:{...}
+                }]
+                ...
+            }]
+        }
+    **/
+
     //TODO 需要支持内容的Page渲染
     import Vue from 'vue';
     import Util from '../libs/util.js'
@@ -6,35 +54,85 @@
         name: 'bb-tabs',
         render: function (createElement) {
             const t = this;
-            if (t.canRender) {
-                const paneArr = t.renderTabPanes(createElement);
-                return createElement('el-tabs', {
-                    props: {value: t.value, 'active-name': t.p_activeName}, on: {
-                        'tab-click': t.tabClick
-                    }
-                }, [paneArr]);
-            }
 
+            if(!t.canRender){
+                return;
+            }
+            const paneArr = t.renderTabData(createElement);
+            return createElement('el-tabs', {
+                props: {
+                    value: t.p_activeName,
+                    "tab-position":t.tabPosition,
+                }, on: {
+                    'tab-click': t.tabClick
+                }
+            }, [paneArr]);
         },
         props: {
+            /**
+                最终的tab数据是由tabPanels + tabDS 合并而来
+                实现交互渲染，需要改造为content , 增加group设计
+            **/
+            content:{
+                type:Array,
+                default:function(){
+                    return [];
+                }
+            },
+            /**
+                记录所有的tab  static和 dynamic区分
+                tabs:[{
+                    type:'static',
+                    label:'全部',
+                    name:'all'
+                },{
+                    type:'dynamic',
+                    name:'d',//content中的group
+                    ds:{
+                        ...
+                    }
+                }]
+            **/
+            tabs:{
+                type:Array,
+                default:function(){
+                    return [];
+                }
+            },
+            /**
+                [{
+                    label: item.text,
+                    name: item.value,
+                    fields:[{
+                        et:'bb-input',
+                        etProps:'{xxx:xxx}'
+                    }]
+                }]
+            **/
+            tabPosition:{
+                type:String,
+                default:"top"
+            },
             tabPanes: {
                 type: Array,
                 default: function () {
                     return [];
                 }
             },
-            value: {
-                type: String
-            },
+            //选中tab的name
             activeName: {
                 type: String
             },
+            //Tab上的角标读取的DS
             badgeDs: {
                 type: Object
             },
-            //tab头支持接口返回，默认text,value，不满足用handle处理
+            //Tab头支持接口返回，默认text,value，不满足用handle处理
             tabDs: {
-                type: [Object,String]
+                type: Object,
+                default:function(){
+                    return null;
+                }
             },
             //针对tabDs，如果是接口返回的tab头，页面配置公共的
             tabDsContent: {
@@ -44,8 +142,28 @@
         data() {
             return {
                 badgeData: null,
-                canRender: false,
-                // paneBox: []
+                canRender:false,//是否可以渲染了，属性改动会重新执行render方法
+                bbTabs:this.tabs,//tab header,含dynamic类型
+                /**
+                    最终转换成没有dynamic的类型
+                    [{
+                        label:'全部',
+                        name:'all',
+                        group:'all'
+                    }]
+                **/
+                realTabs:[],
+                bbContent:this.content,
+                /**
+                    tabsData:[{
+                        label: '全部',
+                        name: 'all',
+                        content:[{
+                            
+                        }]
+                    }]
+                **/
+                tabsData:[]//最终转换成tab识别的data数据
             }
         },
         computed: {
@@ -54,87 +172,193 @@
             }
         },
         created: function () {
-            this.getTabList();
+            const t=this;
+            // this.getTabList();
             this.getBadge();
+            //将老的属性转换成content
+            t.oldPropsToContent();
+            //再created的时候，先将动态tab头查询出来
+            t.getTabHeaders();
+        },
+        mounted:function(){
+            let t=this;
+            //将content属性转换成可以识别的tab组件
+            window.setTimeout(function(){
+                t.contentToTabData();
+            },300);
         },
         methods: {
-            tabClick: function (tab, event) {
-                const t = this;
-                t.$refs['badge_'+tab.name].hide();
-                let alias = tab.name;
-                let currentTab;
-                for(let i=0;i<t.paneBox.length;i++){
-                    if(alias==t.paneBox[i].alias){
-                        currentTab = t.paneBox[i];
-                        break;
+            //tabPanes  tabDs tabDsContent 转换成  只有在this.content没数据的时候才调用,方法内改变 bbContent 的值
+            oldPropsToContent:function(){
+                let t=this;
+                if(t.bbContent&&t.bbContent.length>0){
+                    return;
+                }
+                t.bbContent = [];
+                t.bbTabs=[];
+                if(t.tabPanes){
+                    for(let i=0;i<t.tabPanes.length;i++){
+                        let item = t.tabPanes[i];
+                        t.bbTabs.push({
+                            type:'static',
+                            label:item.label,
+                            name:item.name
+                        });
+                        let fields = item.fields;
+                        for(let j=0;j<item.fields.length;j++){
+                            let field = item.fields[j];
+                            t.bbContent.push({
+                                uuid:_TY_Tool.uuid(),
+                                alias:field['et'],
+                                aliasName:field['et'],
+                                group:item.name,
+                                attributes:typeof field['etProps'] == 'string' ? eval("("+field['etProps']+")") : field['etProps'],
+                                animation:[],
+                                interactives:[],
+                                layout:{}
+                            });
+                        }
                     }
                 }
-                if(!currentTab.dom.componentInstance){
-                  //渲染content
-                    let dom = new Vue({
-                        router: t.$router,
-                        render: function(createElement) {
-                            return currentTab.dom;
-                        }
-                    }).$mount('#tab_pane_' + alias);
+                if(t.tabDs&&t.tabDsContent){
+                    t.bbTabs.push({
+                        type:'dynamic',
+                        label:'动态tab',
+                        name:'dynamicTab',
+                        ds:t.tabDs
+                    });
+                    let props = typeof t.tabDsContent == 'string' ? eval("("+t.tabDsContent+")") : t.tabDsContent;
+                    t.bbContent.push({
+                        uuid:_TY_Tool.uuid(),
+                        alias:props['et'],
+                        aliasName:props['et'],
+                        group:'dynamicTab',
+                        attributes:props['etProps'],
+                        animation:[],
+                        interactives:[],
+                        layout:{}
+                    });
                 }
             },
-            renderTabPanes: function (createElement) {
+            //根据bbTabs 获取所有的
+            getTabHeaders:function(){
+                let t=this;
+                t.realTabs=[];
+                if(t.bbTabs&&t.bbTabs.length>0){
+                    t.canRender=false;
+                    t.bbTabs.forEach(function(tab,index){
+                        if(tab.type==='static'){
+                            t.realTabs.push({
+                                label:tab.label,
+                                name:tab.name,
+                                group:tab.name
+                            });
+                        }else if(tab.type==='dynamic'){
+                            _TY_Tool.getDSData(tab.ds, _TY_Tool.buildTplParams(t), function (map) {
+                                map[0].value.forEach((item, key)=> {
+                                    t.realTabs.push({
+                                        label: item.text,
+                                        name: item.value,
+                                        group: tab.name
+                                    })
+                                    t.canRender=true;
+                                });
+                            }, function (code, msg) {
+                                t.canRender=true;
+                            });
+                        }
+                    });
+                }
+            },
+            //转换content 让bb-tab能渲染  同一个group组装content
+            contentToTabData:function(){
+                let t=this;
+                t.tabsData=[];
+                if(t.realTabs&&t.realTabs.length>0&&t.bbContent&&t.bbContent.length>0){
+                    for(let i=0;i<t.realTabs.length;i++){
+                        let data={
+                            label:t.realTabs[i].label,
+                            name:t.realTabs[i].name,
+                            content:[]
+                        };
+                        for(let j=0;j<t.bbContent.length;j++){
+                            let item = t.bbContent[j];
+                            if(item.group==t.realTabs[i].group){
+                                //同一个group
+                                let itemCopy = _TY_Tool.deepClone(item);
+                                itemCopy['attributes']=_TY_Tool.tpl(item['attributes'], _TY_Tool.buildTplParams(t,{
+                                    "tab": {//静态配置只传过去name和value
+                                        label: data.label,
+                                        name: data.name
+                                    }
+                                }));
+                                data.content.push(itemCopy);
+                            }
+                        }
+                        t.tabsData.push(data);
+                    }
+                }
+            },
+            tabClick: function (tab, event) {
+                const t = this;
+                // debugger;
+                 t.$refs['badge_'+tab.name].hide();
+                let alias = tab.name;
+
+                let currentTabContent;
+                t.tabsData.forEach((tabData, key)=> {
+                    if(tabData.name==alias){
+                        currentTabContent=tabData.content;
+                    }
+                });
+                //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
+                if(!document.getElementById('tab_pane_' + alias)){
+                    return;
+                }
+                //渲染content
+                let dom = new Vue({
+                    router: t.$router,
+                    render: function(createElement) {
+                        return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
+                    }
+                }).$mount('#tab_pane_' + alias);
+            },
+            renderTabData: function (createElement) {
                 const t = this;
                 const paneArr = [];
-                let _paneBox = [];
-                if (t.tabPanes&&t.tabPanes.length>0) {
-                    t.tabPanes.forEach((tabPane, key)=> {
+                // let _paneBox = [];
+                if (t.tabsData&&t.tabsData.length>0) {
+                    t.tabsData.forEach((tabData, key)=> {
                         if (t.badgeData) {
                             t.badgeData.forEach((badgeItem, index)=> {
-                                if (tabPane.name == badgeItem.name) {
-                                    tabPane.value = badgeItem.value
+                                if (tabData.name == badgeItem.name) {
+                                    tabData.value = badgeItem.value
                                 }
                             })
                         }
                         //当前tab是否默认选中的tab
-                        const activeTab = t.p_activeName&&tabPane.name==t.p_activeName;
-                        const activeTabDom =[];
-                        tabPane.fields = tabPane.fields ? tabPane.fields : [];
-                        tabPane.fields.forEach((field, index)=> {
-                            let etProps = typeof field['etProps'] == 'string' ? eval("(" + field['etProps'] + ")") : field['etProps'];
-                            let currentDom = createElement(field['et'], {
-                                props: _TY_Tool.tpl(etProps, _TY_Tool.buildTplParams(t,{
-                                    "tab": {//静态配置只传过去name和value
-                                        label: tabPane.label,
-                                        name: tabPane.name
-                                    }
-                                }))
-                            }, []);
-                            _paneBox.push({
-                                rendered:activeTab,
-                                alias: tabPane.name,//表示唯一tab
-                                dom:currentDom
-                            });
-                            if(activeTab){
-                                activeTabDom.push(currentDom);
-                            }
-                        });
-                        const badge = createElement('bb-badge', {props: {value: tabPane.value}, ref: 'badge_'+tabPane.name}, []);
-                        const label = createElement('span', {slot: 'label'}, [tabPane.label, badge]);
+                        const activeTab = t.p_activeName&&tabData.name==t.p_activeName;
+                        let activeTabDom =[];
+                        if(activeTab){
+                            activeTabDom=_TY_Tool.bbRender(tabData.content, createElement, t);
+                        }
+                        const badge = createElement('bb-badge', {props: {value: tabData.value}, ref: 'badge_'+tabData.name}, []);
+                        const label = createElement('span', {slot: 'label'}, [tabData.label, badge]);
                         const tabPaneItem = createElement('el-tab-pane', {
-                                    props: {name: tabPane.name,label:tabPane.label, key: tabPane.name}
+                                    props: {name: tabData.name,label:tabData.label, key: tabData.name}
                                 }, [label, createElement('div', {
-                                    attrs: {id: 'tab_pane_' + tabPane.name}
-                                }, [activeTabDom])]
+                                    attrs: {id: 'tab_pane_' + tabData.name}
+                                }, activeTabDom)]
                         );
-//                        },[label,tabPaneChild]);
                         paneArr.push(tabPaneItem);
                     });
-                }
-                if(_paneBox.length>0){
-                    t.paneBox=_paneBox;
                 }
                 return paneArr;
             },
             getBadge: function () {
                 var t = this;
                 if (t.badgeDs) {
+                    t.canRender=false;
                     Util.getDSData(t.badgeDs, _TY_Tool.buildTplParams(t), function (map) {
                         t.badgeData = [];
                         map.forEach((item, key)=> {
@@ -143,38 +367,13 @@
                                 value: item.value,
                             }
                             t.badgeData.push(badge);
+
                         });
-                        t.canRender = true;
+                        t.canRender=true;
                     }, function (code, msg) {
+                         t.canRender=true;
                     });
                 } else {
-                    t.canRender = true;
-                }
-            },
-            getTabList(){
-                let t=this;
-                if(t.tabDs){
-                    Util.getDSData(t.tabDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map[0].value.forEach((item, key)=> {
-                            const tab = {
-                                label: item.text,
-                                name: item.value,
-                                fields:[]
-                            }
-                            if(t.tabDsContent){
-                                let props = typeof t.tabDsContent == 'string' ? eval("("+t.tabDsContent+")") : t.tabDsContent;
-                                let newProps=_TY_Tool.tpl(props,_TY_Tool.buildTplParams(t,{
-                                    "tab": {//动态可以传其他值
-                                        label: item.text,
-                                        name: item.value
-                                    }
-                                }));
-                                tab.fields.push(newProps);
-                            }
-                            t.tabPanes.push(tab);
-                        });
-                    }, function (code, msg) {
-                    });
                 }
             },
             loadChildBB(){
