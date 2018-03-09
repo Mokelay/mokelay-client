@@ -303,6 +303,7 @@
                         t.tabsData.push(data);
                     }
                 }
+                t.canRender=true;
             },
             tabClick: function (tab, event) {
                 const t = this;
