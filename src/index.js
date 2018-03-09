@@ -54,6 +54,7 @@ import bbbar from './buildingblock/bb-bar.vue';
 import bbdropdown from './buildingblock/bb-dropdown.vue';
 import bbcascader from './buildingblock/bb-cascader.vue';
 import bbslider from './buildingblock/bb-slider.vue';
+import bbpanel from './buildingblock/bb-panel.vue';
 
 
 //移动端积木
@@ -182,6 +183,7 @@ let ty = {
 		Vue.component('bb-bb-select', bbbbselect);
 		Vue.component('bb-field-select', bbfieldselect);
 		Vue.component('bb-slider', bbslider);
+		Vue.component('bb-panel', bbpanel);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
