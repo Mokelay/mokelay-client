@@ -54,7 +54,6 @@
                     }
                     props['rules'] = field['rules'];
                     props['attributeName'] = field['attributeName'];
-
                     const bbEle = {
                         uuid: field['pbbId'],
                         alias: field['et'], //积木别名
@@ -67,15 +66,13 @@
                     bbContent.push(bbEle);
                 });
             }
-            //为每一项添加默认的输入事件
+            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
             bbContent.forEach((field,key)=>{
                 field['interactives'].push({
                     uuid:_TY_Tool.uuid(),
                     fromContentEvent:'input',
-                    executeType:'custom_script',         //执行类型(预定义方法 trigger_method,
-                    executeScript:function (val) {
-                        t.formData[field['attributes']['attributeName']] = val;
-                    }
+                    executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                    containerMethodName:'defaultVmodel'
                 })
             })
             const bbList = _TY_Tool.bbRender(bbContent, createElement, t);
@@ -92,9 +89,7 @@
                     }
                 },[bbItem]);
                 formItems.push(formItem);
-            })
-
-
+            });
             //取消按钮
             var cancelButton = createElement('el-button',{
                     domProps:{
@@ -397,6 +392,18 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            /* defaultVmodel  bb-form实现createElement中的v-model
+                由于createElement中暂时没有找到实现v-model的方式，
+                defaultVmodel配合input事件实现v-model功能.
+                表单中的编辑器输入时都会默认触发该方法.
+                @val:积木触发事件时传给方法的参数[data,data2....],例如linkage(data)
+                @t:当前容器积木
+                @bb:触发事件的积木
+            */
+            defaultVmodel:function (val, t, bb) {
+                //表单值回填
+                t.formData[bb['attributes']['attributeName']] = val[0];
             }
         }
     }
