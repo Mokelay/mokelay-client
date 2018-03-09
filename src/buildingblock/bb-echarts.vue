@@ -83,9 +83,11 @@
                            const dataKey = val.dataKey
                             t[dataKey] = val.value.list;
                         })
-                        t.loadCahrts()
+                        t.loadCahrts();
                     }, function (code, msg) {
                     });
+                }else{
+                    t.loadCahrts();
                 }
             },
             //按需加载和渲染ve-line
