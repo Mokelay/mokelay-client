@@ -66,6 +66,8 @@ import bbcountdown from './buildingblock/h5/bb-countdown.vue';
 import bbvote from './buildingblock/h5/bb-vote.vue';
 import bbhtml from './buildingblock/h5/bb-html.vue';
 import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
+import bbtoast from './buildingblock/h5/bbToast';
+import bbmodal from './buildingblock/h5/bbModal';
 
 //Module相关
 import bbbblistselect from './module/bb-bblist-select';
@@ -183,6 +185,9 @@ let ty = {
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
+
+		Vue.prototype.$toast = bbtoast;
+		Vue.prototype.$modal = bbmodal;
 		console.log("finish ty bb init....");
 	}
 };
