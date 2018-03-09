@@ -58,7 +58,7 @@
                     });
                 }
             },
-            linkage:function(...data){
+            linkage:function(data){
                 if(data){
                     this.external['linkage'] = data;
                     this.getData();
