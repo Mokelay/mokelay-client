@@ -509,6 +509,7 @@ util.bbRender = function(content, createElement, t) {
     const bbList = [];
     //onInteractiveFn 存储每个事件的方法数组
     if (content) {
+        content = typeof content == 'string' ? eval("(" + content + ")") : content;
         content.forEach((bb, key) => {
             const attributes = bb['attributes'];
             let onArr = _setEventMethod(bb, t);

@@ -84,7 +84,7 @@
                     }]
             */
             content:{
-                type:Array
+                type:[Array,String]
             }
         },
         data() {
