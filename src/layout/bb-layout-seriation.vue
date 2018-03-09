@@ -74,7 +74,7 @@
                     }]
             */
             content:{
-                type:Array
+                type:[Array,String]
             }
         },
         methods: {

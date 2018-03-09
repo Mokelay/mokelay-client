@@ -84,7 +84,7 @@
                     }]
             */
             content:{
-                type:Array
+                type:[Array,String]
             }
         },
         data() {
@@ -109,9 +109,11 @@
         mounted:function(){
         },
         methods: {
-            //收缩放大面板
+            //收缩放大面板 
             toggleScreen:function(){
                 const t = this;
+                //收缩放大 事件
+                t.$emit('click');
                 if(t.fullScreen){
                     t.panelClass = "box-card normalScreen";
                     t.fullScreenIcon = 'ty-icon_faqi1';

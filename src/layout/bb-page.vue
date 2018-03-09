@@ -145,7 +145,7 @@
           t.templatePageAlias = page['templatePageAlias'];
 
           //获取页面信息
-          t.layoutObject = page.layoutObject || {};
+          t.layoutObject = JSON.parse(page.layoutObject) || {};
 
           //指定布局类型
           t.layoutType = page.layoutType;

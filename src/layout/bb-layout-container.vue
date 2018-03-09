@@ -200,7 +200,7 @@
                     }]
             */
             content:{
-                type:Array,
+                type:[Array,String],
                 default:function(){
                     return [
                         {uuid:'header',alias:'bb-words',group:'header',aliasName:'',attributes:{value:'Header',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
