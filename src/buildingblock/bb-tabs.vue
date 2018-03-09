@@ -65,7 +65,7 @@
                     "tab-position":t.tabPosition,
                 }, on: {
                     'tab-click': t.tabClick
-                }
+                },
             }, [paneArr]);
         },
         props: {
@@ -74,7 +74,7 @@
                 实现交互渲染，需要改造为content , 增加group设计
             **/
             content:{
-                type:Array,
+                type:[Array,String],
                 default:function(){
                     return [];
                 }
@@ -153,7 +153,7 @@
                     }]
                 **/
                 realTabs:[],
-                bbContent:this.content,
+                bbContent:typeof(this.content)==='string'?JSON.parse(this.content):this.content,
                 /**
                     tabsData:[{
                         label: '全部',
@@ -163,7 +163,9 @@
                         }]
                     }]
                 **/
-                tabsData:[]//最终转换成tab识别的data数据
+                tabsData:[],//最终转换成tab识别的data数据
+                key:'',//当前组件标识，针对同一个页面由多个相同的组件
+                
             }
         },
         computed: {
@@ -184,6 +186,9 @@
             let t=this;
             //将content属性转换成可以识别的tab组件
             window.setTimeout(function(){
+                if(!t.key){
+                    t.key = ""+ +new Date();
+                }
                 t.contentToTabData();
             },300);
         },
@@ -312,7 +317,7 @@
                     }
                 });
                 //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
-                if(!document.getElementById('tab_pane_' + alias)){
+                if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
                     return;
                 }
                 //渲染content
@@ -321,7 +326,7 @@
                     render: function(createElement) {
                         return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
                     }
-                }).$mount('#tab_pane_' + alias);
+                }).$mount('#tab_pane_' + alias+'_'+t.key);
             },
             renderTabData: function (createElement) {
                 const t = this;
@@ -345,9 +350,9 @@
                         const badge = createElement('bb-badge', {props: {value: tabData.value}, ref: 'badge_'+tabData.name}, []);
                         const label = createElement('span', {slot: 'label'}, [tabData.label, badge]);
                         const tabPaneItem = createElement('el-tab-pane', {
-                                    props: {name: tabData.name,label:tabData.label, key: tabData.name}
+                                    props: {name: ""+tabData.name,label:tabData.label, key: tabData.name}
                                 }, [label, createElement('div', {
-                                    attrs: {id: 'tab_pane_' + tabData.name}
+                                    attrs: {id: 'tab_pane_' + tabData.name+'_'+t.key}
                                 }, activeTabDom)]
                         );
                         paneArr.push(tabPaneItem);
