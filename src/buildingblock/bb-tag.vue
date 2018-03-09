@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-tag :style="{marginRight:'5px'}"
-          :key="tag"
-          v-for="tag in tags"
+          v-for="(tag,key) in tags"
+          :key="key"
           :closable="closable"
           :close-transition="false"
-          @close="handleClose(tag)"
+          @close="handleClose(key)"
         >
         {{tag}}
         </el-tag>
@@ -29,12 +29,14 @@
     export default {
         name: 'bb-tag',
         props: {
+            /*实现v-model*/
             value:{
                 type: Array,
                 default:function(){
                     return null;
                 }
             },
+            /*实现v-model*/
             column:{
                 type: Object,
                 default:function(){
@@ -47,7 +49,9 @@
             },
             prop:{
               type:String,
-            }
+            },
+
+
         },
         data() {
             return {
@@ -57,6 +61,12 @@
             }
         },
         computed: {
+            /*标签数组
+              [{
+                alias:'',
+                name:''
+              }]
+            */
             tags: function() {
                 const t = this;
                 let tagsArr = [];
@@ -74,16 +84,19 @@
         created: function () {
         },
         methods: {
-            handleClose(tag) {
-                this.tags.splice(this.tags.indexOf(tag), 1);
+            //关闭标签
+            handleClose(key) {
+                this.tags.splice(key,1);
                 this.$emit('input', this.tags);
             },
+            //点击添加标签显示输入框并focus
             showInput() {
               this.inputVisible = true;
               this.$nextTick(_ => {
                 this.$refs.saveTagInput.$refs.input.focus();
               });
             },
+            //输入框失去焦点输出内容
             handleInputConfirm() {
               let inputValue = this.inputValue;
               if (inputValue) {
@@ -92,7 +105,8 @@
               }
               this.inputVisible = false;
               this.inputValue = '';
-            }
+            },
+
         }
     }
 </script>
