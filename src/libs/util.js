@@ -593,10 +593,12 @@ let _setStyle = function(bb, t) {
 let _setAnimation = function(bb) {
     const animations = bb['animation'];
     let animation = null;
-    animations.forEach((ani, key) => {
-        const playNum = ani.loop ? 'infinite' : ani.playNum;
-        animation = animation ? `${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}` : `${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
-    })
+    if (animations && animations.length > 0) {
+        animations.forEach((ani, key) => {
+            const playNum = ani.loop ? 'infinite' : ani.playNum;
+            animation = animation ? `${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}` : `${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
+        })
+    }
     return animation;
 }
 /**
