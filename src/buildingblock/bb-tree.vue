@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="dib">
         <el-tree
                 class="bn"
                 :data="data"
@@ -244,6 +244,9 @@
 
     .bn {
         border: none
+    }
+    .dib{
+        display: inline-block;
     }
 
 </style>
