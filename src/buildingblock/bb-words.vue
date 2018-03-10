@@ -179,7 +179,15 @@
         const t = this;
         clearInterval(t.setTime);
         t.setTime = null;
-      }
+      },
+      //外部联动 接收交互参数
+      linkage:function(data){
+        const t = this;
+        if(data){
+          t.realText = data[0];
+          t.tansferTpl();
+        }
+      },
     }
   }
 </script>
