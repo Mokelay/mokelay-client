@@ -56,7 +56,7 @@
                     props['attributeName'] = field['attributeName'];
                     props['show'] = field['show'];
                     const bbEle = {
-                        uuid: field['pbbId'],
+                        uuid: field['pbbId'] || _TY_Tool.uuid(),
                         alias: field['et'], //积木别名
                         aliasName: field['name'], //中文名称
                         attributes: props, //积木属性
@@ -77,15 +77,23 @@
                 })
             })
             bbContent.forEach((field,key)=>{
+                var ref = 'form-item_' + field['uuid']
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
                 var formItem = createElement('bb-form-item',{
-                    ref: 'form-item_' + field['uuid'],
+                    ref: ref,
+                    key: ref,
                     props:{
                         label:field['aliasName'],
                         prop:field['attributes']['attributeName'],
                         rules:field['rules'],
                         show:field['attributes']['show'],
                         contentItem:field
+                    },
+                    on:{
+                        //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
+                        input: function (val) {
+                            t.formData[field['attributes']['attributeName']] = val;
+                        }
                     }
                 },[]);
                 formItems.push(formItem);
@@ -392,18 +400,6 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
-            },
-            /* defaultVmodel  bb-form实现createElement中的v-model
-                由于createElement中暂时没有找到实现v-model的方式，
-                defaultVmodel配合input事件实现v-model功能.
-                表单中的编辑器输入时都会默认触发该方法.
-                @val:积木触发事件时传给方法的参数[data,data2....],例如linkage(data)
-                @t:当前容器积木
-                @bb:触发事件的积木
-            */
-            defaultVmodel:function (val, t, bb) {
-                //表单值回填
-                t.formData[bb['attributes']['attributeName']] = val[0];
             }
         }
     }

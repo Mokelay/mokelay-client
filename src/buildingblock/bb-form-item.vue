@@ -143,6 +143,19 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            /* defaultVmodel  bb-form实现createElement中的v-model
+                由于createElement中暂时没有找到实现v-model的方式，
+                defaultVmodel配合input事件实现v-model功能.
+                表单中的编辑器输入时都会默认触发该方法.
+                @val:积木触发事件时传给方法的参数[data,data2....],例如linkage(data)
+                @t:当前容器积木
+                @bb:触发事件的积木
+            */
+            defaultVmodel:function (val, t, bb) {
+                //表单值回填
+                t.$emit('input',val[0]);
+                t.$emit('change',val[0]);
             }
         }
     }
