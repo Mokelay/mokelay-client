@@ -54,6 +54,7 @@
                     }
                     props['rules'] = field['rules'];
                     props['attributeName'] = field['attributeName'];
+                    props['show'] = field['show'];
                     const bbEle = {
                         uuid: field['pbbId'],
                         alias: field['et'], //积木别名
@@ -75,19 +76,18 @@
                     containerMethodName:'defaultVmodel'
                 })
             })
-            const bbList = _TY_Tool.bbRender(bbContent, createElement, t);
             bbContent.forEach((field,key)=>{
-                const bbItem = bbList[key];
-                var className = field['alias'] == 'bb-hidden'?'form-item-hidden':'form-item';
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
-                var formItem = createElement('el-form-item',{
-                    class:className,
+                var formItem = createElement('bb-form-item',{
+                    ref: 'form-item_' + field['uuid'],
                     props:{
                         label:field['aliasName'],
                         prop:field['attributes']['attributeName'],
-                        rules:field['rules']
+                        rules:field['rules'],
+                        show:field['attributes']['show'],
+                        contentItem:field
                     }
-                },[bbItem]);
+                },[]);
                 formItems.push(formItem);
             });
             //取消按钮
