@@ -271,9 +271,11 @@ util.resolveButton = function(button, valueobj) {
     if (button['action'] == 'url') {
         //URL跳转
         //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
-        var dataParam = valueobj['row-data'] || {};
-        dataParam = Object.assign({}, dataParam, valueobj);
-        var url = util.tpl(button['url'], dataParam);
+        // var dataParam = valueobj['row-data'] || {};
+        // dataParam = Object.assign({}, dataParam, valueobj);
+        //var url = util.tpl(button['url'], dataParam);
+
+        var url = util.tpl(button['url'], _TY_Tool.buildTplParams(t));
         url = encodeURI(url);
         if (button['urlType'] == 'openWindow') {
             window.open(url);

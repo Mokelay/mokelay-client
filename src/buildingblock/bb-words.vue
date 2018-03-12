@@ -138,7 +138,7 @@
         }
         t.getData();
         const words = t.realText?t.realText:'';
-        t.content = Util.tpl(words,data)
+        t.content = _TY_Tool.tpl(words,_TY_Tool.buildTplParams(t));
       },
       //获取标签属性
       getTagAttributes:function(data){
@@ -147,7 +147,7 @@
           const tagAttributes = typeof t.tagAttributes == 'string'?eval("("+t.tagAttributes+")"):t.tagAttributes;
           t.realTagAttributes = {};
           Object.keys(tagAttributes).forEach((val,key)=>{
-            t.realTagAttributes[val] = Util.tpl(tagAttributes[val],data);
+            t.realTagAttributes[val] = _TY_Tool.tpl(tagAttributes[val],_TY_Tool.buildTplParams(t));
           })
         }
       },
