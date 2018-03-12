@@ -706,7 +706,8 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
                 @bb:触发事件的积木
                 @fromContentEvent:当前触发事件名称
             */
-            fn(params, t, bb, fromContentEvent);
+            const realParams = params.concat(t, bb, fromContentEvent);
+            fn.apply(null, realParams);
         }
     });
 }

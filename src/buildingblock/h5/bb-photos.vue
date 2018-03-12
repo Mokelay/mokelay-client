@@ -96,7 +96,7 @@
                 }
             },
             //支持外部传参
-            linkage:function(data){
+            linkage:function(...data){
                 if(data){
                     this.external['linkage'] = data;
                     this.getData();

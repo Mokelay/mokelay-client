@@ -115,7 +115,7 @@
             },
             linkage: function (data) { //提供给外部调用
                 if (data) {
-                    this.external = Object.assign({}, {linkage: data[0]});
+                    this.external = Object.assign({}, {linkage: data});
                 }
             },
             treeCommit(data){
