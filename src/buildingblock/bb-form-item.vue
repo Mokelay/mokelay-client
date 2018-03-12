@@ -152,10 +152,10 @@
                 @t:当前容器积木
                 @bb:触发事件的积木
             */
-            defaultVmodel:function (val, t, bb) {
+            defaultVmodel:function (val) {
                 //表单值回填
-                t.$emit('input',val[0]);
-                t.$emit('change',val[0]);
+                this.$emit('input',val);
+                this.$emit('change',val);
             }
         }
     }
