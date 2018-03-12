@@ -382,7 +382,7 @@ let _checkVueHasRef = function(uuid, vueObj) {
     return null;
 }
 
-//深度遍历，可能会影响性能，后面考虑改成层级遍历
+//深度遍历，可能会影响性能，后面考虑改成层级遍历   $refs和$children 一起查询
 let _findChildBB = function(uuid, children) {
     let resultVue = null;
     if (children && children.length > 0) {
@@ -399,6 +399,37 @@ let _findChildBB = function(uuid, children) {
                     return resultVue;
                 }
             }
+            if (vueItem.$refs) {
+                for (let j in vueItem.$refs) {
+                    if (!vueItem.$refs[j]) {
+                        continue;
+                    }
+                    if (uuid == j) {
+                        //如果ref的key等于uuid，则表示该对象就是要找的uuid对象(通过ref方式查找；_checkVueHasRef是通过$children方式来查找)
+                        return vueItem.$refs[j];
+                    }
+                    if (vueItem.$refs[j].$children && vueItem.$refs[j].$children.length > 0) {
+                        resultVue = _findChildBB(uuid, vueItem.$refs[j].$children);
+                        if (resultVue && resultVue != null) {
+                            return resultVue;
+                        }
+                    }
+                    if (vueItem.$refs[j].$refs) {
+                        let child = [];
+                        for (let k in vueItem.$refs[j].$refs) {
+                            if (vueItem.$refs[j].$refs[k]) {
+                                child.push(vueItem.$refs[j].$refs[k]);
+                            }
+                        }
+                        if (child && child.length > 0) {
+                            resultVue = _findChildBB(uuid, child);
+                            if (resultVue && resultVue != null) {
+                                return resultVue;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     return resultVue;
@@ -413,9 +444,9 @@ util.findBBByUuid = function(uuid) {
         return null; //没有页面
     }
     ////从root开始找，比如弹窗中的子积木就查询不到，所以还是从根dom开始找
-    while (root.$parent) {
-        root = root.$parent;
-    }
+    // while (root.$parent) {
+    //     root = root.$parent;
+    // }
     //判断当前vue对象是不是要找的vue组件
     let resultVue = _checkVueHasRef(uuid, root);
     if (resultVue && resultVue != null) {
