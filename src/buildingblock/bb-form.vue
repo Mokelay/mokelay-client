@@ -59,6 +59,7 @@
                         uuid: field['pbbId'] || _TY_Tool.uuid(),
                         alias: field['et'], //积木别名
                         aliasName: field['name'], //中文名称
+                        group:field['group'],
                         attributes: props, //积木属性
                         animation: [], //动画
                         interactives: interactives, //触发交互
@@ -76,11 +77,14 @@
                     containerMethodName:'defaultVmodel'
                 })
             })
+            //有group分组的项
+            const groups = {};
+            //没有group分组的项
+            const normalItems = [];
             bbContent.forEach((field,key)=>{
                 var ref = 'form-item_' + field['uuid']
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
                 var formItem = createElement('bb-form-item',{
-                    ref: ref,
                     key: ref,
                     props:{
                         label:field['aliasName'],
@@ -94,10 +98,40 @@
                         input: function (val) {
                             t.formData[field['attributes']['attributeName']] = val;
                         }
-                    }
+                    },
+                    ref: ref,
                 },[]);
-                formItems.push(formItem);
+
+                if(field['group']){
+                    const groupName = field['group'];
+                    if(groups[groupName]){
+                        groups[groupName].push(formItem);
+                    }else{
+                        groups[groupName] = [];
+                        groups[groupName].push(formItem);
+                    }
+                }else{
+                    normalItems.push(formItem);
+                }
+                //formItems.push(formItem);
             });
+            Object.keys(groups).forEach((key,index)=>{
+                var key_contents = createElement('el-collapse-item',{
+                    props:{
+                        title:key,
+                        name:index
+                    },
+                },groups[key]);
+                var group_content = createElement('el-collapse',{
+                    props:{
+                        title:key,
+                        name:index
+                    },
+                },[key_contents]);
+                formItems.push(group_content);
+            })
+            formItems = formItems.concat(normalItems);
+
             //取消按钮
             var cancelButton = createElement('el-button',{
                     domProps:{
@@ -239,6 +273,7 @@
                         uuid:'',
                         alias:'',                   //积木别名
                         aliasName:'',               //中文名称
+                        group:'',                   //积木分组 表单项显示的位置
                         attributes:{
                             attributeName:''    //表单项键值别名
                             rules:[]            //验证规则
