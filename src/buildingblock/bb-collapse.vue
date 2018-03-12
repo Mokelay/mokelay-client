@@ -37,9 +37,11 @@
         render: function (createElement) {
             const t = this;
             const renderArray = t.renderElement(createElement);
-            return createElement('el-button-group', {
+            return createElement('el-collapse', {
                 ref:'bb-collapse',
-                value:this.p_activeNames
+                props:{
+                    value:this.p_activeNames
+                }
             }, [renderArray]);
         },
         props: {
@@ -88,12 +90,29 @@
         },
         data() {
             return {
-                p_activeNames:typeof(this.activeNames)==='string'?JSON.parse(this.activeNames):this.activeNames,
+                // p_activeNames:((this.activeNames&&typeof(this.activeNames)==='string')?(this.activeNames.indexOf(",")>=0?this.activeNames.split(","):this.activeNames):this.activeNames),
                 //collapseData 数据
                 renderData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[]
             }
         },
         watch: {
+        },
+        computed:{
+            p_activeNames(){
+                if(this.accordion){
+                    //手风琴
+                    if(typeof(this.activeNames)==='string'){
+                        return this.activeNames.split(",")[0];
+                    }else{
+                        return this.activeNames[0];
+                    }
+                }else{
+                    if(typeof(this.activeNames)==='string'){
+                        return this.activeNames.split(",");
+                    }
+                }
+                return this.activeNames;
+            }
         },
         created: function () {
 
