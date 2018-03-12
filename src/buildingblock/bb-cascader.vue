@@ -149,7 +149,7 @@
             linkage(data){
               let t=this;
               if(data){
-                this.external['linkage'] = data[0];
+                this.external['linkage'] = data;
                 //刷新选项
                 t.getNextData(1);
               }
