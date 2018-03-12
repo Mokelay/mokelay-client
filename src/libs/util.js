@@ -358,6 +358,8 @@ util.resolveButton = function(button, valueobj) {
             });
             d.showModal();
             t.dialog = d;
+            //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
+            t.$refs[_TY_Tool.uuid()] = _page.$children[0]; //把bb-form 设置到$refs中
         }, 'art-dialog');
     } else if (button['action'] == 'code') {
         //执行代码

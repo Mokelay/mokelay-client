@@ -100,6 +100,8 @@ import Util from '../libs/util';
                     });
                     d.showModal();
                     t.dialog = d;
+                    //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
+                    t.$refs[_TY_Tool.uuid()]=_array;//把bb-form 设置到$refs中
                 },'art-dialog');
             },
              loadChildBB(){
