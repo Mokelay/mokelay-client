@@ -136,7 +136,7 @@
                             //RowData从map中获取
                             const rowData = val.value;
                             param['rowData'] = rowData;
-                            t.showText = _TY_Tool.tpl(t.textTpl, _TY_Tool.buildTplParams(t));
+                            t.showText = _TY_Tool.tpl(t.textTpl, _TY_Tool.buildTplParams(t,param));
                         })
                     }, function (code, msg) {
                         //TODO
@@ -145,7 +145,7 @@
                     const param = _TY_Tool.buildTplParams(t,{
                         "rowData":t.selectRow
                     });
-                    t.showText = _TY_Tool.tpl(t.textTpl, _TY_Tool.buildTplParams(t));
+                    t.showText = _TY_Tool.tpl(t.textTpl, param);
                 }
             }
         },
@@ -175,10 +175,10 @@
                 const param = _TY_Tool.buildTplParams(t,{
                     "rowData":t.selectRow
                 });
-                const _value = _TY_Tool.tpl(t.valueTpl, _TY_Tool.buildTplParams(t));
+                const _value = _TY_Tool.tpl(t.valueTpl ,param);
                 t.$emit('input',_value);
                 t.$emit('change',_value);
-                t.showText = _TY_Tool.tpl(t.textTpl, _TY_Tool.buildTplParams(t));
+                t.showText = _TY_Tool.tpl(t.textTpl, param);
             },
             //选中数据缓存
             listSelect:function(row){
