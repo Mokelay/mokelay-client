@@ -166,7 +166,7 @@
       //定时刷新
       autoRefresh:function(){
         const t = this;
-        if(t.autoRefresh == undefined){
+        if(t.intervalTime == undefined){
           t.tansferTpl();
         }else{
           if(!t.setTime){
