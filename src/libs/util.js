@@ -271,7 +271,9 @@ util.resolveButton = function(button, valueobj) {
     if (button['action'] == 'url') {
         //URL跳转
         //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
-        var url = util.tpl(button['url'], _TY_Tool.buildTplParams(t));
+        var rowData = valueobj['row-data'] ? valueobj['row-data'] : {};
+        var realObj = Object.assign({}, valueobj, rowData);
+        var url = util.tpl(button['url'], _TY_Tool.buildTplParams(t, realObj));
         url = encodeURI(url);
         if (button['urlType'] == 'openWindow') {
             window.open(url);
@@ -287,10 +289,10 @@ util.resolveButton = function(button, valueobj) {
     } else if (button['action'] == 'execute-ds') {
         var ds = button['ds'];
         var valueKey = button.valueKey || 'row-data';
-        var confirmTitle = button['confirmTitle'] ? util.tpl(button['confirmTitle'], _TY_Tool.buildTplParams(t)) : "提示";
-        var confirmText = button['confirmText'] ? util.tpl(button['confirmText'], _TY_Tool.buildTplParams(t)) : "是否执行此操作";
+        var confirmTitle = button['confirmTitle'] ? util.tpl(button['confirmTitle'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "提示";
+        var confirmText = button['confirmText'] ? util.tpl(button['confirmText'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "是否执行此操作";
         button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
-        var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], _TY_Tool.buildTplParams(t)) : "操作成功";
+        var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "操作成功";
         t.$confirm(confirmText, confirmTitle, {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
