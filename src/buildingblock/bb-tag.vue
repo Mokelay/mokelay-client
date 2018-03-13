@@ -1,25 +1,29 @@
 <template>
     <div>
-        <el-tag :style="{marginRight:'5px'}"
-          v-for="(tag,key) in tags"
-          :key="key"
-          :closable="closable"
-          :close-transition="false"
-          @close="handleClose(key)"
-        >
-        {{tag}}
-        </el-tag>
+        <el-tooltip :disabled="!(tag.tipContent&&tag.tipContent.length>0)" v-for="(tag,key) in tags" placement="top">
+          <span slot="content" v-html="tag.tipContent"></span>
+          <el-tag :style="{marginRight:'5px'}"
+            :key="key"
+            :closable="closable"
+            :size="size"
+            :color="color||tag.color||''"
+            :close-transition="false"
+            @close="handleClose(key)"
+          >
+          {{tag.name}}
+          </el-tag>
+        </el-tooltip>
         <div v-if="showButton" class="addButton">
           <el-input :style="{width:'100px'}"
             v-if="inputVisible"
             v-model="inputValue"
             ref="saveTagInput"
-            size="mini"
+            :size="btnSize"
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
           >
           </el-input>
-          <el-button v-else class="button-new-tag" type="default" size="small" @click="showInput">+</el-button>
+          <el-button v-else class="button-new-tag" type="default" :size="btnSize" @click="showInput">+</el-button>
         </div>
     </div>
 </template>
@@ -30,56 +34,58 @@
         name: 'bb-tag',
         props: {
             /*实现v-model*/
+            /*标签数组
+              [{
+                alias:'',//key
+                name:'',//标签显示文案
+                tipContent:'',//tip展示的文案 或者html代码
+                color:''//背景色，类似主题
+              }]
+            */
             value:{
-                type: Array,
-                default:function(){
-                    return null;
-                }
-            },
-            /*实现v-model*/
-            column:{
-                type: Object,
+                type: [Array,String],
                 default:function(){
                     return null;
                 }
             },
             showButton:{
               type:Boolean,
-              default:true
+              default:false
             },
-            prop:{
+            //是否可以删除标签
+            closable:{
+              type:Boolean,
+              default:false
+            },
+            //标签大小  默认mini  
+            size:{
               type:String,
+              default:''
             },
-
-
+            color:{
+              type:String,
+              default:null
+            }
         },
         data() {
             return {
                 inputVisible: false,
                 inputValue: '',
-                closable:this.column ? false:true
+                tags:(this.value&&typeof(this.value)==='string')?JSON.parse(this.value):this.value
             }
         },
         computed: {
-            /*标签数组
-              [{
-                alias:'',
-                name:''
-              }]
-            */
-            tags: function() {
-                const t = this;
-                let tagsArr = [];
-                if(t.column){
-                  t.column.templateProp.forEach((val,key)=>{
-                    const tag = val.alias == t.prop?val.name:null;
-                    if(tag){
-                      tagsArr.push(tag);
-                    }
-                  });
-                }
-                return tagsArr;
+          btnSize(){
+            if(!this.size){
+              return "medium";
+            }else if(this.size==='medium'){
+              return "small";
+            }else if(this.size==='small'){
+              return "mini";
+            }else{
+              return "mini";
             }
+          }
         },
         created: function () {
         },
@@ -100,12 +106,19 @@
             handleInputConfirm() {
               let inputValue = this.inputValue;
               if (inputValue) {
-                this.tags.push(inputValue);
+                if(!this.tags){
+                  this.tags=[];
+                }
+                this.tags.push({
+                  alias:inputValue,
+                  name:inputValue
+                });
                 this.$emit('input', this.tags);
               }
               this.inputVisible = false;
               this.inputValue = '';
-            },
+            }
+
 
         }
     }
