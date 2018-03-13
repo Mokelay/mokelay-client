@@ -141,8 +141,10 @@
           var pbbList = data['pbb_list']['list'];
           var interactives = data['interactives']['list'];
 
-          //模板文件
-          t.templatePageAlias = page['templatePageAlias'];
+          if(page['template']){
+            //模板文件
+            t.templatePageAlias = page['templatePageAlias'];
+          }
 
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
