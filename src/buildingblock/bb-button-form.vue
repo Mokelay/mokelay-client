@@ -77,7 +77,8 @@ import Util from '../libs/util';
             formDesc:function(){
                 var t = this;
                 if(t.formDescTpl && t.formData){
-                    return Util.tpl(t.formDescTpl, _TY_Tool.buildTplParams(t));
+                    return _TY_Tool.tpl(t.formDescTpl, _TY_Tool.buildTplParams(t,t.formData));
+
                 }
             },
         },

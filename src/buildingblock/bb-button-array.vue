@@ -33,7 +33,7 @@ import Util from '../libs/util';
             arrayDesc:function(){
                 var t = this;
                 if(t.arrayDescTpl && t.arrayData){
-                    return Util.tpl(t.arrayDescTpl, _TY_Tool.buildTplParams(t));
+                    return _TY_Tool.tpl(t.arrayDescTpl, _TY_Tool.buildTplParams(t,t.arrayData));
                 }
             },
         },
@@ -100,7 +100,13 @@ import Util from '../libs/util';
                     });
                     d.showModal();
                     t.dialog = d;
+                    //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
+                    t.$refs[_TY_Tool.uuid()]=_array;//把bb-form 设置到$refs中
                 },'art-dialog');
+            },
+             loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }
