@@ -44,7 +44,15 @@
             change:function(val){
                 this.$emit('input',val)
                 this.$emit('change',val)
-            }
+            },
+            //外部联动 接收交互参数
+            linkage:function(data){
+                const t = this;
+                if(data){
+                    t.valueBase = data;
+                    t.change(data);
+                }
+            },
         }
     }
 </script>
