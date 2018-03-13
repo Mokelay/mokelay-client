@@ -7,7 +7,6 @@
     name: 'bb-page',
     render: function (createElement) {
       var pbbElementList = [];
-
       //处理模板
       if(this.templatePageAlias){
         pbbElementList.push(createElement(
@@ -24,8 +23,6 @@
       //处理配置UI
       var t = this;
       var pbbs = this.pbbs;
-      //onInteractiveFn 存储所有事件的方法
-      t.onInteractiveFn = {};
       for (var i in pbbs) {
           var pbb = pbbs[i];
           var props = pbb['attributes'] || {};
@@ -36,30 +33,6 @@
               var interactive = interactives[j];
               var executeType = interactive['executeType'];
               on[interactive['triggerEventName']] = t.publicEmit.bind(t,pbb,interactive['triggerEventName']);
-              var fn = null;
-              if(executeType == 'trigger_method'){
-                //预定义方法
-                var executePbbId = interactive['executePbbId'];
-                var executeBBMethodName = interactive['executeBBMethodName'];
-                //给相同事件的创建方法数组
-                fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
-              }else if(executeType == 'custom_script'){
-                //自定义方法
-                var buzz = interactive['executeScript'];
-                fn = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
-                  eval(code);
-                })
-              }else if(executeType == 'container_method'){
-                //容器方法
-                var containerMethodName = interactive['containerMethodName'];
-                fn = t[containerMethodName];
-              }
-              if(fn){
-                //将获得的方法推送到数组中
-                t.onInteractiveFn[pbbId] = t.onInteractiveFn[pbbId] || {};
-                t.onInteractiveFn[pbbId][interactive['triggerEventName']] = t.onInteractiveFn[pbbId][interactive['triggerEventName']] || [];
-                t.onInteractiveFn[pbbId][interactive['triggerEventName']].push(fn)
-              }
           }
           var element = createElement(pbb['bbAlias'], {ref:_PBB_PREFIX+pbb['id'], props:props, on:on});
           var colElement = createElement('el-col', {props:{span:24},style:t.layoutStyle},[element]);
@@ -177,16 +150,48 @@
       */
       publicEmit:function(pbb,interactive,...params){
         var t = this;
-        var pbbId = pbb.id;
-        var fnArr = t.onInteractiveFn[pbbId][interactive];
-        fnArr.forEach((fn,key)=>{
-          fn(...params);
-        })
+        var argus = [];
+        argus.push(pbb);
+        argus = argus.concat(params);
+        //每次执行时都寻找实例化对象上的方法
+        t.getFn.apply(null,argus);
       },
       //页面卸载
       unload:function(){
         //触发页面卸载事件
         this.$emit('after-unload', this);
+      },
+      getFn:function(pbb,...params){
+        var t = this;
+        var props = pbb['attributes'] || {};
+        var on = {};
+        var interactives = pbb['interactives'] || [];
+        var pbbId = pbb['id'];
+        for (var j in interactives) {
+            var interactive = interactives[j];
+            var executeType = interactive['executeType'];
+            var fn = null;
+            if(executeType == 'trigger_method'){
+              //预定义方法
+              var executePbbId = interactive['executePbbId'];
+              var executeBBMethodName = interactive['executeBBMethodName'];
+              //给相同事件的创建方法数组
+              fn = t.$refs[_PBB_PREFIX+executePbbId]?t.$refs[_PBB_PREFIX+executePbbId][executeBBMethodName] : null;
+            }else if(executeType == 'custom_script'){
+              //自定义方法
+              var buzz = interactive['executeScript'];
+              fn = _TY_Tool.loadBuzz.bind(this,buzz,function(code){
+                eval(code);
+              })
+            }else if(executeType == 'container_method'){
+              //容器方法
+              var containerMethodName = interactive['containerMethodName'];
+              fn = t[containerMethodName];
+            }
+            if(fn){
+              fn(...params);
+            }
+        }
       }
     }
   }
