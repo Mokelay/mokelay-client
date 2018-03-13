@@ -33,7 +33,7 @@ import Util from '../libs/util';
             arrayDesc:function(){
                 var t = this;
                 if(t.arrayDescTpl && t.arrayData){
-                    return Util.tpl(t.arrayDescTpl, t.arrayData);
+                    return Util.tpl(t.arrayDescTpl, _TY_Tool.buildTplParams(t));
                 }
             },
         },
