@@ -94,6 +94,7 @@
             handleClose(key) {
                 this.tags.splice(key,1);
                 this.$emit('input', this.tags);
+                this.$emit('change', this.tags);
             },
             //点击添加标签显示输入框并focus
             showInput() {
@@ -114,6 +115,7 @@
                   name:inputValue
                 });
                 this.$emit('input', this.tags);
+                this.$emit('change', this.tags);
               }
               this.inputVisible = false;
               this.inputValue = '';
