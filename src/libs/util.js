@@ -696,8 +696,10 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             })
         } else if (executeType == 'container_method') {
             //容器方法
+            const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
-            fn = t[containerMethodName];
+            const executeContent = util.findBBByUuid(executeContentUUID);
+            fn = t[containerMethodName] || executeContent[containerMethodName];
         }
         if (fn) {
             /**

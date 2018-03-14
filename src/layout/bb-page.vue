@@ -191,7 +191,8 @@
                       executeScript:interactive['executeScript'],
                       executeContentUUID:interactive['executePbbId'],  //执行积木的UUID executeType = trigger_method
                       executeBBMethodName:interactive['executeBBMethodName'],
-                      executeContentMethodName:interactive['executeBBMethodName']
+                      executeContentMethodName:interactive['executeBBMethodName'],
+                      containerMethodName:interactive['containerMethodName']
                   }
                   contentItem['interactives'].push(newInteractive);
                 }
