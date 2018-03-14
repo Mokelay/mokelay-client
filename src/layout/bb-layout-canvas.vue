@@ -1,6 +1,6 @@
 <template>
     <div class="bb-layout-canvas">
-        <div v-drag="direction" id="drag" class="canvas" v-for="canvasItem in canvasItems"
+        <div ref="canvasItem" v-drag="direction" id="drag" class="canvas" v-for="canvasItem in canvasItems"
              v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px'}">
 
             <bb-canvas-template :content="canvasItem"></bb-canvas-template>
