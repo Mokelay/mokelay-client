@@ -139,6 +139,8 @@
         t.getData();
         const words = t.realText?t.realText:'';
         t.content = _TY_Tool.tpl(words, _TY_Tool.buildTplParams(t));
+        t.$emit('input:',t.content);
+        t.$emit('change:',t.content);
       },
       //获取标签属性
       getTagAttributes:function(data){
@@ -184,7 +186,7 @@
       linkage:function(data){
         const t = this;
         if(data){
-          t.realText = data[0];
+          t.realText = data;
           t.tansferTpl();
         }
       },
