@@ -1,11 +1,12 @@
 <template>
     <div class="bb-layout-canvas">
-        <div class="canvas" v-for="canvasItem in canvasItems">
+        <div v-drag="direction" id="drag" class="canvas" v-for="canvasItem in canvasItems"
+             v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px'}">
 
             <bb-canvas-template :content="canvasItem"></bb-canvas-template>
 
             <div class="operate operate-size"
-                 v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+                 v-bind:style="{width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
                 <div class="border-line"></div>
                 <div class="border-line dashed"></div>
@@ -82,6 +83,37 @@
     }]
 }"></canvas>
      **/
+
+    import Vue from 'vue';
+
+    Vue.directive('drag', {
+            bind: function (el, binding) {
+                let oDiv = el;   //当前元素
+                let self = this;  //上下文
+                oDiv.onmousedown = function (e) {
+                    //鼠标按下，计算当前元素距离可视区的距离
+                    let disX = e.clientX - oDiv.offsetLeft;
+                    let disY = e.clientY - oDiv.offsetTop;
+
+                    document.onmousemove = function (e) {
+                        //通过事件委托，计算移动的距离
+                        let l = e.clientX - disX;
+                        let t = e.clientY - disY;
+                        //移动当前元素
+                        oDiv.style.left = l + 'px';
+                        oDiv.style.top = t + 'px';
+                        //将此时的位置传出去
+                        binding.value({x: e.pageX, y: e.pageY})
+                    };
+                    document.onmouseup = function (e) {
+
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                    };
+                };
+            }
+        }
+    );
 
     export default {
         name: 'bb-layout-canvas',
@@ -160,13 +192,20 @@
         methods: {
             setData: function () {
                 if (this.content) {
-                    this.canvasItems = this.content;
+                    this.canvasItems = this.canvasItems.concat(this.content);
                 }
+            },
+            direction(val){
+                console.log(val);
             }
         }
     }
 </script>
 <style scoped>
+    .canvas {
+        position: absolute;
+    }
+
     .operate {
         position: absolute;
         cursor: pointer;
