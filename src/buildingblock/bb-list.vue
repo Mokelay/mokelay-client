@@ -69,7 +69,7 @@
                                 <el-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
                                            :type="button.type" :key="index"
                                            :style="{'color':button.wordColor,'user-select':'all'}"
-                                           :icon="button.icon" @click.native.prevent="btnClick(button,scope.row)">
+                                           :icon="button.icon" @click.native.prevent="btnClick(button,scope)">
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
                                 <!-- 后续业务禁止应用 -->
@@ -104,10 +104,14 @@
                             </div>
                         </div>
                         <div v-else>
-                            <bb v-if="false" :value="scope['row'][column.prop]" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="{
-                                change:cellEdit.bind(null,column,scope)
+                            <!-- 编辑状态 -->
+                            <bb v-show="scope['$index'] == canEditRow" v-model="scope['row'][column.prop]" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="{
+                                change:cellChange.bind(null,column,scope)
                             }"></bb>
-                            {{scope['row'][column.prop]}}
+                            <!-- 只读状态 -->
+                            <span v-if="scope['$index'] != canEditRow">
+                                {{scope['row'][column.prop]}}
+                            </span>
                         </div>
                     </template>
                 </el-table-column>
@@ -289,7 +293,8 @@
                 //可编辑状态，编辑器的默认事件
                 defaultOn:{},
                 //第一次渲染处理表头数据
-                canPre:true
+                canPre:true,
+                canEditRow:null
             }
         },
         watch: {
@@ -304,7 +309,7 @@
                 this.preColumns();
             }
             if(!this.lazy){
-                this.getData();
+                this.startIntervalFresh();
             }
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
         },
@@ -379,13 +384,19 @@
             loadData: function (tableData) {
                 this.tableData = tableData;
             },
-            btnClick: function (button, row) {
+            btnClick: function (button, scope) {
                 var t = this;
-                t.vue = Vue;
-                Util.resolveButton(button,_TY_Tool.buildTplParams(t,{
-                    'row-data':row,
-                    'getData':t.getData
-                }));
+                if(button.action == 'bbListeditorData'){
+                    //查询当前按钮，如果是editorData 责为编辑按钮
+                    t.editorData(button, scope);
+                }else{
+                    //否则正常处理
+                    t.vue = Vue;
+                    Util.resolveButton(button,_TY_Tool.buildTplParams(t,{
+                        'row-data':scope.row,
+                        'getData':t.getData
+                    }));
+                }
             },
             popupClick: function (button, row) {
                 var t = this;
@@ -490,13 +501,28 @@
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
             },
+            //定时刷新
+            startIntervalFresh(){
+                const t = this;
+                if(t.intervalTime){
+                    t.interval = setInterval(t.getData,t.intervalTime);
+                }else{
+                    t.getData();
+                }
+            },
+            //停止自动刷新
+            stopIntervalFresh(){
+                const t = this;
+                clearInterval(t.interval);
+            },
             //对表头进行预处理
             preColumns(){
                 const t = this;
                 t.realColumns.forEach((col,key)=>{
-                    col.et = key == 2?'bb-editor-switch':'bb-input';
-                    col.etProp = {};
-
+                    col.et = key == 2?'bb-select':'bb-input';
+                    col.etProp = {
+                        fields:[{value:'true',text:'男'},{value:'false',text:'女'}]
+                    };
                 });
                 //如果是可编辑状态，默认添加操作列
                 if(t.editable){
@@ -504,31 +530,31 @@
                         fixed:"right",
                         width:"120px",
                         label:"操作",
-                        prop:"",
+                        prop:"bbListeditorData",
                         type:"button-group",
                         buttons:[{
-                            action:"buzz",
+                            action:"bbListeditorData",
                             icon:"el-icon-edit",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'edit'
                         },{
-                            action:"buzz",
+                            action:"bbListeditorData",
                             icon:"ty-icon_lajitong",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'delete'
                         },{
-                            action:"buzz",
+                            action:"bbListeditorData",
                             icon:"ty-icon_shangyi",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'up'
                         },{
-                            action:"buzz",
+                            action:"bbListeditorData",
                             icon:"ty-icon_xiayi",
                             text:"",
                             type:"text",
@@ -537,27 +563,30 @@
                         }]
                     };
                     t.defaultOn = {
-                        input:t.cellEdit,
-                        change:t.cellEdit
+                        input:t.cellChange,
+                        change:t.cellChange
                     }
                     t.realColumns.push(editor);
                 }
             },
             //编辑状态，更新数据
-            cellEdit:function(column, scope, val){
+            cellChange:function(column, scope, val){
                 const t = this;
                 // 需要配置DS来做更新
                 let newRow = {};
                 Object.assign(newRow,scope['row']);
                 newRow[column.prop] = val;
                 t.tableData[scope['$index']] = newRow;
-                //实现添加事件，配合bb-form实现表单v-model
-                t.$set(t.tableData,scope['$index'],newRow);
                 //console.log('t.tableData:',t.tableData);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
+                //去除编辑状态
+                //t.canEditRow = null;
+                //实现添加事件，配合bb-form实现表单v-model
+                t.$set(t.tableData,scope['$index'],newRow);
                 //通过接口提交修改
                 t.cellDSSubmit(event, column, scope['row']);
+
             },
             /*通过DS保存修改行
                 @newRow 当前修改数据的整行数据
@@ -578,19 +607,67 @@
             cellAdd:function(){
                 const t = this;
                 const key = t.tableData.length;
-                //console.log('t.tableData:',t.tableData);
-                t.tableData.splice(0,0,{
-                    // id:null,
-                    // password:null,
-                    // sex:null,
-                    // username:null
-                })
-                // t.tableData.push({
-                //     id:undefined,
-                //     password:undefined,
-                //     sex:undefined,
-                //     username:undefined
-                // })
+                t.tableData.splice(0,0,{});
+                t.canEditRow = 0;
+            },
+            //分发编辑列表的各种按钮事件
+            editorData:function(button, scope){
+                const t = this;
+                switch(button.alias){
+                    case 'edit':
+                        t.cellEditor(scope);
+                        break;
+                    case 'delete':
+                        t.cellDelete(scope);
+                        break;
+                    case 'up':
+                        t.cellUp(scope);
+                        break;
+                    case 'down':
+                        t.cellDown(scope);
+                        break;
+                }
+            },
+            //当前行进入编辑装填
+            cellEditor:function(scope){
+                const t = this;
+                t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
+            },
+            //删除数据
+            cellDelete:function(scope){
+                const t = this;
+                const index = scope['$index'];
+                t.tableData.splice(index,1);
+                t.$emit('input',t.tableData);
+                t.$emit('change',t.tableData);
+                //调用删除接口
+                //t.cellDSSubmit(event, column, scope['row']);
+            },
+            //数据向上移动
+            cellUp:function(scope){
+                const t = this;
+                const index = scope['$index'];
+                if(index == 0) {
+                    return;
+                }
+                const item = t.tableData[index]
+                t.tableData.splice(index,1);
+                t.tableData.splice(index-1,0,item);
+                t.$emit('input',t.tableData);
+                t.$emit('change',t.tableData);
+            },
+            //数据向下移动
+            cellDown:function(scope){
+                const t = this;
+                const index = scope['$index']; 
+                if(index == t.tableData.length -1) {
+                    return;
+                }
+                const item = t.tableData[index]
+                t.tableData.splice(index,1);
+                t.tableData.splice(index+1,0,item);
+                t.$emit('input',t.tableData);
+                t.$emit('change',t.tableData);
             }
         }
     }
