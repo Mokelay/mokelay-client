@@ -2,9 +2,15 @@
   export default {
     name: 'bb',
     render: function (createElement) {
-        return createElement(this.alias, {props: this.props, on : this.on});
+        if(this.value){
+          this.props.value = this.value;
+        }
+        return createElement(this.alias, {props: this.props, on : this.on,key:_TY_Tool.uuid()});
     },
     props: {
+        value:{
+          type:[String,Array,Object,Number,Boolean]
+        },
         alias:{
             type:String
         },
