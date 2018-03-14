@@ -30,8 +30,12 @@
                 :labelInline="true"
                 :fields="advancedSearchConfig.fields"
                 :settingButtonText="advancedSearchConfig.formButtonName"></bb-form>
+            
         </el-row>
         <el-row>
+            <!-- 列表新增按钮 -->
+            <el-button type="text" icon="ty-icon_faqi1" class="fr" @click=cellAdd></el-button>
+            <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55"></el-table-column>
@@ -44,7 +48,7 @@
                                 :prop="treeConfig.prop"
                                 :label="treeConfig.label"></el-table-tree-column>
 
-                <el-table-column v-for="column in columns" :fixed="column.fixed" :width="column.width" :prop="column.prop" :label="column.label"
+                <el-table-column v-for="(column,key) in realColumns" :fixed="column.fixed" :width="column.width" :prop="column.prop" :label="column.label"
                                  :key="column.prop" :align="column.align">
                     <template slot-scope="scope">
                         <!-- type=button-group 不再扩展 -->
@@ -100,6 +104,9 @@
                             </div>
                         </div>
                         <div v-else>
+                            <bb v-if="false" :value="scope['row'][column.prop]" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="{
+                                change:cellEdit.bind(null,column,scope)
+                            }"></bb>
                             {{scope['row'][column.prop]}}
                         </div>
                     </template>
@@ -254,9 +261,19 @@
                     }
                 }
             },
+            //自动刷新时间间隔
+            intervalTime:{
+                type:Number
+            },
+            //editable是否是编辑状态
+            editable:{
+                type:Boolean,
+                default:true
+            }
         },
         data() {
             return {
+                realColumns:this.columns,
                 tableData: this.value,
                 totalItems: this.total,
                 pageSize: 10,
@@ -268,7 +285,11 @@
                 toChildParams:null,
                 showPopIsShow:false,
                 searchFormData:null,
-                external:{}
+                external:{},
+                //可编辑状态，编辑器的默认事件
+                defaultOn:{},
+                //第一次渲染处理表头数据
+                canPre:true
             }
         },
         watch: {
@@ -277,6 +298,11 @@
             }
         },
         created: function () {
+            //可编辑状态下对表头拓展
+            if(this.canPre){
+                this.canPre = false;
+                this.preColumns();
+            }
             if(!this.lazy){
                 this.getData();
             }
@@ -463,6 +489,108 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //对表头进行预处理
+            preColumns(){
+                const t = this;
+                t.realColumns.forEach((col,key)=>{
+                    col.et = key == 2?'bb-editor-switch':'bb-input';
+                    col.etProp = {};
+
+                });
+                //如果是可编辑状态，默认添加操作列
+                if(t.editable){
+                    const editor = {
+                        fixed:"right",
+                        width:"120px",
+                        label:"操作",
+                        prop:"",
+                        type:"button-group",
+                        buttons:[{
+                            action:"buzz",
+                            icon:"el-icon-edit",
+                            text:"",
+                            type:"text",
+                            buzz:"buzzNull",
+                            alias:'edit'
+                        },{
+                            action:"buzz",
+                            icon:"ty-icon_lajitong",
+                            text:"",
+                            type:"text",
+                            buzz:"buzzNull",
+                            alias:'delete'
+                        },{
+                            action:"buzz",
+                            icon:"ty-icon_shangyi",
+                            text:"",
+                            type:"text",
+                            buzz:"buzzNull",
+                            alias:'up'
+                        },{
+                            action:"buzz",
+                            icon:"ty-icon_xiayi",
+                            text:"",
+                            type:"text",
+                            buzz:"buzzNull",
+                            alias:'down'
+                        }]
+                    };
+                    t.defaultOn = {
+                        input:t.cellEdit,
+                        change:t.cellEdit
+                    }
+                    t.realColumns.push(editor);
+                }
+            },
+            //编辑状态，更新数据
+            cellEdit:function(column, scope, val){
+                const t = this;
+                // 需要配置DS来做更新
+                let newRow = {};
+                Object.assign(newRow,scope['row']);
+                newRow[column.prop] = val;
+                t.tableData[scope['$index']] = newRow;
+                //实现添加事件，配合bb-form实现表单v-model
+                t.$set(t.tableData,scope['$index'],newRow);
+                //console.log('t.tableData:',t.tableData);
+                t.$emit('input',t.tableData);
+                t.$emit('change',t.tableData);
+                //通过接口提交修改
+                t.cellDSSubmit(event, column, scope['row']);
+            },
+            /*通过DS保存修改行
+                @newRow 当前修改数据的整行数据
+                @column 当前修改数据的表头
+            */
+            cellDSSubmit:function(newRow,column){
+                //列表的更新操作
+                if (column.ds) {
+                    t.loading = true;
+                    Util.getDSData(column.ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
+                        t.loading = false;
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
+            },
+            //新增行数据
+            cellAdd:function(){
+                const t = this;
+                const key = t.tableData.length;
+                //console.log('t.tableData:',t.tableData);
+                t.tableData.splice(0,0,{
+                    // id:null,
+                    // password:null,
+                    // sex:null,
+                    // username:null
+                })
+                // t.tableData.push({
+                //     id:undefined,
+                //     password:undefined,
+                //     sex:undefined,
+                //     username:undefined
+                // })
             }
         }
     }
@@ -488,5 +616,8 @@
         font-family: 'PingFangSC-Regular';
         font-size: 12px;
         color: #999999;
+    }
+    .fr{
+        float: right;
     }
 </style>
