@@ -595,13 +595,16 @@ let _setStyle = function(bb, t) {
             'background-color': layout.bgColor,
             'transform': `rotate(${layout.bgColor})`,
             'opacity': layout.transparency,
-            'width': layout.size.width,
-            'height': layout.size.height,
+            'width': layout.size.width && layout.size.width + 'px',
+            'height': layout.size.height && layout.size.height + 'px',
             'border-style': layout.border.style,
             'border-color': layout.border.color,
             'border-size': layout.border.size,
             'border-radius': layout.border.radius,
             'margin': layout.border.margin,
+            'position': (layout.position.x || layout.position.y) && 'absolute',
+            'left': (layout.position.x && layout.position.x + 'px'),
+            'top': (layout.position.y && layout.position.y + 'px'),
             'box-shadow': `${layout.shadow.size} ${layout.shadow.direction} ${layout.shadow.vague} ${layout.shadow.color}`,
         }
     }

@@ -1,13 +1,25 @@
 <template>
-    <div class="container">
-        <div class="canvas" style=""></div>
+    <div class="bb-layout-canvas">
+        <div class="canvas" v-for="canvasItem in canvasItems">
+
+            <bb-canvas-template :content="canvasItem"></bb-canvas-template>
+
+            <div class="operate operate-size"
+                 v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+
+                <div class="border-line"></div>
+                <div class="border-line dashed"></div>
+                <div class="dot scale-e dot-e"></div>
+                <div class="dot scale-w dot-w"></div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
-/**
-1. 特效
-2. 背景
-<canvas :value="{
+    /**
+     1. 特效
+     2. 背景
+     <canvas :value="{
     layoutObject:{
         uuid:'',
         title:'',                   //标题
@@ -69,40 +81,143 @@
         }
     }]
 }"></canvas>
-**/
+     **/
+
     export default {
         name: 'bb-layout-canvas',
         props: {
-            //画布宽度
-            width:{
-                type:Number,
-                default:320
-            },
-            //画布高度
-            height:{
-                type:Number,
-                default:480
-            },
-            value:{
-                type:Object,
-                default:function(){
-                    return {
-                        layoutObject:{},
-                        content:[],
-                        interactives:[]
-                    }
+//            layoutObject: {
+//                type: Object,
+//                default: function () {
+//                    return {
+//                        uuid: '',
+//                        title: '',                   //标题
+//                        shell: true,                //手机/PC外壳
+//                        bgMusic: "",                 //背景音乐
+//                        type: 'h-l-m-r',
+//                        bgColor: {
+//                            header: "#B3C0D1",
+//                            leftAside: "#D3DCE6",
+//                            main: "#E9EEF3",
+//                            rightAside: "#D3DCE6",
+//                            footer: "#B3C0D1"
+//                        }
+//                    }
+//                }
+//            },
+//            ds: {
+//                type: Array,
+//                default: function () {
+//                    return []
+//                }
+//            },
+            content: {
+                type: [Array, String],
+                default: function () {
+                    return [
+                        {
+                            uuid: 'footer',
+                            alias: 'bb-words',
+                            aliasName: '',
+                            group: 'footer',
+                            attributes: {value: 'Footer', textAlign: 'center', lineHeight: '60px'},
+                            animation: [],
+                            interactives: [],
+                            layout: {
+                                bgColor: "",             //背景颜色
+                                rotate: 0,               //旋转
+                                transparency: 0,         //透明度
+                                zIndex: 0,               //层级
+                                size: {width: 0, height: 0},//大小
+                                position: {x: 0, y: 0},     //位置
+                                border: {                //边框
+                                    style: "",           //边框样式
+                                    color: "",           //边框颜色
+                                    size: "",            //边框尺寸
+                                    radian: "",          //边框弧度
+                                    margin: ""           //边距
+                                },
+                                shadow: {                //阴影
+                                    color: "",           //阴影颜色
+                                    size: "",            //阴影大小
+                                    direction: '',       //阴影方向
+                                    vague: ''            //阴影模糊
+                                }
+                            }
+                        }
+                    ]
                 }
             }
         },
         data() {
-            return{
+            return {
+                canvasItems: []
             }
         },
-        methods: {
+        created: function () {
+            this.setData();
         },
-        components:{
+        methods: {
+            setData: function () {
+                if (this.content) {
+                    this.canvasItems = this.content;
+                }
+            }
         }
     }
 </script>
-<style lang="less">
+<style scoped>
+    .operate {
+        position: absolute;
+        cursor: pointer;
+        z-index: 99;
+        -webkit-transform-origin: center center;
+        transform-origin: center center;
+        pointer-events: auto;
+    }
+
+    .operate-size {
+        transform: rotate(0deg);
+    }
+
+    .border-line {
+        position: absolute;
+        box-sizing: content-box;
+        width: 100%;
+        height: 100%;
+        margin: -1px 0 0 -1px;
+        border: 1px solid #fff;
+    }
+
+    .dashed {
+        border: 1px dashed #000;
+    }
+
+    .scale-e {
+        cursor: e-resize;
+    }
+
+    .scale-w {
+        cursor: w-resize;
+    }
+
+    .dot {
+        position: absolute;
+        background-color: #fff;
+        width: 5px;
+        height: 5px;
+        border: 1px solid #4a4a4a;
+    }
+
+    .dot-e {
+        top: 50%;
+        right: -4px;
+        margin-top: -4px;
+    }
+
+    .dot-w {
+        top: 50%;
+        left: -4px;
+        margin-top: -4px;
+    }
 </style>
