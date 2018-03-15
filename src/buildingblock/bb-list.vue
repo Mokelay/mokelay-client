@@ -202,22 +202,27 @@
                     return {}
                 }
             },
+            //todo 删除
             alias:{
                 type:String,//表单id 传参数给buzz时使用
                 default:'list'
             },
+            //todo 删除
             popup:{//标识是否是弹出表单
                 type:Boolean,
                 default:false
             },
+            //todo 删除
             showHeader:{//是否显示表头
                 type:Boolean,
                 default:true
             },
+            //todo 删除
             highlightCurrent:{//高亮当前选中
                 type:Boolean,
                 default:false
             },
+            //todo 删除
             stripe:{//条纹
                 type:Boolean,
                 default:true
@@ -225,15 +230,19 @@
             fixedColumn:{//固定表头
                 type:String
             },
+            //todo 删除
             parentParams:{
                 type:Object
             },
+            //todo 删除
             hiddenValueKey:{
                 type:String
             },
+            //todo 删除
             hiddenItems:{
                 type:Array
             },
+            //todo 删除
             confirmButton:{
                 type: Object,
                 default:function(){
@@ -269,10 +278,30 @@
             intervalTime:{
                 type:Number
             },
-            //editable是否是编辑状态
-            editable:{
-                type:Boolean,
-                default:true
+            /*editConfig 列表编辑器配置
+                {
+                   editable:true,
+                   editDs:{ //增删改排序的ds接口
+                        add:{},
+                        remove:{},
+                        update:{},
+                        sort:{},
+                   }
+                }
+            */
+            editConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        editable:true,
+                        editDs:{
+                            add:{},
+                            remove:{},
+                            update:{},
+                            sort:{},
+                        }
+                    }
+                } 
             }
         },
         data() {
