@@ -83,10 +83,10 @@
                 this.editor.customConfig.uploadImgParams = {  // 自定义上传参数配置
 //                    usersecret: usersecret
                 };
-                this.editor.customConfig.onchangeTimeout = 1000; // 单位 ms
-                this.editor.customConfig.onchange = function (html) {
-                    t.$emit("input",html);
-                };
+                // this.editor.customConfig.onchangeTimeout = 1000; // 单位 ms
+                // this.editor.customConfig.onchange = function (html) {
+                //     t.$emit("input",html);
+                // };
                 this.editor.customConfig.onblur = function (html) {
                     t.$emit("input",html);
                 };
