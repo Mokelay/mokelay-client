@@ -1,12 +1,12 @@
 <template>
     <div class="bb-layout-canvas">
-        <div ref="canvasItem" v-drag="direction" id="drag" class="canvas" v-for="canvasItem in canvasItems"
+        <div ref="canvasItem" class="canvas" v-for="canvasItem in canvasItems"
              v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px'}">
 
-            <bb-canvas-template :content="canvasItem"></bb-canvas-template>
+            <bb-canvas-template :content="canvasItem" ref="canvasItem.uuid + '-canvas'"></bb-canvas-template>
 
-            <div class="operate operate-size"
-                 v-bind:style="{width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+            <div v-drag="direction" id="drag" :data-uuid="canvasItem.uuid" class="operate operate-size"
+                 v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
                 <div class="border-line"></div>
                 <div class="border-line dashed"></div>
@@ -91,19 +91,22 @@
                 let oDiv = el;   //当前元素
                 let self = this;  //上下文
                 oDiv.onmousedown = function (e) {
-                    //鼠标按下，计算当前元素距离可视区的距离
+                    // 鼠标按下，计算当前元素距离可视区的距离
                     let disX = e.clientX - oDiv.offsetLeft;
                     let disY = e.clientY - oDiv.offsetTop;
 
                     document.onmousemove = function (e) {
-                        //通过事件委托，计算移动的距离
-                        let l = e.clientX - disX;
-                        let t = e.clientY - disY;
-                        //移动当前元素
-                        oDiv.style.left = l + 'px';
-                        oDiv.style.top = t + 'px';
-                        //将此时的位置传出去
-                        binding.value({x: e.pageX, y: e.pageY})
+                        // 通过事件委托，计算移动的距离
+                        let left = e.clientX - disX;
+                        let top = e.clientY - disY;
+                        // 移动当前元素
+                        oDiv.style.left = left + 'px';
+                        oDiv.style.top = top + 'px';
+                        // 将此时的位置传出去
+//                        binding.value({x: e.pageX, y: e.pageY})
+
+                        binding.value({x: left, y: top, uuid: el.getAttribute('data-uuid')})
+
                     };
                     document.onmouseup = function (e) {
 
@@ -144,7 +147,7 @@
 //                }
 //            },
             content: {
-                type: [Array, String],
+                type: Array,
                 default: function () {
                     return [
                         {
@@ -152,16 +155,46 @@
                             alias: 'bb-words',
                             aliasName: '',
                             group: 'footer',
-                            attributes: {value: 'Footer', textAlign: 'center', lineHeight: '60px'},
+                            attributes: {value: 'Footer', textAlign: 'center', lineHeight: '60px', width: '100px', height: '100px'},
                             animation: [],
                             interactives: [],
                             layout: {
                                 bgColor: "",             //背景颜色
                                 rotate: 0,               //旋转
-                                transparency: 0,         //透明度
+                                transparency: 1,         //透明度
                                 zIndex: 0,               //层级
-                                size: {width: 0, height: 0},//大小
-                                position: {x: 0, y: 0},     //位置
+                                size: {width: 100, height: 100},//大小
+                                position: {x: 300, y: 300},     //位置
+                                border: {                //边框
+                                    style: "",           //边框样式
+                                    color: "",           //边框颜色
+                                    size: "",            //边框尺寸
+                                    radian: "",          //边框弧度
+                                    margin: ""           //边距
+                                },
+                                shadow: {                //阴影
+                                    color: "",           //阴影颜色
+                                    size: "",            //阴影大小
+                                    direction: '',       //阴影方向
+                                    vague: ''            //阴影模糊
+                                }
+                            }
+                        },
+                        {
+                            uuid: 'leftAside',
+                            alias: 'bb-words',
+                            group: 'leftAside',
+                            aliasName: '',
+                            attributes: {value: 'LeftAside', textAlign: 'center', lineHeight: '60px'},
+                            animation: [],
+                            interactives: [],
+                            layout: {
+                                bgColor: "",             //背景颜色
+                                rotate: 0,               //旋转
+                                transparency: 1,         //透明度
+                                zIndex: 0,               //层级
+                                size: {width: 200, height: 200},//大小
+                                position: {x: 500, y: 200},     //位置
                                 border: {                //边框
                                     style: "",           //边框样式
                                     color: "",           //边框颜色
@@ -183,7 +216,8 @@
         },
         data() {
             return {
-                canvasItems: []
+                canvasItems: [],
+                contentValue: this.content
             }
         },
         created: function () {
@@ -197,14 +231,22 @@
             },
             direction(val){
                 console.log(val);
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === val.uuid) {
+                        item.layout.position = {x: val.x, y: val.y};
+                    }
+                });
+
+                console.log(this.canvasItems);
             }
         }
     }
 </script>
 <style scoped>
-    .canvas {
-        position: absolute;
-    }
+    /*.canvas {*/
+        /*position: absolute;*/
+    /*}*/
 
     .operate {
         position: absolute;
