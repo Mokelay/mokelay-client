@@ -5,15 +5,6 @@
 
             <bb-canvas-template :content="canvasItem" ref="canvasItem.uuid + '-canvas'"></bb-canvas-template>
 
-            <!--<div v-drag="direction" id="drag" :data-uuid="canvasItem.uuid" class="operate operate-size"-->
-            <!--v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">-->
-
-            <!--<div class="border-line"></div>-->
-            <!--<div class="border-line dashed"></div>-->
-            <!--<div class="dot scale-e dot-e"></div>-->
-            <!--<div class="dot scale-w dot-w"></div>-->
-            <!--</div>-->
-
             <div v-drag="direction" id="drag" :data-uuid="canvasItem.uuid" class="operate operate-size"
                  v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
                 <div class="rotate-btn">
@@ -268,63 +259,6 @@
     }
 </script>
 <style scoped>
-    /*.canvas {*/
-    /*position: absolute;*/
-    /*}*/
-
-    /*.operate {*/
-    /*position: absolute;*/
-    /*cursor: pointer;*/
-    /*z-index: 99;*/
-    /*-webkit-transform-origin: center center;*/
-    /*transform-origin: center center;*/
-    /*pointer-events: auto;*/
-    /*}*/
-
-    /*.operate-size {*/
-    /*transform: rotate(0deg);*/
-    /*}*/
-
-    /*.border-line {*/
-    /*position: absolute;*/
-    /*box-sizing: content-box;*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*margin: -1px 0 0 -1px;*/
-    /*border: 1px solid #fff;*/
-    /*}*/
-
-    /*.dashed {*/
-    /*border: 1px dashed #000;*/
-    /*}*/
-
-    /*.scale-e {*/
-    /*cursor: e-resize;*/
-    /*}*/
-
-    /*.scale-w {*/
-    /*cursor: w-resize;*/
-    /*}*/
-
-    /*.dot {*/
-    /*position: absolute;*/
-    /*background-color: #fff;*/
-    /*width: 5px;*/
-    /*height: 5px;*/
-    /*border: 1px solid #4a4a4a;*/
-    /*}*/
-
-    /*.dot-e {*/
-    /*top: 50%;*/
-    /*right: -4px;*/
-    /*margin-top: -4px;*/
-    /*}*/
-
-    /*.dot-w {*/
-    /*top: 50%;*/
-    /*left: -4px;*/
-    /*margin-top: -4px;*/
-    /*}*/
 
     .operate {
         position: absolute;
