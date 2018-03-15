@@ -257,7 +257,8 @@
             afterCommit:function(button){
                 const t = this;
                 if(button.goUrl){
-                    t.$router.push(button.goUrl);
+                    const url = _TY_Tool.tpl(button.goUrl, _TY_Tool.buildTplParams(t));
+                    t.$router.push(url);
                 }
             },
             //获取表单项
