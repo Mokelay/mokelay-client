@@ -3,9 +3,9 @@
     name: 'bb',
     render: function (createElement) {
         if(this.value){
-          this.props.value = this.value;
+          this.realConfig.value = this.value;
         }
-        return createElement(this.alias, {props: this.props, on : this.on,key:_TY_Tool.uuid()});
+        return createElement(this.alias, {props: this.realConfig, on : this.on,key:_TY_Tool.uuid()});
     },
     props: {
         value:{
@@ -32,12 +32,12 @@
       return {}
     },
     computed:{
-        props:function(){
-            var props = {};
+        realConfig:function(){
+            var realConfig = {};
             if(this.config){
               var config = this.config;
-              props = typeof config == 'string'?eval("("+config+")"):config;
-              props.parentData = this.parentData;
+              realConfig = typeof config == 'string'?eval("("+config+")"):config;
+              realConfig.parentData = this.parentData;
             }else{
               var attributes = this.attributes || [];
               for (var j in attributes) {
@@ -51,11 +51,11 @@
                   attributeValue = attribute['attributeValue'];
                 }
 
-                props[attribute['attributeName']] = attributeValue;
+                realConfig[attribute['attributeName']] = attributeValue;
               }
             }
 
-            return props;
+            return realConfig;
         }
     },
     created: function () {
