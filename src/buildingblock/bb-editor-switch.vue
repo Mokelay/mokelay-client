@@ -32,6 +32,7 @@
            switchChange(val){
                 this.p_value=val;
                 this.$emit("input",val);
+                this.$emit("change",val);
            }    
         }
     }
