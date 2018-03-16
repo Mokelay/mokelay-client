@@ -134,7 +134,7 @@
                         t.realFileList.push(item);
                     })
                 }else{
-                    t.realFileList = list
+                    t.realFileList = list?list:[];
                 }
             },
             //文件超出个数限制时的钩子
