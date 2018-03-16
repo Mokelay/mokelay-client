@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <!-- 列表新增按钮 -->
-            <el-button type="text" icon="ty-icon_faqi1" class="fr" @click=cellAdd></el-button>
+            <el-button v-show="editConfig.editable" type="text" icon="ty-icon_faqi1" class="fr" @click=rowAdd></el-button>
             <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
@@ -105,9 +105,7 @@
                         </div>
                         <div v-else>
                             <!-- 编辑状态 -->
-                            <bb v-show="scope['$index'] == canEditRow" v-model="scope['row'][column.prop]" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="{
-                                change:cellChange.bind(null,column,scope)
-                            }"></bb>
+                            <bb v-show="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']":on="column['on']" ></bb>
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow">
                                 {{scope['row'][column.prop]}}
@@ -202,22 +200,27 @@
                     return {}
                 }
             },
+            //todo 删除
             alias:{
                 type:String,//表单id 传参数给buzz时使用
                 default:'list'
             },
+            //todo 删除
             popup:{//标识是否是弹出表单
                 type:Boolean,
                 default:false
             },
+            //todo 删除
             showHeader:{//是否显示表头
                 type:Boolean,
                 default:true
             },
+            //todo 删除
             highlightCurrent:{//高亮当前选中
                 type:Boolean,
                 default:false
             },
+            //todo 删除
             stripe:{//条纹
                 type:Boolean,
                 default:true
@@ -225,15 +228,19 @@
             fixedColumn:{//固定表头
                 type:String
             },
+            //todo 删除
             parentParams:{
                 type:Object
             },
+            //todo 删除
             hiddenValueKey:{
                 type:String
             },
+            //todo 删除
             hiddenItems:{
                 type:Array
             },
+            //todo 删除
             confirmButton:{
                 type: Object,
                 default:function(){
@@ -269,10 +276,30 @@
             intervalTime:{
                 type:Number
             },
-            //editable是否是编辑状态
-            editable:{
-                type:Boolean,
-                default:true
+            /*editConfig 列表编辑器配置
+                {
+                   editable:true,
+                   editDs:{ //增删改排序的ds接口
+                        add:{},
+                        remove:{},
+                        update:{},
+                        sort:{},
+                   }
+                }
+            */
+            editConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        editable:true,
+                        editDs:{
+                            add:{},
+                            remove:{},
+                            update:{},
+                            sort:{},
+                        }
+                    }
+                } 
             }
         },
         data() {
@@ -290,11 +317,10 @@
                 showPopIsShow:false,
                 searchFormData:null,
                 external:{},
-                //可编辑状态，编辑器的默认事件
-                defaultOn:{},
                 //第一次渲染处理表头数据
                 canPre:true,
-                canEditRow:null
+                canEditRow:null,
+                scope:null
             }
         },
         watch: {
@@ -519,13 +545,13 @@
             preColumns(){
                 const t = this;
                 t.realColumns.forEach((col,key)=>{
-                    col.et = key == 2?'bb-select':'bb-input';
-                    col.etProp = {
-                        fields:[{value:'true',text:'男'},{value:'false',text:'女'}]
-                    };
+                    col.et = key == 2?'bb-editor-switch':'bb-input';
+                    col.on = {
+                        change:t.cellChange.bind(null,col)
+                    }
                 });
                 //如果是可编辑状态，默认添加操作列
-                if(t.editable){
+                if(t.editConfig.editable){
                     const editor = {
                         fixed:"right",
                         width:"120px",
@@ -562,57 +588,63 @@
                             alias:'down'
                         }]
                     };
-                    t.defaultOn = {
-                        input:t.cellChange,
-                        change:t.cellChange
-                    }
                     t.realColumns.push(editor);
                 }
             },
             //编辑状态，更新数据
-            cellChange:function(column, scope, val){
+            cellChange:function(column,val){
                 const t = this;
-                // 需要配置DS来做更新
-                let newRow = {};
-                Object.assign(newRow,scope['row']);
-                newRow[column.prop] = val;
-                t.tableData[scope['$index']] = newRow;
-                //console.log('t.tableData:',t.tableData);
-                t.$emit('input',t.tableData);
-                t.$emit('change',t.tableData);
-                //去除编辑状态
-                //t.canEditRow = null;
-                //实现添加事件，配合bb-form实现表单v-model
-                t.$set(t.tableData,scope['$index'],newRow);
-                //通过接口提交修改
-                t.cellDSSubmit(event, column, scope['row']);
+                if(t.scope){
+                    //修改
+                    const scope = t.scope;
+                    //实现添加事件，配合bb-form实现表单v-model
+                    t.$set(t.tableData[scope['$index']],column.prop,val);
+                    t.$emit('input',t.tableData);
+                    t.$emit('change',t.tableData);
+                    //通过接口提交修改
+                    //t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
+                }else{
+                    //新增
+                    t.$set(t.tableData[0],column.prop,val);
+                    //通过接口提交修改
+                    t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                    t.$emit('input',t.tableData);
+                    t.$emit('change',t.tableData);
+                }
+                
 
             },
             /*通过DS保存修改行
                 @newRow 当前修改数据的整行数据
-                @column 当前修改数据的表头
+                @ds 请求接口配置
             */
-            cellDSSubmit:function(newRow,column){
+            cellDSSubmit:function(newRow,ds){
                 //列表的更新操作
-                if (column.ds) {
+                const t = this;
+                if (ds) {
                     t.loading = true;
-                    Util.getDSData(column.ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
+                    Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
                     });
                 }
             },
-            //新增行数据
-            cellAdd:function(){
+            //新增行数据 newRow 新增加的行数据
+            rowAdd:function(newRow){
                 const t = this;
                 const key = t.tableData.length;
-                t.tableData.splice(0,0,{});
-                t.canEditRow = 0;
+                if(false){
+                    t.tableData.splice(0,0,newRow);
+                }else{
+                   t.tableData.splice(0,0,{});
+                    t.canEditRow = 0; 
+                }
             },
             //分发编辑列表的各种按钮事件
             editorData:function(button, scope){
                 const t = this;
+                t.scope = scope;
                 switch(button.alias){
                     case 'edit':
                         t.cellEditor(scope);
@@ -642,6 +674,7 @@
                 t.$emit('change',t.tableData);
                 //调用删除接口
                 //t.cellDSSubmit(event, column, scope['row']);
+                t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
             },
             //数据向上移动
             cellUp:function(scope){
@@ -655,6 +688,7 @@
                 t.tableData.splice(index-1,0,item);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
+                t.cellDSSubmit(item,t.editConfig.editDs.sort);
             },
             //数据向下移动
             cellDown:function(scope){
@@ -668,6 +702,7 @@
                 t.tableData.splice(index+1,0,item);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
+                t.cellDSSubmit(item,t.editConfig.editDs.sort);
             }
         }
     }
