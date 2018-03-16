@@ -19,6 +19,7 @@
       value:{
         type:String
       },
+      //文字内容，支持模板<%=params%>
       text: {
         type: [String,Number]
       },
@@ -55,6 +56,14 @@
       },
       tagAttributes:{
         type:[Object,String]
+      },
+      //动态数据源获取文字内容
+      textDs:{
+        type:Object
+      },
+      //自动刷新时间间隔
+      intervalTime:{
+        type:Number
       }
     },
     data() {
@@ -65,11 +74,11 @@
       };
     },
     created: function () {
-        this.tansferTpl();
+        this.autoRefresh();
     },
     watch:{
       realText(val){
-        this.tansferTpl();
+        this.autoRefresh();
       },
       value: {
         handler: function (val, oldVal) {
@@ -78,10 +87,10 @@
         deep: true
       },
       text(val){
-        this.tansferTpl();
+        this.autoRefresh();
       },
       parentParams(val){
-        this.tansferTpl();
+        this.autoRefresh()
       }
     },
     methods: {
@@ -127,8 +136,11 @@
             }
           })
         }
+        t.getData();
         const words = t.realText?t.realText:'';
         t.content = _TY_Tool.tpl(words, _TY_Tool.buildTplParams(t));
+        t.$emit('input:',t.content);
+        t.$emit('change:',t.content);
       },
       //获取标签属性
       getTagAttributes:function(data){
@@ -140,7 +152,44 @@
             t.realTagAttributes[val] = _TY_Tool.tpl(tagAttributes[val], _TY_Tool.buildTplParams(t));
           })
         }
-      }
+      },
+      //获取动态数据
+      getData:function () {
+        const t = this;
+        if (t.textDs) {
+            _TY_Tool.getDSData(t.textDs, _TY_Tool.buildTplParams(t), function (map) {
+                map.forEach((val,key)=>{
+                    t.realText = val.value;
+                })
+            }, function (code, msg) {
+            });
+        }
+      },
+      //定时刷新
+      autoRefresh:function(){
+        const t = this;
+        if(t.intervalTime == undefined){
+          t.tansferTpl();
+        }else{
+          if(!t.setTime){
+            t.setTime = setInterval(t.tansferTpl,t.intervalTime);
+          }
+        }
+      },
+      //停止定时刷新
+      stopFresh:function(){
+        const t = this;
+        clearInterval(t.setTime);
+        t.setTime = null;
+      },
+      //外部联动 接收交互参数
+      linkage:function(data){
+        const t = this;
+        if(data){
+          t.realText = data;
+          t.tansferTpl();
+        }
+      },
     }
   }
 </script>
