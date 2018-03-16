@@ -19,7 +19,7 @@
         data() {
             return {
                 field:this.value,
-                p_apiAlias:_TY_Tool.tpl(this.apiAlias,_TY_Tool.buildTplParams(this));
+                p_apiAlias:_TY_Tool.tpl(this.apiAlias,_TY_Tool.buildTplParams(this)),
                 uuid:_TY_Tool.uuid(),//生成uuid
                 dsList:[{
                   type:'ds',                            //级联数据获取方式  接口获取
