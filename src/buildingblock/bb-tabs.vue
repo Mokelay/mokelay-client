@@ -63,12 +63,18 @@
                 props: {
                     value: t.p_activeName,
                     "tab-position":t.tabPosition,
+                    type:t.tabType
                 }, on: {
                     'tab-click': t.tabClick
                 },
             }, [paneArr]);
         },
         props: {
+            //tab的样式  border-card、card、默认
+            tabType:{
+                type:String,
+                default:''
+            },
             /**
                 最终的tab数据是由tabPanels + tabDS 合并而来
                 实现交互渲染，需要改造为content , 增加group设计
@@ -113,6 +119,7 @@
                 type:String,
                 default:"top"
             },
+            //后面废弃
             tabPanes: {
                 type: Array,
                 default: function () {
@@ -127,14 +134,14 @@
             badgeDs: {
                 type: Object
             },
-            //Tab头支持接口返回，默认text,value，不满足用handle处理
+            //Tab头支持接口返回，默认text,value，不满足用handle处理  后面废弃
             tabDs: {
                 type: Object,
                 default:function(){
                     return null;
                 }
             },
-            //针对tabDs，如果是接口返回的tab头，页面配置公共的
+            //针对tabDs，如果是接口返回的tab头，页面配置公共的  后面废弃
             tabDsContent: {
                 type: [Array,String]
             }

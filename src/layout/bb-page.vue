@@ -163,7 +163,11 @@
           var contentArr = [];
           if(page.content){
             //积木内容 content
-            t.content = JSON.parse(page.content);
+            try{
+              t.content = JSON.parse(page.content);
+            } catch(e){
+              t.content = eval(page.content);
+            }
           }else{
             //积木内容 content
             let content = [];

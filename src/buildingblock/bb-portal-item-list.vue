@@ -1,6 +1,6 @@
 <template>
     <div :class="'bb-portal-item-list ' + p_styleConfig.transitionType" :style="{'max-width':p_styleConfig.width}">
-        <div class="grid-item" v-for="(field,key) in realFields" :style="{'margin': '20px '+ p_styleConfig.margin}">
+        <div class="grid-item" v-for="(field,key) in realFields" :style="{'margin': (p_styleConfig.h_margin||'20px')+' '+ p_styleConfig.margin}">
             <bb-button :button="field.actionConfig" @button-finish='buttonFinish' @click='btnClick(field)' :style="{width:p_styleConfig.imgWidth}">
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
@@ -30,6 +30,7 @@
                     icon:'ty-flower-off ty-font',  //图标名称 同时存在 icon和 src 默认优先显示图标
                     src:'', 图片地址
                     title:'',标题
+                    value:'',图文值
                     subtitle:'',副标题
                     actionConfig:{  //点击后执行的动作
                         action: url || execute-ds || dialog-page || code || buzz
@@ -66,6 +67,7 @@
                     新增
                     width:'500px',  整体宽度
                     margin:'50px' 入口按钮的间距
+                    h_margin:'20px' 上下间距
                 }
             */
             styleConfig:{
@@ -147,6 +149,7 @@
                 let t=this;
                 t.p_value=field.value||'';
                 t.$emit('input',field.value||'');
+                t.$emit('click',field.value);
             }
         }
     }

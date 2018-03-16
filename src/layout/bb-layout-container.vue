@@ -215,7 +215,7 @@
         data() {
             return {
                 realLayout:this.layoutObject.type,
-                realBgColor:this.layoutObject.bgColor,
+                // realBgColor:this.realLayoutObject.bgColor,
                 realHeader:[],
                 realLeftAside:[],
                 realRightAside:[],
@@ -224,6 +224,17 @@
             }
         },
         watch: {
+        },
+        computed:{
+            realBgColor(){
+                return Object.assign({
+                            header:"transparent",
+                            leftAside:"transparent",
+                            main:"transparent",
+                            rightAside:"transparent",
+                            footer:"transparent"
+                    },this.layoutObject.bgColor);
+            }
         },
         created: function () {
             this.setData();
