@@ -19,7 +19,7 @@
         data() {
             return {
                 field:this.value,
-                p_apiAlias:this.apiAlias,
+                p_apiAlias:_TY_Tool.tpl(this.apiAlias,_TY_Tool.buildTplParams(this));
                 uuid:_TY_Tool.uuid(),//生成uuid
                 dsList:[{
                   type:'ds',                            //级联数据获取方式  接口获取
@@ -95,7 +95,7 @@
         },
         watch: {
             apiAlias(val){
-                this.getFirstData(val);
+                this.getFirstData(_TY_Tool.tpl(val,_TY_Tool.buildTplParams(this)));
             }
         },
         created: function () {
@@ -124,7 +124,8 @@
             //提供set方法，可以外部设置apiAlias
             setApiAlias(val){
                 let t=this;
-                t.p_apiAlias = val;
+                t.p_apiAlias = _TY_Tool.tpl(val,_TY_Tool.buildTplParams(t));
+                t.getFirstData(t.p_apiAlias);
             }
         }
     }
