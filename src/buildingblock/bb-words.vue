@@ -185,6 +185,7 @@
       //外部联动 接收交互参数
       linkage:function(data){
         const t = this;
+        t.external = data;
         if(data){
           t.realText = data;
           t.tansferTpl();
