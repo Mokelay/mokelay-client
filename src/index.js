@@ -90,7 +90,6 @@ import bblayoutgrid from './layout/bb-layout-grid.vue';
 import bblayoutseriation from './layout/bb-layout-seriation.vue';
 import bblayoutcanvas from './layout/bb-layout-canvas.vue';
 import bblayoutcontainer from './layout/bb-layout-container.vue';
-import bblayoutcanvastemplate from './layout/bb-canvas-template.vue';
 
 //引入minireset
 import './css/minireset.css';
@@ -182,7 +181,6 @@ let ty = {
 		Vue.component('bb-layout-grid', bblayoutgrid);
 		Vue.component('bb-layout-canvas', bblayoutcanvas);
 		Vue.component('bb-layout-container', bblayoutcontainer);
-		Vue.component('bb-canvas-template', bblayoutcanvastemplate);
 		Vue.component('bb-cascader', bbcascader);
 		Vue.component('bb-layout-seriation', bblayoutseriation);
 		Vue.component('bb-bb-select', bbbbselect);
