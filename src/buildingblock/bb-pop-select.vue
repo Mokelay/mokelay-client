@@ -146,7 +146,7 @@
                     const param = _TY_Tool.buildTplParams(t,{
                         "rowData":t.selectRow
                     });
-                    t.showText = _TY_Tool.tpl(t.textTpl,param);
+                    t.showText = _TY_Tool.tpl(t.textTpl,param) || val;
                 }
             }
         },
