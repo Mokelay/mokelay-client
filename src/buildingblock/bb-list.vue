@@ -156,6 +156,17 @@
                     return null
                 }
             },
+            /*表头数组
+                [{
+                    prop:null,  表头键值
+                    label:'默认表单', 表头展示名称
+                    fixed:"right",
+                    width:"120px",
+                    type:"defalut || button-group(操作)",
+                    et:"bb-select" 表头编辑器 编辑状态有效
+                    etProp:{} 表头编辑器配置 编辑状态有效
+                }]
+            */
             columns: {
                 type: Array,
                 default: function () {
@@ -304,7 +315,7 @@
         },
         data() {
             return {
-                realColumns:this.columns,
+                realColumns:[].concat(this.columns),
                 tableData: this.value,
                 totalItems: this.total,
                 pageSize: 10,
@@ -545,7 +556,6 @@
             preColumns(){
                 const t = this;
                 t.realColumns.forEach((col,key)=>{
-                    col.et = key == 2?'bb-editor-switch':'bb-input';
                     col.on = {
                         change:t.cellChange.bind(null,col)
                     }
@@ -588,7 +598,9 @@
                             alias:'down'
                         }]
                     };
-                    t.realColumns.push(editor);
+                    if(t.realColumns.length == t.columns.length){
+                        t.realColumns.push(editor);
+                    }
                 }
             },
             //编辑状态，更新数据
