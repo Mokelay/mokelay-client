@@ -15,42 +15,60 @@
 
         data() {
             return {
+                //API : bb-select => 获得接口别名   支持中文名 和 接口别名搜索，单选
+                //接口分类 : bb-words =>（linakge交互） 通过DS查询到当前接口分类并展示 
+                //方法 : bb-words =>（linakge交互） 通过DS查询到当前接口方法并展示
+                /*请求参数 : bb-list{
+                        参数名:bb-field-select,
+                        固定  值类型valueType,// template
+                        删除  常量:bb-select
+                        删除  值对象:bb-select
+                        变量:bb-input,//交互隐藏 valueType == 'template'
+                }*/
+                /*响应数据 : bb-list{
+                        数据变量:bb-input,
+                        数据处理中间件:bb-select
+                        响应变量:bb-field-select,// 联动获取接口别名
+                }*/
                 fields:[
-                    {name:'API',attributeName:'api',et:'bb-pop-select',props:{
-                        textTpl:'<%=rowData.name%>',valueTpl:"<%print((()=>{var valueData = rowData.category == 'config'?rowData.alias:rowData.url;return valueData})())%>",valueField2:'url',selectionGridConfig:{ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},columns:[{prop:'alias',label:'别名'},{prop:'name',label:'名称'},{prop:'url',label:'地址'}],selection: false,
-                        pagination: false,searchConfig: {search:true,searchType:'searchInput',searchButtonName:'搜索',type:'checkbox'},showHeader: true}
+                    {name:'API',attributeName:'api',et:'bb-select',props:{
+                        ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},
+                        textField:'name',
+                        valueField:'alias'
                     }},
-                    {name:'接口分类',attributeName:'category',et:'bb-select',props:{fields:[{text:'TY配置',value:'config'},{text:'定制',value:'custom'}]}},
-                    {name:'方法',attributeName:'method',et:'bb-select',props:{fields:[{text:'POST',value:'post'},{text:'GET',value:'get'}]}},
-                    {name:'请求参数',attributeName:'inputs',et:'bb-array',props:{
-                            fields:[
-                                {name:'参数名',attributeName:'paramName',et:'bb-input'},
-                                {name:'值类型',attributeName:'valueType',et:'bb-select',props:{
-                                        fields:[
-                                            {text:'常量',value:'constant'},
-                                            {text:'值对象',value:'inputValueObj'},
-                                            {text:'模板',value:'template'}]}},
-                                {name:'常量',attributeName:'constant',et:'bb-input'},
-                                {name:'值对象',attributeName:'valueKey',et:'bb-select',props:{
-                                        fields:[
-                                            {text:'组件对象',value:'bb'},
-                                            {text:'路由数据',value:'router'},
-                                            {text:'根路由数据',value:'route'},
-                                            {text:'外部数据',value:'external'},
-                                            {text:'Local存储',value:'local'},
-                                            {text:'Session存储',value:'session'},
-                                            {text:'列数据',value:'row-data'}]
-                                }},
-                                {name:'变量',attributeName:'variable',et:'bb-input'}
-                            ]
-                        }},
-                    {name:'响应数据',attributeName:'outputs',et:'bb-array',props:{
-                            fields:[
-                                {name:'数据变量',attributeName:'dataKey',et:'bb-input'},
-                                {name:'响应变量',attributeName:'valueKey',et:'bb-input'},
-                                {name:'数据处理中间件',attributeName:'handle',et:'bb-input'}
-                            ]
+                    {name:'接口分类',attributeName:'category',et:'bb-words',props:{
+                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
+                    }},
+                    {name:'方法',attributeName:'method',et:'bb-words',props:{
+                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
+                    }},
+                    {name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
+                        editConfig:{
+                            editable:true,
+                            editDs:{add:{},remove:{},update:{},sort:{}}
+                        },
+                        columns:[
+                            {prop:'paramName',label:'参数名',type:"defalut",et:"bb-field-select",etProp:{}},
+                            {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
+                        ]
+                    }},
+                    {name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
+                        editConfig:{
+                            editable:true,
+                            editDs:{add:{},remove:{},update:{},sort:{}}
+                        },
+                        columns:[
+                            {prop:'dataKey',label:'数据变量',type:"defalut",et:"bb-input",etProp:{}},
+                            {prop:'handle',label:'数据处理中间件',type:"defalut",et:"bb-select",etProp:{
+                                ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [
+                                        {dataKey: "fields", valueKey: "data_list"}]},
+                                textField:'name',
+                                valueField:"alias"
+                            }},
+                            {prop:'valueKey',label:'响应变量',type:"defalut",et:"bb-input",etProp:{}}
+                        ]
                     }}
+
                 ],
                 ds:this.value
             }
