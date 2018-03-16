@@ -131,14 +131,18 @@
             //回填图片
             setFileList:function(val,t){
                 let list = val;
-                if(list && typeof list == 'string'){
-                    list = list.split(',');
-                    list.forEach((ele,key)=>{
-                        const item = {
-                            url:ele
-                        }
-                        t.realFileList.push(item);
-                    })
+                if(typeof list == 'string'){
+                    if(!list){
+                        t.realFileList=[];
+                    }else{
+                        list = list.split(',');
+                        list.forEach((ele,key)=>{
+                            const item = {
+                                url:ele
+                            }
+                            t.realFileList.push(item);
+                        })
+                    }
                 }else{
                     t.realFileList = list?list:[];
                 }
