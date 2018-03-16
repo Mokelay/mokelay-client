@@ -114,10 +114,16 @@
                 if(t.handle){
                     _TY_Tool.loadBuzz(t.handle, function(code) {
                         fileList = eval(code);
+                        if(fileList instanceof Array && fileList.length<=0){
+                            fileList='';
+                        }
                         t.$emit(emit,fileList);
                         t.$emit('input',fileList);
                     });
                 }else{
+                    if(fileList instanceof Array && fileList.length<=0){
+                        fileList='';
+                    }
                     t.$emit(emit,fileList);
                     t.$emit('input',fileList);
                 }
