@@ -569,6 +569,49 @@ util.bbRender = function(content, createElement, t) {
     }
     return bbList;
 }
+
+/**
+ * canvas渲染标准数据格式
+ * @param content
+ * @param createElement
+ * @param t
+ * @returns {Array}
+ * @createElement: fn vue的方法
+ * @t:当前容器积木的实例化对象
+ */
+util.bbCanvasRender = function(content, createElement, t) {
+    const bbList = [];
+    //onInteractiveFn 存储每个事件的方法数组
+    if (content) {
+        content = typeof content == 'string' ? eval("(" + content + ")") : content;
+        content.forEach((bb, key) => {
+            const attributes = bb['attributes'];
+            let onArr = _setEventMethod(bb, t);
+            //渲染积木属性和动画
+            const style = _setStyle(bb, t);
+            const bbele = createElement(bb['alias'], {
+                ref: bb['uuid'] || util.uuid(),
+                props: attributes,
+                attrs: {
+                    aliasName: bb['aliasName']
+                },
+                on: onArr,
+                style: style
+            }, []);
+            const bbItem = createElement('div', {
+                style: {
+                    flex: 1,
+                    position: 'absolute',
+                    left: bb.layout.position.x + 'px',
+                    top: bb.layout.position.y + 'px'
+                }
+            }, [bbele]);
+
+            bbList.push(bbItem);
+        });
+    }
+    return bbList;
+}
 /**
  *setStyle 设置积木样式
  *私有只在bbRender中使用
@@ -602,9 +645,6 @@ let _setStyle = function(bb, t) {
             'border-size': layout.border.size,
             'border-radius': layout.border.radius,
             'margin': layout.border.margin,
-            'position': (layout.position.x || layout.position.y) && 'absolute',
-            'left': (layout.position.x && layout.position.x + 'px'),
-            'top': (layout.position.y && layout.position.y + 'px'),
             'box-shadow': `${layout.shadow.size} ${layout.shadow.direction} ${layout.shadow.vague} ${layout.shadow.color}`,
         }
     }
