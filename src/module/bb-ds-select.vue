@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>"></bb-form>
+        <bb-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-form>
     </div>
 </template>
 
@@ -101,6 +101,10 @@
         mounted:function(){
         },
         methods: {
+            //增加input 事件
+            commit:function(val){
+                this.$emit('input', val);
+            }
         }
     }
 </script>
