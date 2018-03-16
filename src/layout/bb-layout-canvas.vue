@@ -1,21 +1,3 @@
-<template>
-    <div class="bb-layout-canvas">
-        <div ref="canvasItem" v-drag="direction" id="drag" class="canvas" v-for="canvasItem in canvasItems"
-             v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px'}">
-
-            <bb-canvas-template :content="canvasItem"></bb-canvas-template>
-
-            <div class="operate operate-size"
-                 v-bind:style="{width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
-
-                <div class="border-line"></div>
-                <div class="border-line dashed"></div>
-                <div class="dot scale-e dot-e"></div>
-                <div class="dot scale-w dot-w"></div>
-            </div>
-        </div>
-    </div>
-</template>
 <script>
     /**
      1. 特效
@@ -84,67 +66,11 @@
 }"></canvas>
      **/
 
-    import Vue from 'vue';
-
-    Vue.directive('drag', {
-            bind: function (el, binding) {
-                let oDiv = el;   //当前元素
-                let self = this;  //上下文
-                oDiv.onmousedown = function (e) {
-                    //鼠标按下，计算当前元素距离可视区的距离
-                    let disX = e.clientX - oDiv.offsetLeft;
-                    let disY = e.clientY - oDiv.offsetTop;
-
-                    document.onmousemove = function (e) {
-                        //通过事件委托，计算移动的距离
-                        let l = e.clientX - disX;
-                        let t = e.clientY - disY;
-                        //移动当前元素
-                        oDiv.style.left = l + 'px';
-                        oDiv.style.top = t + 'px';
-                        //将此时的位置传出去
-                        binding.value({x: e.pageX, y: e.pageY})
-                    };
-                    document.onmouseup = function (e) {
-
-                        document.onmousemove = null;
-                        document.onmouseup = null;
-                    };
-                };
-            }
-        }
-    );
-
     export default {
         name: 'bb-layout-canvas',
         props: {
-//            layoutObject: {
-//                type: Object,
-//                default: function () {
-//                    return {
-//                        uuid: '',
-//                        title: '',                   //标题
-//                        shell: true,                //手机/PC外壳
-//                        bgMusic: "",                 //背景音乐
-//                        type: 'h-l-m-r',
-//                        bgColor: {
-//                            header: "#B3C0D1",
-//                            leftAside: "#D3DCE6",
-//                            main: "#E9EEF3",
-//                            rightAside: "#D3DCE6",
-//                            footer: "#B3C0D1"
-//                        }
-//                    }
-//                }
-//            },
-//            ds: {
-//                type: Array,
-//                default: function () {
-//                    return []
-//                }
-//            },
             content: {
-                type: [Array, String],
+                type: Array,
                 default: function () {
                     return [
                         {
@@ -152,16 +78,52 @@
                             alias: 'bb-words',
                             aliasName: '',
                             group: 'footer',
-                            attributes: {value: 'Footer', textAlign: 'center', lineHeight: '60px'},
+                            attributes: {
+                                value: 'Footer',
+                                textAlign: 'center',
+                                lineHeight: '60px',
+                                width: '100px',
+                                height: '100px'
+                            },
                             animation: [],
                             interactives: [],
                             layout: {
                                 bgColor: "",             //背景颜色
                                 rotate: 0,               //旋转
-                                transparency: 0,         //透明度
+                                transparency: 1,         //透明度
                                 zIndex: 0,               //层级
-                                size: {width: 0, height: 0},//大小
-                                position: {x: 0, y: 0},     //位置
+                                size: {width: 100, height: 100},//大小
+                                position: {x: 300, y: 300},     //位置
+                                border: {                //边框
+                                    style: "",           //边框样式
+                                    color: "",           //边框颜色
+                                    size: "",            //边框尺寸
+                                    radian: "",          //边框弧度
+                                    margin: ""           //边距
+                                },
+                                shadow: {                //阴影
+                                    color: "",           //阴影颜色
+                                    size: "",            //阴影大小
+                                    direction: '',       //阴影方向
+                                    vague: ''            //阴影模糊
+                                }
+                            }
+                        },
+                        {
+                            uuid: 'leftAside',
+                            alias: 'bb-words',
+                            group: 'leftAside',
+                            aliasName: '',
+                            attributes: {value: 'LeftAside', textAlign: 'center', lineHeight: '60px'},
+                            animation: [],
+                            interactives: [],
+                            layout: {
+                                bgColor: "",             //背景颜色
+                                rotate: 0,               //旋转
+                                transparency: 1,         //透明度
+                                zIndex: 0,               //层级
+                                size: {width: 200, height: 200},//大小
+                                position: {x: 500, y: 200},     //位置
                                 border: {                //边框
                                     style: "",           //边框样式
                                     color: "",           //边框颜色
@@ -182,81 +144,18 @@
             }
         },
         data() {
-            return {
-                canvasItems: []
-            }
+            return {}
         },
-        created: function () {
-            this.setData();
+        render: function (createElement) {
+            const bbList = _TY_Tool.bbCanvasRender(this.content, createElement, this);
+
+            return createElement('div', {}, bbList);
         },
         methods: {
-            setData: function () {
-                if (this.content) {
-                    this.canvasItems = this.canvasItems.concat(this.content);
-                }
-            },
-            direction(val){
-                console.log(val);
-            }
+
         }
     }
 </script>
 <style scoped>
-    .canvas {
-        position: absolute;
-    }
 
-    .operate {
-        position: absolute;
-        cursor: pointer;
-        z-index: 99;
-        -webkit-transform-origin: center center;
-        transform-origin: center center;
-        pointer-events: auto;
-    }
-
-    .operate-size {
-        transform: rotate(0deg);
-    }
-
-    .border-line {
-        position: absolute;
-        box-sizing: content-box;
-        width: 100%;
-        height: 100%;
-        margin: -1px 0 0 -1px;
-        border: 1px solid #fff;
-    }
-
-    .dashed {
-        border: 1px dashed #000;
-    }
-
-    .scale-e {
-        cursor: e-resize;
-    }
-
-    .scale-w {
-        cursor: w-resize;
-    }
-
-    .dot {
-        position: absolute;
-        background-color: #fff;
-        width: 5px;
-        height: 5px;
-        border: 1px solid #4a4a4a;
-    }
-
-    .dot-e {
-        top: 50%;
-        right: -4px;
-        margin-top: -4px;
-    }
-
-    .dot-w {
-        top: 50%;
-        left: -4px;
-        margin-top: -4px;
-    }
 </style>
