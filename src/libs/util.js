@@ -193,7 +193,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             if (valueType == 'constant') {
                 paramValue = input['constant'];
             } else if (valueType == 'template') { //支持参数为自定义模板
-                paramValue = util.tpl(input['variable'], inputValueObj[input['valueKey']]);
+                paramValue = util.tpl(input['variable'], util.buildTplParams(inputValueObj['bb'], inputValueObj[input['valueKey']]));
             } else if (valueType == 'inputValueObj') {
                 var _inputData = inputValueObj[input['valueKey']];
                 if (_inputData && typeof input['variable'] == 'string') {
