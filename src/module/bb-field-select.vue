@@ -102,7 +102,7 @@
         },
         mounted:function(){
             let t=this;
-            t.getFirstData(t.apiAlias);
+            t.getFirstData(t.p_apiAlias);
         },
         methods: {
             //获取第一级数据
