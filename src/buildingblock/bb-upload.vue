@@ -131,7 +131,7 @@
             //回填图片
             setFileList:function(val,t){
                 let list = val;
-                if(typeof list == 'string'){
+                if(list && typeof list == 'string'){
                     list = list.split(',');
                     list.forEach((ele,key)=>{
                         const item = {
