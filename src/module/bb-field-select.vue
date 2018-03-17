@@ -14,6 +14,11 @@
             apiAlias:{//可以通过属性和下面的set方法来传参
                 type:String,
                 default:null
+            },
+            //设置value的取值，input返回的是一个对象，valueTpl设置返回的取值
+            valueTpl:{
+                type:String,
+                default:null
             }
         },
         data() {
@@ -117,9 +122,13 @@
             change(value){
                 let t=this;
                 console.log("change value:",value);
-
-                t.$emit('change',value);
-                t.$emit('input',value);
+                if(t.valueTpl){
+                    t.$emit('change',_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,value)));
+                    t.$emit('input',_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,value)));
+                }else{
+                    t.$emit('change',value);
+                    t.$emit('input',value);
+                }
             },
             //提供set方法，可以外部设置apiAlias
             setApiAlias(val){
