@@ -70,7 +70,8 @@
       return {
         content:null,
         realText:this.value || this.text,
-        realTagAttributes:null
+        realTagAttributes:null,
+        external:{}
       };
     },
     created: function () {
@@ -185,7 +186,7 @@
       //外部联动 接收交互参数
       linkage:function(data){
         const t = this;
-        t.external = data;
+        t.external['linkage'] = data;
         if(data){
           t.realText = data;
           t.tansferTpl();

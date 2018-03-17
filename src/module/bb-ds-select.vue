@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-form :fields="fields" settingText="设置数据源" v-model="ds" formDescTpl="API:<%api%>"></bb-button-form>
+        <bb-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-form>
     </div>
 </template>
 
@@ -31,28 +31,30 @@
                         响应变量:bb-field-select,// 联动获取接口别名
                 }*/
                 fields:[
-                    {name:'API',attributeName:'api',et:'bb-select',props:{
+                    {pbbId:'api',name:'API',attributeName:'api',et:'bb-select',props:{
                         ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},
                         textField:'name',
                         valueField:'alias'
                     }},
-                    {name:'接口分类',attributeName:'category',et:'bb-words',props:{
-                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
+                    {pbbId:'category',name:'接口分类',attributeName:'category',et:'bb-words',props:{
+                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
                     }},
-                    {name:'方法',attributeName:'method',et:'bb-words',props:{
-                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
+                    {pbbId:'method',name:'方法',attributeName:'method',et:'bb-words',props:{
+                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
                     }},
-                    {name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
+                    {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
                         editConfig:{
                             editable:true,
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[
-                            {prop:'paramName',label:'参数名',type:"defalut",et:"bb-field-select",etProp:{}},
+                            {prop:'paramName',label:'参数名',type:"defalut",et:"bb-field-select",etProp:{
+                                apiAlias:'<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>'
+                            }},
                             {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
                         ]
                     }},
-                    {name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
+                    {pbbId:'outputs',name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
                         editConfig:{
                             editable:true,
                             editDs:{add:{},remove:{},update:{},sort:{}}
@@ -68,7 +70,14 @@
                             {prop:'valueKey',label:'响应变量',type:"defalut",et:"bb-input",etProp:{}}
                         ]
                     }}
-
+                ],
+                interactiveOn:[
+                    {pbbId:'api',triggerEventName:'change',executePbbId:'category',executeBBMethodName:'linkage'},
+                    {pbbId:'api',triggerEventName:'change',executePbbId:'method',executeBBMethodName:'linkage'},
+                    {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
+                    {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'cleanData'},
+                    {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
+                    {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'cleanData'}
                 ],
                 ds:this.value
             }
@@ -92,6 +101,10 @@
         mounted:function(){
         },
         methods: {
+            //增加input 事件
+            commit:function(val){
+                this.$emit('input', val);
+            }
         }
     }
 </script>

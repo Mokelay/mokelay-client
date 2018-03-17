@@ -105,7 +105,7 @@
                         </div>
                         <div v-else>
                             <!-- 编辑状态 -->
-                            <bb v-show="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']":on="column['on']" ></bb>
+                            <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']":on="column['on']"></bb>
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow">
                                 {{scope['row'][column.prop]}}
@@ -623,8 +623,6 @@
                     t.$emit('input',t.tableData);
                     t.$emit('change',t.tableData);
                 }
-                
-
             },
             /*通过DS保存修改行
                 @newRow 当前修改数据的整行数据
@@ -676,17 +674,36 @@
             cellEditor:function(scope){
                 const t = this;
                 t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
+
             },
-            //删除数据
-            cellDelete:function(scope){
+            //清空数据数据
+            cleanData:function(scope){
                 const t = this;
-                const index = scope['$index'];
-                t.tableData.splice(index,1);
+                t.tableData = [];
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
-                //调用删除接口
-                //t.cellDSSubmit(event, column, scope['row']);
-                t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
+                t.$emit('delete',t.tableData);
+            },            //删除数据
+            cellDelete:function(scope){
+                const t = this;
+                t.$confirm('确认操作?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const index = scope['$index'] || 0;
+                    t.tableData.splice(index,1);
+                    t.$emit('input',t.tableData);
+                    t.$emit('change',t.tableData);
+                    t.$emit('delete',t.tableData);
+                    //调用删除接口
+                    t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
+                }).catch(() => {
+                    t.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             //数据向上移动
             cellUp:function(scope){
