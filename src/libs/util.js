@@ -440,15 +440,15 @@ let _findChildBB = function(uuid, children) {
 /**
     根据uuid 查询这个uuid的积木vue对象
 **/
-util.findBBByUuid = function(uuid) {
+util.findBBByUuid = function(uuid, fromRoot) {
     let root = window._TY_Root; //初始根
     if (!root) {
         return null; //没有页面
     }
     ////从root开始找，比如弹窗中的子积木就查询不到，所以还是从根dom开始找
-    // while (root.$parent) {
-    //     root = root.$parent;
-    // }
+    if (fromRoot) {
+        root = root.$root;
+    }
     //判断当前vue对象是不是要找的vue组件
     let resultVue = _checkVueHasRef(uuid, root);
     if (resultVue && resultVue != null) {
