@@ -115,10 +115,16 @@
                 if(t.handle){
                     _TY_Tool.loadBuzz(t.handle, function(code) {
                         fileList = eval(code);
+                        if(fileList instanceof Array && fileList.length<=0){
+                            fileList='';
+                        }
                         t.$emit(emit,fileList);
                         t.$emit('input',fileList);
                     });
                 }else{
+                    if(fileList instanceof Array && fileList.length<=0){
+                        fileList='';
+                    }
                     t.$emit(emit,fileList);
                     t.$emit('input',fileList);
                 }
@@ -127,13 +133,17 @@
             setFileList:function(val,t){
                 let list = val;
                 if(typeof list == 'string'){
-                    list = list.split(',');
-                    list.forEach((ele,key)=>{
-                        const item = {
-                            url:ele
-                        }
-                        t.realFileList.push(item);
-                    })
+                    if(!list){
+                        t.realFileList=[];
+                    }else{
+                        list = list.split(',');
+                        list.forEach((ele,key)=>{
+                            const item = {
+                                url:ele
+                            }
+                            t.realFileList.push(item);
+                        })
+                    }
                 }else{
                     t.realFileList = list
                 }
