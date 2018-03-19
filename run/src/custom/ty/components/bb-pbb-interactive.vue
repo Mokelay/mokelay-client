@@ -7,7 +7,7 @@
         </div>
         <bb-list :ds="ds" :columns="columns" ref="InteractivesLsit"></bb-list>
         <bb-dialog title="添加" size="small" :modal="false"
-       :isShow.sync="dialogVisible" style="height:100vh;">
+       :isShow.sync="dialogVisible" style="height:100vh;" :appendToBody="true">
             <bb-form ref="object_form" :fields="interactivefields" @commit="addInteractive" :on="interactiveOn"></bb-form>
         </bb-dialog>
     </div>
