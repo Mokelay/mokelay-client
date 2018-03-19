@@ -38,7 +38,8 @@
         },
         mounted:function(){
             let t=this;
-            _TY_Tool.buildDefaultValTpl(t,"valueBase");
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");  
+            t.$emit('mounted',this.valueBase);          
         },
         methods: {
             change:function(val){

@@ -2,6 +2,7 @@
     <el-select 
       placeholder="请选择" 
       v-model="valueBase" 
+      :allow-create="filterable"
       :multiple="multiple"
       :filterable="filterable"
       default-first-option
@@ -99,6 +100,7 @@
         mounted(){
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
+            t.$emit('mounted',this.valueBase);
         },
         methods: {
             getData: function () {

@@ -77,6 +77,10 @@
     created: function () {
         this.autoRefresh();
     },
+    mounted:function(){
+        let t=this;  
+        t.$emit('mounted',t.content);          
+    },
     watch:{
       realText(val){
         this.autoRefresh();

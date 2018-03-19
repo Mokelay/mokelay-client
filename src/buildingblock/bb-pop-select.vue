@@ -150,6 +150,8 @@
             }
         },
         mounted:function(){
+            const t = this;
+            t.$emit('mounted',t.value);
         },
         methods: {
             //开始选择
