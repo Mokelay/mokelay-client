@@ -1,5 +1,5 @@
 <template>
-    <div :style="{width:width,height:height}"></div>
+    <div :style="{width:p_width,height:p_height}"></div>
 </template>
 
 <script>
@@ -70,7 +70,10 @@
         },
         data() {
             return {
-                _chart: null
+                _chart: null,
+                external:{},
+                p_width:this.width,
+                p_height:this.height
             }
         },
         created: function () {
@@ -106,6 +109,32 @@
             //关系图表刷新
             refresh(){
                 const t = this;
+                t.loadData(function(){
+                    t.getData();
+                });
+            },
+            toFull:function(){
+                let t = this;
+                t.p_height="700px";
+                t.legend.show=true;
+                t.loadData(function(){
+                    t.getData();
+                    t._chart.resize();
+                });
+            },
+            toSmall:function(){
+                let t = this;
+                t.p_height="300px";
+                t.legend.show=false;
+                t.loadData(function(){
+                    t.getData();
+                    t._chart.resize();
+                });
+            },
+            //外部传参方法
+            linkage:function(...data){
+                const t = this;
+                t.external['linkage'] = data;
                 t.loadData(function(){
                     t.getData();
                 });
@@ -224,7 +253,7 @@
                         },
                         //控制图例
                         legend: {
-                            show: t.legend.show || true,
+                            show: t.legend.show,
                             data: categories,
                             orient: t.legend.orient || 'vertical',
                             width: t.legend.width || 40,

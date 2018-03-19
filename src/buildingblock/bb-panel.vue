@@ -5,7 +5,7 @@
             <el-button style="float: right; padding: 3px 0" type="text" :icon="fullScreenIcon" @click="toggleScreen"></el-button>
         </div>
         <div class="panelContent">
-            <bb-layout-seriation :content="content" :ref="realuuid + '_content'"></bb-layout-seriation>
+            <bb-layout-seriation :content="content" :style="p_layoutObject.style" :ref="realuuid + '_content'"></bb-layout-seriation>
         </div>
     </el-card>
 </template>
@@ -89,6 +89,13 @@
         },
         data() {
             return {
+                p_layoutObject:Object.assign({
+                        uuid:_TY_Tool.uuid(), //唯一标识
+                        title:'面板',//标题
+                        background:'rgba(255,255,255, 0.8)', //背景色
+                        transparency:1, //透明度
+                        zoomType:'fullScreen'
+                    },this.layoutObject),
                 //当前积木的标识 供积木选择器使用
                 realuuid:this.layoutObject?this.layoutObject.uuid : _TY_Tool.uuid(),
                 panelClass:'box-card',
@@ -113,16 +120,16 @@
             toggleScreen:function(){
                 const t = this;
                 //收缩放大 事件
-                t.$emit('click');
                 if(t.fullScreen){
                     t.panelClass = "box-card normalScreen";
                     t.fullScreenIcon = 'ty-icon_faqi1';
                     t.fullScreenStyle = '';
                     t.fullScreen = false;
+                    t.$emit('panelSmall');
                 }else{
-                    t.fullScreenStyle = `background:${t.layoutObject.background};opacity:${t.layoutObject.transparency}`;
+                    t.fullScreenStyle = `background:${t.p_layoutObject.background};opacity:${t.p_layoutObject.transparency}`;
                     t.fullScreenIcon = 'ty-wenjuan_danhang';
-                    switch(t.layoutObject.zoomType){
+                    switch(t.p_layoutObject.zoomType){
                         case 'fullScreen':   
                             t.panelClass = "box-card fullScreen";
                             break;
@@ -134,7 +141,9 @@
                             break;
                     }
                     t.fullScreen = true;
+                    t.$emit('panelFull');
                 }
+                t.$emit('click');
             },
             //容器类积木获取子积木
             loadChildBB(){

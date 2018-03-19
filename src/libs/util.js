@@ -717,6 +717,9 @@ let _setEventMethod = function(bb, t) {
 let _publicEmit = function(t, bb, fromContentEvent, ...params) {
     const uuid = bb['uuid'];
     bb.interactives.forEach((interactive, index) => {
+        if (fromContentEvent != interactive.fromContentEvent) {
+            return;
+        }
         const executeType = interactive['executeType'];
         //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
         //事件所要执行的方法
