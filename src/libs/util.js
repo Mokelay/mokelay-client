@@ -378,7 +378,7 @@ util.resolveButton = function(button, valueobj) {
 //检查vue对象是否含有uuid,通过$children来找
 let _checkVueHasRef = function(uuid, vueObj) {
     //判断vue对象是否是该uuid组件逻辑
-    if (vueObj && vueObj.$vnode && vueObj.$vnode.data && vueObj.$vnode.data.ref && vueObj.$vnode.data.ref == uuid) {
+    if (vueObj && vueObj.$vnode && vueObj.$vnode.data && vueObj.$vnode.data.ref && vueObj.$vnode.data.ref == uuid && vueObj._isVue) {
         return vueObj;
     }
     return null;
@@ -406,7 +406,7 @@ let _findChildBB = function(uuid, children) {
                     if (!vueItem.$refs[j]) {
                         continue;
                     }
-                    if (uuid == j) {
+                    if (uuid == j && vueItem.$refs[j]._isVue) {
                         //如果ref的key等于uuid，则表示该对象就是要找的uuid对象(通过ref方式查找；_checkVueHasRef是通过$children方式来查找)
                         return vueItem.$refs[j];
                     }
@@ -418,6 +418,7 @@ let _findChildBB = function(uuid, children) {
                     }
                     if (vueItem.$refs[j].$refs) {
                         let child = [];
+                        //构造_findChildBB方法第二个参数
                         for (let k in vueItem.$refs[j].$refs) {
                             if (vueItem.$refs[j].$refs[k]) {
                                 child.push(vueItem.$refs[j].$refs[k]);
