@@ -1,13 +1,26 @@
-<template>
-    <el-dialog :title="title" :visible.sync="active" @close="closeFn" :width="realWidth" :custom-class="className" :append-to-body="appendToBody" :modal-append-to-body="modalAppendToBody" :fullscreen="fullscreen" :modal="modal">
-        <slot></slot>
-    </el-dialog>
-</template>
-
 <script>
-
     export default {
         name: 'bb-dialog',
+        render: function (createElement) {
+            const t = this;
+            const bbItems = _TY_Tool.bbRender(t.realContent, createElement, t);
+            const slot = createElement('slot',{},[]);
+            return createElement('el-dialog',{
+                props:{
+                    'title':t.title,
+                    'visible':t.active,
+                    'width':t.realWidth,
+                    'custom-class':t.className,
+                    'append-to-body':t.appendToBody,
+                    'modal-append-to-body':t.modalAppendToBody,
+                    'fullscreen':t.fullscreen,
+                    'modal':t.modal
+                },
+                on:{
+                    close:t.closeFn
+                }
+            },[bbItems,slot])
+        },
         props: {
             title: {
                 type: String,
@@ -43,11 +56,64 @@
             fullscreen:{
                 type:Boolean,
                 default:false
+            },
+            /*
+                content:积木数据,
+                content:[{                      //页面内容
+                        uuid:'',
+                        alias:'',                   //积木别名
+                        aliasName:'',               //中文名称
+                        attributes:{
+                        },              //积木属性
+                        animation:[{                //动画
+                            style:"",               //方式
+                            time:0,                 //时间
+                            delay:0,                //延迟时间
+                            playNum:1               //播放次数
+                            loop:true|false,        //循环
+                            direction:""            //方向
+                        }],
+                        interactives:[{             //触发交互
+                            uuid:'',
+                            fromContentEvent:'',    //触发积木的事件,fromContentUUID为当前content的UUID
+                            executeType:'',         //执行类型(预定义方法 trigger_method,
+                                                    //自定义方法 custom_script,
+                                                    //容器类方法 container_method)
+                            executeScript:'',       //执行脚本 executeType = custom_script
+                            executeContentUUID:'',  //执行积木的UUID executeType = trigger_method
+                            executeContentMethodName:'',
+                                                    //执行积木的方法
+                            containerMethodName:''  //容器方法 executeType = container_method
+                        }],
+                        layout:{                    //积木布局
+                            sort:0,                 //排序 顺序排列布局下有效
+                            bgColor:"",             //背景颜色
+                            rotate:0,               //旋转
+                            transparency:0,         //透明度
+                            border:{                //边框
+                                style:"",           //边框样式
+                                color:"",           //边框颜色
+                                size:"",            //边框尺寸
+                                radius:"",          //边框弧度
+                                margin:""           //边距
+                            },
+                            shadow:{                //阴影
+                                color:"",           //阴影颜色
+                                size:"",            //阴影大小
+                                direction:'',       //阴影方向
+                                vague:''            //阴影模糊
+                            }
+                        }
+                    }]
+            */
+            content:{
+                type:[Array,String]
             }
         },
         data() {
             return {
-                active: false
+                active: false,
+                realContent: this.content
           }
         },
         computed: {
@@ -77,6 +143,9 @@
         watch: {
             isShow: function (val, oldVal) {
                 this.active = val;
+            },
+            content: function (val) {
+                this.realContent = val;
             }
         },
         mounted() {
@@ -84,12 +153,18 @@
         },
         methods: {
             closeFn() {
+                this.active = false;
                 this.$emit('closeDia');
-                this.$emit('update:isShow', false)
+                this.$emit('update:isShow', false);
             },
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            show(){
+                this.active = true;
+                this.$emit('openDia');
+                this.$emit('update:isShow', true);
             }
         }
     }
