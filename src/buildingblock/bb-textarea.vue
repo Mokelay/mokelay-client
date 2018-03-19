@@ -41,6 +41,7 @@
         mounted:function(){
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
+            t.$emit('mounted',t.valueBase);
         },
         methods: {
             change:function(val){

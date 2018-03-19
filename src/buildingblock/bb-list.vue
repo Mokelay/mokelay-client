@@ -302,7 +302,7 @@
                 type:Object,
                 default:function(){
                     return {
-                        editable:true,
+                        editable:false,
                         editDs:{
                             add:{},
                             remove:{},

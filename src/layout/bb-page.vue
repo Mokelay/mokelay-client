@@ -64,8 +64,17 @@
         }
         break;
         //自由式布局 canvas
-        //TODO
-
+        case 'canvas':
+        var props = {};
+        if(this.content){
+          //获取自由布局中的 内容
+          props = {
+            content:this.content,
+            layoutObject:this.layoutObject
+          }
+          var element = createElement('bb-layout-canvas', {ref:uuid,props:props});
+            pbbElementList.push(element);
+        }
         //网格布局 grid
         //TODO
 

@@ -81,6 +81,7 @@
             }
         },
         mounted:function(){
+            this.$emit('mounted',this.value);
         },
         methods: {
             //移除图片
