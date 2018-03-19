@@ -48,8 +48,13 @@
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[
-                            {prop:'paramName',label:'参数名',type:"defalut",et:"bb-field-select",etProp:{
-                                apiAlias:'<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>'
+                            {prop:'paramName',label:'参数名',type:"defalut",et:"bb-select",etProp:{
+                                ds:{api: "/ty-list-api-req",method: "get",
+                                    inputs: [{paramName: 'apiAlias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
+                                    outputs: [{dataKey: "fields", valueKey: "data_list"}]
+                                },
+                                textField:'alias',
+                                valueField:"alias"
                             }},
                             {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
                         ]
@@ -60,14 +65,23 @@
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[
-                            {prop:'dataKey',label:'数据变量',type:"defalut",et:"bb-input",etProp:{}},
+                            {prop:'dataKey',label:'数据变量',type:"defalut",et:"bb-select",etProp:{
+                                fields:[{text:'tableData',value:'tableData'},{text:'value',value:'value'}]
+                            }},
                             {prop:'handle',label:'数据处理中间件',type:"defalut",et:"bb-select",etProp:{
                                 ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [
                                         {dataKey: "fields", valueKey: "data_list"}]},
                                 textField:'name',
                                 valueField:"alias"
                             }},
-                            {prop:'valueKey',label:'响应变量',type:"defalut",et:"bb-input",etProp:{}}
+                            {prop:'valueKey',label:'响应变量',type:"defalut",et:"bb-select",etProp:{
+                                ds:{api: "/ty-list-api-res",method: "get",
+                                    inputs: [{paramName: 'apiAlias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
+                                    outputs: [{dataKey: "fields", valueKey: "data_list"}]
+                                },
+                                textField:'alias',
+                                valueField:"alias"
+                            }}
                         ]
                     }}
                 ],
@@ -75,9 +89,9 @@
                     {pbbId:'api',triggerEventName:'change',executePbbId:'category',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'method',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
-                    {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'cleanData'},
+                    {pbbId:'api',triggerEventName:'mounted',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
-                    {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'cleanData'}
+                    {pbbId:'api',triggerEventName:'mounted',executePbbId:'outputs',executeBBMethodName:'linkage'}
                 ],
                 ds:this.value
             }
