@@ -18,7 +18,7 @@
                 on:{
                     close:t.closeFn
                 }
-            },[bbItems])
+            },[bbItems,this.$slots.default]); //支持插槽
         },
         props: {
             title: {
