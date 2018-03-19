@@ -1,5 +1,5 @@
 <template>
-    <el-button :style="{color:relButton.color,'font-size':relButton.fontSize}" class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
+    <el-button :style="relButton.style" class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
 </template>
 
 <script>
@@ -26,6 +26,15 @@
         },
         computed: {
             relButton: function () {
+                if(!this.button.style){
+                    this.button.style = {};
+                }
+                if(this.button.color){
+                    this.button.style.color=this.button.color;
+                }
+                if(this.button.fontSize){
+                    this.button.style.fontSize=this.button.fontSize;
+                }
                 return this.button;
             }
         },

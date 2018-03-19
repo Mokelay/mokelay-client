@@ -3,7 +3,7 @@
         <!-- 上下布局 -->
         <el-container v-if="realLayout == 'h-f'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-main :style="{background:realBgColor.main}">
                 <bb-layout-seriation :content="realMain"></bb-layout-seriation>
@@ -12,7 +12,7 @@
         <!-- 上中下布局 -->
         <el-container v-if="realLayout == 'h-m-f'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-main :style="{background:realBgColor.main}">
                 <bb-layout-seriation :content="realMain"></bb-layout-seriation>
@@ -33,7 +33,7 @@
         <!-- 上下左右布局 -->
         <el-container v-if="realLayout == 'h-l-m'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
                 <el-aside width="20%" :style="{background:realBgColor.leftAside}">
@@ -47,7 +47,7 @@
         <!-- 上下左右上下布局 -->
         <el-container v-if="realLayout == 'h-l-m-f'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
                 <el-aside width="20%" :style="{background:realBgColor.leftAside}">
@@ -70,7 +70,7 @@
             </el-aside>
             <el-container>
                 <el-header :style="{background:realBgColor.header}">
-                    <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                    <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
                 </el-header>
                 <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation :content="realMain"></bb-layout-seriation>
@@ -84,7 +84,7 @@
             </el-aside>
             <el-container>
                 <el-header :style="{background:realBgColor.header}">
-                    <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                    <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
                 </el-header>
                 <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation :content="realMain"></bb-layout-seriation>
@@ -97,7 +97,7 @@
         <!-- 上下左中右布局 -->
         <el-container v-if="realLayout == 'h-l-m-r'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
                 <el-aside width="20%" :style="{background:realBgColor.leftAside}">

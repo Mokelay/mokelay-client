@@ -192,6 +192,15 @@
           t.tansferTpl();
         }
       },
+       //外部联动 接收交互参数  上面方法的重载,如果有多个参数会走下面这个方法
+      linkage:function(...data){
+        const t = this;
+        t.external['linkage'] = data;
+        if(data[0]){
+          t.realText = data[0];
+          t.tansferTpl();
+        }
+      },
     }
   }
 </script>

@@ -149,7 +149,7 @@
                 let t=this;
                 t.p_value=field.value||'';
                 t.$emit('input',field.value||'');
-                t.$emit('click',field.value);
+                t.$emit('click',field.title,field.value);
             }
         }
     }
