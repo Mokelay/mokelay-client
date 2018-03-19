@@ -73,7 +73,8 @@
                 _chart: null,
                 external:{},
                 p_width:this.width,
-                p_height:this.height
+                p_height:this.height,
+                chartData:this.data
             }
         },
         created: function () {
@@ -91,7 +92,7 @@
                     t.loading = true;
                     _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach(function (item) {
-                            t.data = item['value'];
+                            t.chartData = item['value'];
                         });
                         t.loading = false;
                         if(callback){
@@ -141,7 +142,7 @@
             },
             getData(self) {
                 var t = self||this;
-                var json = this.data;
+                var json = this.chartData;
                 require.ensure(['echarts'], function (require) {
                     if (!t._chart) {
                         var echarts = require("echarts");
