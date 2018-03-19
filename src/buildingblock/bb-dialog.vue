@@ -4,7 +4,6 @@
         render: function (createElement) {
             const t = this;
             const bbItems = _TY_Tool.bbRender(t.realContent, createElement, t);
-            const slot = createElement('slot',{},[]);
             return createElement('el-dialog',{
                 props:{
                     'title':t.title,
@@ -19,7 +18,7 @@
                 on:{
                     close:t.closeFn
                 }
-            },[bbItems,slot])
+            },[bbItems])
         },
         props: {
             title: {
