@@ -733,7 +733,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             const targetUUID = executeContentUUID;
             //通过uuid查找目标积木 
             //优先查找当前容器积木内的实例对象，找不到再通过util.findBBByUuid全局查找,加快查找速度
-            const executeContent = t.$refs[executeContentUUID] || util.findBBByUuid(executeContentUUID);
+            const executeContent = util.findBBByUuid(executeContentUUID) || util.findBBByUuid(executeContentUUID, true);
             fn = executeContent ? executeContent[executeContentMethodName] : null;
         } else if (executeType == 'custom_script') {
             //自定义方法
