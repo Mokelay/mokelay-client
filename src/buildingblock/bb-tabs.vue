@@ -59,6 +59,10 @@
                 return;
             }
             const paneArr = t.renderTabData(createElement);
+            //模拟点击默认tab事件,避免已经渲染的dom重新渲染
+            setTimeout(function(){
+                t.tabClick({name:t.p_activeName});
+            },300);
             return createElement('el-tabs', {
                 props: {
                     value: t.p_activeName,
@@ -298,12 +302,8 @@
                             if(item.group==t.realTabs[i].group){
                                 //同一个group
                                 let itemCopy = _TY_Tool.deepClone(item);
-                                itemCopy['attributes']=_TY_Tool.tpl(item['attributes'], _TY_Tool.buildTplParams(t,{
-                                    "tab": {//静态配置只传过去name和value
-                                        label: data.label,
-                                        name: data.name
-                                    }
-                                }));
+                                let itemAttrStr = JSON.stringify(item['attributes']);
+                                itemCopy['attributes']=JSON.parse(itemAttrStr.replace(new RegExp('<%=tab.name%>','g'),data.name).replace(new RegExp('<%=tab.label%>','g'),data.label));
                                 data.content.push(itemCopy);
                             }
                         }
@@ -315,7 +315,7 @@
             tabClick: function (tab, event) {
                 const t = this;
                 // debugger;
-                 t.$refs['badge_'+tab.name].hide();
+                t.$refs['badge_'+tab.name].hide();
                 let alias = tab.name;
 
                 let currentTabContent;
@@ -335,6 +335,8 @@
                         return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
                     }
                 }).$mount('#tab_pane_' + alias+'_'+t.key);
+
+                t.$refs[_TY_Tool.uuid()] = dom; //把创建的vue 设置到$refs中
             },
             renderTabData: function (createElement) {
                 const t = this;
@@ -350,18 +352,22 @@
                             })
                         }
                         //当前tab是否默认选中的tab
-                        const activeTab = t.p_activeName&&tabData.name==t.p_activeName;
-                        let activeTabDom =[];
-                        if(activeTab){
-                            activeTabDom=_TY_Tool.bbRender(tabData.content, createElement, t);
-                        }
+                        // const activeTabFlag = t.p_activeName&&tabData.name==t.p_activeName;
+                        // if(activeTabFlag){
+                        //     activeTab.name=
+                        // }
+                        // let activeTabDom =[];
+                        // if(activeTab){
+                        //     activeTabDom=_TY_Tool.bbRender(tabData.content, createElement, t);
+                        // }
                         const badge = createElement('bb-badge', {props: {value: tabData.value}, ref: 'badge_'+tabData.name}, []);
                         const label = createElement('span', {slot: 'label'}, [tabData.label, badge]);
                         const tabPaneItem = createElement('el-tab-pane', {
                                     props: {name: ""+tabData.name,label:tabData.label, key: tabData.name}
                                 }, [label, createElement('div', {
                                     attrs: {id: 'tab_pane_' + tabData.name+'_'+t.key}
-                                }, activeTabDom)]
+                                }, [])]
+                                // }, activeTabDom)]
                         );
                         paneArr.push(tabPaneItem);
                     });

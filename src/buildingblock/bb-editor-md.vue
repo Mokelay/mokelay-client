@@ -118,6 +118,8 @@
                             )
                         }
                     }).$mount('#' + t.editorId);
+
+                    t.$refs[_TY_Tool.uuid()] = _mdEditor; //把创建的vue 设置到$refs中
                 },'mavon-editor');
             }
         }
