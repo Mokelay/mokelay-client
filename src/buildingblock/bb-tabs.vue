@@ -314,7 +314,6 @@
             },
             tabClick: function (tab, event) {
                 const t = this;
-                // debugger;
                 t.$refs['badge_'+tab.name].hide();
                 let alias = tab.name;
 
@@ -341,7 +340,6 @@
             renderTabData: function (createElement) {
                 const t = this;
                 const paneArr = [];
-                // let _paneBox = [];
                 if (t.tabsData&&t.tabsData.length>0) {
                     t.tabsData.forEach((tabData, key)=> {
                         if (t.badgeData) {
@@ -351,15 +349,6 @@
                                 }
                             })
                         }
-                        //当前tab是否默认选中的tab
-                        // const activeTabFlag = t.p_activeName&&tabData.name==t.p_activeName;
-                        // if(activeTabFlag){
-                        //     activeTab.name=
-                        // }
-                        // let activeTabDom =[];
-                        // if(activeTab){
-                        //     activeTabDom=_TY_Tool.bbRender(tabData.content, createElement, t);
-                        // }
                         const badge = createElement('bb-badge', {props: {value: tabData.value}, ref: 'badge_'+tabData.name}, []);
                         const label = createElement('span', {slot: 'label'}, [tabData.label, badge]);
                         const tabPaneItem = createElement('el-tab-pane', {
@@ -367,7 +356,6 @@
                                 }, [label, createElement('div', {
                                     attrs: {id: 'tab_pane_' + tabData.name+'_'+t.key}
                                 }, [])]
-                                // }, activeTabDom)]
                         );
                         paneArr.push(tabPaneItem);
                     });
