@@ -5,21 +5,27 @@
 
             <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
 
-            <div v-drag="direction" id="drag" :data-uuid="canvasItem.uuid" class="operate operate-size"
+            <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
+            <div class="operate operate-size"
                  v-bind:style="{left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+
                 <div class="rotate-btn">
                     <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
                 </div>
                 <div class="border-line"></div>
-                <div class="border-line dashed"></div>
-                <div class="dot scale-nw dot-nw"></div>
-                <div class="dot scale-n dot-n"></div>
-                <div class="dot scale-ne dot-ne"></div>
-                <div class="dot scale-e dot-e"></div>
-                <div class="dot scale-se dot-se"></div>
-                <div class="dot scale-s dot-s"></div>
-                <div class="dot scale-sw dot-sw"></div>
-                <div class="dot scale-w dot-w"></div>
+                <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" id="drag"></div>
+
+                <!-- <div class="dot scale-nw dot-nw"></div> -->
+                <!-- <div class="dot scale-n dot-n"></div> -->
+
+                <!-- <div class="dot scale-ne dot-ne"></div> -->
+                <div class="dot scale-e dot-e" id="dragRight" :data-uuid="canvasItem.uuid" v-dragRight="directionRight"></div>
+
+                <!-- <div class="dot scale-se dot-se"></div> -->
+                <!-- <div class="dot scale-s dot-s"></div> -->
+
+                <!-- <div class="dot scale-sw dot-sw"></div> -->
+                <!-- <div class="dot scale-w dot-w" id="dragLeft" :data-uuid="canvasItem.uuid" v-dragLeft="directionLeft"></div> -->
             </div>
         </div>
     </div>
@@ -29,24 +35,89 @@
     import Vue from 'vue';
     import '../css/iconfont/rotatefont.css';
 
-    Vue.directive('drag', {
+    Vue.directive('dragRight', {
+            bind: function (el, binding) {
+                let oDiv = el;   //当前元素
+                let self = this;  //上下文
+                oDiv.onmousedown = function (e) {
+                    let left = oDiv.offsetParent.offsetLeft;
+                    let disX = e.clientX - oDiv.offsetParent.offsetLeft;
+                    let disX1 = oDiv.offsetParent.clientWidth;
+
+                    document.onmousemove = function (e) {
+                        
+                        let width = e.clientX - disX;
+
+                        oDiv.offsetParent.style.width = width + disX1 - left + 'px';
+                        
+                        binding.value({x: left + disX1, uuid: el.getAttribute('data-uuid')})
+
+                    };
+                   
+                    document.onmouseup = function (e) {
+
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                    };
+                };
+            }
+        }
+    );
+
+    Vue.directive('dragLeft', {
             bind: function (el, binding) {
                 let oDiv = el;   //当前元素
                 let self = this;  //上下文
                 oDiv.onmousedown = function (e) {
                     // 鼠标按下，计算当前元素距离可视区的距离
-                    let disX = e.clientX - oDiv.offsetLeft;
-                    let disY = e.clientY - oDiv.offsetTop;
+                    let disX = e.clientX - oDiv.offsetParent.offsetLeft;
+                    let disY = e.clientY - oDiv.offsetParent.offsetTop;
+                    let heightTop = disY + oDiv.offsetParent.clientHeight;
 
                     document.onmousemove = function (e) {
                         // 通过事件委托，计算移动的距离
                         let left = e.clientX - disX;
                         let top = e.clientY - disY;
                         // 移动当前元素
-                        oDiv.style.left = left + 'px';
-                        oDiv.style.top = top + 'px';
+                        //debugger
+                        
+                        oDiv.offsetParent.style.height = (oDiv.offsetParent.clientHeight - disY) + 'px';
+                        oDiv.offsetParent.style.top = top + 'px';
                         // 将此时的位置传出去
-//                        binding.value({x: e.pageX, y: e.pageY})
+                        //binding.value({x: e.pageX, y: e.pageY})
+
+                        binding.value({x: left, y: top, height: oDiv.offsetParent.style.height, uuid: el.getAttribute('data-uuid')})
+
+                    };
+                    document.onmouseup = function (e) {
+
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                    };
+                };
+            }
+        }
+    );
+
+    Vue.directive('drag', {
+            bind: function (el, binding) {
+                let oDiv = el;   //当前元素
+                let self = this;  //上下文
+                oDiv.onmousedown = function (e) {
+                    // 鼠标按下，计算当前元素距离可视区的距离
+                    let disX = e.clientX - oDiv.offsetParent.offsetLeft;
+                    let disY = e.clientY - oDiv.offsetParent.offsetTop;
+
+                    document.onmousemove = function (e) {
+                        // 通过事件委托，计算移动的距离
+                        let left = e.clientX - disX;
+                        let top = e.clientY - disY;
+                        // 移动当前元素
+                        
+                        oDiv.offsetParent.style.left = left + 'px';
+                        oDiv.offsetParent.style.top = top + 'px';
+                        // 将此时的位置传出去
+                        //binding.value({x: e.pageX, y: e.pageY})
 
                         binding.value({x: left, y: top, uuid: el.getAttribute('data-uuid')})
 
@@ -140,7 +211,9 @@
         },
         data() {
             return {
-                canvasItems: []
+                canvasItems: [],
+                disX: 0,
+                disY: 0
             }
         },
         created: function () {
@@ -152,12 +225,24 @@
                     this.canvasItems = this.canvasItems.concat(this.content);
                 }
             },
+            directionLeft(val){
+                console.log(val);
+
+                
+            },
+            
+            directionRight(val){
+                console.log(val);
+
+                
+            },
             direction(val){
                 console.log(val);
 
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === val.uuid) {
                         item.layout.position = {x: val.x, y: val.y};
+                        item.layout.size.height = val.height;
                     }
                 });
 
