@@ -705,12 +705,12 @@
                     type: 'warning'
                 }).then(() => {
                     const index = scope['$index'] || 0;
+                    //调用删除接口
+                    t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
                     t.tableData.splice(index,1);
                     t.$emit('input',t.tableData);
                     t.$emit('change',t.tableData);
                     t.$emit('delete',t.tableData);
-                    //调用删除接口
-                    t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
                 }).catch(() => {
                     t.$message({
                         type: 'info',
