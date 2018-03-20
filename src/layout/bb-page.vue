@@ -261,7 +261,6 @@
       openDialog:function(...args){
         const t = this;
         args.forEach((val,key)=>{
-          debugger
           if(val.type == 'custom'){
             t.diaContent = val.arguments;
           }
