@@ -6,7 +6,7 @@
         <div v-if="groupConfig.type == 'normal'">
             <span v-for="(button,index) in realButtons" :key="index" class="button">
                 <bb-button :key="index" :button="button" @click="click"></bb-button>
-                <i v-if="button.iconName" :class="button.iconName || 'ty-icon_cuowu'" @click='iconClick(button,index)'></i>
+                <i v-if="button.iconName" :class="button.iconName" @click='iconClick(button,index)'></i>
                 <bb-badge v-if="button.badgeDs" :textDs="button.badgeDs" class="icon"  @click='iconClick(button,index)'></bb-badge>
             </span>
         </div>
@@ -87,7 +87,6 @@
             },
             //移除按钮
             remove:function(button,index){
-                debugger
                 const t = this;
                 t.$confirm('确认操作?', '提示', {
                     confirmButtonText: '确定',
@@ -95,7 +94,7 @@
                     type: 'warning'
                 }).then(() => {
                     t.realButtons.splice(index, 1);
-                    t.$emit('remove',button);
+                    t.$emit('remove',button,index);
                 }).catch(() => {
                     t.$message({
                         type: 'info',
