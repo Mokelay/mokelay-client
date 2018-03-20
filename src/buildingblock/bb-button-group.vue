@@ -6,7 +6,7 @@
         <div v-if="groupConfig.type == 'normal'">
             <span v-for="(button,index) in realButtons" :key="index" class="button">
                 <bb-button :key="index" :button="button" @click="click"></bb-button>
-                <i v-if="!button.iconName" :class="button.iconName || 'ty-icon_cuowu'" @click='iconClick(button,index)'></i>
+                <i v-if="button.iconName" :class="button.iconName || 'ty-icon_cuowu'" @click='iconClick(button,index)'></i>
                 <bb-badge v-if="button.badgeDs" :textDs="button.badgeDs" class="icon"  @click='iconClick(button,index)'></bb-badge>
             </span>
         </div>
