@@ -721,7 +721,12 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
         if (fromContentEvent != interactive.fromContentEvent) {
             return;
         }
+
         const executeType = interactive['executeType'];
+        //TODO假数据demo验证后立即删除，目前TY1.0下数据库中交互无executeArgument字段 且TY2.0中也无需添加（交互全部存在content中）
+        interactive['executeArgument'] = "[{uuid:'111111',alias:'bb-list'},{uuid:'222222',alias:'bb-uuid'}]";
+
+        let executeArgument = eval(interactive['executeArgument']);
         //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
         //事件所要执行的方法
         let fn = null;
@@ -745,7 +750,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             //容器方法
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
-            const executeContent = util.findBBByUuid(executeContentUUID);
+            const executeContent = util.findBBByUuid(executeContentUUID) || window._TY_Root;
             fn = t[containerMethodName] || executeContent[containerMethodName];
         }
         if (fn) {
@@ -753,11 +758,16 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
              *执行目标方法 
              *私有只在bbRender中使用
                 @params:积木触发事件时传给方法的参数[data,data2....],例如linkage(data)
+                @customArg:交互配置时，用户传给目标方法的参数
                 @t:当前容器积木的实例化对象
                 @bb:触发事件的积木
                 @fromContentEvent:当前触发事件名称
             */
-            const realParams = params.concat(t, bb, fromContentEvent);
+            const customArg = {
+                type: 'custom',
+                arguments: executeArgument
+            }
+            const realParams = params.concat(customArg, t, bb, fromContentEvent);
             fn.apply(null, realParams);
         }
     });

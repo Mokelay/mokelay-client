@@ -84,11 +84,13 @@
             pbbElementList.push(element);
             break;
       }
-      return createElement(
-          'div',
-          {},
-          pbbElementList
-        );
+
+      //页面级弹窗
+      const dialog = createElement('bb-dialog',{props:{'isShow':this.diaIsShow,content:this.diaContent},on:{"update:isShow":(val)=>{this.diaIsShow = val}}},[]);
+      pbbElementList.push(dialog);
+
+      //返回页面内所有的内容
+      return createElement('div',{},pbbElementList);
     },
     props: {
       root:{
@@ -118,7 +120,9 @@
         pbbs:[],
         customFile:null,
         layoutObject:null,
-        content:null
+        content:null,
+        diaContent:null, //页面级弹窗内容
+        diaIsShow:false //页面级弹控制
       };
     },
     created: function () {
@@ -239,6 +243,64 @@
       loadChildBB(){
         let t=this;
         return _TY_Tool.loadChildBB(t);
+      },
+      /*页面弹窗方法
+        eventArg: 积木触发事件时所带的原始参数
+        content:[{ //页面内容 由交互配置参数得来
+          uuid: '',
+          alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+          aliasName: '自由式布局', //中文名称
+          attributes: {}, //积木属性
+          animation: [{ //动画
+          }],
+          interactives: [{ //触发交互
+          }],
+          layout: {} //积木布局
+        }]
+      */
+      openDialog:function(...args){
+        const t = this;
+        args.forEach((val,key)=>{
+          debugger
+          if(val.type == 'custom'){
+            t.diaContent = val.arguments;
+          }
+        })
+        t.diaIsShow = true;
+      },
+      /*交互ds解析
+        ds:{
+          api:"/list-data",
+          category:'config',//ds选择器 不是type字段而是category字段
+          method:"post",
+          inputs:[
+              {paramName:'a',valueType:"constant",constant:123},
+              {paramName:'b',valueType:"inputValueObj",valueKey:"bb",variable:"pageSize"},
+              {paramName:'c',valueType:"inputValueObj",valueKey:"router",variable:"page"},
+              {paramName:'d',valueType:"inputValueObj",valueKey:"row-data",variable:"alias"},
+          ],
+          outputs:[
+              {dataKey:"tableData",valueKey:"data-list-1"},
+              {dataKey:"obj",valueKey:"data-obj-1",handle:"${buzzCode}"}
+          ]
+        }
+      */
+      executeDS:function(...args){
+        const t =this;
+        args.forEach((val,key)=>{
+          if(val.type == 'custom'){
+            var ds = val.arguments;
+            if (ds) {
+              _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
+                  //接口执行完毕
+                  t.emit('ds-success');
+                }, function (code, msg) {
+                  //接口执行完毕
+                  t.emit('ds-error');
+              });
+            }
+          }
+        })
       }
     }
   }
