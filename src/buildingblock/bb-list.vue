@@ -331,7 +331,8 @@
                 //第一次渲染处理表头数据
                 canPre:true,
                 canEditRow:null,
-                scope:null
+                scope:null,
+                adding:false//是否添加状态
             }
         },
         watch: {
@@ -620,7 +621,7 @@
                     //新增
                     t.$set(t.tableData[0],column.prop,val);
                     //通过接口提交修改
-                    t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                    // t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
                     t.$emit('input',t.tableData);
                     t.$emit('change',t.tableData);
                 }
@@ -648,9 +649,10 @@
                 if(false){
                     t.tableData.splice(0,0,newRow);
                 }else{
-                   t.tableData.splice(0,0,{});
+                    t.tableData.splice(0,0,{});
                     t.canEditRow = 0; 
                 }
+                t.adding = true;
             },
             //分发编辑列表的各种按钮事件
             editorData:function(button, scope){
@@ -675,7 +677,17 @@
             cellEditor:function(scope){
                 const t = this;
                 t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
-
+                if(!t.canEditRow){
+                    if(!t.adding){
+                        //修改
+                        t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
+                    }else{
+                        //新增
+                        t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                    }
+                }else{
+                    t.adding = false;
+                }
             },
             //清空数据数据
             cleanData:function(scope){
