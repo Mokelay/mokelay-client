@@ -20,14 +20,13 @@
     }
   */
   import Util from '../libs/util';
-
+  import Vue from 'vue';
   var _PBB_PREFIX = "pbb_";
 
   export default {
     name: 'bb-page',
     render: function (createElement) {
       var pbbElementList = [];
-
       //处理模板
       if(this.templatePageAlias){
         pbbElementList.push(createElement(
@@ -85,8 +84,8 @@
             break;
       }
 
-      //页面级弹窗
-      const dialog = createElement('bb-dialog',{props:{'isShow':this.diaIsShow,content:this.diaContent},on:{"update:isShow":(val)=>{this.diaIsShow = val}}},[]);
+      //页面级弹窗容器 所有的弹窗都新增在此div下
+      const dialog = createElement('div',{attrs:{id:this.pageAlias + '_dialog'}},[]);
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
@@ -121,8 +120,6 @@
         customFile:null,
         layoutObject:null,
         content:null,
-        diaContent:null, //页面级弹窗内容
-        diaIsShow:false //页面级弹控制
       };
     },
     created: function () {
@@ -265,7 +262,21 @@
             t.diaContent = val.arguments;
           }
         })
-        t.diaIsShow = true;
+        var _dialog = new Vue({
+            router: t.$router,
+            render: function(createElement){
+                return createElement('bb-dialog',{props:{'isShow':true,content:t.diaContent},on:{
+                  "update:isShow":(val)=>{
+                    if(!val){
+                      //关闭弹窗销毁DOM中的当前弹窗节点
+                      document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
+                    }
+                  },
+                }},[]);
+            }
+        }).$mount();
+        //将弹窗实例化对象挂载到当前bb-page下
+        document.getElementById(t.pageAlias + '_dialog').appendChild(_dialog.$el);
       },
       /*交互ds解析
         ds:{

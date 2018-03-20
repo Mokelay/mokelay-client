@@ -36,7 +36,7 @@
             <!-- 列表新增按钮 -->
             <el-button v-show="editConfig.editable" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="chooseLego" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55"></el-table-column>
 
@@ -331,7 +331,8 @@
                 //第一次渲染处理表头数据
                 canPre:true,
                 canEditRow:null,
-                scope:null
+                scope:null,
+                adding:false//是否添加状态
             }
         },
         watch: {
@@ -462,8 +463,9 @@
                 }
                 return true;
             },
-            chooseLego(row){
+            rowClick(row){
                 //触发父组件的选择
+                this.$emit("rowClick", row);
                 //this.$emit("list-select", row);
             },
             globalSearch(){
@@ -619,7 +621,7 @@
                     //新增
                     t.$set(t.tableData[0],column.prop,val);
                     //通过接口提交修改
-                    t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                    // t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
                     t.$emit('input',t.tableData);
                     t.$emit('change',t.tableData);
                 }
@@ -647,9 +649,10 @@
                 if(false){
                     t.tableData.splice(0,0,newRow);
                 }else{
-                   t.tableData.splice(0,0,{});
+                    t.tableData.splice(0,0,{});
                     t.canEditRow = 0; 
                 }
+                t.adding = true;
             },
             //分发编辑列表的各种按钮事件
             editorData:function(button, scope){
@@ -674,7 +677,17 @@
             cellEditor:function(scope){
                 const t = this;
                 t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
-
+                if(!t.canEditRow){
+                    if(!t.adding){
+                        //修改
+                        t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
+                    }else{
+                        //新增
+                        t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                    }
+                }else{
+                    t.adding = false;
+                }
             },
             //清空数据数据
             cleanData:function(scope){

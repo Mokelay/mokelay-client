@@ -70,6 +70,7 @@
             }
             //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
             bbContent.forEach((field,key)=>{
+                field['interactives'] = field['interactives']?field['interactives']:[];
                 field['interactives'].push({
                     uuid:_TY_Tool.uuid(),
                     fromContentEvent:'input',
