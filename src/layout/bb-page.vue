@@ -292,10 +292,10 @@
             if (ds) {
               _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
                   //接口执行完毕
-                  t.emit('ds-success');
+                  t.emit('ds-success',map);
                 }, function (code, msg) {
                   //接口执行完毕
-                  t.emit('ds-error');
+                  t.emit('ds-error',code);
               });
             }
           }
