@@ -156,7 +156,7 @@
                         ds:{
                             api: "list-mdByBbAlias",
                             method: "get",
-                            inputs: [{paramName: 'bbAlias',valueType:"template",variable:this.pbbId}],
+                            inputs: [{paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external.linkage%>"}],
                             outputs: [
                                 {dataKey: "fields", valueKey: "data_list"}
                             ]
@@ -217,7 +217,7 @@
                             {prop: 'executeContentMethodName',label: '目标积木方法',et:'bb-select',etProp:{ds:{
                                 api: "list-mdByBbAlias",
                                 method: "get",
-                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external.linkage%"}],
+                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external.linkage%>"}],
                                 outputs: [
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
