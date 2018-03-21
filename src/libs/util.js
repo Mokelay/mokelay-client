@@ -618,7 +618,7 @@ util.bbCanvasRender = function(content, createElement, t) {
             }, []);
             const bbItem = createElement('div', {
                 style: {
-                    transform: `rotate(${bb.layout.bgColor}deg)`,
+                    transform: `rotate(${bb.layout.rotate}deg)`,
                     flex: 1,
                     position: 'absolute',
                     left: bb.layout.position.x + 'px',
