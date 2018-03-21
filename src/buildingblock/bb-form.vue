@@ -12,7 +12,7 @@
             if(t.content){
                 bbContent = t.content;
                 bbContent.forEach((bb,key)=>{
-                    bb.attributes.value = t.formData?t.formData[bb['attributes']['attributeName']]:{};
+                    bb.attributes.value = t.formData?t.formData[bb['attributes']['attributeName']]:'';
                 })
             }else{
                 t.realFields.forEach(function(field){
