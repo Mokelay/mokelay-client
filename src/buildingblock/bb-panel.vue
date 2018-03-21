@@ -166,7 +166,7 @@
         left: 0%;
         width: 100%;
         height: 100%;
-        z-index: 2;
+        z-index: 10;
         animation:zoomIn 0.2s;
         overflow-y: auto;
         .panelContent{

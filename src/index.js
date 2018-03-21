@@ -83,6 +83,7 @@ import bbiconselect from './module/bb-icon-select.vue';
 import bbicon from './module/bb-icon.vue';
 import bbbbselect from './module/bb-bb-select.vue';
 import bbfieldselect from './module/bb-field-select.vue';
+import bbconfig from './module/bb-config.vue';
 
 //布局相关
 import bbpage from './layout/bb-page';
@@ -192,6 +193,7 @@ let ty = {
 		Vue.component('bb-collapse', bbcollapse);
 		Vue.component('bb-form-item', bbformitem);
 		Vue.component('bb-json', bbjson);
+		Vue.component('bb-config', bbconfig);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);

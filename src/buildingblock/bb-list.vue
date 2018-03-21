@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <!-- 列表新增按钮 -->
-            <el-button v-show="editConfig.editable" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
+            <el-button v-if="editConfig.editable[0] == 'add'" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
@@ -302,7 +302,7 @@
                 type:Object,
                 default:function(){
                     return {
-                        editable:false,
+                        editable:[], // ['add','edit','up','down','remove']
                         editDs:{
                             add:{},
                             remove:{},
@@ -562,44 +562,54 @@
                         change:t.cellChange.bind(null,col)
                     }
                 });
-                //如果是可编辑状态，默认添加操作列
-                if(t.editConfig.editable){
-                    const editor = {
-                        fixed:"right",
-                        width:"120px",
-                        label:"操作",
-                        prop:"bbListeditorData",
-                        type:"button-group",
-                        buttons:[{
+                const buttons = {
+                        edit:{
                             action:"bbListeditorData",
                             icon:"el-icon-edit",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'edit'
-                        },{
+                        },
+                        remove:{
                             action:"bbListeditorData",
                             icon:"ty-icon_lajitong",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
-                            alias:'delete'
-                        },{
+                            alias:'remove'
+                        },
+                        up:{
                             action:"bbListeditorData",
                             icon:"ty-icon_shangyi",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'up'
-                        },{
+                        },
+                        down:{
                             action:"bbListeditorData",
                             icon:"ty-icon_xiayi",
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'down'
-                        }]
+                        }}
+                //如果是可编辑状态，默认添加操作列
+                if(t.editConfig.editable.length){
+                    const editor = {
+                        fixed:"right",
+                        width:"120px",
+                        label:"操作",
+                        prop:"bbListeditorData",
+                        type:"button-group",
+                        buttons:[]
                     };
+                    t.editConfig.editable.forEach((ele,index)=>{
+                        if(buttons[ele]){
+                            editor.buttons.push(buttons[ele]);
+                        }
+                    })
                     if(t.realColumns.length == t.columns.length){
                         t.realColumns.push(editor);
                     }
@@ -630,9 +640,13 @@
                 @newRow 当前修改数据的整行数据
                 @ds 请求接口配置
             */
-            cellDSSubmit:function(newRow,ds){
+            cellDSSubmit:function(newRow,dsName){
                 //列表的更新操作
                 const t = this;
+                let ds = null;
+                if(t.editConfig.editDs){
+                    ds = t.editConfig.editDs[dsName];
+                }
                 if (ds) {
                     t.loading = true;
                     Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
@@ -662,8 +676,8 @@
                     case 'edit':
                         t.cellEditor(scope);
                         break;
-                    case 'delete':
-                        t.cellDelete(scope);
+                    case 'remove':
+                        t.cellremove(scope);
                         break;
                     case 'up':
                         t.cellUp(scope);
@@ -680,10 +694,10 @@
                 if(!t.canEditRow){
                     if(!t.adding){
                         //修改
-                        t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
+                        t.cellDSSubmit(t.tableData[scope['$index']],'update');                 
                     }else{
                         //新增
-                        t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                        t.cellDSSubmit(t.tableData[0],'add');
                     }
                 }else{
                     t.adding = false;
@@ -695,9 +709,9 @@
                 t.tableData = [];
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
-                t.$emit('delete',t.tableData);
+                t.$emit('remove',t.tableData);
             },            //删除数据
-            cellDelete:function(scope){
+            cellremove:function(scope){
                 const t = this;
                 t.$confirm('确认操作?', '提示', {
                     confirmButtonText: '确定',
@@ -705,12 +719,12 @@
                     type: 'warning'
                 }).then(() => {
                     const index = scope['$index'] || 0;
+                    //调用删除接口
+                    t.cellDSSubmit(t.tableData[index],'remove');
                     t.tableData.splice(index,1);
                     t.$emit('input',t.tableData);
                     t.$emit('change',t.tableData);
-                    t.$emit('delete',t.tableData);
-                    //调用删除接口
-                    t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
+                    t.$emit('remove',t.tableData);
                 }).catch(() => {
                     t.$message({
                         type: 'info',
@@ -730,7 +744,7 @@
                 t.tableData.splice(index-1,0,item);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
-                t.cellDSSubmit(item,t.editConfig.editDs.sort);
+                t.cellDSSubmit(item,'sort');
             },
             //数据向下移动
             cellDown:function(scope){
@@ -744,7 +758,7 @@
                 t.tableData.splice(index+1,0,item);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
-                t.cellDSSubmit(item,t.editConfig.editDs.sort);
+                t.cellDSSubmit(item,'sort');
             }
         }
     }

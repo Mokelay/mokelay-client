@@ -1,5 +1,8 @@
 <template>
-    <el-badge :is-dot="isDot" :value="showValue" class="item" :hidden="hidden"><span @click="click">{{text}}</span></el-badge>
+    <el-badge :is-dot="isDot" :value="showValue" class="item" :hidden="hidden">
+        <span v-if="text" @click="click">{{text}}</span>
+        <bb-button v-if="button" @click="btnClick" :button="button"></bb-button>
+    </el-badge>
 </template>
 <script>
     export default {
@@ -26,6 +29,10 @@
             clickable: {
                 type: Boolean,
                 default:false
+            },
+            button:{
+                type:Object,
+                default:null
             }
         },
         data() {
@@ -48,6 +55,10 @@
         },
         created: function () {
             this.autoRefresh();
+        },
+        beforeDestroy:function(){
+            //摧毁前 停止定时器
+            this.stopRefresh();
         },
         methods: {
             //隐藏标记
@@ -73,6 +84,10 @@
                 if(t.clickable){
                     t.hide();
                 }
+            },
+            btnClick:function(){
+                const t = this;
+                t.$emit('click');
             },
             //获取动态数据
             getData:function () {
@@ -102,7 +117,8 @@
                 const t = this;
                 clearInterval(t.setTime);
                 t.setTime = null;
-            },
+            }
+
         }
     }
 </script>

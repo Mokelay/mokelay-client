@@ -1,5 +1,5 @@
 <template>
-  <bb-page :pageAlias="$route.params.pageAlias" :key="key" :root="true"></bb-page>
+  <bb-page :pageAlias="$route.params.pageAlias" ref="Page_Ref_Root" :key="key" :root="true"></bb-page>
 </template>
 
 <script>
