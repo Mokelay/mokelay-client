@@ -11,6 +11,9 @@
             //创建FormItem
             if(t.content){
                 bbContent = t.content;
+                bbContent.forEach((bb,key)=>{
+                    bb.attributes.value = t.formData[bb['attributes']['attributeName']];
+                })
             }else{
                 t.realFields.forEach(function(field){
                     //支持etProps
