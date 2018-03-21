@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-cascader placeholder="请选择积木" @change="change" :changeOnSelect="true" :staticOptions="firstOpts" :dsList="dsList" v-model="bb"></bb-cascader>
+        <bb-cascader placeholder="请选择积木" @change="change" :changeOnSelect="true" :staticOptions="firstOpts" :dsList="dsList" v-model="bb" :valueTpl="<%=value[value.length-1]%>"></bb-cascader>
     </div>
 </template>
 
