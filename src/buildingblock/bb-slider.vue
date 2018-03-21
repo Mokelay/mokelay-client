@@ -16,6 +16,7 @@
           :label="label"
           :tooltip-class="tooltipClass"
           @change="change"
+          class="bb-slider"
           >
         </el-slider>
 </template>
@@ -139,11 +140,17 @@
 </script>
 
 
-<style>
+<style lang="less">
     .el-slider__runway div.el-slider__button-wrapper{
         z-index: 100;
     }
     .el-slider{
         padding: 5px 10px;
+    }
+    .bb-slider{
+        .el-slider__runway{
+            display: inline-block;
+            line-height: 0px;
+        }
     }
 </style>
