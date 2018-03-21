@@ -79,6 +79,10 @@
                 type:String,
                 default:''
             },
+            tabIconStyle:{
+                type:[Object,String],
+                default:null
+            },
             /**
                 最终的tab数据是由tabPanels + tabDS 合并而来
                 实现交互渲染，需要改造为content , 增加group设计
@@ -359,10 +363,16 @@
                         let iconDom = '';
                         if(tabData.icon){
                             //如果有icon
+                            let iconStyle={}
+                            if(t.tabIconStyle){
+                                //如果有css样式配置
+                                iconStyle = typeof(t.tabIconStyle)==='string'?eval(t.tabIconStyle):t.tabIconStyle;
+                            }
                             iconDom = createElement('i',{
                                 attrs:{
                                     class:tabData.icon
-                                }
+                                },
+                                style:iconStyle
                             },[]);
                         }
                         const label = createElement('span', {slot: 'label'}, [iconDom,tabData.label, badge]);
