@@ -10,7 +10,16 @@
         render: function (createElement) {
             const t = this;
             const realContent = [];
-            realContent.push(t.contentItem);
+            const realContentItem = _TY_Tool.deepClone(t.contentItem);
+            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
+            realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
+            realContentItem['interactives'].push({
+                uuid:_TY_Tool.uuid(),
+                fromContentEvent:'input',
+                executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                containerMethodName:'defaultVmodel'
+            });
+            realContent.push(realContentItem);
             //处理标准格式数据
             const bbList = _TY_Tool.bbRender(realContent, createElement, t);
             let formItem;
