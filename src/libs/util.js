@@ -740,9 +740,9 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
 
         const executeType = interactive['executeType'];
         //TODO假数据demo验证后立即删除，目前TY1.0下数据库中交互无executeArgument字段 且TY2.0中也无需添加（交互全部存在content中）
-        interactive['executeArgument'] = "[{uuid:'111111',alias:'bb-list'},{uuid:'222222',alias:'bb-uuid'}]";
+        // interactive['executeArgument'] = "[{uuid:'111111',alias:'bb-list'},{uuid:'222222',alias:'bb-uuid'}]";
 
-        let executeArgument = eval(interactive['executeArgument']);
+        let executeArgument = typeof(interactive['executeArgument']) === 'string' ? eval(interactive['executeArgument']) : interactive['executeArgument'];
         //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
         //事件所要执行的方法
         let fn = null;

@@ -13,6 +13,12 @@
              *按钮配置 
                 @button:当前点击的按钮配置
                 {
+                    style:{},//css样式
+                    type:'primary',//按钮样式
+                    disabled:false,//按钮是否可编辑
+                    size:'small',//按钮大小
+                    icon:'icon',//按钮图标
+                    text:'按钮文字',//
                     action:'url 地址跳转|| execute-ds执行接口 || dialog-page弹窗 || code自定义代码 || buzz 巴斯代码',
                     url:''跳转地址 action:'url’时有效
                     urlType:'openWindow 在新标签中打开 

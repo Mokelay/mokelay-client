@@ -79,6 +79,10 @@
                 type:String,
                 default:''
             },
+            tabIconStyle:{
+                type:[Object,String],
+                default:null
+            },
             /**
                 最终的tab数据是由tabPanels + tabDS 合并而来
                 实现交互渲染，需要改造为content , 增加group设计
@@ -169,6 +173,7 @@
                     tabsData:[{
                         label: '全部',
                         name: 'all',
+                        icon: 'ty-icon'
                         content:[{
                             
                         }]
@@ -218,7 +223,8 @@
                         t.bbTabs.push({
                             type:'static',
                             label:item.label,
-                            name:item.name
+                            name:item.name,
+                            icon:item.icon
                         });
                         let fields = item.fields;
                         for(let j=0;j<item.fields.length;j++){
@@ -241,7 +247,8 @@
                         type:'dynamic',
                         label:'动态tab',
                         name:'dynamicTab',
-                        ds:t.tabDs
+                        ds:t.tabDs,
+                        icon:''
                     });
                     let props = typeof t.tabDsContent == 'string' ? eval("("+t.tabDsContent+")") : t.tabDsContent;
                     t.bbContent.push({
@@ -267,7 +274,8 @@
                             t.realTabs.push({
                                 label:tab.label,
                                 name:tab.name,
-                                group:tab.name
+                                group:tab.name,
+                                icon:tab.icon
                             });
                         }else if(tab.type==='dynamic'){
                             _TY_Tool.getDSData(tab.ds, _TY_Tool.buildTplParams(t), function (map) {
@@ -275,7 +283,8 @@
                                     t.realTabs.push({
                                         label: item.text,
                                         name: item.value,
-                                        group: tab.name
+                                        group: tab.name,
+                                        icon: item.icon
                                     })
                                     t.canRender=true;
                                 });
@@ -295,6 +304,7 @@
                         let data={
                             label:t.realTabs[i].label,
                             name:t.realTabs[i].name,
+                            icon:t.realTabs[i].icon,
                             content:[]
                         };
                         for(let j=0;j<t.bbContent.length;j++){
@@ -350,7 +360,22 @@
                             })
                         }
                         const badge = createElement('bb-badge', {props: {value: tabData.value}, ref: 'badge_'+tabData.name}, []);
-                        const label = createElement('span', {slot: 'label'}, [tabData.label, badge]);
+                        let iconDom = '';
+                        if(tabData.icon){
+                            //如果有icon
+                            let iconStyle={}
+                            if(t.tabIconStyle){
+                                //如果有css样式配置
+                                iconStyle = typeof(t.tabIconStyle)==='string'?eval(t.tabIconStyle):t.tabIconStyle;
+                            }
+                            iconDom = createElement('i',{
+                                attrs:{
+                                    class:tabData.icon
+                                },
+                                style:iconStyle
+                            },[]);
+                        }
+                        const label = createElement('span', {slot: 'label'}, [iconDom,tabData.label, badge]);
                         const tabPaneItem = createElement('el-tab-pane', {
                                     props: {name: ""+tabData.name,label:tabData.label, key: tabData.name}
                                 }, [label, createElement('div', {

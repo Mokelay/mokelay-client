@@ -640,9 +640,13 @@
                 @newRow 当前修改数据的整行数据
                 @ds 请求接口配置
             */
-            cellDSSubmit:function(newRow,ds){
+            cellDSSubmit:function(newRow,dsName){
                 //列表的更新操作
                 const t = this;
+                let ds = null;
+                if(t.editConfig.editDs){
+                    ds = t.editConfig.editDs[dsName];
+                }
                 if (ds) {
                     t.loading = true;
                     Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
@@ -690,10 +694,10 @@
                 if(!t.canEditRow){
                     if(!t.adding){
                         //修改
-                        t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
+                        t.cellDSSubmit(t.tableData[scope['$index']],'update');                 
                     }else{
                         //新增
-                        t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
+                        t.cellDSSubmit(t.tableData[0],'add');
                     }
                 }else{
                     t.adding = false;
@@ -715,12 +719,12 @@
                     type: 'warning'
                 }).then(() => {
                     const index = scope['$index'] || 0;
+                    //调用删除接口
+                    t.cellDSSubmit(t.tableData[index],'remove');
                     t.tableData.splice(index,1);
                     t.$emit('input',t.tableData);
                     t.$emit('change',t.tableData);
                     t.$emit('remove',t.tableData);
-                    //调用删除接口
-                    t.cellDSSubmit(t.tableData[index],t.editConfig.editDs.remove);
                 }).catch(() => {
                     t.$message({
                         type: 'info',
@@ -740,7 +744,7 @@
                 t.tableData.splice(index-1,0,item);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
-                t.cellDSSubmit(item,t.editConfig.editDs.sort);
+                t.cellDSSubmit(item,'sort');
             },
             //数据向下移动
             cellDown:function(scope){
@@ -754,7 +758,7 @@
                 t.tableData.splice(index+1,0,item);
                 t.$emit('input',t.tableData);
                 t.$emit('change',t.tableData);
-                t.cellDSSubmit(item,t.editConfig.editDs.sort);
+                t.cellDSSubmit(item,'sort');
             }
         }
     }
