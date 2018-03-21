@@ -48,21 +48,25 @@
             },
             loadFirstData(){
                 let t=this;
-                t.firstOpts = [];
+                t.firstOpts = [{
+                    value:"Page_Ref_Root",
+                    label:"Root",
+                    children:[]
+                }];
                 //获取根数据
-                const uuidList = window._TY_Root.$refs;
+                // const uuidList = window._TY_Root.$refs;
 
-                console.log("uuidList",uuidList);
-                for(let i in uuidList){
-                    if(uuidList[i]&&uuidList[i]._isVue){//是vue对象
-                        let len = t.firstOpts.length;
-                        t.firstOpts.push({
-                            value:i,
-                            label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
-                            children:[]
-                        });
-                    }
-                }
+                // console.log("uuidList",uuidList);
+                // for(let i in uuidList){
+                //     if(uuidList[i]&&uuidList[i]._isVue){//是vue对象
+                //         let len = t.firstOpts.length;
+                //         t.firstOpts.push({
+                //             value:i,
+                //             label:uuidList[i].$attrs.aliasName||uuidList[i].$vnode.componentOptions.tag,//获取组件名
+                //             children:[]
+                //         });
+                //     }
+                // }
             }
         }
     }
