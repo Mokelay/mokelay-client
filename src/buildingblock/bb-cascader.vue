@@ -77,7 +77,7 @@
             dsList级联数据获取方式，ds表示通过接口获取; method表示通过容器方法获取
             dsList:[{
               type:'ds',                            //级联数据获取方式  接口获取
-              index:1,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
+              index:1,                              //级联第几层接口，比如第一层数据的获取接口   
               isleaf:false,                       //是否叶子节点
               ds:{                                //ds配置
                 "api": "xxx",
@@ -93,6 +93,11 @@
                     "dataKey": "formData",
                     "valueKey": "data"
                 }]
+              },
+              props:{                               //方法返回字段和级联选择器的字段对应（字段名转换）
+                value:'uuid',
+                label:'name',
+                children:'children'
               }
             },{
               type:'method',                        //级联数据获取方式  接口获取
@@ -111,6 +116,12 @@
             type:Array,
             default:function(){
               return [];
+            }
+          },
+          valueTpl:{
+            type:String,
+            default:function(){
+              return '';
             }
           }
         },
@@ -140,7 +151,7 @@
           let t=this;
           if(t.dsList&&t.dsList.length>0){
             //有动态请求数据的配置  第一级
-            t.getNextData(1,t);
+            t.getNextData(1);
           }
         },
         mounted:function(){
@@ -176,9 +187,13 @@
                   //有动态请求数据的配置    不是叶子节点则调用
                   t.getNextData(index,param,value);
               }
+              let resultVal = value;
+              if(t.valueTpl){
+                resultVal=_TY_Tool.tpl(t.valueTpl,{value:value});//不需要传其他的参数
+              }
               //向上提供change事件
-              t.$emit('change',value);
-              t.$emit('input',value);
+              t.$emit('change',resultVal);
+              t.$emit('input',resultVal);
             },
             //判断是否选中叶子节点
             _isLeaf(value){
@@ -276,6 +291,10 @@
                         //如果含有isLeaf字段，并且为true 就不存children属性,没有children属性，表示是叶子节点
                     }else if((props.children&&data[props.children])||!isleaf||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
                       //如果有  并且不是叶子节点
+                      temp[t.p_casProps.children]=[];
+                    }
+                  }else{
+                    if(!isleaf||(data.hasOwnProperty('isleaf')&&!data['isleaf'])){
                       temp[t.p_casProps.children]=[];
                     }
                   }
