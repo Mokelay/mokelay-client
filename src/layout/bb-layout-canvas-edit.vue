@@ -283,9 +283,7 @@
         },
         data() {
             return {
-                canvasItems: [],
-                disX: 0,
-                disY: 0
+                canvasItems: []
             }
         },
         created: function () {
