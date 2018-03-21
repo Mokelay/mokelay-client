@@ -64,6 +64,9 @@ import Util from '../libs/util';
             labelInline:{
                 type:Boolean,
                 default:false
+            },
+            content:{
+                type:Array
             }
         },
 
@@ -117,7 +120,8 @@ import Util from '../libs/util';
                                     on:t.on,
                                     parentData:t.parentData,
                                     labelWidth:t.labelWidth,
-                                    labelInline:t.labelInline
+                                    labelInline:t.labelInline,
+                                    content:t.content
                                 },
                                 on:{
                                     "button-finish":function(button, valueobj){

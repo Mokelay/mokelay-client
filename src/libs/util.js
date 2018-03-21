@@ -154,6 +154,7 @@ util.buildTplParams = function(t, obj) {
 /**
 DS配置案例
 {
+    host:"", //如果为空，默认是window._TY_APIHost
     api:"/list-data",
     category:'config',//ds选择器 不是type字段而是category字段
     method:"post",
@@ -617,6 +618,7 @@ util.bbCanvasRender = function(content, createElement, t) {
             }, []);
             const bbItem = createElement('div', {
                 style: {
+                    transform: `rotate(${bb.layout.rotate}deg)`,
                     flex: 1,
                     position: 'absolute',
                     left: bb.layout.position.x + 'px',
@@ -653,7 +655,7 @@ let _setStyle = function(bb, t) {
     if (layout && JSON.stringify(layout) != '{}') {
         style = {
             'background-color': layout.bgColor,
-            'transform': `rotate(${layout.bgColor})`,
+            'transform': `rotate(${layout.bgColor}deg)`,
             'opacity': layout.transparency,
             'width': layout.size.width && layout.size.width + 'px',
             'height': layout.size.height && layout.size.height + 'px',
