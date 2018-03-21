@@ -12,7 +12,7 @@
             if(t.content){
                 bbContent = t.content;
                 bbContent.forEach((bb,key)=>{
-                    bb.attributes.value = t.formData[bb['attributes']['attributeName']];
+                    bb.attributes.value = t.formData?t.formData[bb['attributes']['attributeName']]:{};
                 })
             }else{
                 t.realFields.forEach(function(field){
@@ -90,6 +90,9 @@
                     on:{
                         //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
                         input: function (val) {
+                            if(!t.formData){
+                                t.formData={};
+                            }
                             t.formData[field['attributes']['attributeName']] = val;
                         }
                     },

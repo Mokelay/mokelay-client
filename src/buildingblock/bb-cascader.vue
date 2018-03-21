@@ -19,7 +19,7 @@
         name: 'bb-cascader',
         props: {
           value:{
-            type:[Number,String,Array]
+            type:[Number,String,Array,Object]
           },
           placeholder:{
               type:String,
@@ -167,7 +167,7 @@
             },
             //单级选项改变后触发, 远程获取下级数据
             handleItemChange(value){
-              console.log('active item:', value);
+              // console.log('active item:', value);
               let t=this;
               const index = value.length+1;
               let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
@@ -179,7 +179,7 @@
             },
             //选项改变后触发事件
             handleChange(value){
-              console.log('active:', value);
+              // console.log('active:', value);
               let t=this;
               const index = value.length+1;
               let param  = value.length>0?value[value.length-1]:'';//取级联选择的最后那个值
