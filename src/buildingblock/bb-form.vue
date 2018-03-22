@@ -337,6 +337,9 @@
                 handler:(val,oldVal)=>{
                 },
                 deep:true
+            },
+            dsFields(val){
+                this.getFields();
             }
         },
         data() {
