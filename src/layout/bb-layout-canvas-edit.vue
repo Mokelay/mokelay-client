@@ -50,7 +50,7 @@
                         
                         rotate = Math.ceil(Math.atan2(e.pageX - rotateX, rotateY - e.pageY) / Math.PI * 180);
 
-                        console.log(rotate);
+                        // console.log(rotate);
 
                         if (result && rotate != 0) {
                             if (rotate < 0) {
