@@ -36,22 +36,44 @@
 
     Vue.directive('dragRotate', {
             bind: function (el, binding) {
-                let width = null;
-                let height = null;
-                let isdown = false;
+                let rotateX = 0;
+                let rotateY = 0;
+                let rotate = 0;
+                let result = false;
+                let direaction = ''
                 el.onmousedown = function (e) {
-                    isdown = true;
-                    width = el.offsetParent.offsetWidth;
-                    height = el.offsetParent.offsetHeight;
+                    rotateX = e.pageX;
+                    rotateY = e.pageY;
+                    result = true;
 
                     document.onmousemove = function (e) {
-                        let centerX = el.offsetParent.offsetLeft + width / 2;
-                        let centerY = el.offsetParent.offsetTop + height / 2;
+                        
+                        rotate = Math.ceil(Math.atan2(e.pageX - rotateX, rotateY - e.pageY) / Math.PI * 180);
 
-                        binding.value({centerX: centerX, centerY: centerY, clientX: e.clientX, clientY: e.clientY, uuid: el.getAttribute('data-uuid')});
+                        // console.log(rotate);
+
+                        if (result && rotate != 0) {
+                            if (rotate < 0) {
+                                direaction = 'left';
+                                result = false;
+                            } else if (rotate > 0) {
+                                direaction = 'right';
+                                result = false;
+                            }
+                        }
+                        
+                        if (direaction == 'left') {
+                            rotate = rotate + 90;
+                        }
+                        if (direaction == 'right') {
+                            rotate = rotate - 90;
+                        }
+                        
+                        binding.value({rotate: rotate, uuid: el.getAttribute('data-uuid')});
                     };
                    
                     document.onmouseup = function (e) {
+                        direaction = '';
                         document.onmousemove = null;
                         document.onmouseup = null;
                     };
@@ -296,24 +318,11 @@
                 }
             },
 
-            getmatrix: function (centerx, centery, endx, endy){  
-                let diffX = endx - centerx;
-                let diffY = endy - centery;
-
-                var rotate = 360 * Math.atan2(diffY , diffX) / (2 * Math.PI);
-                rotate = rotate <= -90 ? (360 + rotate) : rotate;
-
-                return rotate + 90;
-            },
-
             directionRotate(val){
-                let rotate = this.getmatrix(val.centerX, val.centerY, val.clientX, val.clientY);
-                
-                console.log(val.centerX + "-" + val.centerY + "|" + val.clientX + "-" + val.clientY + "-" + rotate);
 
                 this.canvasItems.forEach((con, key) => {
                     if (con.uuid === val.uuid) {
-                        con.layout.rotate = rotate;
+                        con.layout.rotate = val.rotate;
                     }
                 });
             },
