@@ -85,6 +85,7 @@
 
         },
         methods: {
+            //载入当前积木的编辑内容
             editBB:function(content){
                 const t = this;
                 t.valueBase = content;
