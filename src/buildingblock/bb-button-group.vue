@@ -61,11 +61,19 @@
                         text:'初始化按钮'
                     }]
                 }
+            },
+            //button item数据获取，有多少个item
+            buttonDs:{
+                type:Object,
+                default:function(){
+                    return null;
+                }
             }
         },
         data() {
             return {
-                realButtons:this.buttons
+                realButtons:this.buttons,
+                external:{}
             }
         },
         watch: {
@@ -74,10 +82,27 @@
             }
         },
         created: function () {
+            this.loadData();
         },
         mounted:function(){
         },
         methods: {
+            loadData:function(){
+                let t=this;
+                if(t.buttonDs){
+                     _TY_Tool.getDSData(t.buttonDs, _TY_Tool.buildTplParams(t), function (map) {
+                        t.realButtons = map[0].value;
+                    }, function (code, msg) {
+                    });
+                }
+            },
+             //外部传参调用
+            linkage:function(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.loadData();
+                }
+            },
             click:function(button){
                 this.$emit('click',button);
             },
@@ -109,6 +134,7 @@
     .button{
         display: inline-block;
         margin-right: 5px;
+        padding-top:10px;
         i{
             position: relative;
             top: -10px;
