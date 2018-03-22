@@ -130,6 +130,9 @@
       }
       this.loadData();
     },
+    mounted:function(){
+      this.$emit('mounted',this);
+    },
     methods: {
       refresh:function(){
         this.loadData();
