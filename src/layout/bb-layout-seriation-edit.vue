@@ -193,7 +193,7 @@
                 t.$emit('change',t.realContent);
             },
             /*乐高新增方法 对外
-                @content:积木别名
+                @contentItem:积木别名
                 {
                     uuid:'',
                     alias:bbAlias,
@@ -204,12 +204,18 @@
                     layout:{}
                 }
             */
-            addContent:function(content){
+            addContent:function(contentItem){
                 const t = this;
-                t.realContent.push(content);
+                t.realContent.push(contentItem);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
                 t.$emit('change',t.realContent);
+            },
+            //刷新方法，主要用于 lego配置页刷新 根据apiALias获取item列表
+            refresh:function(content){
+                const t=this;
+                 t.realContent = content;
+                 t.$emit('afterLoad',t.realContent);
             },
             //完成编辑的积木数据回填
             afterEdit:function(content){
