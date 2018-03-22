@@ -37,14 +37,14 @@
                         valueField:'alias'
                     }},
                     {pbbId:'category',name:'接口分类',attributeName:'category',et:'bb-words',props:{
-                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
+                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
                     }},
                     {pbbId:'method',name:'方法',attributeName:'method',et:'bb-words',props:{
-                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
+                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
                     }},
                     {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
                         editConfig:{
-                            editable:true,
+                            editable:['add','edit','up','down','remove'],
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[
@@ -61,7 +61,7 @@
                     }},
                     {pbbId:'outputs',name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
                         editConfig:{
-                            editable:true,
+                            editable:['add','edit','up','down','remove'],
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[

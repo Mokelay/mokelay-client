@@ -102,7 +102,7 @@
                 //面板当前的是否是全屏
                 fullScreen:false,
                 fullScreenStyle:'',
-                fullScreenIcon:'ty-icon_faqi1'
+                fullScreenIcon:'ty-bd__transfer'
             }
         },
         watch: {

@@ -12,7 +12,7 @@
             if(t.content){
                 bbContent = t.content;
                 bbContent.forEach((bb,key)=>{
-                    bb.attributes.value = t.formData[bb['attributes']['attributeName']];
+                    bb.attributes.value = t.formData?t.formData[bb['attributes']['attributeName']]:'';
                 })
             }else{
                 t.realFields.forEach(function(field){
@@ -71,16 +71,6 @@
                     bbContent.push(bbEle);
                 });
             }
-            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
-            bbContent.forEach((field,key)=>{
-                field['interactives'] = field['interactives']?field['interactives']:[];
-                field['interactives'].push({
-                    uuid:_TY_Tool.uuid(),
-                    fromContentEvent:'input',
-                    executeType:'container_method',         //执行类型(预定义方法 trigger_method,
-                    containerMethodName:'defaultVmodel'
-                })
-            })
             //有group分组的项
             const groups = {};
             //没有group分组的项
@@ -100,6 +90,9 @@
                     on:{
                         //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
                         input: function (val) {
+                            if(!t.formData){
+                                t.formData={};
+                            }
                             t.formData[field['attributes']['attributeName']] = val;
                         }
                     },

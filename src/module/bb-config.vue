@@ -128,14 +128,7 @@
                             {text:'自定义方法',value:'custom_script'},
                             {text:'容器类方法',value:'container_method'}
                         ]
-                    },
-                    // interactives:[{             //触发交互
-                    //     uuid:_TY_Tool.uuid(),
-                    //     fromContentEvent:'change',
-                    //     executeType:'trigger_method',
-                    //     executeContentUUID:'interactive-executeContentUUID',
-                    //     executeContentMethodName:'itemShow'
-                    // }],
+                    }
                 },{                      
                     uuid:'interactive-executeContentUUID',
                     alias:'bb-bb-select',                   
@@ -143,8 +136,15 @@
                     //group:'预定义方法',                   
                     attributes:{
                         attributeName:'executeContentUUID',
-                        show:false
-                    }
+                        show:true
+                    },
+                    interactives:[{             //触发交互
+                        uuid:_TY_Tool.uuid(),
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'interactive-executeContentMethodName',
+                        executeContentMethodName:'linkage'
+                    }],
                 },{                      
                     uuid:'interactive-executeContentMethodName',
                     alias:'bb-select',                   
@@ -152,11 +152,11 @@
                     //group:'预定义方法',                   
                     attributes:{
                         attributeName:'executeContentMethodName',
-                        show:false,
+                        show:true,
                         ds:{
                             api: "list-mdByBbAlias",
                             method: "get",
-                            inputs: [{paramName: 'bbAlias',valueType:"template",variable:this.pbbId}],
+                            inputs: [{paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external.linkage%>"}],
                             outputs: [
                                 {dataKey: "fields", valueKey: "data_list"}
                             ]
@@ -169,7 +169,7 @@
                     //group:'自定义方法',                   
                     attributes:{
                         attributeName:'executeScript',
-                        show:false,
+                        show:true,
                         ds:{
                             api: "list-buzz",
                             method: "get",
@@ -186,7 +186,7 @@
                     //group:'容器类方法',                   
                     attributes:{
                         attributeName:'containerMethodName',
-                        show:false,
+                        show:true,
                         fields:[
                             {text:'刷新页面',value:'refresh'},
                             {text:'关闭页面',value:'unload'},
@@ -207,21 +207,6 @@
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[
                             {prop: 'uuid',label: '交互标识',type:'defalut'},
-                            // {prop: 'description', label: "描述", dt: '', et: 'bb-input'},
-                            // {prop: 'fromContentEvent',label: '事件',et: 'bb-select', etProp:{
-                            //     ds:{
-                            //         api: "list-edByBbAlias",
-                            //         method: "get",
-                            //         inputs: [
-                            //             {paramName: 'bbAlias',valueType:"template",variable:this.value.alias}
-                            //         ],
-                            //         outputs: [
-                            //             {dataKey: "fields", valueKey: "data_list"}
-                            //         ]
-                            //     },
-                            //     textField:'name',
-                            //     valueField:"eventName"
-                            // }},
                             {prop: 'executeType',label: '方法类型',et: 'bb-select',etProp:{fields:[
                                 {text:'预定义方法',value:'trigger_method'},
                                 {text:'自定义方法',value:'custom_script'},
@@ -232,7 +217,7 @@
                             {prop: 'executeContentMethodName',label: '目标积木方法',et:'bb-select',etProp:{ds:{
                                 api: "list-mdByBbAlias",
                                 method: "get",
-                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:this.pbbId}],
+                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external.linkage%>"}],
                                 outputs: [
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
