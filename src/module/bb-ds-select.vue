@@ -36,12 +36,12 @@
                         textField:'name',
                         valueField:'alias'
                     }},
-                    {pbbId:'category',name:'接口分类',attributeName:'category',et:'bb-words',props:{
-                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
-                    }},
-                    {pbbId:'method',name:'方法',attributeName:'method',et:'bb-words',props:{
-                        textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
-                    }},
+                    // {pbbId:'category',name:'接口分类',attributeName:'category',et:'bb-words',props:{
+                    //     textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
+                    // }},
+                    // {pbbId:'method',name:'方法',attributeName:'method',et:'bb-words',props:{
+                    //     textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
+                    // }},
                     {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
                         editConfig:{
                             editable:['add','edit','up','down','remove'],
@@ -86,14 +86,21 @@
                     }}
                 ],
                 interactiveOn:[
-                    {pbbId:'api',triggerEventName:'change',executePbbId:'category',executeBBMethodName:'linkage'},
-                    {pbbId:'api',triggerEventName:'change',executePbbId:'method',executeBBMethodName:'linkage'},
+                    // {pbbId:'api',triggerEventName:'change',executePbbId:'category',executeBBMethodName:'linkage'},
+                    // {pbbId:'api',triggerEventName:'change',executePbbId:'method',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'outputs',executeBBMethodName:'linkage'}
                 ],
-                ds:this.value
+                ds:this.value,
+                api:'',
+                apiInfo:{
+                    api:'/read-api-info',
+                    method:'post',
+                    inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.api%>"}],
+                    outputs:[{dataKey: 'tableData', valueKey: 'data'}]
+                },
             }
         },
         watch: {
@@ -115,9 +122,25 @@
         mounted:function(){
         },
         methods: {
+            //获取category 和 method
+            //获取动态数据
+            getData:function (val) {
+                const t = this;
+                if (t.apiInfo) {
+                    _TY_Tool.getDSData(t.apiInfo, _TY_Tool.buildTplParams(t), function (map) {
+                        map.forEach((ele,key)=>{
+                            val.category = ele.category;
+                            val.method = ele.method;
+                            t.$emit('input', val);
+                        })
+                    }, function (code, msg) {
+                    });
+                }
+            }, 
             //增加input 事件
             commit:function(val){
-                this.$emit('input', val);
+                this.api = val.api;
+                this.getData(val);
             }
         }
     }
