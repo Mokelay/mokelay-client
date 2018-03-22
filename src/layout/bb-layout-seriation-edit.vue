@@ -175,7 +175,7 @@
                 t.preItem = params[1];
                 t.$emit('onFocus',this.content[params[0]]);
             },
-            /*新增方法 对外
+            /*积木新增方法 对外
                 @bbAlias:积木别名
                 @bbName:积木名称
             */
@@ -192,6 +192,24 @@
                     layout:{}
                 }
                 t.realContent.push(newBB);
+                //返回新的积木数组
+                t.$emit('add',t.realContent);
+            },
+            /*乐高新增方法 对外
+                @content:积木别名
+                {
+                    uuid:'',
+                    alias:bbAlias,
+                    aliasName:bbName,
+                    attributes:{},
+                    animation:[],
+                    interactives:[],
+                    layout:{}
+                }
+            */
+            addContent:function(content){
+                const t = this;
+                t.realContent.push(content);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
             }
