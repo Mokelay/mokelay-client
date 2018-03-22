@@ -119,7 +119,8 @@
             up:function(...params){
                 const t = this;
                 const index = params[0];
-                t.$emit('up',this.content[index]);
+                t.$emit('up',t.realContent);
+                t.$emit('change',t.realContent);
                 if(index == 0) {
                     return;
                 }
@@ -131,7 +132,8 @@
             down:function(...params){
                 const t = this;
                 const index = params[0];
-                this.$emit('down',this.content[index]);
+                this.$emit('down',t.realContent);
+                this.$emit('change',t.realContent);
                 if(index == t.realContent.length -1) {
                     return;
                 }
@@ -148,7 +150,8 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    t.$emit('remove',this.content[index]);
+                    t.$emit('remove',t.realContent);
+                    t.$emit('change',t.realContent);
                     t.realContent.splice(index, 1);
                 }).catch(() => {
                     t.$message({
@@ -164,6 +167,8 @@
                     t.preItem.onBlur();
                 }
                 t.preItem = params[1];
+                //记录当前编辑的积木下标
+                t.nowEdit = params[0];
                 t.$emit('onFocus',this.content[params[0]]);
             },
             /*积木新增方法 对外
@@ -185,6 +190,7 @@
                 t.realContent.push(newBB);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
+                t.$emit('change',t.realContent);
             },
             /*乐高新增方法 对外
                 @content:积木别名
@@ -203,6 +209,14 @@
                 t.realContent.push(content);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
+                t.$emit('change',t.realContent);
+            },
+            //完成编辑的积木数据回填
+            afterEdit:function(content){
+                const t = this;
+                t.$set(t.realContent,t.nowEdit,content);
+                t.$emit('afterEdit',t.realContent);
+                t.$emit('change',t.realContent);
             }
         },
         components:{
