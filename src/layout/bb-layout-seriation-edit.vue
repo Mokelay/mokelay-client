@@ -74,16 +74,7 @@
                     }]
             */
             content:{
-                type:[Array,String],
-                default:function(){
-                    return [
-                        {uuid:'header',alias:'bb-words',group:'header',aliasName:'',attributes:{value:'Header',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'leftAside',alias:'bb-words',group:'leftAside',aliasName:'',attributes:{value:'LeftAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'main',alias:'bb-words',aliasName:'',group:'main',attributes:{value:'main',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'rightAside',alias:'bb-words',aliasName:'',group:'rightAside',attributes:{value:'rightAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'footer',alias:'bb-words',aliasName:'',group:'footer',attributes:{value:'Footer',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}
-                    ]
-                }
+                type:[Array,String]
             }
         },
         data() {
