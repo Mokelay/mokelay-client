@@ -15,6 +15,9 @@
                     'fullscreen':t.fullscreen,
                     'modal':t.modal
                 },
+                style:{
+                    'border-radius':"5px"
+                },
                 on:{
                     close:t.closeFn
                 }

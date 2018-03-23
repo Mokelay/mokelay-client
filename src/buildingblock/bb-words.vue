@@ -64,6 +64,11 @@
       //自动刷新时间间隔
       intervalTime:{
         type:Number
+      },
+      //外部参数的时候，需要展示的文本 模板配置
+      linkageTpl:{
+        type:String,
+        default:''
       }
     },
     data() {
@@ -200,7 +205,9 @@
       linkage:function(...data){
         const t = this;
         t.external['linkage'] = data;
-        if(data[0]){
+        if(t.linkageTpl){
+          t.realText=_TY_Tool.tpl(this.linkageTpl,_TY_Tool.buildTplParams(t));
+        }else if(data[0]){
           t.realText = data[0];
         }
       },

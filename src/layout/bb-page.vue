@@ -317,6 +317,27 @@
             }
           }
         })
+      },
+      /**
+        重定向跳转
+      **/
+      redirect:function(...args){
+        const t =this;
+        args.forEach((val,key)=>{
+          if(val.type == 'custom'){
+            var pathTpl = val.arguments;
+            if (pathTpl) {
+                const path = _TY_Tool.tpl(pathTpl.pathTpl,_TY_Tool.buildTplParams(t,{
+                  args:args
+                }));
+                if(path.indexOf('http')==0){
+                  location.href=path;
+                }else{
+                  t.$router.push(path);
+                }
+            }
+          }
+        })
       }
     }
   }
