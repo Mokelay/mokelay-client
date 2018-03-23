@@ -61,7 +61,6 @@
                     document.onmousemove = function (e) {
                         
                         rotate = Math.ceil(Math.atan2(e.pageX - rotateX, rotateY - e.pageY) / Math.PI * 180);
-                        console.log(rotate);
                         
                         binding.value({rotate: rotate, uuid: el.getAttribute('data-uuid')});
                     };
