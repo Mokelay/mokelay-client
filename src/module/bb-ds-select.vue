@@ -131,6 +131,7 @@
                         map.forEach((ele,key)=>{
                             val.category = ele.value.category;
                             val.method = ele.value.method;
+                            t.setDs(val.api);
                             t.$emit('input', val);
                         })
                     }, function (code, msg) {
@@ -141,6 +142,14 @@
             commit:function(val){
                 this.api = val.api;
                 this.getData(val);
+            },
+            //维护页面DSC数据中心
+            setDs:function(api){
+                const dsc = _TY_Page_Data['ty-bb-config']['ds'] || [];
+                if(dsc.indexOf(api)){
+                    dsc.push(api);
+                    _TY_Page_Data['ty-bb-config']['ds'] = dsc;
+                }
             }
         }
     }
