@@ -89,6 +89,11 @@
                 preItem:null
             }
         },
+        watch:{
+            content(val){
+                this.realContent = val;
+            }
+        },
         methods: {
             renderBB:function(createElement){
                 const t = this;
