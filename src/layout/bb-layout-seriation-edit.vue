@@ -169,13 +169,13 @@
                 t.preItem = params[1];
                 //记录当前编辑的积木下标
                 t.nowEdit = params[0];
-                t.$emit('onFocus',this.content[params[0]]);
+                t.$emit('onFocus',t.realContent[params[0]]);
             },
             /*积木新增方法 对外
                 @bbAlias:积木别名
                 @bbName:积木名称
             */
-            add:function(bbAlias,bbName){
+            add:function(bbName,bbAlias){
                 const t = this;
                 //初始化新增加的积木
                 const newBB = {
@@ -187,6 +187,7 @@
                     interactives:[],
                     layout:{}
                 }
+                t.realContent = t.realContent?t.realContent:[];
                 t.realContent.push(newBB);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
@@ -220,6 +221,7 @@
             //完成编辑的积木数据回填
             afterEdit:function(content){
                 const t = this;
+                //t.realContent[t.nowEdit] = content;
                 t.$set(t.realContent,t.nowEdit,content);
                 t.$emit('afterEdit',t.realContent);
                 t.$emit('change',t.realContent);
