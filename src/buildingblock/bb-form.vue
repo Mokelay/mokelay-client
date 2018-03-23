@@ -32,13 +32,7 @@
                             value:t.formData[field['attributeName']]
                         }
                     }
-                    var defaultOn = {
-                        input: function (val) {
-                            t.formData[field['attributeName']] = val;
-                        }
-                    };
                     var pbbId = field['pbbId'];
-                    var itemOn = Object.assign({}, defaultOn);//传入事件监听
                     var on = t.on;
                     var interactives = [];
                     if(on){
@@ -75,6 +69,7 @@
             const groups = {};
             //没有group分组的项
             const normalItems = [];
+            t.newFormData = _TY_Tool.deepClone(t.contentItem);
             bbContent.forEach((field,key)=>{
                 var ref = 'form-item_' + field['uuid']
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
@@ -89,11 +84,11 @@
                     },
                     on:{
                         //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
-                        input: function (val) {
-                            if(!t.formData){
-                                t.formData={};
+                        change: function (val) {
+                            if(!t.newFormData){
+                                t.newFormData={};
                             }
-                            t.formData[field['attributes']['attributeName']] = val;
+                            t.newFormData[field['attributes']['attributeName']] = val;
                         }
                     },
                     ref: ref,
@@ -371,8 +366,8 @@
                 var t = this;
                 t.$refs['form'].validate(function(valid){
                     if(valid){
-                        t.$emit('input', t.formData);
-                        t.$emit('commit', t.formData);
+                        t.$emit('input', t.newFormData);
+                        t.$emit('commit', t.newFormData);
                         /*buttonConfig
                             提交按钮的配置
                             此处需要用bb-button重构*/
@@ -412,7 +407,7 @@
             },
             cancelCommit:function(){
                 const t = this;
-                t.$emit('cancel',t.formData);
+                t.$emit('cancel',t.newFormData);
             },
             clearForm:function(){
                 const t = this;

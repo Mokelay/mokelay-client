@@ -778,8 +778,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             //容器方法
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
-            const executeContent = util.findBBByUuid(executeContentUUID) || window._TY_Root;
-            fn = t[containerMethodName] || executeContent[containerMethodName];
+            fn = t[containerMethodName] || window._TY_Root;
         }
         if (fn) {
             /**
