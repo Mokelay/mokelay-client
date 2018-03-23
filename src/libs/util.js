@@ -721,6 +721,13 @@ let _setEventMethod = function(bb, t) {
     if (bb.interactives) {
         bb.interactives.forEach((interactive, index) => {
             on[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
+            if (interactive['fromContentUUID'] && interactive['fromContentUUID'] === 'Page_Ref_Root') {
+                //说明是触发根页面的事件，所以这里放到全局变量里面，在bb-page渲染的时候添加监听
+                if (window._TY_Root.rootOn) {
+                    window._TY_Root.rootOn = {};
+                }
+                window._TY_Root.rootOn[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
+            }
         });
     }
     return on;

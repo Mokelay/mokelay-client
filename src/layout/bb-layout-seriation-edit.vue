@@ -77,6 +77,12 @@
                 type:[Array,String]
             }
         },
+        mounted:function(){
+            const t =this;
+            setTimeout(function(){
+                t.$emit('mounted',t);
+            },0);
+        },
         data() {
             return {
                 realContent:this.content,
@@ -214,8 +220,10 @@
             //刷新方法，主要用于 lego配置页刷新 根据apiALias获取item列表
             refresh:function(content){
                 const t=this;
-                 t.realContent = content;
-                 t.$emit('afterLoad',t.realContent);
+                if(content instanceof Array){
+                    t.realContent = content;    
+                }
+                t.$emit('afterLoad',t.realContent);
             },
             //完成编辑的积木数据回填
             afterEdit:function(content){

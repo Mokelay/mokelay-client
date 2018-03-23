@@ -89,7 +89,9 @@
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
-      return createElement('div',{},pbbElementList);
+      return createElement('div',{
+        on:window._TY_Root.rootOn
+      },pbbElementList);
     },
     props: {
       root:{
@@ -131,7 +133,10 @@
       this.loadData();
     },
     mounted:function(){
-      this.$emit('mounted',this);
+      const t=this;
+      setTimeout(function(){
+        t.$emit('mounted',t);
+      },0);
     },
     methods: {
       refresh:function(){
@@ -306,10 +311,10 @@
             if (ds) {
               _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
                   //接口执行完毕
-                  t.emit('ds-success',map);
+                  t.$emit('ds-success',map);
                 }, function (code, msg) {
                   //接口执行完毕
-                  t.emit('ds-error',code);
+                  t.$emit('ds-error',code);
               });
             }
           }
