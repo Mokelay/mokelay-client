@@ -94,6 +94,7 @@ import bblayoutcanvasedit from './layout/bb-layout-canvas-edit.vue';
 import bblayoutcontainer from './layout/bb-layout-container.vue';
 import bbseriationitemedit from './layout/bb-seriation-item-edit.vue';
 import bblayoutseriationedit from './layout/bb-layout-seriation-edit.vue';
+import bbpageedit from './layout/bb-page-edit.vue';
 
 //引入minireset
 import './css/minireset.css';
@@ -198,6 +199,7 @@ let ty = {
 		Vue.component('bb-config', bbconfig);
 		Vue.component('bb-seriation-item-edit', bbseriationitemedit);
 		Vue.component('bb-layout-seriation-edit', bblayoutseriationedit);
+		Vue.component('bb-page-edit', bbpageedit);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);

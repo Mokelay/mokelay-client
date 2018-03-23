@@ -2,7 +2,7 @@
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
     <el-tabs type="border-card">
         <el-tab-pane label="属性">
-            <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase" @commit="attributesChange"></bb-form>
+            <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>

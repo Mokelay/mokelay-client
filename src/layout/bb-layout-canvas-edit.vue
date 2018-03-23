@@ -8,7 +8,7 @@
             <div class="operate operate-size"
                  v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)',left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
-                <div class="rotate-btn" id="dragRotate" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
+                <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
                     <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
                 </div>
                 <div class="border-line"></div>
@@ -40,34 +40,27 @@
                 let rotateY = 0;
                 let rotate = 0;
                 let result = false;
-                let direaction = ''
+                let direaction = '';
+                let currentX = 0;
+                let currentY = 0;
                 el.onmousedown = function (e) {
-                    rotateX = e.pageX;
-                    rotateY = e.pageY;
                     result = true;
+                    currentX = el.getAttribute('data-x');
+                    currentY = el.getAttribute('data-y');
+
+                    if (currentX != '0' && currentY != '0') {
+                        rotateX = currentX;
+                        rotateY = currentY;
+                    } else {
+                        rotateX = e.pageX;
+                        rotateY = e.pageY;
+                        el.setAttribute('data-x', rotateX);
+                        el.setAttribute('data-y', rotateY);
+                    }
 
                     document.onmousemove = function (e) {
                         
                         rotate = Math.ceil(Math.atan2(e.pageX - rotateX, rotateY - e.pageY) / Math.PI * 180);
-
-                        // console.log(rotate);
-
-                        if (result && rotate != 0) {
-                            if (rotate < 0) {
-                                direaction = 'left';
-                                result = false;
-                            } else if (rotate > 0) {
-                                direaction = 'right';
-                                result = false;
-                            }
-                        }
-                        
-                        if (direaction == 'left') {
-                            rotate = rotate + 90;
-                        }
-                        if (direaction == 'right') {
-                            rotate = rotate - 90;
-                        }
                         
                         binding.value({rotate: rotate, uuid: el.getAttribute('data-uuid')});
                     };
@@ -233,6 +226,64 @@
                 type: Array,
                 default: function () {
                     return [
+                         { //页面内容
+                            uuid: '111111',
+                            alias: 'bb-count', //积木别名
+                            aliasName: '', //中文名称
+                            attributes: {
+                                value: 100,
+                                //defaultValTpl:'<%=route.query.param%>'
+                                countConfig: {
+                                    countType: 'count',
+                                    buttonType: 'default',
+                                    layout: 'horizontal',
+                                    color: '#333',
+                                    size: '14px',
+                                    icon: 'ty-star-on',
+                                    repeat: true
+                                },
+                            }, //积木属性
+                            animation: [{ }],//动画
+                            interactives: [{ //触发交互
+                                uuid: '',
+                                fromContentEvent: '', //触发积木的事件,fromContentUUID为当前content的UUID
+                                executeType: '', //执行类型(预定义方法 trigger_method,
+                                //自定义方法 custom_script,
+                                //容器类方法 container_method)
+                                executeScript: '', //执行脚本 executeType = custom_script
+                                executeContentUUID: '', //执行积木的UUID executeType = trigger_method
+                                executeContentMethodName: '',
+                                //执行积木的方法
+                                containerMethodName: '' //容器方法 executeType = container_method
+                            }],
+                            layout: { //积木布局
+                                bgColor: "", //背景颜色
+                                rotate: 0, //旋转
+                                transparency: 1, //透明度
+                                zIndex: 100, //层级
+                                size: {
+                                    width: 100,
+                                    height: 100
+                                }, //大小
+                                position: {
+                                    x: 100,
+                                    y: 100
+                                }, //位置
+                                border: { //边框
+                                    style: "", //边框样式
+                                    color: "", //边框颜色
+                                    size: "", //边框尺寸
+                                    radian: "", //边框弧度
+                                    margin: "" //边距
+                                },
+                                shadow: { //阴影
+                                    color: "", //阴影颜色
+                                    size: "", //阴影大小
+                                    direction: '', //阴影方向
+                                    vague: '' //阴影模糊
+                                }
+                            }
+                        },
                         {
                             uuid: 'footer',
                             alias: 'bb-words',

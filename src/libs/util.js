@@ -219,6 +219,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         //如果不是自定义接口
         apiUrl = window._TY_ContentPath + "/" + api;
     }
+    //统一转换成小写
+    method = method.toLowerCase();
     util[method](apiUrl, requestParam).then(function(response) {
         var data = response['data'];
         if (data['ok']) {
@@ -778,8 +780,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             //容器方法
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
-            const executeContent = util.findBBByUuid(executeContentUUID) || window._TY_Root;
-            fn = t[containerMethodName] || executeContent[containerMethodName];
+            fn = t[containerMethodName] || window._TY_Root;
         }
         if (fn) {
             /**
