@@ -184,6 +184,10 @@
             //删除返回当前的积木数据
             remove:function(){
                 this.$emit('remove',this);
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }

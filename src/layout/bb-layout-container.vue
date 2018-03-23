@@ -3,62 +3,62 @@
         <!-- 上下布局 -->
         <el-container v-if="realLayout == 'h-f'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-main :style="{background:realBgColor.main}">
-                <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
             </el-main>
         </el-container>
         <!-- 上中下布局 -->
         <el-container v-if="realLayout == 'h-m-f'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-main :style="{background:realBgColor.main}">
-                <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
             </el-main>
             <el-footer>
-                <bb-layout-seriation :content="realFooter" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
             </el-footer>
         </el-container>
         <!-- 左右布局 -->
         <el-container v-if="realLayout == 'r-m'">
             <el-aside width="20%" :style="{background:realBgColor.leftAside}">
-                <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
+                <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-main :style="{background:realBgColor.main}">
-                <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
             </el-main>
         </el-container>
         <!-- 上下左右布局 -->
         <el-container v-if="realLayout == 'h-l-m'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
                 <el-aside width="20%" :style="{background:realBgColor.leftAside}">
-                    <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
+                    <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-main :style="{background:realBgColor.main}">
-                    <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                    <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
             </el-container>
         </el-container>
         <!-- 上下左右上下布局 -->
         <el-container v-if="realLayout == 'h-l-m-f'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
                 <el-aside width="20%" :style="{background:realBgColor.leftAside}">
-                    <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
+                    <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-container>
                     <el-main :style="{background:realBgColor.main}">
-                        <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                        <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                     </el-main>
                     <el-footer>
-                        <bb-layout-seriation :content="realFooter" :horizontal="true"></bb-layout-seriation>
+                        <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
                     </el-footer>
                 </el-container>
             </el-container>
@@ -66,48 +66,48 @@
         <!-- 左右上下布局 -->
         <el-container v-if="realLayout == 'l-h-m'">
             <el-aside width="20%" :style="{background:realBgColor.leftAside}">
-                <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
+                <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-container>
                 <el-header :style="{background:realBgColor.header}">
-                    <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                    <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
                 </el-header>
                 <el-main :style="{background:realBgColor.main}">
-                    <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                    <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
             </el-container>
         </el-container>
         <!-- 左右上中下布局 -->
         <el-container v-if="realLayout == 'l-h-m-f'">
             <el-aside width="20%" :style="{background:realBgColor.leftAside}">
-                <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
+                <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-container>
                 <el-header :style="{background:realBgColor.header}">
-                    <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                    <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
                 </el-header>
                 <el-main :style="{background:realBgColor.main}">
-                    <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                    <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
                 <el-footer :style="{background:realBgColor.footer}">
-                    <bb-layout-seriation :content="realFooter" :horizontal="true"></bb-layout-seriation>
+                    <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
                 </el-footer>
             </el-container>
         </el-container>
         <!-- 上下左中右布局 -->
         <el-container v-if="realLayout == 'h-l-m-r'">
             <el-header :style="{background:realBgColor.header}">
-                <bb-layout-seriation :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+                <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside width="20%" :style="{background:realBgColor.leftAside}">
-                    <bb-layout-seriation :content="realLeftAside"></bb-layout-seriation>
+                <el-aside  width="20%" :style="{background:realBgColor.leftAside}">
+                    <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-main :style="{background:realBgColor.main}">
-                    <bb-layout-seriation :content="realMain"></bb-layout-seriation>
+                    <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
                 <el-aside width="20%" :style="{background:realBgColor.rightAside}">
-                    <bb-layout-seriation :content="realRightAside"></bb-layout-seriation>
+                    <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
         </el-container>
