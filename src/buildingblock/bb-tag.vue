@@ -90,6 +90,37 @@
         created: function () {
         },
         methods: {
+            /** 添加标签
+              {
+                alias:'',//key
+                name:'',//标签显示文案
+                tipContent:'',//tip展示的文案 或者html代码
+                color:''//背景色，类似主题
+              }
+            **/
+            addItem:function(tag){
+              if(tag){
+                this.tags.push(tag);
+                this.$emit('input', this.tags);
+                this.$emit('change', this.tags);
+              }
+            },
+            // 移除标签 key 是tag 的alias
+            removeItem:function(key){
+              let t=this;
+              let num;
+              t.tags.forEach(function(item,index){
+                if(item.alias==key){
+                  num = index;
+                  return false;
+                }
+              });
+              if(num){
+                this.tags.splice(num,1);
+                this.$emit('input', this.tags);
+                this.$emit('change', this.tags);
+              }
+            },
             //关闭标签
             handleClose(key) {
                 this.tags.splice(key,1);
