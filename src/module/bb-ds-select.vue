@@ -44,7 +44,7 @@
                     // }},
                     {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
                         editConfig:{
-                            editable:['add','edit','up','down','remove'],
+                            editable:['add','edit','remove'],
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[
@@ -61,7 +61,7 @@
                     }},
                     {pbbId:'outputs',name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
                         editConfig:{
-                            editable:['add','edit','up','down','remove'],
+                            editable:['add','edit','remove'],
                             editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[

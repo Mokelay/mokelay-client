@@ -37,22 +37,7 @@
             value:{
                 type:Object,
                 default:function(){
-                    return {
-                        uuid:'123456',
-                        alias:'bb-select', //布局类积木 || 普通积木
-                        aliasName: '类型选择', 
-                        attributes: {
-                            fields:[
-                                {text:'刷新页面',value:'refresh'},
-                                {text:'关闭页面',value:'unload'},
-                                {text:'显示弹窗',value:'openDialog'},
-                                {text:'解析接口',value:'executeDS'}
-                            ]
-                        }, //积木属性
-                        animation: [],
-                        interactives: [],
-                        layout: {} //积木布局
-                    }
+                    return {}
                 }
             }
         },
@@ -95,11 +80,13 @@
             //添加交互
             interactiveAdd:function(row){
                 const t = this;
+                t.interactiveForm = {};
                 t.valueBase.interactives.push(row);
             },
             //添加动画
             animationAdd:function(row){
                 const t = this;
+                t.animationForm = {};
                 t.valueBase.animation.push(row);
             },
             //属性修改

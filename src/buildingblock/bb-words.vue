@@ -97,6 +97,7 @@
         deep: true
       },
       text(val){
+        this.realText = val;
         this.autoRefresh();
       },
       parentParams(val){
