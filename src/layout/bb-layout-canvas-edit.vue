@@ -2,11 +2,13 @@
     <div class="bb-layout-canvas">
         <div class="canvas" v-for="canvasItem in canvasItems">
 
-            <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
-
+            <div v-on:click="setData(this, canvasItem.uuid)">
+                <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+            </div>
+            
             <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
-            <div class="operate operate-size"
-                 v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)',left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+            <div v-show="canvasItem.isShow" class="operate operate-size"
+                 v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
                 <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
                     <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
@@ -25,7 +27,8 @@
 
                 <!-- <div class="dot scale-sw dot-sw"></div> -->
                 <div class="dot scale-w dot-w" id="dragLeft" :data-uuid="canvasItem.uuid" v-dragLeft="directionLeft"></div>
-            </div>
+            </div>       
+
         </div>
     </div>
 </template>
@@ -62,6 +65,8 @@
                         
                         rotate = Math.ceil(Math.atan2(e.pageX - rotateX, rotateY - e.pageY) / Math.PI * 180);
                         
+                        console.log(rotate);
+
                         binding.value({rotate: rotate, uuid: el.getAttribute('data-uuid')});
                     };
                    
@@ -363,10 +368,27 @@
             this.setData();
         },
         methods: {
-            setData: function () {
+            checkDom: function () {
                 if (this.content) {
                     this.canvasItems = this.canvasItems.concat(this.content);
                 }
+            },
+
+            setData(e, uuid){
+
+                if (e) {
+                    this.canvasItems.forEach((con, key) => {
+                        if (con.uuid === uuid) {
+                            con.isShow = true;
+                        } else {
+                            con.isShow = false;
+                        }
+                    });
+                } else {
+                    this.content[0].isShow = true;
+                }
+
+                this.checkDom();
             },
 
             directionRotate(val){
@@ -609,5 +631,123 @@
 
     .operate .scale-sw {
         cursor: sw-resize;
+    }
+
+    .keyboard-help {
+        height: 100%;
+        position: fixed;
+        font-size: 20px;
+        z-index: 10000000;
+    }
+    .keyboard-help .stretch-transition {
+        -webkit-transition: height 0.3s ease;
+        transition: height 0.3s ease;
+    }
+    .keyboard-help .stretch-transition.stretch-enter,
+    .keyboard-help .stretch-transition.stretch-leave {
+        height: 0 !important;
+        overflow: hidden;
+    }
+    .keyboard-help .icon-wrap {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .keyboard-help .icon-wrap .icon {
+        -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+    }
+    .keyboard-help .icon {
+        width: 20px;
+        height: 20px;
+        fill: #fff;
+    }
+    .keyboard-help .help-modal {
+        position: absolute;
+        border-radius: 3px;
+        bottom: 100px;
+        left: 50px;
+        width: 360px;
+        height: 540px;
+        background-color: #fff;
+        box-shadow: 3px 2px 20px rgba(49,48,48,0.32);
+        overflow: hidden;
+    }
+    .keyboard-help .help-modal header {
+        height: 60px;
+        font-size: 16px;
+        background-color: #29d1d9;
+        color: #fff;
+        line-height: 60px;
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+    }
+    .keyboard-help .help-modal header .title {
+        display: inline-block;
+        height: 100%;
+    }
+    .keyboard-help .help-modal header .icon {
+        margin-right: 10px;
+        top: 2px;
+        vertical-align: text-bottom;
+        position: relative;
+        margin-left: 30px;
+    }
+    .keyboard-help .help-modal header .close-icon {
+        cursor: pointer;
+        display: inline-block;
+        position: absolute;
+        right: 20px;
+        top: 25px;
+    }
+    .keyboard-help .help-modal header .close-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .keyboard-help .help-modal ul.article {
+        font-size: 13px;
+        padding: 0 25px;
+        width: 310px;
+        overflow: auto;
+        max-height: 478px;
+        color: #989898;
+    }
+    .keyboard-help .help-modal ul.article .line {
+        height: 38px;
+        line-height: 38px;
+        border-bottom: 1px solid #f3f3f3;
+    }
+    .keyboard-help .help-modal ul.article .line .name {
+        display: inline-block;
+        width: 120px;
+        height: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .keyboard-help .help-modal ul.article .line .control {
+        display: inline-block;
+        height: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .keyboard-help .help-btn {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        cursor: pointer;
+        left: 0;
+        bottom: 100px;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+    }
+    .keyboard-help .help-btn:hover {
+        color: #00c4cd;
+    }
+    .keyboard-help .help-btn:hover .icon {
+        fill: #00c4cd;
     }
 </style>
