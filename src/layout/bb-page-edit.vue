@@ -329,6 +329,28 @@
           }
         })
       },
+      /*积木新增方法 对外
+          @bbAlias:积木别名
+          @bbName:积木名称
+      */
+      add:function(bbName,bbAlias){
+          const t = this;
+          //初始化新增加的积木
+          const newBB = {
+              uuid:_TY_Tool.uuid(),
+              alias:bbAlias,
+              aliasName:bbName,
+              attributes:{},
+              animation:[],
+              interactives:[],
+              layout:{}
+          }
+          t.content = t.content?t.content:[];
+          t.content.push(newBB);
+          //返回新的积木数组
+          t.$emit('add',t.content);
+          t.$emit('change',t.content);
+      },
       /*积木选中状态 
         @contentItem选中的积木对象{uuid:'',alias:'',aliasName:'',animation:[],interactive:[],layout:{}}
         @index:当前积木在数组中的位置
@@ -345,6 +367,15 @@
           t.$set(t.content,t.nowEdit,content)
           t.$emit('afterEdit',t.content);
           t.$emit('change',t.content);
+      },
+      updatePage:function(){
+        const  t = this;
+        const newPage = {
+          layoutObject:t.layoutObject,
+          ds:t.ds,
+          content:t.content
+        };
+        t.$emit('update',newPage);
       }
     }
   }
