@@ -56,10 +56,7 @@
             buttons:{
                 type: Array,
                 default:function(){
-                    return [{
-                        type:'primary',
-                        text:'初始化按钮'
-                    }]
+                    return null
                 }
             },
             //button item数据获取，有多少个item
