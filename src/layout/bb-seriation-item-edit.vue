@@ -7,7 +7,7 @@
             realContent = t.content?realContent:null;
             //生成积木内容
             const bbItems = _TY_Tool.bbRender(realContent, createElement, t);
-            const contentElements = createElement('div',{props:{},attrs:{class:t.borderClass},on:{click:t.onFocus}},[bbItems,t.$slots.default]);
+            const contentElements = createElement('div',{props:{},attrs:{class:t.borderClass}},[bbItems,t.$slots.default]);
             //生成按钮
             const upButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.up.icon},class:t.realStyle.up.class},on:{click:t.up}},[]);
             const downButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.down.icon},class:t.realStyle.down.class},on:{click:t.down}},[]);
@@ -28,7 +28,7 @@
             })
             const buttonElements = createElement('div',{props:{},attrs:{class:'buttons'},on:{}},buttons);
             //生成虚线框的编辑区域
-            const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{}},[buttonElements,contentElements]);
+            const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{click:t.onFocus}},[buttonElements,contentElements]);
             //生成箭头
             const pointer = t.config.pointer?createElement('i',{props:{},attrs:{class:t.realStyle.pointer.class},on:{}},[contentElements,buttonElements]):[];
 
