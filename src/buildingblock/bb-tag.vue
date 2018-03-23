@@ -87,6 +87,11 @@
             }
           }
         },
+        watch:{
+          value(val){
+            this.tags = (val&&typeof(val)==='string')?JSON.parse(val):val;
+          }
+        },
         created: function () {
         },
         methods: {
