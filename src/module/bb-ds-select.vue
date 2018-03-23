@@ -129,8 +129,8 @@
                 if (t.apiInfo) {
                     _TY_Tool.getDSData(t.apiInfo, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((ele,key)=>{
-                            val.category = ele.category;
-                            val.method = ele.method;
+                            val.category = ele.value.category;
+                            val.method = ele.value.method;
                             t.$emit('input', val);
                         })
                     }, function (code, msg) {

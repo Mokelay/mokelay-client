@@ -219,6 +219,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         //如果不是自定义接口
         apiUrl = window._TY_ContentPath + "/" + api;
     }
+    //统一转换成小写
+    method = method.toLowerCase();
     util[method](apiUrl, requestParam).then(function(response) {
         var data = response['data'];
         if (data['ok']) {
@@ -626,8 +628,6 @@ util.bbCanvasRender = function(content, createElement, t) {
                 style: {
                     transform: `rotate(${bb.layout.rotate}deg)`,
                     flex: 1,
-                    width: bb.layout.size.width + 'px',
-                    height: bb.layout.size.height + 'px',
                     position: 'absolute',
                     left: bb.layout.position.x + 'px',
                     top: bb.layout.position.y + 'px'
