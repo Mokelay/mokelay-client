@@ -7,11 +7,11 @@
             realContent = t.content?realContent:null;
             //生成积木内容
             const bbItems = _TY_Tool.bbRender(realContent, createElement, t);
-            const contentElements = createElement('div',{props:{},attrs:{class:t.borderClass},on:{click:t.onFocus}},[bbItems,t.$slots.default]);
+            const contentElements = createElement('div',{props:{},attrs:{class:t.borderClass}},[bbItems,t.$slots.default]);
             //生成按钮
-            const upButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.up.icon},class:t.realStyle.up.class},on:{click:t.up},style:{margin:'auto',width:'100%'}},[]);
-            const downButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.down.icon},class:t.realStyle.down.class},on:{click:t.down},style:{margin:'auto',width:'100%'}},[]);
-            const removeButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.remove.icon},class:t.realStyle.remove.class},on:{click:t.remove},style:{margin:'auto',width:'100%'}},[]);
+            const upButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.up.icon},class:t.realStyle.up.class},on:{click:t.up}},[]);
+            const downButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.down.icon},class:t.realStyle.down.class},on:{click:t.down}},[]);
+            const removeButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.remove.icon},class:t.realStyle.remove.class},on:{click:t.remove}},[]);
             const buttons = [];
             t.config.buttons.forEach((ele,key)=>{
                 switch(ele){
@@ -28,7 +28,7 @@
             })
             const buttonElements = createElement('div',{props:{},attrs:{class:'buttons'},on:{}},buttons);
             //生成虚线框的编辑区域
-            const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{}},[contentElements,buttonElements]);
+            const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{click:t.onFocus}},[buttonElements,contentElements]);
             //生成箭头
             const pointer = t.config.pointer?createElement('i',{props:{},attrs:{class:t.realStyle.pointer.class},on:{}},[contentElements,buttonElements]):[];
 
@@ -110,15 +110,15 @@
                 //垂直样式
                 vertical:{
                     up:{
-                        class:'w100 ma fs16',
+                        class:'ma fs16',
                         icon:'ty-icon_shangyi',
                     },
                     down:{
-                        class:'w100 ma fs16',
+                        class:'ma fs16',
                         icon:'ty-icon_xiayi'
                     },
                     remove:{
-                        class:'w100 ma fs16',
+                        class:'ma fs16',
                         icon:'ty-icon_lajitong'
                     },
                     pointer:{
@@ -132,15 +132,15 @@
                 //水平样式
                 horizontal:{
                     up:{
-                        class:'w100 ma fs16',
+                        class:'ma fs16',
                         icon:'ty-icon_jiangtoul',
                     },
                     down:{
-                        class:'w100 ma fs16 rotate180',
+                        class:'ma fs16 rotate180',
                         icon:'ty-icon_jiangtoul'
                     },
                     remove:{
-                        class:'w100 ma fs16',
+                        class:'ma fs16',
                         icon:'ty-icon_lajitong'
                     },
                     pointer:{
@@ -192,8 +192,6 @@
     .bb-seriation-item-edit{
         .content{
             width: 100%;
-            min-height: 200px;
-            max-height: 600px;
             margin: auto;
             overflow-y: auto;
         }
@@ -203,12 +201,9 @@
             font-size: 60px;
             color: #999999;
         }
-        padding: 5px;
         border-box:box-sizing;
         .border{
-            width: 95%;
-            min-height: 200px;
-            max-height: 400px;
+            width: 100%;
             border:2px dashed #cccccc;
             border-color: #cccccc;
             display: inline-block;
@@ -224,8 +219,8 @@
         }
         .buttons{
             display: inline-block;
-            width: 5%;
-            float: left;
+            width: 100%;
+            text-align: right;
         }
         .w20{
             width: 20%;    
