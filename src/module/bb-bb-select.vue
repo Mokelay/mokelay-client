@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-cascader placeholder="请选择积木" @change="change" :changeOnSelect="true" :staticOptions="firstOpts" :dsList="dsList" v-model="bb" valueTpl="<%=value[value.length-1]%>"></bb-cascader>
+        <bb-cascader placeholder="请选择积木" @change="change" :changeOnSelect="true" :staticOptions="firstOpts" :dsList="dsList" v-model="bb"></bb-cascader>
     </div>
 </template>
 
@@ -42,15 +42,20 @@
             change(value){
                 let t=this;
                 console.log("change value:",value);
-
-                t.$emit('change',value);
-                t.$emit('input',value);
+                if(value instanceof Object){
+                    t.$emit('change',value.bbAlias);
+                    t.$emit('input',value.value);
+                }else{
+                    t.$emit('change',value);
+                    t.$emit('input',value);
+                }
             },
             loadFirstData(){
                 let t=this;
                 t.firstOpts = [{
                     value:"Page_Ref_Root",
                     label:"Root",
+                    bbAlias:'bb-page',
                     children:[]
                 }];
                 //获取根数据

@@ -190,10 +190,20 @@
               let resultVal = value;
               if(t.valueTpl){
                 resultVal=_TY_Tool.tpl(t.valueTpl,{value:value});//不需要传其他的参数
+                //向上提供change事件
+                t.$emit('change',resultVal);
+                t.$emit('input',resultVal);
+              }else{
+                const lastVal = value[value.length-1];
+                for(let k=0;k<t.optionData.length;k++){
+                  let item = t.optionData[k];
+                  if(lastVal == item.value){
+                    t.$emit('change',item);
+                    t.$emit('input',item);
+                    break;
+                  }
+                }
               }
-              //向上提供change事件
-              t.$emit('change',resultVal);
-              t.$emit('input',resultVal);
             },
             //判断是否选中叶子节点
             _isLeaf(value){
