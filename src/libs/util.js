@@ -401,9 +401,14 @@ let _checkVueHasRef = function(uuid, vueObj) {
     return null;
 }
 
+
+let currentVue = null; //解决findBBByUuid方法查询慢的问题
 //深度遍历，可能会影响性能，后面考虑改成层级遍历   $refs和$children 一起查询
 let _findChildBB = function(uuid, children) {
     let resultVue = null;
+    if (currentVue) {
+        return currentVue;
+    }
     if (children && children.length > 0) {
         for (let i = 0; i < children.length; i++) {
             let vueItem = children[i];
@@ -460,6 +465,7 @@ let _findChildBB = function(uuid, children) {
 **/
 util.findBBByUuid = function(uuid, fromRoot) {
     let root = window._TY_Root; //初始根
+    currentVue = null;
     if (!root) {
         return null; //没有页面
     }
