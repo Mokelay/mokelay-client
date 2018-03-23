@@ -401,9 +401,14 @@ let _checkVueHasRef = function(uuid, vueObj) {
     return null;
 }
 
+
+let currentVue = null; //解决findBBByUuid方法查询慢的问题
 //深度遍历，可能会影响性能，后面考虑改成层级遍历   $refs和$children 一起查询
 let _findChildBB = function(uuid, children) {
     let resultVue = null;
+    if (currentVue) {
+        return currentVue;
+    }
     if (children && children.length > 0) {
         for (let i = 0; i < children.length; i++) {
             let vueItem = children[i];
@@ -460,6 +465,7 @@ let _findChildBB = function(uuid, children) {
 **/
 util.findBBByUuid = function(uuid, fromRoot) {
     let root = window._TY_Root; //初始根
+    currentVue = null;
     if (!root) {
         return null; //没有页面
     }
@@ -723,6 +729,10 @@ let _setEventMethod = function(bb, t) {
     if (bb.interactives) {
         bb.interactives.forEach((interactive, index) => {
             on[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
+            if (interactive['fromContentUUID'] && interactive['fromContentUUID'] === 'Page_Ref_Root' && window._TY_Root) {
+                //说明是触发根页面的事件，所以这里直接将事件绑定到根page上
+                window._TY_Root.$on(interactive['fromContentEvent'], _publicEmit.bind(this, t, bb, interactive['fromContentEvent']));
+            }
         });
     }
     return on;
@@ -770,8 +780,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             //容器方法
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
-            const executeContent = util.findBBByUuid(executeContentUUID) || window._TY_Root;
-            fn = t[containerMethodName] || executeContent[containerMethodName];
+            fn = t[containerMethodName] || window._TY_Root;
         }
         if (fn) {
             /**

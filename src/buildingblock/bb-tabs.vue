@@ -324,7 +324,9 @@
             },
             tabClick: function (tab, event) {
                 const t = this;
-                t.$refs['badge_'+tab.name].hide();
+                if(t.$refs['badge_'+tab.name]){
+                    t.$refs['badge_'+tab.name].hide();
+                }
                 let alias = tab.name;
 
                 let currentTabContent;

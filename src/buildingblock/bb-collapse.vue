@@ -85,14 +85,21 @@
                 default:function(){
                     return null;
                 }
+            },
+            //查询折叠面板的item数据 有几个内折叠
+            itemDs:{
+                type:Object,
+                default:function(){
+                    return null;
+                }
             }
-
         },
         data() {
             return {
                 // p_activeNames:((this.activeNames&&typeof(this.activeNames)==='string')?(this.activeNames.indexOf(",")>=0?this.activeNames.split(","):this.activeNames):this.activeNames),
                 //collapseData 数据
-                renderData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[]
+                renderData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[],
+                external:{}//外部参数
             }
         },
         watch: {
@@ -115,12 +122,39 @@
             }
         },
         created: function () {
-
+            let t=this;
+            //初始化item
+            t.buildTitle();
         },
         mounted:function(){
             let t=this;
         },
         methods: {
+            //外部传参调用
+            linkage:function(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.buildTitle();
+                }
+            },
+            //动态获取item值  renderData的name属性来分组
+            buildTitle:function(){
+                let t=this;
+                 if(t.itemDs){
+                    _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (map) {
+                        let showItems=[];
+                        map[0].value.forEach((item, key)=> {
+                            t.renderData.forEach(function(itemData){
+                                if(item.alias==itemData.name&&JSON.stringify(showItems).indexOf(JSON.stringify(itemData))==-1){
+                                    showItems.push(itemData);
+                                }
+                            });
+                        });
+                        t.renderData = showItems.reverse();
+                    }, function (code, msg) {
+                    });
+                }
+            },
             //渲染组件
             renderElement:function(createElement){
                 let t=this;

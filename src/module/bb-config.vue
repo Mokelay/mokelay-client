@@ -2,7 +2,7 @@
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
     <el-tabs type="border-card">
         <el-tab-pane label="属性">
-            <bb-form :dsFields="attributesDs" v-model="valueBase" @commit="attributesChange"></bb-form>
+            <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
@@ -59,7 +59,70 @@
         data() {
             return {
                 valueBase:this.value,
-                tabs:[{
+                alias:this.value.alias,
+                animationForm:{},
+                tabs:null,
+                activeName:'attributes',
+                //属性配置
+                attributesDs:{},
+                //交互新增表单
+                interactiveFormContent:null,
+                interactiveForm:{},
+                //交互配置列表
+                interactiveContent:null,
+                //动画配置 新增表单
+                animationFormContent:null,
+                //动画配置 动画列表
+                animationListContent:null
+            }
+        },
+        watch: {
+        },
+        created: function () {
+            this.setEditor()
+        },
+        mounted:function(){
+
+        },
+        methods: {
+            //载入当前积木的编辑内容
+            editBB:function(content){
+                const t = this;
+                t.valueBase = content;
+                t.alias = content.alias;
+                t.setEditor()
+            },
+            //添加交互
+            interactiveAdd:function(row){
+                const t = this;
+                t.valueBase.interactives.push(row);
+            },
+            //添加动画
+            animationAdd:function(row){
+                const t = this;
+                t.valueBase.animation.push(row);
+            },
+            //属性修改
+            attributesChange:function(formData){
+                const t = this;
+                t.$emit('input',t.valueBase);
+                t.$emit('change',t.valueBase);
+            },
+            //交互修改
+            interactivesChange:function(formData){
+                const t = this;
+                t.$emit('input',t.valueBase);
+                t.$emit('change',t.valueBase);
+            },
+            //动画修改
+            animationChange:function(formData){
+                const t = this;
+                t.$emit('input',t.valueBase);
+                t.$emit('change',t.valueBase);
+            },
+            setEditor:function(){
+                const t = this;
+                t.tabs = [{
                     type:'static',
                     label:'属性',
                     name:'attributes'
@@ -71,14 +134,15 @@
                     type:'static',
                     label:'动画',
                     name:'animation'
-                }],
-                activeName:'attributes',
+                }];
+                t.activeName = 'attributes';
                 //属性配置
-                attributesDs:{
-                    api:'list-adByBbAlias',method:'get',category:'config',inputs: [{paramName: 'bbAlias', valueType: "template", variable: this.value.alias}],outputs:[{dataKey: 'tableData', valueKey: 'data_list.list'}]
-                },
+                t.attributesDs = {
+                    api:'list-adByBbAlias',method:'get',category:'config',inputs: [{paramName: 'bbAlias', valueType: "template", variable: t.alias}],outputs:[{dataKey: 'tableData', valueKey: 'data_list.list'}]
+                };
+                t.$set(t.attributesDs,'inputs',[{paramName: 'bbAlias', valueType: "template", variable: t.alias}])
                 //交互新增表单
-                interactiveFormContent:[{                      
+                t.interactiveFormContent = [{                      
                     uuid:'interactive-uuid',
                     alias:'bb-uuid',                   
                     aliasName:'唯一标识',               
@@ -99,7 +163,7 @@
                             api: "list-edByBbAlias",
                             method: "get",
                             inputs: [
-                                {paramName: 'bbAlias',valueType:"template",variable:this.value.alias}
+                                {paramName: 'bbAlias',valueType:"template",variable:t.alias}
                             ],
                             outputs: [
                                 {dataKey: "fields", valueKey: "data_list"}
@@ -194,10 +258,10 @@
                             {text:'解析接口',value:'executeDS'}
                         ]
                     }
-                }],
-                interactiveForm:{},
+                }];
+                t.interactiveForm = {};
                 //交互配置列表
-                interactiveContent:[{                      
+                t.interactiveContent = [{                      
                     uuid:'interactiveEditor',
                     alias:'bb-list',                   
                     aliasName:'',               
@@ -238,9 +302,9 @@
                             ]}}
                         ]
                     }
-                }],
+                }];
                 //动画配置 新增表单
-                animationFormContent:[{                      
+                t.animationFormContent = [{                      
                     uuid:'animation-type',
                     alias:'bb-portal-item-list',                   
                     aliasName:'动画类型',               
@@ -363,9 +427,9 @@
                         ],
                         defaultValTpl:''
                     }
-                }],
+                }];
                 //动画配置 动画列表
-                animationListContent:[{                      
+                t.animationListContent = [{                      
                     uuid:'animationListContent',
                     alias:'bb-list',                   
                     aliasName:'',               
@@ -447,46 +511,8 @@
                             }
                         }]
                     }
-                }],
-                animationForm:{}
+                }];
             }
-        },
-        watch: {
-        },
-        created: function () {
-        },
-        mounted:function(){
-
-        },
-        methods: {
-            //添加交互
-            interactiveAdd:function(row){
-                const t = this;
-                t.valueBase.interactives.push(row);
-            },
-            //添加动画
-            animationAdd:function(row){
-                const t = this;
-                t.valueBase.animation.push(row);
-            },
-            //属性修改
-            attributesChange:function(formData){
-                const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            },
-            //交互修改
-            interactivesChange:function(formData){
-                const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            },
-            //动画修改
-            animationChange:function(formData){
-                const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            },
 
         }
     }

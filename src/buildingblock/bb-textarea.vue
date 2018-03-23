@@ -6,6 +6,7 @@
         v-model="valueBase"
         @change="change"
         :disabled="disabled"
+        :style="p_style"
         >
       </el-input>
 </template>
@@ -24,11 +25,16 @@
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            bbStyle:{
+                type:[String,Object],
+                default:''
             }
         },
         data() {
             return {
                 valueBase: this.value,
+                p_style:typeof(this.bbStyle)==='string'?eval(this.bbStyle):this.bbStyle
             }
         },
         watch: {
