@@ -89,9 +89,7 @@
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
-      return createElement('div',{
-        on:window._TY_Root.rootOn
-      },pbbElementList);
+      return createElement('div',{},pbbElementList);
     },
     props: {
       root:{

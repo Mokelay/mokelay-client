@@ -221,8 +221,10 @@
             //刷新方法，主要用于 lego配置页刷新 根据apiALias获取item列表
             refresh:function(content){
                 const t=this;
-                if(content instanceof Array){
-                    t.realContent = content;    
+                if(content instanceof Array && content[0].hasOwnProperty('value')&&content[0].hasOwnProperty('valueKey')){
+                    t.realContent = content[0].value;
+                }else if(content instanceof Array){
+                    t.realContent = content;
                 }
                 t.$emit('afterLoad',t.realContent);
             },
