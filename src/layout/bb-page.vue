@@ -263,6 +263,8 @@
       */
       openDialog:function(...args){
         const t = this;
+        //content需要args传过来的参数，实在想不到其他办法，只能放在全局变量里,然后接口从window。_TY_Root对象中区获取
+        _TY_Root._TY_args = args;
         args.forEach((val,key)=>{
           if(val.type == 'custom'){
             t.diaContent = val.arguments;

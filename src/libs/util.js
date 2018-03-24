@@ -758,7 +758,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
         if (fromContentEvent != interactive.fromContentEvent) {
             return;
         }
-        // 放在_TY_Root 对象中 的 key，所有只执行一次的事件放在  _TY_Root.eventOnce 数组中，如果不存在就执行一次后放进去，存在就不执行了
+        // 放在_TY_Root 对象中 的 key，所有只执行一次的事件放在  _TY_Root._TY_eventOnce 数组中，如果不存在就执行一次后放进去，存在就不执行了
         let eventOnceKey = fromContentEvent + '-'; //事件名+方法名(或者自定义脚本别名)作为key
 
         const executeType = interactive['executeType'];
@@ -810,14 +810,14 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             }
             //代码控制 once事件只执行一次
             if (interactive['once']) {
-                if (_TY_Root.eventOnce && _TY_Root.eventOnce.indexOf(eventOnceKey) >= 0) {
+                if (_TY_Root._TY_eventOnce && _TY_Root._TY_eventOnce.indexOf(eventOnceKey) >= 0) {
                     //说明已经在全局变量里了，或者已经执行过一次了,直接return
                     return;
                 } else {
-                    if (!_TY_Root.eventOnce) {
-                        _TY_Root.eventOnce = [];
+                    if (!_TY_Root._TY_eventOnce) {
+                        _TY_Root._TY_eventOnce = [];
                     }
-                    _TY_Root.eventOnce.push(eventOnceKey);
+                    _TY_Root._TY_eventOnce.push(eventOnceKey);
                 }
             }
 
