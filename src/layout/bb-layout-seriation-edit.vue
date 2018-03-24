@@ -218,7 +218,18 @@
             */
             addContent:function(contentItem){
                 const t = this;
-                t.realContent.push(contentItem);
+                let item;
+                if(contentItem instanceof Array && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')&&Array.isArray(contentItem[0].value)){
+                    //数组直接return
+                    return; 
+                }else if(contentItem instanceof Array && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')){
+                    // t.realContent.push(contentItem[0].value);
+                    item = contentItem[0].value;
+                }else{
+                    item = contentItem;
+                    // t.realContent.push(contentItem);
+                }
+                t.realContent.splice(t.realContent.length,0,item);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
                 t.$emit('change',t.realContent);
@@ -226,9 +237,9 @@
             //刷新方法，主要用于 lego配置页刷新 根据apiALias获取item列表
             refresh:function(content){
                 const t=this;
-                if(content instanceof Array && content[0].hasOwnProperty('value')&&content[0].hasOwnProperty('valueKey')){
+                if(content instanceof Array && content[0].hasOwnProperty('value')&&content[0].hasOwnProperty('valueKey')&&content[0].value instanceof Array){
                     t.realContent = content[0].value;
-                }else if(content instanceof Array){
+                }else if(content instanceof Array&&!content[0].hasOwnProperty('value')){
                     t.realContent = content;
                 }
                 t.$emit('afterLoad',t.realContent);

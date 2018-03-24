@@ -194,7 +194,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             if (valueType == 'constant') {
                 paramValue = input['constant'];
             } else if (valueType == 'template') { //支持参数为自定义模板
-                paramValue = util.tpl(input['variable'], util.buildTplParams(inputValueObj['bb'], inputValueObj[input['valueKey']]));
+                paramValue = util.tpl(input['variable'], Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj[input['valueKey']]), inputValueObj));
             } else if (valueType == 'inputValueObj') {
                 var _inputData = inputValueObj[input['valueKey']];
                 if (_inputData && typeof input['variable'] == 'string') {
@@ -731,7 +731,13 @@ let _setEventMethod = function(bb, t) {
             on[interactive['fromContentEvent']] = _publicEmit.bind(this, t, bb, interactive['fromContentEvent']);
             if (interactive['fromContentUUID'] && interactive['fromContentUUID'] === 'Page_Ref_Root' && window._TY_Root) {
                 //说明是触发根页面的事件，所以这里直接将事件绑定到根page上
+                window._TY_Root.$off(interactive['fromContentEvent']); //先移除监听 去除重复的事件绑定
+                // if (interactive['once']) {
+                //     window._TY_Root.$once(interactive['fromContentEvent'], _publicEmit.bind(this, t, bb, interactive['fromContentEvent']));
+                // } else {
+                //这里once监听没有用，会导致 只要ds-success事件走一遍，其他的都不会再走了, once的逻辑应该放在下面来做
                 window._TY_Root.$on(interactive['fromContentEvent'], _publicEmit.bind(this, t, bb, interactive['fromContentEvent']));
+                // }
             }
         });
     }
@@ -751,6 +757,8 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
         if (fromContentEvent != interactive.fromContentEvent) {
             return;
         }
+        // 放在_TY_Root 对象中 的 key，所有只执行一次的事件放在  _TY_Root.eventOnce 数组中，如果不存在就执行一次后放进去，存在就不执行了
+        let eventOnceKey = fromContentEvent + '-'; //事件名+方法名(或者自定义脚本别名)作为key
 
         const executeType = interactive['executeType'];
         //TODO假数据demo验证后立即删除，目前TY1.0下数据库中交互无executeArgument字段 且TY2.0中也无需添加（交互全部存在content中）
@@ -764,6 +772,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             //预定义方法
             const executeContentUUID = interactive['executeContentUUID'];
             const executeContentMethodName = interactive['executeContentMethodName'];
+            eventOnceKey = eventOnceKey + executeContentMethodName;
             //给相同事件的创建方法数组
             const targetUUID = executeContentUUID;
             //通过uuid查找目标积木 
@@ -773,6 +782,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
         } else if (executeType == 'custom_script') {
             //自定义方法
             const buzz = interactive['executeScript'];
+            eventOnceKey = eventOnceKey + buzz;
             fn = util.loadBuzz.bind(this, buzz, function(code) {
                 eval(code);
             })
@@ -780,6 +790,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             //容器方法
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
+            eventOnceKey = eventOnceKey + containerMethodName;
             fn = t[containerMethodName] || window._TY_Root;
         }
         if (fn) {
@@ -796,6 +807,19 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
                 type: 'custom',
                 arguments: executeArgument
             }
+            //代码控制 once事件只执行一次
+            if (interactive['once']) {
+                if (_TY_Root.eventOnce && _TY_Root.eventOnce.indexOf(eventOnceKey) >= 0) {
+                    //说明已经在全局变量里了，或者已经执行过一次了,直接return
+                    return;
+                } else {
+                    if (!_TY_Root.eventOnce) {
+                        _TY_Root.eventOnce = [];
+                    }
+                    _TY_Root.eventOnce.push(eventOnceKey);
+                }
+            }
+
             const realParams = params.concat(customArg, t, bb, fromContentEvent);
             fn.apply(null, realParams);
         }
