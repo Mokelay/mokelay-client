@@ -189,7 +189,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     var outputs = ds['outputs'] || [];
     if (inputs && inputs.length > 0) {
         inputs.forEach(function(input) {
-            var valueType = input['valueType'];
+            //TY2.0默认全部走template
+            var valueType = input['valueType'] || 'template';
             var paramValue = null;
             if (valueType == 'constant') {
                 paramValue = input['constant'];
