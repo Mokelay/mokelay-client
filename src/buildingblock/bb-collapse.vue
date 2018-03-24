@@ -99,7 +99,8 @@
                 // p_activeNames:((this.activeNames&&typeof(this.activeNames)==='string')?(this.activeNames.indexOf(",")>=0?this.activeNames.split(","):this.activeNames):this.activeNames),
                 //collapseData 数据
                 renderData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[],
-                external:{}//外部参数
+                external:{},//外部参数
+                totalData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[]
             }
         },
         watch: {
@@ -143,12 +144,16 @@
                  if(t.itemDs){
                     _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (map) {
                         let showItems=[];
-                        map[0].value.forEach((item, key)=> {
-                            t.renderData.forEach(function(itemData){
-                                if(item.alias==itemData.name&&JSON.stringify(showItems).indexOf(JSON.stringify(itemData))==-1){
-                                    showItems.push(itemData);
+                        t.totalData.forEach(function(itemData){
+                            itemData.isShow=false;
+                            map[0].value.forEach((item, key)=> {
+                                if(item.alias==itemData.name){
+                                    itemData.isShow=true;
                                 }
                             });
+                            if(JSON.stringify(showItems).indexOf(JSON.stringify(itemData))==-1){
+                                showItems.push(itemData);
+                            }
                         });
                         t.renderData = showItems.reverse();
                     }, function (code, msg) {
@@ -161,12 +166,19 @@
                 let result = [];
                 if(t.renderData&&t.renderData.length>0){
                     t.renderData.forEach(function(data,index){
+                        let style={};
+                        if(!data.isShow){
+                            style={
+                                "display":"none"
+                            }
+                        }
                         let collapseItemContent=_TY_Tool.bbRender(data.content, createElement, t);
                         result.push(createElement('el-collapse-item',{
                             props:{
                                 title:data.title,
                                 name:data.name
-                            }
+                            },
+                            style:style
                         },collapseItemContent));
                     });
                 }

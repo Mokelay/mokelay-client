@@ -70,24 +70,29 @@
         data() {
             return {
                 realButtons:this.buttons,
+                realButtonDs:this.buttonDs,
                 external:{}
             }
         },
         watch: {
             buttons(val){
                 this.realButtons = val;
+            },
+            buttonDs(val){
+                this.realButtonDs = val;
             }
         },
         created: function () {
             this.loadData();
         },
         mounted:function(){
+
         },
         methods: {
             loadData:function(){
                 let t=this;
-                if(t.buttonDs){
-                     _TY_Tool.getDSData(t.buttonDs, _TY_Tool.buildTplParams(t), function (map) {
+                if(t.realButtonDs){
+                     _TY_Tool.getDSData(t.realButtonDs, _TY_Tool.buildTplParams(t), function (map) {
                         t.realButtons = map[0].value;
                     }, function (code, msg) {
                     });

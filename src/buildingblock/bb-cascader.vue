@@ -157,7 +157,7 @@
         mounted:function(){
         },
         methods: {
-            linkage(data){
+            linkage(...data){
               let t=this;
               if(data){
                 this.external['linkage'] = data;
@@ -191,8 +191,8 @@
               if(t.valueTpl){
                 resultVal=_TY_Tool.tpl(t.valueTpl,{value:value});//不需要传其他的参数
                 //向上提供change事件
-                t.$emit('change',resultVal);
-                t.$emit('input',resultVal);
+                t.$emit('change',resultVal,t);//把级联选择的当前对象传过去，调用bb-page的excuteDs方法时，需要linkage参数
+                t.$emit('input',resultVal,t);
               }else{
                 const lastVal = value[value.length-1];
                 for(let k=0;k<t.optionData.length;k++){

@@ -130,7 +130,7 @@
             up:function(...params){
                 const t = this;
                 const index = params[0];
-                t.$emit('up',t.realContent);
+                t.$emit('up',t.realContent[index]);
                 t.$emit('change',t.realContent);
                 if(index == 0) {
                     return;
@@ -143,7 +143,7 @@
             down:function(...params){
                 const t = this;
                 const index = params[0];
-                this.$emit('down',t.realContent);
+                this.$emit('down',t.realContent[index]);
                 this.$emit('change',t.realContent);
                 if(index == t.realContent.length -1) {
                     return;
@@ -161,8 +161,8 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    t.$emit('remove',t.realContent);
-                    t.$emit('change',t.realContent);
+                    t.$emit('remove',t.realContent[index]);
+                    t.$emit('change',t.realContent[index]);
                     t.realContent.splice(index, 1);
                 }).catch(() => {
                     t.$message({
@@ -218,11 +218,14 @@
             */
             addContent:function(contentItem){
                 const t = this;
+                if(!contentItem||contentItem.length<=0){
+                    return;
+                }
                 let item;
-                if(contentItem instanceof Array && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')&&Array.isArray(contentItem[0].value)){
+                if(contentItem instanceof Array&&contentItem[0] && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')&&(Array.isArray(contentItem[0].value)||!contentItem[0].value)){
                     //数组直接return
                     return; 
-                }else if(contentItem instanceof Array && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')){
+                }else if(contentItem instanceof Array&&contentItem[0] && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')){
                     // t.realContent.push(contentItem[0].value);
                     item = contentItem[0].value;
                 }else{
