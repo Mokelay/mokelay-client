@@ -184,6 +184,10 @@
             //删除返回当前的积木数据
             remove:function(){
                 this.$emit('remove',this);
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }
@@ -192,8 +196,15 @@
     .bb-seriation-item-edit{
         .content{
             width: 100%;
-            margin: auto;
+            margin: 5px auto;
             overflow-y: auto;
+            position: relative;
+            &:hover{
+                .buttons{
+                    opacity:1;
+                    transition: opacity .5s;
+                }
+            }
         }
         &>i{
             text-align: center;
@@ -219,8 +230,12 @@
         }
         .buttons{
             display: inline-block;
-            width: 100%;
             text-align: right;
+            opacity:0;
+            transition: opacity .5s;
+            position: absolute;
+            right: 5px;
+            /*top: -10px;*/
         }
         .w20{
             width: 20%;    

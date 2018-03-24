@@ -1,7 +1,7 @@
 <template>
     <el-card :class="panelClass" :style="fullScreenStyle" :ref="realuuid">
         <div slot="header">
-            <span>卡片名称</span>
+            <span>{{layoutObject.title}}</span>
             <el-button style="float: right; padding: 3px 0" type="text" :icon="fullScreenIcon" @click="toggleScreen"></el-button>
         </div>
         <div class="panelContent">
