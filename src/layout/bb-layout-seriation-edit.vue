@@ -161,9 +161,9 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    t.$emit('remove',t.realContent[index]);
-                    t.$emit('change',t.realContent[index]);
                     t.realContent.splice(index, 1);
+                    t.$emit('remove',t.realContent[index]);
+                    t.$emit('change',t.realContent);
                 }).catch(() => {
                     t.$message({
                         type: 'info',
