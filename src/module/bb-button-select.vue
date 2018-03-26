@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-form :fields="fields" settingText="设置按钮" v-model="btn" formDescTpl="按钮:<%=text%>"></bb-button-form>
+        <bb-button-form :fields="fields" @commit="commit" settingText="设置按钮" v-model="btn" formDescTpl="按钮:<%=text%>"></bb-button-form>
     </div>
 </template>
 
@@ -201,6 +201,13 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            commit(formData){
+                debugger
+                const t = this;
+                t.$emit('input',formData);
+                t.$emit('change',formData);
+                t.$emit('commit',formData);
             }
         }
     }
