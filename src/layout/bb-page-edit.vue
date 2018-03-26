@@ -54,7 +54,8 @@
         case 'seriation':
         //顺序排列布局 seriation
             var element = createElement('bb-layout-seriation-edit', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
-              onFocus:this.onFocus
+              onFocus:this.onFocus,
+              change:this.change
             }});
             pbbElementList.push(element);
             break;
@@ -68,7 +69,8 @@
             layoutObject:this.layoutObject
           }
           var element = createElement('bb-layout-container-edit', {ref:uuid,props:props,on:{
-              onFocus:this.onFocus
+              onFocus:this.onFocus,
+              change:this.change
             }});
             pbbElementList.push(element);
         }
@@ -83,7 +85,8 @@
             layoutObject:this.layoutObject
           }
           var element = createElement('bb-layout-canvas-edit', {ref:uuid,props:props,on:{
-              onFocus:this.onFocus
+              onFocus:this.onFocus,
+              change:this.change
             }});
             pbbElementList.push(element);
         }
@@ -395,6 +398,7 @@
           t.$emit('afterEdit',t.content);
           t.$emit('change',t.content);
       },
+      //提交当前页面配置
       updatePage:function(){
         const  t = this;
         const newPage = {
@@ -403,6 +407,12 @@
           content:t.content
         };
         t.$emit('update',newPage);
+      },
+      //积木数据发生变动
+      change:function(content){
+        const t = this;
+        t.content = content;
+        t.$emit('change',t.content);
       }
     }
   }
