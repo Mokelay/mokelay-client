@@ -1,11 +1,9 @@
 <template>
     <div class="bb-layout-canvas">
         <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-
             <div v-on:click="setData(this, canvasItem.uuid)">
                 <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
             </div>
-            
             <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
             <div v-show="canvasItem.isShow" class="operate operate-size"
                  v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
@@ -375,7 +373,7 @@
         },
         methods: {
             checkDom: function () {
-                if (this.content) {
+                if (this.content.length) {
                     this.canvasItems = [].concat(this.content);
                 }
             },
@@ -390,9 +388,10 @@
                         }
                     });
                 } else {
-                    this.content[0].isShow = true;
+                    if(this.canvasItems.length){
+                        this.content[0].isShow = true;
+                    }
                 }
-
                 this.checkDom();
             },
 
