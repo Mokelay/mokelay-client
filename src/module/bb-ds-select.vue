@@ -145,10 +145,12 @@
             },
             //维护页面DSC数据中心
             setDs:function(api){
-                const dsc = _TY_Page_Data['ty-bb-config']['ds'] || [];
-                if(dsc.indexOf(api)){
+                const t = this;
+                const dsc = _TY_Page_Data[t.$route.query.pageAlias]?_TY_Page_Data[t.$route.query.pageAlias]['ds']:[];
+                //判断_TY_Page_Data中是否存在当前编辑的页面，并且ds中不存在这个api
+                if( _TY_Page_Data[t.$route.query.pageAlias] && dsc.indexOf(api)){
                     dsc.push(api);
-                    _TY_Page_Data['ty-bb-config']['ds'] = dsc;
+                    _TY_Page_Data[t.$route.query.pageAlias]['ds'] = dsc;
                 }
             }
         }
