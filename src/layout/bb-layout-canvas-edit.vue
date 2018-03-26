@@ -367,19 +367,23 @@
         created: function () {
             this.setData();
         },
+        watch:{
+            content(val){
+                this.setData();
+            }
+        },
         methods: {
             checkDom: function () {
                 if (this.content) {
                     this.canvasItems = this.canvasItems.concat(this.content);
                 }
             },
-
             setData(e, uuid){
-
                 if (e) {
                     this.canvasItems.forEach((con, key) => {
                         if (con.uuid === uuid) {
                             con.isShow = true;
+                            this.$emit('onFocus',con);
                         } else {
                             con.isShow = false;
                         }

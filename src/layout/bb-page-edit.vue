@@ -49,10 +49,13 @@
       var uuid = this.layoutObject&&this.layoutObject['uuid']?this.layoutObject['uuid'] : _TY_Tool.uuid();
 
       //根据布局类型展示不同布局
+      this.layoutType = this.layoutType?this.layoutType:'seriation';
       switch(this.layoutType){
         case 'seriation':
         //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation-edit', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
+            var element = createElement('bb-layout-seriation-edit', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
+              onFocus:this.onFocus
+            }});
             pbbElementList.push(element);
             break;
         //容器布局 container
@@ -64,7 +67,9 @@
             content:this.content,
             layoutObject:this.layoutObject
           }
-          var element = createElement('bb-layout-container-edit', {ref:uuid,props:props});
+          var element = createElement('bb-layout-container-edit', {ref:uuid,props:props,on:{
+              onFocus:this.onFocus
+            }});
             pbbElementList.push(element);
         }
         break;
@@ -77,23 +82,17 @@
             content:this.content,
             layoutObject:this.layoutObject
           }
-          var element = createElement('bb-layout-canvas-edit', {ref:uuid,props:props});
+          var element = createElement('bb-layout-canvas-edit', {ref:uuid,props:props,on:{
+              onFocus:this.onFocus
+            }});
             pbbElementList.push(element);
         }
         //网格布局 grid
         //TODO
-
-        default:
-            //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation-edit', {ref:uuid,props:{content:this.content},on:{
-              onFocus:this.onFocus
-            }});
-            pbbElementList.push(element);
-            break;
       }
 
       //页面级弹窗容器 所有的弹窗都新增在此div下
-      const dialog = createElement('div',{attrs:{id:this.pageAlias + '_dialog'}},[]);
+      const dialog = createElement('div',{attrs:{id:this.realPageAlias + '_dialog'}},[]);
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
@@ -131,9 +130,17 @@
         ds:null
       };
     },
-    created: function () {
+    watch:{
+      content:{
+        handler:(val,oldVal)=>{
+        },
+        deep:true
+      }
+    },
+    created: function () { 
+      this.realPageAlias = _TY_Tool.tpl(this.pageAlias, _TY_Tool.buildTplParams(this));
       //把bb-page的全局对象注册到window下
-      window._TY_Page_Data[this.pageAlias] = this;
+      window._TY_Page_Data[this.realPageAlias] = this;
       if(this.root){
         window._TY_Root = this;
       }
@@ -153,7 +160,7 @@
         }
         //调用ajax获取PBBS数据
         var t = this;
-        var pageAlias = _TY_Tool.tpl(t.pageAlias, _TY_Tool.buildTplParams(t));
+        var pageAlias = t.realPageAlias;
         //TODO 单接口调用
         Util.post(window._TY_ContentPath+"/load-page-data",{
           alias:pageAlias
@@ -343,7 +350,27 @@
               attributes:{},
               animation:[],
               interactives:[],
-              layout:{}
+              layout:{
+                  bgColor: "",             //背景颜色
+                  rotate: 0,               //旋转
+                  transparency: 1,         //透明度
+                  zIndex: 0,               //层级
+                  size: {width: 200, height: 200},//大小
+                  position: {x: 500, y: 200},     //位置
+                  border: {                //边框
+                      style: "",           //边框样式
+                      color: "",           //边框颜色
+                      size: "",            //边框尺寸
+                      radian: "",          //边框弧度
+                      margin: ""           //边距
+                  },
+                  shadow: {                //阴影
+                      color: "",           //阴影颜色
+                      size: "",            //阴影大小
+                      direction: '',       //阴影方向
+                      vague: ''            //阴影模糊
+                  }
+              }
           }
           t.content = t.content?t.content:[];
           t.content.push(newBB);
