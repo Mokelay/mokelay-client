@@ -105,7 +105,7 @@
                         </div>
                         <div v-else>
                             <!-- 编辑状态 -->
-                            <bb v-if="scope['$index'] == canEditRow" v-mdoel="scope['row'][column.prop]" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
+                            <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow">
                                 {{scope['row'][column.prop]}}
@@ -617,6 +617,7 @@
             },
             //编辑状态，更新数据
             cellChange:function(column,val){
+                debugger
                 const t = this;
                 if(t.scope){
                     //修改
