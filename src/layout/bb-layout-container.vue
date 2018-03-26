@@ -111,6 +111,26 @@
                 </el-aside>
             </el-container>
         </el-container>
+        <!-- 上左中右下布局 -->
+        <el-container v-if="realLayout == 'h-l-m-r-f'">
+            <el-header :style="{background:realBgColor.header}">
+                <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
+            </el-header>
+            <el-container>
+                <el-aside  width="20%" :style="{background:realBgColor.leftAside}">
+                    <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
+                </el-aside>
+                <el-main :style="{background:realBgColor.main}">
+                    <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
+                </el-main>
+                <el-aside width="20%" :style="{background:realBgColor.rightAside}">
+                    <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
+                </el-aside>
+            </el-container>
+        </el-container>
+        <el-footer :style="{background:realBgColor.footer}">
+            <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
+        </el-footer>
     </div> 
 </template>
 <script>
@@ -297,5 +317,19 @@
         }
     }
 </script>
-<style lang='less' scoped>
+<style lang='less'>
+    .bb-layout-container{
+        .el-header{
+            height: 60px;
+            overflow-y: auto;
+        }
+        .el-container{
+            height: calc(~'100vh - 60px');
+            overflow-y: auto;
+        }
+        .el-footer{
+            height: 0px;
+            overflow-y: auto;
+        }
+    }
 </style>
