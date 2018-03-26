@@ -1,6 +1,6 @@
 <template>
     <div class="bb-layout-canvas">
-        <div class="canvas" v-for="canvasItem in canvasItems">
+        <div class="canvas" v-for="(canvasItem,key) in canvasItems">
 
             <div v-on:click="setData(this, canvasItem.uuid)">
                 <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
@@ -13,6 +13,7 @@
                 <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
                     <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
                 </div>
+                <div class="remove" @click="remove(key)"><i class="ty-icon_lajitong"></i></div>
                 <div class="border-line"></div>
                 <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" id="drag"></div>
 
@@ -375,7 +376,7 @@
         methods: {
             checkDom: function () {
                 if (this.content) {
-                    this.canvasItems = this.canvasItems.concat(this.content);
+                    this.canvasItems = [].concat(this.content);
                 }
             },
             setData(e, uuid){
@@ -451,11 +452,30 @@
                         item.layout.size.height = val.height;
                     }
                 });
+            },
+            //删除积木
+            remove(index){
+                const t = this;
+                t.$confirm('确认操作?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    t.canvasItems.splice(index, 1);
+                    t.$emit('remove',t.canvasItems[index]);
+                    t.$emit('change',t.canvasItems);
+                }).catch(() => {
+                    t.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
             }
         }
     }
 </script>
-<style scoped>
+<style lang="less" scoped>
 
     .operate {
         position: absolute;
@@ -753,5 +773,21 @@
     }
     .keyboard-help .help-btn:hover .icon {
         fill: #00c4cd;
+    }
+    .bb-layout-canvas{
+        .remove{
+            opacity:0;
+            transition: opacity .2s;
+            display: inline-block;
+            position: absolute;
+            top: -30px;
+            right: 30px;
+        }
+        &:hover{
+            .remove{
+                opacity:1;
+                transition: opacity .2s;
+            }
+        }
     }
 </style>
