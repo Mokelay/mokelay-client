@@ -62,7 +62,7 @@
             //模拟点击默认tab事件,避免已经渲染的dom重新渲染
             setTimeout(function(){
                 t.tabClick({name:t.p_activeName});
-            },300);
+            },500);
             return createElement('el-tabs', {
                 props: {
                     value: t.p_activeName,
