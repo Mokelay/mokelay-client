@@ -71,7 +71,7 @@
             return {
                 inputVisible: false,
                 inputValue: '',
-                tags:(this.value&&typeof(this.value)==='string')?JSON.parse(this.value):this.value
+                tags:(this.value&&typeof(this.value)==='string')?_TY_Tool.tpl(this.value, _TY_Tool.buildTplParams(this)):this.value
             }
         },
         computed: {
@@ -89,7 +89,7 @@
         },
         watch:{
           value(val){
-            this.tags = (val&&typeof(val)==='string')?JSON.parse(val):val;
+            this.tags = (val&&typeof(val)==='string')?_TY_Tool.tpl(val, _TY_Tool.buildTplParams(this)):val;
           }
         },
         created: function () {
