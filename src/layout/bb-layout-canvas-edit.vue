@@ -57,7 +57,7 @@
         <el-dialog
             width="414px"
             height="736px"
-            top="80px"
+            top="20px"
             :close-on-click-modal="false"
             :visible.sync="isShowDialog">
 
@@ -544,6 +544,11 @@
     }
 </script>
 <style lang="less">
+
+    .el-main {
+        padding: 0 !important;
+    }
+
     .bb-layout-canvas .el-dialog {
         height: 736px !important;
     }
