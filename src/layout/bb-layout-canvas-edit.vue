@@ -401,6 +401,7 @@
             return {
                 isShowDialog: false,
                 menuRight: 0,
+                operationItems: [],
                 canvasItems: []
             }
         },
@@ -531,14 +532,15 @@
             
             cancelCanvas() {
 
-                if (!this.canvasItems.length) {
-                    return;
+                if (this.canvasItems.length) {
+                    this.canvasItems.pop();
+                } else {
+                    this.canvasItems = this.operationItems;
                 }
-
-                this.canvasItems.pop();
             },
 
             reformCanvas() {
+                this.operationItems = this.canvasItems;
                 this.canvasItems = [];
             },
 
