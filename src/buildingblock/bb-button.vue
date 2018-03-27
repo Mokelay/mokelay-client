@@ -43,7 +43,7 @@
         },
         data() {
             return {
-
+                external:{}//外部参数
             }
         },
         computed: {
@@ -65,11 +65,18 @@
         mounted:function(){
         },
         methods: {
+            //外部参数，在button中存储
+            linkage(...data){
+              let t=this;
+              if(data){
+                this.external['linkage'] = data;
+              }
+            },
             click:function(button){
                 this.vue = Vue;
                 Util.resolveButton(button,_TY_Tool.buildTplParams(this),button.afterClick);
-                this.$emit('buttonClick',button);
-                this.$emit('click',button);
+                this.$emit('buttonClick',button,this);
+                this.$emit('click',button,this);
             },
             loadChildBB(){
                 let t=this;

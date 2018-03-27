@@ -38,7 +38,8 @@
         data() {
             return {
                 baseValue: this.value,
-                hidden: !Boolean(this.value)
+                hidden: !Boolean(this.value),
+                external:{}//外部参数
             };
         },
         computed: {
@@ -61,6 +62,13 @@
             this.stopRefresh();
         },
         methods: {
+            //外部参数，在button中存储
+            linkage(...data){
+              let t=this;
+              if(data){
+                this.external['linkage'] = data;
+              }
+            },
             //隐藏标记
             hide: function () {
                 this.baseValue = null;
@@ -80,14 +88,14 @@
             //接收点击事件
             click:function(){
                 const t = this;
-                t.$emit('click');
+                t.$emit('click',t);
                 if(t.clickable){
                     t.hide();
                 }
             },
             btnClick:function(){
                 const t = this;
-                t.$emit('click');
+                t.$emit('click',t);
             },
             //获取动态数据
             getData:function () {
@@ -96,6 +104,9 @@
                     _TY_Tool.getDSData(t.textDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                             t.baseValue = val.value;
+                            if(t.baseValue>0){
+                                t.hidden = false;
+                            }
                         })
                     }, function (code, msg) {
                     });

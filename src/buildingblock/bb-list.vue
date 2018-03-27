@@ -395,7 +395,11 @@
                                     if(item['valueKey'].split('.').length > 1){//支持定制接口
                                         list = item['value']
                                     }else{
-                                        list = item['value']['list'];
+                                        if(item['value']['list']){
+                                            list = item['value']['list'];    
+                                        }else{
+                                            list = item['value'];
+                                        }
                                     }
                                     t[item['dataKey']] = [];
                                     for (var i in list) {
