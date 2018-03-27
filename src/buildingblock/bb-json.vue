@@ -49,6 +49,11 @@
                 canRender:false
             }
         },
+        watch: {
+            data(val){
+                this.jsonSource = typeof(val)==='string'?JSON.parse(val):val
+            }
+        },
         computed:{
             
         },

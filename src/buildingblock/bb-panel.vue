@@ -28,7 +28,7 @@
                     return {
                         uuid:_TY_Tool.uuid(), //唯一标识
                         title:'面板',//标题
-                        background:'rgba(255,255,255, 0.8)', //背景色
+                        background:'rgba(255,255,255, 0.95)', //背景色
                         transparency:1, //透明度
                         zoomType:'fullScreen'
                     }
@@ -92,7 +92,7 @@
                 p_layoutObject:Object.assign({
                         uuid:_TY_Tool.uuid(), //唯一标识
                         title:'面板',//标题
-                        background:'rgba(255,255,255, 0.8)', //背景色
+                        background:'rgba(255,255,255, 0.95)', //背景色
                         transparency:1, //透明度
                         zoomType:'fullScreen'
                     },this.layoutObject),
