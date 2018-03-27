@@ -1,36 +1,37 @@
 <template>
     <div class="bb-layout-canvas">
-        <!--<div class="bg-canvas"> -->
-            <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-                <div v-on:click="setData(this, canvasItem.uuid)">
-                    <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
-                </div>
-                <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
-                <div v-show="canvasItem.isShow" class="operate operate-size"
-                    v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
-
-                    <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
-                        <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
+        <div>
+            <div class="bg-canvas">
+                <div class="canvas" v-for="(canvasItem,key) in canvasItems">
+                    <div v-on:click="setData(this, canvasItem.uuid)">
+                        <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
                     </div>
-                    <div class="remove" @click="remove(key)"><i class="ty-icon_lajitong"></i></div>
-                    <div class="border-line"></div>
-                    <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" id="drag"></div>
+                    <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
+                    <div v-show="canvasItem.isShow" class="operate operate-size"
+                        v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
-                    <!-- <div class="dot scale-nw dot-nw"></div> -->
-                    <div class="dot scale-n dot-n" id="dragTop" :data-uuid="canvasItem.uuid" v-dragTop="directionTop"></div>
+                        <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
+                            <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
+                        </div>
+                        <div class="remove" @click="remove(key)"><i class="ty-icon_lajitong"></i></div>
+                        <div class="border-line"></div>
+                        <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" id="drag"></div>
 
-                    <!-- <div class="dot scale-ne dot-ne"></div> -->
-                    <div class="dot scale-e dot-e" id="dragRight" :data-uuid="canvasItem.uuid" v-dragRight="directionRight"></div>
+                        <!-- <div class="dot scale-nw dot-nw"></div> -->
+                        <div class="dot scale-n dot-n" id="dragTop" :data-uuid="canvasItem.uuid" v-dragTop="directionTop"></div>
 
-                    <!-- <div class="dot scale-se dot-se"></div> -->
-                    <div class="dot scale-s dot-s" id="dragBottom" :data-uuid="canvasItem.uuid" v-dragBottom="directionBottom"></div>
+                        <!-- <div class="dot scale-ne dot-ne"></div> -->
+                        <div class="dot scale-e dot-e" id="dragRight" :data-uuid="canvasItem.uuid" v-dragRight="directionRight"></div>
 
-                    <!-- <div class="dot scale-sw dot-sw"></div> -->
-                    <div class="dot scale-w dot-w" id="dragLeft" :data-uuid="canvasItem.uuid" v-dragLeft="directionLeft"></div>
+                        <!-- <div class="dot scale-se dot-se"></div> -->
+                        <div class="dot scale-s dot-s" id="dragBottom" :data-uuid="canvasItem.uuid" v-dragBottom="directionBottom"></div>
+
+                        <!-- <div class="dot scale-sw dot-sw"></div> -->
+                        <div class="dot scale-w dot-w" id="dragLeft" :data-uuid="canvasItem.uuid" v-dragLeft="directionLeft"></div>
+                    </div>
                 </div>
             </div>
-        <!--</div>-->
-
+        </div>
     </div>
 </template>
 <script>
@@ -64,7 +65,7 @@
 
                     document.onmousemove = function (e) {
                         
-                        rotate = Math.ceil(Math.atan2(e.pageX - rotateX, rotateY - e.pageY) / Math.PI * 180);
+                        rotate = Math.ceil(Math.atan2(e.clientX - rotateX, rotateY - e.clientY) / Math.PI * 180);
                         
                         console.log(rotate);
 
@@ -477,6 +478,10 @@
 </script>
 <style lang="less" scoped>
 
+    .bb-layout-canvas {
+        background: #efefef;
+    }
+
     .bg-canvas {
         background-image: none;
         background-size: 451.905px;
@@ -484,11 +489,15 @@
         background-repeat: no-repeat;
         background-position: 0px 0px;
         opacity: 1;
-        position: absolute;
+        position: relative;
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
+        width: 414px;
+        height: 736px;
+        margin: 0 auto;
+        box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.2);
     }
 
     .operate {
