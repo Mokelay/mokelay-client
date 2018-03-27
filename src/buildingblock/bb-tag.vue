@@ -10,7 +10,7 @@
             :close-transition="false"
             @close="handleClose(key)"
           >
-          {{tag.name}}
+          {{tag.name || tag}}
           </el-tag>
         </el-tooltip>
         <div v-if="showButton" class="addButton">
@@ -71,7 +71,7 @@
             return {
                 inputVisible: false,
                 inputValue: '',
-                tags:(this.value&&typeof(this.value)==='string')?_TY_Tool.tpl(this.value, _TY_Tool.buildTplParams(this)):this.value
+                tags:(this.value&&typeof(this.value)==='string')?_TY_Tool.tpl(this.value, _TY_Tool.buildTplParams(this)).split(','):this.value
             }
         },
         computed: {
@@ -89,7 +89,7 @@
         },
         watch:{
           value(val){
-            this.tags = (val&&typeof(val)==='string')?_TY_Tool.tpl(val, _TY_Tool.buildTplParams(this)):val;
+            this.tags = (val&&typeof(val)==='string')?_TY_Tool.tpl(val, _TY_Tool.buildTplParams(this)).split(','):val;
           }
         },
         created: function () {
