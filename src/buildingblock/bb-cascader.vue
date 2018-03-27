@@ -228,7 +228,7 @@
                   t._tempItem = item;
                   return;
                 }else if(item.children&&item.children.length>0){
-                  let result = _findItem(val,item.children);
+                  let result = t._findItem(val,item.children);
                   if(result){
                     t._tempItem = item;
                     return;
