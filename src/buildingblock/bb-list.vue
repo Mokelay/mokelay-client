@@ -73,7 +73,7 @@
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
                                 <!-- 后续业务禁止应用 -->
-                                <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row']}"></bb>
+                                <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}"></bb>
                             </span>
                         </div>
                         <div v-else-if="column['type'] == 'edit'">
@@ -376,7 +376,7 @@
                             });
                         }
                     }
-                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentParams}), function (map) {
+                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentParams,'rowData':t.parentParams}), function (map) {
                         if(dataHandler && typeof dataHandler == 'function'){
                             dataHandler(map);
                         }else{
@@ -432,6 +432,7 @@
                     t.vue = Vue;
                     Util.resolveButton(button,_TY_Tool.buildTplParams(t,{
                         'row-data':scope.row,
+                        'rowData':scope.row,
                         'getData':t.getData
                     }));
                 }
@@ -481,7 +482,7 @@
                 //列表的更新操作
                 if (column.ds) {
                     t.loading = true;
-                    Util.getDSData(column.ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
+                    Util.getDSData(column.ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
@@ -649,7 +650,7 @@
                 }
                 if (ds) {
                     t.loading = true;
-                    Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow}), function (map) {
+                    Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
