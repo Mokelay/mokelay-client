@@ -69,7 +69,6 @@
             const groups = {};
             //没有group分组的项
             const normalItems = [];
-            t.newFormData = _TY_Tool.deepClone(t.fromData);
             bbContent.forEach((field,key)=>{
                 var ref = 'form-item_' + field['uuid']
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
