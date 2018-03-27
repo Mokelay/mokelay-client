@@ -141,6 +141,11 @@
                 const item = t.realContent[index];
                 t.realContent.splice(index,1);
                 t.realContent.splice(index-1,0,item);
+                if(index==t.realContent.length-1&&
+                    t.realContent[index].attributes.hasOwnProperty('pointer')){
+                    t.realContent[index-1].attributes.pointer=true;
+                    t.realContent[index].attributes.pointer=false;
+                }
             },
             //下移返回当前的积木数据
             down:function(...params){
@@ -154,6 +159,11 @@
                 const item = t.realContent[index]
                 t.realContent.splice(index,1);
                 t.realContent.splice(index+1,0,item);
+                if(index==t.realContent.length-2&&
+                    t.realContent[index].attributes.hasOwnProperty('pointer')){
+                    t.realContent[index+1].attributes.pointer=false;
+                    t.realContent[index].attributes.pointer=true;
+                }
             },
             //删除返回当前的积木数据
             remove:function(...params){
@@ -164,8 +174,11 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    t.realContent.splice(index, 1);
+                    if(index==t.realContent.length-1&&t.realContent.length>1){
+                        t.realContent[t.realContent.length-2].attributes.pointer=false;
+                    }
                     t.$emit('remove',t.realContent[index]);
+                    t.realContent.splice(index, 1);
                     t.$emit('change',t.realContent);
                 }).catch(() => {
                     t.$message({
@@ -236,6 +249,9 @@
                 }else{
                     item = contentItem;
                     // t.realContent.push(contentItem);
+                }
+                if(t.realContent[t.realContent.length-1].attributes.hasOwnProperty('pointer')){
+                    t.realContent[t.realContent.length-1].attributes.pointer=true;
                 }
                 t.realContent.splice(t.realContent.length,0,item);
                 //返回新的积木数组

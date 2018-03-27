@@ -131,6 +131,8 @@
                         map.forEach((ele,key)=>{
                             val.category = ele.value.category;
                             val.method = ele.value.method;
+                            val.category = ele.value.category;
+                            val.url = ele.value.url;
                             t.setDs(val.api);
                             t.$emit('input', val);
                         })
