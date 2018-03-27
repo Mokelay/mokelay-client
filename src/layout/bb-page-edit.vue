@@ -413,6 +413,11 @@
         };
         t.$emit('update',newPage);
       },
+      //更新layoutObject
+      setLayoutObject:function(layoutObject){
+        const  t = this;
+        t.layoutObject = layoutObject;
+      },
       //积木数据发生变动
       change:function(content){
         const t = this;
