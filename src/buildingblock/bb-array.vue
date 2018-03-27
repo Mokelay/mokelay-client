@@ -55,7 +55,7 @@ import Vue from 'vue';
         },
         data() {
             return {
-                array:this.value,
+                array:typeof(this.value)==='string'?eval(this.value):this.value,
                 formDialog:null,
             }
         },
