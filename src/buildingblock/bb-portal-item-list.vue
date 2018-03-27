@@ -162,6 +162,8 @@
         padding: 27px 0 90px;
         display: flex;
         flex-wrap: wrap;
+        max-height: 80vh;
+        overflow-y: auto;
         .grid-item{
             .item-container{
                 box-sizing: border-box;

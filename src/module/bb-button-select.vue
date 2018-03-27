@@ -203,7 +203,6 @@
                 return _TY_Tool.loadChildBB(t);                
             },
             commit(formData){
-                debugger
                 const t = this;
                 t.$emit('input',formData);
                 t.$emit('change',formData);
