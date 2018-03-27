@@ -540,6 +540,9 @@
             },
 
             reformCanvas() {
+                if (!this.canvasItems.length) {
+                    return;
+                }
                 this.operationItems = this.canvasItems;
                 this.canvasItems = [];
             },
