@@ -197,12 +197,19 @@
             return {}
         },
         render: function (createElement) {
+            const el = this;
             const bbList = _TY_Tool.bbCanvasRender(this.content, createElement, this);
 
-            return createElement('div', {}, bbList);
+            return createElement('div', {
+                on: {
+                    click: el.clickHandler
+                }
+            }, bbList);
         },
         methods: {
-
+            clickHandler(e) {
+                window.stop();
+            }
         }
     }
 </script>

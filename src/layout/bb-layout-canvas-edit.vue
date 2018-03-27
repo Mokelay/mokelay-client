@@ -2,7 +2,7 @@
     <div class="bb-layout-canvas">
         <div class="bg-canvas">
             <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-                <div v-on:click="setData(this, canvasItem.uuid)">
+                <div>
                     <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
                 </div>
                 <div @click="checkDrag(canvasItem.uuid)" class="operate operate-size"
@@ -417,31 +417,19 @@
                 }
             },
             setData(e, uuid){
-                if (e) {
+                
+                if (this.canvasItems.length) {
                     this.canvasItems.forEach((con, key) => {
-                        if (con.uuid === uuid) {
-                            con.isShow = true;
-                            this.$emit('onFocus',con);
+                        if (key === (this.canvasItems.length - 1)) {
+                            this.content[this.content.length - 1].isShow = true;
                         } else {
                             con.isShow = false;
                         }
                     });
-
-                    e.stop();
                 } else {
-                    if (this.canvasItems.length) {
-                        this.canvasItems.forEach((con, key) => {
-                            if (key === (this.canvasItems.length - 1)) {
-                                this.content[this.content.length - 1].isShow = true;
-                            } else {
-                                con.isShow = false;
-                            }
-                        });
-                    } else {
-                        this.content[this.content.length - 1].isShow = true;
-                    }
-                    
+                    this.content[this.content.length - 1].isShow = true;
                 }
+                    
                 this.checkDom();
             },
 
