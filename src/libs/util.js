@@ -674,6 +674,8 @@ let _setStyle = function(bb, t) {
             'border-radius': layout.border.radius,
             'margin': layout.border.margin,
             'box-shadow': `${layout.shadow.size} ${layout.shadow.direction} ${layout.shadow.vague} ${layout.shadow.color}`,
+            'overflow-y': layout['overflow-y'],
+            'overflow-x': layout['overflow-x']
         }
     }
     const animation = _setAnimation(bb);
