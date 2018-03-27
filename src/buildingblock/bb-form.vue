@@ -364,6 +364,9 @@
             formCommit:function(){
                 var t = this;
                 //t.formData = t.newFormData;
+                if(!t.formData){
+                    t.formData={};
+                }
                 t.formData = Object.assign(t.formData,t.newFormData);
                 t.$refs['form'].validate(function(valid){
                     if(valid){

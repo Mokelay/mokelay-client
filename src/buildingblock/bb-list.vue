@@ -174,7 +174,7 @@
                 }
             },
             value: {
-                type: Array,
+                type: [Array,String],
                 default: function () {
                     return []
                 }
@@ -310,13 +310,17 @@
                             sort:{},
                         }
                     }
-                } 
+                }
+            },
+            returnString:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
             return {
                 realColumns:[].concat(this.columns),
-                tableData: this.value,
+                tableData: (this.value&&typeof(this.value)==='string')?eval(this.value):this.value||[],
                 totalItems: this.total,
                 pageSize: 10,
                 page: 1,
@@ -337,7 +341,7 @@
         },
         watch: {
             value(val) {
-                this.tableData = val;
+                this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
             }
         },
         created: function () {
@@ -628,8 +632,8 @@
                     const scope = t.scope;
                     //实现添加事件，配合bb-form实现表单v-model
                     t.$set(t.tableData[scope['$index']],column.prop,val);
-                    t.$emit('input',t.tableData);
-                    t.$emit('change',t.tableData);
+                    t.$emit('input',t._returnStringOrArray());
+                    t.$emit('change',t._returnStringOrArray());
                     //通过接口提交修改
                     //t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
                 }else{
@@ -637,8 +641,8 @@
                     t.$set(t.tableData[0],column.prop,val);
                     //通过接口提交修改
                     // t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
-                    t.$emit('input',t.tableData);
-                    t.$emit('change',t.tableData);
+                    t.$emit('input',t._returnStringOrArray());
+                    t.$emit('change',t._returnStringOrArray());
                 }
             },
             /*通过DS保存修改行
@@ -712,9 +716,9 @@
             cleanData:function(scope){
                 const t = this;
                 t.tableData = [];
-                t.$emit('input',t.tableData);
-                t.$emit('change',t.tableData);
-                t.$emit('remove',t.tableData);
+                t.$emit('input',t._returnStringOrArray());
+                t.$emit('change',t._returnStringOrArray());
+                t.$emit('remove',t._returnStringOrArray());
             },            //删除数据
             cellremove:function(scope){
                 const t = this;
@@ -727,9 +731,9 @@
                     //调用删除接口
                     t.cellDSSubmit(t.tableData[index],'remove');
                     t.tableData.splice(index,1);
-                    t.$emit('input',t.tableData);
-                    t.$emit('change',t.tableData);
-                    t.$emit('remove',t.tableData);
+                    t.$emit('input',t._returnStringOrArray());
+                    t.$emit('change',t._returnStringOrArray());
+                    t.$emit('remove',t._returnStringOrArray());
                 }).catch(() => {
                     t.$message({
                         type: 'info',
@@ -747,8 +751,8 @@
                 const item = t.tableData[index]
                 t.tableData.splice(index,1);
                 t.tableData.splice(index-1,0,item);
-                t.$emit('input',t.tableData);
-                t.$emit('change',t.tableData);
+                t.$emit('input',t._returnStringOrArray());
+                t.$emit('change',t._returnStringOrArray());
                 t.cellDSSubmit(item,'sort');
             },
             //数据向下移动
@@ -761,9 +765,17 @@
                 const item = t.tableData[index]
                 t.tableData.splice(index,1);
                 t.tableData.splice(index+1,0,item);
-                t.$emit('input',t.tableData);
-                t.$emit('change',t.tableData);
+                t.$emit('input',t._returnStringOrArray());
+                t.$emit('change',t._returnStringOrArray());
                 t.cellDSSubmit(item,'sort');
+            },
+            _returnStringOrArray:function(){
+                let t=this;
+                if(t.returnString){
+                    return JSON.stringify(t.tableData);
+                }else{
+                    return t.tableData;
+                }
             }
         }
     }
