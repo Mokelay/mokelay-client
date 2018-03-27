@@ -34,7 +34,8 @@
         data() {
             return {
                 valueBase: this.value,
-                p_style:typeof(this.bbStyle)==='string'?eval(this.bbStyle):this.bbStyle
+                p_style:typeof(this.bbStyle)==='string'?eval(this.bbStyle):this.bbStyle,
+                external:{}//外部参数
             }
         },
         watch: {
@@ -47,12 +48,20 @@
         mounted:function(){
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
-            t.$emit('mounted',t.valueBase);
+            t.$emit('mounted',t.valueBase,t);
         },
         methods: {
+            linkage(...data){
+              let t=this;
+              if(data){
+                this.external['linkage'] = data;
+                //刷新选项
+                _TY_Tool.buildDefaultValTpl(t,"valueBase");
+              }
+            },
             change:function(val){
-                this.$emit('input',val)
-                this.$emit('change',val)
+                this.$emit('input',val,this)
+                this.$emit('change',val,this)//把当前对象传过去，因为会需要linkage参数
             }
         }
     }
