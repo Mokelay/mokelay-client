@@ -2,7 +2,7 @@
     <div class="bb-layout-canvas">
         <div class="bg-canvas">
             <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-                <div v-on:click="setData(this, canvasItem.uuid)">
+                <div>
                     <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
                 </div>
                 <div @click="checkDrag(canvasItem.uuid)" class="operate operate-size"
@@ -34,10 +34,10 @@
         </div>
         <div class="menu" :style="{ left: menuRight + 'px' }">
             <div class="menu-box">
-                <div class="cexiao danyeeditor-undo">
+                <div @click="cancelCanvas" class="cexiao danyeeditor-undo">
                     <span>撤销</span>
                 </div>
-                <div class="chongzuo danyeeditor-redo">
+                <div @click="reformCanvas" class="chongzuo danyeeditor-redo">
                     <span>重做</span>
                 </div>
             </div>
@@ -55,16 +55,18 @@
             <div class="menu-psd">Ps</div>
         </div>
         <el-dialog
-            width="414px"
-            height="736px"
-            top="80px"
+            width="460px"
+            height="810px"
+            top="20px"
             :close-on-click-modal="false"
             :visible.sync="isShowDialog">
 
-            <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-                <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+            <div class="show-dialog">
+                <div class="canvas" v-for="(canvasItem,key) in canvasItems">
+                    <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+                </div>
             </div>
-
+            
         </el-dialog>
     </div>
 </template>
@@ -399,6 +401,7 @@
             return {
                 isShowDialog: false,
                 menuRight: 0,
+                operationItems: [],
                 canvasItems: []
             }
         },
@@ -416,32 +419,22 @@
                     this.canvasItems = [].concat(this.content);
                 }
             },
-            setData(e, uuid){
-                if (e) {
+            
+            setData(){
+                
+                if (this.canvasItems.length) {
                     this.canvasItems.forEach((con, key) => {
-                        if (con.uuid === uuid) {
-                            con.isShow = true;
-                            this.$emit('onFocus',con);
+                        if (key === (this.canvasItems.length - 1)) {
+                            this.content[this.content.length - 1].isShow = true;
+                            this.$emit('onFocus',con, key);
                         } else {
                             con.isShow = false;
                         }
                     });
-
-                    e.stop();
                 } else {
-                    if (this.canvasItems.length) {
-                        this.canvasItems.forEach((con, key) => {
-                            if (key === (this.canvasItems.length - 1)) {
-                                this.content[this.content.length - 1].isShow = true;
-                            } else {
-                                con.isShow = false;
-                            }
-                        });
-                    } else {
-                        this.content[this.content.length - 1].isShow = true;
-                    }
-                    
+                    this.content[this.content.length - 1].isShow = true;
                 }
+                    
                 this.checkDom();
             },
 
@@ -509,10 +502,13 @@
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === uuid) {
                         item.isShow = true;
+                        this.$emit('onFocus',item, key);
                     } else {
                         item.isShow = false;
                     }
                 });
+
+                
             },
             //删除积木
             remove(index){
@@ -533,6 +529,20 @@
                 });
 
             },
+            
+            cancelCanvas() {
+
+                if (this.canvasItems.length) {
+                    this.canvasItems.pop();
+                } else {
+                    this.canvasItems = this.operationItems;
+                }
+            },
+
+            reformCanvas() {
+                this.operationItems = this.canvasItems;
+                this.canvasItems = [];
+            },
 
             previewCanvas() {
                 this.isShowDialog = !this.isShowDialog
@@ -540,23 +550,45 @@
         },
         mounted() {
             const el = this;
-            const bgCanvas = document.getElementsByClassName('bg-canvas')[0];
-            let offLeft = bgCanvas.offsetLeft;
-            let menuWidth = bgCanvas.clientWidth;
+            const bgCanvas = document.getElementsByClassName('bg-canvas');
+
+            if (!bgCanvas || !bgCanvas.length) {
+                return;
+            }
+
+            let offLeft = bgCanvas[0].offsetLeft;
+            let menuWidth = bgCanvas[0].clientWidth;
 
             el.menuRight = offLeft + menuWidth + 20;
 
             window.onresize = function() {
-                offLeft = bgCanvas.offsetLeft;
-                menuWidth = bgCanvas.clientWidth;
+                offLeft = bgCanvas[0].offsetLeft;
+                menuWidth = bgCanvas[0].clientWidth;
                 el.menuRight = offLeft + menuWidth + 20;
             };
         }
     }
 </script>
 <style lang="less">
+
+    .el-main {
+        padding: 0 !important;
+    }
+
     .bb-layout-canvas .el-dialog {
-        height: 736px !important;
+        height: 810px !important;
+    }
+
+    .bb-layout-canvas .el-dialog .show-dialog {
+        height: 736px; 
+        width: 414px; 
+        border: 1px solid; 
+        margin: 0 auto; 
+        position: relative; 
+        left: 0; 
+        right: 0; 
+        top: 0; 
+        bottom: 0;
     }
 </style>
 <style lang="less">
