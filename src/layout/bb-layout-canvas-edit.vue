@@ -55,16 +55,18 @@
             <div class="menu-psd">Ps</div>
         </div>
         <el-dialog
-            width="414px"
-            height="736px"
+            width="460px"
+            height="810px"
             top="20px"
             :close-on-click-modal="false"
             :visible.sync="isShowDialog">
 
-            <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-                <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+            <div style="widht: 414px; height: 736px; border: 1px solid; margin: 0 auto; position: relative; left: 0; right: 0; top: 0; bottom: 0;">
+                <div class="canvas" v-for="(canvasItem,key) in canvasItems">
+                    <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+                </div>
             </div>
-
+            
         </el-dialog>
     </div>
 </template>
@@ -498,10 +500,13 @@
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === uuid) {
                         item.isShow = true;
+                        this.$emit('onFocus',item, key);
                     } else {
                         item.isShow = false;
                     }
                 });
+
+                
             },
             //删除积木
             remove(index){
@@ -550,7 +555,7 @@
     }
 
     .bb-layout-canvas .el-dialog {
-        height: 736px !important;
+        height: 810px !important;
     }
 </style>
 <style lang="less">
