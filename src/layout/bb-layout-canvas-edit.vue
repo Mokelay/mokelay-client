@@ -61,7 +61,7 @@
             :close-on-click-modal="false"
             :visible.sync="isShowDialog">
 
-            <div style="widht: 414px; height: 736px; border: 1px solid; margin: 0 auto; position: relative; left: 0; right: 0; top: 0; bottom: 0;">
+            <div class="show-dialog">
                 <div class="canvas" v-for="(canvasItem,key) in canvasItems">
                     <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
                 </div>
@@ -557,6 +557,10 @@
 
     .bb-layout-canvas .el-dialog {
         height: 810px !important;
+    }
+
+    .bb-layout-canvas .el-dialog .show-dialog {
+        height: 736px; width: 414px; border: 1px solid; margin: 0 auto; position: relative; left: 0; right: 0; top: 0; bottom: 0;
     }
 </style>
 <style lang="less">
