@@ -383,7 +383,7 @@
                     this.canvasItems.forEach((con, key) => {
                         if (con.uuid === uuid) {
                             con.isShow = true;
-                            this.$emit('onFocus',con);
+                            this.$emit('onFocus',con, key);
                         } else {
                             con.isShow = false;
                         }

@@ -395,10 +395,11 @@
           t.$emit('onFocus',contentItem);
       },
       //完成编辑的积木数据回填
-      afterEdit:function(content){
+      afterEdit:function(contentItem){
           const t = this;
-          //t.realContent[t.nowEdit] = content;
-          t.$set(t.content,t.nowEdit,content)
+          const newContent = _TY_Tool.deepClone(t.content);
+          t.$set(newContent,t.nowEdit,contentItem);
+          t.content = newContent;
           t.$emit('afterEdit',t.content);
           t.$emit('change',t.content);
       },

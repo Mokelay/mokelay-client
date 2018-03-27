@@ -215,7 +215,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             requestParam[input['paramName']] = paramValue;
         });
     }
-    var apiUrl = api;
+    //老数据的custom接口地址存在api中，TY2.0的custom接口存在url中
+    var apiUrl = ds['url'] || api;
     if (type == 'config') {
         //如果不是自定义接口
         apiUrl = window._TY_ContentPath + "/" + api;
