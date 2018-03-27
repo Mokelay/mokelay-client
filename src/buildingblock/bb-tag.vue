@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="tagStyle">
         <el-tooltip :disabled="!(tag.tipContent&&tag.tipContent.length>0)" v-for="(tag,key) in tags" placement="top">
           <span slot="content" v-html="tag.tipContent"></span>
           <el-tag :style="{marginRight:'5px'}"
@@ -64,6 +64,10 @@
             },
             color:{
               type:String,
+              default:null
+            },
+            tagStyle:{
+              type:Object,
               default:null
             }
         },
