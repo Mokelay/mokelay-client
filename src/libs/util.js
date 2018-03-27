@@ -795,7 +795,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
             eventOnceKey = eventOnceKey + containerMethodName;
-            fn = t[containerMethodName] || window._TY_Root;
+            fn = t[containerMethodName] || window._TY_Root[containerMethodName];
         }
         if (fn) {
             /**
