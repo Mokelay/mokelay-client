@@ -30,7 +30,42 @@
                     </div>
                 </div>
             </div>
+            
         </div>
+        <div class="menu" :style="{ left: menuRight + 'px' }">
+            <div class="menu-box">
+                <div class="cexiao danyeeditor-undo">
+                    <span>撤销</span>
+                </div>
+                <div class="chongzuo danyeeditor-redo">
+                    <span>重做</span>
+                </div>
+            </div>
+            <div class="menu-box">
+                <div @click="previewCanvas" class="play danyeeditor-eye">
+                    <span>预览</span>
+                </div>
+                <div class="wangge danyeeditor-wangge">
+                    <span>网格</span>
+                </div>
+                <div class="xifu danyeeditor-xifu active">
+                    <span>吸附</span>
+                </div>
+            </div>
+            <div class="menu-psd">Ps</div>
+        </div>
+        <el-dialog
+            width="414px"
+            height="736px"
+            top="80px"
+            :close-on-click-modal="false"
+            :visible.sync="isShowDialog">
+
+            <div class="canvas" v-for="(canvasItem,key) in canvasItems">
+                <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+            </div>
+
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -362,6 +397,8 @@
         },
         data() {
             return {
+                isShowDialog: false,
+                menuRight: 0,
                 canvasItems: []
             }
         },
@@ -384,7 +421,7 @@
                     this.canvasItems.forEach((con, key) => {
                         if (con.uuid === uuid) {
                             con.isShow = true;
-                            this.$emit('onFocus',con, key);
+                            this.$emit('onFocus',con);
                         } else {
                             con.isShow = false;
                         }
@@ -495,14 +532,42 @@
                     });
                 });
 
+            },
+
+            previewCanvas() {
+                this.isShowDialog = !this.isShowDialog
             }
+        },
+        mounted() {
+            const el = this;
+            const bgCanvas = document.getElementsByClassName('bg-canvas')[0];
+            let offLeft = bgCanvas.offsetLeft;
+            let menuWidth = bgCanvas.clientWidth;
+
+            el.menuRight = offLeft + menuWidth + 20;
+
+            window.onresize = function() {
+                offLeft = bgCanvas.offsetLeft;
+                menuWidth = bgCanvas.clientWidth;
+                el.menuRight = offLeft + menuWidth + 20;
+            };
         }
     }
 </script>
-<style lang="less" scoped>
+<style lang="less">
+    .bb-layout-canvas .el-dialog {
+        height: 736px !important;
+    }
+</style>
+<style lang="less">
 
     .bb-layout-canvas {
         background: #efefef;
+    }
+
+    .bb-layout-canvas .el-dialog__wrapper.el-dialog {
+        margin-left: -10px !important;
+        height: 100% !important;
     }
 
     .bg-canvas {
@@ -836,5 +901,92 @@
                 transition: opacity .2s;
             }
         }
+    }
+
+    .menu {
+        width: 40px;
+        position: fixed;
+        top: 200px;
+        z-index: 1000;
+    }
+    .menu .menu-psd {
+        background: #646a74;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 2px;
+        text-align: center;
+        line-height: 40px;
+        height: 37px;
+        font-size: 24px;
+        box-shadow: 2px 2px 8px rgba(170,170,170,0.89);
+    }
+    .menu .menu-psd:hover,
+    .menu .menu-psd.active {
+        color: #00c4cd;
+        background-color: #51555c;
+    }
+    .menu .menu-box {
+        border-radius: 2px;
+        margin-bottom: 16px;
+        box-shadow: 2px 2px 8px rgba(170,170,170,0.89);
+    }
+    .menu .menu-box .ico_stop {
+        position: relative;
+    }
+    .menu .menu-box .ico_stop:hover:before,
+    .menu .menu-box .ico_stop:hover:after {
+        background-color: #00c4cd;
+    }
+    .menu .menu-box .ico_stop:before,
+    .menu .menu-box .ico_stop:after {
+        content: '';
+        width: 2px;
+        height: 10px;
+        background-color: #fff;
+        position: absolute;
+        top: 10px;
+    }
+    .menu .menu-box .ico_stop:before {
+        left: 16px;
+    }
+    .menu .menu-box .ico_stop:after {
+        right: 16px;
+    }
+    .menu .menu-box .play:before {
+        font-size: 15px;
+    }
+    .menu .menu-box div {
+        position: relative;
+        width: 100%;
+        height: 41px;
+        line-height: 30px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 12px;
+        color: #fff;
+        background: #646a74;
+    }
+    .menu .menu-box div:first-child {
+        border-bottom: 1px solid #525861;
+        border-radius: 2px 2px 0 0;
+    }
+    .menu .menu-box div:last-child {
+        border-radius: 0 0 2px 2px;
+    }
+    .menu .menu-box div:hover,
+    .menu .menu-box div.active {
+        color: #00c4cd;
+        background-color: #51555c;
+    }
+    .menu .menu-box div span {
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+        -webkit-transform: scale(0.93);
+                transform: scale(0.93);
+        font-family: 'PingFangSC-Regular';
     }
 </style>
