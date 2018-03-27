@@ -211,7 +211,7 @@
                             outputs: [
                                 {dataKey: "fields", valueKey: "data_list"}
                             ]
-                        },textField:'name',valueField:"alias"
+                        },textField:'name',valueField:"methodName"
                     }
                 },{                      
                     uuid:'interactive-executeScript',
@@ -272,7 +272,7 @@
                                 outputs: [
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
-                            },textField:'name',valueField:"alias"}},
+                            },textField:'name',valueField:"methodName"}},
                             {prop: 'executeScript',label: '巴斯方法',et:'bb-select',etProps:{ds:{
                                 api: "list-buzz",
                                 method: "get",
