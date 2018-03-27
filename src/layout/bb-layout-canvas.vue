@@ -207,6 +207,7 @@
             }, bbList);
         },
         methods: {
+            
             clickHandler(e) {
                 window.stop();
             }

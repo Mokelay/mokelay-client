@@ -416,7 +416,8 @@
                     this.canvasItems = [].concat(this.content);
                 }
             },
-            setData(e, uuid){
+            
+            setData(){
                 
                 if (this.canvasItems.length) {
                     this.canvasItems.forEach((con, key) => {
