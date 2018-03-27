@@ -1,34 +1,32 @@
 <template>
     <div class="bb-layout-canvas">
-        <div>
-            <div class="bg-canvas">
-                <div class="canvas" v-for="(canvasItem,key) in canvasItems">
-                    <div v-on:click="setData(this, canvasItem.uuid)">
-                        <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+        <div class="bg-canvas">
+            <div class="canvas" v-for="(canvasItem,key) in canvasItems">
+                <div v-on:click="setData(this, canvasItem.uuid)">
+                    <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+                </div>
+                <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
+                <div v-show="canvasItem.isShow" class="operate operate-size"
+                    v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+
+                    <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
+                        <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
                     </div>
-                    <!--<div :data-uuid="canvasItem.uuid" class="operate operate-size"-->
-                    <div v-show="canvasItem.isShow" class="operate operate-size"
-                        v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
+                    <div class="remove" @click="remove(key)"><i class="ty-icon_lajitong"></i></div>
+                    <div class="border-line"></div>
+                    <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" @click="checkDrag(canvasItem.uuid)" id="drag"></div>
 
-                        <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
-                            <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
-                        </div>
-                        <div class="remove" @click="remove(key)"><i class="ty-icon_lajitong"></i></div>
-                        <div class="border-line"></div>
-                        <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" @click="checkDrag(canvasItem.uuid)" id="drag"></div>
+                    <!-- <div class="dot scale-nw dot-nw"></div> -->
+                    <div class="dot scale-n dot-n" id="dragTop" :data-uuid="canvasItem.uuid" v-dragTop="directionTop"></div>
 
-                        <!-- <div class="dot scale-nw dot-nw"></div> -->
-                        <div class="dot scale-n dot-n" id="dragTop" :data-uuid="canvasItem.uuid" v-dragTop="directionTop"></div>
+                    <!-- <div class="dot scale-ne dot-ne"></div> -->
+                    <div class="dot scale-e dot-e" id="dragRight" :data-uuid="canvasItem.uuid" v-dragRight="directionRight"></div>
 
-                        <!-- <div class="dot scale-ne dot-ne"></div> -->
-                        <div class="dot scale-e dot-e" id="dragRight" :data-uuid="canvasItem.uuid" v-dragRight="directionRight"></div>
+                    <!-- <div class="dot scale-se dot-se"></div> -->
+                    <div class="dot scale-s dot-s" id="dragBottom" :data-uuid="canvasItem.uuid" v-dragBottom="directionBottom"></div>
 
-                        <!-- <div class="dot scale-se dot-se"></div> -->
-                        <div class="dot scale-s dot-s" id="dragBottom" :data-uuid="canvasItem.uuid" v-dragBottom="directionBottom"></div>
-
-                        <!-- <div class="dot scale-sw dot-sw"></div> -->
-                        <div class="dot scale-w dot-w" id="dragLeft" :data-uuid="canvasItem.uuid" v-dragLeft="directionLeft"></div>
-                    </div>
+                    <!-- <div class="dot scale-sw dot-sw"></div> -->
+                    <div class="dot scale-w dot-w" id="dragLeft" :data-uuid="canvasItem.uuid" v-dragLeft="directionLeft"></div>
                 </div>
             </div>
         </div>
@@ -390,6 +388,8 @@
                             con.isShow = false;
                         }
                     });
+
+                    e.stop();
                 } else {
                     if (this.canvasItems.length) {
                         this.canvasItems.forEach((con, key) => {
