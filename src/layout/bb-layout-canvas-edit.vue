@@ -34,10 +34,10 @@
         </div>
         <div class="menu" :style="{ left: menuRight + 'px' }">
             <div class="menu-box">
-                <div class="cexiao danyeeditor-undo">
+                <div @click="cancelCanvas" class="cexiao danyeeditor-undo">
                     <span>撤销</span>
                 </div>
-                <div class="chongzuo danyeeditor-redo">
+                <div @click="reformCanvas" class="chongzuo danyeeditor-redo">
                     <span>重做</span>
                 </div>
             </div>
@@ -527,6 +527,19 @@
                     });
                 });
 
+            },
+            
+            cancelCanvas() {
+
+                if (!this.canvasItems.length) {
+                    return;
+                }
+
+                this.canvasItems.pop();
+            },
+
+            reformCanvas() {
+                this.canvasItems = [];
             },
 
             previewCanvas() {
