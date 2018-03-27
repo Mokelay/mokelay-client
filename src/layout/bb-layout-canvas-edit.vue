@@ -560,7 +560,15 @@
     }
 
     .bb-layout-canvas .el-dialog .show-dialog {
-        height: 736px; width: 414px; border: 1px solid; margin: 0 auto; position: relative; left: 0; right: 0; top: 0; bottom: 0;
+        height: 736px; 
+        width: 414px; 
+        border: 1px solid; 
+        margin: 0 auto; 
+        position: relative; 
+        left: 0; 
+        right: 0; 
+        top: 0; 
+        bottom: 0;
     }
 </style>
 <style lang="less">
