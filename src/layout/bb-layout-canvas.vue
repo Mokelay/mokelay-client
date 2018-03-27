@@ -200,17 +200,13 @@
             const el = this;
             const bbList = _TY_Tool.bbCanvasRender(this.content, createElement, this);
 
-            return createElement('div', {
-                on: {
-                    click: el.clickHandler
-                }
-            }, bbList);
+            return createElement('div', {}, bbList);
         },
         methods: {
-            
-            clickHandler(e) {
-                window.stop();
-            }
+
+            // clickHandler(e) {
+            //     window.stop();
+            // }
         }
     }
 </script>
