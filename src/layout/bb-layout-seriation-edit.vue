@@ -102,6 +102,7 @@
                     //水平排列垂直排列控制
                     t.realContent.forEach((bbEle,index)=>{
                         const bbItem = createElement('bb-seriation-item-edit', {
+                            ref:'bb-seriation-item-edit-' + index,
                             props:{
                                 content:bbEle,
                                 config:{
