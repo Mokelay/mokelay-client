@@ -425,6 +425,7 @@
                     this.canvasItems.forEach((con, key) => {
                         if (key === (this.canvasItems.length - 1)) {
                             this.content[this.content.length - 1].isShow = true;
+                            this.$emit('onFocus',con, key);
                         } else {
                             con.isShow = false;
                         }
