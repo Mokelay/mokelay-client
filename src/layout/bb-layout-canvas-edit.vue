@@ -550,15 +550,20 @@
         },
         mounted() {
             const el = this;
-            const bgCanvas = document.getElementsByClassName('bg-canvas')[0];
-            let offLeft = bgCanvas.offsetLeft;
-            let menuWidth = bgCanvas.clientWidth;
+            const bgCanvas = document.getElementsByClassName('bg-canvas');
+
+            if (!bgCanvas || !bgCanvas.length) {
+                return;
+            }
+
+            let offLeft = bgCanvas[0].offsetLeft;
+            let menuWidth = bgCanvas[0].clientWidth;
 
             el.menuRight = offLeft + menuWidth + 20;
 
             window.onresize = function() {
-                offLeft = bgCanvas.offsetLeft;
-                menuWidth = bgCanvas.clientWidth;
+                offLeft = bgCanvas[0].offsetLeft;
+                menuWidth = bgCanvas[0].clientWidth;
                 el.menuRight = offLeft + menuWidth + 20;
             };
         }
