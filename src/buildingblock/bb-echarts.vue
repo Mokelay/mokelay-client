@@ -67,21 +67,39 @@
         },
         created: function () {
             const t = this;
-            t.realRows = typeof t.rows == 'string' && t.rows.length?eval("("+t.rows+")"):t.rows,
-            t.realColumns = typeof t.columns == 'string' && t.columns.length?eval("("+t.columns+")"):t.columns,
-            t.realSettings = typeof t.settings == 'string' && t.settings.length?eval("("+t.settings+")"):t.settings,
+            t.realRows = typeof t.rows == 'string' && t.rows.length?eval("("+t.rows+")"):t.rows;
+            t.realColumns = typeof t.columns == 'string' && t.columns.length?eval("("+t.columns+")"):t.columns;
+            t.realSettings = typeof t.settings == 'string' && t.settings.length?eval("("+t.settings+")"):t.settings;
+            t.getRow();
             t.getData();
         },
         mounted: function () {
         },
         methods: {
+            //动态获取表头
+            getRow: function () {
+                const t = this;
+                if (t.columnsDs) {
+                    _TY_Tool.getDSData(t.columnsDs, _TY_Tool.buildTplParams(t), function (map) {
+                        map.forEach((val,key)=>{
+                           const dataKey = val.dataKey
+                            t.realColumns = val.value;
+                        })
+                        t.loadCahrts();
+                    }, function (code, msg) {
+                    });
+                }else{
+                    t.loadCahrts();
+                }
+            },
+            //动态获取数据
             getData: function () {
                 const t = this;
                 if (t.rowsDs) {
                     _TY_Tool.getDSData(t.rowsDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
                            const dataKey = val.dataKey
-                            t[dataKey] = val.value.list;
+                            t.realRows = val.value.list;
                         })
                         t.loadCahrts();
                     }, function (code, msg) {
