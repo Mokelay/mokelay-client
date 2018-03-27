@@ -235,6 +235,7 @@
             transition: opacity .5s;
             position: absolute;
             right: 5px;
+            z-index: 1;
             /*top: -10px;*/
         }
         .w20{
