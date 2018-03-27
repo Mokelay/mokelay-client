@@ -15,7 +15,7 @@
                         </div>
                         <div class="remove" @click="remove(key)"><i class="ty-icon_lajitong"></i></div>
                         <div class="border-line"></div>
-                        <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" id="drag"></div>
+                        <div class="border-line dashed" :data-uuid="canvasItem.uuid" v-drag="direction" @click="checkDrag(canvasItem.uuid)" id="drag"></div>
 
                         <!-- <div class="dot scale-nw dot-nw"></div> -->
                         <div class="dot scale-n dot-n" id="dragTop" :data-uuid="canvasItem.uuid" v-dragTop="directionTop"></div>
@@ -376,7 +376,7 @@
         },
         methods: {
             checkDom: function () {
-                if (this.content.length) {
+                if (this.content.length && this.content.length && this.content[this.content.length - 1].layout) {
                     this.canvasItems = [].concat(this.content);
                 }
             },
@@ -391,9 +391,18 @@
                         }
                     });
                 } else {
-                    if(this.canvasItems.length){
-                        this.content[0].isShow = true;
+                    if (this.canvasItems.length) {
+                        this.canvasItems.forEach((con, key) => {
+                            if (key === (this.canvasItems.length - 1)) {
+                                this.content[this.content.length - 1].isShow = true;
+                            } else {
+                                con.isShow = false;
+                            }
+                        });
+                    } else {
+                        this.content[this.content.length - 1].isShow = true;
                     }
+                    
                 }
                 this.checkDom();
             },
@@ -450,7 +459,20 @@
 
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === val.uuid) {
+                        item.isShow = true;
                         item.layout.position = {x: val.x, y: val.y};
+                    } else {
+                        item.isShow = false;
+                    }
+                });
+            },
+            checkDrag(uuid){
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === uuid) {
+                        item.isShow = true;
+                    } else {
+                        item.isShow = false;
                     }
                 });
             },
