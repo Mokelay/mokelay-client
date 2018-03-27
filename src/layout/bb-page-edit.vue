@@ -179,7 +179,7 @@
           }
 
           //存储当前页面ds信息
-          t.ds = page.ds;
+          t.ds = JSON.parse(page.ds) || [];
 
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
