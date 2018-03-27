@@ -1,6 +1,6 @@
 <template>
-    <div :class="'bb-portal-item-list ' + p_styleConfig.transitionType" :style="{'max-width':p_styleConfig.width}">
-        <div class="grid-item" v-for="(field,key) in realFields" :style="{'margin': (p_styleConfig.h_margin||'20px')+' '+ p_styleConfig.margin}">
+    <div :class="p_styleConfig.mainClass +' ' + p_styleConfig.transitionType" :style="{'max-width':p_styleConfig.width}">
+        <div class="grid-item" v-for="(field,key) in realFields" :title="field.title" :style="{'margin': (p_styleConfig.h_margin||'20px')+' '+ p_styleConfig.margin}">
             <bb-button :button="field.actionConfig" @button-finish='buttonFinish' @click='btnClick(field)' :style="{width:p_styleConfig.imgWidth}">
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
@@ -68,6 +68,7 @@
                     width:'500px',  整体宽度
                     margin:'50px' 入口按钮的间距
                     h_margin:'20px' 上下间距
+                    mainClass:'bb-portal-item-list'
                 }
             */
             styleConfig:{
@@ -80,7 +81,8 @@
                         fontColor:'#666666',
                         fontSize:'14px',
                         width:'500px',
-                        margin:'50px'
+                        margin:'50px',
+                        mainClass:'bb-portal-item-list'
                     }
                 }
             }
@@ -102,7 +104,8 @@
                         fontColor:'#666666',
                         fontSize:'14px',
                         width:'500px',
-                        margin:'50px'
+                        margin:'50px',
+                        mainClass:'bb-portal-item-list'
                     },this.styleConfig);
             }
         },
@@ -158,7 +161,7 @@
     .bb-portal-item-list{
         box-sizing: border-box;
         position: relative;
-        margin: auto;
+        margin: 0 auto !important;
         padding: 27px 0 90px;
         display: flex;
         flex-wrap: wrap;
@@ -170,6 +173,23 @@
             }
         }
     }
+    .bb-portal-item-list-inner{
+        box-sizing: border-box;
+        position: relative;
+        margin: 0 auto !important;
+        padding: 0;
+        display: flex;
+        overflow: hidden; 
+        flex-wrap: wrap;
+        max-height: 87vh;
+        overflow-y: auto;
+        .grid-item{
+            .item-container{
+                box-sizing: border-box;
+            }
+        }
+    }
+
     .portal-move-up .grid-item .item-container>i.el-icon-check{
         position: absolute;
         font-size: 15px;
