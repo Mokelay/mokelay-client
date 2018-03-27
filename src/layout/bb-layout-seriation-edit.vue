@@ -104,7 +104,10 @@
                         const bbItem = createElement('bb-seriation-item-edit', {
                             props:{
                                 content:bbEle,
-                                config:{horizontal:t.horizontal,pointer:false,buttons:['up','down','remove']}
+                                config:{
+                                    horizontal:t.horizontal,
+                                    pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
+                                    buttons:['up','down','remove']}
                             },
                             style:{flex:1},
                             on:{
@@ -180,6 +183,8 @@
                 t.preItem = params[1];
                 //记录当前编辑的积木下标
                 t.nowEdit = params[0];
+                //将当前编辑的对象放到全局变量中
+                _TY_Root._TY_Current_Edit_Item = t.realContent[params[0]];
                 t.$emit('onFocus',t.realContent[params[0]]);
             },
             /*积木新增方法 对外

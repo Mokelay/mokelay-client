@@ -30,7 +30,7 @@
             //生成虚线框的编辑区域
             const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{click:t.onFocus}},[buttonElements,contentElements]);
             //生成箭头
-            const pointer = t.config.pointer?createElement('i',{props:{},attrs:{class:t.realStyle.pointer.class},on:{}},[contentElements,buttonElements]):[];
+            const pointer = t.config.pointer?createElement('i',{props:{},attrs:{class:t.realStyle.pointer.class},on:{}},[]):[];
 
             return createElement('div',{attrs:{class:'bb-seriation-item-edit'}},[editorArea,pointer]); 
         },

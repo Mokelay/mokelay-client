@@ -617,7 +617,6 @@
             },
             //编辑状态，更新数据
             cellChange:function(column,val){
-                debugger
                 const t = this;
                 if(t.scope){
                     //修改
