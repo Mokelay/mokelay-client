@@ -10,6 +10,7 @@
         @change="handleChange"
         :props="p_casProps"
         v-model="selectedOptions"
+        ref='cas'
       ></el-cascader>
     </div>
 </template>
@@ -130,7 +131,8 @@
                 optionData:(typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]),
                 selectedOptions:[],
                 itemVal:'',//当前点击的记录    用于接口配置
-                external:{}//外部参数
+                external:{},//外部参数
+                p_placeholder:this.placeholder
             }
         },
         computed:{
@@ -144,7 +146,7 @@
         },
         watch:{
           staticOptions(val){
-            this.optionData = typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]
+            this.optionData = typeof(val)==='string'?JSON.parse(val):val||[]
           }
         },
         created: function () {
@@ -157,16 +159,29 @@
         mounted:function(){
         },
         methods: {
-            linkage(...data){
+            loadValue:function(){
+              let t=this;
+              //填充级联选择器的问题 TODO
+              if(t.valueTpl){
+                // let resultVal=_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,{_init:true}));//不需要传其他的参数
+                //向上提供change事件
+                // t.$emit('input',resultVal);
+                // let current = t.$refs['cas'];
+                // current.$emit('input',resultVal);
+                // t.p_placeholder = resultVal;
+              }
+            },
+            linkage:function(...data){
               let t=this;
               if(data){
                 this.external['linkage'] = data;
                 //刷新选项
                 t.getNextData(1);
+                t.loadValue();
               }
             },
             //单级选项改变后触发, 远程获取下级数据
-            handleItemChange(value){
+            handleItemChange:function(value){
               // console.log('active item:', value);
               let t=this;
               const index = value.length+1;
@@ -178,7 +193,7 @@
               }
             },
             //选项改变后触发事件
-            handleChange(value){
+            handleChange:function(value){
               // console.log('active:', value);
               let t=this;
               const index = value.length+1;
@@ -195,18 +210,34 @@
                 t.$emit('input',resultVal,t);
               }else{
                 const lastVal = value[value.length-1];
-                for(let k=0;k<t.optionData.length;k++){
-                  let item = t.optionData[k];
-                  if(lastVal == item.value){
-                    t.$emit('change',item);
-                    t.$emit('input',item);
-                    break;
+                //t._tempItem 临时item
+                t._tempItem='';
+                t._findItem(lastVal,t.optionData);
+                t.$emit('change',t._tempItem,t);
+                t.$emit('input',t._tempItem,t);
+              }
+            },
+            _findItem:function(val,list){
+              let t=this;
+              if(t._tempItem){
+                return;
+              }
+              for(let i=0;i<list.length;i++){
+                let item = list[i];
+                if(val==item.value){
+                  t._tempItem = item;
+                  return;
+                }else if(item.children&&item.children.length>0){
+                  let result = _findItem(val,item.children);
+                  if(result){
+                    t._tempItem = item;
+                    return;
                   }
                 }
               }
             },
             //判断是否选中叶子节点
-            _isLeaf(value){
+            _isLeaf:function(value){
               let t=this;
               if(value&&value.length>0){
                 const lastVal = value[value.length-1];//最后一个选择项的val值
@@ -232,7 +263,7 @@
               return false;
             },
             //获取下一级数据，动态获取下一级数据时有效
-            getNextData(index,lastSelectedVal,selectedValArray){
+            getNextData:function(index,lastSelectedVal,selectedValArray){
                let t=this;
                t.itemVal = lastSelectedVal;
                if(t.dsList&&t.dsList.length>0){
@@ -252,7 +283,7 @@
                }
             },
             //获取下一级数据 lastSelectedVal 为当前级选项值   selectedValArray 选择的全部选项 array
-            _excuteNextOpt(item,lastSelectedVal,selectedValArray){
+            _excuteNextOpt:function(item,lastSelectedVal,selectedValArray){
               let t=this;
               const type = item.type;
               if(type=='ds'){
@@ -279,7 +310,7 @@
               }
             },
             //填充到下一级数组
-            __fillNextOptions(item,list,selectedValArray){
+            __fillNextOptions:function(item,list,selectedValArray){
               let t=this;
               //需要改动的options下标值
               const index = item.index-1;
