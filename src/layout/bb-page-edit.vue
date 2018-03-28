@@ -53,7 +53,7 @@
       switch(this.layoutType){
         case 'seriation':
         //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation-edit', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
+            var element = createElement('bb-layout-seriation-edit', {key:this.key,ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
               onFocus:this.onFocus,
               change:this.change
             }});
@@ -68,7 +68,7 @@
             content:this.content,
             layoutObject:this.layoutObject
           }
-          var element = createElement('bb-layout-container-edit', {ref:uuid,props:props,on:{
+          var element = createElement('bb-layout-container-edit', {key:this.key,ref:uuid,props:props,on:{
               onFocus:this.onFocus,
               change:this.change
             }});
@@ -84,7 +84,7 @@
             content:this.content,
             layoutObject:this.layoutObject
           }
-          var element = createElement('bb-layout-canvas-edit', {ref:uuid,props:props,on:{
+          var element = createElement('bb-layout-canvas-edit', {key:this.key,ref:uuid,props:props,on:{
               onFocus:this.onFocus,
               change:this.change
             }});
@@ -136,6 +136,7 @@
     watch:{
       content:{
         handler:(val,oldVal)=>{
+
         },
         deep:true
       }
@@ -151,6 +152,9 @@
     },
     mounted:function(){
       this.$emit('mounted',this);
+    },
+    destroyed:function(){
+
     },
     methods: {
       refresh:function(){
@@ -397,6 +401,7 @@
       //完成编辑的积木数据回填
       afterEdit:function(contentItem){
           const t = this;
+          t.key = _TY_Tool.uuid();
           const newContent = _TY_Tool.deepClone(t.content);
           t.$set(newContent,t.nowEdit,contentItem);
           t.content = newContent;
