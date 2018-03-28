@@ -62,7 +62,8 @@
                 realRows:null,
                 realColumns:null,
                 realSettings:null,
-                canRender:false
+                canRender:false,
+                external:{}
             }
         },
         created: function () {
@@ -116,7 +117,13 @@
                     Vue.use(veChart)
                     t.canRender = true;
                 },'v-charts')
-              
+            },
+            //外部联动
+            linkage:function(data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.getData();
+                }
             }
         },
     }
