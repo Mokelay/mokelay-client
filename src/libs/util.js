@@ -495,17 +495,26 @@ util.loadChildBB = function(t) {
     if (t && t.$refs) {
         //不是空对象
         for (let i in t.$refs) {
-            if (!t.$refs[i] || !t.$refs[i]._isVue) {
+
+            let isArray = false;
+            if (!t.$refs[i] && t.$refs[i] instanceof Array) {
+                isArray = true;
+            }
+            if (!t.$refs[i] || (!t.$refs[i]._isVue && !isArray) || (isArray && !t.$refs[i][0]._isVue)) {
                 //为undefined 或者 不是vue对象 
                 continue;
+            }
+            let _ref = t.$refs[i];
+            if (isArray) {
+                _ref = t.$refs[i][0];
             }
             let item = {
                 uuid: i
             };
-            item.name = t.$refs[i].$attrs.aliasName || t.$refs[i].$vnode.componentOptions.tag; //设置组件名称
-            item.bbAlias = t.$refs[i].$vnode.componentOptions.tag; //设置积木别名
+            item.name = _ref.$attrs.aliasName || _ref.$vnode.componentOptions.tag; //设置组件名称
+            item.bbAlias = _ref.$vnode.componentOptions.tag; //设置积木别名
             let isNull = true;
-            for (let j in t.$refs[i].$refs) {
+            for (let j in _ref.$refs) {
                 isNull = false;
                 break;
             }
