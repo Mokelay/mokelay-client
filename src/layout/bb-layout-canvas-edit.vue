@@ -409,31 +409,24 @@
             this.setData();
         },
         methods: {
-            checkDom: function () {
-                if (this.content.length && this.content.length && this.content[this.content.length - 1].layout) {
-                    this.canvasItems = [].concat(this.content);
-                }
-            },
+
             setData(){
-                if (this.canvasItems.length) {
-                    this.canvasItems.forEach((con, key) => {
-                        if (key === (this.canvasItems.length - 1)) {
-                            this.content[this.content.length - 1].isShow = true;
-                            this.$emit('onFocus',con, key);
-                        } else {
-                            con.isShow = false;
-                        }
-                    });
-                } else {
-                    this.content[this.content.length - 1].isShow = true;
-                    const timeOut = setTimeout(()=>{
-                        this.$emit('onFocus',this.content[this.content.length - 1], this.content.length - 1);
-                    },500);
-                    clearTimeout(timeOut);
-                    
+
+                if (!this.content.length) {
+                    return;
                 }
-                    
-                this.checkDom();
+
+                const el = this;
+                this.content.forEach((con, key) => {
+                    if (key === (el.content.length - 1)) {
+                        el.content[el.content.length - 1].isShow = true;
+                        el.$emit('onFocus',con, key);
+                    } else {
+                        con.isShow = false;
+                    }
+                });
+
+                this.canvasItems = this.content;
             },
 
             directionRotate(val){
@@ -496,6 +489,7 @@
                 });
             },
             checkDrag(uuid){
+                const el = this;
 
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === uuid) {
@@ -504,9 +498,9 @@
                     } else {
                         item.isShow = false;
                     }
+                    el.canvasItems.splice(key, 1, item);
                 });
 
-                
             },
             //删除积木
             remove(index){
