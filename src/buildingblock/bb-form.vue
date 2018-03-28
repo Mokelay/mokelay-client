@@ -357,6 +357,18 @@
             setTimeout(()=>{t.$emit('bb-mounted',null,{bb:t})},0);
         },
         methods: {
+            //显示和隐藏的uuid数组
+            hideAndShowFormItem:function(showArray,hideArray){
+                let t=this;
+                if(showArray instanceof Array && hideArray instanceof Array){
+                    showArray.forEach(function(uuid){
+                        t.$refs[uuid].itemShow();
+                    });
+                    hideArray.forEach(function(uuid){
+                        t.$refs[uuid].itemHide();
+                    });
+                }
+            },
             clean: function () {
                 this.formData = {};
                 // this.$refs['form'].resetFields();

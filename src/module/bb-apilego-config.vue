@@ -270,6 +270,73 @@
                         return "内存字段"
                 }
             },
+            //ioft 在参数二中时 隐藏，其他情况显示
+            _show:function(ioft,array){
+                const t=this;
+                if(array && array instanceof Array && array.indexOf(ioft)>=0){
+                    return false;
+                }
+                return true;
+            },
+            changeFVT:function(...data){
+                let t=this;
+                if(data.length<4){
+                    return;
+                }
+                const fvt = data[0];//fvt
+                let bbForm = data[2].$parent.$parent;
+                let preUUID = "form-item_"+data[3].uuid.replace("fvt","");
+                switch(fvt){
+                    case 'constant':
+                        bbForm.hideAndShowFormItem([preUUID+'constant'],
+                            [
+                                preUUID+'requestParamName',
+                                preUUID+'sessionParamName',
+                                preUUID+'fromApiLegoId',
+                                preUUID+'fromApiLegoOutputFieldAlias',
+                                preUUID+'fieldTpl'
+                            ]);
+                        break;
+                    case 'request':
+                        bbForm.hideAndShowFormItem([preUUID+'requestParamName'],
+                            [
+                                preUUID+'constant',
+                                preUUID+'sessionParamName',
+                                preUUID+'fromApiLegoId',
+                                preUUID+'fromApiLegoOutputFieldAlias',
+                                preUUID+'fieldTpl'
+                            ]);
+                        break;
+                    case 'session':
+                        bbForm.hideAndShowFormItem([preUUID+'sessionParamName'],
+                            [
+                                preUUID+'constant',
+                                preUUID+'requestParamName',
+                                preUUID+'fromApiLegoId',
+                                preUUID+'fromApiLegoOutputFieldAlias',
+                                preUUID+'fieldTpl'
+                            ]);
+                        break;
+                    case 'output':
+                        bbForm.hideAndShowFormItem([preUUID+'fromApiLegoId',preUUID+'fromApiLegoOutputFieldAlias'],
+                            [
+                                preUUID+'constant',
+                                preUUID+'requestParamName',
+                                preUUID+'sessionParamName',
+                                preUUID+'fieldTpl'
+                            ]);
+                        break;
+                    case 'template':
+                        bbForm.hideAndShowFormItem([preUUID+'fromApiLegoId',preUUID+'fieldTpl'],
+                            [
+                                preUUID+'constant',
+                                preUUID+'requestParamName',
+                                preUUID+'sessionParamName',
+                                preUUID+'fromApiLegoOutputFieldAlias'
+                            ]);
+                        break;
+                }
+            },
             //构建输入的 colopseData
             buildIfCollopaseData: function () {
                 let t = this;
@@ -342,7 +409,7 @@
                                         "executeContentMethodName": "openDialog",
                                         "executeArgument": [
                                             {
-                                                "uuid": "",
+                                                "uuid": t.external.linkage[0].data.id + "-if-form-"+_ioft,
                                                 "alias": "bb-form",
                                                 "aliasName": "编辑属性",
                                                 "attributes": {
@@ -518,6 +585,7 @@
                                                             "attributes": {
                                                                 "attributeName": "ct",
                                                                 "rules": [],
+                                                                "show":t._show(_ioft,["read","create","update"]),
                                                                 "fields": [
                                                                     {
                                                                         "text": "大于",
@@ -600,6 +668,7 @@
                                                             "attributes": {
                                                                 "attributeName": "dt",
                                                                 "rules": [],
+                                                                "show":t._show(_ioft,["read","create","update","condition","cache"]),
                                                                 "fields": [
                                                                     {
                                                                         "text": "整数",
@@ -664,6 +733,7 @@
                                                             "attributes": {
                                                                 "attributeName": "fvt",
                                                                 "rules": [],
+                                                                "show":t._show(_ioft,["read"]),
                                                                 "fields": [
                                                                     {
                                                                         "text": "无",
@@ -692,7 +762,14 @@
                                                                 ]
                                                             },
                                                             "animation": [],
-                                                            "interactives": []
+                                                            "interactives": [{
+                                                                "uuid": "",
+                                                                "fromContentUUID": t.external.linkage[0].data.id + "-if-" + _ioft + '-fvt',
+                                                                "executeType": "trigger_method",
+                                                                "fromContentEvent": "change",
+                                                                "executeContentUUID": "r-00001-config",
+                                                                "executeContentMethodName": "changeFVT"
+                                                            }]
                                                         },
                                                         {
                                                             "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-requestParamName',
@@ -701,7 +778,8 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "requestParamName",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                 "show":t._show(_ioft,["read"]),
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -713,7 +791,8 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "sessionParamName",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                 "show":t._show(_ioft,["read"]),
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -726,7 +805,8 @@
                                                             "attributes": {
                                                                 "attributeName": "fromApiLegoId",
                                                                 "rules": [],
-                                                                "fields":t.apiLegos
+                                                                "fields":t.apiLegos,
+                                                                 "show":t._show(_ioft,["read"]),
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -738,7 +818,8 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "fromApiLegoOutputFieldAlias",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                 "show":t._show(_ioft,["read"]),
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -750,7 +831,8 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "constant",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                 "show":t._show(_ioft,["read"]),
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -762,7 +844,8 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "fieldTpl",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                 "show":t._show(_ioft,["read"]),
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -1215,7 +1298,14 @@
                                                             ]
                                                         },
                                                         "animation": [],
-                                                        "interactives": []
+                                                        "interactives": [{
+                                                            "uuid": "",
+                                                                "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-fvt',
+                                                                "executeType": "trigger_method",
+                                                                "fromContentEvent": "change",
+                                                                "executeContentUUID": "r-00001-config",
+                                                                "executeContentMethodName": "changeFVT"
+                                                        }]
                                                     },
                                                     {
                                                         "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "requestParamName",

@@ -285,6 +285,8 @@
         }).$mount();
         //将弹窗实例化对象挂载到当前bb-page下
         document.getElementById(t.pageAlias + '_dialog').appendChild(_dialog.$el);
+        //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
+        t.$refs[_TY_Tool.uuid()] = _dialog; //把bb-form 设置到$refs中
       },
       /*交互ds解析
         ds:{

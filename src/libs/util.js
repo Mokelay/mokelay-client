@@ -484,6 +484,16 @@ util.findBBByUuid = function(uuid, fromRoot) {
     } else if (root.$children && root.$children.length > 0) {
         resultVue = _findChildBB(uuid, root.$children);
     }
+    if (!resultVue && root.$refs) {
+        let child = [];
+        //构造_findChildBB方法第二个参数
+        for (let k in root.$refs) {
+            if (root.$refs[k]) {
+                child.push(root.$refs[k]);
+            }
+        }
+        resultVue = _findChildBB(uuid, child);
+    }
     return resultVue;
 }
 
