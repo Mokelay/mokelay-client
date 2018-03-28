@@ -9,7 +9,7 @@ import Util from '../libs/util';
         name: 'bb-button-array',
         props: {
             value:{
-                type:[Array]
+                type:[Array,String]
             },
             fields:{
                 type:[String,Array]

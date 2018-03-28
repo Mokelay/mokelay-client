@@ -9,7 +9,7 @@
         name: 'bb-columns-select',
         props: {
             value:{
-                type:[Array]
+                type:[Array,String]
             }
         },
 
