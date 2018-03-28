@@ -159,8 +159,11 @@
         mounted:function(){
         },
         methods: {
-            loadValue:function(){
+            loadValue:function(val){
               let t=this;
+              if(val&&val instanceof Array){
+                t.selectedOptions = val;
+              }
               //填充级联选择器的问题 TODO
               if(t.valueTpl){
                 // let resultVal=_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,{_init:true}));//不需要传其他的参数
@@ -177,7 +180,6 @@
                 this.external['linkage'] = data;
                 //刷新选项
                 t.getNextData(1);
-                t.loadValue();
               }
             },
             //单级选项改变后触发, 远程获取下级数据

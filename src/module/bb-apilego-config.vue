@@ -114,6 +114,7 @@
                 setTimeout(function(){
                     //刷新第一列接口
                     t.$refs['oi'].getNextData(1);
+                    t.$refs['oi'].loadValue([t.external.linkage[0].data.dsAlias,t.external.linkage[0].data.oiAlias]);
                     //刷新描述
                     t.apiLegoDes = t.external.linkage[0].data.description || "";
                 },10);
