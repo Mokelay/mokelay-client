@@ -408,20 +408,13 @@
         created: function () {
             this.setData();
         },
-        watch:{
-            content(val){
-                this.setData();
-            }
-        },
         methods: {
             checkDom: function () {
                 if (this.content.length && this.content.length && this.content[this.content.length - 1].layout) {
                     this.canvasItems = [].concat(this.content);
                 }
             },
-            
             setData(){
-                
                 if (this.canvasItems.length) {
                     this.canvasItems.forEach((con, key) => {
                         if (key === (this.canvasItems.length - 1)) {
@@ -433,6 +426,11 @@
                     });
                 } else {
                     this.content[this.content.length - 1].isShow = true;
+                    const timeOut = setTimeout(()=>{
+                        this.$emit('onFocus',this.content[this.content.length - 1], this.content.length - 1);
+                    },500);
+                    clearTimeout(timeOut);
+                    
                 }
                     
                 this.checkDom();
@@ -942,7 +940,7 @@
         width: 40px;
         position: fixed;
         top: 200px;
-        z-index: 1000;
+        z-index: 1;
     }
     .menu .menu-psd {
         background: #646a74;

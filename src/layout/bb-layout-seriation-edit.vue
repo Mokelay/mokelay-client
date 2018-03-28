@@ -94,6 +94,12 @@
                 this.realContent = val;
             }
         },
+        created:function(){
+            const tiemOut = setTimeout(()=>{
+                this.realContent[this.realContent.length - 1].attributes.onFocus = true;
+            },500);
+            clearTimeout(tiemOut);
+        },
         methods: {
             renderBB:function(createElement){
                 const t = this;
@@ -108,7 +114,8 @@
                                 config:{
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
-                                    buttons:['up','down','remove']}
+                                    buttons:['up','down','remove']},
+                                    onFocus:bbEle.attributes.onFocus
                             },
                             style:{flex:1},
                             on:{
@@ -199,7 +206,7 @@
                 t.nowEdit = params[0];
                 //将当前编辑的对象放到全局变量中
                 _TY_Root._TY_Current_Edit_Item = t.realContent[params[0]];
-                t.$emit('onFocus',t.realContent[params[0]]);
+                t.$emit('onFocus',t.realContent[params[0]],t.nowEdit);
             },
             /*积木新增方法 对外
                 @bbAlias:积木别名
