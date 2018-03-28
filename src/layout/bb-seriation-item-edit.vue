@@ -48,7 +48,8 @@
                     return {
                         horizontal:false, //水平排列
                         pointer:false,
-                        buttons:['up','down','remove']
+                        buttons:['up','down','remove'],
+                        onFocus:false
                     }
                 }
             },
@@ -159,6 +160,9 @@
         created: function () {
             const  t = this;
             t.realStyle = t.config.horizontal?t.horizontal:t.vertical;
+            if(t.onFocus){
+                t.onFocus();
+            }
         },
         mounted:function(){
         },
@@ -219,11 +223,11 @@
             border-color: #cccccc;
             display: inline-block;
             float: left;
-            transition: border-color .5s;
+            transition: border-color .1s;
         }
         .borderSelected{
             border-color: #0091ea;
-            transition: border-color .5s;
+            transition: border-color .1s;
         }
         .legoborder{
             
@@ -232,7 +236,7 @@
             display: inline-block;
             text-align: right;
             opacity:0;
-            transition: opacity .5s;
+            transition: opacity .1s;
             position: absolute;
             right: 5px;
             z-index: 1;
