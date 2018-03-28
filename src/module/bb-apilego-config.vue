@@ -174,6 +174,18 @@
                 let t = this;
                 if (data) {
                     this.external['linkage'] = data;
+                    //计算当前api 的apilego列表
+                    if(data[2]&&data[2].realContent&&data[2].realContent.length>0){
+                        let resultApiLego=[];
+                        data[2].realContent.forEach(function(item,index){
+                            resultApiLego.push({
+                                "text":(index+1)+"."+item.data.legoName,
+                                "value":item.data.id
+                            });
+                        });
+                        t.apiLegos = resultApiLego;
+                    }
+
                     t._refreshBase();
                     t._refreshIf();
                     t._refreshOf();
@@ -707,12 +719,13 @@
                                                         },
                                                         {
                                                             "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-fromApiLegoId',
-                                                            "alias": "bb-input",
+                                                            "alias": "bb-select",
                                                             "aliasName": "数据来源ID",
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "fromApiLegoId",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                "fields":t.apiLegos
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -865,6 +878,9 @@
                                             "alias": "bb-form",
                                             "aliasName": "编辑属性",
                                             "attributes": {
+                                                "value":{
+                                                    "ct":"eq"
+                                                },
                                                 "settingButtonText": "确定",
                                                 "buttonConfig": {
                                                     "action": "execute-ds",
@@ -1226,12 +1242,13 @@
                                                     },
                                                     {
                                                         "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoId",
-                                                        "alias": "bb-input",
+                                                        "alias": "bb-select",
                                                         "aliasName": "数据来源ID",
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fromApiLegoId",
-                                                            "rules": []
+                                                            "rules": [],
+                                                            "fields":t.apiLegos
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -1729,12 +1746,15 @@
                                             "alias": "bb-form",
                                             "aliasName": "编辑属性",
                                             "attributes": {
+                                                "value":{
+                                                    "response":false
+                                                },
                                                 "settingButtonText": "确定",
                                                 "buttonConfig": {
                                                     "action": "execute-ds",
                                                     "callback": "refresh",
                                                     "ds": {
-                                                        "api": "add-outputField",
+                                                        "api": "add-outputfield",
                                                         "category": "config",
                                                         "method": "post",
                                                         "inputs": [

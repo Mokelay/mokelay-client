@@ -106,7 +106,7 @@
                 <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-aside width="20%" :style="{background:realBgColor.rightAside}">
+                <el-aside width="30%" :style="{background:realBgColor.rightAside}">
                     <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
@@ -123,7 +123,7 @@
                 <el-main :style="{background:realBgColor.main}">
                     <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-aside width="20%" :style="{background:realBgColor.rightAside}">
+                <el-aside width="30%" :style="{background:realBgColor.rightAside}">
                     <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>

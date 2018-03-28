@@ -206,7 +206,7 @@
                 t.nowEdit = params[0];
                 //将当前编辑的对象放到全局变量中
                 _TY_Root._TY_Current_Edit_Item = t.realContent[params[0]];
-                t.$emit('onFocus',t.realContent[params[0]],t.nowEdit);
+                t.$emit('onFocus',t.realContent[params[0]],t.nowEdit,t);
             },
             /*积木新增方法 对外
                 @bbAlias:积木别名
