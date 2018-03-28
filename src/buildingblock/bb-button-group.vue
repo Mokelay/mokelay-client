@@ -80,6 +80,7 @@
             },
             buttonDs(val){
                 this.realButtonDs = val;
+                this.loadData();
             }
         },
         created: function () {
@@ -110,7 +111,20 @@
             },
             //图标点击
             iconClick:function(button,index){
-                this.$emit('iconClick',button,index);
+                let t=this;
+                 t.$confirm('确认操作?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    t.$emit('iconClick',button,index);
+                    t.realButtons.splice(index,1);
+                }).catch(() => {
+                    t.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             //移除按钮
             remove:function(button,index){

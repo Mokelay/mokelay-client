@@ -85,6 +85,9 @@ import bbbbselect from './module/bb-bb-select.vue';
 import bbfieldselect from './module/bb-field-select.vue';
 import bbconfig from './module/bb-config.vue';
 import bbapiinfo from './module/bb-api-info.vue';
+import bbapilegoconfig from './module/bb-apilego-config.vue';
+
+
 
 //布局相关
 import bbpage from './layout/bb-page';
@@ -202,6 +205,7 @@ let ty = {
 		Vue.component('bb-layout-seriation-edit', bblayoutseriationedit);
 		Vue.component('bb-page-edit', bbpageedit);
 		Vue.component('bb-api-info', bbapiinfo);
+		Vue.component('bb-apilego-config', bbapilegoconfig);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);

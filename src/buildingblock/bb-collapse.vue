@@ -104,6 +104,9 @@
             }
         },
         watch: {
+            collapseData(val){
+                this.totalData = val?(typeof(val)==='String'?JSON.parse(val):val):[]
+            }
         },
         computed:{
             p_activeNames(){

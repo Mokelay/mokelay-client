@@ -70,7 +70,7 @@
             //没有group分组的项
             const normalItems = [];
             bbContent.forEach((field,key)=>{
-                var ref = 'form-item_' + field['uuid']
+                var ref = 'form-item_' + (field['uuid']?field['uuid']:_TY_Tool.uuid());
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
                 var formItem = createElement('bb-form-item',{
                     key: ref,
