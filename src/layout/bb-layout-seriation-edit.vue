@@ -150,7 +150,7 @@
                 t.realContent.splice(index,1);
                 t.realContent.splice(index-1,0,item);
                 if(index==t.realContent.length-1&&
-                    t.realContent[index].attributes.hasOwnProperty('pointer')){
+                    t.realContent[index].attributes.hasOwnProperty('pointer')&&t.realContent[index].attributes.pointer){
                     t.realContent[index-1].attributes.pointer=true;
                     t.realContent[index].attributes.pointer=false;
                 }
@@ -168,7 +168,7 @@
                 t.realContent.splice(index,1);
                 t.realContent.splice(index+1,0,item);
                 if(index==t.realContent.length-2&&
-                    t.realContent[index].attributes.hasOwnProperty('pointer')){
+                    t.realContent[index].attributes.hasOwnProperty('pointer')&&t.realContent[index+1].attributes.pointer){
                     t.realContent[index+1].attributes.pointer=false;
                     t.realContent[index].attributes.pointer=true;
                 }
@@ -258,7 +258,8 @@
                     item = contentItem;
                     // t.realContent.push(contentItem);
                 }
-                if(t.realContent[t.realContent.length-1].attributes.hasOwnProperty('pointer')){
+
+                if(t.realContent.length>0&&t.realContent[t.realContent.length-1].attributes.hasOwnProperty('pointer')){
                     t.realContent[t.realContent.length-1].attributes.pointer=true;
                 }
                 t.realContent.splice(t.realContent.length,0,item);

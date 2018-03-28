@@ -111,10 +111,12 @@
                         }
                     }
                 ];
-                //刷新第一列接口
-                t.$refs['oi'].getNextData(1);
-                //刷新描述
-                t.apiLegoDes = this.external.linkage[0].data.description || "";
+                setTimeout(function(){
+                    //刷新第一列接口
+                    t.$refs['oi'].getNextData(1);
+                    //刷新描述
+                    t.apiLegoDes = t.external.linkage[0].data.description || "";
+                },10);
             },
             _refreshIf: function () {
                 let t = this;
@@ -195,7 +197,7 @@
                         {
                             "paramName": "apiLegoId",
                             "valueType": "constant",
-                            "constant": this.external.linkage[0].data.id
+                            "constant": t.external.linkage[0].data.id
                         },
                         {
                             "paramName": "oiAlias",
@@ -227,7 +229,7 @@
                         {
                             "paramName": "id",
                             "valueType": "constant",
-                            "constant": this.external.linkage[0].data.id
+                            "constant": t.external.linkage[0].data.id
                         }
                     ],
                     "outputs": []
