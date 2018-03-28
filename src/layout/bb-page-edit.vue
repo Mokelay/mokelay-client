@@ -356,7 +356,7 @@
               transparency: 1,         //透明度
               zIndex: 0,               //层级
               size: {width: 200, height: 200},//大小
-              position: {x: 500, y: 200},     //位置
+              position: {x: 100, y: 300},     //位置
               border: {                //边框
                   style: "",           //边框样式
                   color: "",           //边框颜色
