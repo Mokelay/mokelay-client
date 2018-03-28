@@ -349,13 +349,14 @@
       */
       add:function(bbName,bbAlias){
           const t = this;
+          t.key = _TY_Tool.uuid();
           const layout = {
               bgColor: "",             //背景颜色
               rotate: 0,               //旋转
               transparency: 1,         //透明度
               zIndex: 0,               //层级
               size: {width: 200, height: 200},//大小
-              position: {x: 500, y: 200},     //位置
+              position: {x: 100, y: 300},     //位置
               border: {                //边框
                   style: "",           //边框样式
                   color: "",           //边框颜色
@@ -426,6 +427,7 @@
       //积木数据发生变动
       change:function(content){
         const t = this;
+        t.key = _TY_Tool.uuid();
         t.content = content;
         t.$emit('change',t.content);
       }
