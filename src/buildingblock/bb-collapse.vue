@@ -92,15 +92,38 @@
                 default:function(){
                     return null;
                 }
-            }
+            },
+            //collapseDs 动态获取折叠面板
+            collapseDs:{
+                type:Object
+            },
+            /*templateContent 折叠面板内容
+                content:[{
+                    uuid: '234',
+                    alias: 'bb-list',
+                    aliasName: '属性配置',
+                    group: 'a', //a  和 head上面的name属性对应
+                    attributes: { ...
+                    }, //etProps的内容
+                    animation: [{ ...
+                    }],
+                    interactives: [{ ...
+                    }],
+                    layout: { ...
+                    }
+                }]
+            */
+            templateContent:{
+                type:[Array,String]
+            },
         },
         data() {
             return {
                 // p_activeNames:((this.activeNames&&typeof(this.activeNames)==='string')?(this.activeNames.indexOf(",")>=0?this.activeNames.split(","):this.activeNames):this.activeNames),
                 //collapseData 数据
-                renderData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[],
+                renderData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[],
                 external:{},//外部参数
-                totalData:this.collapseData?(typeof(this.collapseData)==='String'?JSON.parse(this.collapseData):this.collapseData):[]
+                totalData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[]
             }
         },
         watch: {
@@ -129,6 +152,7 @@
             let t=this;
             //初始化item
             t.buildTitle();
+            t.getCollapseItem();
         },
         mounted:function(){
             let t=this;
@@ -190,8 +214,62 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
-            }
+            },
+            /*DS动态获取Collapse项
+                获取到的itemList = [{
+                            title:'',
+                            name:'',
+                            content:[],
+                            isShow:true
+                        }]
+            */
 
+            getCollapseItem:function(){
+                const t = this;
+                if (t.collapseDs) {
+                    _TY_Tool.getDSData(t.collapseDs, _TY_Tool.buildTplParams(t), function (map) {
+                        const itemList = map[0].value;
+                        let templateContent = t.templateContent;
+                        templateContent = templateContent?(typeof(templateContent)==='string'?eval(templateContent):templateContent):[];
+                        itemList.forEach((val,key)=>{
+                            //用模板生成具体的contentItem 生成新的uuid
+                            t.transferContentItem(templateContent);
+                            templateContent.forEach((contentItem,index)=>{
+                                //根据新生成的uuid重构交互
+                                contentItem['interactives'].forEach((interactive,id)=>{
+                                    interactive['uuid'] = _TY_Tool.uuid();
+                                    interactive['fromContentUUID'] = contentItem['uuid'];
+                                    if(interactive['executeType'] == 'trigger_method'){
+                                        const oldUUID = interactive['executeContentUUID'];
+                                        //修改模板中的目标积木uuid
+                                        interactive['executeContentUUID'] = t.collapseItem[oldUUID] || oldUUID;
+                                    }
+                                });
+                                contentItem['attributes']['parantData'] = val['name'];
+                                if(contentItem['group'] && contentItem['group'] == val['name']){
+                                    //如果有分组则按分组放置
+                                    val['content'].push(contentItem);
+                                }else if(!contentItem['group']){
+                                    val['content'].push(contentItem);
+                                }
+                            })
+                        })
+                        t.renderData = itemList;
+                    }, function (code, msg) {
+                    });
+                }
+            },
+            //用模板生成具体的contentItem的uuid
+            transferContentItem:function(templateContent){
+                const t = this;
+                templateContent.forEach((contentItem,index)=>{
+                    t.collapseItem = t.collapseItem?t.collapseItem:{};
+                    //生成新的积木uuid
+                    const newUUID = _TY_Tool.uuid();
+                    t.collapseItem[contentItem['uuid']] = newUUID;
+                    contentItem['uuid'] = newUUID;
+                })
+            }
         }
     }
 </script>
