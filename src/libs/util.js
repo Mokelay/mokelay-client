@@ -661,7 +661,8 @@ util.bbCanvasRender = function(content, createElement, t) {
                     flex: 1,
                     position: 'absolute',
                     left: bb.layout.position.x + 'px',
-                    top: bb.layout.position.y + 'px'
+                    top: bb.layout.position.y + 'px',
+                    "z-index": bb.layout.zIndex
                 }
             }, [bbele]);
 
