@@ -14,6 +14,10 @@ import 'codemirror/lib/codemirror.css';
         props: {
             value:{
                 type:String
+            },
+            returnObj:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -59,7 +63,11 @@ import 'codemirror/lib/codemirror.css';
             },
             submit(){
                 let t=this;
-                t.$emit("input",this.codeObj.getValue());
+                let result = this.codeObj.getValue();
+                if(t.returnObj){
+                    result = eval(result);
+                }
+                t.$emit("input",result);
             }
         }
     }
