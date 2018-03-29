@@ -608,7 +608,7 @@
                 if ((y + 145) <= contentHeight) {
                     this.menuTop = y;
                 } else {
-                    this.menuTop = y - 200;
+                    this.menuTop = y - 160;
                 }
                 console.log(x, y, contentHeight);
             },
