@@ -86,8 +86,6 @@
                     }}
                 ],
                 interactiveOn:[
-                    // {pbbId:'api',triggerEventName:'change',executePbbId:'category',executeBBMethodName:'linkage'},
-                    // {pbbId:'api',triggerEventName:'change',executePbbId:'method',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
@@ -106,9 +104,9 @@
         watch: {
             value(val){
                 if (typeof val === 'object') {
-                    this.ds = val;
+                    this.ds = this.transferOldData(val);
                 } else if (typeof val === 'string') {
-                    this.ds = (val ? JSON.parse(val) : {});
+                    this.ds = this.transferOldData(val ? JSON.parse(val) : {});
                 }
                 this.$emit("input",val);
             },
@@ -118,6 +116,8 @@
             }
         },
         created: function () {
+            const t = this;
+            t.ds = t.transferOldData(t.value);
         },
         mounted:function(){
         },
@@ -154,6 +154,34 @@
                     dsc.push(api);
                     _TY_Page_Data[t.$route.query.pageAlias]['ds'] = dsc;
                 }
+            },
+            /*转换老数据
+                valueType全部转换成template
+                constant => variable
+                valueKey + variable => variable
+            */ 
+            transferOldData:function(val){
+                const t = this;
+                const ds = val;
+                if(ds && ds['inputs']){
+                    ds['inputs'].forEach((input,key)=>{
+                        input['valueType'] = input['valueType']?input['valueType']:'template';
+                        switch(input['valueType']){
+                            case "constant":
+                                input['valueType'] = 'template';
+                                input['variable'] = input['constant'];
+                                break;
+                            case "inputValueObj":
+                                input['valueType'] = 'template';
+                                let valueKey = input['valueKey'];
+                                valueKey = valueKey == 'row-data'?'rowData':valueKey;
+                                const variable = input['variable'];
+                                input['variable'] = `<%=${valueKey}.${variable}%>`;
+                                break;
+                        }
+                    })
+                }
+                return ds;
             }
         }
     }
