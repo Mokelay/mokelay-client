@@ -268,7 +268,6 @@
                 let t=this;
                 t.realTabs=[];
                 if(t.bbTabs&&t.bbTabs.length>0){
-                    t.canRender=false;
                     t.bbTabs.forEach(function(tab,index){
                         if(tab.type==='static'){
                             t.realTabs.push({
@@ -286,10 +285,8 @@
                                         group: tab.name,
                                         icon: item.icon
                                     })
-                                    t.canRender=true;
                                 });
                             }, function (code, msg) {
-                                t.canRender=true;
                             });
                         }
                     });

@@ -1,28 +1,31 @@
 <template>
-    <el-tabs v-model="p_activeName" @tab-click="tabClick">
-        <el-tab-pane label="基础" name="legoInfo">
-            <div class="form_item">
-                模型:
-                <bb-cascader ref="oi" :style="{display:'inline-block'}" valueTpl="<%=value[value.length-1]%>"
-                             :casProps="casProps" :dsList="dsList"
-                             @change="oiChange"></bb-cascader>
-            </div>
-            <div class="form_item">
-                描述:
-                <bb-textarea :bbStyle="{width: '75%'}" v-model="apiLegoDes" @change="desChange"></bb-textarea>
-            </div>
-        </el-tab-pane>
-        <el-tab-pane label="输入" name="inputField">
-            <bb-collapse ref="_if" :activeNames="['common','read','create','update','cache','condition']"
-                         :itemDs="ifItemDs" :collapseData="ifCollapseData"
-            ></bb-collapse>
-        </el-tab-pane>
-        <el-tab-pane label="输出" name="outputField">
-            <bb-collapse ref="_of" :activeNames="['common','read','create','update','cache','condition']"
-                         :itemDs="ofItemDs" :collapseData="ofCollapseData"
-            ></bb-collapse>
-        </el-tab-pane>
-    </el-tabs>
+    <div>
+        <el-tabs v-model="p_activeName" @tab-click="tabClick">
+            <el-tab-pane label="基础" name="legoInfo">
+                <div class="form_item">
+                    模型:
+                    <bb-cascader ref="oi" :style="{display:'inline-block'}" valueTpl="<%=value[value.length-1]%>"
+                                 :casProps="casProps" :dsList="dsList"
+                                 @change="oiChange"></bb-cascader>
+                </div>
+                <div class="form_item">
+                    描述:
+                    <bb-textarea :bbStyle="{width: '75%'}" v-model="apiLegoDes" @change="desChange"></bb-textarea>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="输入" name="inputField">
+                <bb-collapse ref="_if" :activeNames="['common','read','create','update','cache','condition']"
+                             :itemDs="ifItemDs" :collapseData="ifCollapseData"
+                ></bb-collapse>
+            </el-tab-pane>
+            <el-tab-pane label="输出" name="outputField">
+                <bb-collapse ref="_of" :activeNames="['common','read','create','update','cache','condition']"
+                             :itemDs="ofItemDs" :collapseData="ofCollapseData"
+                ></bb-collapse>
+            </el-tab-pane>
+        </el-tabs>
+
+    </div>
 </template>
 
 <script>
@@ -343,6 +346,539 @@
                 t.ifCollapseData = [];
                 for (let i in IOFT) {
                     const _ioft = IOFT[i];
+                    //输入字段表单编辑
+                    const formAdd = {
+                                "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft,
+                                "alias": "bb-button",
+                                "aliasName": "添加" + t._buildTitle(_ioft),
+                                "group": "",
+                                "attributes": {
+                                    "button": {
+                                        "icon": "ty-icon_tianjia",
+                                        "size": "small",
+                                        "style": {}
+                                    }
+                                },
+                                "animation": [],
+                                "interactives": [{
+                                    "uuid": "",
+                                    "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft,
+                                    "executeType": "trigger_method",
+                                    "fromContentEvent": "click",
+                                    "executeContentUUID": "Page_Ref_Root",
+                                    "executeContentMethodName": "openDialog",
+                                    "executeArgument": [
+                                        {
+                                            "uuid": "",
+                                            "alias": "bb-form",
+                                            "aliasName": "编辑属性",
+                                            "attributes": {
+                                                "value":{
+                                                    "ct":"eq"
+                                                },
+                                                "settingButtonText": "确定",
+                                                "buttonConfig": {
+                                                    "action": "execute-ds",
+                                                    "callback": "refresh",
+                                                    "ds": {
+                                                        "api": "add-inputfield",
+                                                        "category": "config",
+                                                        "method": "post",
+                                                        "inputs": [
+                                                            {
+                                                                "paramName": "name",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.name"
+                                                            },
+                                                            {
+                                                                "paramName": "description",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.description"
+                                                            },
+                                                            {
+                                                                "paramName": "fieldName",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.fieldName"
+                                                            },
+                                                            {
+                                                                "paramName": "constant",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.constant"
+                                                            },
+                                                            {
+                                                                "paramName": "ct",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.ct"
+                                                            },
+                                                            {
+                                                                "paramName": "fvt",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.fvt"
+                                                            },
+                                                            {
+                                                                "paramName": "fromApiLegoId",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.fromApiLegoId"
+                                                            },
+                                                            {
+                                                                "paramName": "alias",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.alias"
+                                                            },
+                                                            {
+                                                                "paramName": "validate",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.validate"
+                                                            },
+                                                            {
+                                                                "paramName": "connectorPath",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.connectorPath"
+                                                            },
+                                                            {
+                                                                "paramName": "dt",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.dt"
+                                                            },
+                                                            {
+                                                                "paramName": "fromApiLegoOutputFieldAlias",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.fromApiLegoOutputFieldAlias"
+                                                            },
+                                                            {
+                                                                "paramName": "requestParamName",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.requestParamName"
+                                                            },
+                                                            {
+                                                                "paramName": "sessionParamName",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.sessionParamName"
+                                                            },
+                                                            {
+                                                                "paramName": "fieldTpl",
+                                                                "valueType": "inputValueObj",
+                                                                "valueKey": "bb",
+                                                                "variable": "formData.fieldTpl"
+                                                            },
+                                                            {
+                                                                "paramName": "ift",
+                                                                "valueType": "constant",
+                                                                "constant": _ioft
+                                                            },
+                                                            {
+                                                                "paramName": "apiLegoId",
+                                                                "valueType": "constant",
+                                                                "constant": t.external.linkage[0].data.id
+                                                            }
+                                                        ]
+                                                    },
+                                                    "confirmTitle": "确认添加",
+                                                    "confirmText": "提示"
+                                                },
+                                                "content": [
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "name",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "名称",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "name",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fieldName",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "字段名",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "fieldName",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "alias",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "别名",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "alias",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "ct",
+                                                        "alias": "bb-select",
+                                                        "aliasName": "条件类型",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "ct",
+                                                            "rules": [],
+                                                            "fields": [
+                                                                {
+                                                                    "text": "大于",
+                                                                    "value": "gt"
+                                                                },
+                                                                {
+                                                                    "text": "大于等于",
+                                                                    "value": "ge"
+                                                                },
+                                                                {
+                                                                    "text": "小于",
+                                                                    "value": "lt"
+                                                                },
+                                                                {
+                                                                    "text": "小于等于",
+                                                                    "value": "le"
+                                                                },
+                                                                {
+                                                                    "text": "等于",
+                                                                    "value": "eq"
+                                                                },
+                                                                {
+                                                                    "text": "不等于",
+                                                                    "value": "neq"
+                                                                },
+                                                                {
+                                                                    "text": "在什么之中",
+                                                                    "value": "In"
+                                                                },
+                                                                {
+                                                                    "text": "不在什么之中",
+                                                                    "value": "notIn"
+                                                                },
+                                                                {
+                                                                    "text": "模糊搜索",
+                                                                    "value": "like"
+                                                                },
+                                                                {
+                                                                    "text": "左链接搜索",
+                                                                    "value": "leftLike"
+                                                                },
+                                                                {
+                                                                    "text": "右链接搜索",
+                                                                    "value": "rightLike"
+                                                                },
+                                                                {
+                                                                    "text": "是",
+                                                                    "value": "is"
+                                                                },
+                                                                {
+                                                                    "text": "不是",
+                                                                    "value": "isnot"
+                                                                },
+                                                                {
+                                                                    "text": "为空",
+                                                                    "value": "Null"
+                                                                },
+                                                                {
+                                                                    "text": "不为空",
+                                                                    "value": "NotNull"
+                                                                },
+                                                                {
+                                                                    "text": "混合条件",
+                                                                    "value": "Multi"
+                                                                },
+                                                                {
+                                                                    "text": "自定义条件",
+                                                                    "value": "Custom"
+                                                                }
+                                                            ]
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "dt",
+                                                        "alias": "bb-select",
+                                                        "aliasName": "数据类型",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "dt",
+                                                            "rules": [],
+                                                            "fields": [
+                                                                {
+                                                                    "text": "整数",
+                                                                    "value": "int"
+                                                                },
+                                                                {
+                                                                    "text": "浮点数",
+                                                                    "value": "double"
+                                                                },
+                                                                {
+                                                                    "text": "布尔值",
+                                                                    "value": "boolean"
+                                                                },
+                                                                {
+                                                                    "text": "字符串",
+                                                                    "value": "string"
+                                                                },
+                                                                {
+                                                                    "text": "日期",
+                                                                    "value": "date"
+                                                                },
+                                                                {
+                                                                    "text": "日期时间",
+                                                                    "value": "time"
+                                                                },
+                                                                {
+                                                                    "text": "对象",
+                                                                    "value": "object"
+                                                                },
+                                                                {
+                                                                    "text": "数组",
+                                                                    "value": "array"
+                                                                },
+                                                                {
+                                                                    "text": "文件",
+                                                                    "value": "multipart"
+                                                                }
+                                                            ]
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "ift",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "输入类型",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "ift",
+                                                            "rules": [],
+                                                            "show": false,
+                                                            "value": _ioft
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fvt",
+                                                        "alias": "bb-select",
+                                                        "aliasName": "数据来源",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "fvt",
+                                                            "rules": [],
+                                                            "fields": [
+                                                                {
+                                                                    "text": "无",
+                                                                    "value": ""
+                                                                },
+                                                                {
+                                                                    "text": "常量",
+                                                                    "value": "constant"
+                                                                },
+                                                                {
+                                                                    "text": "http请求",
+                                                                    "value": "request"
+                                                                },
+                                                                {
+                                                                    "text": "session会话",
+                                                                    "value": "session"
+                                                                },
+                                                                {
+                                                                    "text": "来自前一个节点",
+                                                                    "value": "output"
+                                                                },
+                                                                {
+                                                                    "text": "模板",
+                                                                    "value": "template"
+                                                                }
+                                                            ]
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": [{
+                                                            "uuid": "",
+                                                                "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-fvt',
+                                                                "executeType": "trigger_method",
+                                                                "fromContentEvent": "change",
+                                                                "executeContentUUID": "r-00001-config",
+                                                                "executeContentMethodName": "changeFVT"
+                                                        }]
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "requestParamName",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "请求参数",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "requestParamName",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "sessionParamName",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "session参数",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "sessionParamName",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoId",
+                                                        "alias": "bb-select",
+                                                        "aliasName": "数据来源ID",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "fromApiLegoId",
+                                                            "rules": [],
+                                                            "fields":t.apiLegos
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoOutputFieldAlias",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "output参数",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "fromApiLegoOutputFieldAlias",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "constant",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "常量值",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "constant",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fieldTpl",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "模板TPL",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "fieldTpl",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-validate',
+                                                        "alias": "bb-list",
+                                                        "aliasName": "数据校验",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "validate",
+                                                            "rules": [],
+                                                            "returnString": true,
+                                                            "editConfig": {
+                                                                "editable": [
+                                                                    "add",
+                                                                    "edit",
+                                                                    "remove"
+                                                                ]
+                                                            },
+                                                            "columns": [
+                                                                {
+                                                                    "prop": "validateName",
+                                                                    "label": "检验名称",
+                                                                    "et": "bb-select",
+                                                                    "etProp": {
+                                                                        textField: 'name',
+                                                                        valueField: 'alias',
+                                                                        ds: {
+                                                                            "api": "list-validate",
+                                                                            "category": "config",
+                                                                            "method": "post",
+                                                                            "inputs": [],
+                                                                            "outputs": [{
+                                                                                "dataKey": "fields",
+                                                                                "valueKey": "data_list"
+                                                                            }]
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "prop": "params",
+                                                                    "label": "检验参数",
+                                                                    "et": "bb-input"
+                                                                }
+                                                            ],
+                                                            "border": true
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "connectorPath",
+                                                        "alias": "bb-input",
+                                                        "aliasName": "连接器",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "connectorPath",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "description",
+                                                        "alias": "bb-textarea",
+                                                        "aliasName": "描述",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "description",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    }
+                                                ]
+                                            },
+                                            "animation": [
+                                                {}
+                                            ],
+                                            "interactives": [
+                                                {}
+                                            ],
+                                            "layout": {}
+                                        }
+                                    ]
+                                }]
+                            };
+                    //输入字段字段选择
+                    const treeAdd ={
+
+                    }
                     let item = {
                         title: t._buildTitle(_ioft),
                         name: _ioft,
@@ -935,537 +1471,14 @@
                                     }
 
                                 ]
-                            },
-                            {
-                                "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft,
-                                "alias": "bb-button",
-                                "aliasName": "添加" + t._buildTitle(_ioft),
-                                "group": "",
-                                "attributes": {
-                                    "button": {
-                                        "icon": "ty-icon_tianjia",
-                                        "size": "small",
-                                        "style": {}
-                                    }
-                                },
-                                "animation": [],
-                                "interactives": [{
-                                    "uuid": "",
-                                    "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft,
-                                    "executeType": "trigger_method",
-                                    "fromContentEvent": "click",
-                                    "executeContentUUID": "Page_Ref_Root",
-                                    "executeContentMethodName": "openDialog",
-                                    "executeArgument": [
-                                        {
-                                            "uuid": "",
-                                            "alias": "bb-form",
-                                            "aliasName": "编辑属性",
-                                            "attributes": {
-                                                "value":{
-                                                    "ct":"eq"
-                                                },
-                                                "settingButtonText": "确定",
-                                                "buttonConfig": {
-                                                    "action": "execute-ds",
-                                                    "callback": "refresh",
-                                                    "ds": {
-                                                        "api": "add-inputfield",
-                                                        "category": "config",
-                                                        "method": "post",
-                                                        "inputs": [
-                                                            {
-                                                                "paramName": "name",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.name"
-                                                            },
-                                                            {
-                                                                "paramName": "description",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.description"
-                                                            },
-                                                            {
-                                                                "paramName": "fieldName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fieldName"
-                                                            },
-                                                            {
-                                                                "paramName": "constant",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.constant"
-                                                            },
-                                                            {
-                                                                "paramName": "ct",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.ct"
-                                                            },
-                                                            {
-                                                                "paramName": "fvt",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fvt"
-                                                            },
-                                                            {
-                                                                "paramName": "fromApiLegoId",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fromApiLegoId"
-                                                            },
-                                                            {
-                                                                "paramName": "alias",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.alias"
-                                                            },
-                                                            {
-                                                                "paramName": "validate",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.validate"
-                                                            },
-                                                            {
-                                                                "paramName": "connectorPath",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.connectorPath"
-                                                            },
-                                                            {
-                                                                "paramName": "dt",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.dt"
-                                                            },
-                                                            {
-                                                                "paramName": "fromApiLegoOutputFieldAlias",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fromApiLegoOutputFieldAlias"
-                                                            },
-                                                            {
-                                                                "paramName": "requestParamName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.requestParamName"
-                                                            },
-                                                            {
-                                                                "paramName": "sessionParamName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.sessionParamName"
-                                                            },
-                                                            {
-                                                                "paramName": "fieldTpl",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fieldTpl"
-                                                            },
-                                                            {
-                                                                "paramName": "ift",
-                                                                "valueType": "constant",
-                                                                "constant": _ioft
-                                                            },
-                                                            {
-                                                                "paramName": "apiLegoId",
-                                                                "valueType": "constant",
-                                                                "constant": t.external.linkage[0].data.id
-                                                            }
-                                                        ]
-                                                    },
-                                                    "confirmTitle": "确认添加",
-                                                    "confirmText": "提示"
-                                                },
-                                                "content": [
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "name",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "名称",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "name",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fieldName",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "字段名",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "fieldName",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "alias",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "别名",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "alias",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "ct",
-                                                        "alias": "bb-select",
-                                                        "aliasName": "条件类型",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "ct",
-                                                            "rules": [],
-                                                            "fields": [
-                                                                {
-                                                                    "text": "大于",
-                                                                    "value": "gt"
-                                                                },
-                                                                {
-                                                                    "text": "大于等于",
-                                                                    "value": "ge"
-                                                                },
-                                                                {
-                                                                    "text": "小于",
-                                                                    "value": "lt"
-                                                                },
-                                                                {
-                                                                    "text": "小于等于",
-                                                                    "value": "le"
-                                                                },
-                                                                {
-                                                                    "text": "等于",
-                                                                    "value": "eq"
-                                                                },
-                                                                {
-                                                                    "text": "不等于",
-                                                                    "value": "neq"
-                                                                },
-                                                                {
-                                                                    "text": "在什么之中",
-                                                                    "value": "In"
-                                                                },
-                                                                {
-                                                                    "text": "不在什么之中",
-                                                                    "value": "notIn"
-                                                                },
-                                                                {
-                                                                    "text": "模糊搜索",
-                                                                    "value": "like"
-                                                                },
-                                                                {
-                                                                    "text": "左链接搜索",
-                                                                    "value": "leftLike"
-                                                                },
-                                                                {
-                                                                    "text": "右链接搜索",
-                                                                    "value": "rightLike"
-                                                                },
-                                                                {
-                                                                    "text": "是",
-                                                                    "value": "is"
-                                                                },
-                                                                {
-                                                                    "text": "不是",
-                                                                    "value": "isnot"
-                                                                },
-                                                                {
-                                                                    "text": "为空",
-                                                                    "value": "Null"
-                                                                },
-                                                                {
-                                                                    "text": "不为空",
-                                                                    "value": "NotNull"
-                                                                },
-                                                                {
-                                                                    "text": "混合条件",
-                                                                    "value": "Multi"
-                                                                },
-                                                                {
-                                                                    "text": "自定义条件",
-                                                                    "value": "Custom"
-                                                                }
-                                                            ]
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "dt",
-                                                        "alias": "bb-select",
-                                                        "aliasName": "数据类型",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "dt",
-                                                            "rules": [],
-                                                            "fields": [
-                                                                {
-                                                                    "text": "整数",
-                                                                    "value": "int"
-                                                                },
-                                                                {
-                                                                    "text": "浮点数",
-                                                                    "value": "double"
-                                                                },
-                                                                {
-                                                                    "text": "布尔值",
-                                                                    "value": "boolean"
-                                                                },
-                                                                {
-                                                                    "text": "字符串",
-                                                                    "value": "string"
-                                                                },
-                                                                {
-                                                                    "text": "日期",
-                                                                    "value": "date"
-                                                                },
-                                                                {
-                                                                    "text": "日期时间",
-                                                                    "value": "time"
-                                                                },
-                                                                {
-                                                                    "text": "对象",
-                                                                    "value": "object"
-                                                                },
-                                                                {
-                                                                    "text": "数组",
-                                                                    "value": "array"
-                                                                },
-                                                                {
-                                                                    "text": "文件",
-                                                                    "value": "multipart"
-                                                                }
-                                                            ]
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "ift",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "输入类型",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "ift",
-                                                            "rules": [],
-                                                            "show": false,
-                                                            "value": _ioft
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fvt",
-                                                        "alias": "bb-select",
-                                                        "aliasName": "数据来源",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "fvt",
-                                                            "rules": [],
-                                                            "fields": [
-                                                                {
-                                                                    "text": "无",
-                                                                    "value": ""
-                                                                },
-                                                                {
-                                                                    "text": "常量",
-                                                                    "value": "constant"
-                                                                },
-                                                                {
-                                                                    "text": "http请求",
-                                                                    "value": "request"
-                                                                },
-                                                                {
-                                                                    "text": "session会话",
-                                                                    "value": "session"
-                                                                },
-                                                                {
-                                                                    "text": "来自前一个节点",
-                                                                    "value": "output"
-                                                                },
-                                                                {
-                                                                    "text": "模板",
-                                                                    "value": "template"
-                                                                }
-                                                            ]
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": [{
-                                                            "uuid": "",
-                                                                "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-fvt',
-                                                                "executeType": "trigger_method",
-                                                                "fromContentEvent": "change",
-                                                                "executeContentUUID": "r-00001-config",
-                                                                "executeContentMethodName": "changeFVT"
-                                                        }]
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "requestParamName",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "请求参数",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "requestParamName",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "sessionParamName",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "session参数",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "sessionParamName",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoId",
-                                                        "alias": "bb-select",
-                                                        "aliasName": "数据来源ID",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "fromApiLegoId",
-                                                            "rules": [],
-                                                            "fields":t.apiLegos
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoOutputFieldAlias",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "output参数",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "fromApiLegoOutputFieldAlias",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "constant",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "常量值",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "constant",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fieldTpl",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "模板TPL",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "fieldTpl",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-validate',
-                                                        "alias": "bb-list",
-                                                        "aliasName": "数据校验",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "validate",
-                                                            "rules": [],
-                                                            "returnString": true,
-                                                            "editConfig": {
-                                                                "editable": [
-                                                                    "add",
-                                                                    "edit",
-                                                                    "remove"
-                                                                ]
-                                                            },
-                                                            "columns": [
-                                                                {
-                                                                    "prop": "validateName",
-                                                                    "label": "检验名称",
-                                                                    "et": "bb-select",
-                                                                    "etProp": {
-                                                                        textField: 'name',
-                                                                        valueField: 'alias',
-                                                                        ds: {
-                                                                            "api": "list-validate",
-                                                                            "category": "config",
-                                                                            "method": "post",
-                                                                            "inputs": [],
-                                                                            "outputs": [{
-                                                                                "dataKey": "fields",
-                                                                                "valueKey": "data_list"
-                                                                            }]
-                                                                        }
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "prop": "params",
-                                                                    "label": "检验参数",
-                                                                    "et": "bb-input"
-                                                                }
-                                                            ],
-                                                            "border": true
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "connectorPath",
-                                                        "alias": "bb-input",
-                                                        "aliasName": "连接器",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "connectorPath",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    },
-                                                    {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "description",
-                                                        "alias": "bb-textarea",
-                                                        "aliasName": "描述",
-                                                        "group": "",
-                                                        "attributes": {
-                                                            "attributeName": "description",
-                                                            "rules": []
-                                                        },
-                                                        "animation": [],
-                                                        "interactives": []
-                                                    }
-                                                ]
-                                            },
-                                            "animation": [
-                                                {}
-                                            ],
-                                            "interactives": [
-                                                {}
-                                            ],
-                                            "layout": {}
-                                        }
-                                    ]
-                                }]
                             }
                         ]
                     };
+                    if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'){
+                        item.content.push(formAdd);
+                    }else{
+
+                    }
                     t.ifCollapseData.push(item);
                 }
             },
