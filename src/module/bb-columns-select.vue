@@ -455,6 +455,31 @@
                             value: 'row-data'
                         }]
                     }
+                }, {
+                    name: '编辑器类型',
+                    attributeName: 'et',
+                    et: 'bb-select',
+                    props: {
+                         textField: 'name',
+                         valueField: 'alias',
+                         ds: {
+                             "api": "list-bb",
+                             "category": "config",
+                             "method": "post",
+                             "inputs": [],
+                             "outputs": [{
+                                 "dataKey": "fields",
+                                 "valueKey": "data_list"
+                            }]
+                         }
+                    }
+                }, {
+                    name: '编辑器属性',
+                    attributeName: 'etProp',
+                    et: 'bb-editor-code',
+                    props: {
+                        
+                    }
                 }],
                 table:this.value,
             }

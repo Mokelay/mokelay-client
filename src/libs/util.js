@@ -561,10 +561,16 @@ util.loadBuzz = function(buzz, handle) {
  * 构建form表单组件 默认值
  * @param t
  * @param p_value
+ * @param isObj   是否返回object
  */
-util.buildDefaultValTpl = function(t, p_value) {
+util.buildDefaultValTpl = function(t, p_value, isObj) {
     if (!t.value && t.defaultValTpl) {
-        t[p_value] = util.tpl(t.defaultValTpl, util.buildTplParams(t));
+        let temp = util.tpl(t.defaultValTpl, util.buildTplParams(t));
+        if (isObj) {
+            t[p_value] = JSON.parse(temp);
+        } else {
+            t[p_value] = temp;
+        }
         t.$emit('input', t[p_value]);
     }
 }

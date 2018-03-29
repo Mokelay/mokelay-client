@@ -201,6 +201,11 @@
             value:{
                 type:[String,Object]
             },
+            //默认值
+            defaultValTpl:{
+                type:String,
+                default:''
+            },
             settingButtonText:{
                 type:String,
                 default:function(){
@@ -355,6 +360,8 @@
                 bb-form初次渲染回填初始化值后 触发此事件 
                 设置setTimeout防止事件触发时目标方法积木还未渲染*/
             setTimeout(()=>{t.$emit('bb-mounted',null,{bb:t})},0);
+            //初始化form表单值
+            _TY_Tool.buildDefaultValTpl(t,'formData',true);
         },
         methods: {
             //显示和隐藏的uuid数组

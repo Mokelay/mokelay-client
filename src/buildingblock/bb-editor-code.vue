@@ -13,7 +13,7 @@ import 'codemirror/lib/codemirror.css';
         },
         props: {
             value:{
-                type:String
+                type:[String,Object]
             },
             returnObj:{
                 type:Boolean,
@@ -28,8 +28,12 @@ import 'codemirror/lib/codemirror.css';
         watch: {
             value(val){
                 var t = this;
+                let temp = val;
+                if(val && val instanceof Object&&t.returnObj){
+                    temp = JSON.stringify(val);
+                }
                 t.loadLib(function(){
-                    t.codeObj.setValue(val || "");
+                    t.codeObj.setValue(temp || "");
                 });
             }
         },
@@ -43,6 +47,9 @@ import 'codemirror/lib/codemirror.css';
             loadLib: function(callback){
                 var t = this;
                 var v = t.value || "";
+                if(v instanceof Object&&t.returnObj){
+                    v = JSON.stringify(v);
+                }
                 if(!t. codeObj){
                     require.ensure(['codemirror/lib/codemirror','codemirror/mode/javascript/javascript'], function (require) {
                         var CodeMirror =  require("codemirror/lib/codemirror");
