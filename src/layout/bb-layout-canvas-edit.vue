@@ -517,7 +517,6 @@
                     }
                     el.canvasItems.splice(key, 1, item);
                 });
-
             },
             //删除积木
             remove(index){
