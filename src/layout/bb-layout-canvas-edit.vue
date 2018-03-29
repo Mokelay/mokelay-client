@@ -451,7 +451,7 @@
 
                 if (zIndexMax) {
                     this.content.forEach((con, key) => {
-                        if (key === (el.content.length - 1)) {
+                        if (key === (el.content.length - 1) && con.layout.zIndex != 90) {
                             con.layout.zIndex = zIndexMax * 1 + 10;
                         }
                     });
