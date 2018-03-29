@@ -72,7 +72,7 @@
             <li class="context-menu-item"><span>剪切</span></li>
             <li class="context-menu-item context-menu-visible"><span>复制</span></li>
             <li class="context-menu-item" @click="propLayout"><span>上移一层</span></li>
-            <li class="context-menu-item context-menu-disabled" @click="nextLayout"><span>下移一层</span></li>
+            <li :class="{ 'context-menu-item context-menu-disabled' : nextLayoutCss, 'context-menu-item' : !nextLayoutCss }" @click="nextLayout"><span>下移一层</span></li>
             <li class="context-menu-item"><span>置于顶层</span></li>
             <li class="context-menu-item"><span>置于底层</span></li>
             <li class="context-menu-item"><span>删除</span></li>
@@ -415,6 +415,7 @@
                 isShowDialog: false,
                 menuRight: 0,
                 checkCanvasId: 0,
+                nextLayoutCss: false,
                 operationItems: [],
                 canvasItems: []
             }
@@ -431,6 +432,7 @@
                 }
 
                 const el = this;
+                const zIndex = [];
                 this.content.forEach((con, key) => {
                     if (key === (el.content.length - 1)) {
                         el.checkCanvasId = el.content[el.content.length - 1].uuid;
@@ -439,8 +441,19 @@
                     } else {
                         con.isShow = false;
                     }
+                    zIndex.push(con.layout.zIndex);
                 });
 
+                let zIndexMax = Math.max.apply(null, zIndex);
+
+                if (zIndexMax) {
+                    this.content.forEach((con, key) => {
+                        if (key === (el.content.length - 1)) {
+                            con.layout.zIndex = zIndexMax * 1 + 10;
+                        }
+                    });
+                }
+                
                 this.canvasItems = this.content;
             },
 
@@ -599,8 +612,13 @@
 
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === el.checkCanvasId) {
-                        item.layout.zIndex = item.layout.zIndex * 1 - 10;
-                        el.canvasItems.splice(key, 1, item);
+                        if (item.layout.zIndex === 0) {
+                            el.nextLayoutCss = true;
+                        } else {
+                            el.nextLayoutCss = false;
+                            item.layout.zIndex = item.layout.zIndex * 1 - 10;
+                            el.canvasItems.splice(key, 1, item);
+                        }
                     }
                 });
             }
@@ -763,7 +781,6 @@
         width: 100%;
         height: 100%;
         margin: -1px 0 0 -1px;
-        border: 1px solid #fff;
     }
 
     .operate .border-line.dashed {
