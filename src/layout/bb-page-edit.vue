@@ -230,7 +230,7 @@
               interactives.forEach((interactive,key)=>{//添加交互
                 if(interactive.pbbId == _pbbId){
                   const newInteractive = {       //触发交互
-                      uuid:interactive.id || _TY_Tool.uuid(),
+                      uuid:interactive.id || _TY_Tool.uuid(3,8),
                       fromContentEvent:interactive['triggerEventName'],
                       executeType:interactive['executeType'],         //执行类型(预定义方法 trigger_method,
                       executeScript:interactive['executeScript'],

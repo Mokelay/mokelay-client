@@ -544,6 +544,23 @@ util.loadChildBB = function(t) {
     }
     return result;
 }
+//TODO修改老数据后删除仅供过渡老数据使用
+/**
+    获取当前积木的最近的bb-page容器
+**/
+util.nearestPage = function(t) {
+    let vNode = {};
+    if (t && t.$parent) {
+        //不是空对象
+        const nowNode = t.$parent;
+        if (t.$parent.$vnode.tag.search("bb-page") != -1) {
+            vNode = nowNode;
+            return vNode;
+        } else {
+            return util.nearestPage(nowNode);
+        }
+    }
+}
 
 
 
@@ -825,7 +842,15 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
             eventOnceKey = eventOnceKey + containerMethodName;
-            fn = t[containerMethodName] || window._TY_Root[containerMethodName];
+            if (interactive['uuid'].toString().length < 5) {
+                //TODO修改老数据后删除
+                //如果当前交互的uuid长度小于5则可以认定是老数据
+                const bbPage = util.nearestPage(t);
+                fn = bbPage[containerMethodName];
+            } else {
+                //新数据交互
+                fn = t[containerMethodName] || window._TY_Root[containerMethodName];
+            }
         }
         if (fn) {
             /**
