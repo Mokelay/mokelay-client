@@ -160,9 +160,13 @@ DS配置案例
     method:"post",
     inputs:[
         {paramName:'a',valueType:"constant",constant:123},
+        {paramName:'a',valueType:"constant",variable:123},
         {paramName:'b',valueType:"inputValueObj",valueKey:"bb",variable:"pageSize"},
         {paramName:'c',valueType:"inputValueObj",valueKey:"router",variable:"page"},
         {paramName:'d',valueType:"inputValueObj",valueKey:"row-data",variable:"alias"},
+        //TY2.0统一走tempalte
+        {paramName:'e',valueType:"template",variable:"<%=roure.query.param%>},
+        {paramName:'a2',valueType:"template",variable:123},
     ],
     outputs:[
         {dataKey:"tableData",valueKey:"data-list-1"},
@@ -193,7 +197,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             var valueType = input['valueType'] || 'template';
             var paramValue = null;
             if (valueType == 'constant') {
-                paramValue = input['constant'];
+                paramValue = input['constant'] || input['variable'];
             } else if (valueType == 'template') { //支持参数为自定义模板
                 paramValue = util.tpl(input['variable'], Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj[input['valueKey']]), inputValueObj));
             } else if (valueType == 'inputValueObj') {

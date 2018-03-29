@@ -3,7 +3,7 @@
         <div class="bg-canvas">
             <div class="canvas" v-for="(canvasItem,key) in canvasItems">
                 <div>
-                    <bb-layout-canvas :content="[canvasItem]"></bb-layout-canvas>
+                    <bb-layout-canvas :ref="canvasItem.uuid" :content="[canvasItem]"></bb-layout-canvas>
                 </div>
                 <div @click="checkDrag(canvasItem.uuid)" class="operate operate-size"
                     v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
@@ -541,7 +541,11 @@
 
             previewCanvas() {
                 this.isShowDialog = !this.isShowDialog
-            }
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
+            },
         },
         mounted() {
             const el = this;

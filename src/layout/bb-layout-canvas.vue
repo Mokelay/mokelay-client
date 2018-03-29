@@ -203,6 +203,10 @@
             return createElement('div', {}, bbList);
         },
         methods: {
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
+            },
 
             // clickHandler(e) {
             //     window.stop();
