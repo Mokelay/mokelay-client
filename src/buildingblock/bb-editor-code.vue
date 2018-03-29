@@ -65,7 +65,7 @@ import 'codemirror/lib/codemirror.css';
                 let t=this;
                 let result = this.codeObj.getValue();
                 if(t.returnObj){
-                    result = eval(result);
+                    result = JSON.parse(result);
                 }
                 t.$emit("input",result);
             }
