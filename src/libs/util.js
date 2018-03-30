@@ -197,7 +197,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             var valueType = input['valueType'] || 'template';
             var paramValue = null;
             if (valueType == 'constant') {
-                paramValue = input['constant'] || input['variable'];
+                paramValue = input['constant'] == undefined ? input['variable'] : input['constant'];
             } else if (valueType == 'template') { //支持参数为自定义模板
                 paramValue = util.tpl(input['variable'], Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj[input['valueKey']]), inputValueObj));
             } else if (valueType == 'inputValueObj') {
