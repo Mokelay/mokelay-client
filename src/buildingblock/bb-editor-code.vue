@@ -13,7 +13,7 @@ import 'codemirror/lib/codemirror.css';
         },
         props: {
             value:{
-                type:[String,Object]
+                type:[String,Object,Array]
             },
             returnObj:{
                 type:Boolean,
@@ -71,8 +71,12 @@ import 'codemirror/lib/codemirror.css';
             submit(){
                 let t=this;
                 let result = this.codeObj.getValue();
-                if(t.returnObj){
-                    result = JSON.parse(result);
+                if(t.returnObj && result){
+                    try{
+                    　　result = JSON.parse(result);
+                    }catch(e){
+                        result = eval(result);
+                    }
                 }
                 t.$emit("input",result);
             }
