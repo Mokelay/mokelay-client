@@ -1,6 +1,6 @@
 <template>
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
-    <el-tabs type="border-card">
+    <el-tabs :key="key" type="border-card">
         <el-tab-pane label="属性">
             <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
@@ -43,7 +43,7 @@
         },
         data() {
             return {
-                valueBase:this.value,
+                valueBase:_TY_Tool.deepClone(this.value),
                 alias:this.value.alias,
                 animationForm:{},
                 tabs:null,
@@ -58,13 +58,15 @@
                 //动画配置 新增表单
                 animationFormContent:null,
                 //动画配置 动画列表
-                animationListContent:null
+                animationListContent:null,
+                key:null
             }
         },
         watch: {
         },
         created: function () {
-            this.setEditor()
+            this.key = _TY_Tool.uuid();
+            this.setEditor();
         },
         mounted:function(){
 
@@ -75,6 +77,7 @@
                 const t = this;
                 t.valueBase = content;
                 t.alias = content.alias;
+                t.key = _TY_Tool.uuid();
                 t.setEditor()
             },
             //添加交互
@@ -258,6 +261,25 @@
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[
                             {prop: 'uuid',label: '交互标识',type:'defalut'},
+                            {prop:'fromContentEvent',
+                                et:'bb-select',                   
+                                label:'事件',               
+                                //group:'交互事件',                   
+                                etProp:{
+                                    ds:{
+                                        api: "list-edByBbAlias",
+                                        method: "get",
+                                        inputs: [
+                                            {paramName: 'bbAlias',valueType:"template",variable:t.alias}
+                                        ],
+                                        outputs: [
+                                            {dataKey: "fields", valueKey: "data_list"}
+                                        ]
+                                    },
+                                    textField:'name',
+                                    valueField:"eventName"
+                                }
+                            },
                             {prop: 'executeType',label: '方法类型',et: 'bb-select',etProp:{fields:[
                                 {text:'预定义方法',value:'trigger_method'},
                                 {text:'自定义方法',value:'custom_script'},
