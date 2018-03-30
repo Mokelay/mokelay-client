@@ -143,6 +143,18 @@
                     let data =JSON.parse(userInfo);
                     t.userInfo = data;
                     t.userName = data.user_name;
+                }else{
+                    _TY_Tool.get(_TY_ContentPath+"/read-session-user-info").then(function (response) {
+                        let data = response['data']['data'];
+                        t.userInfo={};
+                        t.userInfo['user_id']=data.id;
+                        t.userInfo['user_name']=data.name;
+                        t.userInfo['market_id']=data.marketId;
+                        t.userInfo['market_name']=data.marketDesc;
+                        t.userName = data.name
+                        localStorage.setItem('userInfo', JSON.stringify(t.userInfo));
+                    }).catch(function (error) {
+                    });
                 }
             },
             getResources(){
