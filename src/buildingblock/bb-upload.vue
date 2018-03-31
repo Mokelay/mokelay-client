@@ -138,8 +138,11 @@
                     }else{
                         list = list.split(',');
                         list.forEach((ele,key)=>{
+                            const nameList = ele.split('/');
+                            const name = nameList[nameList.length - 1];
                             const item = {
-                                url:ele
+                                url:ele,
+                                name:name
                             }
                             t.realFileList.push(item);
                         })
