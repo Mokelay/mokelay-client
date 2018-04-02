@@ -198,13 +198,16 @@
             //积木选中状态
             onFocus:function(...params){
                 const t = this;
+                if(params[0] == t.nowEdit){
+                    return;
+                }
                 if(t.preItem){
                     t.preItem.onBlur();
                 }
                 t.preItem = params[1];
-                //记录当前编辑的积木下标
+                // //记录当前编辑的积木下标
                 t.nowEdit = params[0];
-                //将当前编辑的对象放到全局变量中
+                // //将当前编辑的对象放到全局变量中
                 _TY_Root._TY_Current_Edit_Item = t.realContent[params[0]];
                 t.$emit('onFocus',t.realContent[params[0]],t.nowEdit,t);
             },
