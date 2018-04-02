@@ -5,7 +5,7 @@
                 <div>
                     <bb-layout-canvas :ref="canvasItem.uuid" :content="[canvasItem]"></bb-layout-canvas>
                 </div>
-                <div @click="checkDrag(canvasItem.uuid)" class="operate operate-size"
+                <div @click="checkDrag($event, canvasItem.uuid)" class="operate operate-size"
                     v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
                     <div class="border-line"></div>
@@ -253,6 +253,8 @@
                     let disX = e.clientX - oDiv.offsetParent.offsetLeft;
                     let disY = e.clientY - oDiv.offsetParent.offsetTop;
 
+                    binding.value(true, {x: e.clientX - disX, y: e.clientY - disY, uuid: el.getAttribute('data-uuid')})
+
                     document.onmousemove = function (e) {
                         // 通过事件委托，计算移动的距离
                         let left = e.clientX - disX;
@@ -261,7 +263,7 @@
                         oDiv.offsetParent.style.left = left + 'px';
                         oDiv.offsetParent.style.top = top + 'px';
 
-                        binding.value({x: left, y: top, uuid: el.getAttribute('data-uuid')})
+                        binding.value(false, {x: left, y: top, uuid: el.getAttribute('data-uuid')})
                     };
                     document.onmouseup = function (e) {
 
@@ -419,8 +421,8 @@
                 checkCanvasId: 0,
                 upLayoutCss: false,
                 downLayoutCss: false,
-                operationItems: [],
-                canvasItems: []
+                canvasItems: [],
+                initItems: []
             }
         },
         created: function () {
@@ -436,15 +438,23 @@
 
                 const el = this;
                 const zIndex = [];
+                let item = null;
+
                 this.content.forEach((con, key) => {
+                    item = el.content[el.content.length - 1];
                     if (key === (el.content.length - 1)) {
-                        el.checkCanvasId = el.content[el.content.length - 1].uuid;
-                        el.content[el.content.length - 1].isShow = true;
+                        el.checkCanvasId = item.uuid;
+                        item.isShow = true;
                         el.$emit('onFocus',con, key);
                     } else {
                         con.isShow = false;
                     }
-                    zIndex.push(con.layout.zIndex);
+
+                    if (con.init) {
+                        el.initItems.push(con);
+                    }
+                    
+                    zIndex.push(con.zIndex);
                 });
 
                 let zIndexMax = Math.max.apply(null, zIndex);
@@ -507,11 +517,28 @@
                     }
                 });
             },
-            direction(val){
+            direction(record, val){
                 console.log(val);
+                const el = this;
 
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === val.uuid) {
+                        if (record) {
+                            if (el.canvasItems[0].recordArray && el.canvasItems[0].recordArray.length) {
+                                el.canvasItems[0].recordArray.push({
+                                    uuid: val.uuid,
+                                    x: val.x,
+                                    y: val.y
+                                });
+                            } else {
+                                el.canvasItems[0].recordArray = [{
+                                    uuid: val.uuid,
+                                    x: val.x,
+                                    y: val.y
+                                }];
+                            }
+                        }
+                        
                         item.isShow = true;
                         item.layout.position = {x: val.x, y: val.y};
                     } else {
@@ -519,7 +546,9 @@
                     }
                 });
             },
-            checkDrag(uuid){
+            checkDrag(e, uuid){
+                e.stopPropagation();
+                
                 const el = this;
 
                 el.checkCanvasId = uuid;
@@ -545,10 +574,10 @@
                 if (!index) {
                     
                     this.canvasItems.forEach((item, key) => {
-                    if (item.uuid === t.checkCanvasId) {
-                        index = key;
-                    }
-                });
+                        if (item.uuid === t.checkCanvasId) {
+                            index = key;
+                        }
+                    });
                 }
 
                 t.$confirm('确认操作?', '提示', {
@@ -570,19 +599,32 @@
             
             cancelCanvas() {
 
-                if (this.canvasItems.length) {
-                    this.canvasItems.pop();
-                } else {
-                    this.canvasItems = this.operationItems;
+                let recordArray = this.canvasItems[0].recordArray;
+
+                if (!recordArray || !recordArray.length) {
+                    return;
                 }
+
+                const el = this;
+                let recordObj = recordArray.pop();
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === recordObj.uuid) {
+                        item.layout.position = {
+                            x: recordObj.x,
+                            y: recordObj.y
+                        }
+
+                        el.canvasItems.splice(key, 1, item);
+                    }
+                });
             },
 
             reformCanvas() {
                 if (!this.canvasItems.length) {
                     return;
                 }
-                this.operationItems = this.canvasItems;
-                this.canvasItems = [];
+                this.canvasItems = this.initItems;
             },
 
             previewCanvas() {
@@ -696,6 +738,14 @@
             window.onclick = function() {
                 el.menu = false;
                 el.scrollCss = false;
+
+                el.canvasItems.forEach((item, key) => {
+                    if (item.isShow) {
+                        el.$emit('onFocus', {});
+                    }
+                    item.isShow = false;
+                    el.canvasItems.splice(key, 1, item);
+                });
             };
         }
     }
