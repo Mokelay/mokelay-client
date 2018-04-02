@@ -209,6 +209,9 @@
             } catch(e){
               t.content = eval(page.content);
             }
+            t.content.forEach((item, key)=>{//添加交互
+                item.init = true;
+            });
           }else{
             //积木内容 content
             let content = [];
@@ -225,7 +228,8 @@
                 uuid:_pbb['id'],
                 interactives:[],
                 animation:[],
-                layout:null
+                layout:null,
+                init: true
               }
               interactives.forEach((interactive,key)=>{//添加交互
                 if(interactive.pbbId == _pbbId){
