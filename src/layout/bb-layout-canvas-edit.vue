@@ -450,9 +450,7 @@
                         con.isShow = false;
                     }
 
-                    if (con.init) {
-                        el.initItems.push(con);
-                    }
+                    el.initItems.push(con);
                     
                     zIndex.push(con.zIndex);
                 });
@@ -599,6 +597,11 @@
             
             cancelCanvas() {
 
+                if (!this.canvasItems.length) {
+                    this.canvasItems = this.initItems;
+                    return ;
+                }
+
                 let recordArray = this.canvasItems[0].recordArray;
 
                 if (!recordArray || !recordArray.length) {
@@ -624,7 +627,7 @@
                 if (!this.canvasItems.length) {
                     return;
                 }
-                this.canvasItems = this.initItems;
+                this.canvasItems = [];
             },
 
             previewCanvas() {
