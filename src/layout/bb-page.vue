@@ -155,7 +155,7 @@
           var data = response['data']['data'];
           var page = data['page'];
           var pbbList = data['pbb_list']['list'];
-          var interactives = data['interactives']['list'];
+          var interactives = data['interactives']?data['interactives']['list']:[];
 
           if(page['template']){
             //模板文件
