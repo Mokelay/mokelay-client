@@ -734,7 +734,7 @@ let _setStyle = function(bb, t) {
         }
     }
     const animation = _setAnimation(bb);
-    style.animation = animation;
+    style['animation'] = animation;
     return style;
 }
 /**
@@ -758,7 +758,7 @@ let _setAnimation = function(bb) {
     if (animations && animations.length > 0) {
         animations.forEach((ani, key) => {
             const playNum = ani.loop ? 'infinite' : ani.playNum;
-            animation = animation ? `${animation},${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}` : `${ani.style} ${ani.time} ${ani.delay} ${ani.direction} ${playNum}`
+            animation = animation ? `${animation},${ani.style} ${ani.time/1000}s ${ani.delay/1000}s ${ani.direction} ${playNum}` : `${ani.style} ${ani.time/1000}s ${ani.delay/1000}s ${ani.direction} ${playNum}`
         })
     }
     return animation;

@@ -319,7 +319,7 @@
                     aliasName:'动画类型',               
                     group:'',                   
                     attributes:{
-                        attributeName:'type',
+                        attributeName:'style',
                         styleConfig: {
                             imgWidth: "50px",
                             imgHeight: "50px",
@@ -431,8 +431,8 @@
                     attributes:{
                         attributeName:'direction',
                         fields:[
-                            {text:'normal',value:'正向'},
-                            {text:'alternate',value:'反向'}
+                            {text:'正向',value:'normal'},
+                            {text:'反向',value:'alternate'}
                         ],
                         defaultValTpl:''
                     }
@@ -447,7 +447,7 @@
                         attributeName:'animation',
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[{                      
-                            prop:'type',                   
+                            prop:'style',                   
                             label:'动画类型',               
                             et:'bb-select',                   
                             etProp:{
@@ -513,8 +513,8 @@
                             label:'播放方向',                                  
                             etProp:{
                                 fields:[
-                                    {text:'normal',value:'正向'},
-                                    {text:'alternate',value:'反向'}
+                                    {text:'正向',value:'normal'},
+                                    {text:'反向',value:'alternate'}
                                 ],
                                 defaultValTpl:''
                             }
