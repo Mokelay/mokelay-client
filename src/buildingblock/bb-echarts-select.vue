@@ -28,6 +28,7 @@
                     {name:'暂无数据状态',attributeName:'data-empty',et:'bb-editor-switch',props:{value:false}},
                     {name:'处理生成图表时的宽度问题',attributeName:'judge-width',et:'bb-editor-switch',props:{value:false}},
                     {name:'容器宽度变化的延迟',attributeName:'width-change-delay',et:'bb-input-number',props:{value:300}},
+                    {name:'图形颜色',attributeName:'colors',et:'bb-editor-code',props:{returnObj:true}}
                 ],
                 ds:this.value
             }

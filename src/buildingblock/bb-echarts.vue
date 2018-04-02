@@ -5,8 +5,24 @@
         render: function(createElement){
             const t = this;
             if(t.canRender){
+                const tempPublicConfig = Object.assign({
+                        width:'auto',
+                        height:'400px',
+                        'tooltip-visible':true,
+                        'legend-visible ':true,
+                        'legend-position':'top',
+                        grid:null,
+                        events:null,
+                        'before-config':null,
+                        'after-config':null,
+                        loading:false,
+                        'data-empty':false,
+                        'judge-width':false,
+                        'width-change-delay':300,
+                        "colors":null
+                    },t.publicConfig);
                 const chart = createElement(t.chartType,{
-                    props:Object.assign(t.publicConfig,{
+                    props:Object.assign(tempPublicConfig,{
                             data:{columns:t.realColumns,rows:t.realRows},
                             settings:t.realSettings
                         }),
@@ -37,7 +53,8 @@
                         loading:false,
                         'data-empty':false,
                         'judge-width':false,
-                        'width-change-delay':300
+                        'width-change-delay':300,
+                        "colors":null
                     }
                 }
             },
