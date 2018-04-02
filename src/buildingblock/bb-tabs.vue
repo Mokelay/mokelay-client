@@ -280,7 +280,9 @@
                                 group:tab.name,
                                 icon:tab.icon
                             });
+                            t.canRender=true;
                         }else if(tab.type==='dynamic'){
+                            t.canRender=false;
                             _TY_Tool.getDSData(tab.ds, _TY_Tool.buildTplParams(t), function (map) {
                                 map[0].value.forEach((item, key)=> {
                                     t.realTabs.push({
