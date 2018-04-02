@@ -14,12 +14,12 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="输入" name="inputField">
-                <bb-collapse ref="_if" :activeNames="['common','read','create','update','cache','condition']"
+                <bb-collapse ref="_if" :activeNames="['common','read','create','update','cache','condition','unstructured']"
                              :itemDs="ifItemDs" :collapseData="ifCollapseData"
                 ></bb-collapse>
             </el-tab-pane>
             <el-tab-pane label="输出" name="outputField">
-                <bb-collapse ref="_of" :activeNames="['common','read','create','update','cache','condition']"
+                <bb-collapse ref="_of" :activeNames="['common','read','create','update','cache','condition','unstructured']"
                              :itemDs="ofItemDs" :collapseData="ofCollapseData"
                 ></bb-collapse>
             </el-tab-pane>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    const IOFT = ['common', 'read', 'create', 'update', 'condition', 'cache', 'memory']
+    const IOFT = ['common', 'read', 'create', 'update', 'condition', 'cache', 'memory','unstructured']
 
     export default {
         name: 'bb-apilego-config',
@@ -184,7 +184,7 @@
                         data[2].realContent.forEach(function(item,index){
                             resultApiLego.push({
                                 "text":(index+1)+"."+item.data.legoName,
-                                "value":item.data.id
+                                "value":item.data.uuid
                             });
                         });
                         t.apiLegos = resultApiLego;
@@ -205,54 +205,56 @@
             },
             oiChange: function (val, cascader) {
                 let t = this;
-                const ds = {
-                    "api": "ty-auto-generate-iof",
-                    "category": "config",
-                    "method": "post",
-                    "inputs": [
-                        {
-                            "paramName": "apiLegoId",
-                            "valueType": "constant",
-                            "constant": t.external.linkage[0].data.id
-                        },
-                        {
-                            "paramName": "oiAlias",
-                            "valueType": "constant",
-                            "constant": val
-                        }
-                    ],
-                    "outputs": []
-                };
-                _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
-                    //刷新输入 输出字段配置
-                    t._refreshIf();
-                    t._refreshOf();
-                }, function (code, msg) {
-                });
+                t.external.linkage[0].data.oiAlias = val;
+                // const ds = {
+                //     "api": "ty-auto-generate-iof",
+                //     "category": "config",
+                //     "method": "post",
+                //     "inputs": [
+                //         {
+                //             "paramName": "apiLegoId",
+                //             "valueType": "constant",
+                //             "constant": t.external.linkage[0].data.id
+                //         },
+                //         {
+                //             "paramName": "oiAlias",
+                //             "valueType": "constant",
+                //             "constant": val
+                //         }
+                //     ],
+                //     "outputs": []
+                // };
+                // _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
+                //     //刷新输入 输出字段配置
+                //     t._refreshIf();
+                //     t._refreshOf();
+                // }, function (code, msg) {
+                // });
             },
             desChange: function (val, textarea) {
                 let t = this;
-                const ds = {
-                    "api": "update-apilego-des-by-id",
-                    "category": "config",
-                    "method": "post",
-                    "inputs": [
-                        {
-                            "paramName": "description",
-                            "valueType": "constant",
-                            "constant": val
-                        },
-                        {
-                            "paramName": "id",
-                            "valueType": "constant",
-                            "constant": t.external.linkage[0].data.id
-                        }
-                    ],
-                    "outputs": []
-                };
-                _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
-                }, function (code, msg) {
-                });
+                t.external.linkage[0].data.description = val;
+                // const ds = {
+                //     "api": "update-apilego-des-by-id",
+                //     "category": "config",
+                //     "method": "post",
+                //     "inputs": [
+                //         {
+                //             "paramName": "description",
+                //             "valueType": "constant",
+                //             "constant": val
+                //         },
+                //         {
+                //             "paramName": "id",
+                //             "valueType": "constant",
+                //             "constant": t.external.linkage[0].data.id
+                //         }
+                //     ],
+                //     "outputs": []
+                // };
+                // _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
+                // }, function (code, msg) {
+                // });
             },
             _buildTitle: function (ioft) {
                 let t = this;
@@ -270,7 +272,9 @@
                     case "cache":
                         return "缓存字段";
                     case "memory":
-                        return "内存字段"
+                        return "内存字段";
+                    case "unstructured":
+                        return "非结构字段";
                 }
             },
             //ioft 在参数二中时 隐藏，其他情况显示
@@ -295,7 +299,7 @@
                             [
                                 preUUID+'requestParamName',
                                 preUUID+'sessionParamName',
-                                preUUID+'fromApiLegoId',
+                                preUUID+'fromApiLegoUuid',
                                 preUUID+'fromApiLegoOutputFieldAlias',
                                 preUUID+'fieldTpl'
                             ]);
@@ -305,7 +309,7 @@
                             [
                                 preUUID+'constant',
                                 preUUID+'sessionParamName',
-                                preUUID+'fromApiLegoId',
+                                preUUID+'fromApiLegoUuid',
                                 preUUID+'fromApiLegoOutputFieldAlias',
                                 preUUID+'fieldTpl'
                             ]);
@@ -315,13 +319,13 @@
                             [
                                 preUUID+'constant',
                                 preUUID+'requestParamName',
-                                preUUID+'fromApiLegoId',
+                                preUUID+'fromApiLegoUuid',
                                 preUUID+'fromApiLegoOutputFieldAlias',
                                 preUUID+'fieldTpl'
                             ]);
                         break;
                     case 'output':
-                        bbForm.hideAndShowFormItem([preUUID+'fromApiLegoId',preUUID+'fromApiLegoOutputFieldAlias'],
+                        bbForm.hideAndShowFormItem([preUUID+'fromApiLegoUuid',preUUID+'fromApiLegoOutputFieldAlias'],
                             [
                                 preUUID+'constant',
                                 preUUID+'requestParamName',
@@ -330,7 +334,7 @@
                             ]);
                         break;
                     case 'template':
-                        bbForm.hideAndShowFormItem([preUUID+'fromApiLegoId',preUUID+'fieldTpl'],
+                        bbForm.hideAndShowFormItem([preUUID+'fromApiLegoUuid',preUUID+'fieldTpl'],
                             [
                                 preUUID+'constant',
                                 preUUID+'requestParamName',
@@ -340,6 +344,105 @@
                         break;
                 }
             },
+            //构造bb-button-group的buttons属性
+            _buildIOFTButton:function(io,ioft){
+                let t=this;
+                // let allData = t.external.linkage[2].realContent;
+                //当前apilego
+                let data = t.external.linkage[0].data;
+                let result = [];
+                if(io==='inputField'&&data.ifList){
+                    //输入字段
+                    data.ifList.forEach(function(item,index){
+                        if(item.ift == ioft){
+                            result.push({
+                                text: item.name,
+                                value: item.alias,
+                                type:'primary',
+                                iconName:'ty-icon_cuowu',
+                                size:'small',
+                                data:item
+                            });
+                        }
+                    });
+                }else if(io==='outputField'&&data.ofList){
+                    //输出字段
+                    data.ofList.forEach(function(item,index){
+                        if(item.oft == ioft){
+                            result.push({
+                                text: item.name,
+                                value: item.alias,
+                                type:'primary',
+                                iconName:'ty-icon_cuowu',
+                                size:'small',
+                                data:item
+                            });
+                        }
+                    });
+                }
+                return result;
+            },
+            removeIOF:function(..._data){
+                let t=this;
+                let removeData = _data[0].data;
+                let data = t.external.linkage[0].data;
+                if(removeData.ift){
+                    //输入字段
+                        data.ifList.forEach(function(item,index){
+                            if(item.uuid==removeData.uuid){
+                                data.ifList.splice(index,1);
+                                return false;
+                            }
+                        });
+                }else if(removeData.oft){
+                        data.ofList.forEach(function(item,index){
+                            if(item.uuid==removeData.uuid){
+                                data.ofList.splice(index,1);
+                                return false;
+                            }
+                        });
+                }
+                t._refreshIf();//修改字段后，刷新整个字段
+                t._refreshOf();
+            },
+            //保存字段  表单交互用
+            saveIOF:function(..._data){
+                let t=this;
+                let formData = _data[0];
+                let data = t.external.linkage[0].data;
+                if(formData.ift){
+                    //输入字段
+                    if(!formData.uuid){
+                        //没有uuid 表示新增
+                        formData.uuid = _TY_Tool.uuidTimestamp();
+                        formData.apiLegoUuid = data.uuid;
+                        data.ifList.push(formData);
+                    }else{
+                        data.ifList.forEach(function(item,index){
+                            if(item.uuid==formData.uuid){
+                                data.ifList[index] = Object.assign(data.ifList[index],formData);
+                                return false;
+                            }
+                        });
+                    }
+                }else if(formData.oft){
+                     if(!formData.uuid){
+                        //没有uuid 表示新增
+                        formData.uuid = _TY_Tool.uuidTimestamp();
+                        formData.apiLegoUuid = data.uuid;
+                        data.ofList.push(formData);
+                    }else{
+                        data.ofList.forEach(function(item,index){
+                            if(item.uuid==formData.uuid){
+                                data.ofList[index] = Object.assign(data.ofList[index],formData);
+                                return false;
+                            }
+                        });
+                    }
+                }
+                t._refreshIf();//修改字段后，刷新整个字段
+                t._refreshOf();
+            },
             //构建输入的 colopseData
             buildIfCollopaseData: function () {
                 let t = this;
@@ -348,7 +451,7 @@
                     const _ioft = IOFT[i];
                     //输入字段表单编辑
                     const formAdd = {
-                                "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft,
+                                "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft,
                                 "alias": "bb-button",
                                 "aliasName": "添加" + t._buildTitle(_ioft),
                                 "group": "",
@@ -362,137 +465,26 @@
                                 "animation": [],
                                 "interactives": [{
                                     "uuid": "",
-                                    "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft,
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-if-add-" + _ioft,
                                     "executeType": "trigger_method",
                                     "fromContentEvent": "click",
                                     "executeContentUUID": "Page_Ref_Root",
                                     "executeContentMethodName": "openDialog",
                                     "executeArgument": [
                                         {
-                                            "uuid": "",
+                                            "uuid": t.external.linkage[0].data.uuid + "-if-add-form-"+_ioft,
                                             "alias": "bb-form",
                                             "aliasName": "编辑属性",
                                             "attributes": {
                                                 "value":{
-                                                    "ct":"eq"
+                                                    "ct":"eq",
+                                                    "ift":_ioft,
+                                                    "apiLegoUuid":t.external.linkage[0].data.uuid
                                                 },
                                                 "settingButtonText": "确定",
-                                                "buttonConfig": {
-                                                    "action": "execute-ds",
-                                                    "callback": "refresh",
-                                                    "ds": {
-                                                        "api": "add-inputfield",
-                                                        "category": "config",
-                                                        "method": "post",
-                                                        "inputs": [
-                                                            {
-                                                                "paramName": "name",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.name"
-                                                            },
-                                                            {
-                                                                "paramName": "description",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.description"
-                                                            },
-                                                            {
-                                                                "paramName": "fieldName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fieldName"
-                                                            },
-                                                            {
-                                                                "paramName": "constant",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.constant"
-                                                            },
-                                                            {
-                                                                "paramName": "ct",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.ct"
-                                                            },
-                                                            {
-                                                                "paramName": "fvt",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fvt"
-                                                            },
-                                                            {
-                                                                "paramName": "fromApiLegoId",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fromApiLegoId"
-                                                            },
-                                                            {
-                                                                "paramName": "alias",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.alias"
-                                                            },
-                                                            {
-                                                                "paramName": "validate",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.validate"
-                                                            },
-                                                            {
-                                                                "paramName": "connectorPath",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.connectorPath"
-                                                            },
-                                                            {
-                                                                "paramName": "dt",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.dt"
-                                                            },
-                                                            {
-                                                                "paramName": "fromApiLegoOutputFieldAlias",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fromApiLegoOutputFieldAlias"
-                                                            },
-                                                            {
-                                                                "paramName": "requestParamName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.requestParamName"
-                                                            },
-                                                            {
-                                                                "paramName": "sessionParamName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.sessionParamName"
-                                                            },
-                                                            {
-                                                                "paramName": "fieldTpl",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fieldTpl"
-                                                            },
-                                                            {
-                                                                "paramName": "ift",
-                                                                "valueType": "constant",
-                                                                "constant": _ioft
-                                                            },
-                                                            {
-                                                                "paramName": "apiLegoId",
-                                                                "valueType": "constant",
-                                                                "constant": t.external.linkage[0].data.id
-                                                            }
-                                                        ]
-                                                    },
-                                                    "confirmTitle": "确认添加",
-                                                    "confirmText": "提示"
-                                                },
                                                 "content": [
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "name",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "name",
                                                         "alias": "bb-input",
                                                         "aliasName": "名称",
                                                         "group": "",
@@ -504,7 +496,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fieldName",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "fieldName",
                                                         "alias": "bb-input",
                                                         "aliasName": "字段名",
                                                         "group": "",
@@ -516,7 +508,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "alias",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "alias",
                                                         "alias": "bb-input",
                                                         "aliasName": "别名",
                                                         "group": "",
@@ -528,7 +520,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "ct",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "ct",
                                                         "alias": "bb-select",
                                                         "aliasName": "条件类型",
                                                         "group": "",
@@ -610,7 +602,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "dt",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "dt",
                                                         "alias": "bb-select",
                                                         "aliasName": "数据类型",
                                                         "group": "",
@@ -660,7 +652,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "ift",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "ift",
                                                         "alias": "bb-input",
                                                         "aliasName": "输入类型",
                                                         "group": "",
@@ -674,7 +666,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fvt",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "fvt",
                                                         "alias": "bb-select",
                                                         "aliasName": "数据来源",
                                                         "group": "",
@@ -711,7 +703,7 @@
                                                         "animation": [],
                                                         "interactives": [{
                                                             "uuid": "",
-                                                                "fromContentUUID": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-fvt',
+                                                                "fromContentUUID": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + '-fvt',
                                                                 "executeType": "trigger_method",
                                                                 "fromContentEvent": "change",
                                                                 "executeContentUUID": "r-00001-config",
@@ -719,7 +711,7 @@
                                                         }]
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "requestParamName",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "requestParamName",
                                                         "alias": "bb-input",
                                                         "aliasName": "请求参数",
                                                         "group": "",
@@ -731,7 +723,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "sessionParamName",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "sessionParamName",
                                                         "alias": "bb-input",
                                                         "aliasName": "session参数",
                                                         "group": "",
@@ -743,12 +735,12 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoId",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "fromApiLegoUuid",
                                                         "alias": "bb-select",
                                                         "aliasName": "数据来源ID",
                                                         "group": "",
                                                         "attributes": {
-                                                            "attributeName": "fromApiLegoId",
+                                                            "attributeName": "fromApiLegoUuid",
                                                             "rules": [],
                                                             "fields":t.apiLegos
                                                         },
@@ -756,7 +748,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fromApiLegoOutputFieldAlias",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "fromApiLegoOutputFieldAlias",
                                                         "alias": "bb-input",
                                                         "aliasName": "output参数",
                                                         "group": "",
@@ -768,7 +760,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "constant",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "constant",
                                                         "alias": "bb-input",
                                                         "aliasName": "常量值",
                                                         "group": "",
@@ -780,7 +772,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "fieldTpl",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "fieldTpl",
                                                         "alias": "bb-input",
                                                         "aliasName": "模板TPL",
                                                         "group": "",
@@ -792,7 +784,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + '-validate',
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + '-validate',
                                                         "alias": "bb-list",
                                                         "aliasName": "数据校验",
                                                         "group": "",
@@ -839,7 +831,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "connectorPath",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "connectorPath",
                                                         "alias": "bb-input",
                                                         "aliasName": "连接器",
                                                         "group": "",
@@ -851,7 +843,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-if-add-" + _ioft + "description",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-add-" + _ioft + "description",
                                                         "alias": "bb-textarea",
                                                         "aliasName": "描述",
                                                         "group": "",
@@ -868,7 +860,22 @@
                                                 {}
                                             ],
                                             "interactives": [
-                                                {}
+                                                {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
                                             ],
                                             "layout": {}
                                         }
@@ -884,201 +891,32 @@
                         name: _ioft,
                         "content": [
                             {
-                                "uuid": t.external.linkage[0].data.id + "-if-" + _ioft,
+                                "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft,
                                 "alias": "bb-button-group",
                                 "aliasName": t._buildTitle(_ioft),
                                 "attributes": {
-                                    "buttonDs": {
-                                        "api": "ty-list-if-by-apilegoIdAndIft",
-                                        "method": "get",
-                                        "inputs": [
-                                            {
-                                                "paramName": "apiLegoId",
-                                                "valueType": "constant",
-                                                "constant": t.external.linkage[0].data.id
-                                            },
-                                            {
-                                                "paramName": "ift",
-                                                "valueType": "constant",
-                                                "constant": _ioft
-                                            }
-                                        ],
-                                        "outputs": [
-                                            {
-                                                "dataKey": "tableData",
-                                                "valueKey": "data_list",
-                                                "handle": "ty-data-transfer-iof-to-button"
-                                            }
-                                        ],
-                                        "category": "config"
-                                    }
+                                    "buttons":t._buildIOFTButton('inputField',_ioft)
                                 },
                                 "animation": [],
                                 "interactives": [
                                     {
                                         "uuid": "",
-                                        "fromContentUUID": t.external.linkage[0].data.id + "-if-" + _ioft,
-                                        "executeType": "trigger_method",
-                                        "fromContentEvent": "iconClick",
-                                        "executeContentUUID": "Page_Ref_Root",
-                                        "executeContentMethodName": "executeDS",
-                                        "executeArgument": {
-                                            "api": "delete-inputField",
-                                            "category": "config",
-                                            "method": "post",
-                                            "inputs": [
-                                                {
-                                                    "paramName": "fieldId",
-                                                    "valueType": "template",
-                                                    "variable": "<%=args[0].data.id%>"
-                                                }
-                                            ],
-                                            "outputs": []
-                                        }
-                                    },
-                                    {
-                                        "uuid": "",
-                                        "fromContentUUID": t.external.linkage[0].data.id + "-if-" + _ioft,
+                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-" + _ioft,
                                         "executeType": "trigger_method",
                                         "fromContentEvent": "click",
                                         "executeContentUUID": "Page_Ref_Root",
                                         "executeContentMethodName": "openDialog",
                                         "executeArgument": [
                                             {
-                                                "uuid": t.external.linkage[0].data.id + "-if-form-"+_ioft,
+                                                "uuid": t.external.linkage[0].data.uuid + "-if-form-"+_ioft,
                                                 "alias": "bb-form",
                                                 "aliasName": "编辑属性",
                                                 "attributes": {
                                                     "settingButtonText": "确定",
-                                                    "buttonConfig": {
-                                                        "action": "execute-ds",
-                                                        "callback": "refresh",
-                                                        "ds": {
-                                                            "api": "update-inputfield",
-                                                            "category": "config",
-                                                            "method": "post",
-                                                            "inputs": [
-                                                                {
-                                                                    "paramName": "id",
-                                                                    "valueType": "template",
-                                                                    "variable": "<%=_TY_Root._TY_args[0].data.id%>"
-                                                                },
-                                                                {
-                                                                    "paramName": "name",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.name"
-                                                                },
-                                                                {
-                                                                    "paramName": "description",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.description"
-                                                                },
-                                                                {
-                                                                    "paramName": "fieldName",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.fieldName"
-                                                                },
-                                                                {
-                                                                    "paramName": "constant",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.constant"
-                                                                },
-                                                                {
-                                                                    "paramName": "ct",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.ct"
-                                                                },
-                                                                {
-                                                                    "paramName": "fvt",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.fvt"
-                                                                },
-                                                                {
-                                                                    "paramName": "fromApiLegoId",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.fromApiLegoId"
-                                                                },
-                                                                {
-                                                                    "paramName": "alias",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.alias"
-                                                                },
-                                                                {
-                                                                    "paramName": "validate",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.validate"
-                                                                },
-                                                                {
-                                                                    "paramName": "connectorPath",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.connectorPath"
-                                                                },
-                                                                {
-                                                                    "paramName": "dt",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.dt"
-                                                                },
-                                                                {
-                                                                    "paramName": "fromApiLegoOutputFieldAlias",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.fromApiLegoOutputFieldAlias"
-                                                                },
-                                                                {
-                                                                    "paramName": "requestParamName",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.requestParamName"
-                                                                },
-                                                                {
-                                                                    "paramName": "sessionParamName",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.sessionParamName"
-                                                                },
-                                                                {
-                                                                    "paramName": "fieldTpl",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.fieldTpl"
-                                                                }
-                                                            ]
-                                                        },
-                                                        "confirmTitle": "确认更新",
-                                                        "confirmText": "提示"
-                                                    },
-                                                    "ds": {
-                                                        "api": "ty-read-if",
-                                                        "category": "config",
-                                                        "method": "get",
-                                                        "inputs": [
-                                                            {
-                                                                "paramName": "id",
-                                                                "valueType": "template",
-                                                                "variable": "<%=_TY_Root._TY_args[0].data.id%>"
-                                                            }
-                                                        ],
-                                                        "outputs": [
-                                                            {
-                                                                "dataKey": "formData",
-                                                                "valueKey": "data"
-                                                            }
-                                                        ]
-                                                    },
+                                                    "defaultValTpl":"<%=JSON.stringify(_TY_Root._TY_args[0].data)%>",
                                                     "content": [
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-name',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-name',
                                                             "alias": "bb-input",
                                                             "aliasName": "名称",
                                                             "group": "",
@@ -1090,7 +928,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-fieldName',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-fieldName',
                                                             "alias": "bb-input",
                                                             "aliasName": "字段名",
                                                             "group": "",
@@ -1102,7 +940,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-alias',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-alias',
                                                             "alias": "bb-input",
                                                             "aliasName": "别名",
                                                             "group": "",
@@ -1114,7 +952,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-ct',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-ct',
                                                             "alias": "bb-select",
                                                             "aliasName": "条件类型",
                                                             "group": "",
@@ -1197,7 +1035,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-dt',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-dt',
                                                             "alias": "bb-select",
                                                             "aliasName": "数据类型",
                                                             "group": "",
@@ -1248,7 +1086,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-ift',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-ift',
                                                             "alias": "bb-input",
                                                             "aliasName": "输入类型",
                                                             "group": "",
@@ -1262,7 +1100,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-fvt',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-fvt',
                                                             "alias": "bb-select",
                                                             "aliasName": "数据来源",
                                                             "group": "",
@@ -1300,7 +1138,7 @@
                                                             "animation": [],
                                                             "interactives": [{
                                                                 "uuid": "",
-                                                                "fromContentUUID": t.external.linkage[0].data.id + "-if-" + _ioft + '-fvt',
+                                                                "fromContentUUID": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-fvt',
                                                                 "executeType": "trigger_method",
                                                                 "fromContentEvent": "change",
                                                                 "executeContentUUID": "r-00001-config",
@@ -1308,7 +1146,7 @@
                                                             }]
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-requestParamName',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-requestParamName',
                                                             "alias": "bb-input",
                                                             "aliasName": "请求参数",
                                                             "group": "",
@@ -1321,7 +1159,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-sessionParamName',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-sessionParamName',
                                                             "alias": "bb-input",
                                                             "aliasName": "session参数",
                                                             "group": "",
@@ -1334,12 +1172,12 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-fromApiLegoId',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-fromApiLegoUuid',
                                                             "alias": "bb-select",
                                                             "aliasName": "数据来源ID",
                                                             "group": "",
                                                             "attributes": {
-                                                                "attributeName": "fromApiLegoId",
+                                                                "attributeName": "fromApiLegoUuid",
                                                                 "rules": [],
                                                                 "fields":t.apiLegos,
                                                                  "show":t._show(_ioft,["read"]),
@@ -1348,7 +1186,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-fromApiLegoOutputFieldAlias',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-fromApiLegoOutputFieldAlias',
                                                             "alias": "bb-input",
                                                             "aliasName": "output参数",
                                                             "group": "",
@@ -1361,7 +1199,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-constant',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-constant',
                                                             "alias": "bb-input",
                                                             "aliasName": "常量值",
                                                             "group": "",
@@ -1374,7 +1212,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-fieldTpl',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-fieldTpl',
                                                             "alias": "bb-input",
                                                             "aliasName": "模板TPL",
                                                             "group": "",
@@ -1387,7 +1225,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-validate',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-validate',
                                                             "alias": "bb-list",
                                                             "aliasName": "数据校验",
                                                             "group": "",
@@ -1434,7 +1272,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-connectorPath',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-connectorPath',
                                                             "alias": "bb-input",
                                                             "aliasName": "连接器",
                                                             "group": "",
@@ -1446,7 +1284,7 @@
                                                             "interactives": []
                                                         },
                                                         {
-                                                            "uuid": t.external.linkage[0].data.id + "-if-" + _ioft + '-description',
+                                                            "uuid": t.external.linkage[0].data.uuid + "-if-" + _ioft + '-description',
                                                             "alias": "bb-textarea",
                                                             "aliasName": "描述",
                                                             "group": "",
@@ -1463,21 +1301,43 @@
                                                     {}
                                                 ],
                                                 "interactives": [
-                                                    {}
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
                                                 ],
                                                 "layout": {}
                                             }
                                         ]
+                                    },
+                                    {
+                                        "uuid": "",
+                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-" + _ioft,
+                                        "executeType": "trigger_method",
+                                        "fromContentEvent": "remove",
+                                        "executeContentUUID": "r-00001-config",
+                                        "executeContentMethodName": "removeIOF"
                                     }
-
                                 ]
                             }
                         ]
                     };
-                    if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'){
+                    if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'||_ioft=='unstructured'){
                         item.content.push(formAdd);
                     }else{
-
+                        item.content.push(formAdd);
                     }
                     t.ifCollapseData.push(item);
                 }
@@ -1488,344 +1348,10 @@
                 t.ofCollapseData = [];
                 for (let i in IOFT) {
                     const _ioft = IOFT[i];
-                    let item = {
-                        title: t._buildTitle(_ioft),
-                        name: _ioft,
-                        "content": [
-                            {
-                                "uuid": t.external.linkage[0].data.id + "-of-" + _ioft,
-                                "alias": "bb-button-group",
-                                "aliasName": t._buildTitle(_ioft),
-                                "attributes": {
-                                    "buttonDs": {
-                                        "api": "ty-list-of-by-apilegoIdAndIft",
-                                        "method": "get",
-                                        "inputs": [
-                                            {
-                                                "paramName": "apiLegoId",
-                                                "valueType": "constant",
-                                                "constant": t.external.linkage[0].data.id
-                                            },
-                                            {
-                                                "paramName": "oft",
-                                                "valueType": "constant",
-                                                "constant": _ioft
-                                            }
-                                        ],
-                                        "outputs": [
-                                            {
-                                                "dataKey": "tableData",
-                                                "valueKey": "data_list",
-                                                "handle": "ty-data-transfer-iof-to-button"
-                                            }
-                                        ],
-                                        "category": "config"
-                                    }
-                                },
-                                "animation": [],
-                                "interactives": [
-                                    {
-                                        "uuid": "",
-                                        "fromContentUUID": t.external.linkage[0].data.id + "-of-" + _ioft,
-                                        "executeType": "trigger_method",
-                                        "fromContentEvent": "iconClick",
-                                        "executeContentUUID": "Page_Ref_Root",
-                                        "executeContentMethodName": "executeDS",
-                                        "executeArgument": {
-                                            "api": "delete-outputField",
-                                            "category": "config",
-                                            "method": "post",
-                                            "inputs": [
-                                                {
-                                                    "paramName": "fieldId",
-                                                    "valueType": "template",
-                                                    "variable": "<%=args[0].data.id%>"
-                                                }
-                                            ],
-                                            "outputs": []
-                                        }
-                                    },
-                                    {
-                                        "uuid": "",
-                                        "fromContentUUID": t.external.linkage[0].data.id + "-of-" + _ioft,
-                                        "executeType": "trigger_method",
-                                        "fromContentEvent": "click",
-                                        "executeContentUUID": "Page_Ref_Root",
-                                        "executeContentMethodName": "openDialog",
-                                        "executeArgument": [
-                                            {
-                                                "uuid": "",
-                                                "alias": "bb-form",
-                                                "aliasName": "编辑属性",
-                                                "attributes": {
-                                                    "settingButtonText": "确定",
-                                                    "buttonConfig": {
-                                                        "action": "execute-ds",
-                                                        "callback": "refresh",
-                                                        "ds": {
-                                                            "api": "update-outputfield",
-                                                            "category": "config",
-                                                            "method": "post",
-                                                            "inputs": [
-                                                                {
-                                                                    "paramName": "id",
-                                                                    "valueType": "template",
-                                                                    "variable": "<%=_TY_Root._TY_args[0].data.id%>"
-                                                                },
-                                                                {
-                                                                    "paramName": "name",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.name"
-                                                                },
-                                                                {
-                                                                    "paramName": "description",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.description"
-                                                                },
-                                                                {
-                                                                    "paramName": "fieldName",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.fieldName"
-                                                                },
-                                                                {
-                                                                    "paramName": "alias",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.alias"
-                                                                },
-                                                                {
-                                                                    "paramName": "handle",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.handle"
-                                                                },
-                                                                {
-                                                                    "paramName": "dt",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.dt"
-                                                                },
-                                                                {
-                                                                    "paramName": "response",
-                                                                    "valueType": "inputValueObj",
-                                                                    "valueKey": "bb",
-                                                                    "variable": "formData.response"
-                                                                }
-                                                            ]
-                                                        },
-                                                        "confirmTitle": "确认更新",
-                                                        "confirmText": "提示"
-                                                    },
-                                                    "ds": {
-                                                        "api": "ty-read-of",
-                                                        "category": "config",
-                                                        "method": "get",
-                                                        "inputs": [
-                                                            {
-                                                                "paramName": "id",
-                                                                "valueType": "template",
-                                                                "variable": "<%=_TY_Root._TY_args[0].data.id%>"
-                                                            }
-                                                        ],
-                                                        "outputs": [
-                                                            {
-                                                                "dataKey": "formData",
-                                                                "valueKey": "data"
-                                                            }
-                                                        ]
-                                                    },
-                                                    "content": [
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-name',
-                                                            "alias": "bb-input",
-                                                            "aliasName": "名称",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "name",
-                                                                "rules": []
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-fieldName',
-                                                            "alias": "bb-input",
-                                                            "aliasName": "字段名",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "fieldName",
-                                                                "rules": []
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-alias',
-                                                            "alias": "bb-input",
-                                                            "aliasName": "别名",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "alias",
-                                                                "rules": []
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-dt',
-                                                            "alias": "bb-select",
-                                                            "aliasName": "数据类型",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "dt",
-                                                                "rules": [],
-                                                                "fields": [
-                                                                    {
-                                                                        "text": "整数",
-                                                                        "value": "int"
-                                                                    },
-                                                                    {
-                                                                        "text": "浮点数",
-                                                                        "value": "double"
-                                                                    },
-                                                                    {
-                                                                        "text": "布尔值",
-                                                                        "value": "boolean"
-                                                                    },
-                                                                    {
-                                                                        "text": "字符串",
-                                                                        "value": "string"
-                                                                    },
-                                                                    {
-                                                                        "text": "日期",
-                                                                        "value": "date"
-                                                                    },
-                                                                    {
-                                                                        "text": "日期时间",
-                                                                        "value": "time"
-                                                                    },
-                                                                    {
-                                                                        "text": "对象",
-                                                                        "value": "object"
-                                                                    },
-                                                                    {
-                                                                        "text": "数组",
-                                                                        "value": "array"
-                                                                    },
-                                                                    {
-                                                                        "text": "文件",
-                                                                        "value": "multipart"
-                                                                    }
-                                                                ]
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-oft',
-                                                            "alias": "bb-input",
-                                                            "aliasName": "输出类型",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "oft",
-                                                                "rules": [],
-                                                                "show": false,
-                                                                "value": _ioft
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-response',
-                                                            "alias": "bb-editor-switch",
-                                                            "aliasName": "返回客户端",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "response",
-                                                                "rules": []
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-handle',
-                                                            "alias": "bb-list",
-                                                            "aliasName": "数据处理",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "handle",
-                                                                "rules": [],
-                                                                "returnString": true,
-                                                                "editConfig": {
-                                                                    "editable": [
-                                                                        "add",
-                                                                        "edit",
-                                                                        "remove"
-                                                                    ]
-                                                                },
-                                                                "columns": [
-                                                                    {
-                                                                        "prop": "handleName",
-                                                                        "label": "数据处理名称",
-                                                                        "et": "bb-select",
-                                                                        "etProp": {
-                                                                            textField: 'name',
-                                                                            valueField: 'alias',
-                                                                            ds: {
-                                                                                "api": "list-handle",
-                                                                                "category": "config",
-                                                                                "method": "post",
-                                                                                "inputs": [],
-                                                                                "outputs": [{
-                                                                                    "dataKey": "fields",
-                                                                                    "valueKey": "data_list"
-                                                                                }]
-                                                                            }
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        "prop": "params",
-                                                                        "label": "处理参数",
-                                                                        "et": "bb-input"
-                                                                    }
-                                                                ],
-                                                                "border": true
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        },
-                                                        {
-                                                            "uuid": t.external.linkage[0].data.id + "-of-" + _ioft + '-description',
-                                                            "alias": "bb-textarea",
-                                                            "aliasName": "描述",
-                                                            "group": "",
-                                                            "attributes": {
-                                                                "attributeName": "description",
-                                                                "rules": []
-                                                            },
-                                                            "animation": [],
-                                                            "interactives": []
-                                                        }
-                                                    ]
-                                                },
-                                                "animation": [
-                                                    {}
-                                                ],
-                                                "interactives": [
-                                                    {}
-                                                ],
-                                                "layout": {}
-                                            }
-                                        ]
-                                    }
 
-                                ]
-                            },
-                            {
-                                "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft,
+                    //输出字段表单输入
+                    const formAddOf={
+                                "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft,
                                 "alias": "bb-button",
                                 "aliasName": "添加" + t._buildTitle(_ioft),
                                 "group": "",
@@ -1839,89 +1365,25 @@
                                 "animation": [],
                                 "interactives": [{
                                     "uuid": "",
-                                    "fromContentUUID": t.external.linkage[0].data.id + "-of-add-" + _ioft,
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-of-add-" + _ioft,
                                     "executeType": "trigger_method",
                                     "fromContentEvent": "click",
                                     "executeContentUUID": "Page_Ref_Root",
                                     "executeContentMethodName": "openDialog",
                                     "executeArgument": [
                                         {
-                                            "uuid": "",
+                                            "uuid": t.external.linkage[0].data.uuid + "-of-add-form-"+_ioft,
                                             "alias": "bb-form",
                                             "aliasName": "编辑属性",
                                             "attributes": {
                                                 "value":{
-                                                    "response":false
+                                                    "response":true,
+                                                    "oft":_ioft
                                                 },
                                                 "settingButtonText": "确定",
-                                                "buttonConfig": {
-                                                    "action": "execute-ds",
-                                                    "callback": "refresh",
-                                                    "ds": {
-                                                        "api": "add-outputfield",
-                                                        "category": "config",
-                                                        "method": "post",
-                                                        "inputs": [
-                                                            {
-                                                                "paramName": "name",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.name"
-                                                            },
-                                                            {
-                                                                "paramName": "description",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.description"
-                                                            },
-                                                            {
-                                                                "paramName": "fieldName",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.fieldName"
-                                                            },
-                                                            {
-                                                                "paramName": "alias",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.alias"
-                                                            },
-                                                            {
-                                                                "paramName": "handle",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.handle"
-                                                            },
-                                                            {
-                                                                "paramName": "dt",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.dt"
-                                                            },
-                                                            {
-                                                                "paramName": "response",
-                                                                "valueType": "inputValueObj",
-                                                                "valueKey": "bb",
-                                                                "variable": "formData.response"
-                                                            },
-                                                            {
-                                                                "paramName": "oft",
-                                                                "valueType": "constant",
-                                                                "constant": _ioft
-                                                            },
-                                                            {
-                                                                "paramName": "apiLegoId",
-                                                                "valueType": "constant",
-                                                                "constant": t.external.linkage[0].data.id
-                                                            }
-                                                        ]
-                                                    },
-                                                    "confirmTitle": "确认添加",
-                                                    "confirmText": "提示"
-                                                },
                                                 "content": [
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + "name",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + "name",
                                                         "alias": "bb-input",
                                                         "aliasName": "名称",
                                                         "group": "",
@@ -1933,7 +1395,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + "fieldName",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + "fieldName",
                                                         "alias": "bb-input",
                                                         "aliasName": "字段名",
                                                         "group": "",
@@ -1945,7 +1407,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + "alias",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + "alias",
                                                         "alias": "bb-input",
                                                         "aliasName": "别名",
                                                         "group": "",
@@ -1957,7 +1419,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + "dt",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + "dt",
                                                         "alias": "bb-select",
                                                         "aliasName": "数据类型",
                                                         "group": "",
@@ -2007,7 +1469,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + "oft",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + "oft",
                                                         "alias": "bb-input",
                                                         "aliasName": "输出类型",
                                                         "group": "",
@@ -2021,7 +1483,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + '-response',
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + '-response',
                                                         "alias": "bb-editor-switch",
                                                         "aliasName": "返回客户端",
                                                         "group": "",
@@ -2033,7 +1495,7 @@
                                                         "interactives": []
                                                     },
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + '-handle',
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + '-handle',
                                                         "alias": "bb-list",
                                                         "aliasName": "数据处理",
                                                         "group": "",
@@ -2081,7 +1543,7 @@
                                                     },
 
                                                     {
-                                                        "uuid": t.external.linkage[0].data.id + "-of-add-" + _ioft + "description",
+                                                        "uuid": t.external.linkage[0].data.uuid + "-of-add-" + _ioft + "description",
                                                         "alias": "bb-textarea",
                                                         "aliasName": "描述",
                                                         "group": "",
@@ -2098,15 +1560,278 @@
                                                 {}
                                             ],
                                             "interactives": [
-                                                {}
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
                                             ],
                                             "layout": {}
                                         }
                                     ]
                                 }]
+                            };
+
+                    //输出字段字段选择
+                    const treeAddOf ={
+
+                    }
+                    let item = {
+                        title: t._buildTitle(_ioft),
+                        name: _ioft,
+                        "content": [
+                            {
+                                "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft,
+                                "alias": "bb-button-group",
+                                "aliasName": t._buildTitle(_ioft),
+                                "attributes": {
+                                    "buttons":t._buildIOFTButton('outputField',_ioft)
+                                },
+                                "animation": [],
+                                "interactives": [
+                                    {
+                                        "uuid": "",
+                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-" + _ioft,
+                                        "executeType": "trigger_method",
+                                        "fromContentEvent": "click",
+                                        "executeContentUUID": "Page_Ref_Root",
+                                        "executeContentMethodName": "openDialog",
+                                        "executeArgument": [
+                                            {
+                                                "uuid": t.external.linkage[0].data.uuid + "-of-form-"+_ioft,
+                                                "alias": "bb-form",
+                                                "aliasName": "编辑属性",
+                                                "attributes": {
+                                                    "settingButtonText": "确定",
+                                                    "defaultValTpl":"<%=JSON.stringify(_TY_Root._TY_args[0].data)%>",
+                                                    "content": [
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-name',
+                                                            "alias": "bb-input",
+                                                            "aliasName": "名称",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "name",
+                                                                "rules": []
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-fieldName',
+                                                            "alias": "bb-input",
+                                                            "aliasName": "字段名",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "fieldName",
+                                                                "rules": []
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-alias',
+                                                            "alias": "bb-input",
+                                                            "aliasName": "别名",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "alias",
+                                                                "rules": []
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-dt',
+                                                            "alias": "bb-select",
+                                                            "aliasName": "数据类型",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "dt",
+                                                                "rules": [],
+                                                                "fields": [
+                                                                    {
+                                                                        "text": "整数",
+                                                                        "value": "int"
+                                                                    },
+                                                                    {
+                                                                        "text": "浮点数",
+                                                                        "value": "double"
+                                                                    },
+                                                                    {
+                                                                        "text": "布尔值",
+                                                                        "value": "boolean"
+                                                                    },
+                                                                    {
+                                                                        "text": "字符串",
+                                                                        "value": "string"
+                                                                    },
+                                                                    {
+                                                                        "text": "日期",
+                                                                        "value": "date"
+                                                                    },
+                                                                    {
+                                                                        "text": "日期时间",
+                                                                        "value": "time"
+                                                                    },
+                                                                    {
+                                                                        "text": "对象",
+                                                                        "value": "object"
+                                                                    },
+                                                                    {
+                                                                        "text": "数组",
+                                                                        "value": "array"
+                                                                    },
+                                                                    {
+                                                                        "text": "文件",
+                                                                        "value": "multipart"
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-oft',
+                                                            "alias": "bb-input",
+                                                            "aliasName": "输出类型",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "oft",
+                                                                "rules": [],
+                                                                "show": false,
+                                                                "value": _ioft
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-response',
+                                                            "alias": "bb-editor-switch",
+                                                            "aliasName": "返回客户端",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "response",
+                                                                "rules": []
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-handle',
+                                                            "alias": "bb-list",
+                                                            "aliasName": "数据处理",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "handle",
+                                                                "rules": [],
+                                                                "returnString": true,
+                                                                "editConfig": {
+                                                                    "editable": [
+                                                                        "add",
+                                                                        "edit",
+                                                                        "remove"
+                                                                    ]
+                                                                },
+                                                                "columns": [
+                                                                    {
+                                                                        "prop": "handleName",
+                                                                        "label": "数据处理名称",
+                                                                        "et": "bb-select",
+                                                                        "etProp": {
+                                                                            textField: 'name',
+                                                                            valueField: 'alias',
+                                                                            ds: {
+                                                                                "api": "list-handle",
+                                                                                "category": "config",
+                                                                                "method": "post",
+                                                                                "inputs": [],
+                                                                                "outputs": [{
+                                                                                    "dataKey": "fields",
+                                                                                    "valueKey": "data_list"
+                                                                                }]
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "prop": "params",
+                                                                        "label": "处理参数",
+                                                                        "et": "bb-input"
+                                                                    }
+                                                                ],
+                                                                "border": true
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        },
+                                                        {
+                                                            "uuid": t.external.linkage[0].data.uuid + "-of-" + _ioft + '-description',
+                                                            "alias": "bb-textarea",
+                                                            "aliasName": "描述",
+                                                            "group": "",
+                                                            "attributes": {
+                                                                "attributeName": "description",
+                                                                "rules": []
+                                                            },
+                                                            "animation": [],
+                                                            "interactives": []
+                                                        }
+                                                    ]
+                                                },
+                                                "animation": [
+                                                    {}
+                                                ],
+                                                "interactives": [
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
+                                                ],
+                                                "layout": {}
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "uuid": "",
+                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-" + _ioft,
+                                        "executeType": "trigger_method",
+                                        "fromContentEvent": "remove",
+                                        "executeContentUUID": "r-00001-config",
+                                        "executeContentMethodName": "removeIOF"
+                                    }
+                                ]
                             }
                         ]
                     };
+
+                    if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'||_ioft=='unstructured'){
+                        item.content.push(formAddOf);
+                    }else{
+                        item.content.push(formAddOf);
+                    }
                     t.ofCollapseData.push(item);
                 }
             }

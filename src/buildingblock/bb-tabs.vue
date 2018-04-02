@@ -58,6 +58,9 @@
             if(!t.canRender){
                 return;
             }
+            if(!t.hasTransfer){
+                t.contentToTabData();
+            }
             const paneArr = t.renderTabData(createElement);
             //模拟点击默认tab事件,避免已经渲染的dom重新渲染
             setTimeout(function(){
@@ -181,6 +184,7 @@
                 **/
                 tabsData:[],//最终转换成tab识别的data数据
                 key:'',//当前组件标识，针对同一个页面由多个相同的组件
+                hasTransfer:false//表示t.contentToTabData(); 方法是否已经执行了，这个方法只能执行一次
                 
             }
         },
@@ -201,12 +205,12 @@
         mounted:function(){
             let t=this;
             //将content属性转换成可以识别的tab组件
-            window.setTimeout(function(){
-                if(!t.key){
+            // window.setTimeout(function(){
+                // if(!t.key){
                     t.key = ""+ +new Date();
-                }
-                t.contentToTabData();
-            },300);
+                // }
+                // t.contentToTabData();
+            // },300);
         },
         methods: {
             //tabPanes  tabDs tabDsContent 转换成  只有在this.content没数据的时候才调用,方法内改变 bbContent 的值
@@ -286,6 +290,7 @@
                                         icon: item.icon
                                     })
                                 });
+                                t.canRender=true;
                             }, function (code, msg) {
                             });
                         }
@@ -317,6 +322,7 @@
                         t.tabsData.push(data);
                     }
                 }
+                t.hasTransfer=true;
                 t.canRender=true;
             },
             tabClick: function (tab, event) {

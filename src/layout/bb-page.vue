@@ -247,6 +247,12 @@
         let t=this;
         return _TY_Tool.loadChildBB(t);
       },
+      closeDialog:function(){
+        let t=this;
+        if(t._dialog){
+          t._dialog.$children[0].closeFn();
+        }
+      },
       /*页面弹窗方法
         eventArg: 积木触发事件时所带的原始参数
         content:[{ //页面内容 由交互配置参数得来
@@ -285,6 +291,7 @@
         }).$mount();
         //将弹窗实例化对象挂载到当前bb-page下
         document.getElementById(t.pageAlias + '_dialog').appendChild(_dialog.$el);
+        t._dialog = _dialog;
         //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
         t.$refs[_TY_Tool.uuid()] = _dialog; //把bb-form 设置到$refs中
       },

@@ -34,7 +34,10 @@ util.post = function(url, param, options) {
     return util.invoke(_.extend({
         url: url,
         method: 'post',
-        data: Qs.stringify(param)
+        data: Qs.stringify(param),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
     }, options));
 }
 
@@ -135,6 +138,10 @@ util.uuid = function(len, radix) {
     }
     return uuid.join('');
 };
+
+util.uuidTimestamp = function(len, radix) {
+    return util.uuid(len, radix) + +new Date();
+}
 
 /**
  *  组装模板或者getDsData方法的参数

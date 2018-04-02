@@ -154,16 +154,16 @@
             this.active = this.isShow;
         },
         methods: {
-            closeFn() {
+            closeFn:function() {
                 this.active = false;
                 this.$emit('closeDia');
                 this.$emit('update:isShow', false);
             },
-            loadChildBB(){
+            loadChildBB:function(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
             },
-            show(){
+            show:function(){
                 this.active = true;
                 this.$emit('openDia');
                 this.$emit('update:isShow', true);
