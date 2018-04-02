@@ -356,6 +356,10 @@
         }, 
         mounted:function(){
             const t = this;
+            if(t.formData && t.newFormData){
+               t.formData = Object.assign(t.formData,t.newFormData); 
+            }
+            
             /*bb-mounted 
                 bb-form初次渲染回填初始化值后 触发此事件 
                 设置setTimeout防止事件触发时目标方法积木还未渲染*/

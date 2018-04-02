@@ -204,7 +204,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             var valueType = input['valueType'] || 'template';
             var paramValue = null;
             if (valueType == 'constant') {
-                paramValue = input['constant'] || input['variable'];
+                paramValue = input['constant'] == undefined ? input['variable'] : input['constant'];
             } else if (valueType == 'template') { //支持参数为自定义模板
                 paramValue = util.tpl(input['variable'], Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj[input['valueKey']]), inputValueObj));
             } else if (valueType == 'inputValueObj') {
@@ -551,6 +551,23 @@ util.loadChildBB = function(t) {
     }
     return result;
 }
+//TODO修改老数据后删除仅供过渡老数据使用
+/**
+    获取当前积木的最近的bb-page容器
+**/
+util.nearestPage = function(t) {
+    let vNode = {};
+    if (t && t.$parent) {
+        //不是空对象
+        const nowNode = t.$parent;
+        if (t.$parent.$vnode.tag.search("bb-page") != -1) {
+            vNode = nowNode;
+            return vNode;
+        } else {
+            return util.nearestPage(nowNode);
+        }
+    }
+}
 
 
 
@@ -668,7 +685,8 @@ util.bbCanvasRender = function(content, createElement, t) {
                     flex: 1,
                     position: 'absolute',
                     left: bb.layout.position.x + 'px',
-                    top: bb.layout.position.y + 'px'
+                    top: bb.layout.position.y + 'px',
+                    "z-index": bb.layout.zIndex
                 }
             }, [bbele]);
 
@@ -831,7 +849,15 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             const executeContentUUID = interactive['executeContentUUID'];
             const containerMethodName = interactive['containerMethodName'];
             eventOnceKey = eventOnceKey + containerMethodName;
-            fn = t[containerMethodName] || window._TY_Root[containerMethodName];
+            if (interactive['uuid'].toString().length < 5) {
+                //TODO修改老数据后删除
+                //如果当前交互的uuid长度小于5则可以认定是老数据
+                const bbPage = util.nearestPage(t);
+                fn = bbPage[containerMethodName];
+            } else {
+                //新数据交互
+                fn = t[containerMethodName] || window._TY_Root[containerMethodName];
+            }
         }
         if (fn) {
             /**

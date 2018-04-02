@@ -9,7 +9,7 @@
                     v-bind:style="{transform: 'rotate(' + canvasItem.layout.rotate + 'deg)', left: canvasItem.layout.position.x + 'px', top: canvasItem.layout.position.y + 'px', width: canvasItem.layout.size.width + 'px', height: canvasItem.layout.size.height + 'px'}">
 
                     <div class="border-line"></div>
-                    <div v-show="canvasItem.isShow">
+                    <div v-show="canvasItem.isShow" @contextmenu="showMenu" style="z-index: 1000">
                         <div class="rotate-btn" id="dragRotate" :data-x="0" :data-y="0" :data-uuid="canvasItem.uuid" v-dragRotate="directionRotate">
                             <span class="icon-xuanzhuang-css danyeeditor-replay"></span>
                         </div>
@@ -68,6 +68,17 @@
             </div>
             
         </el-dialog>
+        <ul ref="menu" v-show="menu" class="context-menu-list" :style="{top: menuTop + 'px', left: menuLeft + 'px', 'z-index': 1000}">
+            <!--
+                <li class="context-menu-item"><span>剪切</span></li>
+                <li class="context-menu-item context-menu-visible"><span>复制</span></li>
+             -->
+            <li :class="{ 'context-menu-item context-menu-disabled' : upLayoutCss, 'context-menu-item' : !upLayoutCss }" @click="propLayout"><span>上移一层</span></li>
+            <li :class="{ 'context-menu-item context-menu-disabled' : downLayoutCss, 'context-menu-item' : !downLayoutCss }" @click="nextLayout"><span>下移一层</span></li>
+            <li :class="{ 'context-menu-item context-menu-disabled' : upLayoutCss, 'context-menu-item' : !upLayoutCss }" @click="upLayout"><span>置于顶层</span></li>
+            <li :class="{ 'context-menu-item context-menu-disabled' : downLayoutCss, 'context-menu-item' : !downLayoutCss }" @click="downLayout"><span>置于底层</span></li>
+            <li class="context-menu-item" @click="remove()"><span>删除</span></li>
+        </ul>
     </div>
 </template>
 <script>
@@ -399,8 +410,15 @@
         },
         data() {
             return {
+                menu: false,
+                menuLeft: 0,
+                menuTop: 0,
+                scrollCss: false,
                 isShowDialog: false,
                 menuRight: 0,
+                checkCanvasId: 0,
+                upLayoutCss: false,
+                downLayoutCss: false,
                 operationItems: [],
                 canvasItems: []
             }
@@ -417,15 +435,28 @@
                 }
 
                 const el = this;
+                const zIndex = [];
                 this.content.forEach((con, key) => {
                     if (key === (el.content.length - 1)) {
+                        el.checkCanvasId = el.content[el.content.length - 1].uuid;
                         el.content[el.content.length - 1].isShow = true;
                         el.$emit('onFocus',con, key);
                     } else {
                         con.isShow = false;
                     }
+                    zIndex.push(con.layout.zIndex);
                 });
 
+                let zIndexMax = Math.max.apply(null, zIndex);
+
+                if (zIndexMax) {
+                    this.content.forEach((con, key) => {
+                        if (key === (el.content.length - 1) && con.layout.zIndex != 90) {
+                            con.layout.zIndex = zIndexMax * 1 + 10;
+                        }
+                    });
+                }
+                
                 this.canvasItems = this.content;
             },
 
@@ -491,6 +522,8 @@
             checkDrag(uuid){
                 const el = this;
 
+                el.checkCanvasId = uuid;
+
                 this.canvasItems.forEach((item, key) => {
                     if (item.uuid === uuid) {
                         item.isShow = true;
@@ -500,11 +533,24 @@
                     }
                     el.canvasItems.splice(key, 1, item);
                 });
-
             },
             //删除积木
             remove(index){
                 const t = this;
+
+                if (!index && !t.checkCanvasId) {
+                    return;
+                }
+
+                if (!index) {
+                    
+                    this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === t.checkCanvasId) {
+                        index = key;
+                    }
+                });
+                }
+
                 t.$confirm('确认操作?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -542,10 +588,91 @@
             previewCanvas() {
                 this.isShowDialog = !this.isShowDialog
             },
+
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
             },
+
+            showMenu(parameter) {
+                parameter.preventDefault()  
+                let x = parameter.clientX;  
+                let y = parameter.clientY; 
+                
+
+                this.menu = true;
+                this.scrollCss = true;
+                this.menuLeft = x;
+
+                let contentHeight = document.getElementsByClassName('bb-layout-canvas')[0].parentNode.parentNode.parentNode.parentNode.parentNode.offsetHeight;
+                if ((y + 145) <= contentHeight) {
+                    this.menuTop = y;
+                } else {
+                    this.menuTop = y - 160;
+                }
+                console.log(x, y, contentHeight);
+            },
+
+            propLayout() {
+                const el = this;
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === el.checkCanvasId && item.layout.zIndex != 90) {
+                        if (item.layout.zIndex === 80) {
+                            el.upLayoutCss = true;
+                        } else {
+                            el.upLayoutCss = false;
+                        }
+                        el.downLayoutCss = false;
+                        item.layout.zIndex = item.layout.zIndex * 1 + 10;
+                        el.canvasItems.splice(key, 1, item);
+                    }
+                });
+
+            },
+
+            nextLayout() {
+                const el = this;
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === el.checkCanvasId && item.layout.zIndex) {
+                        if (item.layout.zIndex === 10) {
+                            el.downLayoutCss = true;
+                        } else {
+                            el.downLayoutCss = false;
+                        }
+                        el.upLayoutCss = false;
+                        item.layout.zIndex = item.layout.zIndex * 1 - 10;
+                        el.canvasItems.splice(key, 1, item);
+                    }
+                });
+            },
+
+            upLayout() {
+                const el = this;
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === el.checkCanvasId) {
+                        el.upLayoutCss = true;
+                        el.downLayoutCss = false;
+                        item.layout.zIndex = 90;
+                        el.canvasItems.splice(key, 1, item);
+                    }
+                });
+            },
+
+            downLayout() {
+                const el = this;
+
+                this.canvasItems.forEach((item, key) => {
+                    if (item.uuid === el.checkCanvasId) {
+                        el.upLayoutCss = false;
+                        el.downLayoutCss = true;
+                        item.layout.zIndex = 0;
+                        el.canvasItems.splice(key, 1, item);
+                    }
+                });
+            }
         },
         mounted() {
             const el = this;
@@ -564,6 +691,11 @@
                 offLeft = bgCanvas[0].offsetLeft;
                 menuWidth = bgCanvas[0].clientWidth;
                 el.menuRight = offLeft + menuWidth + 20;
+            };
+            
+            window.onclick = function() {
+                el.menu = false;
+                el.scrollCss = false;
             };
         }
     }
@@ -700,7 +832,6 @@
         width: 100%;
         height: 100%;
         margin: -1px 0 0 -1px;
-        border: 1px solid #fff;
     }
 
     .operate .border-line.dashed {
@@ -804,7 +935,7 @@
         height: 100%;
         position: fixed;
         font-size: 20px;
-        z-index: 10000000;
+        z-index: 1000;
     }
     .keyboard-help .stretch-transition {
         -webkit-transition: height 0.3s ease;
@@ -1019,5 +1150,64 @@
         -webkit-transform: scale(0.93);
                 transform: scale(0.93);
         font-family: 'PingFangSC-Regular';
+    }
+    .context-menu-list {
+        line-height: 0;
+        font-size: 14px !important;
+        position: absolute;
+        display: inline-block;
+        min-width: 110px;
+        max-width: 360px;
+        padding: 4px 0;
+        margin: 5px;
+        font-family: inherit;
+        font-size: inherit;
+        white-space: pre; 
+        list-style-type: none;
+        background: #fff;
+        border: 1px solid #bebebe;
+        border-radius: 3px;
+        opacity: 0.9;
+        -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+    }
+
+    .context-menu-item {
+        position: relative;
+        line-height: 20px;
+        padding: 4px 20px;
+        color: #2f2f2f;
+        -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+                user-select: none; 
+        background-color: #fff;
+    }
+
+    .context-menu-item:hover {
+        color: #000000;
+        background-color: #ececec;
+    }
+
+    .context-menu-disabled {
+        color: #b2bcba;
+        background-color: #fff;
+    }
+
+    .contextmenu-custom {
+        width: 100px;
+        min-width: 100px;
+        border-radius: 3px;
+        border: 0px;
+        opacity: 0.9;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        padding: 18px 0;
+        z-index: 1000 !important;
+    }
+    .contextmenu-custom.context-menu-item {
+        padding: 3px 21px;
+        color: #000000;
+        font-size: 14px;
+        line-height: 6px;
     }
 </style>
