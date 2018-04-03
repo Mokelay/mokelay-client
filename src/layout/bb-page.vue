@@ -283,7 +283,9 @@
                   "update:isShow":(val)=>{
                     if(!val){
                       //关闭弹窗销毁DOM中的当前弹窗节点
-                      document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
+                      setTimeout(function(){
+                        document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
+                      },0);
                     }
                   },
                 }},[]);

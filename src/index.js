@@ -86,6 +86,7 @@ import bbfieldselect from './module/bb-field-select.vue';
 import bbconfig from './module/bb-config.vue';
 import bbapiinfo from './module/bb-api-info.vue';
 import bbapilegoconfig from './module/bb-apilego-config.vue';
+import bbfieldtreeselect from './module/bb-field-tree-select.vue';
 
 
 
@@ -206,6 +207,7 @@ let ty = {
 		Vue.component('bb-page-edit', bbpageedit);
 		Vue.component('bb-api-info', bbapiinfo);
 		Vue.component('bb-apilego-config', bbapilegoconfig);
+		Vue.component('bb-field-tree-select', bbfieldtreeselect);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);

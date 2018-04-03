@@ -117,7 +117,14 @@
                 setTimeout(function(){
                     //刷新第一列接口
                     t.$refs['oi'].getNextData(1);
-                    t.$refs['oi'].loadValue([t.external.linkage[0].data.dsAlias,t.external.linkage[0].data.oiAlias]);
+                    let oiData=[];
+                    if(t.external.linkage[0].data.dsAlias){
+                        oiData.push(t.external.linkage[0].data.dsAlias);
+                    }
+                    if(t.external.linkage[0].data.oiAlias){
+                        oiData.push(t.external.linkage[0].data.oiAlias);
+                    }
+                    t.$refs['oi'].loadValue(oiData);
                     //刷新描述
                     t.apiLegoDes = t.external.linkage[0].data.description || "";
                 },10);
@@ -439,6 +446,117 @@
                             }
                         });
                     }
+                }
+                t._refreshIf();//修改字段后，刷新整个字段
+                t._refreshOf();
+            },
+            //校验级联字段是否重复 fieldConnAlias：输入字段的connectorPath  nodeConnAlias:选中的字段connectorAlias
+            _checkFieldConnAliasEQNodeConnAlias:function(fieldConnAlias, nodeConnAlias){
+                let t = this;
+                if (!fieldConnAlias && !nodeConnAlias) {
+                    return true;
+                } else if (fieldConnAlias && nodeConnAlias) {
+                    let fieldConn = JSON.parse(fieldConnAlias);
+                    let result = '';
+                    fieldConn.forEach((item, index)=> {
+                        if (result) {
+                            result = result + ",";
+                        }
+                        result = result + item.alias;
+                    });
+                    if (result == nodeConnAlias) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            },
+            //将 connectorAlias 转换成 connectorPath [{alias:'xxx'}]
+            _transferConnAliasToJsonAlias:function(connAlias){
+                let t = this;
+                if (connAlias) {
+                    let result = [];
+                    let aliasArray = connAlias.split(',');
+                    aliasArray.forEach((item, index)=> {
+                        result.push({
+                            alias: item
+                        });
+                    })
+                    return JSON.stringify(result);
+                }
+                return '';
+            },
+            //树形字段选择 保存方法
+            saveTreeIOF:function(..._data){
+                let t=this;
+                let treeData = _data[0];
+                const ioftType = _data[1];
+                const __ioft = _data[2];
+                if(!treeData){
+                    return;
+                }
+                let data = t.external.linkage[0].data;
+                if(ioftType=='ift'&&treeData.length>0){
+                    //输入字段
+                    const ifList = data.ifList;
+                    treeData.forEach(function(item,index){
+                        if(__ioft!='condition'){//条件可以选多次
+                            for(let i=0;i<ifList.length;i++){
+                                const _ifItem = ifList[i];
+                                if(_ifItem.ift==__ioft&&_ifItem.fieldName==item.fieldName&&
+                                    t._checkFieldConnAliasEQNodeConnAlias(_ifItem.connectorPath,item.connectorAlias)){
+                                    //字段相同，并且连接器相同，说明是同一个字段，不能添加
+                                    return true;//继续下一个forEach循环
+                                }
+                            }
+                        }
+                        //上面过滤掉相同的字段，下面添加字段到保存的数据中
+                        data.ifList.push({
+                            id: '',
+                            uuid:_TY_Tool.uuidTimestamp(),
+                            apiLegoUuid:data.uuid,
+                            name: item.label,
+                            fieldName: item.fieldName,
+                            alias: item.fieldName,
+                            fvt: __ioft != 'read' ? 'request' : '',
+                            ift: __ioft,
+                            ct: 'eq',
+                            dt: item.dt||'string',
+                            fieldTpl:'',
+                            apiLegoId: data.apiLegoId,
+                            connectorPath: t._transferConnAliasToJsonAlias(item.connectorAlias),
+                            requestParamName: item.fieldName
+                        });
+                    });
+                }else if(ioftType=='oft'){
+                    const ofList = data.ofList;
+                    treeData.forEach(function(item,index){
+                        if(__ioft!='condition'){//条件可以选多次
+                            for(let i=0;i<ofList.length;i++){
+                                const _ofItem = ofList[i];
+                                if(_ofItem.ift==__ioft&&_ofItem.fieldName==item.fieldName&&
+                                    t._checkFieldConnAliasEQNodeConnAlias(_ofItem.connectorPath,item.connectorAlias)){
+                                    //字段相同，并且连接器相同，说明是同一个字段，不能添加
+                                    return true;//继续下一个forEach循环
+                                }
+                            }
+                        }
+                        //上面过滤掉相同的字段，下面添加字段到保存的数据中
+                        data.ofList.push({
+                            id: '',
+                            uuid:_TY_Tool.uuidTimestamp(),
+                            apiLegoUuid:data.uuid,
+                            name: item.label,
+                            fieldName: item.fieldName,
+                            alias: item.fieldName,
+                            oft: __ioft,
+                            response: true,
+                            apiLegoId: data.apiLegoId,
+                            dt: item.dt||'string'
+                        });
+                    });
                 }
                 t._refreshIf();//修改字段后，刷新整个字段
                 t._refreshOf();
@@ -884,7 +1002,65 @@
                             };
                     //输入字段字段选择
                     const treeAdd ={
-
+                                "uuid": t.external.linkage[0].data.uuid + "-if-tree-add-" + _ioft,
+                                "alias": "bb-button",
+                                "aliasName": "添加" + t._buildTitle(_ioft),
+                                "group": "",
+                                "attributes": {
+                                    "button": {
+                                        "icon": "ty-icon_tianjia",
+                                        "size": "small",
+                                        "style": {}
+                                    }
+                                },
+                                "animation": [],
+                                "interactives": [{
+                                    "uuid": "",
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-if-tree-add-" + _ioft,
+                                    "executeType": "trigger_method",
+                                    "fromContentEvent": "click",
+                                    "executeContentUUID": "Page_Ref_Root",
+                                    "executeContentMethodName": "openDialog",
+                                    "executeArgument": [
+                                        {
+                                            "uuid": t.external.linkage[0].data.uuid + "-if-tree-add-form-"+_ioft,
+                                            "alias": "bb-field-tree-select",
+                                            "aliasName": "选择属性",
+                                            "attributes": {
+                                                "multiple":true,
+                                                "ioftType":'ift',
+                                                "ioft":_ioft
+                                                // "value":{
+                                                //     "ct":"eq",
+                                                //     "ift":_ioft,
+                                                //     "apiLegoUuid":t.external.linkage[0].data.uuid
+                                                // },
+                                            },
+                                            "animation": [
+                                                {}
+                                            ],
+                                            "interactives": [
+                                                {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveTreeIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
+                                            ],
+                                            "layout": {}
+                                        }
+                                    ]
+                                }]
                     }
                     let item = {
                         title: t._buildTitle(_ioft),
@@ -1278,7 +1454,8 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "connectorPath",
-                                                                "rules": []
+                                                                "rules": [],
+                                                                "show":false
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -1337,7 +1514,7 @@
                     if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'||_ioft=='unstructured'){
                         item.content.push(formAdd);
                     }else{
-                        item.content.push(formAdd);
+                        item.content.push(treeAdd);
                     }
                     t.ifCollapseData.push(item);
                 }
@@ -1585,7 +1762,65 @@
 
                     //输出字段字段选择
                     const treeAddOf ={
-
+                        "uuid": t.external.linkage[0].data.uuid + "-of-tree-add-" + _ioft,
+                                "alias": "bb-button",
+                                "aliasName": "添加" + t._buildTitle(_ioft),
+                                "group": "",
+                                "attributes": {
+                                    "button": {
+                                        "icon": "ty-icon_tianjia",
+                                        "size": "small",
+                                        "style": {}
+                                    }
+                                },
+                                "animation": [],
+                                "interactives": [{
+                                    "uuid": "",
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-of-tree-add-" + _ioft,
+                                    "executeType": "trigger_method",
+                                    "fromContentEvent": "click",
+                                    "executeContentUUID": "Page_Ref_Root",
+                                    "executeContentMethodName": "openDialog",
+                                    "executeArgument": [
+                                        {
+                                            "uuid": t.external.linkage[0].data.uuid + "-of-tree-add-form-"+_ioft,
+                                            "alias": "bb-field-tree-select",
+                                            "aliasName": "选择属性",
+                                            "attributes": {
+                                                "multiple":true,
+                                                "ioftType":'oft',
+                                                "ioft":_ioft
+                                                // "value":{
+                                                //     "ct":"eq",
+                                                //     "ift":_ioft,
+                                                //     "apiLegoUuid":t.external.linkage[0].data.uuid
+                                                // },
+                                            },
+                                            "animation": [
+                                                {}
+                                            ],
+                                            "interactives": [
+                                                {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveTreeIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
+                                            ],
+                                            "layout": {}
+                                        }
+                                    ]
+                                }]
                     }
                     let item = {
                         title: t._buildTitle(_ioft),
@@ -1830,7 +2065,7 @@
                     if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'||_ioft=='unstructured'){
                         item.content.push(formAddOf);
                     }else{
-                        item.content.push(formAddOf);
+                        item.content.push(treeAddOf);
                     }
                     t.ofCollapseData.push(item);
                 }
