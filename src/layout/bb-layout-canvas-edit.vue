@@ -746,7 +746,7 @@
                 el.menu = false;
                 el.scrollCss = false;
 
-                if (event.clientX > leftMenuW && event.clientX < rightArea) {
+                if (event.target.className === 'bb-layout-canvas' || event.target.className === 'bg-canvas') {
                     el.canvasItems.forEach((item, key) => {
                         if (item.isShow) {
                             el.$emit('onFocus', {});
