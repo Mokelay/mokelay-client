@@ -95,6 +95,12 @@
                 if(this.fileType.indexOf('image') != -1){
                     this.dialogImageUrl = file.url;
                     this.dialogVisible = true;
+                }else{
+                    const a = document.createElement('a');  
+                    a.href = file.url;  
+                    a.target='_blank';
+                    a.download = file.fullName;  
+                    a.click();
                 }
             },
             //上传成功
@@ -139,10 +145,12 @@
                         list = list.split(',');
                         list.forEach((ele,key)=>{
                             const nameList = ele.split('/');
-                            const name = nameList[nameList.length - 1];
+                            const fullName = nameList[nameList.length - 1];
+                            const name = fullName.slice(0,50);
                             const item = {
                                 url:ele,
-                                name:name
+                                name:name,
+                                fullName:fullName
                             }
                             t.realFileList.push(item);
                         })
