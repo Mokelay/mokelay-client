@@ -722,10 +722,14 @@
         mounted() {
             const el = this;
             const bgCanvas = document.getElementsByClassName('bg-canvas');
+            let bodyW = document.body.offsetWidth;
+            let leftMenuW = document.getElementsByClassName('el-aside')[0].offsetWidth;
+            let rightMenuW = document.getElementsByClassName('el-aside')[1].offsetWidth;
+            let rightArea = bodyW - rightMenuW;
 
             if (!bgCanvas || !bgCanvas.length) {
                 return;
-            }
+            } 
 
             let offLeft = bgCanvas[0].offsetLeft;
             let menuWidth = bgCanvas[0].clientWidth;
@@ -738,17 +742,19 @@
                 el.menuRight = offLeft + menuWidth + 20;
             };
             
-            window.onclick = function() {
+            window.onclick = function(event) {
                 el.menu = false;
                 el.scrollCss = false;
 
-                el.canvasItems.forEach((item, key) => {
-                    if (item.isShow) {
-                        el.$emit('onFocus', {});
-                    }
-                    item.isShow = false;
-                    el.canvasItems.splice(key, 1, item);
-                });
+                if (event.target.className === 'bb-layout-canvas' || event.target.className === 'bg-canvas') {
+                    el.canvasItems.forEach((item, key) => {
+                        if (item.isShow) {
+                            el.$emit('onFocus', {});
+                        }
+                        item.isShow = false;
+                        el.canvasItems.splice(key, 1, item);
+                    });
+                }
             };
         }
     }
