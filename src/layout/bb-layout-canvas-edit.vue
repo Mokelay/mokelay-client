@@ -722,6 +722,10 @@
         mounted() {
             const el = this;
             const bgCanvas = document.getElementsByClassName('bg-canvas');
+            let bodyW = document.body.offsetWidth;
+            let leftMenuW = document.getElementsByClassName('el-aside')[0].offsetWidth;
+            let rightMenuW = document.getElementsByClassName('el-aside')[1].offsetWidth;
+            let rightArea = bodyW - rightMenuW;
 
             if (!bgCanvas || !bgCanvas.length) {
                 return;
@@ -738,17 +742,19 @@
                 el.menuRight = offLeft + menuWidth + 20;
             };
             
-            window.onclick = function() {
+            window.onclick = function(event) {
                 el.menu = false;
                 el.scrollCss = false;
 
-                el.canvasItems.forEach((item, key) => {
-                    if (item.isShow) {
-                        el.$emit('onFocus', {});
-                    }
-                    item.isShow = false;
-                    el.canvasItems.splice(key, 1, item);
-                });
+                if (event.clientX > leftMenuW && event.clientX < rightArea) {
+                    el.canvasItems.forEach((item, key) => {
+                        if (item.isShow) {
+                            el.$emit('onFocus', {});
+                        }
+                        item.isShow = false;
+                        el.canvasItems.splice(key, 1, item);
+                    });
+                }
             };
         }
     }
