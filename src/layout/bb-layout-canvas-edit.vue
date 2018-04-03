@@ -729,7 +729,7 @@
 
             if (!bgCanvas || !bgCanvas.length) {
                 return;
-            }
+            } 
 
             let offLeft = bgCanvas[0].offsetLeft;
             let menuWidth = bgCanvas[0].clientWidth;
