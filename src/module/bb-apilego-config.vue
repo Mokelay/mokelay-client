@@ -569,7 +569,7 @@
                             id: '',
                             uuid:_TY_Tool.uuidTimestamp(),
                             apiLegoUuid:data.uuid,
-                            name: funField.field.label,
+                            name: funField.field.label+"("+funField.fun+")",
                             fieldName: funField.fun+"-"+funField.field.fieldName,
                             alias: funField.field.fieldName,
                             fvt: '',
@@ -581,6 +581,7 @@
                             connectorPath: t._transferConnAliasToJsonAlias(funField.field.connectorAlias),
                             requestParamName: ''
                         });
+                t._refreshIf();//修改字段后，刷新整个字段
             },
             //构建输入的 colopseData
             buildIfCollopaseData: function () {
