@@ -115,7 +115,7 @@
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
                                     buttons:['up','down','remove']},
-                                    onFocus:bbEle.attributes?bbEle.attributes.onFocus:''
+                                    //onFocus:bbEle.attributes?bbEle.attributes.onFocus:''
                             },
                             style:{flex:1},
                             on:{
