@@ -160,7 +160,7 @@
         created: function () {
             const  t = this;
             t.realStyle = t.config.horizontal?t.horizontal:t.vertical;
-            if(t.content.onFocus){
+            if(t.config.onFocus){
                 t.onFocus();
             }
         },
