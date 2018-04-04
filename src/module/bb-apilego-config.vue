@@ -561,6 +561,27 @@
                 t._refreshIf();//修改字段后，刷新整个字段
                 t._refreshOf();
             },
+            saveFunIOF:function(..._data){
+                let t=this;
+                const funField = _data[0];
+                let data = t.external.linkage[0].data;
+                data.ifList.push({
+                            id: '',
+                            uuid:_TY_Tool.uuidTimestamp(),
+                            apiLegoUuid:data.uuid,
+                            name: funField.field.label,
+                            fieldName: funField.fun+"-"+funField.field.fieldName,
+                            alias: funField.field.fieldName,
+                            fvt: '',
+                            ift: funField.ift,
+                            ct: 'eq',
+                            dt: 'string',
+                            fieldTpl:'',
+                            apiLegoId: data.apiLegoId,
+                            connectorPath: t._transferConnAliasToJsonAlias(funField.field.connectorAlias),
+                            requestParamName: ''
+                        });
+            },
             //构建输入的 colopseData
             buildIfCollopaseData: function () {
                 let t = this;
@@ -1062,6 +1083,108 @@
                                     ]
                                 }]
                     }
+
+                    const funAdd = {
+                                "uuid": t.external.linkage[0].data.uuid + "-if-fun-add-" + _ioft,
+                                "alias": "bb-button",
+                                "aliasName": "添加" + t._buildTitle(_ioft),
+                                "group": "",
+                                "attributes": {
+                                    "button": {
+                                        "icon": "ty-icon_tianjia",
+                                        "size": "small",
+                                        "text":"Fn",
+                                        "style": {}
+                                    }
+                                },
+                                "animation": [],
+                                "interactives": [{
+                                    "uuid": "",
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-if-fun-add-" + _ioft,
+                                    "executeType": "trigger_method",
+                                    "fromContentEvent": "click",
+                                    "executeContentUUID": "Page_Ref_Root",
+                                    "executeContentMethodName": "openDialog",
+                                    "executeArgument": [
+                                        {
+                                            "uuid": t.external.linkage[0].data.uuid + "-if-fun-add-form-"+_ioft,
+                                            "alias": "bb-form",
+                                            "aliasName": "编辑属性",
+                                            "attributes": {
+                                                "value":{
+                                                    "ct":"eq",
+                                                    "ift":_ioft,
+                                                    "apiLegoUuid":t.external.linkage[0].data.uuid
+                                                },
+                                                "settingButtonText": "确定",
+                                                "content": [
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-fun-add-" + _ioft + "fun",
+                                                        "alias": "bb-select",
+                                                        "aliasName": "函数",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "fun",
+                                                            "rules": [],
+                                                            "filterable":true,
+                                                            "fields": [{
+                                                                text: "总数(count)",
+                                                                value: "count",
+                                                            }, {
+                                                                text: "最大值(max)",
+                                                                value: "max",
+                                                            }, {
+                                                                text: "最小值(min)",
+                                                                value: "min",
+                                                            }, {
+                                                                text: "总和(sum)",
+                                                                value: "sum",
+                                                            }]
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    },
+                                                    {
+                                                        "uuid": t.external.linkage[0].data.uuid + "-if-fun-add-" + _ioft + "field",
+                                                        "alias": "bb-field-tree-pop-select",
+                                                        "aliasName": "字段名",
+                                                        "group": "",
+                                                        "attributes": {
+                                                            "attributeName": "field",
+                                                            "rules": []
+                                                        },
+                                                        "animation": [],
+                                                        "interactives": []
+                                                    }
+                                                ]
+                                            },
+                                            "animation": [
+                                                {}
+                                            ],
+                                            "interactives": [
+                                                {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-fun-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveFunIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-fun-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
+                                            ],
+                                            "layout": {}
+                                        }
+                                    ]
+                                }]
+                            };
+
                     let item = {
                         title: t._buildTitle(_ioft),
                         name: _ioft,
@@ -1515,6 +1638,9 @@
                         item.content.push(formAdd);
                     }else{
                         item.content.push(treeAdd);
+                    }
+                    if(_ioft=='read'){
+                        item.content.push(funAdd);
                     }
                     t.ifCollapseData.push(item);
                 }

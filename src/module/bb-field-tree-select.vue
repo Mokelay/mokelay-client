@@ -3,13 +3,13 @@
         <el-tree class="bn"
                  :data="data"
                  :show-checkbox='true'
-                 node-key="fieldName"
+                 node-key="id"
                  ref="tree"
                  highlight-current
                  :props="defaultProps"
                  :default-checked-keys="p_checkedField"
                  @node-expand="openNode"
-                 @check-change="checkChange"
+                 @check-change="checkChange" 
                 :key="randomKey">
         </el-tree>
         <el-button type="primary" class="fr" @click="addField">确定</el-button>
@@ -83,6 +83,7 @@
         watch: {
             oiAlias: function (val) {
                 this.p_oiAlias = val;
+                this.first_oiAlias = val;
                 this.loadData();
             },
             checkedField:function(val){
@@ -202,18 +203,19 @@
                     });
                 }
                 //触发到父组件处理
-                if (!this.multiple) {
-                    this.$emit("input", newCheckedNode[0].fieldName);//让父组件能用v-model
-                }
+                // if (!this.multiple) {
+                //     this.$emit("input", newCheckedNode[0].fieldName);//让父组件能用v-model
+                // }
                 this.$emit("tree-commit", newCheckedNode,this.ioftType,this.ioft);
             },
             //勾选改变后
             checkChange(data, check, childCheck){
-                if (check && !this.multiple) {//多选的话
+                if (check && !this.multiple) {//单选
                     this.$refs.tree.setCheckedKeys([]);
                     this.$refs.tree.setCheckedKeys([data.id]);
                 }
             }
+
 
         }
     }
