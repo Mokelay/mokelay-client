@@ -226,7 +226,7 @@
               }
               for(let i=0;i<list.length;i++){
                 let item = list[i];
-                if(val==item.value){
+                if(val==item[t.casProps.value]){
                   t._tempItem = item;
                   return;
                 }else if(item.children&&item.children.length>0){

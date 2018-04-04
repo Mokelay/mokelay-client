@@ -4,7 +4,7 @@
             <el-tab-pane label="基础" name="legoInfo">
                 <div class="form_item">
                     模型:
-                    <bb-cascader ref="oi" :style="{display:'inline-block'}" valueTpl="<%=value[value.length-1]%>"
+                    <bb-cascader ref="oi" :style="{display:'inline-block'}" 
                                  :casProps="casProps" :dsList="dsList"
                                  @change="oiChange"></bb-cascader>
                 </div>
@@ -212,7 +212,12 @@
             },
             oiChange: function (val, cascader) {
                 let t = this;
-                t.external.linkage[0].data.oiAlias = val;
+                if(val&&val instanceof Object){
+                    t.external.linkage[0].data.oiAlias = val.alias;
+                    t.external.linkage[0].data.dsAlias = val.dsAlias;
+                }else{
+                    t.external.linkage[0].data.oiAlias = val;
+                }
                 // const ds = {
                 //     "api": "ty-auto-generate-iof",
                 //     "category": "config",
