@@ -53,7 +53,8 @@
         data() {
             return {
                 valueBase: this.value,
-                suggestionsBase:this.suggestions
+                suggestionsBase:this.suggestions,
+                queryString:null
             }
         },
         watch: {
@@ -91,6 +92,7 @@
             //异步检索补全提示
             querySearchAsync:function(queryString, cb){
                 const t = this;
+                t.queryString = queryString;
                 if(t.suggestionsDs){
                     //动态查询
                     t.getData(queryString,cb);
