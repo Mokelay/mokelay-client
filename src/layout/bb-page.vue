@@ -324,10 +324,10 @@
                 args:args
               }), function (map) {
                   //接口执行完毕  传一个ds过去，可以区别是哪个接口调用返回的事件
-                  t.$emit('ds-success',map);
+                  t.$emit('ds-success',map,ds.api);
                 }, function (code, msg) {
                   //接口执行完毕
-                  t.$emit('ds-error',code);
+                  t.$emit('ds-error',code,ds.api);
               });
             }
           }

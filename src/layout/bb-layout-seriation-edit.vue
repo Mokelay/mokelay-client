@@ -149,11 +149,6 @@
                 const item = t.realContent[index];
                 t.realContent.splice(index,1);
                 t.realContent.splice(index-1,0,item);
-                if(index==t.realContent.length-1&&
-                    t.realContent[index].attributes.hasOwnProperty('pointer')&&t.realContent[index].attributes.pointer){
-                    t.realContent[index-1].attributes.pointer=true;
-                    t.realContent[index].attributes.pointer=false;
-                }
             },
             //下移返回当前的积木数据
             down:function(...params){
@@ -167,11 +162,6 @@
                 const item = t.realContent[index]
                 t.realContent.splice(index,1);
                 t.realContent.splice(index+1,0,item);
-                if(index==t.realContent.length-2&&
-                    t.realContent[index].attributes.hasOwnProperty('pointer')&&t.realContent[index+1].attributes.pointer){
-                    t.realContent[index+1].attributes.pointer=false;
-                    t.realContent[index].attributes.pointer=true;
-                }
             },
             //删除返回当前的积木数据
             remove:function(...params){
@@ -182,9 +172,6 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    if(index==t.realContent.length-1&&t.realContent.length>1){
-                        t.realContent[t.realContent.length-2].attributes.pointer=false;
-                    }
                     t.$emit('remove',t.realContent[index]);
                     t.realContent.splice(index, 1);
                     t.$emit('change',t.realContent);
@@ -251,21 +238,24 @@
                     return;
                 }
                 let item;
-                if(contentItem instanceof Array&&contentItem[0] && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')&&(Array.isArray(contentItem[0].value)||!contentItem[0].value)){
+                if(contentItem instanceof Array&&contentItem[0] && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')&&!contentItem[0].value){
                     //数组直接return
                     return; 
                 }else if(contentItem instanceof Array&&contentItem[0] && contentItem[0].hasOwnProperty('value')&&contentItem[0].hasOwnProperty('valueKey')){
-                    // t.realContent.push(contentItem[0].value);
-                    item = contentItem[0].value;
+                    if(Array.isArray(contentItem[0].value)){
+                        //可能会有数组的情况
+                        contentItem[0].value.forEach(function(_item,_index){
+                            t.realContent.splice(t.realContent.length,0,_item);
+                        });
+                    }else{
+                        item = contentItem[0].value;
+                    }
                 }else{
                     item = contentItem;
-                    // t.realContent.push(contentItem);
                 }
-
-                if(t.realContent.length>0&&t.realContent[t.realContent.length-1].attributes.hasOwnProperty('pointer')){
-                    t.realContent[t.realContent.length-1].attributes.pointer=true;
+                if(item){
+                    t.realContent.splice(t.realContent.length,0,item);
                 }
-                t.realContent.splice(t.realContent.length,0,item);
                 //返回新的积木数组
                 t.$emit('add',t.realContent);
                 t.$emit('change',t.realContent);

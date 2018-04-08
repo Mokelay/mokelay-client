@@ -823,6 +823,7 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
         // interactive['executeArgument'] = "[{uuid:'111111',alias:'bb-list'},{uuid:'222222',alias:'bb-uuid'}]";
 
         let executeArgument = typeof(interactive['executeArgument']) === 'string' ? eval(interactive['executeArgument']) : interactive['executeArgument'];
+
         //所有事件都触发 publicEmit 中间处理函数 由publicEmit 统一触发方法
         //事件所要执行的方法
         let fn = null;
@@ -857,6 +858,14 @@ let _publicEmit = function(t, bb, fromContentEvent, ...params) {
             } else {
                 //新数据交互
                 fn = t[containerMethodName] || window._TY_Root[containerMethodName];
+            }
+        }
+        if ((fromContentEvent === 'ds-success' || fromContentEvent === 'ds-error') && executeArgument) {
+            //如果接口是 bb-page中的全局接口请求返回事件，用executeArgument（接口别名） 来区分哪个方法执行
+            let api = params[1];
+            if (api && api != executeArgument) {
+                //如果配置了 api，但是和当前执行的接口不相同，就不执行当前方法
+                return true;
             }
         }
         if (fn) {

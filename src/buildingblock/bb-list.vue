@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <!-- 列表新增按钮 -->
-            <el-button v-if="editConfig.editable[0] == 'add'" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
+            <el-button v-if="editConfig&&editConfig.editable[0] == 'add'" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
@@ -299,7 +299,7 @@
                 }
             */
             editConfig:{
-                type:Object,
+                type:[String,Object],
                 default:function(){
                     return {
                         editable:[], // ['add','edit','up','down','remove']
@@ -605,7 +605,7 @@
                             alias:'down'
                         }}
                 //如果是可编辑状态，默认添加操作列
-                if(t.editConfig.editable.length){
+                if(t.editConfig&&t.editConfig.editable.length){
                     const editor = {
                         fixed:"right",
                         width:"120px",
@@ -653,7 +653,7 @@
                 //列表的更新操作
                 const t = this;
                 let ds = null;
-                if(t.editConfig.editDs){
+                if(t.editConfig&&t.editConfig.editDs){
                     ds = t.editConfig.editDs[dsName];
                 }
                 if (ds) {

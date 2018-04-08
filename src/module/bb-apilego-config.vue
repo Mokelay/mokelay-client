@@ -189,10 +189,12 @@
                     if(data[2]&&data[2].realContent&&data[2].realContent.length>0){
                         let resultApiLego=[];
                         data[2].realContent.forEach(function(item,index){
-                            resultApiLego.push({
-                                "text":(index+1)+"."+item.data.legoName,
-                                "value":item.data.uuid
-                            });
+                            if(item.hasOwnProperty("data")&&item.data){
+                                resultApiLego.push({
+                                    "text":(index+1)+"."+item.data.legoName,
+                                    "value":item.data.uuid
+                                });
+                            }
                         });
                         t.apiLegos = resultApiLego;
                     }
