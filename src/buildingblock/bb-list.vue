@@ -401,7 +401,7 @@
                                     if(item['valueKey'].split('.').length > 1){//支持定制接口
                                         list = item['value']
                                     }else{
-                                        if(item['value']['list']){
+                                        if(item['value']&&item['value']['list']){
                                             list = item['value']['list'];    
                                         }else{
                                             list = item['value'];
@@ -419,7 +419,7 @@
                                             t[item['dataKey']].push(list[i]);
                                         }
                                     }
-                                    t.totalItems = item['value']['totalRecords'];
+                                    t.totalItems = (item['value']&&item['value']['totalRecords'])?item['value']['totalRecords']:0;
                                 });
                             }
                         }
