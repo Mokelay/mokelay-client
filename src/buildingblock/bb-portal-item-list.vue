@@ -5,7 +5,7 @@
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
                     <i v-if="p_value&&p_value==field.value" class="el-icon-check"></i>
-                    <i v-if="field.icon" :class="field.icon + ' ty-font'" :style="{'line-height':p_styleConfig.imgHeight,'font-size':p_styleConfig.imgWidth}"></i>
+                    <i v-if="field.icon" :class="field.icon + ' ty-font'" :style="{'line-height':p_styleConfig.imgHeight,'font-size':p_styleConfig.imgWidth,'border':p_value&&p_value==field.value?'2px dashed #0091ea':''}"></i>
                     <img v-else  class="item-image" :src="field.src" alt="">
                 </div>
                 <!-- 主标题 -->
