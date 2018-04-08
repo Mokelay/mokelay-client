@@ -638,14 +638,7 @@ util.bbRender = function(content, createElement, t) {
                 on: onArr,
                 style: style
             }, []);
-            const bbItem = createElement('div', {
-                style: {
-                    flex: 1
-                }
-            }, [bbele]);
-            //控制排序 TODO
-            //bbList.splice(bb.layout.sort - 1,1,bbItem);
-            bbList.push(bbItem);
+            bbList.push(bbele);
         });
     }
     return bbList;
