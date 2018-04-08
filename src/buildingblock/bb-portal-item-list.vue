@@ -1,6 +1,6 @@
 <template>
     <div :class="p_styleConfig.mainClass +' ' + p_styleConfig.transitionType" :style="{'max-width':p_styleConfig.width}">
-        <div class="grid-item" v-for="(field,key) in realFields" :title="field.title" :style="{'margin': (p_styleConfig.h_margin||'20px')+' '+ p_styleConfig.margin}">
+        <div class="grid-item" v-for="(field,key) in realFields" :title="field.title||field.subtitle" :style="{'margin': (p_styleConfig.h_margin||'20px')+' '+ p_styleConfig.margin}">
             <bb-button :button="field.actionConfig" @button-finish='buttonFinish' @click='btnClick(field)' :style="{width:p_styleConfig.imgWidth}">
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
@@ -152,7 +152,7 @@
                 let t=this;
                 t.p_value=field.value||'';
                 t.$emit('input',field.value||'');
-                t.$emit('click',field.title,field.value);
+                t.$emit('click',(field.title||field.subtitle),field.value);
             }
         }
     }
