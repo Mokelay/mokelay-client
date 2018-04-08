@@ -5,7 +5,7 @@
         if(this.value){
           this.realConfig.value = this.value;
         }
-        return createElement(this.alias, {props: this.realConfig, on : this.on,key:_TY_Tool.uuid()});
+        return createElement(this.alias, {props: this.realConfig, on : this.on});
     },
     props: {
         value:{
