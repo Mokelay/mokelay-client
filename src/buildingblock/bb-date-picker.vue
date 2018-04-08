@@ -1,8 +1,8 @@
 <template>
     <el-date-picker 
         v-model="valueBase"
-        :disabled="option.disabled"
-        :editable="option.editable"
+        :disabled="option.disabled || false"
+        :editable="option.editable || false"
         :picker-options="pickerOptions"
         :value-format="option.valueFormat"
         @change="change"
@@ -17,6 +17,13 @@
         props: {
             option:{
                 type: Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        editable:false,
+                        handle:null
+                    }
+                }
                 /*数据格式
                     {
                         disabled:false,

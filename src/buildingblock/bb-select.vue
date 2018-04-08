@@ -9,8 +9,8 @@
       @change='change'
       >
       <el-option
-              v-for="option in items"
-              :key="option.value"
+              v-for="(option,key) in items"
+              :key="key"
               :label="option.text"
               :value="option.value">
       </el-option>

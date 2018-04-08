@@ -76,14 +76,14 @@
                                 <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}"></bb>
                             </span>
                         </div>
-                        <div v-else-if="column['type'] == 'edit'">
+                        <div v-else-if="column['type'] == 'edit' && scope['$index'] != canEditRow">
                             <el-input :value="scope['row'][column.prop]"
                                       @blur="cellSubmit($event,column,scope['row'])"></el-input>
                         </div>
-                        <div v-else-if="column['type'] == 'picture'">
+                        <div v-else-if="column['type'] == 'picture' && scope['$index'] != canEditRow">
                             <bb-picture-preview :imgList="scope['row'][column.prop]"></bb-picture-preview>
                         </div>
-                        <div v-else-if="column['type'] == 'template'">
+                        <div v-else-if="column['type'] == 'template' && scope['$index'] != canEditRow">
                             <div v-if="column['template'] == 'judge'">
                                 <el-tag :type="scope['row'][column.prop]?'primary':'info'" close-transition>
                                     {{scope['row'][column.prop]?"是":"否"}}
@@ -105,12 +105,14 @@
                         </div>
                         <div v-else>
                             <!-- 编辑状态 -->
-                            <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
+                            <!-- <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb> -->
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow">
                                 {{scope['row'][column.prop]}}
                             </span>
                         </div>
+                        <!-- 编辑状态 -->
+                        <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
                     </template>
                 </el-table-column>
             </el-table>
