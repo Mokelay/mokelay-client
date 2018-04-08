@@ -508,6 +508,19 @@ util.findBBByUuid = function(uuid, fromRoot) {
     return resultVue;
 }
 
+//针对外面包了一层div的组件，查询div下面的组件对象
+let _findRefBB = function(vueObj) {
+    if (vueObj && vueObj.$refs) {
+        for (let i in vueObj.$refs) {
+            let item = vueObj.$refs[i];
+            if (item && item.$vnode) {
+                return item;
+            }
+        }
+    }
+    return null;
+}
+
 /**
     获取当前容器组件的子积木列表
 **/
@@ -532,10 +545,18 @@ util.loadChildBB = function(t) {
             let item = {
                 uuid: i
             };
-            item.name = _ref.$attrs.aliasName || _ref.$vnode.componentOptions.tag; //设置组件名称
-            item.bbAlias = _ref.$vnode.componentOptions.tag; //设置积木别名
+            //有些组件只是外面封了一层div，去除外衣，取其内核组件
+            let tmpVue = _ref;
+            if (!_ref.$vnode) {
+                tmpVue = _findRefBB(_ref) || _ref;
+                if (tmpVue.$vnode) {
+                    item.uuid = tmpVue.$vnode.data.ref;
+                }
+            }
+            item.name = tmpVue.$attrs.aliasName || (tmpVue.$vnode ? tmpVue.$vnode.componentOptions.tag : tmpVue._vnode.tag); //设置组件名称
+            item.bbAlias = (tmpVue.$vnode ? tmpVue.$vnode.componentOptions.tag : tmpVue._vnode.tag); //设置积木别名
             let isNull = true;
-            for (let j in _ref.$refs) {
+            for (let j in tmpVue.$refs) {
                 isNull = false;
                 break;
             }
