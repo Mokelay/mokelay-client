@@ -667,17 +667,23 @@
                     });
                 }
             },
-            //新增行数据 newRow 新增加的行数据
-            rowAdd:function(newRow){
+            //积木内部新增行数据 列表内编辑器
+            rowAdd:function(){
                 const t = this;
                 const key = t.tableData.length;
-                if(false){
-                    t.tableData.splice(0,0,newRow);
-                }else{
-                    t.tableData.splice(0,0,{});
-                    t.canEditRow = 0; 
-                }
+                t.tableData.splice(0,0,{});
+                t.canEditRow = 0; 
                 t.adding = true;
+            },
+            //外部新增行数据 newRow 列表外编辑器
+            rowAddOut:function(newRow){
+                const t = this;
+                const key = t.tableData.length;
+                if(newRow){
+                    const newItem = Object.assign({},newRow);
+                    t.tableData.push(newItem);
+                }
+                //t.adding = true;
             },
             //分发编辑列表的各种按钮事件
             editorData:function(button, scope){
