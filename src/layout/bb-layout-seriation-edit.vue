@@ -198,6 +198,14 @@
                 _TY_Root._TY_Current_Edit_Item = t.realContent[params[0]];
                 t.$emit('onFocus',t.realContent[params[0]],t.nowEdit,t);
             },
+            //积木失焦状态
+            onBlur:function(){
+                const t = this;
+                if(t.preItem){
+                    t.preItem.onBlur();
+                }
+                t.$emit('onBlur');
+            },
             /*积木新增方法 对外
                 @bbAlias:积木别名
                 @bbName:积木名称
