@@ -32,7 +32,7 @@
                 }*/
                 fields:[
                     {pbbId:'api',name:'API',attributeName:'api',et:'bb-select',props:{
-                        ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},
+                        ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"},{paramName: 'type', valueType: "template",variable: "<%=window._TY_Page_Data[route.query.pageAlias]['appAlias']%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},
                         textField:'name',
                         valueField:'alias'
                     }},
