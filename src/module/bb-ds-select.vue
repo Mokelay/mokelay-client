@@ -83,7 +83,8 @@
                                 valueField:"alias"
                             }}
                         ]
-                    }}
+                    }},
+                    {pbbId:'host',name:'接口主域名',attributeName:'host',et:'bb-input',props:{defaultValTpl:"<%=window._TY_APIHost%>"}},
                 ],
                 interactiveOn:[
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
