@@ -95,10 +95,6 @@
             }
         },
         created:function(){
-            // const tiemOut = setTimeout(()=>{
-            //     this.realContent[this.realContent.length - 1].attributes.onFocus = true;
-            // },500);
-            // clearTimeout(tiemOut);
         },
         methods: {
             renderBB:function(createElement){
