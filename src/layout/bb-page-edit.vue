@@ -407,7 +407,6 @@
       },
       onBlur:function(){
           const t = this;
-          t.nowEdit = null;
           t.$emit('onBlur');
       },
       //完成编辑的积木数据回填
@@ -415,6 +414,7 @@
           const t = this;
           t.key = _TY_Tool.uuid();
           const newContent = _TY_Tool.deepClone(t.content);
+          contentItem.onFocus = true;
           t.$set(newContent,t.nowEdit,contentItem);
           t.content = newContent;
           t.$emit('afterEdit',t.content);

@@ -95,10 +95,6 @@
             }
         },
         created:function(){
-            const tiemOut = setTimeout(()=>{
-                this.realContent[this.realContent.length - 1].attributes.onFocus = true;
-            },500);
-            clearTimeout(tiemOut);
         },
         methods: {
             renderBB:function(createElement){
@@ -114,8 +110,9 @@
                                 config:{
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
-                                    buttons:['up','down','remove']},
-                                    //onFocus:bbEle.attributes?bbEle.attributes.onFocus:''
+                                    buttons:['up','down','remove'],
+                                    onFocus:bbEle.onFocus
+                                }   
                             },
                             style:{flex:1},
                             on:{
