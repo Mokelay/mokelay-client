@@ -62,6 +62,13 @@
                 t.contentToTabData();
             }
             const paneArr = t.renderTabData(createElement);
+            if(!t.lazy&&t.realTabs){
+                t.realTabs.forEach(function(_item,_index){
+                    setTimeout(function(){
+                        t.tabClick({name:_item.name});
+                    },400);
+                });
+            }
             //模拟点击默认tab事件,避免已经渲染的dom重新渲染
             setTimeout(function(){
                 t.tabClick({name:t.p_activeName});
@@ -85,6 +92,10 @@
             tabIconStyle:{
                 type:[Object,String],
                 default:null
+            },
+            lazy:{
+                type:Boolean,
+                default:true
             },
             /**
                 最终的tab数据是由tabPanels + tabDS 合并而来
