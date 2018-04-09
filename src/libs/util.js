@@ -772,6 +772,10 @@ let _setAnimation = function(bb) {
     if (animations && animations.length > 0) {
         animations.forEach((ani, key) => {
             const playNum = ani.loop ? 'infinite' : ani.playNum;
+            ani.style = ani.style ? ani.style : '';
+            ani.time = ani.time ? ani.time : 0;
+            ani.delay = ani.delay ? ani.delay : 0;
+            ani.direction = ani.direction ? ani.direction : '';
             animation = animation ? `${animation},${ani.style} ${ani.time/1000}s ${ani.delay/1000}s ${ani.direction} ${playNum}` : `${ani.style} ${ani.time/1000}s ${ani.delay/1000}s ${ani.direction} ${playNum}`
         })
     }

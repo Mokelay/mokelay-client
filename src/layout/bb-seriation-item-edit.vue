@@ -169,8 +169,12 @@
         methods: {
             //当前积木选中状态
             onFocus:function(){
-                this.$emit('onFocus',this);
-                this.borderClass = "border borderSelected";
+                if(this.borderClass == "border borderSelected"){
+                    this.onBlur();
+                }else{
+                    this.$emit('onFocus',this);
+                    this.borderClass = "border borderSelected";
+                }
             },
             //失焦状态
             onBlur:function(){
