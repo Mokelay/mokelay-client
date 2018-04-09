@@ -112,7 +112,7 @@
                             </span>
                         </div>
                         <!-- 编辑状态 -->
-                        <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
+                        <bb v-if="scope['$index'] == canEditRow" :value="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
                     </template>
                 </el-table-column>
             </el-table>
@@ -167,6 +167,12 @@
                     type:"defalut || button-group(操作)",
                     et:"bb-select" 表头编辑器 编辑状态有效
                     etProp:{} 表头编辑器配置 编辑状态有效
+                    etOn:[{             //触发交互
+                        uuid:'',
+                        fromContentEvent:'',//事件
+                        executeContentUUID:'',//目标积木的uuid
+                        executeContentMethodName:'',//目标方法名称
+                    }] 表头编辑器交互 编辑状态有效
                 }]
             */
             columns: {
@@ -572,6 +578,16 @@
                     col.on = {
                         change:t.cellChange.bind(null,col)
                     }
+                    if(col.etOn){
+                        col.etOn.forEach((val,index)=>{
+                            const eventName = val['fromContentEvent'];
+                            const fnName = val['executeContentMethodName']; 
+                            col['on'][eventName] = ((params)=>{
+                                const fn = window._TY_Tool.findBBByUuid(val['executeContentUUID'], true)['$children'][0][fnName];
+                                fn(params);
+                            }).bind(t);
+                        })
+                    }
                 });
                 const buttons = {
                         edit:{
@@ -711,7 +727,8 @@
                 if(!t.canEditRow){
                     if(!t.adding){
                         //修改
-                        t.cellDSSubmit(t.tableData[scope['$index']],'update');                 
+                        t.cellDSSubmit(t.tableData[scope['$index']],'update');
+                        t.$emit('edit',t.tableData[scope['$index']]);              
                     }else{
                         //新增
                         t.cellDSSubmit(t.tableData[0],'add');

@@ -480,6 +480,13 @@
                     props: {
                         
                     }
+                }, {
+                    name: '编辑器交互',
+                    attributeName: 'etOn',
+                    et: 'bb-editor-code',
+                    props: {
+                        returnObj:true
+                    }
                 }],
                 table:this.value,
             }
