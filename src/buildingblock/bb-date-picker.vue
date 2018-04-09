@@ -1,12 +1,30 @@
 <template>
-    <el-date-picker 
-        v-model="valueBase"
-        :disabled="option.disabled || false"
-        :editable="option.editable || false"
-        :picker-options="pickerOptions"
-        :value-format="option.valueFormat"
-        @change="change"
-        :type="type" placeholder="选择日期时间"></el-date-picker>
+    <div>
+        <el-time-picker 
+            v-if="type == 'time' || type == 'timerange'"
+            v-model="valueBase"
+            :is-range="type == 'timerange'"
+            :disabled="option.disabled || false"
+            :editable="option.editable || false"
+            :picker-options="pickerOptions"
+            :value-format="option.valueFormat"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            @change="change"
+            :type="type" placeholder="选择时间">
+        </el-time-picker>
+        <el-date-picker
+            v-else 
+            v-model="valueBase"
+            :disabled="option.disabled || false"
+            :editable="option.editable || false"
+            :picker-options="pickerOptions"
+            :value-format="option.valueFormat"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @change="change"
+            :type="type" placeholder="选择日期时间"></el-date-picker>  
+    </div>
 </template>
 
 <script>
@@ -35,6 +53,27 @@
             value:{
                 type:[String,Date]
             },
+            /*选择器类型
+                {
+                    "text": "时间选择器",
+                    "value": "time"
+                }, {
+                    "text": "时间范围选择器",
+                    "value": "timerange"
+                }, {
+                    "text": "日期选择器",
+                    "value": "date"
+                }, {
+                    "text": "时间日期选择器",
+                    "value": "datetime"
+                }, {
+                    "text": "日期范围选择器",
+                    "value": "daterange"
+                }, {
+                    "text": "时间日期范围选择器",
+                    "value": "datetimerange"
+                }
+            */
             type:{
                 type:String,
                 default:'datetime'
