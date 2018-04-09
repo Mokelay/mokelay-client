@@ -133,6 +133,10 @@ import Util from '../libs/util';
                                         t.formData = formData;
                                         t.$emit('input', formData);
                                         t.$emit('commit', formData);
+                                        if(!t.buttonConfig||!t.buttonConfig.ds){
+                                            t.dialog.close().remove();
+                                            t.dialog = null;
+                                        }
                                     },
                                     cancel:function(formData){
                                         t.$emit('cancel',formData);
