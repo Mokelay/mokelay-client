@@ -1,6 +1,6 @@
 <template>
 
-            <el-radio-group :value="p_value" @input="radioChange" >
+            <el-radio-group :value="p_value" @input="radioChange" @change="radioChange">
                 <el-radio v-if="type == 'radio'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-radio>
                 <el-radio-button v-if="type == 'button'" v-for="item in p_options" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-radio-button>
             </el-radio-group>
@@ -16,6 +16,13 @@ import Util from '../libs/util';
             value:{
                 default:''
             },
+            /**
+                [{
+                    "disabled":false,
+                    "text":"text1",
+                    "value":"val1"
+                }]
+            **/
             options:{
                 type:Array
             },
@@ -47,6 +54,13 @@ import Util from '../libs/util';
                 p_options:this.options
             };
         },
+        watch:{
+            value(val){
+               if(val){
+                    this.p_value = val;
+               } 
+            }
+        },
         mounted(){
             let t=this;
             if(this.ds){
@@ -74,6 +88,7 @@ import Util from '../libs/util';
            radioChange(val){
                 this.p_value=val;
                 this.$emit("input",val);
+                this.$emit("change",val);
            }    
         }
     }

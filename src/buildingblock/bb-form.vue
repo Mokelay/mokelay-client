@@ -43,7 +43,8 @@
                                     fromContentEvent:_on['triggerEventName'],
                                     executeType:'trigger_method',         //执行类型(预定义方法 trigger_method,
                                     executeContentUUID:_on['executePbbId'],  //执行积木的UUID executeType = trigger_method
-                                    executeContentMethodName:_on['executeBBMethodName']
+                                    executeContentMethodName:_on['executeBBMethodName'],
+                                    executeArgument:_on['executeArgument']//执行参数
                                 }
                                 interactives.push(newInteractives);
                             }

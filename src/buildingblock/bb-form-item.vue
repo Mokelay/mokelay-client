@@ -142,6 +142,22 @@
                 t.realShow = true;
                 t.$emit('show');
             },
+            //根据  事件的 executeArgument  来判断是否该隐藏或是显示
+            itemShowOrHide(..._data){
+                const t = this;
+                _data.forEach((val,key)=>{
+                  if(val.type == 'custom'){
+                    let flag = val.arguments;
+                    if(flag){
+                        t.realShow = true;
+                        t.$emit('show');
+                    }else{
+                        t.realShow = false;
+                        t.$emit('hide');
+                    }
+                  }
+                });
+            },
             //标签项影藏
             itemHide(){
                 const t = this;
