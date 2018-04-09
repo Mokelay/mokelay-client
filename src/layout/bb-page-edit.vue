@@ -185,6 +185,9 @@
           //存储当前页面ds信息
           t.ds = JSON.parse(page.ds) || [];
 
+          //存储当前页面应用信息
+          t.appAlias = page.appAlias;
+
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
 
