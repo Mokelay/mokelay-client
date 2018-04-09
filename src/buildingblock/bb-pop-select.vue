@@ -19,6 +19,8 @@
                 :pagination="selectionGridConfig.pagination"  
                 :search="selectionGridConfig.searchConfig.search"  
                 :searchConfig="selectionGridConfig.searchConfig"
+                :advancedSearch="selectionGridConfig.advancedSearch"
+                :advancedSearchConfig="selectionGridConfig.advancedSearchConfig"
                 :highlightCurrent="true"
                 fixedColumn="500"
                 @list-select="listSelect" 
@@ -180,6 +182,7 @@
                 const _value = _TY_Tool.tpl(t.valueTpl ,param);
                 t.$emit('input',_value);
                 t.$emit('change',_value);
+                t.$emit('output',param);
                 t.showText = _TY_Tool.tpl(t.textTpl, param);
             },
             //选中数据缓存
