@@ -393,8 +393,6 @@
                 t.formData = Object.assign(t.formData,t.newFormData);
                 t.$refs['form'].validate(function(valid){
                     if(valid){
-                        t.$emit('input', t.formData);
-                        t.$emit('commit', t.formData);
                         /*buttonConfig
                             提交按钮的配置
                             此处需要用bb-button重构*/
@@ -402,6 +400,8 @@
                                 'row-data':t.parentData['row-data'],
                                 'getData':t.getData
                             }),t.afterCommit);
+                        t.$emit('input', t.formData);
+                        t.$emit('commit', t.formData);
                     }
                 });
             },

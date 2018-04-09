@@ -126,14 +126,13 @@ import Util from '../libs/util';
                                 on:{
                                     "button-finish":function(button, valueobj){
                                         t.$emit('button-finish', button, valueobj);
+                                        t.dialog.close().remove();
+                                        t.dialog = null;
                                     },
                                     commit: function(formData){
                                         t.formData = formData;
-
                                         t.$emit('input', formData);
                                         t.$emit('commit', formData);
-                                        t.dialog.close().remove();
-                                        t.dialog = null;
                                     },
                                     cancel:function(formData){
                                         t.$emit('cancel',formData);
