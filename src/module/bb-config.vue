@@ -60,7 +60,7 @@
                 //动画配置 动画列表
                 animationListContent:null,
                 key:null,
-                show:true
+                show:false
             }
         },
         watch: {
