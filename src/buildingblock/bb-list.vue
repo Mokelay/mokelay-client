@@ -104,8 +104,6 @@
                             </div>
                         </div>
                         <div v-else>
-                            <!-- 编辑状态 -->
-                            <!-- <bb v-if="scope['$index'] == canEditRow" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb> -->
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow">
                                 {{scope['row'][column.prop]}}
