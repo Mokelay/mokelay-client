@@ -224,6 +224,14 @@
             // },300);
         },
         methods: {
+            //刷新tab方法 
+            refresh:function(){
+                let t=this;
+                t.canRender = false;
+                setTimeout(function(){
+                    t.canRender = true;
+                },500);
+            },
             //tabPanes  tabDs tabDsContent 转换成  只有在this.content没数据的时候才调用,方法内改变 bbContent 的值
             oldPropsToContent:function(){
                 let t=this;

@@ -250,7 +250,8 @@
       closeDialog:function(){
         let t=this;
         if(t._dialog){
-          t._dialog.$children[0].closeFn();
+          t._dialog.$children[0].closeDialog();
+          t._dialog = null;
         }
       },
       /*页面弹窗方法
@@ -279,12 +280,24 @@
         var _dialog = new Vue({
             router: t.$router,
             render: function(createElement){
-                return createElement('bb-dialog',{props:{'isShow':true,content:t.diaContent},on:{
+                return createElement('bb-dialog',{
+                  props:{
+                    'isShow':true,
+                    content:t.diaContent,
+                    closeOnClickModal:false
+                  },on:{
                   "update:isShow":(val)=>{
                     if(!val){
                       //关闭弹窗销毁DOM中的当前弹窗节点
                       setTimeout(function(){
-                        document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
+                        //如果有多个dialog，清除后面那个，只有一个就全清
+                        let dialogDom = document.getElementById(t.pageAlias + '_dialog').getElementsByClassName("el-dialog__wrapper");
+                        if(dialogDom.length>1){
+                          let removeDom = dialogDom[dialogDom.length-1];
+                          removeDom.parentNode.removeChild(removeDom);//删除最后一个节点
+                        }else{
+                          document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
+                        }
                       },0);
                     }
                   },

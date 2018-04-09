@@ -12,18 +12,25 @@
                     'custom-class':t.className,
                     'append-to-body':t.appendToBody,
                     'modal-append-to-body':t.modalAppendToBody,
+                    'close-on-click-modal':t.closeOnClickModal,
                     'fullscreen':t.fullscreen,
                     'modal':t.modal
                 },
                 style:{
-                    'border-radius':"5px"
+                    'border-radius':"5px",
                 },
+                key:t.key,
                 on:{
                     close:t.closeFn
                 }
             },[bbItems,this.$slots.default]); //支持插槽
         },
         props: {
+            //是否可以点击model 关闭dialog
+            closeOnClickModal:{
+                type:Boolean,
+                default:true
+            },
             title: {
                 type: String,
                 default: ""
@@ -112,6 +119,7 @@
                 type:[Array,String]
             }
         },
+
         data() {
             return {
                 active: false,
@@ -119,6 +127,9 @@
           }
         },
         computed: {
+              key() {//解决router指向同一个component，页面不刷新的问题
+                return this.$route.name !== undefined? this.$route.name + +new Date(): this.$route + +new Date()
+              },
             realWidth:function(){
                 const t = this;
                 let width = "50%"
@@ -158,6 +169,10 @@
                 this.active = false;
                 this.$emit('closeDia');
                 this.$emit('update:isShow', false);
+            },
+            closeDialog:function(){
+                //因为有close事件，所以active变成false后，会自动执行closeFn 方法
+                this.active = false;
             },
             loadChildBB:function(){
                 let t=this;
