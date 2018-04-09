@@ -1,6 +1,6 @@
 <template>
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
-    <el-tabs :key="key" type="border-card">
+    <el-tabs v-show="show" :key="key" type="border-card">
         <el-tab-pane label="属性">
             <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
@@ -59,7 +59,8 @@
                 animationFormContent:null,
                 //动画配置 动画列表
                 animationListContent:null,
-                key:null
+                key:null,
+                show:true
             }
         },
         watch: {
@@ -75,6 +76,11 @@
             //载入当前积木的编辑内容
             editBB:function(content){
                 const t = this;
+                if(!content.alias){
+                    t.show = false
+                    return;
+                }
+                t.show = true;
                 t.valueBase = content;
                 t.alias = content.alias;
                 t.key = _TY_Tool.uuid();

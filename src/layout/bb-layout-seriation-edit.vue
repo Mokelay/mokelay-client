@@ -122,7 +122,8 @@
                                 up:t.up.bind(null,index),
                                 down:t.down.bind(null,index),
                                 remove:t.remove.bind(null,index),
-                                onFocus:t.onFocus.bind(null,index)
+                                onFocus:t.onFocus.bind(null,index),
+                                onBlur:t.onBlur.bind(null,index)
                             }
                         },[]);
                         // const bbItem = createElement('div', {style:{flex:1}},[bbEle]);
@@ -201,9 +202,7 @@
             //积木失焦状态
             onBlur:function(){
                 const t = this;
-                if(t.preItem){
-                    t.preItem.onBlur();
-                }
+                t.nowEdit = null;
                 t.$emit('onBlur');
             },
             /*积木新增方法 对外

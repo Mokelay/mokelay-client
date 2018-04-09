@@ -55,6 +55,7 @@
         //顺序排列布局 seriation
             var element = createElement('bb-layout-seriation-edit', {key:this.key,ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
               onFocus:this.onFocus,
+              onBlur:this.onBlur,
               change:this.change
             }});
             pbbElementList.push(element);
@@ -70,6 +71,7 @@
           }
           var element = createElement('bb-layout-container-edit', {key:this.key,ref:uuid,props:props,on:{
               onFocus:this.onFocus,
+              onBlur:this.onBlur,
               change:this.change
             }});
             pbbElementList.push(element);
@@ -86,6 +88,7 @@
           }
           var element = createElement('bb-layout-canvas-edit', {key:this.key,ref:uuid,props:props,on:{
               onFocus:this.onFocus,
+              onBlur:this.onBlur,
               change:this.change
             }});
             pbbElementList.push(element);
@@ -401,6 +404,11 @@
           const t = this;
           t.nowEdit = index;
           t.$emit('onFocus',contentItem);
+      },
+      onBlur:function(){
+          const t = this;
+          t.nowEdit = null;
+          t.$emit('onBlur');
       },
       //完成编辑的积木数据回填
       afterEdit:function(contentItem){
