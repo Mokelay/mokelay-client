@@ -2,6 +2,11 @@
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
     <el-tabs v-show="show" :key="key" type="border-card">
         <el-tab-pane label="属性">
+            <div class="bb-info">
+                <p>积木名称：{{valueBase.aliasName}}</p>
+                <p>积木别名：{{valueBase.alias}}</p>
+                <p>积木标识：{{valueBase.uuid}}</p>
+            </div>
             <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
@@ -60,7 +65,8 @@
                 //动画配置 动画列表
                 animationListContent:null,
                 key:null,
-                show:false
+                show:false,
+                _TY_Current_Edit_Item:null
             }
         },
         watch: {
@@ -141,7 +147,7 @@
                 t.interactiveFormContent = [{                      
                     uuid:'interactive-uuid',
                     alias:'bb-uuid',                   
-                    aliasName:'唯一标识',               
+                    aliasName:'唯一标识',              
                     //group:'交互事件',                   
                     attributes:{
                         attributeName:'uuid',
@@ -170,8 +176,8 @@
                     }
                 },{                      
                     uuid:'interactive-executeArgument',
-                    alias:'bb-input',                   
-                    aliasName:'传参',               
+                    alias:'bb-textarea',                   
+                    aliasName:'自定义参数',              
                     //group:'交互事件',                   
                     attributes:{
                         attributeName:'executeArgument'
@@ -188,7 +194,36 @@
                             {text:'自定义方法',value:'custom_script'},
                             {text:'容器类方法',value:'container_method'}
                         ]
-                    }
+                    },
+                    interactives:[{
+                        uuid:'interactive-executeType_01',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-executeContentUUID',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='trigger_method'?true:false"
+                    },{
+                        uuid:'interactive-executeType_02',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-executeContentMethodName',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='trigger_method'?true:false"
+                    },{
+                        uuid:'interactive-executeType_03',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-executeScript',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='custom_script'?true:false"
+                    },{
+                        uuid:'interactive-executeType_04',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-containerMethodName',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='container_method'?true:false"
+                    }]
                 },{                      
                     uuid:'interactive-executeContentUUID',
                     alias:'bb-bb-select',                   
@@ -196,7 +231,7 @@
                     //group:'预定义方法',                   
                     attributes:{
                         attributeName:'executeContentUUID',
-                        show:true
+                        show:false,
                     },
                     interactives:[{             //触发交互
                         uuid:_TY_Tool.uuid(),
@@ -212,7 +247,7 @@
                     //group:'预定义方法',                   
                     attributes:{
                         attributeName:'executeContentMethodName',
-                        show:true,
+                        show:false,
                         ds:{
                             api: "list-mdByBbAlias",
                             method: "get",
@@ -225,11 +260,11 @@
                 },{                      
                     uuid:'interactive-executeScript',
                     alias:'bb-select',                   
-                    aliasName:'巴斯方法',               
+                    aliasName:'巴斯方法',              
                     //group:'自定义方法',                   
                     attributes:{
                         attributeName:'executeScript',
-                        show:true,
+                        show:false,
                         ds:{
                             api: "list-buzz",
                             method: "get",
@@ -246,7 +281,7 @@
                     //group:'容器类方法',                   
                     attributes:{
                         attributeName:'containerMethodName',
-                        show:true,
+                        show:false,
                         fields:[
                             {text:'刷新页面',value:'refresh'},
                             {text:'关闭页面',value:'unload'},
@@ -266,7 +301,7 @@
                         attributeName:'interactives',
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[
-                            {prop: 'uuid',label: '交互标识',type:'defalut'},
+                            {prop: 'uuid',label: '标识',type:'defalut',et: 'bb-uuid'},
                             {prop:'fromContentEvent',
                                 et:'bb-select',                   
                                 label:'事件',               
@@ -286,13 +321,13 @@
                                     valueField:"eventName"
                                 }
                             },
+                            {prop: 'executeArgument',label: '参数',et: 'bb-textarea',etProp:{}},
                             {prop: 'executeType',label: '方法类型',et: 'bb-select',etProp:{fields:[
                                 {text:'预定义方法',value:'trigger_method'},
                                 {text:'自定义方法',value:'custom_script'},
                                 {text:'容器类方法',value:'container_method'}
                             ]}},
-                            {prop: 'executeArgument',label: '传参',et: 'bb-input'},
-                            {prop: 'executeContentUUID',label: '目标积木',et: 'bb-bb-select'},
+                            {prop: 'executeContentUUID',label: '目标',et: 'bb-bb-select'},
                             {prop: 'executeContentMethodName',label: '目标积木方法',et:'bb-select',etProp:{ds:{
                                 api: "list-mdByBbAlias",
                                 method: "get",
@@ -301,7 +336,7 @@
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
                             },textField:'name',valueField:"methodName"}},
-                            {prop: 'executeScript',label: '巴斯方法',et:'bb-select',etProps:{ds:{
+                            {prop: 'executeScript',label: '巴斯',et:'bb-select',etProps:{ds:{
                                 api: "list-buzz",
                                 method: "get",
                                 inputs: [],
@@ -309,7 +344,7 @@
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
                             },textField:'name',valueField:"alias"}},
-                            {prop: 'containerMethodName',label: '容器类方法名称',et:'bb-select',etProp:{fields:[
+                            {prop: 'containerMethodName',label: '容器方法',et:'bb-select',etProp:{fields:[
                                 {text:'刷新页面',value:'refresh'},
                                 {text:'关闭页面',value:'unload'},
                                 {text:'显示弹窗',value:'openDialog'},
@@ -532,3 +567,11 @@
         }
     }
 </script>
+<style lang='less'>
+    .bb-info{
+        font-size: 14px;
+        color: #666;
+        line-height: 40px;
+    }
+    
+</style>

@@ -7,7 +7,7 @@
             :disabled="option.disabled || false"
             :editable="option.editable || false"
             :picker-options="pickerOptions"
-            :value-format="option.valueFormat"
+            :value-format="option.valueFormat || 'HH:mm:ss'"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             @change="change"
@@ -123,6 +123,15 @@
                     //日期选择器参数配置
                     t.pickerOptions = Object.assign({},t.option);
                 }
+            },
+            //通过外部交互设置选择器
+            setOption:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom'){
+                        t.pickerOptions = val.arguments;
+                    }  
+                })
             }
         }
     }
