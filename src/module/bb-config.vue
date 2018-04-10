@@ -295,7 +295,7 @@
                         attributeName:'interactives',
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[
-                            {prop: 'uuid',label: '交互标识',type:'defalut'},
+                            {prop: 'uuid',label: '标识',type:'defalut',et: 'bb-uuid'},
                             {prop:'fromContentEvent',
                                 et:'bb-select',                   
                                 label:'事件',               
@@ -315,12 +315,13 @@
                                     valueField:"eventName"
                                 }
                             },
+                            {prop: 'executeArgument',label: '参数',et: 'bb-textarea',etProp:{}},
                             {prop: 'executeType',label: '方法类型',et: 'bb-select',etProp:{fields:[
                                 {text:'预定义方法',value:'trigger_method'},
                                 {text:'自定义方法',value:'custom_script'},
                                 {text:'容器类方法',value:'container_method'}
                             ]}},
-                            {prop: 'executeContentUUID',label: '目标积木',et: 'bb-bb-select'},
+                            {prop: 'executeContentUUID',label: '目标',et: 'bb-bb-select'},
                             {prop: 'executeContentMethodName',label: '目标积木方法',et:'bb-select',etProp:{ds:{
                                 api: "list-mdByBbAlias",
                                 method: "get",
@@ -329,7 +330,7 @@
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
                             },textField:'name',valueField:"methodName"}},
-                            {prop: 'executeScript',label: '巴斯方法',et:'bb-select',etProps:{ds:{
+                            {prop: 'executeScript',label: '巴斯',et:'bb-select',etProps:{ds:{
                                 api: "list-buzz",
                                 method: "get",
                                 inputs: [],
@@ -337,13 +338,12 @@
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
                             },textField:'name',valueField:"alias"}},
-                            {prop: 'containerMethodName',label: '容器类方法名称',et:'bb-select',etProp:{fields:[
+                            {prop: 'containerMethodName',label: '容器方法',et:'bb-select',etProp:{fields:[
                                 {text:'刷新页面',value:'refresh'},
                                 {text:'关闭页面',value:'unload'},
                                 {text:'显示弹窗',value:'openDialog'},
                                 {text:'解析接口',value:'executeDS'}
-                            ]}},
-                            {prop: 'executeArgument',label: '容器方法传参',et: 'bb-input'}
+                            ]}}
                         ]
                     }
                 }];
