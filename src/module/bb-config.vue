@@ -2,6 +2,11 @@
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
     <el-tabs v-show="show" :key="key" type="border-card">
         <el-tab-pane label="属性">
+            <div class="bb-info">
+                <p>积木名称：{{valueBase.aliasName}}</p>
+                <p>积木别名：{{valueBase.alias}}</p>
+                <p>积木标识：{{valueBase.uuid}}</p>
+            </div>
             <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
@@ -60,7 +65,8 @@
                 //动画配置 动画列表
                 animationListContent:null,
                 key:null,
-                show:false
+                show:false,
+                _TY_Current_Edit_Item:null
             }
         },
         watch: {
@@ -561,3 +567,11 @@
         }
     }
 </script>
+<style lang='less'>
+    .bb-info{
+        font-size: 14px;
+        color: #666;
+        line-height: 40px;
+    }
+    
+</style>
