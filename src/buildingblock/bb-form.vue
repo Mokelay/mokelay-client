@@ -459,6 +459,15 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //外部交互动态设置表单值
+            setFormData:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom'){
+                        t.formData = val.arguments;
+                    }  
+                })
             }
         }
     }
