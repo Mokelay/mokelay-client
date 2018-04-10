@@ -141,7 +141,7 @@
                 t.interactiveFormContent = [{                      
                     uuid:'interactive-uuid',
                     alias:'bb-uuid',                   
-                    aliasName:'唯一标识',               
+                    aliasName:'唯一标识',              
                     //group:'交互事件',                   
                     attributes:{
                         attributeName:'uuid',
@@ -170,8 +170,8 @@
                     }
                 },{                      
                     uuid:'interactive-executeArgument',
-                    alias:'bb-input',                   
-                    aliasName:'传参',               
+                    alias:'bb-textarea',                   
+                    aliasName:'自定义参数',              
                     //group:'交互事件',                   
                     attributes:{
                         attributeName:'executeArgument'
@@ -188,7 +188,36 @@
                             {text:'自定义方法',value:'custom_script'},
                             {text:'容器类方法',value:'container_method'}
                         ]
-                    }
+                    },
+                    interactives:[{
+                        uuid:'interactive-executeType_01',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-executeContentUUID',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='trigger_method'?true:false"
+                    },{
+                        uuid:'interactive-executeType_02',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-executeContentMethodName',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='trigger_method'?true:false"
+                    },{
+                        uuid:'interactive-executeType_03',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-executeScript',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='custom_script'?true:false"
+                    },{
+                        uuid:'interactive-executeType_04',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'form-item_interactive-containerMethodName',
+                        executeContentMethodName:'itemShowOrHide',
+                        executeArgument: "params[0]==='container_method'?true:false"
+                    }]
                 },{                      
                     uuid:'interactive-executeContentUUID',
                     alias:'bb-bb-select',                   
@@ -196,7 +225,7 @@
                     //group:'预定义方法',                   
                     attributes:{
                         attributeName:'executeContentUUID',
-                        show:true
+                        show:false,
                     },
                     interactives:[{             //触发交互
                         uuid:_TY_Tool.uuid(),
@@ -212,7 +241,7 @@
                     //group:'预定义方法',                   
                     attributes:{
                         attributeName:'executeContentMethodName',
-                        show:true,
+                        show:false,
                         ds:{
                             api: "list-mdByBbAlias",
                             method: "get",
@@ -225,11 +254,11 @@
                 },{                      
                     uuid:'interactive-executeScript',
                     alias:'bb-select',                   
-                    aliasName:'巴斯方法',               
+                    aliasName:'巴斯方法',              
                     //group:'自定义方法',                   
                     attributes:{
                         attributeName:'executeScript',
-                        show:true,
+                        show:false,
                         ds:{
                             api: "list-buzz",
                             method: "get",
@@ -246,7 +275,7 @@
                     //group:'容器类方法',                   
                     attributes:{
                         attributeName:'containerMethodName',
-                        show:true,
+                        show:false,
                         fields:[
                             {text:'刷新页面',value:'refresh'},
                             {text:'关闭页面',value:'unload'},
@@ -291,7 +320,6 @@
                                 {text:'自定义方法',value:'custom_script'},
                                 {text:'容器类方法',value:'container_method'}
                             ]}},
-                            {prop: 'executeArgument',label: '传参',et: 'bb-input'},
                             {prop: 'executeContentUUID',label: '目标积木',et: 'bb-bb-select'},
                             {prop: 'executeContentMethodName',label: '目标积木方法',et:'bb-select',etProp:{ds:{
                                 api: "list-mdByBbAlias",
@@ -314,7 +342,8 @@
                                 {text:'关闭页面',value:'unload'},
                                 {text:'显示弹窗',value:'openDialog'},
                                 {text:'解析接口',value:'executeDS'}
-                            ]}}
+                            ]}},
+                            {prop: 'executeArgument',label: '容器方法传参',et: 'bb-input'}
                         ]
                     }
                 }];
