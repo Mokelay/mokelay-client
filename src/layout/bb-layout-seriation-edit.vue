@@ -127,7 +127,8 @@
                         bbList.push(bbItem);
                         //控制排序 TODO
                         //bbList.splice(bb.layout.sort - 1,1,bbItem);
-                    })
+                        bbEle.onFocus = false;
+                    });
                     return bbList; 
                 }
             },
