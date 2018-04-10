@@ -7,6 +7,7 @@
             :closable="closable"
             :size="size"
             :color="color||tag.color||''"
+            :type="type||tag.type||''"
             :close-transition="false"
             @close="handleClose(key)"
           >
@@ -40,6 +41,7 @@
                 name:'',//标签显示文案
                 tipContent:'',//tip展示的文案 或者html代码
                 color:''//背景色，类似主题
+                type:''//主题
               }]
             */
             value:{
@@ -63,6 +65,10 @@
               default:''
             },
             color:{
+              type:String,
+              default:null
+            },
+            type:{
               type:String,
               default:null
             },
