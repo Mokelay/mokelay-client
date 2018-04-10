@@ -42,14 +42,22 @@
 
                 <!-- 树状结构支持 -->
                 <el-table-tree-column v-if="treeConfig&&treeConfig.support"
-                                :remote="loadTreeChild"
-                                :childNumKey="treeConfig.childNumKey"
-                                :parentKey="treeConfig.parentKey"
-                                :prop="treeConfig.prop"
-                                :label="treeConfig.label"></el-table-tree-column>
-
-                <el-table-column v-for="(column,key) in realColumns" :fixed="column.fixed" :width="column.width" :prop="column.prop" :label="column.label"
-                                 :key="column.prop" :align="column.align">
+                    :remote="loadTreeChild"
+                    :childNumKey="treeConfig.childNumKey"
+                    :parentKey="treeConfig.parentKey"
+                    :prop="treeConfig.prop"
+                    :label="treeConfig.label"></el-table-tree-column>
+                <el-table-column 
+                    v-for="(column,key) in realColumns" 
+                    :fixed="column.fixed" 
+                    :width="column.width" 
+                    :prop="column.prop" 
+                    :label="column.label"
+                    :filters="column.filter"
+                    :filter-method="column.filter?filterHandler : null"
+                    filter-placement="bottom-end"
+                    :key="column.prop" 
+                    :align="column.align">
                     <template slot-scope="scope">
                         <!-- type=button-group 不再扩展 -->
                         <div v-if="column['type'] == 'button-group'" >
@@ -160,6 +168,7 @@
                 [{
                     prop:null,  表头键值
                     label:'默认表单', 表头展示名称
+                    filter:"[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]" 列表内数据赛选条件
                     fixed:"right",
                     width:"120px",
                     type:"defalut || button-group(操作)",
@@ -799,6 +808,11 @@
                 }else{
                     return t.tableData;
                 }
+            },
+            //列表静态数据筛选方法
+            filterHandler(value, row, column) {
+                const property = column['property'];
+                return row[property] === value;
             }
         }
     }
