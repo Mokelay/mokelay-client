@@ -116,6 +116,7 @@
     data() {
       return {
         templatePageAlias:null,
+        p_params:this.params,//初始化参数
         pbbs:[],
         customFile:null,
         layoutObject:null,
