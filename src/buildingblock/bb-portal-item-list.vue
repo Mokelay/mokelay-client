@@ -85,6 +85,10 @@
                         mainClass:'bb-portal-item-list'
                     }
                 }
+            },
+            activeVal:{
+                type:String,
+                default:null
             }
         },
         data() {
@@ -107,6 +111,9 @@
                         margin:'50px',
                         mainClass:'bb-portal-item-list'
                     },this.styleConfig);
+            },
+            p_activeVal(){
+                return _TY_Tool.tpl(this.activeVal,_TY_Tool.buildTplParams(this));
             }
         },
         created: function () {
@@ -117,6 +124,16 @@
             t.getData();
         },
         mounted:function(){
+            let t=this;
+            if(t.p_activeVal){
+                setTimeout(function(){
+                    t.realFields.forEach(function(val,index){
+                        if(val.value==t.p_activeVal){
+                            t.btnClick(val);
+                        }
+                    });
+                },500);
+            }
         },
         methods: {
             //事件 button-finish  点击图片由bb-button 触发触发
