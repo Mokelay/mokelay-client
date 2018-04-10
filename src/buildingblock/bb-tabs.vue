@@ -54,7 +54,6 @@
         name: 'bb-tabs',
         render: function (createElement) {
             const t = this;
-
             if(!t.canRender){
                 return;
             }
@@ -62,13 +61,6 @@
                 t.contentToTabData();
             }
             const paneArr = t.renderTabData(createElement);
-            if(!t.lazy&&t.realTabs){
-                t.realTabs.forEach(function(_item,_index){
-                    setTimeout(function(){
-                        t.tabClick({name:_item.name});
-                    },400);
-                });
-            }
             //模拟点击默认tab事件,避免已经渲染的dom重新渲染
             setTimeout(function(){
                 t.tabClick({name:t.p_activeName});
@@ -216,12 +208,7 @@
         mounted:function(){
             let t=this;
             //将content属性转换成可以识别的tab组件
-            // window.setTimeout(function(){
-                // if(!t.key){
-                    t.key = ""+ +new Date();
-                // }
-                // t.contentToTabData();
-            // },300);
+            t.key = ""+ +new Date();
         },
         methods: {
             //刷新tab方法 
@@ -231,6 +218,33 @@
                 setTimeout(function(){
                     t.canRender = true;
                 },500);
+            },
+            showOrHideTab:function(..._data){
+                let t=this;
+                _data.forEach((val,key)=>{
+                  if(val.type == 'custom'){
+                    let showTabNames = val.arguments;// 逗号隔开  abc,def
+                    if(showTabNames){
+                        let showTabNameArray = showTabNames.split(",");
+                        t.tabsData.forEach(function(tab,_index){
+                            let showFlag = false;
+                            showTabNameArray.forEach(function(item,index){
+                                if(tab.name===item){
+                                    showFlag = true;
+                                    return false;//break
+                                }
+                            });
+                            if(showFlag){
+                                tab.show = true;
+                            }else{
+                                tab.show=false;
+                            }
+                        });
+                    }
+                    t.refresh();
+                    return false;//break
+                  }
+                });
             },
             //tabPanes  tabDs tabDsContent 转换成  只有在this.content没数据的时候才调用,方法内改变 bbContent 的值
             oldPropsToContent:function(){
@@ -328,6 +342,7 @@
                             label:t.realTabs[i].label,
                             name:t.realTabs[i].name,
                             icon:t.realTabs[i].icon,
+                            show:true,
                             content:[]
                         };
                         for(let j=0;j<t.bbContent.length;j++){
@@ -351,34 +366,16 @@
                 if(t.$refs['badge_'+tab.name]){
                     t.$refs['badge_'+tab.name].hide();
                 }
-                let alias = tab.name;
-
-                let currentTabContent;
-                t.tabsData.forEach((tabData, key)=> {
-                    if(tabData.name==alias){
-                        currentTabContent=tabData.content;
-                    }
-                });
                 t.$emit('tab-click',tab);
-                //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
-                if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
-                    return;
-                }
-                //渲染content
-                let dom = new Vue({
-                    router: t.$router,
-                    render: function(createElement) {
-                        return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
-                    }
-                }).$mount('#tab_pane_' + alias+'_'+t.key);
-
-                t.$refs[_TY_Tool.uuid()] = dom; //把创建的vue 设置到$refs中
             },
             renderTabData: function (createElement) {
                 const t = this;
                 const paneArr = [];
                 if (t.tabsData&&t.tabsData.length>0) {
                     t.tabsData.forEach((tabData, key)=> {
+                        if(!tabData.show){
+                            return true;
+                        }
                         if (t.badgeData) {
                             t.badgeData.forEach((badgeItem, index)=> {
                                 if (tabData.name == badgeItem.name) {
@@ -402,12 +399,13 @@
                                 style:iconStyle
                             },[]);
                         }
+                        const panelContent = createElement('div',{},_TY_Tool.bbRender(tabData.content, createElement, t));
                         const label = createElement('span', {slot: 'label'}, [iconDom,tabData.label, badge]);
                         const tabPaneItem = createElement('el-tab-pane', {
                                     props: {name: ""+tabData.name,label:tabData.label, key: tabData.name}
                                 }, [label, createElement('div', {
                                     attrs: {id: 'tab_pane_' + tabData.name+'_'+t.key}
-                                }, [])]
+                                }, [panelContent])]
                         );
                         paneArr.push(tabPaneItem);
                     });
