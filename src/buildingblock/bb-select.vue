@@ -2,6 +2,7 @@
     <el-select 
       placeholder="请选择" 
       v-model="valueBase" 
+      clearable
       :allow-create="filterable"
       :multiple="multiple"
       :filterable="filterable"
