@@ -465,7 +465,7 @@
                 const t = this;
                 args.forEach((val,key)=>{
                     if(val.type == 'custom'){
-                        t.formData = val.arguments;
+                        t.formData = Object.assign({},t.formData,val.arguments);
                     }  
                 })
             }

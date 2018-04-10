@@ -28,6 +28,21 @@
                     rules: [],
                     props: {}
                 }, {
+                    name: '数据筛选条件',
+                    attributeName: 'filter',
+                    et: 'bb-list',
+                    rules: [],
+                    props: {
+                        editConfig:{
+                            editable:['add','edit','up','down','remove'],
+                            editDs:{add:{},remove:{},update:{},sort:{}}
+                        },
+                        columns:[
+                            {prop:'text',label:'条件名称',type:"defalut",et:"bb-input",etProp:{}},
+                            {prop:'value',label:'条件别名',type:"defalut",et:"bb-input",etProp:{}}
+                        ]
+                    }
+                }, {
                     name: '表头宽度',
                     attributeName: 'width',
                     et: 'bb-input',
