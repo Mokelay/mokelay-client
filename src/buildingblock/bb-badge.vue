@@ -1,7 +1,7 @@
 <template>
     <el-badge :is-dot="isDot" :value="showValue" class="item" :hidden="hidden">
         <span v-if="text" @click="click">{{text}}</span>
-        <bb-button v-if="button" @click="btnClick" :button="button"></bb-button>
+        <bb-button v-if="button" @click="btnClick" :button="button" :style="{'display':showBtn}"></bb-button>
     </el-badge>
 </template>
 <script>
@@ -39,7 +39,8 @@
             return {
                 baseValue: this.value,
                 hidden: !Boolean(this.value),
-                external:{}//外部参数
+                external:{},//外部参数
+                showBtn:'inline-block'
             };
         },
         computed: {
@@ -68,6 +69,27 @@
               if(data){
                 this.external['linkage'] = data;
               }
+            },
+            //隐藏还是显示
+            showOrHide:function(..._data){
+                let t=this;
+                _data.forEach((val,key)=>{
+                  if(val.type == 'custom'){
+                    let flag = val.arguments;
+                    if(flag){
+                        t.hidden = false;
+                        t.showBtn="inline-block";
+                        //开始刷新
+                        t.autoRefresh();
+                    }else{
+                        t.hidden = true;
+                        t.showBtn = "none";
+                        if(t.setTime){
+                            t.stopRefresh();
+                        }
+                    }
+                  }
+                });
             },
             //隐藏标记
             hide: function () {

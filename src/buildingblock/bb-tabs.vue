@@ -359,6 +359,7 @@
                         currentTabContent=tabData.content;
                     }
                 });
+                t.$emit('tab-click',tab);
                 //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
                 if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
                     return;
