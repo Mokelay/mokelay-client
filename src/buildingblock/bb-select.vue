@@ -6,6 +6,7 @@
       :allow-create="filterable"
       :multiple="multiple"
       :filterable="filterable"
+      :disabled="disabled"
       default-first-option
       @change='change'
       >
@@ -67,6 +68,10 @@
             defaultValTpl:{
                 type:[String,Number,Boolean]
             },
+            disabled:{
+              type:Boolean,
+              default:false
+            }
             /*是否可搜索*/
             filterable:{
               type:Boolean,

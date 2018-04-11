@@ -14,11 +14,12 @@
                 :show-checkbox="showCheckbox"
                 :check-strictly="checkStrictly"
                 highlight-current
-                lazy
+                :lazy="lazy"
                 accordion
                 ref="tree"
                 :key="randomKey"
                 @check-change="checkChange"
+                @node-click="nodeClick"
         >
         </el-tree>
     </div>
@@ -70,8 +71,17 @@
             ds: {
                 type: Object
             },
+            //一次性获取全部树形数据ds
+            staticDs:{
+                type:Object
+            },
             external: {
                 type: Object
+            },
+            //是否懒加载
+            lazy:{
+                type:Boolean,
+                default:true
             }
         },
         data() {
@@ -81,7 +91,8 @@
             }
         },
         created: function () {
-
+            let t=this;
+            t.refresh();
         },
         watch: {
             //value如果为空，取消勾选所有选中节点
@@ -224,17 +235,53 @@
                         });
                     } else if (t.opts && t.opts.length > 0) {
                         resolve(t.opts);
+                    } else if(t.staticDs){
+                        Util.getDSData(t.staticDs, _TY_Tool.buildTplParams(t), function (map) {
+                            const list = [];
+                            if (!map || !map.length) {
+                                resolve([]);
+                                return;
+                            }
+                            resolve(map[0]['value']);
+                        }, function (code, msg) {
+                        });
                     }
                 });
             },
+            //刷新
+            refresh:function(){
+                let t=this;
+                if(!this.lazy&&t.staticDs){
+                    //静态资源不是懒加载
+                    if(t.staticDs){
+                        this.getData().then((data) => {
+                            t.data = data;
+                        })
+                    }
+                }else{
+                    t.getRootData();
+                }
+            },
             //懒加载
             loadData: function (node, resolve) {
+                let t=this;
+                
                 if (node.parent && node.isLeaf) {
                     return resolve([]);
                 }
                 this.getData(node).then((data) => {
                     resolve(data);
                 })
+            },
+            //节点点击事件
+            nodeClick:function(data,node,current){
+                let t=this;
+                if(node.isLeaf){
+                    //如果是叶子节点
+                    t.$emit('leafClick',data,node,current);
+                }
+                t.$emit('click',data,node,current);
+
             }
         }
     }
