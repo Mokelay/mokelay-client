@@ -213,9 +213,8 @@ let ty = {
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
-
-		Vue.prototype.$toast = bbtoast;
-		Vue.prototype.$modal = bbmodal;
+		window._TY_Toast = bbtoast;
+		window._TY_Modal = bbmodal;
 		console.log("finish ty bb init....");
 	}
 };

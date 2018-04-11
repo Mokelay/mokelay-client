@@ -34,13 +34,15 @@ const initInstance = () => {
 const Modal = function(options, callback) {
     if (Vue.prototype.$isServer) return;
 
-    for ( let i=0, len=options.inputs.length; i<len; i++ ) {
-      if ( options.inputs[i].pattern ) {
-        options.inputs[i].legal = '';
+    options = options|| {};
+    let inputs = options.inputs || [];
+    for ( let i=0, len=inputs.length; i<len; i++ ) {
+      if ( inputs[i].pattern ) {
+        inputs[i].legal = '';
       }
 
-      if ( !options.inputs[i].hasOwnProperty('$val') ) {
-        options.inputs[i].$val = '';
+      if ( !inputs[i].hasOwnProperty('$val') ) {
+        inputs[i].$val = '';
       }
     }
 
