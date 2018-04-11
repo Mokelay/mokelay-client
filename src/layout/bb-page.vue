@@ -407,7 +407,6 @@
             }, function (code, msg) {
               //接口执行完毕
               t.$emit('after-betask-excute-err',code);
-              debugger
           });
         }
       },
@@ -415,6 +414,17 @@
       stopTask:function(uuid){
         const t = this;
         clearInterval(t.taskObj[uuid]);
+      },
+      //系统通知
+      notification:function(...argus){
+        args.forEach((val,key)=>{
+          if(val.type == 'custom'){
+            t.$notify({
+              title: val.arguments.title,
+              message: val.arguments.message
+            })
+          }
+        })
       }
     }
   }
