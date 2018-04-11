@@ -460,7 +460,7 @@
                 t.getDSDate(val.ds);
                 break;
               case 'interval':
-                t.taskObj[val.uuid] = setInterval(()=>{t.getDSDate(val.ds)},3000);
+                t.taskObj[val.uuid] = setInterval(()=>{t.getDSDate(val.ds)},val.time);
                 break
             }
           })
@@ -484,7 +484,8 @@
         clearInterval(t.taskObj[uuid]);
       },
       //系统通知
-      notification:function(...argus){
+      notification:function(...args){
+        const t = this;
         args.forEach((val,key)=>{
           if(val.type == 'custom'){
             t.$notify({

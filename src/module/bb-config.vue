@@ -298,12 +298,14 @@
                     attributes:{
                         attributeName:'containerMethodName',
                         show:false,
-                        fields:[
-                            {text:'刷新页面',value:'refresh'},
-                            {text:'关闭页面',value:'unload'},
-                            {text:'显示弹窗',value:'openDialog'},
-                            {text:'解析接口',value:'executeDS'}
-                        ]
+                        ds:{
+                            api: "list-mdByBbAlias",
+                            method: "get",
+                            inputs: [{paramName: 'bbAlias',valueType:"template",variable:"bb-page"}],
+                            outputs: [
+                                {dataKey: "fields", valueKey: "data_list"}
+                            ]
+                        },textField:'name',valueField:"methodName"
                     }
                 }];
                 t.interactiveForm = {};
@@ -367,12 +369,14 @@
                                     {dataKey: "fields", valueKey: "data_list"}
                                 ]
                             },textField:'name',valueField:"alias"}},
-                            {prop: 'containerMethodName',label: '容器方法',et:'bb-select',etProp:{fields:[
-                                {text:'刷新页面',value:'refresh'},
-                                {text:'关闭页面',value:'unload'},
-                                {text:'显示弹窗',value:'openDialog'},
-                                {text:'解析接口',value:'executeDS'}
-                            ]}}
+                            {prop: 'containerMethodName',label: '容器方法',et:'bb-select',etProp:{ds:{
+                                api: "list-mdByBbAlias",
+                                method: "get",
+                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:"bb-page"}],
+                                outputs: [
+                                    {dataKey: "fields", valueKey: "data_list"}
+                                ]
+                            },textField:'name',valueField:"methodName"}}
                         ]
                     }
                 }];
