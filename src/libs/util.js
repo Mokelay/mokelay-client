@@ -237,7 +237,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     method = method.toLowerCase();
     //设置请求参数
     var options = {
-        baseURL: host
+        baseURL: util.tpl(host, Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj)))
     }
     util[method](apiUrl, requestParam, options).then(function(response) {
         var data = response['data'];
