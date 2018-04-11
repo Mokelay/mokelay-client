@@ -185,7 +185,7 @@
             columns: {
                 type: Array,
                 default: function () {
-                    return [{prop:null,label:'默认表单'}]
+                    return [{prop:null,label:'默认列表'}]
                 }
             },
             value: {
