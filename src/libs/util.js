@@ -189,6 +189,7 @@ bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds,
 **/
 util.getDSData = function(ds, inputValueObj, success, error) {
     var api = ds['api'];
+    var host = ds['host'] || window._TY_APIHost;
     var type = ds['category'] || 'config'; //默认是配置接口
     if (!api) {
         error(500, "请求参数无效");
@@ -234,7 +235,11 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     }
     //统一转换成小写
     method = method.toLowerCase();
-    util[method](apiUrl, requestParam).then(function(response) {
+    //设置请求参数
+    var options = {
+        baseURL: host
+    }
+    util[method](apiUrl, requestParam, options).then(function(response) {
         var data = response['data'];
         if (data['ok']) {
             var realDataMap = data['data'];
