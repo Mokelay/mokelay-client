@@ -731,7 +731,7 @@
             cellEditor:function(scope){
                 const t = this;
                 t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
-                if(!t.canEditRow){
+                if(!t.canEditRow&&t.canEditRow!=0){
                     if(!t.adding){
                         //修改
                         t.cellDSSubmit(t.tableData[scope['$index']],'update');

@@ -71,7 +71,7 @@
             disabled:{
               type:Boolean,
               default:false
-            }
+            },
             /*是否可搜索*/
             filterable:{
               type:Boolean,
