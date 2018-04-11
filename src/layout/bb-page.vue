@@ -356,6 +356,9 @@
           if(val.type == 'custom'){
             var pathTpl = val.arguments;
             if (pathTpl) {
+                if(pathTpl==='reload'){
+                  location.reload();
+                }
                 const path = _TY_Tool.tpl(pathTpl.pathTpl,_TY_Tool.buildTplParams(t,{
                   args:args
                 }));
