@@ -155,6 +155,22 @@
                         length:5
                     }
                 },{                      
+                    uuid:'interactive-fromContentUUID',
+                    alias:'bb-select',                   
+                    aliasName:'事件积木',              
+                    //group:'交互事件',                   
+                    attributes:{
+                        attributeName:'fromContentUUID',
+                        fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}]
+                    },
+                    interactives:[{
+                        uuid:'interactive-fromContentUUID_01',
+                        fromContentEvent:'change',
+                        executeType:'trigger_method',
+                        executeContentUUID:'interactive-fromContentEvent',
+                        executeContentMethodName:'linkage',
+                    }]
+                },{                      
                     uuid:'interactive-fromContentEvent',
                     alias:'bb-select',                   
                     aliasName:'事件',               
@@ -165,7 +181,7 @@
                             api: "list-edByBbAlias",
                             method: "get",
                             inputs: [
-                                {paramName: 'bbAlias',valueType:"template",variable:t.alias}
+                                {paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external['linkage'] == 'Page_Ref_Root'?'bb-page':bb.external['linkage']%>"}
                             ],
                             outputs: [
                                 {dataKey: "fields", valueKey: "data_list"}
@@ -302,6 +318,13 @@
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[
                             {prop: 'uuid',label: '标识',type:'defalut',et: 'bb-uuid'},
+                            {prop: 'fromContentUUID',label: '事件积木',type:'defalut',et: 'bb-select',etProp:{fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}]},etOn:[{
+                                uuid:'interactive-fromContentUUID_01',
+                                fromContentEvent:'change',
+                                executeType:'trigger_method',
+                                executeContentUUID:'fromContentEvent',
+                                executeContentMethodName:'linkage',
+                            }]},
                             {prop:'fromContentEvent',
                                 et:'bb-select',                   
                                 label:'事件',               
@@ -311,7 +334,7 @@
                                         api: "list-edByBbAlias",
                                         method: "get",
                                         inputs: [
-                                            {paramName: 'bbAlias',valueType:"template",variable:t.alias}
+                                            {paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external['linkage'] == 'Page_Ref_Root'?'bb-page':bb.external['linkage']%>"}
                                         ],
                                         outputs: [
                                             {dataKey: "fields", valueKey: "data_list"}

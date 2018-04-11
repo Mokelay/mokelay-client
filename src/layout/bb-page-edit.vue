@@ -194,8 +194,8 @@
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
 
-
-
+          //获取页面beTask任务
+          t.runTask();
           //指定布局类型
           t.layoutType = page.layoutType;
 
@@ -340,10 +340,10 @@
             if (ds) {
               _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
                   //接口执行完毕
-                  t.emit('ds-success',map);
+                  t.$emit('ds-success',map);
                 }, function (code, msg) {
                   //接口执行完毕
-                  t.emit('ds-error',code);
+                  t.$emit('ds-error',code);
               });
             }
           }
@@ -441,6 +441,58 @@
         t.key = _TY_Tool.uuid();
         t.content = content;
         t.$emit('change',t.content);
+      },
+      /*解析页面task
+        beTask:[{
+          uuid:'12334' 任务标识
+          type:'once' || 'interval', 单此或则轮询
+          ds:{}, 接口的ds
+          time:1000   间隔时间
+        }]
+      */
+      runTask:function(){
+        const t = this;
+        if(t.layoutObject.beTask){
+          t.layoutObject.beTask.forEach((val,key)=>{
+            t.taskObj = {};
+            switch(val.type){
+              case 'once':
+                t.getDSDate(val.ds);
+                break;
+              case 'interval':
+                t.taskObj[val.uuid] = setInterval(()=>{t.getDSDate(val.ds)},3000);
+                break
+            }
+          })
+        }
+      },
+      getDSDate:function(ds){
+        const t = this;
+        if (ds) {
+          _TY_Tool.getDSData(ds, _TY_Tool.buildTplParams(t), function (map) {
+              //接口执行完毕
+              t.$emit('after-betask-excute-success',map);
+            }, function (code, msg) {
+              //接口执行完毕
+              t.$emit('after-betask-excute-err',code);
+          });
+        }
+      },
+      //停止定时器 uuid 需要停止的task的uuid
+      stopTask:function(uuid){
+        const t = this;
+        clearInterval(t.taskObj[uuid]);
+      },
+      //系统通知
+      notification:function(...argus){
+        args.forEach((val,key)=>{
+          if(val.type == 'custom'){
+            t.$notify({
+              title: val.arguments.title,
+              message: val.arguments.message
+            })
+          }
+        })
       }
     }
   }

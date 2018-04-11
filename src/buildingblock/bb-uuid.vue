@@ -43,6 +43,7 @@ import Util from '../libs/util';
                 var val = Util.uuid(this.length,this.radix);
                 this.v = val;
                 this.$emit('input',val);
+                this.$emit('change',val);
             }
         }
     }
