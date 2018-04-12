@@ -73,6 +73,7 @@
             bbContent.forEach((field,key)=>{
                 var ref = 'form-item_' + (field['uuid']?field['uuid']:_TY_Tool.uuid());
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
+                var maxWidth = t.grid?100/t.grid + '%':'100%';
                 var formItem = createElement('bb-form-item',{
                     key: ref,
                     props:{
@@ -92,6 +93,10 @@
                         }
                     },
                     ref: ref,
+                    style: {
+                        'width': maxWidth,
+                        'overflow-y':'auto'
+                    },
                 },[]);
 
                 if(field['group']){
@@ -176,10 +181,12 @@
                 props:{
                     model:t.formData,
                     labelWidth:t.labelWidth,
-                    inline:t.labelInline
+                    inline:t.labelInline,
+                    'label-position':'left'
                 },on:{
                     submit:"return false;"
-                },ref:"form"
+                },ref:"form",
+                class:t.grid?'grid':''
             },formItems);
         },
         props: {
@@ -258,7 +265,7 @@
             },
             labelWidth:{
                 type:String,
-                default:'auto'
+                default:'80px'
             },
             labelInline:{
                 type:Boolean,
@@ -319,6 +326,10 @@
             */
             content:{
                 type:Array
+            },
+            grid:{
+                type:Number,
+                default:1
             }
         },
         watch: {
@@ -468,6 +479,18 @@
                         t.formData = Object.assign({},t.formData,val.arguments);
                     }  
                 })
+            },
+            //外部刷新表单项
+            getFileds:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        Util.getDSData(val.arguments, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
+                            t.realFields = map[0].value;
+                        }, function (code, msg) {
+                        });
+                    }  
+                })
             }
         }
     }
@@ -479,5 +502,11 @@
     }
     .form-item-hidden{
         display: none;
+    }
+    .grid{
+        display: -webkit-flex; /* Safari */
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
     }
 </style>
