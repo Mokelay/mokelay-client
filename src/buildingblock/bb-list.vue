@@ -113,12 +113,12 @@
                         </div>
                         <div v-else>
                             <!-- 只读状态 -->
-                            <span v-if="scope['$index'] != canEditRow">
+                            <span v-if="scope['$index'] != canEditRow || !column['et']">
                                 {{scope['row'][column.prop]}}
                             </span>
                         </div>
                         <!-- 编辑状态 -->
-                        <bb v-if="scope['$index'] == canEditRow" :value="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
+                        <bb v-if="scope['$index'] == canEditRow && column['et']" :value="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
                     </template>
                 </el-table-column>
             </el-table>
@@ -581,6 +581,7 @@
             //对表头进行预处理
             preColumns(){
                 const t = this;
+                //控制当前行能否进入编辑状态
                 t.realColumns.forEach((col,key)=>{
                     col.on = {
                         change:t.cellChange.bind(null,col)
@@ -704,7 +705,12 @@
                 const key = t.tableData.length;
                 if(newRow){
                     const newItem = Object.assign({},newRow);
-                    t.tableData.push(newItem);
+                    if(t.canEditRow != null){
+                        t.tableData.splice(t.canEditRow,1,newItem);
+                        t.canEditRow = null;
+                    }else{
+                        t.tableData.push(newItem);
+                    }
                 }
                 //t.adding = true;
             },
@@ -727,15 +733,15 @@
                         break;
                 }
             },
-            //当前行进入编辑装填
+            //当前行进入编辑状态
             cellEditor:function(scope){
                 const t = this;
                 t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
-                if(!t.canEditRow&&t.canEditRow!=0){
+                if(t.canEditRow != null){
                     if(!t.adding){
                         //修改
                         t.cellDSSubmit(t.tableData[scope['$index']],'update');
-                        t.$emit('edit',t.tableData[scope['$index']]);              
+                        t.$emit('edit',t.tableData[scope['$index']]);            
                     }else{
                         //新增
                         t.cellDSSubmit(t.tableData[0],'add');
