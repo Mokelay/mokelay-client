@@ -2,7 +2,7 @@
   export default {
     name: 'bb',
     render: function (createElement) {
-        this.realConfig.value = this.value;
+        this.realConfig.value = this.value || null;
         return createElement(this.alias, {props: this.realConfig, on : this.on});
     },
     props: {
