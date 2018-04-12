@@ -737,11 +737,11 @@
             cellEditor:function(scope){
                 const t = this;
                 t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
-                if(t.canEditRow != null){
+                t.$emit('edit',t.tableData[scope['$index']]);
+                if(!t.canEditRow&&t.canEditRow!=0){
                     if(!t.adding){
                         //修改
                         t.cellDSSubmit(t.tableData[scope['$index']],'update');
-                        t.$emit('edit',t.tableData[scope['$index']]);            
                     }else{
                         //新增
                         t.cellDSSubmit(t.tableData[0],'add');
