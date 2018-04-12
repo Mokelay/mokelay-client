@@ -344,6 +344,7 @@ util.resolveButton = function(button, valueobj) {
                 // util.buttonCallback(button, valueobj, callback, map);
                 //触发按钮执行完成事件
                 t.$emit("button-finish", button, valueobj, map);
+                t.$emit("button-finish-success", button, valueobj, map);
             }, function(err, msg) {
                 t.$message({
                     type: 'warning',
@@ -352,6 +353,7 @@ util.resolveButton = function(button, valueobj) {
                 // util.buttonCallback(button, valueobj, callback, err);
                 //触发按钮执行完成事件
                 t.$emit("button-finish", button, valueobj, err);
+                t.$emit("button-finish-error", button, valueobj, map);
             });
         }).catch(() => {
             t.$message({
