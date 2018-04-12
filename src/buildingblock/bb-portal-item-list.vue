@@ -1,7 +1,7 @@
 <template>
     <div :class="p_styleConfig.mainClass +' ' + p_styleConfig.transitionType" :style="{'max-width':p_styleConfig.width}">
         <div class="grid-item" v-for="(field,key) in realFields" :title="field.title||field.subtitle" :style="{'margin': (p_styleConfig.h_margin||'20px')+' '+ p_styleConfig.margin}">
-            <bb-button :button="field.actionConfig" @button-finish='buttonFinish' @click='btnClick(field)' :style="{width:p_styleConfig.imgWidth,'padding-top':(!field.title&&!field.subtitle?'15px':'')}">
+            <bb-button :button="field.actionConfig" @button-finish='buttonFinish' @click='btnClick(field)' :style="{width:p_styleConfig.imgWidth,'padding-top':(field.static?'14px':'')}">
                 <!-- 图片或者图标 -->
                 <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
                     <i v-if="p_value&&p_value==field.value" class="el-icon-check"></i>
@@ -32,6 +32,7 @@
                     title:'',标题
                     value:'',图文值
                     subtitle:'',副标题
+                    static:true,//是否静态数据
                     actionConfig:{  //点击后执行的动作
                         action: url || execute-ds || dialog-page || code || buzz
                         url:''  //action: url 
