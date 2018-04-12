@@ -95,10 +95,10 @@
             openNode(node){
                 if (node.toOIAlias) {
                     this.p_oiAlias = node.toOIAlias;
-                    this.loadData();
+                    this.loadData(node);
                 }
             },
-            loadData(){
+            loadData(node){
                 let t = this;
                 if (this.p_oiAlias) {
 
@@ -110,13 +110,10 @@
                         if (data['ok']) {
                             let fieldList = data['data']['field_list']['list'];
                             let connectorList = data['data']['connector_list']['list'];
-                            let node;
                             if (t.p_oiAlias == t.first_oiAlias) {
                                 //说明是第一级
                                 t.data = [];
                             } else {
-                                //找到当前的父节点
-                                node = t.findNode(t.data, t.p_oiAlias);
                                 if (node) {
                                     node.children = [];
                                 }
@@ -137,6 +134,7 @@
                                     //如果是外键字段，label显示格式 父label-子label
                                     row.label = node.label + "-" + row.label;
                                     row.connectorAlias = node.connTmpAlias;
+                                    debugger;
                                 }
                                 for (let m = 0; m < connectorList.length; m++) {
                                     let item = connectorList[m];
@@ -174,21 +172,6 @@
                         }
                     }).catch(function (error) {
                     });
-                }
-            },
-            findNode(data, _oiAlias){
-                if (data && data.length > 0) {
-                    for (let n = 0; n < data.length; n++) {
-                        let parentNode = data[n];
-                        if (parentNode.toOIAlias == _oiAlias) {
-                            return data[n];
-                        } else {
-                            let temp = this.findNode(parentNode.children, _oiAlias);
-                            if (temp) {
-                                return temp;
-                            }
-                        }
-                    }
                 }
             },
             addField(){
