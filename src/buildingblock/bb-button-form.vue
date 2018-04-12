@@ -167,6 +167,12 @@ import Util from '../libs/util';
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //外部交互弹出弹窗
+            showDialog(formData){
+                const t = this;
+                t.formData = formData;
+                t.setting();
             }
         }
     }
