@@ -112,6 +112,7 @@
                     this.ds = this.transferOldData(val ? JSON.parse(val) : {});
                 }
                 this.$emit("input",val);
+                console.log('val:',val);
             },
             ds(val){
                 this.$emit("input",val);
@@ -130,7 +131,7 @@
             //获取动态数据
             getData:function (val) {
                 const t = this;
-                if (t.apiInfo) {
+                if (t.apiInfo && t.api) {
                     _TY_Tool.getDSData(t.apiInfo, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((ele,key)=>{
                             val.category = ele.value.category;
@@ -147,6 +148,7 @@
             }, 
             //增加input 事件
             commit:function(val){
+                console.log('val:',val);
                 this.api = val.api;
                 this.getData(val);
             },
