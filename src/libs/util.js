@@ -364,6 +364,7 @@ util.resolveButton = function(button, valueobj) {
     } else if (button['action'] == 'dialog-page') {
         //TODO 弹出一个页面对话框
         require.ensure(["art-dialog"], function(require) {
+            t.dialogKey = _TY_Tool.uuid();
             var Vue = valueobj['bb'].vue;
             var _page = new Vue({
                 router: t.$router,
@@ -391,12 +392,19 @@ util.resolveButton = function(button, valueobj) {
                 width: 800,
                 zIndex: 100,
                 title: '消息',
-                content: _page.$el
+                content: _page.$el,
+                onclose: function() {
+                    if (t.dialog) {
+                        t.dialog.close().remove();
+                        t.dialog = null;
+                    }
+                    delete t.$refs[t.dialogKey];
+                }
             });
             d.showModal();
             t.dialog = d;
             //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-            t.$refs[_TY_Tool.uuid()] = _page.$children[0]; //把bb-form 设置到$refs中
+            t.$refs[t.dialogKey] = _page.$children[0]; //把bb-form 设置到$refs中
         }, 'art-dialog');
     } else if (button['action'] == 'code') {
         //执行代码
@@ -423,7 +431,7 @@ let _checkVueHasRef = function(uuid, vueObj) {
     return null;
 }
 
-
+// let currentVueArray = [];
 let currentVue = null; //解决findBBByUuid方法查询慢的问题
 //深度遍历，可能会影响性能，后面考虑改成层级遍历   $refs和$children 一起查询
 let _findChildBB = function(uuid, children) {
@@ -437,12 +445,14 @@ let _findChildBB = function(uuid, children) {
             resultVue = _checkVueHasRef(uuid, vueItem);
             if (resultVue && resultVue != null) {
                 return resultVue;
+                // currentVueArray.push(resultVue);
             }
             if (vueItem.$children && vueItem.$children.length > 0) {
                 //还有子 则继续遍历
                 resultVue = _findChildBB(uuid, vueItem.$children);
                 if (resultVue && resultVue != null) {
                     return resultVue;
+                    // currentVueArray.push(resultVue);
                 }
             }
             if (vueItem.$refs) {
@@ -453,11 +463,13 @@ let _findChildBB = function(uuid, children) {
                     if (uuid == j && vueItem.$refs[j]._isVue) {
                         //如果ref的key等于uuid，则表示该对象就是要找的uuid对象(通过ref方式查找；_checkVueHasRef是通过$children方式来查找)
                         return vueItem.$refs[j];
+                        // currentVueArray.push(vueItem.$refs[j]);
                     }
                     if (vueItem.$refs[j].$children && vueItem.$refs[j].$children.length > 0) {
                         resultVue = _findChildBB(uuid, vueItem.$refs[j].$children);
                         if (resultVue && resultVue != null) {
                             return resultVue;
+                            // currentVueArray.push(resultVue);
                         }
                     }
                     if (vueItem.$refs[j].$refs) {
@@ -472,6 +484,7 @@ let _findChildBB = function(uuid, children) {
                             resultVue = _findChildBB(uuid, child);
                             if (resultVue && resultVue != null) {
                                 return resultVue;
+                                // currentVueArray.push(resultVue);
                             }
                         }
                     }
@@ -512,6 +525,8 @@ util.findBBByUuid = function(uuid, fromRoot) {
         }
         resultVue = _findChildBB(uuid, child);
     }
+    // util.currentVueArray = currentVueArray;
+    // return currentVueArray[currentVueArray.length - 1];
     return resultVue;
 }
 

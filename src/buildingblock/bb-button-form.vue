@@ -103,6 +103,7 @@ import Util from '../libs/util';
             setting:function(){
                 var t = this;
                 require.ensure(["art-dialog"],function(require){
+                    t.dialogKey = _TY_Tool.uuid();
                     var _form = new Vue({
                         router: t.$router,
                         render: function(createElement){
@@ -154,12 +155,19 @@ import Util from '../libs/util';
                         width:800,
                         zIndex:100,
                         title: '设置',
-                        content: _form.$el
+                        content: _form.$el,
+                        onclose:function(){
+                            if(t.dialog){
+                                t.dialog.close().remove();
+                                t.dialog = null;
+                            }
+                            delete t.$refs[t.dialogKey];
+                        }
                     });
                     d.showModal();
 
                     //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-                     t.$refs[_TY_Tool.uuid()]=_form.$children[0];//把bb-form 设置到$refs中
+                     t.$refs[t.dialogKey]=_form.$children[0];//把bb-form 设置到$refs中
 
                     t.dialog = d;
                 },'art-dialog');

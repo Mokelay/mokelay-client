@@ -67,7 +67,13 @@
                         // zIndex:2100,
                         // height:'100%',
                         title: '选择图标',
-                        content: _form.$el
+                        content: _form.$el,
+                        onclose: function() {
+                            if (t.dialog) {
+                                t.dialog.close().remove();
+                                t.dialog = null;
+                            }
+                        }
                     });
                     d.showModal();
                     t.dialog = d;

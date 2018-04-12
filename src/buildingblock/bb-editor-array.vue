@@ -117,7 +117,13 @@
                         width:800,
                         // height:'100%',
                         title: '编辑数组',
-                        content: _form.$el
+                        content: _form.$el,
+                        onclose:function(){
+                            if(t.dsDialog){
+                                t.dsDialog.close().remove();
+                                t.dsDialog = null;
+                            }
+                        }
                     });
                     d.showModal();
                     t.dsDialog = d;
