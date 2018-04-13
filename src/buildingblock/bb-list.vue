@@ -688,18 +688,28 @@
             cellDSSubmit:function(newRow,dsName){
                 //列表的更新操作
                 const t = this;
-                let ds = null;
-                if(t.editConfig&&t.editConfig.editDs){
-                    ds = t.editConfig.editDs[dsName];
-                }
-                if (ds) {
-                    t.loading = true;
-                    Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
-                        t.loading = false;
-                    }, function (code, msg) {
-                        t.loading = false;
-                    });
-                }
+                return new Promise(function(resolve, reject){
+                    let ds = null;
+                    if(t.editConfig&&t.editConfig.editDs){
+                        ds = t.editConfig.editDs[dsName];
+                    }
+                    if (ds) {
+                        t.loading = true;
+                        Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
+                            t.loading = false;
+                            resolve();
+                        }, function (code, msg) {
+                            t.loading = false;
+                            reject();
+                            t.$message({
+                                type: 'error',
+                                message: msg
+                            });
+                        });
+                    }else{
+                        resolve();
+                    }
+                });
             },
             //积木内部新增行数据 列表内编辑器
             rowAdd:function(){
@@ -750,18 +760,34 @@
             //当前行进入编辑状态
             cellEditor:function(scope){
                 const t = this;
-                t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
+                // t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
                 t.$emit('edit',t.tableData[scope['$index']]);
-                if(!t.canEditRow&&t.canEditRow!=0){
+                if(t.canEditRow!=null){
+                    //当前编辑之后点击提交  
                     if(!t.adding){
                         //修改
-                        t.cellDSSubmit(t.tableData[scope['$index']],'update');
+                        t.cellDSSubmit(t.tableData[scope['$index']],'update').then(function(){
+                            if(t.canEditRow == scope['$index']){
+                               t.canEditRow = null;
+                            }else{
+                                //当前行在编辑状态，又点了其他行的编辑按钮
+                                t.canEditRow=scope['$index'];
+                            }
+                        });
                     }else{
                         //新增
-                        t.cellDSSubmit(t.tableData[0],'add');
+                        t.cellDSSubmit(t.tableData[0],'add').then(function(){
+                            if(t.canEditRow == scope['$index']){
+                               t.canEditRow = null; 
+                            }else{
+                                //当前行在编辑状态，又点了其他行的编辑按钮
+                                t.canEditRow=scope['$index'];
+                            }
+                            t.adding = false;
+                        });
                     }
                 }else{
-                    t.adding = false;
+                    t.canEditRow = scope['$index'];
                 }
             },
             //清空数据数据
@@ -780,13 +806,24 @@
                     type: 'warning'
                 }).then(() => {
                     const index = scope['$index'] || 0;
-                    t.canEditRow = null;
-                    //调用删除接口
-                    t.cellDSSubmit(t.tableData[index],'remove');
-                    t.tableData.splice(index,1);
-                    t.$emit('input',t._returnStringOrArray());
-                    t.$emit('change',t._returnStringOrArray());
-                    t.$emit('remove',t._returnStringOrArray());
+                    if(index==0&&t.canEditRow==0&&t.adding){
+                        //如果是正在添加的行 删除，直接splice
+                        t.canEditRow = null;
+                        t.tableData.splice(index,1);
+                        t.adding = false;
+                        t.$emit('input',t._returnStringOrArray());
+                        t.$emit('change',t._returnStringOrArray());
+                        t.$emit('remove',t._returnStringOrArray());
+                    }else{
+                        //调用删除接口
+                        t.cellDSSubmit(t.tableData[index],'remove').then(function(){
+                            t.canEditRow = null;
+                            t.tableData.splice(index,1);
+                            t.$emit('input',t._returnStringOrArray());
+                            t.$emit('change',t._returnStringOrArray());
+                            t.$emit('remove',t._returnStringOrArray());
+                        });
+                    }
                 }).catch(() => {
                     t.$message({
                         type: 'info',
@@ -802,11 +839,12 @@
                     return;
                 }
                 const item = t.tableData[index]
-                t.tableData.splice(index,1);
-                t.tableData.splice(index-1,0,item);
-                t.$emit('input',t._returnStringOrArray());
-                t.$emit('change',t._returnStringOrArray());
-                t.cellDSSubmit(item,'sort');
+                t.cellDSSubmit(item,'sort').then(function(){
+                    t.tableData.splice(index,1);
+                    t.tableData.splice(index-1,0,item);
+                    t.$emit('input',t._returnStringOrArray());
+                    t.$emit('change',t._returnStringOrArray());
+                });
             },
             //数据向下移动
             cellDown:function(scope){
@@ -816,11 +854,12 @@
                     return;
                 }
                 const item = t.tableData[index]
-                t.tableData.splice(index,1);
-                t.tableData.splice(index+1,0,item);
-                t.$emit('input',t._returnStringOrArray());
-                t.$emit('change',t._returnStringOrArray());
-                t.cellDSSubmit(item,'sort');
+                t.cellDSSubmit(item,'sort').then(function(){
+                    t.tableData.splice(index,1);
+                    t.tableData.splice(index+1,0,item);
+                    t.$emit('input',t._returnStringOrArray());
+                    t.$emit('change',t._returnStringOrArray());
+                });
             },
             _returnStringOrArray:function(){
                 let t=this;
