@@ -96,7 +96,7 @@
                     style: {
                         'width': field['attributes']['width'] || '95%',
                         'padding':'0 20px 0 5px',
-                        'box-sizing': 'content-box'
+                        'box-sizing': 'border-box;'
                     },
                 },[]);
 

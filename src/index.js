@@ -58,6 +58,7 @@ import bbpanel from './buildingblock/bb-panel.vue';
 import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
 import bbjson from './buildingblock/bb-json.vue';
+import bbview from './buildingblock/bb-view.vue';
 
 
 //移动端积木
@@ -210,6 +211,7 @@ let ty = {
 		Vue.component('bb-apilego-config', bbapilegoconfig);
 		Vue.component('bb-field-tree-select', bbfieldtreeselect);
 		Vue.component('bb-field-tree-pop-select', bbfieldtreepopselect);
+		Vue.component('bb-view', bbview);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
