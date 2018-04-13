@@ -281,6 +281,12 @@
             t.diaContent = val.arguments;
           }
         })
+        if(!t.dialogKeys){
+          t.dialogKeys = [_TY_Tool.uuid()];
+        }else{
+          t.dialogKeys.push(_TY_Tool.uuid());
+        }
+
         var _dialog = new Vue({
             router: t.$router,
             render: function(createElement){
@@ -302,6 +308,9 @@
                         }else{
                           document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
                         }
+                        if(t.dialogKeys.length>0){
+                          delete t.$refs[t.dialogKeys[t.dialogKeys.length-1]];
+                        }
                       },0);
                     }
                   },
@@ -312,7 +321,7 @@
         document.getElementById(t.pageAlias + '_dialog').appendChild(_dialog.$el);
         t._dialog = _dialog;
         //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-        t.$refs[_TY_Tool.uuid()] = _dialog; //把bb-form 设置到$refs中
+        t.$refs[t.dialogKeys[t.dialogKeys.length-1]] = _dialog; //把bb-form 设置到$refs中
       },
       /*交互ds解析
         ds:{
