@@ -695,6 +695,10 @@
             rowAdd:function(){
                 const t = this;
                 const key = t.tableData.length;
+                if(t.canEditRow==0){
+                    //如果是第一行在编辑状态，不能添加
+                    return;
+                }
                 t.tableData.splice(0,0,{});
                 t.canEditRow = 0; 
                 t.adding = true;
@@ -766,6 +770,7 @@
                     type: 'warning'
                 }).then(() => {
                     const index = scope['$index'] || 0;
+                    t.canEditRow = null;
                     //调用删除接口
                     t.cellDSSubmit(t.tableData[index],'remove');
                     t.tableData.splice(index,1);
