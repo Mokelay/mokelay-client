@@ -95,7 +95,6 @@
                     ref: ref,
                     style: {
                         'width': field['attributes']['width'] || '95%',
-                        'overflow-y':'auto',
                         'padding':'0 20px 0 5px',
                         'box-sizing': 'content-box'
                     },

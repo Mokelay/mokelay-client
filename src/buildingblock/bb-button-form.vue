@@ -125,6 +125,9 @@ import Util from '../libs/util';
                                     content:t.content
                                 },
                                 on:{
+                                    "button-finish-success":function(button, valueobj){
+                                        t.$emit('button-finish-success', button, valueobj);
+                                    },
                                     "button-finish":function(button, valueobj){
                                         t.$emit('button-finish', button, valueobj);
                                         t.dialog.close().remove();
