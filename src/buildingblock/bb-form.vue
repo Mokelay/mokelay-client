@@ -53,6 +53,7 @@
                     props['rules'] = field['rules'];
                     props['attributeName'] = field['attributeName'];
                     props['show'] = field['show'];
+                    props['width'] = field['width'];
                     const bbEle = {
                         uuid: field['pbbId'] || _TY_Tool.uuid(),
                         alias: field['et'], //积木别名
@@ -73,7 +74,6 @@
             bbContent.forEach((field,key)=>{
                 var ref = 'form-item_' + (field['uuid']?field['uuid']:_TY_Tool.uuid());
                 field['rules'] = typeof field['attributes']['rules'] == 'string'?eval(field['attributes']['rules']):field['attributes']['rules'];
-                var maxWidth = t.grid?100/t.grid + '%':'100%';
                 var formItem = createElement('bb-form-item',{
                     key: ref,
                     props:{
@@ -94,8 +94,10 @@
                     },
                     ref: ref,
                     style: {
-                        'width': maxWidth,
-                        'overflow-y':'auto'
+                        'width': field['attributes']['width'] || '95%',
+                        'overflow-y':'auto',
+                        'padding':'0 20px 0 5px',
+                        'box-sizing': 'content-box'
                     },
                 },[]);
 
@@ -173,7 +175,8 @@
             }
             //设置按钮
             formItems.push(createElement('el-form-item',{
-                    props:{}
+                    props:{},
+                    style:{'width':'100%'},
                 },[cancelButton,cleanButton,submitButton]));
 
             //创建Form
@@ -217,7 +220,7 @@
             settingButtonText:{
                 type:String,
                 default:function(){
-                    return "设置";
+                    return "提交";
                 }
             },
             buttonConfig:{
@@ -265,7 +268,7 @@
             },
             labelWidth:{
                 type:String,
-                default:'80px'
+                default:'auto'
             },
             labelInline:{
                 type:Boolean,
@@ -281,6 +284,7 @@
                         attributes:{
                             attributeName:''    //表单项键值别名
                             rules:[]            //验证规则
+                            width:''            //表单项宽度
                             ........            //其他积木属性
                         },              //积木属性
                         animation:[{                //动画
@@ -327,9 +331,10 @@
             content:{
                 type:Array
             },
+            //开启 则会自动flex排列  不开启默认从上往下排列
             grid:{
-                type:Number,
-                default:1
+                type:Boolean,
+                default:false
             }
         },
         watch: {
