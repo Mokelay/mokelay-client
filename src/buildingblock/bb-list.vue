@@ -81,7 +81,7 @@
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
                                 <!-- 后续业务禁止应用 -->
-                                <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}"></bb>
+                                <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb>
                             </span>
                         </div>
                         <div v-else-if="column['type'] == 'edit' && scope['$index'] != canEditRow">
@@ -351,7 +351,8 @@
                 canPre:true,
                 canEditRow:null,
                 scope:null,
-                adding:false//是否添加状态
+                adding:false,//是否添加状态
+                bbButtonFinishOnObj:this.bbButtonFinishOnfun()//针对列表弹窗类编辑按钮 抛出button-finish的事件
             }
         },
         watch: {
@@ -371,6 +372,15 @@
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
         },
         methods: {
+            //返回一个on 对象（bb组件的事件监听on对象）
+            bbButtonFinishOnfun:function(){
+                const t = this;
+                return {
+                    "button-finish":function(button, valueobj){
+                        t.$emit('button-finish', button, valueobj);
+                    }
+                }
+            },
             getData: function (dataHandler) {
                 var t = this;
                 if (this.ds) {
