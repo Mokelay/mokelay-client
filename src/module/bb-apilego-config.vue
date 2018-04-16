@@ -14,12 +14,12 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="输入" name="inputField">
-                <bb-collapse ref="_if" :activeNames="['common','read','create','update','cache','condition','unstructured']"
+                <bb-collapse ref="_if" :activeNames="['common','read','create','update','cache','condition','unstructured','memory']"
                              :itemDs="ifItemDs" :collapseData="ifCollapseData"
                 ></bb-collapse>
             </el-tab-pane>
             <el-tab-pane label="输出" name="outputField">
-                <bb-collapse ref="_of" :activeNames="['common','read','create','update','cache','condition','unstructured']"
+                <bb-collapse ref="_of" :activeNames="['common','read','create','update','cache','condition','unstructured','memory']"
                              :itemDs="ofItemDs" :collapseData="ofCollapseData"
                 ></bb-collapse>
             </el-tab-pane>
@@ -624,6 +624,7 @@
                                             "aliasName": "编辑属性",
                                             "attributes": {
                                                 "value":{
+                                                    "dt":"string",
                                                     "ct":"eq",
                                                     "ift":_ioft,
                                                     "apiLegoUuid":t.external.linkage[0].data.uuid
@@ -1688,6 +1689,7 @@
                                             "aliasName": "编辑属性",
                                             "attributes": {
                                                 "value":{
+                                                    "dt":"string",
                                                     "response":true,
                                                     "oft":_ioft
                                                 },
