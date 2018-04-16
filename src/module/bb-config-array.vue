@@ -1,7 +1,8 @@
 <template>  
     <div>
-        <bb-button-form ref="bb-config-row" :content="formFields" @commit="commit"></bb-button-form>
-        <bb-list :columns="columns" :value="valueBase" :editConfig="editConfig" @edit="edit"></bb-list>
+        <bb-dialog title="积木设置" size="middle" :isShow.sync="showDialog"><bb-config></bb-config></bb-dialog>
+        <bb-button @click="add" :button="addButton"></bb-button>
+        <bb-list :columns="columns" :value="valueBase" :editConfig="editConfig" @edit="edit" @add="add"></bb-list>
     </div>
 </template>
 
@@ -36,6 +37,12 @@
                 ],
                 editConfig:{
                    editable:['edit','up','down','remove']
+                },
+                showDialog:false,
+                addButton:{
+                    type:'text',
+                    text:'添加',
+                    icon:'ty-icon_faqi1'
                 }
             }
         },
@@ -54,9 +61,12 @@
 
             },
             edit:function(row){
-                debugger
                 const t = this;
-                t.$refs['bb-config-row'].showDialog({bbConfigRow:row})
+                t.showDialog = true;
+            },
+            add:function(row){
+                const t = this;
+                t.showDialog = true;
             }
         }
     }
