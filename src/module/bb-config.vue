@@ -1,6 +1,6 @@
 <template>
     <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
-    <el-tabs v-show="show" :key="key" type="border-card">
+    <el-tabs v-show="show" :key="key" :type="showBBSelect?'card':'border-card'">
         <el-tab-pane label="属性">
             <div class="bb-info">
                 <div v-if="showBBSelect">
