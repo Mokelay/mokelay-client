@@ -727,6 +727,8 @@
             rowAddOut:function(newRow){
                 const t = this;
                 const key = t.tableData.length;
+                t.$emit('input',t._returnStringOrArray());
+                t.$emit('change',t._returnStringOrArray());
                 if(newRow){
                     const newItem = Object.assign({},newRow);
                     if(t.canEditRow != null){
