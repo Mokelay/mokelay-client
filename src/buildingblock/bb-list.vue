@@ -54,7 +54,7 @@
                     :prop="column.prop" 
                     :label="column.label"
                     :filters="column.filter"
-                    :filter-method="column.filter?filterHandler : null"
+                    :filter-method="column.filter?filterHandler.bind(null,column) : null"
                     filter-placement="bottom-end"
                     :key="column.prop" 
                     :align="column.align">
@@ -872,8 +872,8 @@
                 }
             },
             //列表静态数据筛选方法
-            filterHandler(value, row, column) {
-                const property = column['property'];
+            filterHandler(column, value, row) {
+                const property = column['prop'];
                 return row[property] === value;
             }
         }

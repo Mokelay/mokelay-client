@@ -45,8 +45,7 @@
                     // }},
                     {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
                         editConfig:{
-                            editable:['add','edit','remove'],
-                            editDs:{add:{},remove:{},update:{},sort:{}}
+                            editable:['add','edit','remove']
                         },
                         columns:[
                             {prop:'paramName',label:'参数名',type:"defalut",et:"bb-select",etProp:{
@@ -63,7 +62,6 @@
                     {pbbId:'outputs',name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
                         editConfig:{
                             editable:['add','edit','remove'],
-                            editDs:{add:{},remove:{},update:{},sort:{}}
                         },
                         columns:[
                             {prop:'dataKey',label:'数据变量',type:"defalut",et:"bb-select",etProp:{

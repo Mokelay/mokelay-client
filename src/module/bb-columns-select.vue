@@ -34,8 +34,7 @@
                     rules: [],
                     props: {
                         editConfig:{
-                            editable:['add','edit','up','down','remove'],
-                            editDs:{add:{},remove:{},update:{},sort:{}}
+                            editable:['add','edit','up','down','remove']
                         },
                         columns:[
                             {prop:'text',label:'条件名称',type:"defalut",et:"bb-input",etProp:{}},

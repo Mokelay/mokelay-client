@@ -14,15 +14,19 @@
                     'modal-append-to-body':t.modalAppendToBody,
                     'close-on-click-modal':t.closeOnClickModal,
                     'fullscreen':t.fullscreen,
-                    'modal':t.modal
+                    'modal':t.modal,
+                    'lock-scroll':true,
+                    'top':'15vh'
                 },
                 style:{
                     'border-radius':"5px",
+                    'heigt':'100vh'
                 },
                 key:t.key,
                 on:{
                     close:t.closeFn
-                }
+                },
+                class:'bb-dialog'
             },[bbItems,this.$slots.default]); //支持插槽
         },
         props: {
@@ -186,3 +190,11 @@
         }
     }
 </script>
+<style lang="less">
+    .bb-dialog{
+        .el-dialog__body{
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+    }
+</style>
