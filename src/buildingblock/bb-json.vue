@@ -41,6 +41,10 @@
             rootObjectKey:{
                 type:String,
                 default:"Root"
+            },
+            //默认展开第几列
+            defaultOpen:{
+                type:[String,Number]
             }
         },
         data() {
@@ -55,7 +59,9 @@
             }
         },
         computed:{
-            
+            p_defaultOpen(){
+                return this.defaultOpen||0;
+            }
         },
         created: function () {
             let t=this;
@@ -65,6 +71,10 @@
                 let Vue = require('vue');
                 Vue.default.use(TreeView)
                 t.canRender=true;
+                setTimeout(function(){
+                    let refs = t.$refs;
+                    refs['bb-json'].$children[0].open = t.p_defaultOpen;
+                },500);
              });
         },
         mounted:function(){

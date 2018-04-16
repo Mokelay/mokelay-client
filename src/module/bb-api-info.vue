@@ -56,8 +56,7 @@
 
         <p></p>
         <div class="b1 p10">
-            <!-- <tree-view :data="testJsonSource" :options="{rootObjectKey:'测试响应数据'}"></tree-view> -->
-            <bb-json :data="testJsonSource"></bb-json>
+            <bb-json :data="testJsonSource" :defaultOpen="1"></bb-json>
         </div>
 
     </div>
