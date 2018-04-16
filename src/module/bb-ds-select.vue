@@ -1,7 +1,7 @@
 <template>
     <div>
-        <bb-button-form v-if="type == 'dialog'" :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-button-form>
-        <bb-form v-else :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-form>
+        <bb-button-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-button-form>
+        <!-- <bb-form v-else :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-form> -->
     </div>
 </template>
 
@@ -119,7 +119,7 @@
         },
         created: function () {
             const t = this;
-            t.setSelectType();
+            // t.setSelectType();
             t.ds = t.transferOldData(t.value);
         },
         mounted:function(){
@@ -188,15 +188,15 @@
                 }
                 return ds;
             },
-            //设置DS选择器类型
-            setSelectType:function(){
-                const t = this;
-                const parentTag = t.$parent.$parent.$vnode.componentOptions.tag;
-                //如果发现父级积木时是table则显示弹窗模式
-                if(parentTag == "table-body"){
-                    t.type = 'dialog'
-                }
-            }
+            // //设置DS选择器类型
+            // setSelectType:function(){
+            //     const t = this;
+            //     const parentTag = t.$parent.$parent.$vnode.componentOptions.tag;
+            //     //如果发现父级积木时是table则显示弹窗模式
+            //     if(parentTag == "table-body"){
+            //         t.type = 'dialog'
+            //     }
+            // }
         }
     }
 </script>
