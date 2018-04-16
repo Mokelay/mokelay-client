@@ -219,7 +219,7 @@
             settingButtonText:{
                 type:String,
                 default:function(){
-                    return "提交";
+                    return "设置";
                 }
             },
             buttonConfig:{
