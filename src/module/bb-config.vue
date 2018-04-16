@@ -3,7 +3,10 @@
     <el-tabs v-show="show" :key="key" type="border-card">
         <el-tab-pane label="属性">
             <div class="bb-info">
-                <p>积木名称：{{valueBase.aliasName}}</p>
+                <div v-if="showBBSelect">
+                    选择积木：<bb-select textField="name" valueField="alias" :ds="bbFieldsDs" @change="bbChange"></bb-select>
+                </div>
+                <p v-if="!showBBSelect">积木名称：{{valueBase.aliasName}}</p>
                 <p>积木别名：{{valueBase.alias}}</p>
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
@@ -66,12 +69,24 @@
                 animationListContent:null,
                 key:null,
                 show:false,
-                _TY_Current_Edit_Item:null
+                _TY_Current_Edit_Item:null,
+                showBBSelect:true,
+                bbFieldsDs: {
+                     "api": "list-bb",
+                     "category": "config",
+                     "method": "post",
+                     "inputs": [],
+                     "outputs": [{
+                         "dataKey": "fields",
+                         "valueKey": "data_list"
+                    }]
+                }
             }
         },
         watch: {
         },
         created: function () {
+            this.getConfigEnv();
             this.key = _TY_Tool.uuid();
             this.setEditor();
         },
@@ -121,6 +136,23 @@
                 const t = this;
                 t.$emit('input',t.valueBase);
                 t.$emit('change',t.valueBase);
+            },
+            //获取当前编辑器的环境判断是否需要显示积木选择功能
+            getConfigEnv:function(){
+                const t = this;
+                const parentAliasName = t.$parent.$vnode.data.attrs?t.$parent.$vnode.data.attrs.aliasName: '';
+                if(parentAliasName == "rightAside"){
+                    t.showBBSelect = false;
+                }else{
+                    t.show = true;
+                }
+            },
+            //积木改变
+            bbChange:function(val){
+                const t = this;
+                t.alias = val;
+                t.valueBase = Object.assign(t.valueBase,{alias:val,uuid:_TY_Tool.uuid()});
+                t.setEditor();
             },
             setEditor:function(){
                 const t = this;
