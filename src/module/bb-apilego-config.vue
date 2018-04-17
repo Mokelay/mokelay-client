@@ -1690,7 +1690,7 @@
                                             "attributes": {
                                                 "value":{
                                                     "dt":"string",
-                                                    "response":true,
+                                                    "response":false,
                                                     "oft":_ioft
                                                 },
                                                 "settingButtonText": "确定",
