@@ -142,9 +142,12 @@
                     var childWindow = frame.contentWindow;
                     var childDoc = childWindow.document;
                     childDoc.body.innerHTML = '';
-                    t._addLink(childDoc,"./../../node_modules/codemirror/lib/codemirror.css");
-	                t._addLink(childDoc,"./../../node_modules/codemirror/theme/eclipse.css");
-	                t._addScript(childDoc,"./../../node_modules/codemirror/lib/codemirror.js");
+                 //    t._addLink(childDoc,"./../../node_modules/codemirror/lib/codemirror.css");
+	                // t._addLink(childDoc,"./../../node_modules/codemirror/theme/eclipse.css");
+	                // t._addScript(childDoc,"./../../node_modules/codemirror/lib/codemirror.js");
+	                t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.css");
+	                t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/theme/eclipse.css");
+	                t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.js");
 	                    // t._addScript(childDoc,"./../../node_modules/codemirror/mode/javascript/javascript.js");
 	                t._addCss(childDoc);
                     setTimeout(function(){
