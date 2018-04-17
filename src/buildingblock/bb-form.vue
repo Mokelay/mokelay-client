@@ -182,7 +182,8 @@
                     model:t.formData,
                     labelWidth:t.labelWidth,
                     inline:t.labelInline,
-                    'label-position':'left'
+                    'label-position':t.labelPosition,
+                    size: t.size
                 },on:{
                     submit:"return false;"
                 },ref:"form",
@@ -262,6 +263,16 @@
                         'getData':null
                     }
                 }
+            },
+            //表单内部组件的尺寸medium / small / mini
+            size:{
+                type:String,
+                default:''
+            },
+            //表单域标签的位置right/left/top
+            labelPosition:{
+                type:String,
+                default:'left'
             },
             labelWidth:{
                 type:String,
