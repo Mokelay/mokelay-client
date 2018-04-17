@@ -712,7 +712,7 @@
                         t.loading = true;
                         Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
                             t.loading = false;
-                            resolve();
+                            resolve((map&&map.length>0)?map[0].value:'');
                             t.$emit("button-finish",dsName,map);
                         }, function (code, msg) {
                             t.loading = false;
@@ -795,7 +795,10 @@
                         });
                     }else{
                         //新增
-                        t.cellDSSubmit(t.tableData[0],'add').then(function(){
+                        t.cellDSSubmit(t.tableData[0],'add').then(function(id){
+                            if(id){
+                                t.tableData[0].id = id;
+                            }
                             if(t.canEditRow == scope['$index']){
                                t.canEditRow = null; 
                             }else{
