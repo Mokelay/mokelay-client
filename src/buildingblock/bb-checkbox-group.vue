@@ -13,7 +13,7 @@ import Util from '../libs/util';
         name : 'bb-checkbox-group',
         props:{
             value:{
-                type:[String,Number],
+                type:[String,Number,Array],
                 default:''
             },
             options:{
@@ -76,6 +76,8 @@ import Util from '../libs/util';
                 let result = [];
                 if(typeof(str)==="number"&&str>=0){
                     result.push(str+"");
+                }else if(typeof(str)==="object"){
+                    result = str;
                 }else{
                     if(str){
                         let arrayTemp = str.split(',');

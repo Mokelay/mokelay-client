@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <!-- 列表新增按钮 -->
-            <el-button v-if="editConfig&&editConfig.editable[0] == 'add'" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
+            <el-button v-if="editConfig && addButton" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
@@ -353,7 +353,8 @@
                 canEditRow:null,
                 scope:null,
                 adding:false,//是否添加状态
-                bbButtonFinishOnObj:this.bbButtonFinishOnfun()//针对列表弹窗类编辑按钮 抛出button-finish的事件
+                bbButtonFinishOnObj:this.bbButtonFinishOnfun(),//针对列表弹窗类编辑按钮 抛出button-finish的事件
+                addButton:false //对添加按钮进行管理
             }
         },
         watch: {
@@ -657,6 +658,8 @@
                         }}
                 //如果是可编辑状态，默认添加操作列
                 if(t.editConfig&&t.editConfig.editable.length){
+                    t.editButtons = t.editConfig.editable;
+                    t.editButtons = typeof t.editButtons == 'string'?t.editButtons.split(','):t.editButtons;
                     const editor = {
                         fixed:"right",
                         width:"120px",
@@ -665,9 +668,12 @@
                         type:"button-group",
                         buttons:[]
                     };
-                    t.editConfig.editable.forEach((ele,index)=>{
+                    t.editButtons.forEach((ele,index)=>{
                         if(buttons[ele]){
                             editor.buttons.push(buttons[ele]);
+                        };
+                        if(ele == 'add'){
+                            t.addButton = true
                         }
                     })
                     if(t.realColumns.length == t.columns.length){

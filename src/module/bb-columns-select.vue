@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-array :fields="fields" settingText="设置按钮" v-model="table" arrayDescTpl="按钮:<%text%>"></bb-button-array>
+        <bb-button-array :fields="fields" settingText="设置按钮" v-model="table" @commit="commit" arrayDescTpl="按钮:<%text%>"></bb-button-array>
     </div>
 </template>
 
@@ -512,10 +512,8 @@
                 } else if (typeof val === 'string') {
                     this.table = (val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
             },
             table(val){
-                this.$emit("input",val);
             }
         },
         created: function () {
@@ -523,6 +521,9 @@
         mounted:function(){
         },
         methods: {
+            commit:function(array){
+                this.$emit('input',array);
+            }
         }
     }
 </script>

@@ -91,7 +91,7 @@ import Util from '../libs/util';
                 } else if (typeof val === 'string') {
                     this.formData = (val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
+                //this.$emit("input",val);
             }
         },
         created: function () {
