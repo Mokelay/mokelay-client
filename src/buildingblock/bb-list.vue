@@ -570,6 +570,20 @@
                     this.getData();
                 }
             },
+            //如果需要将行点击的数据放到全局变量中，可以用交互调这个方法,参数是Key
+            rowClickDataSave:function(...args){
+                const t = this;
+                let _key;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        _key = val.arguments;
+                    }  
+                })
+                if(!_key){
+                    _key = "_TY_list_current_item";//默认的key
+                }
+                window._TY_Root[_key] = args;//将row数据放到全局变量的_TY_Root中
+            },
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
