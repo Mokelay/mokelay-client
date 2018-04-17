@@ -44,7 +44,7 @@ import Util from '../libs/util';
                 } else if (typeof val === 'string') {
                     this.arrayData = (val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
+                //this.$emit("input",val);
             },
             arrayData(val){
                 if (typeof val === 'array') {
@@ -52,7 +52,7 @@ import Util from '../libs/util';
                 } else if (typeof val === 'string') {
                     this.arrayData = (val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
+                //this.$emit("input",val);
             }
         },
         created: function () {

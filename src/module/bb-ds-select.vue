@@ -109,11 +109,8 @@
                 } else if (typeof val === 'string') {
                     this.ds = this.transferOldData(val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
-                console.log('val:',val);
             },
             ds(val){
-                this.$emit("input",val);
                 //TODO 通过ds的api去获取input fields list，并且fire出事件
             }
         },

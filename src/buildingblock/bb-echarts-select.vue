@@ -40,10 +40,10 @@
                 } else if (typeof val === 'string') {
                     this.ds = (val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
+                //this.$emit("input",val);
             },
             ds(val){
-                this.$emit("input",val);
+                //this.$emit("input",val);
             }
         },
         created: function () {
