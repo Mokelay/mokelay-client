@@ -86,10 +86,8 @@
                     on:{
                         //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
                         change: function (val) {
-                            if(!t.newFormData){
-                                t.newFormData={};
-                            }
-                            t.newFormData[field['attributes']['attributeName']] = val;
+                            t.formData = t.formData?t.formData:{};
+                            t.formData[field['attributes']['attributeName']] = val;
                         }
                     },
                     ref: ref,
@@ -343,7 +341,6 @@
                 } else if (typeof val === 'string') {
                     this.formData = (val ? eval("("+t.value+")") : {});
                 }
-                //this.$emit("input",val);
             },
             fields(val){
                 this.realFields = this.fields;
@@ -372,10 +369,6 @@
         }, 
         mounted:function(){
             const t = this;
-            if(t.formData && t.newFormData){
-               t.formData = Object.assign(t.formData,t.newFormData); 
-            }
-            
             /*bb-mounted 
                 bb-form初次渲染回填初始化值后 触发此事件 
                 设置setTimeout防止事件触发时目标方法积木还未渲染*/
@@ -398,15 +391,9 @@
             },
             clean: function () {
                 this.formData = {};
-                // this.$refs['form'].resetFields();
             },
             formCommit:function(){
                 var t = this;
-                //t.formData = t.newFormData;
-                if(!t.formData){
-                    t.formData={};
-                }
-                t.formData = Object.assign(t.formData,t.newFormData);
                 t.$refs['form'].validate(function(valid){
                     if(valid){
                         /*buttonConfig
