@@ -115,7 +115,7 @@
                             "lineNumbers: true,"+
                             "theme:'eclipse'"+
                           "});"+
-                          "window.editor.setValue('"+this.p_value+"')";
+                          "window.editor.setValue(`"+this.p_value+"`)";
                 try {
                     script.appendChild(doc.createTextNode(code));
                 } catch (ex) {
