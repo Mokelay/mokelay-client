@@ -106,7 +106,9 @@
         mounted(){
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
-            t.$emit('mounted',this.valueBase);
+            if(t.valueBase){
+              setTimeout(function(){t.$emit('mounted',t.valueBase)},0);
+            }
         },
         methods: {
             getData: function () {
