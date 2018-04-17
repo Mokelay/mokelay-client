@@ -129,15 +129,21 @@
             //打开弹窗
             openDialog:function(){
                 let t=this;
-                t.key = _TY_Tool.uuid(8);
+                let opened = false;
+                if(t.key){
+                	opened = true;
+                }else{
+                	t.key = _TY_Tool.uuid(8);
+                }
                 t.dialogVisible = true;
                 setTimeout(function(){
-                	let iframe = document.createElement("iframe");
-	                iframe.id = "childFrame_"+t.key;
-	                iframe.width="100%";
-	                iframe.style['min-height']="380px";
-	                t.$refs['frameBox'].appendChild(iframe);
-
+                	if(!opened){
+	                	let iframe = document.createElement("iframe");
+		                iframe.id = "childFrame_"+t.key;
+		                iframe.width="100%";
+		                iframe.style['min-height']="380px";
+		                t.$refs['frameBox'].appendChild(iframe);
+					}
                     let frame = document.getElementById('childFrame_'+t.key);
                     var childWindow = frame.contentWindow;
                     var childDoc = childWindow.document;
