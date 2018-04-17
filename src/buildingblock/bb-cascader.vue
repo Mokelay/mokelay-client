@@ -154,7 +154,9 @@
           if(t.dsList&&t.dsList.length>0){
             //有动态请求数据的配置  第一级
             t.getNextData(1);
-
+            setTimeout(function(){
+              t.loadValue(t.value);
+            },500);
           }
         },
         mounted:function(){
