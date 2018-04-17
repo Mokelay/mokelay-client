@@ -9,8 +9,11 @@
               :modal="false"
               :fullscreen="fullscreen"
               :before-close="handleClose">
-                <iframe ref="childFrame" id="childFrame" width="100%" height="100%">
-                </iframe>
+              <div ref="frameBox">
+
+              </div>
+              <!--   <iframe ref="childFrame" id="childFrame" width="100%" height="100%">
+                </iframe> -->
               <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="formCommit">确 定</el-button>
@@ -50,7 +53,7 @@
                     temp = JSON.stringify(val);
                 }
                 t.p_value = temp;
-                let frame = document.getElementById('childFrame');
+                let frame = document.getElementById('childFrame_'+t.key);
                 if(frame){
                     var childWindow = frame.contentWindow;
                     let editor = childWindow.editor;
@@ -105,13 +108,13 @@
                 head.appendChild(script);
             },
             //添加iframe内容
-            _addContent:function(doc){
+            _addContent:function(doc,key){
                 var _div = doc.createElement("textarea");
-                _div.id = "codeContent";
+                _div.id = "codeContent_"+key;
                 doc.body.appendChild(_div);
                 var script = doc.createElement("script");
                 script.type = "text/javascript";
-                var code ="window.editor = CodeMirror.fromTextArea(document.getElementById('codeContent'), {"+
+                var code ="window.editor = CodeMirror.fromTextArea(document.getElementById('codeContent_"+key+"'), {"+
                             "lineNumbers: true,"+
                             "theme:'eclipse'"+
                           "});"+
@@ -125,24 +128,27 @@
             },
             //打开弹窗
             openDialog:function(){
-                const t=this;
+                let t=this;
+                t.key = _TY_Tool.uuid(8);
                 t.dialogVisible = true;
                 setTimeout(function(){
-                    var v = t.p_value || "";
-                    if(v instanceof Object&&t.returnObj){
-                        v = JSON.stringify(v);
-                    }
-                    let frame = document.getElementById('childFrame');
+                	let iframe = document.createElement("iframe");
+	                iframe.id = "childFrame_"+t.key;
+	                iframe.width="100%";
+	                iframe.style['min-height']="380px";
+	                t.$refs['frameBox'].appendChild(iframe);
+
+                    let frame = document.getElementById('childFrame_'+t.key);
                     var childWindow = frame.contentWindow;
                     var childDoc = childWindow.document;
                     childDoc.body.innerHTML = '';
                     t._addLink(childDoc,"./../../node_modules/codemirror/lib/codemirror.css");
-                    t._addLink(childDoc,"./../../node_modules/codemirror/theme/eclipse.css");
-                    t._addScript(childDoc,"./../../node_modules/codemirror/lib/codemirror.js");
-                    // t._addScript(childDoc,"./../../node_modules/codemirror/mode/javascript/javascript.js");
-                    t._addCss(childDoc);
+	                t._addLink(childDoc,"./../../node_modules/codemirror/theme/eclipse.css");
+	                t._addScript(childDoc,"./../../node_modules/codemirror/lib/codemirror.js");
+	                    // t._addScript(childDoc,"./../../node_modules/codemirror/mode/javascript/javascript.js");
+	                t._addCss(childDoc);
                     setTimeout(function(){
-                        t._addContent(childDoc);
+                        t._addContent(childDoc,t.key);
                     },500);
                 },0);
             },
@@ -153,7 +159,7 @@
             },
             formCommit:function(){
                 let t=this;
-                let frame = document.getElementById('childFrame');
+                let frame = document.getElementById('childFrame_'+t.key);
                 var childWindow = frame.contentWindow;
                 let editor = childWindow.editor;
                 let result = editor.getValue();
@@ -175,9 +181,6 @@
 <style scoped>
     .m10 {
         margin: 10px;
-    }
-    #childFrame{
-        height:380px;
     }
     .code_text{
         overflow: hidden;
