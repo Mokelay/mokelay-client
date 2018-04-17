@@ -84,14 +84,14 @@
                                 <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb>
                             </span>
                         </div>
-                        <div v-else-if="column['type'] == 'edit' && scope['$index'] != canEditRow">
+                        <div v-else-if="column['type'] == 'edit' && scope['$index'] != canEditRow || column['type'] == 'edit' && !column['et']">
                             <el-input :value="scope['row'][column.prop]"
                                       @blur="cellSubmit($event,column,scope['row'])"></el-input>
                         </div>
-                        <div v-else-if="column['type'] == 'picture' && scope['$index'] != canEditRow">
+                        <div v-else-if="column['type'] == 'picture' && scope['$index'] != canEditRow || column['type'] == 'picture' && !column['et']">
                             <bb-picture-preview :imgList="scope['row'][column.prop]"></bb-picture-preview>
                         </div>
-                        <div v-else-if="column['type'] == 'template' && scope['$index'] != canEditRow">
+                        <div v-else-if="column['type'] == 'template' && scope['$index'] != canEditRow || column['type'] == 'template' && !column['et']">
                             <div v-if="column['template'] == 'judge'">
                                 <el-tag :type="scope['row'][column.prop]?'primary':'info'" close-transition>
                                     {{scope['row'][column.prop]?"是":"否"}}
@@ -178,6 +178,7 @@
                         uuid:'',
                         fromContentEvent:'',//事件
                         executeContentUUID:'',//目标积木的uuid
+                        executeArgument:'',//参数
                         executeContentMethodName:'',//目标方法名称
                     }] 表头编辑器交互 编辑状态有效
                 }]
@@ -712,6 +713,7 @@
                         Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
                             t.loading = false;
                             resolve();
+                            t.$emit("button-finish",dsName,map);
                         }, function (code, msg) {
                             t.loading = false;
                             reject();
@@ -719,6 +721,7 @@
                                 type: 'error',
                                 message: msg
                             });
+                            t.$emit("button-finish",dsName,code);
                         });
                     }else{
                         resolve();
