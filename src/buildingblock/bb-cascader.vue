@@ -154,6 +154,7 @@
           if(t.dsList&&t.dsList.length>0){
             //有动态请求数据的配置  第一级
             t.getNextData(1);
+
           }
         },
         mounted:function(){
@@ -161,18 +162,21 @@
         methods: {
             loadValue:function(val){
               let t=this;
-              if(val&&val instanceof Array){
-                t.selectedOptions = val;
+              if(!val){
+                return;
               }
-              //填充级联选择器的问题 TODO
-              if(t.valueTpl){
-                // let resultVal=_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,{_init:true}));//不需要传其他的参数
-                //向上提供change事件
-                // t.$emit('input',resultVal);
-                // let current = t.$refs['cas'];
-                // current.$emit('input',resultVal);
-                // t.p_placeholder = resultVal;
+              let vals=val;
+              if(typeof(val)==='string'){
+                vals = val.split(",");
+              }else if(typeof(val)==='number'){
+                vals = [val];
               }
+              t.selectedOptions = vals;
+              vals.forEach(function(_item,_index){
+                  if(_index<vals.length-1){
+                    t.getNextData(_index+2,_item,vals.slice(0,_index+1));
+                  }
+              });
             },
             linkage:function(...data){
               let t=this;
