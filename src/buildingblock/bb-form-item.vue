@@ -30,9 +30,6 @@
                 let mark = t.contentItem['attributes']['mark'];
                 let tipEle = "";
                 let markEle = "";
-
-                console.log('mark:',mark);
-                console.log('t.contentItem:',t.contentItem);
                 if(mark){
                     itemClass = itemClass + ' childW80';
                     markEle = createElement('i',{props:{},class:'ty-icon_shuomin mark'});

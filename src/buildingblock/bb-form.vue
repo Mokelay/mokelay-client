@@ -179,10 +179,22 @@
             //设置按钮
             formItems.push(createElement('el-form-item',{
                     props:{},
-                    style:{'width':'100%'},
+                    style:{'width':t.labelInline?'auto':'100%'},
                 },[cancelButton,cleanButton,submitButton]));
 
             //创建Form
+            let parentTap = null;
+            //根据当前表单环境设置样式
+            if(this.$parent.$parent && this.$parent.$parent.$vnode){
+                parentTap = this.$parent.$parent.$vnode.componentOptions.tag
+            }
+            let formClass = '';
+            if(parentTap == 'bb-form-item'){
+                formClass = 'border';
+            }
+            if(t.grid){
+                formClass = formClass + ' grid';
+            }
             return createElement('el-form',{
                 props:{
                     model:t.formData,
@@ -193,7 +205,7 @@
                 },on:{
                     submit:"return false;"
                 },ref:"form",
-                class:t.grid?'grid':''
+                class:formClass
             },formItems);
         },
         props: {
@@ -516,5 +528,9 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+    }
+    .border{
+        border:1px dashed #ccc;
+        padding: 5px 0 5px 5px;
     }
 </style>
