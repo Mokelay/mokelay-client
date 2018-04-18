@@ -27,7 +27,7 @@
             realContent.forEach((field,key)=>{
                 let itemClass = t.realShow?'ds':'dn'; //控制元素的隐藏显示
                 let tip = t.contentItem['attributes']['tip'];
-                let mark = t.contentItem['attributes']['mark'] || '12345';
+                let mark = t.contentItem['attributes']['mark'];
                 let tipEle = "";
                 let markEle = "";
 
@@ -135,15 +135,6 @@
             */
             contentItem:{
                 type:Object
-            },
-            /*mark 表单项标记*/
-            mark:{
-                type:String,
-                default:'this is a test'
-            },
-            /*mark 表单项提示*/
-            tip:{
-                type:String
             }
         },
 
