@@ -109,6 +109,7 @@
             },
             //添加iframe内容
             _addContent:function(doc,key){
+                let t=this;
                 var _div = doc.createElement("textarea");
                 _div.id = "codeContent_"+key;
                 doc.body.appendChild(_div);
@@ -117,14 +118,18 @@
                 var code ="window.editor = CodeMirror.fromTextArea(document.getElementById('codeContent_"+key+"'), {"+
                             "lineNumbers: true,"+
                             "theme:'eclipse'"+
-                          "});"+
-                          "window.editor.setValue(`"+this.p_value+"`)";
+                          "});\n"+
+                            "function setEditorVal(data){window.editor.setValue(data);}";
                 try {
                     script.appendChild(doc.createTextNode(code));
                 } catch (ex) {
                     script.text = code;
                 }
                 doc.body.appendChild(script);
+                setTimeout(function(){
+                    let frame = document.getElementById('childFrame_'+t.key);
+                    frame.contentWindow.setEditorVal(t.p_value);
+                },300);
             },
             //打开弹窗
             openDialog:function(){
