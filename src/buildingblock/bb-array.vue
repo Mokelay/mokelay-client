@@ -159,6 +159,7 @@ import Vue from 'vue';
                 const item = t.array[index]
                 t.array.splice(index,1);
                 t.array.splice(index-1,0,item);
+                t.emitResult();
             },
             downData: function (index) {
                 const t = this;
@@ -168,6 +169,7 @@ import Vue from 'vue';
                 const item = t.array[index]
                 t.array.splice(index,1);
                 t.array.splice(index+1,0,item);
+                t.emitResult();
             },
             add: function (formData,formObj,index) {
                 var fd = formData;
@@ -176,12 +178,7 @@ import Vue from 'vue';
                 }else{
                     this.array.push(fd);
                 }
-                var _td = this.array.concat();
-                if (typeof this.value === 'string' || this.value === null) {
-                    this.$emit('input', JSON.stringify(_td));
-                } else {
-                    this.$emit('input', _td);
-                }
+                this.emitResult();
                 formObj.$refs['object_form'].clean();
                 this.formDialog.close().remove();
                 this.formDialog = null;
@@ -193,6 +190,15 @@ import Vue from 'vue';
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //输出事件和数组
+            emitResult:function(){
+                var _td = this.array.concat();
+                if (typeof this.value === 'string' || this.value === null) {
+                    this.$emit('input', JSON.stringify(_td));
+                } else {
+                    this.$emit('input', _td);
+                }
             }
         }
     }
