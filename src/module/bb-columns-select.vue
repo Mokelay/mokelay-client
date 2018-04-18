@@ -501,6 +501,10 @@
                     props: {
                         returnObj:true
                     }
+                }, {
+                    name: '是否添加后不能修改',
+                    attributeName: 'onlyAddEditShow',
+                    et: 'bb-editor-switch'
                 }],
                 table:this.value,
             }
