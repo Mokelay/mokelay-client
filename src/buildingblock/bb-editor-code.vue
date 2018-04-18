@@ -158,7 +158,7 @@
 	                t._addCss(childDoc);
                     setTimeout(function(){
                         t._addContent(childDoc,t.key);
-                    },500);
+                    },1000);
                 },0);
             },
             //关闭前的操作

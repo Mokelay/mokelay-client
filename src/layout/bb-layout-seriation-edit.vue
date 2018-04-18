@@ -103,6 +103,8 @@
                     const bbList = [];
                     //水平排列垂直排列控制
                     t.realContent.forEach((bbEle,index)=>{
+                        //根据group 来区分是否这个item 可以编辑
+                        const notCanOpt = bbEle.group&&bbEle.group==='notCanOpt';
                         const bbItem = createElement('bb-seriation-item-edit', {
                             ref:'bb-seriation-item-edit-' + index,
                             props:{
@@ -110,8 +112,8 @@
                                 config:{
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
-                                    buttons:['up','down','remove'],
-                                    onFocus:bbEle.onFocus
+                                    buttons:notCanOpt?[]:['up','down','remove'],
+                                    onFocus:notCanOpt?null:bbEle.onFocus
                                 }   
                             },
                             style:{flex:1},
@@ -119,7 +121,7 @@
                                 up:t.up.bind(null,index),
                                 down:t.down.bind(null,index),
                                 remove:t.remove.bind(null,index),
-                                onFocus:t.onFocus.bind(null,index),
+                                onFocus:notCanOpt?null:t.onFocus.bind(null,index),
                                 onBlur:t.onBlur.bind(null,index)
                             }
                         },[]);
