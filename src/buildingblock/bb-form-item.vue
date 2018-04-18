@@ -21,18 +21,37 @@
             });
             realContent.push(realContentItem);
             //处理标准格式数据
+            
             const bbList = _TY_Tool.bbRender(realContent, createElement, t);
             let formItem;
             realContent.forEach((field,key)=>{
+                let itemClass = t.realShow?'ds':'dn'; //控制元素的隐藏显示
+                let tip = t.contentItem['attributes']['tip'];
+                let mark = t.contentItem['attributes']['mark'] || '12345';
+                let tipEle = "";
+                let markEle = "";
+
+                console.log('mark:',mark);
+                console.log('t.contentItem:',t.contentItem);
+                if(mark){
+                    itemClass = itemClass + ' childW80';
+                    markEle = createElement('i',{props:{},class:'ty-icon_shuomin mark'});
+                }
+                if(tip){
+                    tipEle = createElement('div',{props:{},class:'tip colorCCC f12',attrs:{title:tip}},tip);
+                    itemClass = itemClass + ' childW60';
+                    markEle = null;
+                }
+                const label = createElement('el-tooltip',{props:{content:mark,placement:"top-start"}},[markEle]);
                 formItem = createElement('el-form-item',{
-                    class:t.realShow?'ds':'dn', //控制元素的隐藏显示
+                    class:itemClass,
                     props:{
                         label:t.realLabel,
                         prop:t.realProp,
                         rules:t.realRules,
                         show:t.realShow
-                    }
-                },bbList);
+                    },
+                },[label,bbList,tipEle]);
             });
             return formItem;
         },
@@ -69,6 +88,8 @@
                         attributes:{
                             attributeName:''    //表单项键值别名
                             rules:[]            //验证规则
+                            mark:''               //表单项标记
+                            tip:''                //表单项提示
                             ........            //其他积木属性
                         },              //积木属性
                         animation:[{                //动画
@@ -114,6 +135,15 @@
             */
             contentItem:{
                 type:Object
+            },
+            /*mark 表单项标记*/
+            mark:{
+                type:String,
+                default:'this is a test'
+            },
+            /*mark 表单项提示*/
+            tip:{
+                type:String
             }
         },
 
@@ -185,11 +215,53 @@
         }
     }
 </script>
-<style scoped>
+<style lang="less">
     .dn{
         display: none;
     }
     .db{
         display: inline-block;
+    }
+    .mark{
+        float: left;
+        color: #ccc;
+    }
+    .tip{
+        width:35%; 
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        overflow:hidden;
+        display: inline-block;
+        line-height: 10px;
+    }
+    .wa{
+        width: auto;
+    }
+    .w100{
+        width: 100%;
+    }
+    .colorCCC{
+        color:#cccccc;
+    }
+
+    .ml2{
+        margin-left: 2px;
+    }
+    .f12{
+        font-size: 12px;
+    }
+    .childW60{
+        &>div{
+            &>div{
+                max-width: 60% !important;
+            }
+        }
+    }
+    .childW80{
+        &>div{
+            &>div{
+                max-width: 80% !important;
+            }
+        }
     }
 </style>
