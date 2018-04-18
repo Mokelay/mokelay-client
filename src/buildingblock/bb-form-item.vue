@@ -38,7 +38,7 @@
                     markEle = createElement('i',{props:{},class:'ty-icon_shuomin mark'});
                 }
                 if(tip){
-                    tipEle = createElement('div',{props:{},class:'tip colorCCC f12',attrs:{title:tip}},tip);
+                    tipEle = createElement('span',{props:{},class:'tip colorCCC f12',attrs:{title:tip}},tip);
                     itemClass = itemClass + ' childW60';
                     markEle = null;
                 }
@@ -223,7 +223,8 @@
         white-space:nowrap;
         overflow:hidden;
         display: inline-block;
-        line-height: 10px;
+        line-height: 12px;
+        vertical-align: sub;
     }
     .wa{
         width: auto;
