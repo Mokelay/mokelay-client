@@ -6,7 +6,7 @@
             </el-button-group>
         </div>
         <el-table :data="array" border style="width: 100%" :height="height" stripe>
-            <el-table-column v-for="field in fields" :prop="field.attributeName" :label="field.name"
+            <el-table-column v-for="field in fields" v-if="!field.hide" :prop="field.attributeName" :label="field.name"
                              :key="field.attributeName">
                 <template slot-scope="scope">
                     {{scope['row'][field.attributeName]}}
