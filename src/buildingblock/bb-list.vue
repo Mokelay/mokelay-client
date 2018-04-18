@@ -670,7 +670,7 @@
                     t.editButtons = typeof t.editButtons == 'string'?t.editButtons.split(','):t.editButtons;
                     const editor = {
                         fixed:"right",
-                        width:"120px",
+                        width:"auto",
                         label:"操作",
                         prop:"bbListeditorData",
                         type:"button-group",
