@@ -31,10 +31,10 @@
         watch: {
             value(val){
                 this.selectValue = val;
-                this.$emit("input",val);
+                //this.$emit("input",val);
             },
             table(val){
-                this.$emit("input",val);
+                //this.$emit("input",val);
             }
         },
         created: function () {

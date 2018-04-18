@@ -187,10 +187,10 @@
                 } else if (typeof val === 'string') {
                     this.btn = (val ? JSON.parse(val) : {});
                 }
-                this.$emit("input",val);
+                //this.$emit("input",val);
             },
             btn(val){
-                this.$emit("input",val);
+                //this.$emit("input",val);
             }
         },
         created: function () {
