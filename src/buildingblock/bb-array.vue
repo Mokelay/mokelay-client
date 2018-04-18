@@ -73,6 +73,9 @@ import Vue from 'vue';
                 }
             }
         },
+        created:function(){
+            this.array = this.array?this.array:[];
+        },
         methods: {
             showForm: function (param) {
                 var t = this;
@@ -174,7 +177,8 @@ import Vue from 'vue';
                     this.array.push(fd);
                 }
                 var _td = this.array.concat();
-                if (typeof this.value === 'string') {
+                debugger
+                if (typeof this.value === 'string' || this.value === null) {
                     this.$emit('input', JSON.stringify(_td));
                 } else {
                     this.$emit('input', _td);

@@ -21,7 +21,11 @@
                     var etProps = field['etProps'];
                     t.formData = t.formData?t.formData : {};
                     if(etProps){
-                        etProps = eval("("+etProps+")");
+                        try{
+                            etProps = eval("("+etProps+")");
+                        }catch(error){
+                            etProps = eval(etProps);
+                        }
                         props = etProps;
                     }
                     //创建InputField
