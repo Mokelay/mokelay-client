@@ -650,6 +650,7 @@ util.buildDefaultValTpl = function(t, p_value, isObj) {
             t[p_value] = temp;
         }
         t.$emit('input', t[p_value]);
+        t.$emit('change', t[p_value]);
     }
 }
 
