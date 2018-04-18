@@ -669,7 +669,6 @@
                     t.editButtons = t.editConfig.editable;
                     t.editButtons = typeof t.editButtons == 'string'?t.editButtons.split(','):t.editButtons;
                     const editor = {
-                        fixed:"right",
                         width:"auto",
                         label:"操作",
                         prop:"bbListeditorData",
