@@ -51,6 +51,9 @@ import Vue from 'vue';
             height: {
                 type: String,//设置列表高度
                 default:'300'
+            },
+            defaultFormData:{
+                type:Object
             }
         },
         data() {
@@ -73,7 +76,7 @@ import Vue from 'vue';
         methods: {
             showForm: function (param) {
                 var t = this;
-                var value = param.value?param.value:null;
+                var value = param.value?param.value:t.defaultFormData;
                 var index = param.index || param.index ==0?param.index:'add';
                 require.ensure(["art-dialog"],function(require){
                     t.dialogKey = _TY_Tool.uuid();
