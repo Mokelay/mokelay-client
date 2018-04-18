@@ -426,6 +426,10 @@ util.resolveButton = function(button, valueobj) {
 let _checkVueHasRef = function(uuid, vueObj) {
     //判断vue对象是否是该uuid组件逻辑
     if (vueObj && vueObj.$vnode && vueObj.$vnode.data && vueObj.$vnode.data.ref && vueObj.$vnode.data.ref == uuid && vueObj._isVue) {
+        if (vueObj.$root && vueObj.$root.$el.parentElement && vueObj.$root.$el.parentElement.style.display == 'none') {
+            //针对 bb-tabs模板查询vue对象问题，只会去找到当前展示的那个content的vue对象
+            return null;
+        }
         return vueObj;
     }
     return null;
@@ -462,8 +466,11 @@ let _findChildBB = function(uuid, children) {
                     }
                     if (uuid == j && vueItem.$refs[j]._isVue) {
                         //如果ref的key等于uuid，则表示该对象就是要找的uuid对象(通过ref方式查找；_checkVueHasRef是通过$children方式来查找)
-                        return vueItem.$refs[j];
-                        // currentVueArray.push(vueItem.$refs[j]);
+                        let resultVue = _checkVueHasRef(uuid, vueItem.$refs[j]);
+                        if (resultVue && resultVue != null) {
+                            return resultVue;
+                            // currentVueArray.push(resultVue);
+                        }
                     }
                     if (vueItem.$refs[j].$children && vueItem.$refs[j].$children.length > 0) {
                         resultVue = _findChildBB(uuid, vueItem.$refs[j].$children);

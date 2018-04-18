@@ -389,7 +389,7 @@
                     });
                     if(currentTabContent&&currentTabContent[0]&&currentTabContent[0].alias=='bb-page'
                         &&currentTabContent[0].attributes&&currentTabContent[0].attributes.pageAlias&&
-                         _TY_Page_Data[currentTabContent[0].attributes.pageAlias]){
+                         _TY_Page_Data[currentTabContent[0].attributes.pageAlias]&&alias!='all'){
                         _TY_Page_Data[currentTabContent[0].attributes.pageAlias].p_params=alias;
                     }
                     //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
