@@ -16,22 +16,26 @@
         data() {
             return {
                 fields: [{
-                    name: '表头名称',
+                    name: '名称',
                     attributeName: 'label',
                     et: 'bb-input',
                     rules: [],
+                    description:'表头中文名称',
                     props: {}
                 }, {
-                    name: '表头变量名',
+                    name: '变量名',
                     attributeName: 'prop',
                     et: 'bb-input',
+                    description:'接口返回的字段',
                     rules: [],
                     props: {}
                 }, {
-                    name: '数据筛选条件',
+                    name: '筛选条件',
                     attributeName: 'filter',
+                    hide:true,
                     et: 'bb-list',
                     rules: [],
+                    description:'根据条件展示表单内数据',
                     props: {
                         editConfig:{
                             editable:['add','edit','up','down','remove']
@@ -42,14 +46,18 @@
                         ]
                     }
                 }, {
-                    name: '表头宽度',
+                    name: '宽度',
                     attributeName: 'width',
+                    description:'表单项的宽度 50% 200px',
+                    hide:true,
                     et: 'bb-input',
                     rules: [],
                     props: {}
                 }, {
                     name: '表头类型',
                     attributeName: 'type',
+                    description:'默认：直接显示接口字段数据;按钮组：可以添加操作当前列表的按钮，如删除，编辑等;自定义模板:通过映射转换需要展示的数据;显示图片:传入逗号隔开的图片地址数组',
+                    hide:true,
                     et: 'bb-select',
                     rules: [],
                     props: {
@@ -73,6 +81,7 @@
                 }, {
                     name: '按钮组',
                     attributeName: 'buttons',
+                    hide:true,
                     et: 'bb-array',
                     rules: [],
                     props: {
@@ -84,11 +93,13 @@
                         }, {
                             name: '文字颜色',
                             attributeName: 'wordColor',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '按钮类型',
                             attributeName: 'buttonType',
+                            hide:true,
                             et: 'bb-select',
                             props: {
                                 options: [{
@@ -105,6 +116,7 @@
                         }, {
                             name: '按钮样式',
                             attributeName: 'type',
+                            hide:true,
                             et: 'bb-select',
                             props: {
                                 options: [{
@@ -133,11 +145,13 @@
                         }, {
                             name: '图标',
                             attributeName: 'icon',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '点击类型',
                             attributeName: 'action',
+                            description:"按钮类型选择默认时需要配置此项",
                             et: 'bb-select',
                             props: {
                                 options: [{
@@ -157,11 +171,15 @@
                         }, {
                             name: '跳转页面',
                             attributeName: 'url',
+                            description:"点击类型选择URL跳转时需要填写",
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '跳转方式',
                             attributeName: 'urlType',
+                            description:"点击类型选择URL跳转时需要填写",
+                            hide:true,
                             et: 'bb-select',
                             props: {
                                 options: [{
@@ -175,57 +193,62 @@
                         }, {
                             name: '执行接口',
                             attributeName: 'ds',
+                            description:"点击类型选择执行接口时需要填写",
+                            hide:true,
                             et: 'bb-ds-select',
                             props: {}
                         }, {
                             name: '接口执行成功系统提示静态文字',
+                            description:"点击类型选择执行接口时需要填写",
                             attributeName: 'callBackStaticWords',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '提示标题',
+                            description:"点击类型选择执行接口时需要填写",
                             attributeName: 'confirmTitle',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '提示文本',
+                            description:"点击类型选择执行接口时需要填写",
                             attributeName: 'confirmText',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '设置巴斯',
+                            description:"点击类型选择执行巴斯时需要填写",
                             attributeName: 'buzz',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
                             name: '页面对话框页面别名',
+                            description:"点击类型选择页面对话框时需要填写",
                             attributeName: 'dialogPage',
+                            hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
-                            name: '执行回调',
-                            attributeName: 'callback',
-                            et: 'bb-select',
-                            props: {
-                                fields: [{
-                                    value: 'refresh',
-                                    text: '刷新'
-                                }, {
-                                    value: 'custom',
-                                    text: '自定义'
-                                }]
-                            }
-                        }, {
                             name: '按钮显示状态控制变量',
+                            description:"根据接口中某个关键字控制按钮展示",
                             attributeName: 'showKey',
+                            hide:true,
                             et: 'bb-input',
                         }, {
                             name: '按钮显示变量值',
+                            description:"按钮展示的值",
                             attributeName: 'showValue',
+                            hide:true,
                             et: 'bb-input',
                         }, {
                             name: '弹窗配置',
                             attributeName: 'dialog',
+                            description:"按钮类型选择弹窗时需要配置此项",
+                            hide:true,
                             et: 'bb-button-form',
                             props: {
                                 fields: [{
@@ -242,6 +265,8 @@
                         }, {
                             name: '弹窗选择器配置',
                             attributeName: 'popupConfig',
+                            description:"按钮类型选择弹窗选择器时需要配置此项",
+                            hide:true,
                             et: 'bb-button-form',
                             props: {
                                 fields: [{
@@ -404,6 +429,7 @@
                     name: '表头模板类型',
                     attributeName: 'template',
                     et: 'bb-select',
+                    hide:true,
                     rules: [],
                     props: {
                         fields: [{
@@ -427,6 +453,7 @@
                     name: '自定义模板参数',
                     attributeName: 'templateProp',
                     et: 'bb-array',
+                    hide:true,
                     rules: [],
                     props: {
                         fields: [{
@@ -447,15 +474,18 @@
                     name: '自定义模板路径',
                     attributeName: 'file',
                     et: 'bb-input',
+                    hide:true,
                     rules: [],
                     props: {}
                 }, {
                     name: '静态字段填写',
                     attributeName: 'staticWords',
+                    hide:true,
                     et: 'bb-input'
                 }, {
                     name: '值对象来源',
                     attributeName: 'valueKey',
+                    hide:true,
                     et: 'bb-select',
                     props: {
                         fields: [{
@@ -472,6 +502,7 @@
                 }, {
                     name: '编辑器类型',
                     attributeName: 'et',
+                    hide:true,
                     et: 'bb-select',
                     props: {
                          textField: 'name',
@@ -490,6 +521,7 @@
                 }, {
                     name: '编辑器属性',
                     attributeName: 'etProp',
+                    hide:true,
                     et: 'bb-editor-code',
                     props: {
                         
@@ -498,11 +530,13 @@
                     name: '编辑器交互',
                     attributeName: 'etOn',
                     et: 'bb-editor-code',
+                    hide:true,
                     props: {
                         returnObj:true
                     }
                 }, {
                     name: '是否添加后不能修改',
+                    hide:true,
                     attributeName: 'onlyAddEditShow',
                     et: 'bb-editor-switch'
                 }],

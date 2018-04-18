@@ -12,7 +12,7 @@
                     {{scope['row'][field.attributeName]}}
                 </template>
             </el-table-column>
-            <el-table-column label="操作" key="operation">
+            <el-table-column label="操作" width="250" key="operation">
                 <template slot-scope="scope">
                     <el-button type="text" icon="el-icon-edit"
                                @click.native.prevent="editData(scope.$index)">修改</el-button>
