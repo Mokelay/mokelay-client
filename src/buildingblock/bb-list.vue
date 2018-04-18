@@ -84,14 +84,14 @@
                                 <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb>
                             </span>
                         </div>
-                        <div v-else-if="column['type'] == 'edit' && scope['$index'] != canEditRow || column['type'] == 'edit' && !column['et']">
+                        <div v-else-if="column['type'] == 'edit' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
                             <el-input :value="scope['row'][column.prop]"
                                       @blur="cellSubmit($event,column,scope['row'])"></el-input>
                         </div>
-                        <div v-else-if="column['type'] == 'picture' && scope['$index'] != canEditRow || column['type'] == 'picture' && !column['et']">
+                        <div v-else-if="column['type'] == 'picture' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
                             <bb-picture-preview :imgList="scope['row'][column.prop]"></bb-picture-preview>
                         </div>
-                        <div v-else-if="column['type'] == 'template' && scope['$index'] != canEditRow || column['type'] == 'template' && !column['et']">
+                        <div v-else-if="column['type'] == 'template' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
                             <div v-if="column['template'] == 'judge'">
                                 <el-tag :type="scope['row'][column.prop]?'primary':'info'" close-transition>
                                     {{scope['row'][column.prop]?"是":"否"}}
@@ -113,12 +113,12 @@
                         </div>
                         <div v-else>
                             <!-- 只读状态 -->
-                            <span v-if="scope['$index'] != canEditRow || !column['et']">
+                            <span v-if="scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column)">
                                 {{scope['row'][column.prop]}}
                             </span>
                         </div>
                         <!-- 编辑状态 -->
-                        <bb v-if="scope['$index'] == canEditRow && column['et']" :value="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
+                        <bb v-if="scope['$index'] == canEditRow && column['et'] && onlyAddEditShow(scope,column,true)" :value="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
                     </template>
                 </el-table-column>
             </el-table>
@@ -172,8 +172,9 @@
                     fixed:"right",
                     width:"120px",
                     type:"defalut || button-group(操作)",
-                    et:"bb-select" 表头编辑器 编辑状态有效
-                    etProp:{} 表头编辑器配置 编辑状态有效
+                    et:"bb-select", 表头编辑器 编辑状态有效
+                    etProp:{}, 表头编辑器配置 编辑状态有效
+                    onlyAddEditShow:false,//只有添加的时候显示编辑状态，修改不显示编辑状态
                     etOn:[{             //触发交互
                         uuid:'',
                         fromContentEvent:'',//事件
@@ -374,6 +375,13 @@
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
         },
         methods: {
+            onlyAddEditShow:function(scope,column,editFlag){
+                if(editFlag){
+                    return (this.adding || (!this.adding&&!column['onlyAddEditShow']));
+                }else{
+                    return (!this.adding && column['onlyAddEditShow']);
+                }
+            },
             //返回一个on 对象（bb组件的事件监听on对象）
             bbButtonFinishOnfun:function(){
                 const t = this;
