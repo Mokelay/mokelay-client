@@ -81,7 +81,7 @@
         data() {
             return {
               items:this.fields.length>0?this.fields:this.options,
-              valueBase: this.value,
+              valueBase: (this.multiple&&this.value?JSON.parse(this.value):this.value),
               external:{}
             }
         },
