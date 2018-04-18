@@ -113,7 +113,7 @@
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
                                     buttons:notCanOpt?[]:['up','down','remove'],
-                                    onFocus:notCanOpt?null:bbEle.onFocus
+                                    onFocus:notCanOpt?false:bbEle.onFocus
                                 }   
                             },
                             style:{flex:1},
@@ -121,7 +121,7 @@
                                 up:t.up.bind(null,index),
                                 down:t.down.bind(null,index),
                                 remove:t.remove.bind(null,index),
-                                onFocus:notCanOpt?null:t.onFocus.bind(null,index),
+                                onFocus:notCanOpt?false:t.onFocus.bind(null,index),
                                 onBlur:t.onBlur.bind(null,index)
                             }
                         },[]);
