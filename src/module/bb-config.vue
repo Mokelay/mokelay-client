@@ -10,7 +10,7 @@
                 <p>积木别名：{{valueBase.alias}}</p>
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
-            <bb-form :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
+            <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>

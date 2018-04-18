@@ -58,6 +58,8 @@
                     props['attributeName'] = field['attributeName'];
                     props['show'] = field['show'];
                     props['width'] = field['width'];
+                    props['mark'] = field['description'];
+                    props['tip'] = field['tip'];
                     const bbEle = {
                         uuid: field['pbbId'] || _TY_Tool.uuid(),
                         alias: field['et'], //积木别名
@@ -96,7 +98,7 @@
                     },
                     ref: ref,
                     style: {
-                        'width': field['attributes']['width'] || '95%',
+                        'width': field['attributes']['width'] || '100%',
                         'padding':'0 20px 0 5px',
                         'box-sizing': 'border-box;'
                     },

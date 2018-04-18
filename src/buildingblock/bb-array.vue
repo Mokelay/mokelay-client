@@ -177,7 +177,6 @@ import Vue from 'vue';
                     this.array.push(fd);
                 }
                 var _td = this.array.concat();
-                debugger
                 if (typeof this.value === 'string' || this.value === null) {
                     this.$emit('input', JSON.stringify(_td));
                 } else {
