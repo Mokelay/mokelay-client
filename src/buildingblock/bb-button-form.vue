@@ -1,12 +1,15 @@
-<template>
-    <div :class="buttonFormClass">{{formDesc}}<el-button :type="startButtonType" :icon="startButtonIcon" @click="setting">{{settingText}}</el-button></div>
-</template>
-
 <script>
 import Vue from 'vue';
 import Util from '../libs/util';
     export default {
         name: 'bb-button-form',
+        render: function(createElement){
+            const t = this;
+            const dialog = t.renderForm(createElement);
+            const buttonEle = createElement('el-button',{props:{type:t.startButtonType,icon:t.startButtonIcon},on:{click:t.setting}},[t.settingText]);
+            const button = createElement('div',{class:this.buttonFormClass},[t.formDesc,buttonEle]);
+            return createElement('div',{},[button,dialog]);
+        },
         props: {
             value:{
                 type:[String,Object]
@@ -73,7 +76,7 @@ import Util from '../libs/util';
         data() {
             return {
                 formData:this.value,
-                dialog:null
+                formVisible:false,
             }
         },
         computed: {
@@ -100,80 +103,57 @@ import Util from '../libs/util';
 
         },
         methods: {
+            //渲染dialog表单
+            renderForm:function(createElement){
+                const t = this;
+                const formKey = _TY_Tool.uuid();
+                const form = createElement('bb-form',{
+                    props:{
+                        fields:t.fields,
+                        value:_TY_Tool.deepClone(t.formData), //传入value
+                        buttonConfig:t.buttonConfig,
+                        settingButtonText:t.formButtonName,
+                        ds:t.valueDs,
+                        dsFields:t.dsFields,
+                        showCancelButton:t.showCancelButton,
+                        showCleanButton:t.showCleanButton,
+                        hideSubmitButton:t.hideSubmitButton,
+                        on:t.on,
+                        parentData:t.parentData,
+                        labelWidth:t.labelWidth,
+                        labelInline:t.labelInline,
+                        content:t.content,
+                        size:'mini'
+                    },
+                    on:{
+                        "button-finish-success":function(button, valueobj,map){
+                            t.$emit('button-finish-success', button, valueobj);
+                        },
+                        "button-finish":function(button, valueobj,map){
+                            t.$emit('button-finish', button, valueobj);
+                            t.formVisible = false;
+                        },
+                        commit: function(formData){
+                            t.$emit('input', formData);
+                            t.$emit('commit', formData);
+                            if(!t.buttonConfig||!t.buttonConfig.ds){
+                                t.formVisible = false;
+                            }
+                        },
+                        cancel:function(formData){
+                            t.$emit('cancel',formData);
+                            t.formVisible = false;
+                        }
+                    },
+                    ref:"form",
+                    key:formKey
+                },[]);
+                const dialog = createElement('bb-dialog',{props:{isShow:t.formVisible,size:"middle",appendToBody:true,modalAppendToBody:true},on:{'update:isShow':(isShow)=>{t.formVisible = isShow}}},[form]);
+                return dialog;
+            },
             setting:function(){
                 var t = this;
-                require.ensure(["art-dialog"],function(require){
-                    t.dialogKey = _TY_Tool.uuid();
-                    var _form = new Vue({
-                        router: t.$router,
-                        render: function(createElement){
-                            const formItem = createElement('bb-form',{
-                                props:{
-                                    fields:t.fields,
-                                    value:t.formData, //传入value
-                                    buttonConfig:t.buttonConfig,
-                                    settingButtonText:t.formButtonName,
-                                    ds:t.valueDs,
-                                    dsFields:t.dsFields,
-                                    showCancelButton:t.showCancelButton,
-                                    showCleanButton:t.showCleanButton,
-                                    hideSubmitButton:t.hideSubmitButton,
-                                    on:t.on,
-                                    parentData:t.parentData,
-                                    labelWidth:t.labelWidth,
-                                    labelInline:t.labelInline,
-                                    content:t.content
-                                },
-                                on:{
-                                    "button-finish-success":function(button, valueobj){
-                                        t.$emit('button-finish-success', button, valueobj);
-                                    },
-                                    "button-finish":function(button, valueobj){
-                                        t.$emit('button-finish', button, valueobj);
-                                        t.dialog.close().remove();
-                                        t.dialog = null;
-                                    },
-                                    commit: function(formData){
-                                        t.formData = formData;
-                                        t.$emit('input', formData);
-                                        t.$emit('commit', formData);
-                                        if(!t.buttonConfig||!t.buttonConfig.ds){
-                                            t.dialog.close().remove();
-                                            t.dialog = null;
-                                        }
-                                    },
-                                    cancel:function(formData){
-                                        t.$emit('cancel',formData);
-                                        t.dialog.close().remove();
-                                        t.dialog = null;
-                                    }
-                                },
-                                ref:"form"
-                            },[]);
-                            return createElement('div',{class:'bb-button-form-content'},[formItem])
-                        }
-                    }).$mount();
-                    var dialog = require('art-dialog');
-                    var d = dialog({
-                        width:800,
-                        zIndex:100,
-                        title: '设置',
-                        content: _form.$el,
-                        onclose:function(){
-                            if(t.dialog){
-                                t.dialog.close().remove();
-                                t.dialog = null;
-                            }
-                            delete t.$refs[t.dialogKey];
-                        }
-                    });
-                    d.showModal();
-
-                    //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-                     t.$refs[t.dialogKey]=_form.$children[0];//把bb-form 设置到$refs中
-
-                    t.dialog = d;
-                },'art-dialog');
+                t.formVisible = true;
             },
             loadChildBB(){
                 let t=this;
