@@ -156,7 +156,7 @@
             t.getNextData(1);
             setTimeout(function(){
               t.loadValue(t.value);
-            },500);
+            },300);
           }
         },
         mounted:function(){
@@ -176,7 +176,9 @@
               t.selectedOptions = vals;
               vals.forEach(function(_item,_index){
                   if(_index<vals.length-1){
-                    t.getNextData(_index+2,_item,vals.slice(0,_index+1));
+                    setTimeout(function(){
+                      t.getNextData(_index+2,_item,vals.slice(0,_index+1));
+                    },300);
                   }
               });
             },
@@ -370,7 +372,9 @@
                           }
                         }
                     }
-                    resultOptionItem[t.p_casProps.children]=result;
+                    if(resultOptionItem){
+                      resultOptionItem[t.p_casProps.children]=result;
+                    }
                   }
                 }
               }
