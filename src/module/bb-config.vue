@@ -6,10 +6,11 @@
                 <div v-if="showBBSelect">
                     选择积木：<bb-select textField="name" valueField="alias" :ds="bbFieldsDs" @change="bbChange"></bb-select>
                 </div>
-                <p v-if="!showBBSelect">积木名称：{{valueBase.aliasName}}</p>
+                <p>积木名称：<bb-input :style="{width:'auto'}" v-model="valueBase.aliasName" ></bb-input></p>
                 <p>积木别名：{{valueBase.alias}}</p>
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
+            <bb-form size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
@@ -45,7 +46,17 @@
             value:{
                 type:Object,
                 default:function(){
-                    return {}
+                    return { 
+                        uuid: '',
+                        alias: '',
+                        aliasName: '', 
+                        attributes: {},
+                        animation: [{
+                        }],
+                        interactives: [{
+                        }],
+                        layout: {}
+                    }
                 }
             }
         },
@@ -80,7 +91,8 @@
                          "dataKey": "fields",
                          "valueKey": "data_list"
                     }]
-                }
+                },
+                formItemFields:null
             }
         },
         watch: {
@@ -111,13 +123,22 @@
             interactiveAdd:function(row){
                 const t = this;
                 t.interactiveForm = {};
-                t.valueBase.interactives.push(row);
+                if(t.valueBase.interactives){
+                    t.valueBase.interactives.push(row);
+                }else{
+                    t.valueBase.interactives = [].push(row);
+                }
             },
             //添加动画
             animationAdd:function(row){
                 const t = this;
                 t.animationForm = {};
-                t.valueBase.animation.push(row);
+                if(t.valueBase.animation){
+                    t.valueBase.animation.push(row);
+                }else{
+                    t.valueBase.animation = [].push(row);
+                }
+                
             },
             //属性修改
             attributesChange:function(formData){
@@ -151,7 +172,7 @@
             bbChange:function(val){
                 const t = this;
                 t.alias = val;
-                t.valueBase = Object.assign(t.valueBase,{alias:val,uuid:_TY_Tool.uuid()});
+                t.valueBase = Object.assign(t.valueBase,{alias:val});
                 t.setEditor();
             },
             setEditor:function(){
@@ -621,6 +642,136 @@
                         }]
                     }
                 }];
+                //设置表单项积木时需要额外增的字段
+                t.formItemFields = [{                      
+                            attributeName:'attributeName',
+                            et:'bb-input',                   
+                            name:'名称',
+                            description:"",                               
+                            props:{
+                            }
+                        },{                      
+                            attributeName:'width',
+                            et:'bb-input',                   
+                            name:'宽度',
+                            description:"表单项占整行的宽度",                               
+                            props:{
+                            }
+                        },{                      
+                            attributeName:'show',
+                            et:'bb-editor-switch',                   
+                            name:'显示',
+                            description:"",                               
+                            props:{
+                            }
+                        },{                      
+                            attributeName:'rules',
+                            et:'bb-array',                   
+                            name:'验证规则',
+                            description:"",                               
+                            props:{
+                                defaultFormData: {
+                                    required: false,
+                                    type: "string",
+                                    trigger: "blur"
+                                },
+                                fields: [{
+                                    name: '是否必填',
+                                    attributeName: 'required',
+                                    et: 'bb-editor-switch',
+                                    rules: [],
+                                    props: {},
+                                }, {
+                                    name: '数据类型',
+                                    attributeName: 'type',
+                                    et: 'bb-select',
+                                    rules: [],
+                                    props: {
+                                        fields: [{
+                                            text: "整数",
+                                            value: "int"
+                                        }, {
+                                            text: "浮点数",
+                                            value: "double"
+                                        }, {
+                                            text: "布尔值",
+                                            value: "boolean"
+                                        }, {
+                                            text: "字符串",
+                                            value: "string"
+                                        }, {
+                                            text: "日期",
+                                            value: "date"
+                                        }, {
+                                            text: "日期时间",
+                                            value: "time"
+                                        }, {
+                                            text: "对象",
+                                            value: "object"
+                                        }, {
+                                            text: "数组",
+                                            value: "array"
+                                        }, {
+                                            text: "文件",
+                                            value: "multipart"
+                                        }]
+                                    }
+                                }, {
+                                    name: '提示',
+                                    hide:true,
+                                    attributeName: 'message',
+                                    et: 'bb-input',
+                                    rules: [],
+                                    props: {},
+                                }, {
+                                    name: '触发事件',
+                                    hide:true,
+                                    attributeName: 'trigger',
+                                    et: 'bb-select',
+                                    rules: [],
+                                    props: {
+                                        fields: [{
+                                            text: '失焦',
+                                            value: 'blur'
+                                        }, {
+                                            text: '改变',
+                                            value: 'change'
+                                        }]
+                                    },
+                                }, {
+                                    name: '自定义验证方法',
+                                    hide:true,
+                                    attributeName: 'validatePass',
+                                    et: 'bb-editor-code',
+                                    group: '额外选项',
+                                    rules: [],
+                                    props: {
+                                        returnObj: true
+                                    }
+                                }]
+                            }
+                        },{                      
+                            attributeName:'show',
+                            et:'bb-editor-switch',                   
+                            name:'显示',
+                            description:"",                               
+                            props:{
+                            }
+                        },{                      
+                            attributeName:'mark',
+                            et:'bb-textarea',                   
+                            name:'表单项说明',
+                            description:"",                               
+                            props:{
+                            }
+                        },{                      
+                            attributeName:'tip',
+                            et:'bb-input',                   
+                            name:'表单注释',
+                            description:"",                               
+                            props:{
+                            }
+                        }];
             }
 
         }
