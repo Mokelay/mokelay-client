@@ -76,7 +76,7 @@
         },
         data() {
             return {
-                bb_value: '',
+                bb_value: this.value,
                 bb_input_value: '',
                 external: {
                     linkage: 'test'//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
@@ -113,9 +113,9 @@
                 this.bb_value = '';
                 this.bb_input_value = '';
             },
-            linkage: function (data) { //提供给外部调用
-                if (data) {
-                    this.external = Object.assign({}, {linkage: data});
+            linkage: function (...data) { //提供给外部调用
+                if (data&&data.length>0) {
+                    this.external = Object.assign({}, {linkage: data[0]});
                 }
             },
             treeCommit(data){

@@ -153,7 +153,9 @@
         },
         mounted:function(){
             const t = this;
-            t.$emit('mounted',t.value);
+            setTimeout(function(){
+               t.$emit('mounted',t.value);
+            },0);
         },
         methods: {
             //开始选择

@@ -103,10 +103,12 @@
                     this.uncheckedKeys(checkedKeys);
                 }
             },
-            external() {
-                this.getRootData().then((data) => {
-                    this.data = data;
-                })
+            external(val) {
+                if(val&&val.linkage){
+                    this.getRootData().then((data) => {
+                        this.data = data;
+                    })
+                }
             }
         },
         computed: {
