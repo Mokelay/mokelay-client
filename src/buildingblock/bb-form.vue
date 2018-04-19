@@ -385,6 +385,7 @@
         },
         data() {
             return {
+                initValue:null,
                 formData:null,
                 realFields:null
             }
@@ -392,6 +393,7 @@
         created: function () {
             const t = this;
             t.formData = typeof t.value == 'string' && t.value.length?eval("("+t.value+")"):t.value
+            t.initValue=(typeof(this.value) == 'string' && this.value.length)?eval("("+this.value+")"):this.value;
             t.realFields = t.fields
             t.getFields();
             t.getData();
@@ -425,15 +427,20 @@
                 var t = this;
                 t.$refs['form'].validate(function(valid){
                     if(valid){
+                        t.$emit('commit', t.formData);
                         /*buttonConfig
                             提交按钮的配置
                             此处需要用bb-button重构*/
                         Util.resolveButton(t.buttonConfig,_TY_Tool.buildTplParams(t,{
                                 'row-data':t.parentData['row-data'],
                                 'getData':t.getData
-                            }),t.afterCommit);
-                        t.$emit('input', t.formData);
-                        t.$emit('commit', t.formData);
+                            })).then(()=>{
+                            //清空表单项
+                            t.$emit('input', t.initValue||{});
+                            t.formData = t.initValue||{};
+                        }).catch(()=>{
+                            t.$emit('input', t.formData);
+                        });
                     }
                 });
             },

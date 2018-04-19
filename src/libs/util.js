@@ -305,121 +305,130 @@ util.getDSData = function(ds, inputValueObj, success, error) {
 */
 util.resolveButton = function(button, valueobj) {
     var t = valueobj['bb'];
-    if (button['action'] == 'url') {
-        //URL跳转
-        //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
-        var rowData = valueobj['row-data'] ? valueobj['row-data'] : {};
-        var realObj = Object.assign({}, valueobj, rowData);
-        var url = util.tpl(button['url'], _TY_Tool.buildTplParams(t, realObj));
-        url = encodeURI(url);
-        if (button['urlType'] == 'openWindow') {
-            window.open(url);
-        } else {
-            if (url.indexOf("http") == 0) {
-                document.location.href = url;
+    return new Promise((resolve, reject) => {
+        if (button['action'] == 'url') {
+            //URL跳转
+            //为了兼容扩展dataparam的值的范围，注意URL参数的Encode
+            var rowData = valueobj['row-data'] ? valueobj['row-data'] : {};
+            var realObj = Object.assign({}, valueobj, rowData);
+            var url = util.tpl(button['url'], _TY_Tool.buildTplParams(t, realObj));
+            url = encodeURI(url);
+            if (button['urlType'] == 'openWindow') {
+                window.open(url);
             } else {
-                t.$router.push(url);
+                if (url.indexOf("http") == 0) {
+                    document.location.href = url;
+                } else {
+                    t.$router.push(url);
+                }
             }
-        }
-        //触发按钮执行完成事件
-        t.$emit("button-finish", button, valueobj);
-    } else if (button['action'] == 'execute-ds') {
-        var ds = button['ds'];
-        var valueKey = button.valueKey || 'row-data';
-        var confirmTitle = button['confirmTitle'] ? util.tpl(button['confirmTitle'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "提示";
-        var confirmText = button['confirmText'] ? util.tpl(button['confirmText'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "是否执行此操作";
-        button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
-        var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "操作成功";
-        t.$confirm(confirmText, confirmTitle, {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-        }).then(() => {
-            util.getDSData(ds, valueobj, function(map) {
-                //TODO
-                t.$message({
-                    type: 'success',
-                    message: messageInfo
-                });
-                // util.buttonCallback(button, valueobj, callback, map);
-                //触发按钮执行完成事件
-                t.$emit("button-finish", button, valueobj, map);
-                t.$emit("button-finish-success", button, valueobj, map);
-            }, function(err, msg) {
-                t.$message({
-                    type: 'warning',
-                    message: msg || messageInfo
-                });
-                // util.buttonCallback(button, valueobj, callback, err);
-                //触发按钮执行完成事件
-                t.$emit("button-finish", button, valueobj, err);
-                t.$emit("button-finish-error", button, valueobj, err);
-            });
-        }).catch(() => {
-            t.$message({
-                type: 'info',
-                message: '操作未完成'
-            });
-        });
-    } else if (button['action'] == 'dialog-page') {
-        //TODO 弹出一个页面对话框
-        require.ensure(["art-dialog"], function(require) {
-            t.dialogKey = _TY_Tool.uuid();
-            var Vue = valueobj['bb'].vue;
-            var _page = new Vue({
-                router: t.$router,
-                render: function(createElement) {
-                    const pageItem = createElement('bb-page', {
-                        props: {
-                            pageAlias: button['dialogPage'],
-                            params: valueobj
-                        },
-                        on: {
-                            'after-unload': (val) => {
-                                //触发按钮执行完成事件
-                                t.$emit("button-finish", button, valueobj);
-                                //关闭并销毁dialog
-                                t.dialog.close().remove();
-                                t.dialog = null;
-                            }
-                        }
-                    }, []);
-                    return createElement('div', {}, [pageItem])
-                }
-            }).$mount();
-            var dialog = require('art-dialog');
-            var d = dialog({
-                width: 800,
-                zIndex: 100,
-                title: '消息',
-                content: _page.$el,
-                onclose: function() {
-                    if (t.dialog) {
-                        t.dialog.close().remove();
-                        t.dialog = null;
-                    }
-                    delete t.$refs[t.dialogKey];
-                }
-            });
-            d.showModal();
-            t.dialog = d;
-            //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-            t.$refs[t.dialogKey] = _page.$children[0]; //把bb-form 设置到$refs中
-        }, 'art-dialog');
-    } else if (button['action'] == 'code') {
-        //执行代码
-        button['method'].call(this, valueobj['row-data']);
-        //触发按钮执行完成事件
-        t.$emit("button-finish", button, valueobj);
-    } else if (button['action'] == 'buzz') {
-        //如果是巴斯代码，远程加载
-        util.loadBuzz(button.buzz, function(code) {
-            t.util = util;
-            eval(code);
+            resolve();
             //触发按钮执行完成事件
             t.$emit("button-finish", button, valueobj);
-        });
-    }
+        } else if (button['action'] == 'execute-ds') {
+            var ds = button['ds'];
+            var valueKey = button.valueKey || 'row-data';
+            var confirmTitle = button['confirmTitle'] ? util.tpl(button['confirmTitle'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "提示";
+            var confirmText = button['confirmText'] ? util.tpl(button['confirmText'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "是否执行此操作";
+            button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
+            var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "操作成功";
+            t.$confirm(confirmText, confirmTitle, {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                util.getDSData(ds, valueobj, function(map) {
+                    //TODO
+                    t.$message({
+                        type: 'success',
+                        message: messageInfo
+                    });
+                    resolve();
+                    // util.buttonCallback(button, valueobj, callback, map);
+                    //触发按钮执行完成事件
+                    t.$emit("button-finish", button, valueobj, map);
+                    t.$emit("button-finish-success", button, valueobj, map);
+                }, function(err, msg) {
+                    t.$message({
+                        type: 'warning',
+                        message: msg || messageInfo
+                    });
+                    reject();
+                    // util.buttonCallback(button, valueobj, callback, err);
+                    //触发按钮执行完成事件
+                    t.$emit("button-finish", button, valueobj, err);
+                    t.$emit("button-finish-error", button, valueobj, err);
+                });
+            }).catch(() => {
+                t.$message({
+                    type: 'info',
+                    message: '操作未完成'
+                });
+                reject();
+            });
+        } else if (button['action'] == 'dialog-page') {
+            //TODO 弹出一个页面对话框
+            require.ensure(["art-dialog"], function(require) {
+                t.dialogKey = _TY_Tool.uuid();
+                var Vue = valueobj['bb'].vue;
+                var _page = new Vue({
+                    router: t.$router,
+                    render: function(createElement) {
+                        const pageItem = createElement('bb-page', {
+                            props: {
+                                pageAlias: button['dialogPage'],
+                                params: valueobj
+                            },
+                            on: {
+                                'after-unload': (val) => {
+                                    //触发按钮执行完成事件
+                                    t.$emit("button-finish", button, valueobj);
+                                    //关闭并销毁dialog
+                                    t.dialog.close().remove();
+                                    t.dialog = null;
+                                }
+                            }
+                        }, []);
+                        return createElement('div', {}, [pageItem])
+                    }
+                }).$mount();
+                var dialog = require('art-dialog');
+                var d = dialog({
+                    width: 800,
+                    zIndex: 100,
+                    title: '消息',
+                    content: _page.$el,
+                    onclose: function() {
+                        if (t.dialog) {
+                            t.dialog.close().remove();
+                            t.dialog = null;
+                        }
+                        delete t.$refs[t.dialogKey];
+                    }
+                });
+                d.showModal();
+                t.dialog = d;
+                //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
+                t.$refs[t.dialogKey] = _page.$children[0]; //把bb-form 设置到$refs中
+            }, 'art-dialog');
+            resolve();
+        } else if (button['action'] == 'code') {
+            //执行代码
+            button['method'].call(this, valueobj['row-data']);
+            resolve();
+            //触发按钮执行完成事件
+            t.$emit("button-finish", button, valueobj);
+        } else if (button['action'] == 'buzz') {
+            //如果是巴斯代码，远程加载
+            util.loadBuzz(button.buzz, function(code) {
+                t.util = util;
+                eval(code);
+                resolve();
+                //触发按钮执行完成事件
+                t.$emit("button-finish", button, valueobj);
+            });
+        }
+    });
 }
 
 //检查vue对象是否含有uuid,通过$children来找
