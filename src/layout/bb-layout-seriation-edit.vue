@@ -155,6 +155,14 @@
             down:function(...params){
                 const t = this;
                 const index = params[0];
+                //如果下一个item是不能编辑的item（最后一个item），点击下移，不移动
+                if(index==t.realContent.length-2){
+                    //根据group 来区分是否这个item 可以编辑
+                    const nextNotCanOpt = t.realContent[index+1].group&&t.realContent[index+1].group==='notCanOpt';
+                    if(nextNotCanOpt){
+                        return;
+                    }
+                }
                 this.$emit('down',t.realContent[index]);
                 this.$emit('change',t.realContent);
                 if(index == t.realContent.length -1) {

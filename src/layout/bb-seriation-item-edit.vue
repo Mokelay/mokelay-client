@@ -169,6 +169,11 @@
         methods: {
             //当前积木选中状态
             onFocus:function(){
+                //不可编辑
+                const notCanOpt = this.content.group&&this.content.group==='notCanOpt';
+                if(notCanOpt){
+                    return ;
+                }
                 if(this.borderClass == "border borderSelected"){
                     this.onBlur();
                 }else{

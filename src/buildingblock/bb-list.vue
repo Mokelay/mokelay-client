@@ -576,6 +576,7 @@
             },
             linkage:function(...data){
                 if(data){
+                    t.canEditRow = null;
                     this.external['linkage'] = data;
                     this.getData();
                 }
