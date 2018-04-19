@@ -1,7 +1,6 @@
 <template>
     <div>
         <bb-button-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-button-form>
-        <!-- <bb-form v-else :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-form> -->
     </div>
 </template>
 
@@ -37,12 +36,6 @@
                         textField:'name',
                         valueField:'alias'
                     }},
-                    // {pbbId:'category',name:'接口分类',attributeName:'category',et:'bb-words',props:{
-                    //     textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.category'}]},
-                    // }},
-                    // {pbbId:'method',name:'方法',attributeName:'method',et:'bb-words',props:{
-                    //     textDs:{api:'/read-api-info',method:'post',inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.external.linkage[0]%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data.method'}]},
-                    // }},
                     {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
                         editConfig:{
                             editable:['add','edit','remove']
@@ -83,7 +76,7 @@
                             }}
                         ]
                     }},
-                    {pbbId:'host',name:'接口主域名',attributeName:'host',et:'bb-input',props:{defaultValTpl:"<%=window._TY_APIHost%>"}},
+                    // {pbbId:'host',name:'接口主域名',attributeName:'host',et:'bb-input',props:{defaultValTpl:"<%=window._TY_APIHost%>"}},
                 ],
                 interactiveOn:[
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},

@@ -1,12 +1,15 @@
-<template>
-    <div>{{arrayDesc}}<el-button @click="setting">{{settingText}}</el-button></div>
-</template>
-
 <script>
 import Vue from 'vue';
 import Util from '../libs/util';
     export default {
         name: 'bb-button-array',
+        render: function(createElement){
+            const t = this;
+            const dialog = t.renderDialog(createElement);
+            const buttonEle = createElement('el-button',{props:{type:t.startButtonType,icon:t.startButtonIcon},on:{click:t.setting}},[t.settingText]);
+            const button = createElement('div',{class:this.buttonFormClass},[t.arrayDesc,buttonEle]);
+            return createElement('div',{},[button,dialog]);
+        },
         props: {
             value:{
                 type:[Array,String]
@@ -26,7 +29,8 @@ import Util from '../libs/util';
         data() {
             return {
                 arrayData:this.value,
-                dialog:null
+                dialog:null,
+                dialogVisible:false
             }
         },
         computed: {
@@ -60,57 +64,36 @@ import Util from '../libs/util';
         mounted:function(){
         },
         methods: {
+            //渲染弹窗
+            renderDialog:function(createElement){
+                const t = this;
+                t.arrayKey = t.arrayKey?t.arrayKey:_TY_Tool.uuid();
+                const array = createElement('bb-array',{
+                    domProps: {
+                        value: t.arrayData,
+                    },
+                    props:{
+                        fields:t.fields,
+                        showCommit:true,
+                        value: t.arrayData
+                    },
+                    on:{
+                        commit: function(arrayData){
+                            t.arrayData = arrayData;
+                            t.$emit('input', arrayData);
+                            t.$emit('commit', arrayData);
+                            t.dialogVisible = false;
+                        },
+                    },
+                    ref:"array",
+                    key:t.arrayKey
+                },[]);
+                const dialog = createElement('bb-dialog',{props:{isShow:t.dialogVisible,size:"middle",appendToBody:true,modalAppendToBody:true},on:{'update:isShow':(isShow)=>{t.dialogVisible = isShow}}},[array]);
+                return dialog;
+            },
             setting:function(){
                 var t = this;
-                require.ensure(["art-dialog"],function(require){
-                    t.dialogKey = _TY_Tool.uuid();
-                    var _array = new Vue({
-                        router: t.$router,
-                        render: function(createElement){
-                            return createElement('bb-array',{
-                                domProps: {
-                                    value: t.arrayData,
-
-                                },
-                                props:{
-                                    fields:t.fields,
-                                    showCommit:true,
-                                    value: t.arrayData
-                                },
-                                on:{
-                                    commit: function(arrayData){
-                                        t.arrayData = arrayData;
-                                        t.$emit('input', arrayData);
-                                        t.$emit('commit', arrayData);
-                                        t.dialog.close().remove();
-                                        t.dialog = null;
-                                    },
-                                },
-                                ref:"array"
-                            },[]);
-                        }
-                    }).$mount();
-
-                    var dialog = require('art-dialog');
-                    var d = dialog({
-                        width:800,
-                        zIndex:100,
-                        // height:'100%',
-                        title: '设置',
-                        content: _array.$el,
-                        onclose:function(){
-                            if(t.dialog){
-                                t.dialog.close().remove();
-                                t.dialog = null;
-                            }
-                            delete t.$refs[t.dialogKey];
-                        }
-                    });
-                    d.showModal();
-                    t.dialog = d;
-                    //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-                    t.$refs[t.dialogKey]=_array;//把bb-form 设置到$refs中
-                },'art-dialog');
+                t.dialogVisible = true;
             },
              loadChildBB(){
                 let t=this;
