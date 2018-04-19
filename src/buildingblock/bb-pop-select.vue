@@ -155,7 +155,7 @@
             const t = this;
             setTimeout(function(){
                t.$emit('mounted',t.value);
-            },0);
+            },300);
         },
         methods: {
             //开始选择

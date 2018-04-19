@@ -114,7 +114,7 @@
                 this.bb_input_value = '';
             },
             linkage: function (...data) { //提供给外部调用
-                if (data&&data.length>0) {
+                if (data&&data.length>0&&data[0]) {
                     this.external = Object.assign({}, {linkage: data[0]});
                 }
             },
