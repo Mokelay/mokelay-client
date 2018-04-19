@@ -794,7 +794,7 @@
             cellEditor:function(scope){
                 const t = this;
                 // t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
-                t.$emit('edit',t.tableData[scope['$index']]);
+                t.$emit('edit',t.tableData[scope['$index']],scope['$index']);
                 if(t.canEditRow!=null){
                     //当前编辑之后点击提交  
                     if(!t.adding){
