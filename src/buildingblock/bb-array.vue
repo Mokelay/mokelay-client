@@ -1,9 +1,7 @@
 <template>
     <div>
         <div style="margin-bottom:10px;">
-            <el-button-group>
-                <el-button type="text" icon="el-icon-plus" @click="showForm">添加</el-button>
-            </el-button-group>
+            <bb-button-form ref="object_form" :fields="fields" startButtonIcon="el-icon-plus" startButtonType="text" settingText="添加" @commit="setArray"></bb-button-form>
         </div>
         <el-table :data="array" border style="width: 100%" :height="height" stripe>
             <el-table-column v-for="field in fields" v-if="!field.hide" :prop="field.attributeName" :label="field.name"
@@ -60,6 +58,8 @@ import Vue from 'vue';
             return {
                 array:typeof(this.value)==='string'?eval(this.value):this.value,
                 formDialog:null,
+                valueBase:_TY_Tool.deepClone(this.defaultFormData),
+                index:'add'
             }
         },
         computed: {},
@@ -77,50 +77,9 @@ import Vue from 'vue';
             this.array = this.array?this.array:[];
         },
         methods: {
-            showForm: function (param) {
-                var t = this;
-                var value = param.value?param.value:_TY_Tool.deepClone(t.defaultFormData);
-                var index = param.index || param.index ==0?param.index:'add';
-                require.ensure(["art-dialog"],function(require){
-                    t.dialogKey = _TY_Tool.uuid();
-                    var _form = new Vue({
-                        router: t.$router,
-                        render: function(createElement){
-                            const formItem = createElement('bb-form',{
-                                props:{
-                                    fields:t.fields,
-                                    value:value
-                                },
-                                on:{
-                                    commit:function(formData){
-                                        t.add(formData,_form,index);
-                                    }
-                                },
-                                ref:"object_form"
-                            },[]);
-                            return createElement('div',{class:'bb-array-content'},[formItem])
-                        }
-                    }).$mount();
-
-                    var dialog = require('art-dialog');
-                    var d = dialog({
-                        zIndex:100,
-                        width:800,
-                        title: '添加',
-                        content: _form.$el,
-                        onclose:function(){
-                            if(t.formDialog){
-                                t.formDialog.close().remove();
-                                t.formDialog = null;
-                            }
-                            delete t.$refs[t.dialogKey];
-                        }
-                    });
-                    d.showModal();
-                    t.formDialog = d;
-                    //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
-                    t.$refs[t.dialogKey]=_form.$children[0];//把bb-form 设置到$refs中
-                },'art-dialog');
+            setArray:function(formData){
+                const t = this;
+                t.add(formData,t.index);
             },
             deleteData: function (index) {
                 const t = this;
@@ -149,7 +108,8 @@ import Vue from 'vue';
                        value:t.array[index],
                        index:index
                     }
-                t.showForm(param)
+                t.$refs.object_form.showDialog(t.array[index]);
+                t.index = index;
             },
             upData: function (index) {
                 const t = this;
@@ -171,16 +131,16 @@ import Vue from 'vue';
                 t.array.splice(index+1,0,item);
                 t.emitResult();
             },
-            add: function (formData,formObj,index) {
+            add: function (formData,index) {
                 var fd = formData;
                 if(index != 'add'){
                     this.array.splice(index,1,fd);
+                    this.index = 'add';
                 }else{
                     this.array.push(fd);
                 }
                 this.emitResult();
-                formObj.$refs['object_form'].clean();
-                this.formDialog.close().remove();
+                this.$refs.object_form.$refs.form.clean()
                 this.formDialog = null;
             },
             commit:function(){
