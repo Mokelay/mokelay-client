@@ -101,6 +101,19 @@
                     const treeInstance = this.$refs.tree;
                     const checkedKeys = treeInstance.getCheckedKeys();
                     this.uncheckedKeys(checkedKeys);
+                }else{
+                    const treeInstance = this.$refs.tree;
+                    let tempVals;
+                    if(typeof val ==='string'){
+                        tempVals = val.split(",");
+                    }else if(typeof val ==='number'){
+                        tempVals = [val];
+                    }else{
+                        tempVals=val;
+                    }
+                    tempVals.forEach(function(item,index){
+                        treeInstance.setChecked(item,true);
+                    });
                 }
             },
             external(val) {
