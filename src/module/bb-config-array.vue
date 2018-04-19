@@ -1,8 +1,10 @@
 <template>  
     <div>
-        <bb-dialog title="积木设置" size="middle" :isShow.sync="showDialog"><bb-config></bb-config></bb-dialog>
-        <bb-button @click="add" :button="addButton"></bb-button>
-        <bb-list :columns="columns" :value="valueBase" :editConfig="editConfig" @edit="edit" @add="add"></bb-list>
+        <bb-dialog title="积木设置" :append-to-body="true" size="middle" :isShow.sync="showDialog">
+            <bb-config @change="commit" v-model="itemValue"></bb-config>
+        </bb-dialog>
+        <bb-button @click="edit" :button="addButton"></bb-button>
+        <bb-list :columns="columns" :value="valueBase" @edit="edit" @change="change" :editConfig="editConfig"></bb-list>
     </div>
 </template>
 
@@ -29,11 +31,9 @@
                     }
                 }],
                 columns:[
-                    {prop: 'uuid',label: '标识',type:'defalut'},
+                    {prop: 'aliasName',label: '积木名称',type:'defalut'},
                     {prop: 'alias',label: '积木别名',type:'defalut'},
-                    {prop: 'attributes',label: '属性',type:'defalut'},
-                    {prop: 'interactives',label: '交互',type:'defalut'},
-                    {prop: 'animation',label: '动画',type:'defalut'}
+                    {prop: 'uuid',label: '标识',type:'defalut'},
                 ],
                 editConfig:{
                    editable:['edit','up','down','remove']
@@ -43,7 +43,9 @@
                     type:'text',
                     text:'添加',
                     icon:'ty-icon_faqi1'
-                }
+                },
+                itemValue:null,
+                key:'add'
             }
         },
         watch: {
@@ -54,18 +56,42 @@
 
         },
         methods: {
-            //提交表单
+            //提交表单修改
             commit:function(formData){
                 const t = this;
-                t.valueBase = formData['bbConfigRow'];
-
+                if(t.key == 'add'){
+                    t.valueBase.push(formData);
+                }else{
+                    t.valueBase[t.key] = formData;
+                }
+                t.$emit('input',t.valueBase);
+                t.$emit('change',t.valueBase);
+                t.showDialog = false;
             },
-            edit:function(row){
+            //监听list中的修改
+            change:function(arrayData){
                 const t = this;
-                t.showDialog = true;
+                t.$emit('input',arrayData);
+                t.$emit('change',arrayData);
             },
-            add:function(row){
+            //进入编辑状态
+            edit:function(formData,key){
                 const t = this;
+                if(typeof key == 'number'){
+                    t.key = key;
+                    t.itemValue = formData;
+                }else{
+                    t.key = 'add';
+                    t.itemValue = {
+                        uuid: _TY_Tool.uuid(5,8),
+                        alias: '',
+                        aliasName: '', 
+                        attributes: {},
+                        animation: [],
+                        interactives: [],
+                        layout: {}
+                    };
+                }
                 t.showDialog = true;
             }
         }
