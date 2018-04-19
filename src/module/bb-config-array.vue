@@ -1,6 +1,6 @@
 <template>  
     <div>
-        <bb-dialog title="积木设置" :append-to-body="true" size="middle" :isShow.sync="showDialog">
+        <bb-dialog title="积木设置" size="middle" :isShow.sync="showDialog">
             <bb-config @change="commit" v-model="itemValue"></bb-config>
         </bb-dialog>
         <bb-button @click="edit" :button="addButton"></bb-button>

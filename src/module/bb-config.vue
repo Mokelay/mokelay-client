@@ -10,7 +10,7 @@
                 <p>积木别名：{{valueBase.alias}}</p>
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
-            <bb-form size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
+            <bb-form v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
@@ -165,7 +165,8 @@
                 if(parentAliasName == "rightAside"){
                     t.showBBSelect = false;
                 }else{
-                    t.show = true;
+                    t.show = true
+                    t.showBBSelect = true;
                 }
             },
             //积木改变
@@ -646,21 +647,24 @@
                 t.formItemFields = [{                      
                             attributeName:'attributeName',
                             et:'bb-input',                   
-                            name:'名称',
+                            name:'表单项名称',
+                            group:'表单选项',
                             description:"",                               
                             props:{
                             }
                         },{                      
                             attributeName:'width',
-                            et:'bb-input',                   
-                            name:'宽度',
+                            et:'bb-input',
+                            group:'表单选项',                 
+                            name:'表单项宽度',
                             description:"表单项占整行的宽度",                               
                             props:{
                             }
                         },{                      
                             attributeName:'show',
-                            et:'bb-editor-switch',                   
-                            name:'显示',
+                            et:'bb-editor-switch',
+                            group:'表单选项',                   
+                            name:'表单项显示',
                             description:"",                               
                             props:{
                             }
@@ -668,6 +672,7 @@
                             attributeName:'rules',
                             et:'bb-array',                   
                             name:'验证规则',
+                            group:'表单选项',
                             description:"",                               
                             props:{
                                 defaultFormData: {
@@ -751,22 +756,17 @@
                                 }]
                             }
                         },{                      
-                            attributeName:'show',
-                            et:'bb-editor-switch',                   
-                            name:'显示',
-                            description:"",                               
-                            props:{
-                            }
-                        },{                      
                             attributeName:'mark',
-                            et:'bb-textarea',                   
+                            et:'bb-textarea',
+                            group:'表单选项',                   
                             name:'表单项说明',
                             description:"",                               
                             props:{
                             }
                         },{                      
                             attributeName:'tip',
-                            et:'bb-input',                   
+                            et:'bb-input',   
+                            group:'表单选项',                
                             name:'表单注释',
                             description:"",                               
                             props:{
