@@ -395,6 +395,7 @@
                 var t = this;
                 if (this.ds) {
                     t.loading = true;
+                    t.canEditRow = null;
                     var routerParams = t.$route?t.$route.params : {};
                     if(t.treeConfig&&t.treeConfig.support){
                         //树形

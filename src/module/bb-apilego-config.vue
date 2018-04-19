@@ -865,6 +865,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "requestParamName",
+                                                            "show": false,
                                                             "rules": []
                                                         },
                                                         "animation": [],
@@ -877,6 +878,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "sessionParamName",
+                                                            "show": false,
                                                             "rules": []
                                                         },
                                                         "animation": [],
@@ -890,6 +892,7 @@
                                                         "attributes": {
                                                             "attributeName": "fromApiLegoUuid",
                                                             "rules": [],
+                                                            "show": false,
                                                             "fields":t.apiLegos
                                                         },
                                                         "animation": [],
@@ -902,6 +905,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fromApiLegoOutputFieldAlias",
+                                                            "show": false,
                                                             "rules": []
                                                         },
                                                         "animation": [],
@@ -914,6 +918,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "constant",
+                                                            "show": false,
                                                             "rules": []
                                                         },
                                                         "animation": [],
@@ -926,6 +931,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fieldTpl",
+                                                            "show": false,
                                                             "rules": []
                                                         },
                                                         "animation": [],
@@ -1193,6 +1199,64 @@
                                     ]
                                 }]
                             };
+
+                    const fvtCode = `
+                        var bbForm = t.$children[0].$children[0];
+                        var preUUID = 'form-item_${t.external.linkage[0].data.uuid}-if-${_ioft}-';
+                        switch (_TY_Root._TY_args[0].data.fvt) {
+                            case 'constant':
+                                bbForm.hideAndShowFormItem([preUUID + 'constant'], [
+                                    preUUID + 'requestParamName',
+                                    preUUID + 'sessionParamName',
+                                    preUUID + 'fromApiLegoUuid',
+                                    preUUID + 'fromApiLegoOutputFieldAlias',
+                                    preUUID + 'fieldTpl'
+                                ]);
+                                break;
+                            case 'request':
+                                bbForm.hideAndShowFormItem([preUUID + 'requestParamName'], [
+                                    preUUID + 'constant',
+                                    preUUID + 'sessionParamName',
+                                    preUUID + 'fromApiLegoUuid',
+                                    preUUID + 'fromApiLegoOutputFieldAlias',
+                                    preUUID + 'fieldTpl'
+                                ]);
+                                break;
+                            case 'session':
+                                bbForm.hideAndShowFormItem([preUUID + 'sessionParamName'], [
+                                    preUUID + 'constant',
+                                    preUUID + 'requestParamName',
+                                    preUUID + 'fromApiLegoUuid',
+                                    preUUID + 'fromApiLegoOutputFieldAlias',
+                                    preUUID + 'fieldTpl'
+                                ]);
+                                break;
+                            case 'output':
+                                bbForm.hideAndShowFormItem([preUUID + 'fromApiLegoUuid', preUUID + 'fromApiLegoOutputFieldAlias'], [
+                                    preUUID + 'constant',
+                                    preUUID + 'requestParamName',
+                                    preUUID + 'sessionParamName',
+                                    preUUID + 'fieldTpl'
+                                ]);
+                                break;
+                            case 'template':
+                                bbForm.hideAndShowFormItem([preUUID + 'fromApiLegoUuid', preUUID + 'fieldTpl'], [
+                                    preUUID + 'constant',
+                                    preUUID + 'requestParamName',
+                                    preUUID + 'sessionParamName',
+                                    preUUID + 'fromApiLegoOutputFieldAlias'
+                                ]);
+                                break;
+                            default :
+                                bbForm.hideAndShowFormItem([], [
+                                    preUUID + 'constant',
+                                    preUUID + 'requestParamName',
+                                    preUUID + 'sessionParamName',
+                                    preUUID + 'fromApiLegoOutputFieldAlias',
+                                    preUUID + 'fromApiLegoUuid',
+                                    preUUID + 'fieldTpl'
+                                ]);
+                        }`;
 
                     let item = {
                         title: t._buildTitle(_ioft),
@@ -1625,6 +1689,15 @@
                                                         "fromContentEvent": "commit",
                                                         "executeContentUUID": "Page_Ref_Root",
                                                         "executeContentMethodName": "closeDialog"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "bb-mounted",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "",//给一个不存在的方法
+                                                        "executeArgument":fvtCode//动态改变item的影藏和显示
                                                     }
                                                 ],
                                                 "layout": {}
