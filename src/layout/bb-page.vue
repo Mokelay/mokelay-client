@@ -394,6 +394,8 @@
           window.onbeforeunload = function(){
             event.returnValue = "";
           };
+        }else{
+          window.onbeforeunload = null;
         }
       },
 
