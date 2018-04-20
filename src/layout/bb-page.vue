@@ -166,8 +166,8 @@
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
 
-          //获取页面beTask任务
-          t.runTask();
+          //初始化Window
+          t.initWindow();
 
           //指定布局类型
           t.layoutType = page.layoutType;
@@ -383,6 +383,20 @@
           }
         })
       },
+
+      //初始化Window相关业务
+      initWindow: function(){
+        const t =this;
+        //获取页面beTask任务
+        t.runTask();
+        //关闭提示配置
+        if(t.layoutObject['closingPrompt']){
+          window.onbeforeunload = function(){
+            event.returnValue = "";
+          };
+        }
+      },
+
       /*解析页面task
         beTask:[{
           uuid:'12334' 任务标识

@@ -2,12 +2,10 @@ import 'babel-polyfill';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Vuex from 'vuex';
 import ElementUI from 'element-ui';
 
 //初始化基础组件
 Vue.use(VueRouter);
-Vue.use(Vuex);
 Vue.use(ElementUI);
 
 
@@ -24,7 +22,9 @@ window._TY_ContentPath = "/config";
 window._TY_APIHost = _env.apiHost;
 window._TY_SSOURL = _env.ssoURL;
 window._TY_Page_Data = {};
-
+window._TY_HOSTS = {
+    "default":window._TY_APIHost
+};
 
 //定制化VUE
 import bbcustom from './custom/bb-custom';
@@ -64,12 +64,9 @@ router.afterEach(() => {
     window.scrollTo(0, 0);
 });
 
-import store from './custom/ty/store';
-
 import App from './app.vue';
 new Vue({
     el: '#app',
     router: router,
-    store: store,
     render: h => h(App)
 });
