@@ -114,7 +114,7 @@
                         <div v-else>
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column)">
-                                <span v-if="column['et']&&column['et']=='bb-select'">
+                                <span v-if="column['et']&&column['et']=='bb-select' && column['etProp'] && checkDsInput(column['etProp'])">
                                     {{bbSelectFill(scope,column)}}
                                 </span>
                                 <span v-else>{{scope['row'][column.prop]}}</span>
@@ -380,6 +380,15 @@
             this.initBBSelectFields();
         },
         methods: {
+            //检查ds的输入是否是否有参数   只填充不带参数的下拉
+            checkDsInput:function(etProp){
+                let t=this;
+                if(etProp&&etProp.ds&&etProp.ds.inputs&&etProp.ds.inputs.length>0){
+                    return false;
+                }else{
+                    return true;
+                }
+            },
             //如果是bb-select，初始化的时候就接口请求下拉数据,并放到_TY_Root 对象中，api作为key
             initBBSelectFields:function(){
                 const t=this;
@@ -387,10 +396,10 @@
                     t.realColumns.forEach(function(column,index){
                         //遍历每个列头
                         if(column['et']&&column['et']==='bb-select'&&column['etProp']&&column['etProp'].ds&&column['etProp'].ds.api){
-                            // if(_TY_Root["_TY_"+column['etProp'].ds.api]){
-                            //     //如果当前页面全局变量中已经有值了，就不在调接口获取
-                            //     return true;
-                            // }
+                            if(_TY_Root["_TY_"+column['etProp'].ds.api]){
+                                //如果当前页面全局变量中已经有值了，就不在调接口获取
+                                return true;
+                            }
                             //有接口的需要在初始化的时候加载数据
                              Util.getDSData(column['etProp'].ds, _TY_Tool.buildTplParams(t), function (map) {
                                 if(map&&map.length>0&&map[0]&&map[0].value){
