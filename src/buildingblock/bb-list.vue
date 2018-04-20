@@ -413,6 +413,9 @@
             bbSelectFill:function(scope,column){
                 let t=this;
                 let selectProp = column.etProp;
+                if(!selectProp){
+                    return;
+                }
                 if(typeof(selectProp)==='string'){
                     selectProp = JSON.parse(selectProp);
                 }
