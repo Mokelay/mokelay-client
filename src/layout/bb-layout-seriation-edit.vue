@@ -95,6 +95,7 @@
             }
         },
         created:function(){
+            this.quickKey();
         },
         methods: {
             renderBB:function(createElement){
@@ -126,7 +127,7 @@
                             },
                             attrs:{
                                 aliasName:bbEle['aliasName'] + '_edit'
-                            }
+                            },
                         },[]);
                         // const bbItem = createElement('div', {style:{flex:1}},[bbEle]);
                         bbList.push(bbItem);
@@ -295,6 +296,21 @@
                 t.$set(t.realContent,t.nowEdit,content);
                 t.$emit('afterEdit',t.realContent);
                 t.$emit('change',t.realContent);
+            },
+            //键盘快捷键监听
+            quickKey:function(){
+                const t = this;
+                window.document.onkeydown=function(event){   
+                    const e = event || window.event || arguments.callee.caller.arguments[0]; 
+                    if (e.ctrlKey && e.keyCode == 8) { 
+                        //control + BackSpace
+                            t.remove(t.nowEdit);
+                    }
+                    if (e && e.keyCode==27) { 
+                        //esc
+                            t.onBlur();
+                    }   
+                 };
             }
         },
         components:{
