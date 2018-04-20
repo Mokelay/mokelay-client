@@ -390,6 +390,7 @@
             return {
                 initValue:null,
                 formData:null,
+                commitFormData:null,//因为表单提交后需要清空表单数据，但有时候又需要表单提交的值，所以这里缓存一个清空前的表单数据
                 realFields:null
             }
         },
@@ -431,6 +432,7 @@
                 t.$refs['form'].validate(function(valid){
                     if(valid){
                         t.$emit('commit', t.formData);
+                        t.commitFormData = _TY_Tool.deepClone(t.formData);
                         /*buttonConfig
                             提交按钮的配置
                             此处需要用bb-button重构*/
