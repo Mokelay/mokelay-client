@@ -13,8 +13,7 @@ Vue.use(ElementUI);
 var _env = {
     name: 'local',
     apiHost: "http://longyan.dev.rs.com", 
-    ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
-    questionnaireHost: 'http://questionnaire.dev.rs.com'
+    ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback"
 };
 window._TY_ENV = _env;
 window._TY_ContentPath = "/config";
