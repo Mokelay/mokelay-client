@@ -401,7 +401,8 @@
                                     //放到当前页面的全局变量中,接口别名作为key
                                     _TY_Root["_TY_"+column['etProp'].ds.api] = columnDatas;
                                 }
-                             });
+                            }, function (code, msg) {
+                            });
                         }else{
                             //continue
                             return true;
