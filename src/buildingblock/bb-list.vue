@@ -763,7 +763,7 @@
                             alias:'down'
                         }}
                 //如果是可编辑状态，默认添加操作列
-                if(t.editConfig&&t.editConfig.editable.length){
+                if(t.editConfig&&t.editConfig.editable&&t.editConfig.editable.length){
                     t.editButtons = t.editConfig.editable;
                     t.editButtons = typeof t.editButtons == 'string'?t.editButtons.split(','):t.editButtons;
                     const editor = {
