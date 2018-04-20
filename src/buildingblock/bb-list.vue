@@ -387,10 +387,10 @@
                     t.realColumns.forEach(function(column,index){
                         //遍历每个列头
                         if(column['et']&&column['et']==='bb-select'&&column['etProp']&&column['etProp'].ds&&column['etProp'].ds.api){
-                            if(_TY_Root["_TY_"+column['etProp'].ds.api]){
-                                //如果当前页面全局变量中已经有值了，就不在调接口获取
-                                return true;
-                            }
+                            // if(_TY_Root["_TY_"+column['etProp'].ds.api]){
+                            //     //如果当前页面全局变量中已经有值了，就不在调接口获取
+                            //     return true;
+                            // }
                             //有接口的需要在初始化的时候加载数据
                              Util.getDSData(column['etProp'].ds, _TY_Tool.buildTplParams(t), function (map) {
                                 if(map&&map.length>0&&map[0]&&map[0].value){
