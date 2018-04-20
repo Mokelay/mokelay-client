@@ -88,7 +88,7 @@ import Util from '../libs/util';
                     ref:"array",
                     key:t.arrayKey
                 },[]);
-                const dialog = createElement('bb-dialog',{props:{isShow:t.dialogVisible,size:"middle",appendToBody:true,modalAppendToBody:true},on:{'update:isShow':(isShow)=>{t.dialogVisible = isShow}}},[array]);
+                const dialog = createElement('bb-dialog',{props:{isShow:t.dialogVisible,size:"middle",modal:false},on:{'update:isShow':(isShow)=>{t.dialogVisible = isShow}}},[array]);
                 return dialog;
             },
             setting:function(){
