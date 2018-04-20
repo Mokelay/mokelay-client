@@ -102,6 +102,9 @@
                         'padding':'0 20px 0 5px',
                         'box-sizing': 'border-box;'
                     },
+                    attrs:{
+                        aliasName:field['aliasName'] + '_edit'
+                    }
                 },[]);
 
                 if(field['group']){
