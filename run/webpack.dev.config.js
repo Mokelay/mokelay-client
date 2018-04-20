@@ -27,7 +27,8 @@ var wc = merge(webpackBaseConfig, {
         port: 8080,
         host: '0.0.0.0',
         disableHostCheck: true,
-        compress: true
+        compress: true,
+        headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Credentials": true }
     },
     plugins: [
         // new webpack.HotModuleReplacementPlugin(),

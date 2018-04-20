@@ -242,7 +242,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     util[method](apiUrl, requestParam, options).then(function(response) {
         var data = response['data'];
         if (data['ok']) {
-            var realDataMap = data['data'];
+            var realDataMap = data['data'] || {};
             new Promise(function(resolve, reject) {
                 const promiseArr = [];
                 outputs.forEach(function(output) {
