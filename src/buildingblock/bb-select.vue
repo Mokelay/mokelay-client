@@ -51,11 +51,13 @@
             },
             /*选项名关键字 配合DS接口使用，从返回数据中获取需要的值*/
             textField:{
-              type:String
+              type:String,
+              default:"name"
             },
             /*选项值关键字 配合DS接口使用，从返回数据中获取需要的值*/
             valueField:{
-              type:String
+              type:String,
+              default:"alias"
             },
             /*选项动态数据源*/
             ds: {

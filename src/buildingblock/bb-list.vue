@@ -114,7 +114,10 @@
                         <div v-else>
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column)">
-                                {{scope['row'][column.prop]}}
+                                <span v-if="column['et']&&column['et']=='bb-select'">
+                                    {{bbSelectFill(scope,column)}}
+                                </span>
+                                <span v-else>{{scope['row'][column.prop]}}</span>
                             </span>
                         </div>
                         <!-- 编辑状态 -->
@@ -373,8 +376,92 @@
                 this.startIntervalFresh();
             }
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
+            //初始化bb-select的数据
+            this.initBBSelectFields();
         },
         methods: {
+            //如果是bb-select，初始化的时候就接口请求下拉数据,并放到_TY_Root 对象中，api作为key
+            initBBSelectFields:function(){
+                const t=this;
+                if(t.realColumns&&t.realColumns.length>0){
+                    t.realColumns.forEach(function(column,index){
+                        //遍历每个列头
+                        if(column['et']&&column['et']==='bb-select'&&column['etProp']&&column['etProp'].ds&&column['etProp'].ds.api){
+                            if(_TY_Root["_TY_"+column['etProp'].ds.api]){
+                                //如果当前页面全局变量中已经有值了，就不在调接口获取
+                                return true;
+                            }
+                            //有接口的需要在初始化的时候加载数据
+                             Util.getDSData(column['etProp'].ds, _TY_Tool.buildTplParams(t), function (map) {
+                                if(map&&map.length>0&&map[0]&&map[0].value){
+                                    let columnDatas = map[0].value;
+                                    if(columnDatas.hasOwnProperty("list")){
+                                        columnDatas = columnDatas.list;
+                                    }
+                                    //放到当前页面的全局变量中,接口别名作为key
+                                    _TY_Root["_TY_"+column['etProp'].ds.api] = columnDatas;
+                                }
+                             });
+                        }else{
+                            //continue
+                            return true;
+                        }
+                    });
+                }
+            },
+            //列表如果是bb-select编辑器，显示对应的中文
+            bbSelectFill:function(scope,column){
+                let t=this;
+                const selectProp = column.etProp;
+                const multiple = selectProp.multiple;//是否多选
+                let columnVal = scope['row'][column.prop];
+                if(columnVal!=null && columnVal!=''&&columnVal!='[]'){
+                    let result = [];//多选返回字符串
+                    if(multiple){
+                        //如果是多选，转换成数组
+                        columnVal = JSON.parse(columnVal);
+                    }
+                    if(selectProp.ds&&selectProp.ds.api){
+                        const opts = _TY_Root["_TY_"+selectProp.ds.api];
+                        if(opts&&opts.length>0){
+                            for(let i=0;i<opts.length;i++){
+                                if(multiple){
+                                    //多选
+                                    columnVal.forEach(function(val,_index){
+                                        if(opts[i][selectProp.valueField]==val){
+                                            result.push(opts[i][selectProp.textField]);
+                                        }
+                                    });
+                                }else{
+                                    //单选直接返回
+                                    if(opts[i][selectProp.valueField]==columnVal){
+                                        return opts[i][selectProp.textField];
+                                    }
+                                }
+                            }
+                            //多选才会走到这里
+                            return result.join(",");
+                        }
+                    }else if(selectProp.fields&&selectProp.fields.length>0){
+                        for(let i=0;i<selectProp.fields.length;i++){
+                            if(multiple){
+                                //多选
+                                columnVal.forEach(function(val,_index){
+                                    if(selectProp.fields[i].value==val){
+                                        result.push(selectProp.fields[i].text);
+                                    }
+                                });
+                            }else{
+                                if(selectProp.fields[i].value==columnVal){
+                                    return selectProp.fields[i].text;
+                                }
+                            }
+                        }
+                        //多选才会走到这里
+                        return result.join(",");
+                    }
+                }
+            },
             onlyAddEditShow:function(scope,column,editFlag){
                 if(editFlag){
                     return (this.adding || (!this.adding&&!column['onlyAddEditShow']));
