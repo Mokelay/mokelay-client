@@ -431,6 +431,9 @@
                 t.$refs['form'].validate(function(valid){
                     if(valid){
                         t.$emit('commit', t.formData);
+                        if(!t.buttonConfig || !t.buttonConfig.action){
+                           t.$emit('input', t.formData); 
+                        }
                         /*buttonConfig
                             提交按钮的配置
                             此处需要用bb-button重构*/
