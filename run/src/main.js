@@ -24,7 +24,9 @@ window._TY_ContentPath = "/config";
 window._TY_APIHost = _env.apiHost;
 window._TY_SSOURL = _env.ssoURL;
 window._TY_Page_Data = {};
-
+window._TY_HOSTS = {
+    "default":window._TY_APIHost
+};
 
 //定制化VUE
 import bbcustom from './custom/bb-custom';
