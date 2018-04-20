@@ -47,7 +47,7 @@
                         prop:t.realProp,
                         rules:t.realRules,
                         show:t.realShow
-                    },
+                    }
                 },[label,bbList,tipEle]);
             });
             return formItem;

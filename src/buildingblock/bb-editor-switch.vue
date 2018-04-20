@@ -16,12 +16,12 @@
         },
         data() {
             return {
-                p_value:(typeof this.value==='boolean')?this.value:(this.value=='true')
+                p_value:(typeof this.value==='boolean')?this.value:(this.value==true)
             };
         },
         watch:{
             value(val){
-                this.p_value = (typeof val==='boolean')?val:(val=='true')
+                this.p_value = (typeof val==='boolean')?val:(val==true)
             }
         },
         mounted:function(){
@@ -30,7 +30,6 @@
         },
         methods: {
            switchChange(val){
-                this.p_value=val;
                 this.$emit("input",val);
                 this.$emit("change",val);
            }    
