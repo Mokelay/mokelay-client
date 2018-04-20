@@ -550,6 +550,8 @@
                                 });
                             }
                         }
+                        //初始化bb-select的数据
+                        t.initBBSelectFields();
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
