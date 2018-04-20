@@ -123,6 +123,9 @@
                                 remove:t.remove.bind(null,index),
                                 onFocus:notCanOpt?false:t.onFocus.bind(null,index),
                                 onBlur:t.onBlur.bind(null,index)
+                            },
+                            attrs:{
+                                aliasName:bbEle['aliasName'] + '_edit'
                             }
                         },[]);
                         // const bbItem = createElement('div', {style:{flex:1}},[bbEle]);
