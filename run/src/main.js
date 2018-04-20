@@ -2,12 +2,10 @@ import 'babel-polyfill';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Vuex from 'vuex';
 import ElementUI from 'element-ui';
 
 //初始化基础组件
 Vue.use(VueRouter);
-Vue.use(Vuex);
 Vue.use(ElementUI);
 
 
