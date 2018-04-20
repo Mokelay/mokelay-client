@@ -10,7 +10,7 @@
               :fullscreen="fullscreen"
               :before-close="handleClose">
               <div ref="frameBox">
-
+                    <el-button type="primary" @click="jsonFormat">JSON格式化</el-button>
               </div>
               <!--   <iframe ref="childFrame" id="childFrame" width="100%" height="100%">
                 </iframe> -->
@@ -67,6 +67,99 @@
             var t =this;
         },
         methods: {
+            //json格式化
+            jsonFormat:function(){
+                let t=this;
+                let frame = document.getElementById('childFrame_'+t.key);
+                if(frame.contentWindow.editor){
+                    let editor = frame.contentWindow.editor;
+                    //编辑器的值
+                    let data = editor.getValue();
+                    try{
+                        //如果不能json转换，说明不是json格式
+                        JSON.parse(data);
+                    }catch(e){
+                        t.$message({
+                            type: 'info',
+                            message: "数据非JSON格式或者JSON有错!"
+                        });
+                        return;
+                    }
+                    editor.setValue(t.jsonFormatUtil(data));
+                    const mode = 'application/ld+json';
+                    editor.setOption("mode", mode);
+                    editor.setOption("lineWrapping", true);
+                    editor.setOption("autoCloseBrackets", true);
+                }
+            },
+            _repeat:function(s, count){
+                return new Array(count + 1).join(s);
+            },
+            //json格式化工具
+            jsonFormatUtil:function(json){
+                let t=this;
+                var i           = 0,
+                len          = 0,
+                tab         = "    ",
+                targetJson     = "",
+                indentLevel = 0,
+                inString    = false,
+                currentChar = null;
+                for (i = 0, len = json.length; i < len; i += 1) { 
+                    currentChar = json.charAt(i);
+                    switch (currentChar) {
+                    case '{': 
+                    case '[': 
+                        if (!inString) { 
+                            targetJson += currentChar + "\n" + t._repeat(tab, indentLevel + 1);
+                            indentLevel += 1; 
+                        } else { 
+                            targetJson += currentChar; 
+                        }
+                        break; 
+                    case '}': 
+                    case ']': 
+                        if (!inString) { 
+                            indentLevel -= 1; 
+                            targetJson += "\n" + t._repeat(tab, indentLevel) + currentChar; 
+                        } else { 
+                            targetJson += currentChar; 
+                        } 
+                        break; 
+                    case ',': 
+                        if (!inString) { 
+                            targetJson += ",\n" + t._repeat(tab, indentLevel); 
+                        } else { 
+                            targetJson += currentChar; 
+                        } 
+                        break; 
+                    case ':': 
+                        if (!inString) { 
+                            targetJson += ": "; 
+                        } else { 
+                            targetJson += currentChar; 
+                        } 
+                        break; 
+                    case ' ':
+                    case "\n":
+                    case "\t":
+                        if (inString) {
+                            targetJson += currentChar;
+                        }
+                        break;
+                    case '"': 
+                        if (i > 0 && json.charAt(i - 1) !== '\\') {
+                            inString = !inString; 
+                        }
+                        targetJson += currentChar; 
+                        break;
+                    default: 
+                        targetJson += currentChar; 
+                        break;                    
+                    } 
+                } 
+                return targetJson;
+            },
             //iframe添加css外链
             _addLink:function(doc,url) {
                 var link = doc.createElement("link");
@@ -116,8 +209,9 @@
                 var script = doc.createElement("script");
                 script.type = "text/javascript";
                 var code ="window.editor = CodeMirror.fromTextArea(document.getElementById('codeContent_"+key+"'), {"+
-                            "lineNumbers: true,"+
-                            "theme:'eclipse'"+
+                            "matchBrackets:true,"+
+                            "mode: 'text/typescript',"+
+                            "lineNumbers: true"+
                           "});\n"+
                             "function setEditorVal(data){window.editor.setValue(data);}";
                 try {
@@ -156,11 +250,16 @@
                  //    t._addLink(childDoc,"./../../node_modules/codemirror/lib/codemirror.css");
 	                // t._addLink(childDoc,"./../../node_modules/codemirror/theme/eclipse.css");
 	                // t._addScript(childDoc,"./../../node_modules/codemirror/lib/codemirror.js");
-	                t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.css");
-	                t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/theme/eclipse.css");
-	                t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.js");
-	                    // t._addScript(childDoc,"./../../node_modules/codemirror/mode/javascript/javascript.js");
-	                t._addCss(childDoc);
+
+	                t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.min.css");
+                    t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.min.js");
+                    setTimeout(function(){
+                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/edit/matchbrackets.min.js");
+                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/comment/continuecomment.min.js");
+                         t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/comment/comment.min.js");
+                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/mode/javascript/javascript.min.js");
+                        t._addCss(childDoc);
+                    },100);
                     setTimeout(function(){
                         t._addContent(childDoc,t.key);
                     },1000);

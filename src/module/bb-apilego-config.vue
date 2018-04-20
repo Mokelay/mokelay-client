@@ -590,6 +590,49 @@
                         });
                 t._refreshIf();//修改字段后，刷新整个字段
             },
+            checkRule:function(ioft,fieldName){
+                let t=this;
+                if(!fieldName||!ioft){
+                    return
+                }
+                switch(ioft){
+                    case 'condition':
+                        if(fieldName=='ct'){
+                            return [{ 
+                                required: true,
+                                message: '请输入条件类型',
+                                trigger: 'blur'
+                            }]
+                        }else if(fieldName =='fvt'){
+                            return [{ 
+                                required: true,
+                                message: '请输入数据来源',
+                                trigger: 'blur'
+                            }]
+                        }
+                        break;
+                    case 'create':
+                        if(fieldName =='fvt'){
+                            return [{ 
+                                required: true,
+                                message: '请输入数据来源',
+                                trigger: 'blur'
+                            }]
+                        }
+                        break;
+                    case 'update':
+                        if(fieldName =='fvt'){
+                            return [{ 
+                                required: true,
+                                message: '请输入数据来源',
+                                trigger: 'blur'
+                            }]
+                        }
+                        break;
+                    default:
+                        return [];
+                }
+            },
             //构建输入的 colopseData
             buildIfCollopaseData: function () {
                 let t = this;
@@ -638,7 +681,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "name",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                required: true,
+                                                                message: '请输入名称',
+                                                                trigger: 'blur'
+                                                            }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -650,7 +697,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fieldName",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                required: true,
+                                                                message: '请输入字段名',
+                                                                trigger: 'blur'
+                                                            }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -662,7 +713,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "alias",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                required: true,
+                                                                message: '请输入别名',
+                                                                trigger: 'blur'
+                                                            }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -674,7 +729,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "ct",
-                                                            "rules": [],
+                                                            "rules": t.checkRule(_ioft,'ct'),
                                                             "fields": [
                                                                 {
                                                                     "text": "大于",
@@ -820,7 +875,7 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fvt",
-                                                            "rules": [],
+                                                            "rules": t.checkRule(_ioft,'fvt'),
                                                             "fields": [
                                                                 {
                                                                     "text": "无",
@@ -1140,7 +1195,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fun",
-                                                            "rules": [],
+                                                            "rules": [{ 
+                                                                required: true,
+                                                                message: '请选择函数',
+                                                                trigger: 'blur'
+                                                            }],
                                                             "filterable":true,
                                                             "fields": [{
                                                                 text: "总数(count)",
@@ -1166,7 +1225,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "field",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                required: true,
+                                                                message: '请选择字段',
+                                                                trigger: 'blur'
+                                                            }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -1294,7 +1357,11 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "name",
-                                                                "rules": []
+                                                                "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入名称',
+                                                                    trigger: 'blur'
+                                                                }]
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -1306,7 +1373,11 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "fieldName",
-                                                                "rules": []
+                                                                "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入字段名',
+                                                                    trigger: 'blur'
+                                                                }]
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -1318,7 +1389,11 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "alias",
-                                                                "rules": []
+                                                                "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入别名',
+                                                                    trigger: 'blur'
+                                                                }]
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -1330,7 +1405,7 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "ct",
-                                                                "rules": [],
+                                                                "rules": t.checkRule(_ioft,'ct'),
                                                                 "show":t._show(_ioft,["read","create","update"]),
                                                                 "fields": [
                                                                     {
@@ -1478,7 +1553,7 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "fvt",
-                                                                "rules": [],
+                                                                "rules": t.checkRule(_ioft,'fvt'),
                                                                 "show":t._show(_ioft,["read"]),
                                                                 "fields": [
                                                                     {
@@ -1775,7 +1850,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "name",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入名称',
+                                                                    trigger: 'blur'
+                                                                }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -1787,7 +1866,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "fieldName",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入字段名',
+                                                                    trigger: 'blur'
+                                                                }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -1799,7 +1882,11 @@
                                                         "group": "",
                                                         "attributes": {
                                                             "attributeName": "alias",
-                                                            "rules": []
+                                                            "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入别名',
+                                                                    trigger: 'blur'
+                                                                }]
                                                         },
                                                         "animation": [],
                                                         "interactives": []
@@ -2067,7 +2154,11 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "name",
-                                                                "rules": []
+                                                                "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入名称',
+                                                                    trigger: 'blur'
+                                                                }]
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -2079,7 +2170,11 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "fieldName",
-                                                                "rules": []
+                                                                "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入字段名',
+                                                                    trigger: 'blur'
+                                                                }]
                                                             },
                                                             "animation": [],
                                                             "interactives": []
@@ -2091,7 +2186,11 @@
                                                             "group": "",
                                                             "attributes": {
                                                                 "attributeName": "alias",
-                                                                "rules": []
+                                                                "rules": [{ 
+                                                                    required: true,
+                                                                    message: '请输入别名',
+                                                                    trigger: 'blur'
+                                                                }]
                                                             },
                                                             "animation": [],
                                                             "interactives": []
