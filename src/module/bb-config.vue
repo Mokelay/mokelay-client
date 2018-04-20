@@ -1,12 +1,11 @@
 <template>
-    <!-- <bb-tabs :tabs="tabs" :activeName="activeName"></bb-tabs> -->
     <el-tabs v-show="show" :key="key" :type="showBBSelect?'card':'border-card'">
         <el-tab-pane label="属性">
             <div class="bb-info">
-                <div v-if="showBBSelect">
-                    选择积木：<bb-select textField="name" valueField="alias" :ds="bbFieldsDs" @change="bbChange"></bb-select>
-                </div>
                 <p>积木名称：<bb-input :style="{width:'auto'}" v-model="valueBase.aliasName" ></bb-input></p>
+                <div v-if="showBBSelect">
+                    选择积木：<bb-select v-model="valueBase.alias" textField="name" valueField="alias" :ds="bbFieldsDs" @change="bbChange"></bb-select>
+                </div>
                 <p>积木别名：{{valueBase.alias}}</p>
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
@@ -647,7 +646,7 @@
                 t.formItemFields = [{                      
                             attributeName:'attributeName',
                             et:'bb-input',                   
-                            name:'表单项名称',
+                            name:'字段别名',
                             group:'表单选项',
                             description:"",                               
                             props:{
