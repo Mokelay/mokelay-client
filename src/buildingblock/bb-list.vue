@@ -412,7 +412,10 @@
             //列表如果是bb-select编辑器，显示对应的中文
             bbSelectFill:function(scope,column){
                 let t=this;
-                const selectProp = column.etProp;
+                let selectProp = column.etProp;
+                if(typeof(selectProp)==='string'){
+                    selectProp = JSON.parse(selectProp);
+                }
                 const multiple = selectProp.multiple;//是否多选
                 let columnVal = scope['row'][column.prop];
                 if(columnVal!=null && columnVal!=''&&columnVal!='[]'){
