@@ -384,7 +384,29 @@
             checkDsInput:function(etProp){
                 let t=this;
                 if(etProp&&etProp.ds&&etProp.ds.inputs&&etProp.ds.inputs.length>0){
-                    return false;
+                    let result = true;
+                    etProp.ds.inputs.forEach(function(item,index){
+                        switch(item.valueType){
+                            case 'template':
+                                let str = item.variable;
+                                if(str.indexOf('external')>=0||
+                                    str.indexOf('linkage')>=0||
+                                    str.indexOf('bb')>=0){
+                                    result =  false
+                                    return result;
+                                }
+                                break;
+                            case 'inputValueObj':
+                                if(item.valueKey==='bb'||
+                                    item.valueKey==='row-data'||
+                                    item.valueKey==='rowData'){
+                                    result =  false
+                                    return result;
+                                }
+                                break;
+                        }
+                    });
+                    return result;
                 }else{
                     return true;
                 }

@@ -172,7 +172,7 @@ DS配置案例
         {paramName:'c',valueType:"inputValueObj",valueKey:"router",variable:"page"},
         {paramName:'d',valueType:"inputValueObj",valueKey:"row-data",variable:"alias"},
         //TY2.0统一走tempalte
-        {paramName:'e',valueType:"template",variable:"<%=roure.query.param%>},
+        {paramName:'e',valueType:"template",variable:"<%=route.query.param%>},
         {paramName:'a2',valueType:"template",variable:123},
     ],
     outputs:[
@@ -189,7 +189,7 @@ bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds,
 **/
 util.getDSData = function(ds, inputValueObj, success, error) {
     var api = ds['api'];
-    var host = window._TY_HOSTS[ds['host'] || ""] ||  window._TY_APIHost;
+    var host = window._TY_HOSTS[ds['host'] || ""] || window._TY_APIHost;
     var type = ds['category'] || 'config'; //默认是配置接口
     if (!api) {
         error(500, "请求参数无效");
