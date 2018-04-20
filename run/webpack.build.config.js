@@ -23,7 +23,8 @@ var env = process.env.ENV;
 
 var wc = merge(webpackBaseConfig, {
     output: {
-        publicPath: '/dist/',
+        //TODO publicpath要做成可配置
+        publicPath: '/run_dist/',
         filename: env == 'dev' ? '[name].js' : '[name].[chunkhash].js', //hash
         chunkFilename: '[name].[chunkhash].chunk.js'
     },

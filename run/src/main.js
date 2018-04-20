@@ -14,7 +14,6 @@ var _env = {
     name: 'local',
     apiHost: "http://longyan.dev.rs.com", 
     ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
-    h5Host: '/dist',
     questionnaireHost: 'http://questionnaire.dev.rs.com'
 };
 window._TY_ENV = _env;
