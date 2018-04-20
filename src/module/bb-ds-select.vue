@@ -132,11 +132,13 @@
                         })
                     }, function (code, msg) {
                     });
+                }else{
+                    t.$emit('input', val);
+                    t.$emit('change', val);
                 }
             }, 
             //增加input 事件
             commit:function(val){
-                console.log('val:',val);
                 this.api = val.api;
                 this.getData(val);
             },
