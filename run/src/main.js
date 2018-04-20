@@ -64,12 +64,9 @@ router.afterEach(() => {
     window.scrollTo(0, 0);
 });
 
-import store from './custom/ty/store';
-
 import App from './app.vue';
 new Vue({
     el: '#app',
     router: router,
-    store: store,
     render: h => h(App)
 });
