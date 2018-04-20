@@ -186,6 +186,10 @@
                     type: 'warning'
                 }).then(() => {
                     t.$emit('remove',t.realContent[index]);
+                    if(index==t.realContent.length-2&&t.realContent[index+1].group&&t.realContent[index+1].group==='notCanOpt'){
+                        //倒数第二个item,并且最后一个item是不可编辑的，则倒数第二个和最后一个不可编辑的item一起删除
+                        t.realContent.splice(index+1, 1);
+                    }
                     t.realContent.splice(index, 1);
                     t.$emit('change',t.realContent);
                 }).catch(() => {
