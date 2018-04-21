@@ -7,8 +7,8 @@ import Util from '../libs/util';
             const t = this;
             const dialog = t.renderDialog(createElement);
             const buttonEle = createElement('el-button',{props:{type:t.startButtonType,icon:t.startButtonIcon},on:{click:t.setting}},[t.settingText]);
-            const button = createElement('div',{class:this.buttonFormClass},[t.arrayDesc,buttonEle]);
-            return createElement('div',{},[button,dialog]);
+            const button = createElement('span',{class:this.buttonFormClass},[t.arrayDesc,buttonEle]);
+            return createElement('span',{},[button,dialog]);
         },
         props: {
             value:{
