@@ -1,5 +1,5 @@
 var CurrentDomain = null;
-if(typeof window  == "undefined"){
+if(window){
 	CurrentDomain = window.location.protocol+"//"+window.location.host;
 }
 
