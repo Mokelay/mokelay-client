@@ -6,8 +6,8 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "rm -rf dist && babel src --out-dir dist && cp -R dist/buildingblock/h5 dist/h5 && cp -R src/buildingblock  dist && cp -R dist/h5 dist/buildingblock && rm -rf dist/h5 && cp -R src/layout  dist/layout && cp -R src/module  dist/module && cp -R src/css/*  dist/css",
-    "local": "webpack-dev-server --content-base ./run/ --hot --config run/webpack.dev.config.js",
-    "prd": "rm -rf ./dist && rm -rf ./run/run_dist && ENV=prd webpack --progress --hide-modules --config run/webpack.build.config.js",
+    "local": "webpack-dev-server --content-base ./run/ --hot --config run/webpack.config.js",
+    "prd": "rm -rf ./dist && rm -rf ./run/run_dist && ENV=prd webpack --progress --hide-modules --config run/webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [

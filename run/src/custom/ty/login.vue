@@ -110,7 +110,7 @@
             login(){
                 const t = this;
                 //gb 表示demo项目
-                _TY_Tool.post(_TY_ENV.name=='gb'?'/ty/login':_TY_ContentPath+"/ty-login", {
+                _TY_Tool.post(_TY_ENV.name=='prd'?'/ty/login':_TY_ContentPath+"/ty-login", {
                     userName:t.formData.username,
                     password:t.formData.password
                 }).then(function (response) {
