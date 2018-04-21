@@ -1,0 +1,22 @@
+<% var hash = htmlWebpackPlugin.files.js[0].split(".")[htmlWebpackPlugin.files.js[0].split(".").length-2]%>
+<script type="text/javascript">
+    function getRootDomain(){
+        var arr = document.domain.split('.');
+        if(arr.length === 2){
+            return document.domain;
+        }
+        if(arr.length > 2 && arr[0] !== 'www'){
+            return arr.slice(1).join('.')
+        }
+        return arr.slice(1).join('.')
+    }
+    var currentDomain = getRootDomain();
+    document.cookie = "staticHash=<%=hash%>; path=/; domain="+currentDomain;
+
+    function loadHashKey(){
+        return "<%=hash%>";
+    }
+    if(window.parent && window.parent.window && window.parent.window.loadTY){
+        window.parent.window.loadTY("<%=hash%>");
+    }
+</script>

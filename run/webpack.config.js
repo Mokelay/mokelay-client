@@ -13,10 +13,10 @@ var env = process.env.ENV || "local";
 
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
-// fs.open('./src/env/env_config.js', 'w', function(err, fd) {
-//     const buf = 'export default "' + env + '";';
-//     fs.write(fd, buf, 0, buf.length, 0, function(err, written, buffer) {});
-// });
+fs.open('./run/src/env/env_config.js', 'w', function(err, fd) {
+    const buf = 'export default "' + env + '";';
+    fs.write(fd, buf, 0, buf.length, 0, function(err, written, buffer) {});
+});
 
 const envInfo = require('./src/env/env_h5_host.js');
 const h5Host = envInfo[env]['h5Host']; //静态资源从静态服务器上取
@@ -80,16 +80,16 @@ if(env == "local"){
             //     }
             // }),
             new UglifyJsPlugin(),
-            // new HtmlWebpackPlugin({
-            //     filename: '../index_' + env + '.html',
-            //     template: './index.ejs',
-            //     inject: false
-            // }),
-            // new HtmlWebpackPlugin({
-            //     filename: '../dist/hash.html',
-            //     template: './hash.ejs',
-            //     inject: false
-            // })
+            new HtmlWebpackPlugin({
+                filename: '../index_' + env + '.html',
+                template: './run/index.ejs',
+                inject: false
+            }),
+            new HtmlWebpackPlugin({
+                filename: './hash.html',
+                template: './run/hash.ejs',
+                inject: false
+            })
         ]
     });
 }
