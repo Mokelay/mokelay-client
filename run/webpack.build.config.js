@@ -24,13 +24,14 @@ var env = process.env.ENV;
 var wc = merge(webpackBaseConfig, {
     output: {
         //TODO publicpath要做成可配置
-        publicPath: '/run_dist/',
-        filename: env == 'dev' ? '[name].js' : '[name].[chunkhash].js', //hash
+        publicPath: 'http://greatbee-ty.oss-cn-hangzhou.aliyuncs.com/run_dist/',
+        // publicPath: '/run_dist/',
+        filename: '[name].[chunkhash].js',
         chunkFilename: '[name].[chunkhash].chunk.js'
     },
     plugins: [
         new ExtractTextPlugin({
-            filename: env == 'dev' ? '[name].css' : '[name].[chunkhash].css',
+            filename: '[name].[chunkhash].css',
             allChunks: true
         }),
         // new webpack.optimize.CommonsChunkPlugin({

@@ -46,7 +46,7 @@ var wc = merge(webpackBaseConfig, {
         //     inject: false
         // }),
         new OpenBrowserPlugin({
-            url: 'http://local.dev.rs.com:8080' //默认打开地址
+            url: 'http://localhost:8080' //默认打开地址
         }),
     ]
 });
