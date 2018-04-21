@@ -95,17 +95,6 @@
                 }]
             };
         },
-        watch: {},
-        computed: {},
-        beforeCreate: function () {
-        },
-        created: function () {
-        },
-        mounted: function () {
-        },
-        beforeDestroy() {
-
-        },
         methods: {
             login(){
                 const t = this;
