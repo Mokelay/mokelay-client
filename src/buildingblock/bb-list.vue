@@ -114,7 +114,7 @@
                         <div v-else>
                             <!-- 只读状态 -->
                             <span v-if="scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column)">
-                                <span v-if="column['et']&&column['et']=='bb-select' && column['etProp'] && checkDsInput(column['etProp'])">
+                                <span v-if="column['et']&&column['et']=='bb-select' && column['etProp'] && checkDsInput(column['etProp'])" :title="canRender">
                                     {{bbSelectFill(scope,column)}}
                                 </span>
                                 <span v-else>{{scope['row'][column.prop]}}</span>
@@ -358,7 +358,8 @@
                 scope:null,
                 adding:false,//是否添加状态
                 bbButtonFinishOnObj:this.bbButtonFinishOnfun(),//针对列表弹窗类编辑按钮 抛出button-finish的事件
-                addButton:false //对添加按钮进行管理
+                addButton:false, //对添加按钮进行管理
+                canRender:false//通过这个data来操作render函数执行,主要用来局部刷新bb-select中文填充
             }
         },
         watch: {
@@ -367,6 +368,8 @@
             }
         },
         created: function () {
+            //初始化bb-select的数据
+            this.initBBSelectFields();
             //可编辑状态下对表头拓展
             if(this.canPre){
                 this.canPre = false;
@@ -376,8 +379,6 @@
                 this.startIntervalFresh();
             }
             sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
-            //初始化bb-select的数据
-            this.initBBSelectFields();
         },
         methods: {
             //检查ds的输入是否是否有参数   只填充不带参数的下拉
@@ -415,29 +416,42 @@
             initBBSelectFields:function(){
                 const t=this;
                 if(t.realColumns&&t.realColumns.length>0){
+                    let promisArr = [];
+                    t.canRender = false;
                     t.realColumns.forEach(function(column,index){
                         //遍历每个列头
                         if(column['et']&&column['et']==='bb-select'&&column['etProp']&&column['etProp'].ds&&column['etProp'].ds.api){
+                            if(!t.checkDsInput(column['etProp'])){
+                                return;
+                            }
                             if(_TY_Root["_TY_"+column['etProp'].ds.api]){
                                 //如果当前页面全局变量中已经有值了，就不在调接口获取
                                 return true;
                             }
-                            //有接口的需要在初始化的时候加载数据
-                             Util.getDSData(column['etProp'].ds, _TY_Tool.buildTplParams(t), function (map) {
-                                if(map&&map.length>0&&map[0]&&map[0].value){
-                                    let columnDatas = map[0].value;
-                                    if(columnDatas.hasOwnProperty("list")){
-                                        columnDatas = columnDatas.list;
-                                    }
-                                    //放到当前页面的全局变量中,接口别名作为key
-                                    _TY_Root["_TY_"+column['etProp'].ds.api] = columnDatas;
-                                }
-                            }, function (code, msg) {
-                            });
+                            promisArr.push(
+                                new Promise((resolve,reject)=>{
+                                    //有接口的需要在初始化的时候加载数据
+                                    Util.getDSData(column['etProp'].ds, _TY_Tool.buildTplParams(t), function (map) {
+                                        if(map&&map.length>0&&map[0]&&map[0].value){
+                                            let columnDatas = map[0].value;
+                                            if(columnDatas.hasOwnProperty("list")){
+                                                columnDatas = columnDatas.list;
+                                            }
+                                            resolve();
+                                            //放到当前页面的全局变量中,接口别名作为key
+                                            _TY_Root["_TY_"+column['etProp'].ds.api] = columnDatas;
+                                        }
+                                    }, function (code, msg) {
+                                    });
+                                })
+                            );
                         }else{
                             //continue
                             return true;
                         }
+                    });
+                    Promise.all(promisArr).then(function(){
+                        t.canRender = true;
                     });
                 }
             },
@@ -518,6 +532,8 @@
             },
             getData: function (dataHandler) {
                 var t = this;
+                //初始化bb-select的数据
+                t.initBBSelectFields();
                 if (this.ds) {
                     t.loading = true;
                     t.canEditRow = null;
@@ -582,8 +598,7 @@
                                 });
                             }
                         }
-                        //初始化bb-select的数据
-                        t.initBBSelectFields();
+                        
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
