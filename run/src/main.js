@@ -59,9 +59,7 @@ router.afterEach(() => {
     window.scrollTo(0, 0);
 });
 
-import App from './app.vue';
 new Vue({
     el: '#app',
-    router: router,
-    render: h => h(App)
+    router: router
 });
