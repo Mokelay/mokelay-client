@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const webpackBaseConfig = require('./webpack.base.config.js');
@@ -89,7 +90,8 @@ if(env == "local"){
                 filename: './hash.html',
                 template: './run/hash.ejs',
                 inject: false
-            })
+            }),
+            new ManifestPlugin()
         ]
     });
 }
