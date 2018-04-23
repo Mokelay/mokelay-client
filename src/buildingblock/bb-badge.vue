@@ -68,6 +68,7 @@
               let t=this;
               if(data){
                 this.external['linkage'] = data;
+                t.getData();//先执行一次，再走定时器
               }
             },
             //隐藏还是显示
@@ -141,7 +142,6 @@
                     t.getData();
                 }else{
                     if(!t.setTime){
-                        t.getData();//先执行一次，再走定时器
                         t.setTime = setInterval(t.getData,t.intervalTime);
                     }
                 }
