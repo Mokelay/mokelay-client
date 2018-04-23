@@ -229,7 +229,10 @@
                 }
             },
             value:{
-                type:[String,Object]
+                type:[String,Object],
+                default:function(){
+                    return {}
+                }
             },
             //默认值
             defaultValTpl:{
