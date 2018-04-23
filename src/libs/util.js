@@ -651,7 +651,7 @@ util.loadBuzz = function(buzz, handle) {
  * @param isObj   是否返回object
  */
 util.buildDefaultValTpl = function(t, p_value, isObj) {
-    if (!t.value && t.defaultValTpl) {
+    if ((!t.value || JSON.stringify(t.value) === '{}') && t.defaultValTpl) {
         let temp = util.tpl(t.defaultValTpl, util.buildTplParams(t));
         if (isObj) {
             t[p_value] = JSON.parse(temp);
