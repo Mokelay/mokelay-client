@@ -222,7 +222,7 @@
                 return result;
             },
             logout:function() {
-                _TY_Tool.get("/wy/user/logout").then(function (response) {
+                _TY_Tool.post("/config/logout").then(function (response) {
                     //清除cookie
                     localStorage.removeItem('userInfo');
                     window.location.reload()
