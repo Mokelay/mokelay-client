@@ -9,7 +9,7 @@
       		}
     	],
       [
-          "import", 
+          "component", 
           {
             "libraryName": "vant",
             "libraryDirectory": "es",
