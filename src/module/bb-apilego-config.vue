@@ -603,32 +603,33 @@
                                 message: '请输入条件类型',
                                 trigger: 'blur'
                             }]
-                        }else if(fieldName =='fvt'){
-                            return [{ 
-                                required: true,
-                                message: '请输入数据来源',
-                                trigger: 'blur'
-                            }]
                         }
+                        // else if(fieldName =='fvt'){
+                        //     return [{ 
+                        //         required: true,
+                        //         message: '请输入数据来源',
+                        //         trigger: 'blur'
+                        //     }]
+                        // }
                         break;
-                    case 'create':
-                        if(fieldName =='fvt'){
-                            return [{ 
-                                required: true,
-                                message: '请输入数据来源',
-                                trigger: 'blur'
-                            }]
-                        }
-                        break;
-                    case 'update':
-                        if(fieldName =='fvt'){
-                            return [{ 
-                                required: true,
-                                message: '请输入数据来源',
-                                trigger: 'blur'
-                            }]
-                        }
-                        break;
+                    // case 'create':
+                    //     if(fieldName =='fvt'){
+                    //         return [{ 
+                    //             required: true,
+                    //             message: '请输入数据来源',
+                    //             trigger: 'blur'
+                    //         }]
+                    //     }
+                    //     break;
+                    // case 'update':
+                    //     if(fieldName =='fvt'){
+                    //         return [{ 
+                    //             required: true,
+                    //             message: '请输入数据来源',
+                    //             trigger: 'blur'
+                    //         }]
+                    //     }
+                    //     break;
                     default:
                         return [];
                 }
