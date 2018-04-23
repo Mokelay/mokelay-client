@@ -1,16 +1,18 @@
 <template>
-    <div class="bb-bar" :style="{'background-image':realBasicConfig.backgroundColor,color:realBasicConfig.fontColor,height:realBasicConfig.height,'line-height':realBasicConfig.height}">
-        <div class="bb-bar-left">
-            <bb-button :button="logoButton" :style="{height:'100%',width:realBasicConfig.logoWidth}" class="bb-bar-logo">
-                <img v-if="!logoButton.icon" :src="realBasicConfig.logoUrl" alt=""> 
-            </bb-button>   
-            <bb-read-bb class="bb-list" :fields="realFieldsLeft"></bb-read-bb>
-        </div>
-        <div class="bb-bar-middle">
-            <bb-read-bb class="bb-list" :fields="realFieldsMiddle"></bb-read-bb>
-        </div>
-        <div class="bb-bar-right">
-            <bb-read-bb class="bb-list" :fields="realFieldsRight"></bb-read-bb>
+    <div class="bb-bar-outer" :style="{'background':p_basicConfig.outerBgColor}">
+        <div class="bb-bar" :style="{'background-image':p_basicConfig.backgroundColor,color:p_basicConfig.fontColor,height:p_basicConfig.height,width:p_basicConfig.width,'line-height':p_basicConfig.height}">
+                <div class="bb-bar-left ">
+                    <bb-button :button="logoButton" :style="{height:'100%',width:p_basicConfig.logoWidth,background:p_basicConfig.logoBackground}" class="bb-bar-logo">
+                        <img v-if="!logoButton.icon" :src="p_basicConfig.logoUrl" alt=""> 
+                    </bb-button>   
+                    <bb-read-bb class="bb-list" :fields="realFieldsLeft"></bb-read-bb>
+                </div>
+                <div class="bb-bar-middle ">
+                    <bb-read-bb class="bb-list" :fields="realFieldsMiddle"></bb-read-bb>
+                </div>
+                <div class="bb-bar-right ">
+                    <bb-read-bb class="bb-list" v-if="p_basicConfig.showBarRight" :fields="realFieldsRight"></bb-read-bb>
+                </div>
         </div>
     </div>
 </template>
@@ -24,11 +26,15 @@
                 {
                     logoUrl:'logo图片地址',  logo的图表的和图片互斥 都配置时 优先显示图标
                     logoHref:'点击跳转地址'
-                    backgroundColor:'':'', 背景色
+                    outerBgColor:'#0091EA',//最外层的背景色
+                    backgroundColor:'', 背景色
                     height:'', bar高度
+                    width:'', bar宽度
                     logoWidth:'', logo宽度
+                    logoBackground:'#0181D0 ',logo背景色
                     fontColor:'', 标题字体颜色
                     fontSize:'',    标题字体大小
+                    showBarRight:true//是否显示右边组件s
                 }
             */
             basicConfig:{
@@ -38,11 +44,15 @@
                         logoIcon:'ty-icon_M_b ty-font',
                         logoUrl:'',
                         logoHref:'',
+                        outerBgColor:'#0091EA',
                         backgroundColor:'-webkit-linear-gradient(0deg, #1E90FF,#104E8B)',
                         logoWidth:'120px',
+                        logoBackground:'',
+                        width:'100%',
                         height:'50px',
                         fontColor:'#ffffff',
                         fontSize:'30px',
+                        showBarRight:true//是否显示右边组件s
                     }
                 }
             },
@@ -83,7 +93,6 @@
         },
         data() {
             return {
-                realBasicConfig:this.basicConfig,
                 realFieldsLeft:this.bbFieldsLeft,
                 realFieldsMiddle:this.bbFieldsMiddle,
                 realFieldsRight:this.bbFieldsRight,
@@ -98,6 +107,24 @@
                 }
             }
         },
+        computed:{
+            p_basicConfig(){
+                return Object.assign({
+                        logoIcon:'ty-icon_M_b ty-font',
+                        logoUrl:'',
+                        logoHref:'',
+                        outerBgColor:'#0091EA',
+                        backgroundColor:'-webkit-linear-gradient(0deg, #1E90FF,#104E8B)',
+                        logoWidth:'120px',
+                        logoBackground:'',
+                        width:'100%',
+                        height:'50px',
+                        fontColor:'#ffffff',
+                        fontSize:'30px',
+                        showBarRight:true//是否显示右边组件s
+                    },this.basicConfig);
+            }
+        },
         watch: {
         },
         created: function () {
@@ -109,7 +136,20 @@
     }
 </script>
 <style lang='less'>
+    .clearfix:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+    .bb-bar-outer{
+        height: 50px;
+        width:100%;
+    }
     .bb-bar{
+        margin:0 auto;
         height: 50px;
         display: flex;
         &>div{

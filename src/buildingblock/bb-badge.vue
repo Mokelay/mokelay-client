@@ -141,6 +141,7 @@
                     t.getData();
                 }else{
                     if(!t.setTime){
+                        t.getData();//先执行一次，再走定时器
                         t.setTime = setInterval(t.getData,t.intervalTime);
                     }
                 }
