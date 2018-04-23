@@ -519,7 +519,7 @@
                 })
             },
             //外部刷新表单项
-            getFileds:function(...args){
+            setFields:function(...args){
                 const t = this;
                 args.forEach((val,key)=>{
                     if(val.type == 'custom' && val.arguments){
