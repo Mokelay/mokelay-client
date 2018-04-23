@@ -392,7 +392,8 @@
                                 let str = item.variable;
                                 if(str.indexOf('external')>=0||
                                     str.indexOf('linkage')>=0||
-                                    str.indexOf('bb')>=0){
+                                    str.indexOf('bb')>=0||
+                                    str.indexOf('_TY_Root')>=0){
                                     result =  false
                                     return result;
                                 }
@@ -413,18 +414,17 @@
                 }
             },
             //如果是bb-select，初始化的时候就接口请求下拉数据,并放到_TY_Root 对象中，api作为key
-            initBBSelectFields:function(){
+            initBBSelectFields:function(force){
                 const t=this;
                 if(t.realColumns&&t.realColumns.length>0){
                     let promisArr = [];
-                    t.canRender = false;
                     t.realColumns.forEach(function(column,index){
                         //遍历每个列头
                         if(column['et']&&column['et']==='bb-select'&&column['etProp']&&column['etProp'].ds&&column['etProp'].ds.api){
                             if(!t.checkDsInput(column['etProp'])){
                                 return;
                             }
-                            if(_TY_Root["_TY_"+column['etProp'].ds.api]){
+                            if(!force&&_TY_Root["_TY_"+column['etProp'].ds.api]){
                                 //如果当前页面全局变量中已经有值了，就不在调接口获取
                                 return true;
                             }
@@ -437,9 +437,9 @@
                                             if(columnDatas.hasOwnProperty("list")){
                                                 columnDatas = columnDatas.list;
                                             }
-                                            resolve();
                                             //放到当前页面的全局变量中,接口别名作为key
                                             _TY_Root["_TY_"+column['etProp'].ds.api] = columnDatas;
+                                            resolve();
                                         }
                                     }, function (code, msg) {
                                     });
@@ -451,7 +451,11 @@
                         }
                     });
                     Promise.all(promisArr).then(function(){
-                        t.canRender = true;
+                        if(t.canRender){
+                          t.canRender = false;  
+                        }else{
+                            t.canRender = true;
+                        }
                     });
                 }
             },
@@ -532,8 +536,6 @@
             },
             getData: function (dataHandler) {
                 var t = this;
-                //初始化bb-select的数据
-                t.initBBSelectFields();
                 if (this.ds) {
                     t.loading = true;
                     t.canEditRow = null;
@@ -598,7 +600,8 @@
                                 });
                             }
                         }
-                        
+                        //初始化bb-select的数据
+                        t.initBBSelectFields(true);
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
