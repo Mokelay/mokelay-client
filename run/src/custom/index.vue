@@ -432,7 +432,7 @@
         min-height: ~'calc(100vh - 135px)';
     }
     .wy .wyIndexBackground{
-        background-image: url('./img/indexBackground.png');
+        background-image: url('./index_bg.png');
         background-repeat: no-repeat;
         background-size: auto;
         background-position: 100% 100%;

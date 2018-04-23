@@ -60,6 +60,8 @@ import bbformitem from './buildingblock/bb-form-item.vue';
 import bbjson from './buildingblock/bb-json.vue';
 import bbview from './buildingblock/bb-view.vue';
 
+// ElementUI相关的
+import bbEleLogin from './buildingblock/elementui/bb-ele-login';
 
 //移动端积木
 import bbtext from './buildingblock/h5/bb-text.vue';
@@ -214,6 +216,9 @@ let ty = {
 		Vue.component('bb-field-tree-pop-select', bbfieldtreepopselect);
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-config-array', bbconfigarray);
+
+		// ElementUI
+		Vue.component('bb-ele-login', bbEleLogin);
 
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
