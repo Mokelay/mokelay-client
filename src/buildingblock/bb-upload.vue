@@ -11,8 +11,9 @@
             :accept="fileType"
             :file-list="realFileList"
             :on-exceed="onExceed"
+            :disabled="p_disable"
             >
-            <i class="el-icon-plus"></i>
+            <i v-if="!p_disable" class="el-icon-plus"></i>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
@@ -48,10 +49,16 @@
             //处理图片地址数组
             handle:{
                 type:String
+            },
+            //是否禁用
+            disable:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
             return {
+                p_disable:this.disable,
                 dialogImageUrl: '',
                 dialogVisible: false,
                 uploadUrl:'',
@@ -81,6 +88,13 @@
             }
         },
         mounted:function(){
+            const t=this;
+            if(t.p_disable){
+                let uploadDom = this.$el.getElementsByClassName("el-upload el-upload--picture-card");
+                if(uploadDom&&uploadDom.length>0){
+                    this.$el.getElementsByClassName("el-upload el-upload--picture-card")[0].style.display="none";
+                }
+            }
             this.$emit('mounted',this.value);
         },
         methods: {
