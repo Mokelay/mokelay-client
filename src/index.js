@@ -59,6 +59,8 @@ import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
 import bbjson from './buildingblock/bb-json.vue';
 import bbview from './buildingblock/bb-view.vue';
+import bbpagination from './buildingblock/bb-pagination.vue';
+
 
 // ElementUI相关的
 import bbEleLogin from './buildingblock/elementui/bb-ele-login';
@@ -216,6 +218,7 @@ let ty = {
 		Vue.component('bb-field-tree-pop-select', bbfieldtreepopselect);
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-config-array', bbconfigarray);
+		Vue.component('bb-pagination', bbpagination);
 
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
