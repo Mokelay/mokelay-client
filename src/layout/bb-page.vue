@@ -138,6 +138,21 @@
       },0);
     },
     methods: {
+      //修改页面的title属性 metadata
+      resetPageTitle:function(pageName){
+        let t=this;
+        //用iframe 方式兼容ios的微信上bug
+        document.title = pageName+" -- TY - 一个全新的开发平台";
+        var i = document.createElement('iframe');
+          i.src = '//m.baidu.com/favicon.ico';
+          i.style.display = 'none';
+          i.onload = function() {
+                setTimeout(function(){
+                  i.remove();
+                }, 9)
+        }
+        document.body.appendChild(i);
+      },
       refresh:function(){
         this.loadData();
       },
@@ -157,7 +172,10 @@
           var page = data['page'];
           var pbbList = data['pbb_list']['list'];
           var interactives = data['interactives']?data['interactives']['list']:[];
-
+          //如果是根页面，修改页面的title
+          if(t.root){
+            t.resetPageTitle(page.name);
+          }
           if(page['template']){
             //模板文件
             t.templatePageAlias = page['templatePageAlias'];
