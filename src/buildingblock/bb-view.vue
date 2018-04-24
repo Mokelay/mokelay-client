@@ -105,8 +105,9 @@
             renderItem:function(createElement){
                 const t = this;
                 const itemList = [];
-                if(t.realFields && t.formData){
-                   t.realFields.forEach((field,key)=>{
+                if(t.realFields){
+                    t.formData = t.formData?t.formData:{};
+                    t.realFields.forEach((field,key)=>{
                         let content = [];
                         //如果是String或者Number则直接展示，File类型的展示现在链接，图片预览
                         switch(field.dt){
