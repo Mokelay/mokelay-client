@@ -193,7 +193,7 @@
 
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
-
+          t.layoutObject.title = t.layoutObject.title?t.layoutObject.title : page.name;
           //获取页面beTask任务
           t.runTask();
           //指定布局类型
