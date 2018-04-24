@@ -85,80 +85,12 @@
                         });
                         return;
                     }
-                    editor.setValue(t.jsonFormatUtil(data));
+                    editor.setValue(_TY_Tool.jsonFormat(data));
                     const mode = 'application/ld+json';
                     editor.setOption("mode", mode);
                     editor.setOption("lineWrapping", true);
                     editor.setOption("autoCloseBrackets", true);
                 }
-            },
-            _repeat:function(s, count){
-                return new Array(count + 1).join(s);
-            },
-            //json格式化工具
-            jsonFormatUtil:function(json){
-                let t=this;
-                var i           = 0,
-                len          = 0,
-                tab         = "    ",
-                targetJson     = "",
-                indentLevel = 0,
-                inString    = false,
-                currentChar = null;
-                for (i = 0, len = json.length; i < len; i += 1) { 
-                    currentChar = json.charAt(i);
-                    switch (currentChar) {
-                    case '{': 
-                    case '[': 
-                        if (!inString) { 
-                            targetJson += currentChar + "\n" + t._repeat(tab, indentLevel + 1);
-                            indentLevel += 1; 
-                        } else { 
-                            targetJson += currentChar; 
-                        }
-                        break; 
-                    case '}': 
-                    case ']': 
-                        if (!inString) { 
-                            indentLevel -= 1; 
-                            targetJson += "\n" + t._repeat(tab, indentLevel) + currentChar; 
-                        } else { 
-                            targetJson += currentChar; 
-                        } 
-                        break; 
-                    case ',': 
-                        if (!inString) { 
-                            targetJson += ",\n" + t._repeat(tab, indentLevel); 
-                        } else { 
-                            targetJson += currentChar; 
-                        } 
-                        break; 
-                    case ':': 
-                        if (!inString) { 
-                            targetJson += ": "; 
-                        } else { 
-                            targetJson += currentChar; 
-                        } 
-                        break; 
-                    case ' ':
-                    case "\n":
-                    case "\t":
-                        if (inString) {
-                            targetJson += currentChar;
-                        }
-                        break;
-                    case '"': 
-                        if (i > 0 && json.charAt(i - 1) !== '\\') {
-                            inString = !inString; 
-                        }
-                        targetJson += currentChar; 
-                        break;
-                    default: 
-                        targetJson += currentChar; 
-                        break;                    
-                    } 
-                } 
-                return targetJson;
             },
             //iframe添加css外链
             _addLink:function(doc,url) {

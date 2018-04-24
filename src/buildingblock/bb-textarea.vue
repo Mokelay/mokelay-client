@@ -1,7 +1,7 @@
 <template>
       <el-input
         type="textarea"
-        :rows="2"
+        :rows="rows"
         placeholder="请输入内容"
         v-model="valueBase"
         @change="change"
@@ -29,18 +29,28 @@
             bbStyle:{
                 type:[String,Object],
                 default:''
+            },
+            //是不是json，如果是json先格式化再显示
+            isJson:{
+              type:Boolean,
+              default:false
+            },
+            //文本域的高
+            rows:{
+                type:Number,
+                default:2
             }
         },
         data() {
             return {
-                valueBase: this.value,
+                valueBase: (this.isJson&&this.value)?_TY_Tool.jsonFormat(this.value):this.value,
                 p_style:typeof(this.bbStyle)==='string'?eval(this.bbStyle):this.bbStyle,
                 external:{}//外部参数
             }
         },
         watch: {
             value(val){
-                this.valueBase=val;
+                this.valueBase=(this.isJson&&val)?_TY_Tool.jsonFormat(val):val;
             }
         },
         created: function () {
