@@ -144,7 +144,8 @@
                     t.userInfo = data;
                     t.userName = data.user_name;
                 }else{
-                    _TY_Tool.get(_TY_ContentPath+"/read-session-user-info").then(function (response) {
+                    var sessionAPI = _TY_ENV.name=='prd'?"/ty-read-session-user-info":"/read-session-user-info";
+                    _TY_Tool.get(_TY_ContentPath+sessionAPI).then(function (response) {
                         let data = response['data']['data'];
                         t.userInfo={};
                         t.userInfo['user_id']=data.id;
