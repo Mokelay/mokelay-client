@@ -133,6 +133,7 @@
                         @current-change="handleCurrentChange"
                         :page-sizes="[10, 20, 50, 100]"
                         :page-size="pageSize"
+                        :current-page="page"
                         layout="total, sizes, prev, pager, next, jumper"
                         :style="{float:'right',marginTop:'20px'}"
                         :total="totalItems">
@@ -659,6 +660,8 @@
                 //this.$emit("list-select", row);
             },
             globalSearch(){
+                //搜索恢复第一页
+                this.page=1;
                 this.getData();
             },
             cellSubmit: function (event, column, row) {
@@ -714,6 +717,7 @@
             },
             advancedSearchFn:function(data){
                 const t = this;
+                t.page = 1;//搜索恢复到第一页
                 t.searchFormData = data;
                 t.getData();
             },
