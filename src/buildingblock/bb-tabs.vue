@@ -369,33 +369,34 @@
                 }
                 
                 t.$emit('tab-click',tab);
-
-                
-                //如果是bb-page的内容，就只能通过bb-page 的p_params传参了
-                let alias = tab.name;
-                let currentTabContent;
-                t.tabsData.forEach((tabData, key)=> {
-                    if(tabData.name==alias){
-                        currentTabContent=tabData.content;
+                // 只有懒加载才需要 重新渲染
+                if(t.lazy){
+                    //如果是bb-page的内容，就只能通过bb-page 的p_params传参了
+                    let alias = tab.name;
+                    let currentTabContent;
+                    t.tabsData.forEach((tabData, key)=> {
+                        if(tabData.name==alias){
+                            currentTabContent=tabData.content;
+                        }
+                    });
+                    if(currentTabContent&&currentTabContent[0]&&currentTabContent[0].alias=='bb-page'
+                            &&currentTabContent[0].attributes&&currentTabContent[0].attributes.pageAlias&&
+                             _TY_Page_Data[currentTabContent[0].attributes.pageAlias]&&alias!='all'){
+                        _TY_Page_Data[currentTabContent[0].attributes.pageAlias].p_params=alias;
                     }
-                });
-                if(currentTabContent&&currentTabContent[0]&&currentTabContent[0].alias=='bb-page'
-                        &&currentTabContent[0].attributes&&currentTabContent[0].attributes.pageAlias&&
-                         _TY_Page_Data[currentTabContent[0].attributes.pageAlias]&&alias!='all'){
-                    _TY_Page_Data[currentTabContent[0].attributes.pageAlias].p_params=alias;
-                }
-                //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
-                if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
-                    return;
-                }
-                //渲染content
-                let dom = new Vue({
-                    router: t.$router,
-                    render: function(createElement) {
-                        return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
+                    //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
+                    if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
+                        return;
                     }
-                }).$mount('#tab_pane_' + alias+'_'+t.key);
-                t.$refs[_TY_Tool.uuid()] = dom; //把创建的vue 设置到$refs中
+                    //渲染content
+                    let dom = new Vue({
+                        router: t.$router,
+                        render: function(createElement) {
+                            return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
+                        }
+                    }).$mount('#tab_pane_' + alias+'_'+t.key);
+                    t.$refs[_TY_Tool.uuid()] = dom; //把创建的vue 设置到$refs中
+                }
             },
             renderTabData: function (createElement) {
                 const t = this;
