@@ -14,6 +14,7 @@ import Util from '../libs/util';
         name : 'bb-radio-group',
         props:{
             value:{
+                type:[String,Number],
                 default:''
             },
             /**
@@ -50,14 +51,14 @@ import Util from '../libs/util';
         },
         data() {
             return {
-                p_value:this.value,
+                p_value:this.value.toString(),
                 p_options:this.options
             };
         },
         watch:{
             value(val){
                if(val){
-                    this.p_value = val;
+                    this.p_value = val.toString();
                } 
             }
         },
@@ -86,9 +87,9 @@ import Util from '../libs/util';
         },
         methods: {
            radioChange(val){
-                this.p_value=val;
-                this.$emit("input",val);
-                this.$emit("change",val);
+                this.p_value = val;
+                this.$emit("input",eval(val));
+                this.$emit("change",eval(val));
            }    
         }
     }

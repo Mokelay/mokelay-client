@@ -129,18 +129,15 @@
             </el-table>
         </el-row>
         <el-row v-if="pagination" type="flex" justify='end'>
-            <div >
-                <el-pagination
-                        @size-change="handleSizeChange"
-                        @current-change="handleCurrentChange"
-                        :page-sizes="[10, 20, 50, 100]"
-                        :page-size="pageSize"
-                        :current-page="page"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :style="{float:'right',marginTop:'20px'}"
-                        :total="totalItems">
-                </el-pagination>
-            </div>
+            <bb-pagination 
+                :pageSizes="pageSizes" 
+                :page="page"
+                :pageSize="pageSize"
+                :totalItems="totalItems"
+                @sizeChange="handleSizeChange"
+                @pageChange="handleCurrentChange"
+                >
+            </bb-pagination>
         </el-row>
     </div>
 </template>
@@ -338,6 +335,16 @@
             returnString:{
                 type:Boolean,
                 default:false
+            },
+            //当前列表分页参数 page当前页  pageSize每页条数
+            pageConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        page:1,
+                        pageSize:10
+                    }
+                }
             }
         },
         data() {
@@ -345,8 +352,9 @@
                 realColumns:[].concat(this.columns),
                 tableData: (this.value&&typeof(this.value)==='string')?eval(this.value):this.value||[],
                 totalItems: this.total,
-                pageSize: 10,
-                page: 1,
+                pageSize:this.pageConfig.pageSize,
+                page: this.pageConfig.page,
+                pageSizes:[this.pageConfig.pageSize*1, this.pageConfig.pageSize*2, this.pageConfig.pageSize*5, this.pageConfig.pageSize*10],
                 keywords: '',
                 selectArr: [],
                 loading: false,
@@ -634,7 +642,7 @@
                 t.toChildParams = row;
                 t.toChildParams.getData = t.getData;
             },
-            handleSizeChange: function (pageSize) {
+            handleSizeChange: function (page,pageSize) {
                 this.pageSize = pageSize;
                 this.getData();
             },
