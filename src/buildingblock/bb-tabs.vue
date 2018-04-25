@@ -62,14 +62,6 @@
             }
             const paneArr = t.renderTabData(createElement);
 
-            if(t._lazy&&!t.lazy&&t.realTabs){
-                t.realTabs.forEach(function(_item,_index){
-                    setTimeout(function(){
-                        t.tabClick({name:_item.name});
-                    },400);
-                });
-            }
-
             //模拟点击默认tab事件,避免已经渲染的dom重新渲染
             setTimeout(function(){
                 t.tabClick({name:t.p_activeName});
@@ -378,33 +370,32 @@
                 
                 t.$emit('tab-click',tab);
 
-                if(t._lazy){
-                    //如果是bb-page的内容，就只能通过bb-page 的p_params传参了
-                    let alias = tab.name;
-                    let currentTabContent;
-                    t.tabsData.forEach((tabData, key)=> {
-                        if(tabData.name==alias){
-                            currentTabContent=tabData.content;
-                        }
-                    });
-                    if(currentTabContent&&currentTabContent[0]&&currentTabContent[0].alias=='bb-page'
+                
+                //如果是bb-page的内容，就只能通过bb-page 的p_params传参了
+                let alias = tab.name;
+                let currentTabContent;
+                t.tabsData.forEach((tabData, key)=> {
+                    if(tabData.name==alias){
+                        currentTabContent=tabData.content;
+                    }
+                });
+                if(currentTabContent&&currentTabContent[0]&&currentTabContent[0].alias=='bb-page'
                         &&currentTabContent[0].attributes&&currentTabContent[0].attributes.pageAlias&&
                          _TY_Page_Data[currentTabContent[0].attributes.pageAlias]&&alias!='all'){
-                        _TY_Page_Data[currentTabContent[0].attributes.pageAlias].p_params=alias;
-                    }
-                    //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
-                    if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
-                        return;
-                    }
-                    //渲染content
-                    let dom = new Vue({
-                        router: t.$router,
-                        render: function(createElement) {
-                            return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
-                        }
-                    }).$mount('#tab_pane_' + alias+'_'+t.key);
-                    t.$refs[_TY_Tool.uuid()] = dom; //把创建的vue 设置到$refs中
+                    _TY_Page_Data[currentTabContent[0].attributes.pageAlias].p_params=alias;
                 }
+                //目前只是解决了按需加载tab页，点击刷新可以通过交互来做
+                if(!document.getElementById('tab_pane_' + alias+'_'+t.key)){
+                    return;
+                }
+                //渲染content
+                let dom = new Vue({
+                    router: t.$router,
+                    render: function(createElement) {
+                        return createElement('div',{},_TY_Tool.bbRender(currentTabContent, createElement, t));
+                    }
+                }).$mount('#tab_pane_' + alias+'_'+t.key);
+                t.$refs[_TY_Tool.uuid()] = dom; //把创建的vue 设置到$refs中
             },
             renderTabData: function (createElement) {
                 const t = this;
@@ -439,10 +430,7 @@
                         }
 
                         let panelContent;
-                        if(tabData.content&&tabData.content[0]&&tabData.content[0].alias==='bb-page'){
-                            //如果是bb-page，就用点击刷新
-                            t._lazy = true;
-                        }else{
+                        if(!t.lazy){
                             panelContent = createElement('div',{},_TY_Tool.bbRender(tabData.content, createElement, t));
                         }
                         //将每个item创建的vue对象放到 t.tabsData中,方便传参

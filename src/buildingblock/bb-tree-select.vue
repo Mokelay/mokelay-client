@@ -79,7 +79,7 @@
                 bb_value: this.value,
                 bb_input_value: '',
                 external: {
-                    linkage: 'test'//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
+                    linkage: ''//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
                 }
             }
         },
