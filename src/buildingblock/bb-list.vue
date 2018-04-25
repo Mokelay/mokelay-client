@@ -20,7 +20,8 @@
                 class="advancedSearch"
                 @commit="advancedSearchFn"
                 v-if="advancedSearch && advancedSearchConfig.layoutType == 'bb-button-form'" 
-                :fields="advancedSearchConfig.fields" 
+                :fields="advancedSearchConfig.fields"
+                :content="advancedSearchConfig.content"
                 :startButtonIcon="advancedSearchConfig.startButtonIcon" 
                 :settingText="advancedSearchConfig.settingText" 
                 :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
@@ -29,6 +30,7 @@
                 v-if="advancedSearch && advancedSearchConfig.layoutType == 'inline-form'"
                 :labelInline="true"
                 :fields="advancedSearchConfig.fields"
+                :content="advancedSearchConfig.content"
                 :settingButtonText="advancedSearchConfig.formButtonName"></bb-form>
             
         </el-row>
