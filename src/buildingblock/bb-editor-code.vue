@@ -38,7 +38,7 @@
         },
         data() {
             return {
-                p_value:this.value,
+                p_value:typeof(this.value)!='string'?JSON.stringify(this.value):this.value,
                 dialogVisible:false,
                 dialogWidth:'100%',
                 fullscreen:true,
