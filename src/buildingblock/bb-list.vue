@@ -351,7 +351,7 @@
             return {
                 realColumns:[].concat(this.columns),
                 tableData: (this.value&&typeof(this.value)==='string')?eval(this.value):this.value||[],
-                totalItems: this.total,
+                totalItems: 0,
                 pageSize:this.pageConfig.pageSize,
                 page: this.pageConfig.page,
                 pageSizes:[this.pageConfig.pageSize*1, this.pageConfig.pageSize*2, this.pageConfig.pageSize*5, this.pageConfig.pageSize*10],
