@@ -10,7 +10,7 @@
                     'visible':t.active,
                     'width':t.realWidth,
                     'custom-class':t.className,
-                    'append-to-body':true,
+                    'append-to-body':false,
                     'modal-append-to-body':false,
                     'close-on-click-modal':true,
                     'fullscreen':t.fullscreen,
