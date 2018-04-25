@@ -146,7 +146,7 @@
                             name: '图标',
                             attributeName: 'icon',
                             hide:true,
-                            et: 'bb-input',
+                            et: 'bb-icon-select',
                             props: {}
                         }, {
                             name: '点击类型',
@@ -223,8 +223,12 @@
                             description:"点击类型选择执行巴斯时需要填写",
                             attributeName: 'buzz',
                             hide:true,
-                            et: 'bb-input',
-                            props: {}
+                            et: 'bb-select',
+                            props: {
+                                ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [{dataKey: "fields", valueKey: "data_list"}]},
+                                textField:'name',
+                                valueField:"alias"
+                            }
                         }, {
                             name: '页面对话框页面别名',
                             description:"点击类型选择页面对话框时需要填写",

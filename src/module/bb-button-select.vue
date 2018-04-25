@@ -63,7 +63,7 @@
                 }, {
                     name: '图标',
                     attributeName: 'icon',
-                    et: 'bb-input',
+                    et: 'bb-icon-select',
                     props: {}
                 }, {
                     name: '字体颜色',
@@ -110,8 +110,12 @@
                 }, {
                     name: '设置巴斯',
                     attributeName: 'buzz',
-                    et: 'bb-input',
-                    props: {}
+                    et: 'bb-select',
+                    props: {
+                        ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [{dataKey: "fields", valueKey: "data_list"}]},
+                        textField:'name',
+                        valueField:"alias"
+                    }
                 }, {
                     name: '执行动作后刷新父列表',
                     attributeName: 'refreshParent',
