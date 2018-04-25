@@ -73,7 +73,9 @@
             }
         },
         watch: {
-            
+            totalItems(val){
+                this.p_totalItems = val;
+            }
         },
         created: function () {
         },
