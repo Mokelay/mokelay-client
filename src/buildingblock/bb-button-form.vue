@@ -134,11 +134,12 @@ import Util from '../libs/util';
                             t.formVisible = false;
                         },
                         commit: function(formData){
-                            t.$emit('input', formData);
-                            t.$emit('commit', formData);
                             if(!t.buttonConfig||!t.buttonConfig.ds){
                                 t.formVisible = false;
                             }
+                            //解决form表单h输出值后不能关闭弹窗
+                            setTimeout(()=>{t.$emit('input', formData)},0);
+                            t.$emit('commit', formData);
                         },
                         cancel:function(formData){
                             t.$emit('cancel',formData);
