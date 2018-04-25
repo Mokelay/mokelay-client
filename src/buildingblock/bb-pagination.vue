@@ -1,14 +1,15 @@
 <template>
-    <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="p_page"
-        :page-sizes="p_pageSizes"
-        :page-size="p_pageSize"
-        :layout="layout"
-        :style="{float:'right',marginTop:'20px'}"
-        :total="p_totalItems">
-    </el-pagination>
+    <div :style="p_style">
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="p_page"
+            :page-sizes="p_pageSizes"
+            :page-size="p_pageSize"
+            :layout="layout"
+            :total="p_totalItems">
+        </el-pagination>
+    </div>
 </template>
 
 <script>
@@ -41,6 +42,16 @@
             totalItems:{
                 type:Number,
                 default:0
+            },
+            //分页的样式
+            bbStyle:{
+                type:[String,Object],
+                default:function(){
+                    return {
+                        "marginTop":"20px",
+                        "text-align": "right"
+                    }
+                }
             }
         },
         data() {
@@ -53,6 +64,12 @@
         computed:{
             p_pageSizes(){
                 return typeof(this.pageSizes)==='string'?JSON.parse(this.pageSizes):this.pageSizes;
+            },
+            p_style(){
+                return Object.assign({
+                        "marginTop":"20px",
+                        "text-align": "right"
+                    },(typeof(this.bbStyle)==='string'?JSON.parse(this.bbStyle):this.bbStyle));
             }
         },
         watch: {

@@ -1,14 +1,19 @@
 <template>
-      <el-input
-        type="textarea"
-        :rows="rows"
-        placeholder="请输入内容"
-        v-model="valueBase"
-        @change="change"
-        :disabled="disabled"
-        :style="p_style"
-        >
-      </el-input>
+    <div class="textarea_box">
+          <el-input
+            type="textarea"
+            :rows="rows"
+            placeholder="请输入内容"
+            v-model="valueBase"
+            @change="change"
+            :disabled="disabled"
+            :style="p_style"
+            :resize="p_resize"
+            :autosize="p_autosize"
+            >
+          </el-input>
+          <span v-if="maxLen" class="textarea_buttom" :class="lengthCheck">{{len}}/{{maxLen}}</span>
+      </div>
 </template>
 
 <script>
@@ -39,18 +44,47 @@
             rows:{
                 type:Number,
                 default:2
+            },
+            //自适应内容高度
+            autosize:{
+                type:[Boolean,Object],
+                default:false
+            },
+            //默认都可以伸缩 可选参数  none, both, horizontal, vertical
+            resize:{
+                type:String
+            },
+            //可输入的最大长度
+            maxLen:{
+                type:Number
             }
         },
         data() {
             return {
                 valueBase: (this.isJson&&this.value)?_TY_Tool.jsonFormat(this.value):this.value,
                 p_style:typeof(this.bbStyle)==='string'?eval(this.bbStyle):this.bbStyle,
+                p_autosize:this.autosize,
+                p_resize:this.resize,
                 external:{}//外部参数
             }
         },
         watch: {
             value(val){
                 this.valueBase=(this.isJson&&val)?_TY_Tool.jsonFormat(val):val;
+            }
+        },
+        computed:{
+            //当前数据的长度
+            len:function(){
+                return this.valueBase?this.valueBase.length:0
+            },
+            lengthCheck:function(){
+                if(this.maxLen&&this.valueBase.length>this.maxLen){
+                    //超过最大长度
+                    return "color_red";
+                }else{
+                    return "";
+                }
             }
         },
         created: function () {
@@ -76,3 +110,19 @@
         }
     }
 </script>
+
+<style scoped>
+    .textarea_buttom{
+        position: absolute;
+        right: 10px;
+        bottom: 0px;
+        font-size: small;
+        color: #ccc;
+    }
+    .textarea_box{
+        position: relative;
+    }
+    .color_red{
+        color: red;
+    }
+</style>
