@@ -60,6 +60,7 @@ import bbformitem from './buildingblock/bb-form-item.vue';
 import bbjson from './buildingblock/bb-json.vue';
 import bbview from './buildingblock/bb-view.vue';
 import bbpagination from './buildingblock/bb-pagination.vue';
+import bbmap from './buildingblock/bb-map.vue';
 
 
 // ElementUI相关的
@@ -219,6 +220,7 @@ let ty = {
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-config-array', bbconfigarray);
 		Vue.component('bb-pagination', bbpagination);
+		Vue.component('bb-map', bbmap);
 
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
