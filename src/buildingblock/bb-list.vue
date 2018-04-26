@@ -324,10 +324,10 @@
                     return {
                         editable:[], // ['add','edit','up','down','remove']
                         editDs:{
-                            add:{},
-                            remove:{},
-                            update:{},
-                            sort:{},
+                            add:null,
+                            remove:null,
+                            update:null,
+                            sort:null,
                         }
                     }
                 }
