@@ -4,7 +4,7 @@
 
         </div>
 
-        <div v-if="search" class="search-element">
+        <div v-if="isSearch" class="search-element">
              <div id="searchbox" class="clearfix"> 
                 <div id="searchbox-container"> 
                     <div id="sole-searchbox-content" class="searchbox-content"> 
@@ -18,7 +18,6 @@
         </div>
 
         <div v-if="isSign" class="sign-element">
-            <!-- <div class="market-opacity"></div> -->
             <div class="market-mode" @click="signDeleteClick">
             </div>
             <div class="market-mode-last" @click="signSaveClick">
@@ -46,7 +45,7 @@
     export default {
         name: 'bb-map',
         props: {
-            search: {
+            isSearch: {
                 type: Boolean,
                 default: true,
             },
@@ -78,13 +77,12 @@
                 // 开启鼠标滚轮缩放      
                 map.enableScrollWheelZoom(true);
 
-                if (th.search) {
+                if (th.isSearch) {
                     // 建立一个自动完成的对象
                     let ac = new BMap.Autocomplete(    
                         {"input" : "sole-input"
                         ,"location" : map
                     });
-
 
                     // 鼠标放在下拉列表上的事件
                     ac.addEventListener("onhighlight", function(e) {  

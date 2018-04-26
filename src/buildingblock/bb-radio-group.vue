@@ -57,30 +57,28 @@ import Util from '../libs/util';
         },
         watch:{
             value(val){
-               if(val){
-                    this.p_value = val.toString();
-               } 
+               this.p_value = val.toString();
             }
         },
         mounted(){
             let t=this;
             if(this.ds){
-                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
-                            map.forEach(function (item) {
-                                var list = item['value']['list'];
-                                t[item['dataKey']] = [];
-                                for (var i in list) {
-                                    t[item['dataKey']].push({
-                                        text:list[i][t.optionText],
-                                        value:list[i][t.optionValue]
-                                    });
-                                }
+                Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
+                    map.forEach(function (item) {
+                        var list = item['value']['list'];
+                        t.p_options = [];
+                        for (var i in list) {
+                            t.p_options.push({
+                                text:list[i][t.optionText],
+                                value:list[i][t.optionValue]
                             });
-                            if(t.type == 'button'){
-                                t.p_options.splice(0,0,{value:'',text:'全部'})
-                            }
-                    }, function (code, msg) {
+                        }
                     });
+                    if(t.type == 'button'){
+                        t.p_options.splice(0,0,{value:'',text:'全部'})
+                    }
+                }, function (code, msg) {
+                });
             }
             //初始化默认值
             _TY_Tool.buildDefaultValTpl(t,"p_value");
