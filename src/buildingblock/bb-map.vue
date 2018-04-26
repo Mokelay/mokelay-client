@@ -85,7 +85,6 @@
                         ,"location" : map
                     });
 
-
                     // 鼠标放在下拉列表上的事件
                     ac.addEventListener("onhighlight", function(e) {  
                         let str = "";
