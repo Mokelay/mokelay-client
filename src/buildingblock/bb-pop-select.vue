@@ -13,6 +13,7 @@
             :modalAppendToBody="selectionDialogConfig.modalAppendToBody"
             :title="selectionDialogConfig.title" >
             <bb-list 
+                v-if="popupVisible"
                 :columns="selectionGridConfig.columns"  
                 :ds="selectionGridConfig.ds"  
                 :selection="selectionGridConfig.selection"  
