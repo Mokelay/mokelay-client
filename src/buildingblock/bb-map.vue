@@ -18,7 +18,6 @@
         </div>
 
         <div v-if="isSign" class="sign-element">
-            <!-- <div class="market-opacity"></div> -->
             <div class="market-mode" @click="signDeleteClick">
             </div>
             <div class="market-mode-last" @click="signSaveClick">
