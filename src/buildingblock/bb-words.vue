@@ -1,15 +1,95 @@
 <script>
   import Util from '../libs/util.js';
-
+  const Themes = [{
+    "text":"段落",
+    "value":"p",
+    "styleObj":{
+      "tagName":"p",
+      "fontSize":"1em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"标题一",
+    "value":"h1",
+    "styleObj":{
+      "tagName":"h1",
+      "fontSize":"2em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"标题二",
+    "value":"h2",
+    "styleObj":{
+      "tagName":"h2",
+      "fontSize":"1.5em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"标题三",
+    "value":"h3",
+    "styleObj":{
+      "tagName":"h3",
+      "fontSize":"1.17em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"标题四",
+    "value":"h4",
+    "styleObj":{
+      "tagName":"h4",
+      "fontSize":"1em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"标题五",
+    "value":"h5",
+    "styleObj":{
+      "tagName":"h5",
+      "fontSize":"0.83em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"标题六",
+    "value":"h6",
+    "styleObj":{
+      "tagName":"h6",
+      "fontSize":"0.67em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  },{
+    "text":"加粗",
+    "value":"b",
+    "styleObj":{
+      "tagName":"b",
+      "fontSize":"1em",
+      "fontColor":"#000",
+      "textAlign":"left",
+      "lineHeight":"1.45em"
+    }
+  }];
   export default {
     name:'bb-words',
     render:function(createElement){
       var t = this;
 
       return createElement(
-          t.tagName,
+          t.p_tagName,
           {
-            style:{fontSize:t.fontSize,fontFamily:t.fontFamily,color:t.fontColor,textAlign:t.textAlign,lineHeight:t.lineHeight},
+            style:{fontSize:t.p_fontSize,fontFamily:t.p_fontFamily,color:t.p_fontColor,textAlign:t.p_textAlign,lineHeight:t.p_lineHeight},
             attrs:t.realTagAttributes
           },
           t.content
@@ -22,6 +102,12 @@
       //文字内容，支持模板<%=params%>
       text: {
         type: [String,Number]
+      },
+      /**====dom相关属性====*/
+      //主题，选择了主题，默认填充对应的dom相关属性样式
+      theme:{
+        type:String,
+        default:'p'
       },
       tagName:{
         type:String,
@@ -42,6 +128,8 @@
       lineHeight:{
         type:String,
       },
+      /**====dom相关属性 end====*/
+
       valueKey:{
         type:String,
       },
@@ -76,7 +164,13 @@
         content:null,
         realText:this.value || this.text,
         realTagAttributes:null,
-        external:{}
+        external:{},
+        p_tagName:this.tagName,
+        p_fontSize:this.fontSize,
+        p_fontFamily:this.fontFamily,
+        p_fontColor:this.fontColor,
+        p_textAlign:this.textAlign,
+        p_lineHeight:this.lineHeight
       };
     },
     created: function () {
@@ -105,6 +199,23 @@
       }
     },
     methods: {
+      //主题change 方法 主要用于交互
+      changeTheme:function(...args){
+        let t=this;
+        if(args&&args.length>0&&args[0]){
+            Themes.forEach(function(item,index){
+              if(item.value==args[0]){
+                t.p_tagName = item.styleObj.tagName;
+                t.p_fontSize = item.styleObj.fontSize;
+                t.p_fontColor = item.styleObj.fontColor;
+                t.p_textAlign = item.styleObj.textAlign;
+                t.p_lineHeight = item.styleObj.lineHeight;
+                t.$emit("themeChange",item.styleObj);
+                return false;//break
+              }
+            });
+        }
+      },
       getStorage:function(){
           const t = this;
           let data = {};
