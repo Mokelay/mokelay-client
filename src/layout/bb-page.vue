@@ -74,6 +74,7 @@
           var element = createElement('bb-layout-canvas', {ref:uuid,props:props});
             pbbElementList.push(element);
         }
+        break;
         //网格布局 grid
         //TODO
 
