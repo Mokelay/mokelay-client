@@ -110,7 +110,7 @@ import Util from '../libs/util';
                 const form = createElement('bb-form',{
                     props:{
                         fields:t.fields,
-                        value:_TY_Tool.deepClone(t.formData), //传入value
+                        value:t.formData, //传入value
                         buttonConfig:t.buttonConfig,
                         settingButtonText:t.formButtonName,
                         ds:t.valueDs,
