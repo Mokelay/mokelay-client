@@ -11,14 +11,18 @@
             </div>
             <bb-form v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
+            <bb-editor-code v-model="valueBase.attributes" :returnObj="true" @input="attributesChange"></bb-editor-code>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
-            <bb-form :content="interactiveContent" v-model="valueBase" @commit="interactivesChange"></bb-form>
+            <bb-form size="mini" :content="interactiveContent" v-model="valueBase" @commit="interactivesChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="动画">
             <bb-button-form :content="animationFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加动画"  settingText ="添加动画" v-model="animationForm" @commit="animationAdd"></bb-button-form>
-            <bb-form v-model="valueBase" ref="animationListContent" :content="animationListContent" @commit="animationChange"></bb-form>
+            <bb-form size="mini" v-model="valueBase" ref="animationListContent" :content="animationListContent" @commit="animationChange"></bb-form>
+        </el-tab-pane>
+        <el-tab-pane label="布局">
+            <bb-form size="mini" v-model="valueBase.layout" ref="layoutContent" :content="layoutContent" @commit="objectChange"></bb-form>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -61,7 +65,8 @@
         },
         data() {
             return {
-                valueBase:_TY_Tool.deepClone(this.value),
+                valueBase:this.value,
+                layout:{},
                 alias:this.value.alias,
                 animationForm:{},
                 tabs:null,
@@ -91,7 +96,8 @@
                          "valueKey": "data_list"
                     }]
                 },
-                formItemFields:null
+                formItemFields:null,
+                layoutContent:null
             }
         },
         watch: {
@@ -153,6 +159,12 @@
             },
             //动画修改
             animationChange:function(formData){
+                const t = this;
+                t.$emit('input',t.valueBase);
+                t.$emit('change',t.valueBase);
+            },
+            //动画修改
+            objectChange:function(formData){
                 const t = this;
                 t.$emit('input',t.valueBase);
                 t.$emit('change',t.valueBase);
@@ -771,8 +783,196 @@
                             props:{
                             }
                         }];
+                        t.layoutContent = [{                      
+                            uuid:'layout_01',
+                            alias:'bb-color-picker',                   
+                            aliasName:'背景色',                                 
+                            attributes:{
+                                attributeName:'bgColor',
+                                show:true,
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_02',
+                            alias:'bb-slider',                   
+                            aliasName:'旋转角度',                                  
+                            attributes:{
+                                attributeName:'rotate',
+                                show:true,
+                                min:0,
+                                max:360
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_03',
+                            alias:'bb-slider',                   
+                            aliasName:'透明度',                                  
+                            attributes:{
+                                attributeName:'transparency',
+                                show:true,
+                                min:0,
+                                step:0.05,
+                                max:1
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_04',
+                            alias:'bb-form',                   
+                            aliasName:'尺寸',                                  
+                            attributes:{
+                                attributeName:'size',
+                                labelWidth:"80px",
+                                grid:true,
+                                size:"mini",
+                                content:[{                      
+                                    uuid:'layout_04_01',
+                                    alias:'bb-input',                   
+                                    aliasName:'宽度',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'width',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_04_02',
+                                    alias:'bb-input',                   
+                                    aliasName:'高度',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'height',
+                                    },
+                                    interactives:[],
+                                }]
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_05',
+                            alias:'bb-form',                   
+                            aliasName:'坐标',                                  
+                            attributes:{
+                                attributeName:'size',
+                                labelWidth:"80px",
+                                grid:true,
+                                size:"mini",
+                                content:[{                      
+                                    uuid:'layout_05_01',
+                                    alias:'bb-input',                   
+                                    aliasName:'横坐标',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'x',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_05_02',
+                                    alias:'bb-input',                   
+                                    aliasName:'纵坐标',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'y',
+                                    },
+                                    interactives:[],
+                                }]
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_06',
+                            alias:'bb-form',                   
+                            aliasName:'边框',                                  
+                            attributes:{
+                                attributeName:'border',
+                                labelWidth:"80px",
+                                grid:true,
+                                size:"mini",
+                                content:[{                      
+                                    uuid:'layout_06_01',
+                                    alias:'bb-input',                   
+                                    aliasName:'样式',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'style',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_06_02',
+                                    alias:'bb-input',                   
+                                    aliasName:'颜色',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'color',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_06_03',
+                                    alias:'bb-input',                   
+                                    aliasName:'圆角',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'radian',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_06_04',
+                                    alias:'bb-input',                   
+                                    aliasName:'边距',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'margin',
+                                    },
+                                    interactives:[],
+                                }]
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_07',
+                            alias:'bb-form',                   
+                            aliasName:'阴影',                                  
+                            attributes:{
+                                attributeName:'shadow',
+                                labelWidth:"80px",
+                                size:"mini",
+                                grid:true,
+                                content:[{                      
+                                    uuid:'layout_07_01',
+                                    alias:'bb-input',                   
+                                    aliasName:'阴影颜色',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'color',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_07_02',
+                                    alias:'bb-input',                   
+                                    aliasName:'阴影大小',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'size',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_07_03',
+                                    alias:'bb-input',                   
+                                    aliasName:'阴影方向',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'direction',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_07_04',
+                                    alias:'bb-input',                   
+                                    aliasName:'阴影模糊',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'vague',
+                                    },
+                                    interactives:[],
+                                }]
+                            },
+                            interactives:[],
+                        }]
             }
-
         }
     }
 </script>
