@@ -10,19 +10,21 @@
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
             <bb-form v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
-            <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="attributesChange"></bb-form>
-            <bb-editor-code v-model="valueBase.attributes" :returnObj="true" @input="attributesChange"></bb-editor-code>
+            <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
-            <bb-form size="mini" :content="interactiveContent" v-model="valueBase" @commit="interactivesChange"></bb-form>
+            <bb-form size="mini" :content="interactiveContent" v-model="valueBase" @commit="contentChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="动画">
             <bb-button-form :content="animationFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加动画"  settingText ="添加动画" v-model="animationForm" @commit="animationAdd"></bb-button-form>
-            <bb-form size="mini" v-model="valueBase" ref="animationListContent" :content="animationListContent" @commit="animationChange"></bb-form>
+            <bb-form size="mini" v-model="valueBase" ref="animationListContent" :content="animationListContent" @commit="contentChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="布局">
-            <bb-form size="mini" v-model="valueBase.layout" ref="layoutContent" :content="layoutContent" @commit="objectChange"></bb-form>
+            <bb-form size="mini" v-model="valueBase.layout" ref="layoutContent" :content="layoutContent" @commit="contentChange"></bb-form>
+        </el-tab-pane>
+        <el-tab-pane label="开发者">
+            <bb-editor-code v-model="valueBase" :returnObj="true" @input="contentChange"></bb-editor-code>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -145,26 +147,8 @@
                 }
                 
             },
-            //属性修改
-            attributesChange:function(formData){
-                const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            },
-            //交互修改
-            interactivesChange:function(formData){
-                const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            },
-            //动画修改
-            animationChange:function(formData){
-                const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            },
-            //动画修改
-            objectChange:function(formData){
+            //content修改
+            contentChange:function(formData){
                 const t = this;
                 t.$emit('input',t.valueBase);
                 t.$emit('change',t.valueBase);
