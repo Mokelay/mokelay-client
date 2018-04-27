@@ -224,6 +224,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                     }
                 }
             }
+            //格式化参数
+            paramValue = typeof paramValue == "object" ? JSON.stringify(paramValue) : paramValue;
             requestParam[input['paramName']] = paramValue;
         });
     }
@@ -783,7 +785,12 @@ let _setStyle = function(bb, t) {
             'margin': layout.border && layout.border.margin,
             'box-shadow': `${layout.shadow&&layout.shadow.size} ${layout.shadow&&layout.shadow.direction} ${layout.shadow&&layout.shadow.vague} ${layout.shadow&&layout.shadow.color}`,
             'overflow-y': layout['overflow-y'],
-            'overflow-x': layout['overflow-x']
+            'overflow-x': layout['overflow-x'],
+            'font-family': layout.font && layout.font.family,
+            'color': layout.font && layout.font.color,
+            'font-size': layout.font && layout.font.size,
+            'text-align': layout.font && layout.font.align,
+            'text-decoration': layout.font && layout.font.decoration,
         }
     }
     const animation = _setAnimation(bb);
