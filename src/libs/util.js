@@ -198,7 +198,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     var method = ds['method'] || 'post';
     var requestParam = {};
     var inputs = ds['inputs'] || [];
-    var outputs = ds['outputs'] || [];
+    var outputs_default = ds['outputs'] || [];
     if (inputs && inputs.length > 0) {
         inputs.forEach(function(input) {
             //TY2.0默认全部走template
@@ -245,6 +245,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         var data = response['data'];
         if (data['ok']) {
             var realDataMap = data['data'] || {};
+            var outputs = _TY_Tool.deepClone(outputs_default);
             new Promise(function(resolve, reject) {
                 const promiseArr = [];
                 outputs.forEach(function(output) {
