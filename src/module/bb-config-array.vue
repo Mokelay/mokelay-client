@@ -83,7 +83,7 @@
                 }else{
                     t.key = 'add';
                     t.itemValue = {
-                        uuid: _TY_Tool.uuid(5,8),
+                        uuid: _TY_Tool.uuid(),
                         alias: '',
                         aliasName: '', 
                         attributes: {},
