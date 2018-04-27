@@ -33,14 +33,14 @@
     import '../css/DrawingManager_min.css';
     import '../css/SearchInfoWindow_min.css';
 
-    import ditu0 from '../css/icon/map/ditu.png';  // 放大
-    import ditu1 from '../css/icon/map/ditu1.png'; // 1爱琴海    4003
-    import ditu2 from '../css/icon/map/ditu2.png'; // 2家具委管  4002
-    import ditu3 from '../css/icon/map/ditu3.png'; // 3星艺佳    4005
-    import ditu4 from '../css/icon/map/ditu4.png'; // 4其他      4006
-    import ditu5 from '../css/icon/map/ditu5.png'; // 5家具自营   4001
-    import ditu6 from '../css/icon/map/ditu6.png'; // 6房地产    4004
-    import alertBack from '../css/icon/map/pao1.png'; // 6房地产    4004
+    import ditu0 from '../css/icon/map/ditu.png';       // 放大
+    import ditu1 from '../css/icon/map/ditu1.png';      // 1爱琴海    4003
+    import ditu2 from '../css/icon/map/ditu2.png';      // 2家具委管  4002
+    import ditu3 from '../css/icon/map/ditu3.png';      // 3星艺佳    4005
+    import ditu4 from '../css/icon/map/ditu4.png';      // 4其他      4006
+    import ditu5 from '../css/icon/map/ditu5.png';      // 5家具自营   4001
+    import ditu6 from '../css/icon/map/ditu6.png';      // 6房地产    4004
+    import alertBack from '../css/icon/map/pao1.png';   // 6房地产    4004
 
     // 百度地图资源加载 
     const resourcesUrl = ['http://api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
