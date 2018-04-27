@@ -413,7 +413,7 @@
       afterEdit:function(contentItem){
           const t = this;
           t.key = _TY_Tool.uuid();
-          const newContent = _TY_Tool.deepClone(t.content);
+          const newContent = t.content;
           contentItem.onFocus = true;
           t.$set(newContent,t.nowEdit,contentItem);
           t.content = newContent;
