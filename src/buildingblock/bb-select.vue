@@ -146,6 +146,14 @@
                 this.getData();
               }
             },
+            //外部联动，并清空value值
+            linkageAndClearValue:function(data){
+              if(data){
+                this.valueBase = null;
+                this.external['linkage'] = data;
+                this.getData();
+              }
+            },
             change:function(val){
               if(Array.isArray(val)){
                 this.$emit('input',JSON.stringify(val))
@@ -158,7 +166,13 @@
             },
             clean:function(val){
               this.valueBase = null;
+            },
+            //清空选项
+            cleanAll:function(){
+              this.valueBase = null;
+              this.items = null;
             }
+
         }
     }
 </script>

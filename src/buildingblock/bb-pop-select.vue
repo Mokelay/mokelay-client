@@ -13,6 +13,7 @@
             :modalAppendToBody="selectionDialogConfig.modalAppendToBody"
             :title="selectionDialogConfig.title" >
             <bb-list 
+                v-if="popupVisible"
                 :columns="selectionGridConfig.columns"  
                 :ds="selectionGridConfig.ds"  
                 :selection="selectionGridConfig.selection"  
@@ -167,6 +168,7 @@
                 this.showText = null;
                 this.$emit('input',null);
                 this.$emit('change',null);
+                this.$emit('clean',null);
             },
             //选择取消
             cancel:function(){
