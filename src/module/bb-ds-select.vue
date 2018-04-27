@@ -46,8 +46,8 @@
                                     inputs: [{paramName: 'apiAlias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
                                     outputs: [{dataKey: "fields", valueKey: "data_list"}]
                                 },
-                                textField:'alias',
-                                valueField:"alias"
+                                textField:'requestParamName',
+                                valueField:"requestParamName"
                             }},
                             {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
                         ]
