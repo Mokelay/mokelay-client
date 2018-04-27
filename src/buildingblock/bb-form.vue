@@ -69,7 +69,7 @@
                         attributes: props, //积木属性
                         animation: [], //动画
                         interactives: interactives, //触发交互
-                        layout: {} //积木布局
+                        layout: field['layout'] || {} //积木布局
                     }
                     bbContent.push(bbEle);
                 });
@@ -393,14 +393,15 @@
         data() {
             return {
                 initValue:null,
-                formData:null,
+                formData:{},
                 commitFormData:null,//因为表单提交后需要清空表单数据，但有时候又需要表单提交的值，所以这里缓存一个清空前的表单数据
                 realFields:null
             }
         },
         created: function () {
             const t = this;
-            t.formData = typeof t.value == 'string' && t.value.length?eval("("+t.value+")"):t.value
+            t.formData = typeof t.value == 'string' && t.value.length?eval("("+t.value+")"):t.value;
+            t.formData = t.formData?t.formData:{};
             t.initValue=(typeof(this.value) == 'string' && this.value.length)?eval("("+this.value+")"):this.value;
             t.realFields = t.fields
             t.getFields();
