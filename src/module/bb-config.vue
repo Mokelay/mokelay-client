@@ -894,16 +894,22 @@
                                 size:"mini",
                                 content:[{                      
                                     uuid:'layout_06_01',
-                                    alias:'bb-input',                   
+                                    alias:'bb-select',                   
                                     aliasName:'样式',                                  
                                     attributes:{
                                         width:"95%",
                                         attributeName:'style',
+                                        fields:[
+                                            {text:"实线",value:"solid"},
+                                            {text:"虚线",value:"dashed"},
+                                            {text:"点状",value:"dotted"},
+                                            {text:"双线",value:"double"}
+                                            ]
                                     },
                                     interactives:[],
                                 },{                      
                                     uuid:'layout_06_02',
-                                    alias:'bb-input',                   
+                                    alias:'bb-color-picker',                   
                                     aliasName:'颜色',                                  
                                     attributes:{
                                         width:"95%",
@@ -942,7 +948,7 @@
                                 grid:true,
                                 content:[{                      
                                     uuid:'layout_07_01',
-                                    alias:'bb-input',                   
+                                    alias:'bb-color-picker',                   
                                     aliasName:'阴影颜色',                                  
                                     attributes:{
                                         width:"95%",
