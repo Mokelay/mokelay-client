@@ -416,7 +416,6 @@
                     if (clickSignMode[0] === ev.target || clickSignMode1[0] === ev.target) {
                         th.modifySignImage('sign');
                     }
-                    
                 });
             },
             /**
