@@ -391,14 +391,14 @@
                     span2.style.marginLeft = '14px';
                     span2.style.display = 'inline-block';
                     span2.style.position = 'relative';
-                    span2.style.padding = '0px 10px';
+                    span2.style.padding = '2px 10px';
                     span2.style.border = '1px solid';
                     span2.style.borderRadius = '20px';
-                    span2.style.borderColor = '#e8e8e8';
-                    span2.style.color = '#0093ea';
+                    span2.style.color = 'rgb(68, 176, 239)';
                     span2.style.background = '#fff';
                     span2.style.lineHeight = '18px';
-                    span2.style.font = '700 12px Arial,sans-serif';
+                    span2.style.font = '400 12px Arial,sans-serif';
+                    span2.style.transform = 'scale(0.8)';
                     
                     div.appendChild(span);
                     div.appendChild(span2);
