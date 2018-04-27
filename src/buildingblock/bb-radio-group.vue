@@ -86,8 +86,12 @@ import Util from '../libs/util';
         methods: {
            radioChange(val){
                 this.p_value = val;
-                this.$emit("input",eval(val));
-                this.$emit("change",eval(val));
+                let tempVal = val;
+                if(typeof(this.value)==='number'){
+                    tempVal = new Number(val);
+                }
+                this.$emit("input",tempVal);
+                this.$emit("change",tempVal);
            }    
         }
     }
