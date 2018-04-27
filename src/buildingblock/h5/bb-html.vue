@@ -1,5 +1,5 @@
 <template>
-    <span class="bb-html" :contenteditable="contenteditable" v-on:dblclick="dblclick" v-on:blur="blur" v-html="valueBase"></span>
+    <span class="bb-html" :contenteditable="contenteditable" @input="valChange" v-on:dblclick="dblclick" v-on:blur="blur" v-html="valueBase"></span>
 </template>
 
 <script>
@@ -26,7 +26,10 @@
         data() {
             return {
                 valueBase: this.value,
-                contenteditable:false
+                contenteditable:false,
+                resultObject:{},//最后返回模板中的变量值对象
+                resultString:'',//最后生成的完整String
+                resultHtmlString:''//最后生成的完整html String
             }
         },
         computed:{
@@ -92,10 +95,11 @@
                     return;
                 }
                 let bbVal = t.valueBase;//先复制valueBase数据，以免响应式会触发渲染
+                let bbResultVal = t.valueBase;//用于value替换
                 map.forEach(function(item,index){
                     const _component = item.component;
                     const _fieldName = item.fieldName;
-                    let fieldValue;
+                    let fieldValue="";
                     if(valObject&&valObject.hasOwnProperty(_fieldName)){
                         fieldValue = valObject[_fieldName];
                     }
@@ -109,8 +113,14 @@
                             break;
 
                     }
-                    bbVal=bbVal.replace(new RegExp(item.src, 'gi'),_html);
+                    bbVal=bbVal.replace(new RegExp(item.src, 'gi'),"<bb-html name="+_fieldName+" >"+_html+"</bb-html>");
+                    //加标签是用于标记
+                    bbResultVal = bbResultVal.replace(new RegExp(item.src, 'gi'),"<bb-item name="+_fieldName+">"+fieldValue+"</bb-item>");
+                    t.resultObject[_fieldName]=fieldValue;
                 });
+                t.resultHtmlString = bbResultVal;
+                //填充无html的string
+                t.fillResultString(t.resultHtmlString);
                 t.valueBase = bbVal;
             },
             dblclick:function(params){
@@ -124,6 +134,27 @@
             },
             cancel:function(params){
                 this.contenteditable = false;
+            },
+            fillResultString:function(str){
+                let t=this;
+                let result = str.replace(/<[^>]+>|&nbsp;/g,"");
+                t.resultString = result;
+            },
+            //val,fieldName  用事件冒泡的方式，接受 动态html代码里的事件触发
+            valChange:function(...args){
+                let t=this;
+                //获取字段名
+                let fieldName = event.target.getAttribute("name");
+                let fieldValue = event.target.value;
+                t.resultObject[fieldName] = fieldValue;//返回的值对象
+                const _html = event.currentTarget.innerHTML;
+                const reg = new RegExp("<bb-item name="+fieldName+".*?>.*?</bb-item>", 'gi')
+                t.resultHtmlString = t.resultHtmlString.replace(reg,"<bb-item name="+fieldName+">"+fieldValue+"</bb-item>");//完整的html 代码
+                //填充无html的string
+                t.fillResultString(t.resultHtmlString);
+                t.$emit("input",t.valueBase,t);
+                //change事件将返回的所有数据 以参数形式传出去
+                t.$emit('change',t.resultHtmlString,t.resultString,t.resultObject,t);
             }
         }
     }
