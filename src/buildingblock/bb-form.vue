@@ -60,6 +60,7 @@
                     props['width'] = field['width'];
                     props['mark'] = field['description'];
                     props['tip'] = field['tip'];
+                    props['itemMargin'] = field['itemMargin'];
                     const bbEle = {
                         uuid: field['pbbId'] || _TY_Tool.uuid(),
                         alias: field['et'], //积木别名
@@ -68,7 +69,7 @@
                         attributes: props, //积木属性
                         animation: [], //动画
                         interactives: interactives, //触发交互
-                        layout: null //积木布局
+                        layout: {} //积木布局
                     }
                     bbContent.push(bbEle);
                 });
@@ -99,7 +100,7 @@
                     ref: ref,
                     style: {
                         'width': field['attributes']['width'] || '100%',
-                        'padding':'0 20px 0 5px',
+                        'margin-bottom':field['attributes']['itemMargin'] || '10px',
                         'box-sizing': 'border-box;'
                     },
                     attrs:{
@@ -367,14 +368,14 @@
             grid:{
                 type:Boolean,
                 default:false
-            }
+            },
         },
         watch: {
             value(val){
                 if (typeof val === 'object') {
                     this.formData = val;
                 } else if (typeof val === 'string') {
-                    this.formData = (val ? eval("("+t.value+")") : {});
+                    this.formData = (val ? eval("("+this.value+")") : {});
                 }
             },
             fields(val){

@@ -672,6 +672,14 @@
                             props:{
                             }
                         },{                      
+                            attributeName:'itemMargin',
+                            et:'bb-input',
+                            group:'表单选项',                 
+                            name:'表单项间距',
+                            description:"表单项底部间距",                               
+                            props:{
+                            }
+                        },{                      
                             attributeName:'show',
                             et:'bb-editor-switch',
                             group:'表单选项',                   
