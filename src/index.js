@@ -63,6 +63,9 @@ import bbpagination from './buildingblock/bb-pagination.vue';
 import bbmap from './buildingblock/bb-map.vue';
 import bbspace from './buildingblock/bb-space.vue';
 
+// Vant相关的
+import vantAddressEdit from './buildingblock/vant/bb-vant-address-edit';
+
 
 // ElementUI相关的
 import bbEleLogin from './buildingblock/elementui/bb-ele-login';
@@ -96,8 +99,6 @@ import bbapilegoconfig from './module/bb-apilego-config.vue';
 import bbfieldtreeselect from './module/bb-field-tree-select.vue';
 import bbfieldtreepopselect from './module/bb-field-tree-pop-select.vue';
 import bbconfigarray from './module/bb-config-array.vue';
-
-
 
 //布局相关
 import bbpage from './layout/bb-page';
@@ -227,6 +228,8 @@ let ty = {
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
 
+		// Vant
+		Vue.component('bb-vant-address-edit', vantAddressEdit);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		window._TY_Toast = bbtoast;
