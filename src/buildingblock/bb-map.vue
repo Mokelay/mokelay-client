@@ -53,90 +53,114 @@
             },
             isSign: {
                 type: Boolean,
-                default: true,
+                default: false,
             },
             isArea: {
                 type: Boolean,
                 default: false,
             },
-            value:{
-                type:[String,Number]
-            },
             ds: {
                 type: Object,
-                default: function () {
-                    return {
-                        api:'/xfz_nation_region_map_address',
-                        method:'post',
-                        inputs: [
-                            {
-                                paramName: 'province_code', 
-                                valueType: "template", 
-                                variable: "<%=route.query.target_province_code%>"
-                            },{
-                                paramName: 'town_code', 
-                                valueType: "template",
-                                variable: "<%=route.query.target_town_code%>"
-                            },{
-                                paramName: 'area_code', 
-                                valueType: "template",
-                                variable: "<%=route.query.target_area_code%>"
-                            }
-                        ],
-                        outputs:[
-                            {
-                                dataKey: 'tableData', 
-                                valueKey: 'data'
-                            }
-                        ]
-                    }
-                }
+                // default: function () {
+                //     return {
+                //         api:'/xfz_nation_region_map_address',
+                //         method:'post',
+                //         inputs: [
+                //             {
+                //                 paramName: 'province_code', 
+                //                 valueType: "template", 
+                //                 variable: "<%=route.query.target_province_code%>"
+                //             },{
+                //                 paramName: 'town_code', 
+                //                 valueType: "template",
+                //                 variable: "<%=route.query.target_town_code%>"
+                //             },{
+                //                 paramName: 'area_code', 
+                //                 valueType: "template",
+                //                 variable: "<%=route.query.target_area_code%>"
+                //             }
+                //         ],
+                //         outputs:[
+                //             {
+                //                 dataKey: 'tableData', 
+                //                 valueKey: 'data'
+                //             }
+                //         ]
+                //     }
+                // }
             },
             tds: {
                 type: Object,
-                default: function () {
-                    return {
-                        api:'/xfz_nation_region_map_project_list',
-                        method:'post',
-                        inputs: [
-                            {
-                                paramName: 'province_code', 
-                                valueType: "template", 
-                                variable: "<%=route.query.target_province_code%>"
-                            },{
-                                paramName: 'town_code', 
-                                valueType: "template",
-                                variable: "<%=route.query.target_town_code%>"
-                            },{
-                                paramName: 'area_code', 
-                                valueType: "template",
-                                variable: "<%=route.query.target_area_code%>"
-                            }
-                        ],
-                        outputs:[
-                            {
-                                dataKey: 'tableData', 
-                                valueKey: 'map_project_list'
-                            }
-                        ]
-                    }
-                }
+                // default: function () {
+                //     return {
+                //         api:'/xfz_nation_region_map_project_list',
+                //         method:'post',
+                //         inputs: [
+                //             {
+                //                 paramName: 'province_code', 
+                //                 valueType: "template", 
+                //                 variable: "<%=route.query.target_province_code%>"
+                //             },{
+                //                 paramName: 'town_code', 
+                //                 valueType: "template",
+                //                 variable: "<%=route.query.target_town_code%>"
+                //             },{
+                //                 paramName: 'area_code', 
+                //                 valueType: "template",
+                //                 variable: "<%=route.query.target_area_code%>"
+                //             }
+                //         ],
+                //         outputs:[
+                //             {
+                //                 dataKey: 'tableData', 
+                //                 valueKey: 'map_project_list'
+                //             }
+                //         ]
+                //     }
+                // }
             },
-        },
-        watch: {
-            value(val){
-                this.valueBase = val;
+            saveds: {
+                type: Object,
+                // default: function () {
+                //     return {
+                //         api:'/xfz_resource_apply_map_location_save',
+                //         method:'post',
+                //         inputs: [
+                //             {
+                //                 paramName: 'id', 
+                //                 valueType: "template", 
+                //                 variable: "<%=route.query.resource_apply_id%>"
+                //             },{
+                //                 paramName: 'address_image', 
+                //                 valueType: "template",
+                //                 variable: ""
+                //             },{
+                //                 paramName: 'address_poi', 
+                //                 valueType: "template",
+                //                 variable: '<%=bb.saveSign%>'
+                //             }
+                //         ],
+                //         outputs:[
+                //             {
+                //                 dataKey: 'tableData', 
+                //                 valueKey: 'data'
+                //             }
+                //         ]
+                //     }
+                // }
             }
         },
         data() {
             return {
                 map: null,                  // 地图对象
-                overlays: [],
+                overlays: [],               // 初始绘制坐标数据
+                saveSign: [],               // 保存坐标数据
                 valueBase: this.value,      // 搜索value
                 province: '',               // 省
                 town: '',                   // 市
                 area: '',                   // 区
-                pointData: {}               // 标记data
+                pointData: {},              // 标记data
+                checkResourcesId: '',       // 选中资源id
             }
         },
         mounted() {
@@ -186,6 +210,8 @@
 
                             if (th.isSign) {
                                 th.signOperation(th);
+
+                                th.modifySignImageClick(th);
                             }
 
                             // th.getBoundary(th);
@@ -199,6 +225,8 @@
                 }
 
                 th.map = map;
+
+                
             });
             
         },
@@ -209,7 +237,7 @@
             /**
              * 行政区划添加标注
              */
-            addPoint(th, data, lng, lat) {
+            addPoint(th, data, lat, lng) {
                 let map = th.map;
                 // 编写自定义函数,创建标注
                 // 1爱琴海    4003
@@ -234,7 +262,7 @@
                     let p = e.target;
                     let lng = p.getPosition().lng;
                     let lat = p.getPosition().lat;
-                    th.addPoint(th, th.pointData, p.getPosition().lng, p.getPosition().lat); 
+                    th.addPoint(th, th.pointData, p.getPosition().lat, p.getPosition().lng); 
                 }
                 // 向地图添加标注
                 let code;
@@ -244,7 +272,7 @@
                 for (var i = 0; i < data.length; i ++) {
                     point = new BMap.Point(data[i].x_coordinate, data[i].y_coordinate);
                     code = data[i].project_kind_code;
-                    if (lng && lat && lng == data[i].x_coordinate && lat == data[i].y_coordinate) {
+                    if (lat && lng && lng == data[i].x_coordinate && lat == data[i].y_coordinate) {
                         myIcon = new BMap.Icon(ditu0, new BMap.Size(32, 32));
                     } else {
                         if (code === '4001') {
@@ -265,12 +293,12 @@
                     addMarker(point, myIcon);
                 }
 
-                th.addlabel(th, data, lng, lat);
+                th.addlabel(th, data, lat, lng);
             },
             /**
              * 行政区划添加备注
              */
-            addlabel(th, data, lng, lat) {
+            addlabel(th, data, lat, lng) {
                 let map = th.map;
 
                 let opts;
@@ -403,8 +431,24 @@
                 //添加鼠标绘制工具监听事件，用于获取绘制结果
                 drawingManager.addEventListener('overlaycomplete', overlaycomplete);
 
-                var obj = document.getElementById("mapContent");
-                obj.addEventListener("click",function(ev){
+                
+            },
+            /**
+             * 删除原百度地图拖动图标及功能
+             */
+            deleteOtherDom() {
+                let removeNode = document.getElementsByClassName('BMapLib_hander');
+
+                if (removeNode && removeNode[0]) {
+                    removeNode[0].parentNode.removeChild(removeNode[0]);
+                }
+            },
+            /**
+             * 修改原百度地图工具箱事件
+             */
+            modifySignImageClick(th) {
+                let obj = th.getDom("mapContent");
+                obj.addEventListener("click", function(ev){
 
                     th.deleteOtherDom();
 
@@ -417,16 +461,6 @@
                         th.modifySignImage('sign');
                     }
                 });
-            },
-            /**
-             * 删除原百度地图拖动图标及功能
-             */
-            deleteOtherDom() {
-                let removeNode = document.getElementsByClassName('BMapLib_hander');
-
-                if (removeNode && removeNode[0]) {
-                    removeNode[0].parentNode.removeChild(removeNode[0]);
-                }
             },
             /**
              * 修改原百度地图工具箱功能
@@ -549,12 +583,38 @@
              * 保存标记点
              */
             signSaveClick() {
+                if (!this.overlays.length) {
+                    return;
+                }
                 this.deleteOtherDom();
                 this.modifySignImage('save');
-                this.testStaticMap();
                 this.map.removeEventListener("click", function() {});
 
-                console.log(this.overlays || this.overlays[0] || this.overlays[0].CC[0].ia);
+                console.log(this.overlays[0] || this.overlays[0].ia);
+
+                const th = this;
+                let overlays = this.overlays[0].ia;
+
+                for (let i = 0; i < overlays.length; i++) {
+                    this.saveSign.push({
+                        x: overlays[i].lat,
+                        y: overlays[i].lng
+                    });
+                }
+
+                this.saveSign = JSON.stringify(this.saveSign);
+
+                Util.getDSData(this.saveds, _TY_Tool.buildTplParams(this), function (data) {
+                    data.forEach(function (item) {
+                        
+                    });
+
+                    th.clearAll();
+
+                    th.loading = false;
+                }, function (code, msg) {
+                    th.loading = false;
+                });
 
                 this.$emit('sign-save-click');
             }
@@ -615,6 +675,7 @@
     .bb-map-contrast {
         height: 100vh;
         margin: 0 auto;
+        position: relative;
         .map-content {
             height: 100%;
             width: 100%;
@@ -739,8 +800,8 @@
             width: 110px;
             height: 140px;
             z-index: 1;
-            right: 22px;
-            top: 73px;
+            right: 20px;
+            top: 71px;
             bottom: 0px;
             margin: 20px 0 0 20px;
 
