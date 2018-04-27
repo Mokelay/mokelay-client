@@ -15,11 +15,13 @@
                 <bb-radio-group v-if="searchConfig.type == 'radio'" v-model="keywords" type="button" @input="globalSearch" :options="searchConfig.searchKeys" :ds="searchConfig.ds" :optionValue="searchConfig.optionValue" :optionText="searchConfig.optionText" class='searchSelection'>
                 </bb-radio-group>
             </div>
+        </el-row>
+        <el-row v-if="advancedSearch">
             <!-- 高级搜索 -->
             <bb-button-form 
                 class="advancedSearch"
                 @commit="advancedSearchFn"
-                v-if="advancedSearch && advancedSearchConfig.layoutType == 'bb-button-form'" 
+                v-if="advancedSearchConfig.layoutType == 'bb-button-form'" 
                 :fields="advancedSearchConfig.fields"
                 :content="advancedSearchConfig.content"
                 :startButtonIcon="advancedSearchConfig.startButtonIcon" 
@@ -27,7 +29,7 @@
                 :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
             <bb-form 
                 @commit="advancedSearchFn"
-                v-if="advancedSearch && advancedSearchConfig.layoutType == 'inline-form'"
+                v-if="advancedSearchConfig.layoutType == 'inline-form'"
                 :labelInline="true"
                 :fields="advancedSearchConfig.fields"
                 :content="advancedSearchConfig.content"

@@ -4,11 +4,11 @@
 
         </div>
 
-        <div v-if="isSearch" class="search-element">
+        <div v-show="isSearch" class="search-element">
              <div id="searchbox" class="clearfix"> 
                 <div id="searchbox-container"> 
                     <div id="sole-searchbox-content" class="searchbox-content"> 
-                        <input id="sole-input" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
+                        <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
                         <div class="input-clear" title="清空"></div> 
                     </div> 
                     <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
@@ -28,16 +28,18 @@
 
 <script>
     import Vue from 'vue';
+    import Util from '../libs/util.js'
     import reloadJS from '../libs/reloadJS';
 
-    import ditu0 from '../css/icon/map/ditu.png'
-    import ditu1 from '../css/icon/map/ditu1.png'
-    import ditu2 from '../css/icon/map/ditu2.png'
-    import ditu3 from '../css/icon/map/ditu3.png'
-    import ditu4 from '../css/icon/map/ditu4.png'
-    import ditu5 from '../css/icon/map/ditu5.png'
-    import ditu6 from '../css/icon/map/ditu6.png'
+    import ditu0 from '../css/icon/map/ditu.png';  // 放大
+    import ditu1 from '../css/icon/map/ditu1.png'; // 1爱琴海    4003
+    import ditu2 from '../css/icon/map/ditu2.png'; // 2家具委管  4002
+    import ditu3 from '../css/icon/map/ditu3.png'; // 3星艺佳    4005
+    import ditu4 from '../css/icon/map/ditu4.png'; // 4其他      4006
+    import ditu5 from '../css/icon/map/ditu5.png'; // 5家具自营   4001
+    import ditu6 from '../css/icon/map/ditu6.png'; // 6房地产    4004
 
+    // 百度地图资源加载 
     const resourcesUrl = ['http://api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
         'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
         'http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js']
@@ -47,121 +49,152 @@
         props: {
             isSearch: {
                 type: Boolean,
-                default: true,
+                default: false,
             },
             isSign: {
                 type: Boolean,
                 default: true,
+            },
+            isArea: {
+                type: Boolean,
+                default: false,
+            },
+            value:{
+                type:[String,Number]
+            },
+            ds: {
+                type: Object,
+                default: function () {
+                    return {
+                        api:'/xfz_nation_region_map_address',
+                        method:'post',
+                        inputs: [
+                            {
+                                paramName: 'province_code', 
+                                valueType: "template", 
+                                variable: "<%=route.query.target_province_code%>"
+                            },{
+                                paramName: 'town_code', 
+                                valueType: "template",
+                                variable: "<%=route.query.target_town_code%>"
+                            },{
+                                paramName: 'area_code', 
+                                valueType: "template",
+                                variable: "<%=route.query.target_area_code%>"
+                            }
+                        ],
+                        outputs:[
+                            {
+                                dataKey: 'tableData', 
+                                valueKey: 'data'
+                            }
+                        ]
+                    }
+                }
+            },
+            tds: {
+                type: Object,
+                default: function () {
+                    return {
+                        api:'/xfz_nation_region_map_project_list',
+                        method:'post',
+                        inputs: [
+                            {
+                                paramName: 'province_code', 
+                                valueType: "template", 
+                                variable: "<%=route.query.target_province_code%>"
+                            },{
+                                paramName: 'town_code', 
+                                valueType: "template",
+                                variable: "<%=route.query.target_town_code%>"
+                            },{
+                                paramName: 'area_code', 
+                                valueType: "template",
+                                variable: "<%=route.query.target_area_code%>"
+                            }
+                        ],
+                        outputs:[
+                            {
+                                dataKey: 'tableData', 
+                                valueKey: 'map_project_list'
+                            }
+                        ]
+                    }
+                }
+            },
+        },
+        watch: {
+            value(val){
+                this.valueBase = val;
             }
         },
         data() {
             return {
-                map: null,
+                map: null,                  // 地图对象
                 overlays: [],
-                marker: null
+                valueBase: this.value,      // 搜索value
+                province: '',               // 省
+                town: '',                   // 市
+                area: '',                   // 区
+                pointData: {}               // 标记data
             }
         },
-        mounted () {
+        mounted() {
             let th = this;
 
             reloadJS(resourcesUrl).then(function () {
-                function G(id) {
-                    return document.getElementById(id);
-                }
-
                 let map = new BMap.Map("mapContent");
                 // 添加地图类型控件
                 map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
-                // 设置地图显示的城市 此项是必须设置的
-                // map.setCurrentCity("杭州");    
                 // 开启鼠标滚轮缩放      
                 map.enableScrollWheelZoom(true);
 
-                if (th.isSearch) {
-                    // 建立一个自动完成的对象
-                    let ac = new BMap.Autocomplete(    
-                        {"input" : "sole-input"
-                        ,"location" : map
-                    });
+                /**
+                * 获取数据
+                */
+                if (th.ds) {
+                    th.loading = true;
+                    Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
+                        data.forEach(function (item) {
+                            var list = item['value'];
 
-                    // 鼠标放在下拉列表上的事件
-                    ac.addEventListener("onhighlight", function(e) {  
-                        let str = "";
-                        let _value = e.fromitem.value;
-                        let value = "";
-                        if (e.fromitem.index > -1) {
-                            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-                        }    
-                        str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
-                        
-                        value = "";
-                        if (e.toitem.index > -1) {
-                            _value = e.toitem.value;
-                            value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-                        }    
-                        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
-                        G("searchResultPanel").innerHTML = str;
+                            th.province = list.province;
+                            th.town = list.town;
+                            th.area = list.area;
+                            // 设置地图显示的城市 此项是必须设置的
+                            map.centerAndZoom(list.area, 11); 
+                            
+                            if (th.tds) {
+                                boundary();
+                            }
+                        });
+                        th.loading = false;
+                    }, function (code, msg) {
+                        th.loading = false;
                     });
-
-                    let myValue;
-                    // 鼠标点击下拉列表后的事件
-                    ac.addEventListener("onconfirm", function(e) {    
-                        let _value = e.item.value;
-                        myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
-                        G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
-                        
-                        th.localSearch(th, myValue, true);
-                    });
-
                 }
 
-                if (th.isSign) {
-                    var poi = new BMap.Point(116.307852,40.057031);
-                    map.centerAndZoom(poi, 16);
-                    map.enableScrollWheelZoom();  
-                    th.overlays = [];
-                    var overlaycomplete = function(e){
-                        th.overlays.push(e.overlay);
-                    };
-                    var styleOptions = {
-                        strokeColor:"red",    //边线颜色。
-                        fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
-                        strokeWeight: 3,       //边线的宽度，以像素为单位。
-                        strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
-                        fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
-                        strokeStyle: 'solid' //边线的样式，solid或dashed。
-                    }
-                    //实例化鼠标绘制工具
-                    var drawingManager = new BMapLib.DrawingManager(map, {
-                        isOpen: false, //是否开启绘制模式
-                        enableDrawingTool: true, //是否显示工具栏
-                        drawingToolOptions: {
-                            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
-                            offset: new BMap.Size(5, 5), //偏离值
-                            drawingModes: [BMAP_DRAWING_POLYLINE],
-                        },
-                        circleOptions: styleOptions, //圆的样式
-                        polylineOptions: styleOptions, //线的样式
-                        polygonOptions: styleOptions, //多边形的样式
-                        rectangleOptions: styleOptions //矩形的样式
-                    });  
-                    //添加鼠标绘制工具监听事件，用于获取绘制结果
-                    drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+                function boundary () {
+                    th.loading = true;
+                    Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
+                        data.forEach(function (item) {
+                            var list = item['value'];
 
-                    var obj = document.getElementById("mapContent");
-                    obj.addEventListener("click",function(ev){
+                            th.pointData = list.list;
 
-                        th.deleteOtherDom();
+                            th.searchOperation(th);
 
-                        let clickSignMode = document.getElementsByClassName('BMapLib_last');
-                        let clickSignMode1 = document.getElementsByClassName('market-sign-mode1');
-                        if (!clickSignMode || !clickSignMode1) {
-                            return;
-                        }
-                        if (clickSignMode[0] === ev.target || clickSignMode1[0] === ev.target) {
-                            th.modifySignImage('sign');
-                        }
-                        
+                            if (th.isSign) {
+                                th.signOperation(th);
+                            }
+
+                            // th.getBoundary(th);
+
+                            th.addPoint(th, list.list);
+                        });
+                        th.loading = false;
+                    }, function (code, msg) {
+                        th.loading = false;
                     });
                 }
 
@@ -170,6 +203,221 @@
             
         },
         methods: {
+            getDom(id) {
+                return document.getElementById(id);
+            },
+            /**
+             * 行政区划添加标注
+             */
+            addPoint(th, data, lng, lat) {
+                let map = th.map;
+                // 编写自定义函数,创建标注
+                // 1爱琴海    4003
+                // 2家具委管  4002
+                // 3星艺佳    4005
+                // 4其他      4006
+                // 5家具自营   4001
+                // 6房地产    4004
+
+                let marker;
+                let markerArr;
+                // 添加标注
+                function addMarker(point, myIcon){
+                    marker = new BMap.Marker(point, {icon:myIcon});
+                    map.addOverlay(marker);
+
+                    marker.addEventListener("click", attribute);
+                }
+                // 标注回调函数
+                function attribute(e){
+                    map.clearOverlays();
+                    let p = e.target;
+                    let lng = p.getPosition().lng;
+                    let lat = p.getPosition().lat;
+                    th.addPoint(th, th.pointData, p.getPosition().lng, p.getPosition().lat); 
+                }
+                // 向地图添加标注
+                let code;
+                let img;
+                let myIcon;
+                let point;
+                for (var i = 0; i < data.length; i ++) {
+                    point = new BMap.Point(data[i].x_coordinate, data[i].y_coordinate);
+                    code = data[i].project_kind_code;
+                    if (lng && lat && lng == data[i].x_coordinate && lat == data[i].y_coordinate) {
+                        myIcon = new BMap.Icon(ditu0, new BMap.Size(32, 32));
+                    } else {
+                        if (code === '4001') {
+                            img = ditu5;
+                        } else if (code === '4002') {
+                            img = ditu2;
+                        } else if (code === '4003') {
+                            img = ditu1;
+                        } else if (code === '4004') {
+                            img = ditu6;
+                        } else if (code === '4005') {
+                            img = ditu3;
+                        } else if (code === '4006') {
+                            img = ditu4;
+                        }
+                        myIcon = new BMap.Icon(img, new BMap.Size(22, 22));
+                    }
+                    addMarker(point, myIcon);
+                }
+
+                th.addlabel(th, data, lng, lat);
+            },
+            /**
+             * 行政区划添加备注
+             */
+            addlabel(th, data, lng, lat) {
+                let map = th.map;
+
+                let opts;
+                let point;
+                let label;
+                for (var i = 0; i < data.length; i ++) {
+                    point = new BMap.Point(data[i].x_coordinate, data[i].y_coordinate);
+
+                    if (lng && lat && lng == data[i].x_coordinate && lat == data[i].y_coordinate) {
+                        opts = {
+                            position : point,    // 指定文本标注所在的地理位置
+                            offset   : new BMap.Size(-30, -50)    //设置文本偏移量
+                        }
+                    } else {
+                        opts = {
+                            position : point,    // 指定文本标注所在的地理位置
+                            offset   : new BMap.Size(-30, -45)    //设置文本偏移量
+                        }
+                    }
+                    
+                    label = new BMap.Label(data[i].project_name, opts);  // 创建文本标注对象
+                    label.setStyle({
+                        color : "#7a7a7a",
+                        fontSize : "12px",
+                        height : "30px",
+                        lineHeight : "30px",
+                        border: '1px solid',
+                        borderColor: '#e8e8e8',
+                        boxShadow: '2px 2px 12px #888',
+                        fontFamily:"微软雅黑"
+                    });
+
+                    map.addOverlay(label); 
+                }  
+                
+            },
+            /**
+             * 添加行政区划
+             */
+            getBoundary(th){       
+                let map = th.map;
+                var bdary = new BMap.Boundary();
+                bdary.get(th.province + th.town + th.area, function(rs){      //获取行政区域
+                    map.clearOverlays();                    //清除地图覆盖物       
+                    var count = rs.boundaries.length;       //行政区域的点有多少个
+                    if (count === 0) {
+                        // alert('未能获取当前输入行政区域');
+                        return ;
+                    }
+                    var pointArray = [];
+                    for (var i = 0; i < count; i++) {
+                        var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#0091EA"}); //建立多边形覆盖物
+                        map.addOverlay(ply);  //添加覆盖物
+                        pointArray = pointArray.concat(ply.getPath());
+                    }    
+                    map.setViewport(pointArray);    //调整视野  
+                });   
+            },            
+            /**
+             * 搜索逻辑处理
+             */
+            searchOperation(th) {
+                let map = th.map;
+                // 建立一个自动完成的对象
+                let ac = new BMap.Autocomplete(    
+                    {"input" : "sole-input"
+                    ,"location" : map
+                });
+
+                // 鼠标放在下拉列表上的事件
+                ac.addEventListener("onhighlight", function(e) {  
+                    let str = "";
+                    let _value = e.fromitem.value;
+                    let value = "";
+                    if (e.fromitem.index > -1) {
+                        value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+                    }    
+                    str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+                    
+                    value = "";
+                    if (e.toitem.index > -1) {
+                        _value = e.toitem.value;
+                        value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+                    }    
+                    str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+                    th.getDom("searchResultPanel").innerHTML = str;
+                });
+
+                let myValue;
+                // 鼠标点击下拉列表后的事件
+                ac.addEventListener("onconfirm", function(e) {    
+                    let _value = e.item.value;
+                    myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+                    th.getDom("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+                    
+                    th.localSearch(th, myValue, true);
+                });
+            },
+            /**
+             * 标记逻辑处理
+             */
+            signOperation(th) {
+                let map = th.map;
+                th.overlays = [];
+                var overlaycomplete = function(e){
+                    th.overlays.push(e.overlay);
+                };
+                var styleOptions = {
+                    strokeColor:"red",    //边线颜色。
+                    fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+                    strokeWeight: 3,       //边线的宽度，以像素为单位。
+                    strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+                    fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+                    strokeStyle: 'solid' //边线的样式，solid或dashed。
+                }
+                //实例化鼠标绘制工具
+                var drawingManager = new BMapLib.DrawingManager(map, {
+                    isOpen: false, //是否开启绘制模式
+                    enableDrawingTool: true, //是否显示工具栏
+                    drawingToolOptions: {
+                        anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+                        offset: new BMap.Size(5, 5), //偏离值
+                        drawingModes: [BMAP_DRAWING_POLYLINE],
+                    },
+                    circleOptions: styleOptions, //圆的样式
+                    polylineOptions: styleOptions, //线的样式
+                    polygonOptions: styleOptions, //多边形的样式
+                    rectangleOptions: styleOptions //矩形的样式
+                });  
+                //添加鼠标绘制工具监听事件，用于获取绘制结果
+                drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+
+                var obj = document.getElementById("mapContent");
+                obj.addEventListener("click",function(ev){
+
+                    th.deleteOtherDom();
+
+                    let clickSignMode = document.getElementsByClassName('BMapLib_last');
+                    let clickSignMode1 = document.getElementsByClassName('market-sign-mode1');
+                    if (!clickSignMode || !clickSignMode1) {
+                        return;
+                    }
+                    if (clickSignMode[0] === ev.target || clickSignMode1[0] === ev.target) {
+                        th.modifySignImage('sign');
+                    }
+                });
+            },
             /**
              * 删除原百度地图拖动图标及功能
              */
@@ -273,12 +521,13 @@
              * 搜索点击功能
              */
             searchClick() {
-                let searchValue = document.getElementById('sole-input').value;
-                if (!searchValue) {
+                if (!this.valueBase) {
                     return;
                 }
 
-                this.localSearch(this, searchValue, false);
+                this.localSearch(this, this.valueBase, false);
+
+                this.$emit('search-click');
             },
             /**
              * 处理地图点击事件
@@ -294,6 +543,7 @@
                 this.modifySignImage('clear');
                 this.clearAll();
                 this.map.removeEventListener("click", function() {});
+                this.$emit('sign-delete-click');
             },
             /**
              * 保存标记点
@@ -305,6 +555,8 @@
                 this.map.removeEventListener("click", function() {});
 
                 console.log(this.overlays || this.overlays[0] || this.overlays[0].CC[0].ia);
+
+                this.$emit('sign-save-click');
             }
         }
     }
