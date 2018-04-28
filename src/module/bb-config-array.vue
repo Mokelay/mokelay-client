@@ -1,7 +1,7 @@
 <template>  
     <div>
         <bb-dialog title="积木设置" size="middle" :isShow.sync="showDialog">
-            <bb-config @change="commit" v-model="itemValue"></bb-config>
+            <bb-config v-if="showDialog" @change="commit" v-model="itemValue"></bb-config>
         </bb-dialog>
         <bb-button @click="edit" :button="addButton"></bb-button>
         <bb-list :columns="columns" :value="valueBase" @edit="edit" @change="change" :editConfig="editConfig"></bb-list>
