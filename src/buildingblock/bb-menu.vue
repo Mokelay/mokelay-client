@@ -8,6 +8,15 @@
             if (t.shouldUpdate && t.items) {
                 t.menuList = t.createMenu(createElement, t.items);
             }
+            let menuExternalStyle = {};
+            if(t.horizontal==='horizontal'){
+                menuExternalStyle ={height:t.height};
+            }
+            if(t.p_collapse){
+                menuExternalStyle['width']='';
+            }else{
+                delete menuExternalStyle['width'];
+            }
             return createElement(
                     'el-menu',
                     {
@@ -16,9 +25,13 @@
                             router: t.router,
                             'default-active': t.defaultActive,
                             'unique-opened': false,
-                            collapse: t.collapse,
-                            'default-openeds': t.defaultOpeneds
-                        }
+                            collapse: t.p_collapse,
+                            'default-openeds': t.defaultOpeneds,
+                            'active-text-color':t.activeTextColor,
+                            'text-color':t.textColor,
+                            'background-color':t.backgroundColor
+                        },
+                        style:Object.assign({},t.bbStyle,menuExternalStyle)
                     },
                     t.menuList
             );
@@ -30,6 +43,7 @@
                     return []
                 }
             },
+            //vertical horizontal
             horizontal: {
                 type: String,
                 default: "horizontal"
@@ -65,10 +79,42 @@
             router: {
                 type: Boolean,
                 default: true
+            },
+            //菜单样式
+            bbStyle:{
+                type:[String,Object],
+                default:function(){
+                    return {};
+                }
+            },
+            //菜单高度
+            height:{
+                type:String
+            },
+            //选中后的下拉颜色
+            activeTextColor:{
+                type:String
+            },
+            //文字颜色
+            textColor:{
+                type:String
+            },
+            //是否关闭item 的hover 背景色效果
+            itemHoverBg:{
+                type:String
+            },
+            //背景色
+            backgroundColor:{
+                type:String
+            },
+            //用于根据路由 判断 active
+            urlLevel:{
+                type:[Number,String]
             }
         },
         data() {
             return {
+                p_collapse:this.collapse,//是否折叠
                 items: this.fields,
                 newMenu: true,
                 menuList: [],
@@ -83,16 +129,38 @@
                     this.items = val;
                 },
                 deep: true
+            },
+            collapse(val){
+                this.p_collapse = val;
             }
         },
         computed: {
         },
         components: {},
         created: function () {
+            const t=this;
             this.getData();
-            this.defaultActive = this.$route.fullPath;
+            const fullPath = this.$route.fullPath;
+            let _urlLevel = (typeof(t.urlLevel)==='string'?new Number(t.urlLevel):t.urlLevel);
+            _urlLevel = typeof(_urlLevel)==='undefined'?-1:_urlLevel;
+            let paths = fullPath.split("&");
+            if(_urlLevel>=0){
+                this.defaultActive = paths.slice(0,_urlLevel+1).join('&');
+            }else{
+               this.defaultActive = fullPath;
+            }
         },
         methods: {
+            closeOrOpenMenu:function(...args){
+                let t=this;
+                if(args&&args.length>0){
+                    if(args[0]){
+                        t.p_collapse = true;
+                    }else{
+                        t.p_collapse = false;
+                    }
+                }
+            },
             getData: function () {
                 var t = this;
                 if (this.ds && this.ds.api) {
@@ -104,7 +172,8 @@
                                 var ele = list[i];
                                 let button = {
                                     title: ele[t.titleField],
-                                    url: ele[t.urlField]
+                                    url: ele[t.urlField],
+                                    icon:ele['icon']
                                 }
                                 newArr.push(button);
                             }
@@ -150,7 +219,16 @@
                                         t.$refs[item['url']].hide();
                                     }
                                     t.forwardThirdUrl(item.url);
+                                },
+                                mouseenter:function(){
+                                    t.$emit('mouseenter',item)
+
                                 }
+                            },
+                            style:{
+                                height:t.height,
+                                "line-height":t.height,
+                                backgroud:(t.itemHoverBg?t.itemHoverBg:'')
                             }
                         },
                         [templateChild, titleEle]);

@@ -71,7 +71,8 @@
     }
     .f_right{
         float: right;
-        line-height: 1.75em;
+        line-height: 1.85em;
+        font-size: 0.85em;
     }
     ._title{
         font-size: 1.17em;
@@ -79,15 +80,16 @@
         float: left;
     }
     ._title>h3{
+        font-size: inherit;
         display: inline-block;
     }
     ._title_icon{
-        height: 0.85em;
+        height: 0.80em;
         width: 0.25em;
         float: left;
         background: #0091EA;
         border-radius: 6px;
-        margin: 6px 8px 0 0;
+        margin: 5px 8px 0 0;
     }
     ._box{
         width: 100%;

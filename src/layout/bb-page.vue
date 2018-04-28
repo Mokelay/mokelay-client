@@ -85,7 +85,7 @@
       }
 
       //页面级弹窗容器 所有的弹窗都新增在此div下
-      const dialog = createElement('div',{attrs:{id:this.pageAlias + '_dialog'}},[]);
+      const dialog = createElement('div',{attrs:{id:this.p_pageAlias + '_dialog'}},[]);
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
@@ -98,6 +98,7 @@
           return false;
         }
       },
+      //支持模板
       pageAlias:{
         type: String
       },
@@ -115,6 +116,7 @@
     },
     data() {
       return {
+        p_pageAlias:this.pageAlias,//初始化pageAlias
         templatePageAlias:null,
         p_params:this.params,//初始化参数
         pbbs:[],
@@ -124,8 +126,10 @@
       };
     },
     created: function () {
+      //解析pageAlias 模板（如果是模板的话）
+      this.p_pageAlias = _TY_Tool.tpl(this.pageAlias,_TY_Tool.buildTplParams(this));
       //把bb-page的全局对象注册到window下
-      window._TY_Page_Data[this.pageAlias] = this;
+      window._TY_Page_Data[this.p_pageAlias] = this;
       if(this.root){
         window._TY_Root = this;
       }
@@ -157,13 +161,13 @@
         this.loadData();
       },
       loadData:function(){
-        var pass = this.pageAlias && this.pageAlias.length >0;
+        var pass = this.p_pageAlias && this.p_pageAlias.length >0;
         if(!pass){
           return;
         }
         //调用ajax获取PBBS数据
         var t =this;
-        var pageAlias = this.pageAlias;
+        var pageAlias = this.p_pageAlias;
         //TODO 单接口调用
         Util.post(window._TY_ContentPath+"/load-page-data",{
           alias:pageAlias
@@ -319,12 +323,12 @@
                       //关闭弹窗销毁DOM中的当前弹窗节点
                       setTimeout(function(){
                         //如果有多个dialog，清除后面那个，只有一个就全清
-                        let dialogDom = document.getElementById(t.pageAlias + '_dialog').getElementsByClassName("el-dialog__wrapper");
+                        let dialogDom = document.getElementById(t.p_pageAlias + '_dialog').getElementsByClassName("el-dialog__wrapper");
                         if(dialogDom.length>1){
                           let removeDom = dialogDom[dialogDom.length-1];
                           removeDom.parentNode.removeChild(removeDom);//删除最后一个节点
                         }else{
-                          document.getElementById(t.pageAlias + '_dialog').innerHTML = '';
+                          document.getElementById(t.p_pageAlias + '_dialog').innerHTML = '';
                         }
                         if(t.dialogKeys.length>0){
                           delete t.$refs[t.dialogKeys[t.dialogKeys.length-1]];
@@ -336,7 +340,7 @@
             }
         }).$mount();
         //将弹窗实例化对象挂载到当前bb-page下
-        document.getElementById(t.pageAlias + '_dialog').appendChild(_dialog.$el);
+        document.getElementById(t.p_pageAlias + '_dialog').appendChild(_dialog.$el);
         t._dialog = _dialog;
         //为了解决容器类积木  获取不到 弹窗中的子积木，方案待定
         t.$refs[t.dialogKeys[t.dialogKeys.length-1]] = _dialog; //把bb-form 设置到$refs中

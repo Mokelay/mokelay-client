@@ -46,18 +46,18 @@
         </el-container>
         <!-- 上下左右上下布局 -->
         <el-container v-if="realLayout == 'h-l-m-f'">
-            <el-header :style="{background:realBgColor.header}">
+            <el-header :style="p_layoutObject.headerStyle">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside width="20%" :style="{background:realBgColor.leftAside}">
+                <el-aside :width="p_layoutObject.leftAuto?'':'20%'" :style="p_layoutObject.leftStyle">
                     <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-container>
-                    <el-main :style="{background:realBgColor.main}">
+                    <el-main :style="p_layoutObject.mainStyle">
                         <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                     </el-main>
-                    <el-footer>
+                    <el-footer :style="p_layoutObject.footerStyle">
                         <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
                     </el-footer>
                 </el-container>
@@ -127,10 +127,10 @@
                     <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
+            <el-footer :style="{background:realBgColor.footer}">
+                <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
+            </el-footer>
         </el-container>
-        <el-footer :style="{background:realBgColor.footer}">
-            <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
-        </el-footer>
     </div> 
 </template>
 <script>
@@ -150,6 +150,12 @@
                 h-l-m-r:'上下左中右布局'
                 {
                     type:'', 
+                    leftAuto:false,//最侧菜单是否根据内容自适应宽度
+                    leftStyle:{},//上下左右的css样式
+                    headerStyle:{padding: '0 2px'},
+                    mainStyle:{},
+                    rightStyle:{},
+                    footerStyle:{},
                     bgColor:{}//布局背景色
                 }               
             */
@@ -158,6 +164,12 @@
                 default:function(){
                     return {
                         type:'h-l-m-r',
+                        leftAuto:false,
+                        leftStyle:{},
+                        headerStyle:{},
+                        mainStyle:{},
+                        rightStyle:{},
+                        footerStyle:{},
                         bgColor:{
                             header:"#B3C0D1",
                             leftAside:"#D3DCE6",
@@ -223,11 +235,11 @@
                 type:[Array,String],
                 default:function(){
                     return [
-                        {uuid:'header',alias:'bb-words',group:'header',aliasName:'',attributes:{value:'Header',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'leftAside',alias:'bb-words',group:'leftAside',aliasName:'',attributes:{value:'LeftAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'main',alias:'bb-words',aliasName:'',group:'main',attributes:{value:'main',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'rightAside',alias:'bb-words',aliasName:'',group:'rightAside',attributes:{value:'rightAside',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]},
-                        {uuid:'footer',alias:'bb-words',aliasName:'',group:'footer',attributes:{value:'Footer',textAlign:'center',lineHeight:'60px'},animation:[],interactives:[]}
+                        {uuid:'header',alias:'bb-words',group:'header',aliasName:'',attributes:{value:'Header',textAlign:'center',lineHeight:'56px'},animation:[],interactives:[]},
+                        {uuid:'leftAside',alias:'bb-words',group:'leftAside',aliasName:'',attributes:{value:'LeftAside',textAlign:'center',lineHeight:'56px'},animation:[],interactives:[]},
+                        {uuid:'main',alias:'bb-words',aliasName:'',group:'main',attributes:{value:'main',textAlign:'center',lineHeight:'56px'},animation:[],interactives:[]},
+                        {uuid:'rightAside',alias:'bb-words',aliasName:'',group:'rightAside',attributes:{value:'rightAside',textAlign:'center',lineHeight:'56px'},animation:[],interactives:[]},
+                        {uuid:'footer',alias:'bb-words',aliasName:'',group:'footer',attributes:{value:'Footer',textAlign:'center',lineHeight:'56px'},animation:[],interactives:[]}
                     ]
                 }
             }
@@ -254,6 +266,16 @@
                             rightAside:"transparent",
                             footer:"transparent"
                     },this.layoutObject.bgColor);
+            },
+            p_layoutObject(){
+                return  Object.assign({
+                            leftAuto:false,
+                            leftStyle:{},
+                            headerStyle:{},
+                            mainStyle:{},
+                            rightStyle:{},
+                            footerStyle:{}
+                    },this.layoutObject);
             }
         },
         created: function () {
@@ -320,12 +342,12 @@
 <style lang='less'>
     .bb-layout-container{
         .el-header{
-            height: 60px;
+            height: 56px;
             overflow-y: auto;
         }
         .el-container{
-            height: calc(~'100vh - 60px');
-            overflow-y: auto;
+            height: calc(~'100vh - 56px');
+            /*overflow-y: auto;*/
         }
         .el-footer{
             height: 0px;
