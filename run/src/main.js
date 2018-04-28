@@ -47,7 +47,7 @@ const router = new VueRouter({
         meta: {
             title: '应用首页'
         },
-        component: (resolve) => require(['./custom/index.vue'], resolve),
+        component: (resolve) => require(['./index.vue'], resolve),
         children: [{
             path: '/:appAlias/index/:pageAlias',
             meta: {},

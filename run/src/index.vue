@@ -47,24 +47,6 @@
             return {
                 fields:[],
                 fieldsBanner:{title:'',url:"http://" + document.location.host + "/#" + window._TY_Home,icon:'ty-icon_M_b ty-font',class:'wy-banner-left wy-banner-lg'},
-
-//                fieldsIndex:{title:'首页',url:'/wy/wy-index',icon:'icon_home wy-font'},
-//                fieldsInspectionTPList:{title:'巡检表单管理',url:'/wy/wy-inspectionTPList',icon:'icon_biaodan1 wy-font'},
-//                fieldsInspectionList:{title:'巡检管理',url:'inspectionListHome',icon:'icon_xunjian wy-font',children:[
-//                        {title:'点位管理',url:'/wy/wy-inspectionList',icon:''},
-//                        {title:'任务分配',url:'/wy/wy-taskManage',icon:'',value:false},
-//                        {title:'人员排期',url:'/wy/wy-schedule',icon:''},
-//                        {title:'转单/报修',url:'/wy/wy-transferOrRepair',icon:'',value:false},
-//                        {title:'岗位交接',url:'/wy/wy-jobHandover',icon:''}
-//                    ]},
-//                fieldsPermissionManage:{title:'基础配置',url:'permissionManageHome',icon:'icon_shezhi1 wy-font',children:[
-//                        {title:'员工授权',url:'/wy/wy-employeeEmpowerment',icon:''},
-//                        {title:'设置一责',url:'/wy/wy-addAdmin',icon:''}
-//                    ]},
-//                fieldsFeedback:{title:'帮助中心',url:'feedbackHome',icon:'icon_bangzhu1 wy-font',children:[
-//                        {title:'帮助手册',url:'/wy/wy-help',icon:''},
-//                        {title:'意见反馈',url:'/wy/wy-feedback',icon:''}
-//                    ]},
                 horizontal:'vertical',
                 collapse:false,
                 userName:null,
@@ -239,11 +221,7 @@
             },
             setStyle:function(){
                 const t = this;
-                if(window.location.href.indexOf('wy-index') == -1){
-                    t.wyPageContainer = 'wy-content-height'
-                }else{
-                    t.wyPageContainer = 'wyIndexBackground wy-content-height'
-                }
+                t.wyPageContainer = 'wy-content-height';
             },
             menuClick:function(){
                 this.setStyle();
@@ -252,45 +230,7 @@
                 this.contentHeight = window.screen.availHeight - 50 - 65 + 'px';
                 this.menuBackgroundHeight = window.screen.availHeight - 65 + 'px';
                 this.menuBackgroundWidth = this.collapse?'64px':'160px';
-            },
-//            setPermission:function(newArr,key){//权限配置
-//                const t = this;
-//                let userInfo = sessionStorage.getItem('userInfo');
-//                userInfo = JSON.parse(userInfo);
-//                userInfo.user_type = '3'
-//                const user_type = userInfo.user_type;
-//                t.fieldsReady = [];
-//                let newfieldsPermissionManage = t.fieldsPermissionManage;
-//                switch(user_type){
-//                    case '1':
-//                        t.$msgbox({
-//                            title: '提示',
-//                            type:'warning',
-//                            message: '您没有权限访问物业管理信息系统',
-//                            confirmButtonText: '确定',
-//                        })
-//                        t.fieldsReady.push(t.fieldsBanner,t.fieldsIndex);
-//                        break;
-//                    case '2':
-//                        t.defaultOpeneds.push('inspectionListHome');
-//                        t.fieldsReady.push(t.fieldsBanner,t.fieldsIndex,t.fieldsInspectionList);
-//                        break;
-//                    case '3':
-//                        t.defaultOpeneds.push('inspectionListHome','permissionManageHome');
-//                        newfieldsPermissionManage.children.splice(1,1);
-//                        t.fieldsReady.push(t.fieldsBanner,t.fieldsIndex,t.fieldsInspectionTPList,t.fieldsInspectionList,newfieldsPermissionManage);
-//                        break;
-//                    case '4':
-//                        t.defaultOpeneds.push('permissionManageHome','feedbackHome');
-//                        newfieldsPermissionManage.children.splice(0,1);
-//                        t.fieldsReady.push(t.fieldsBanner,t.fieldsIndex,newfieldsPermissionManage,t.fieldsFeedback);
-//                        break;
-//                    case '5':
-//                        t.defaultOpeneds.push('feedbackHome');
-//                        t.fieldsReady.push(t.fieldsBanner,t.fieldsIndex,t.fieldsInspectionTPList,t.fieldsFeedback);
-//                        break;
-//                }
-//            }
+            }
         }
     }
 </script>
@@ -431,14 +371,6 @@
     }
     .wy .wy-content-height{
         min-height: ~'calc(100vh - 135px)';
-    }
-    .wy .wyIndexBackground{
-        background-image: url('./index_bg.png');
-        background-repeat: no-repeat;
-        background-size: auto;
-        background-position: 100% 100%;
-        width: 100%;
-        margin-bottom: -19px;   
     }
     .wy-menu-container{
         height: 100vh;
