@@ -149,7 +149,7 @@ import Util from '../libs/util';
                     ref:"form",
                     key:formKey
                 },[]);
-                const dialog = createElement('bb-dialog',{props:{isShow:t.formVisible,size:"middle"},on:{'update:isShow':(isShow)=>{t.formVisible = isShow;t.formData = {}}}},[form]);
+                const dialog = createElement('bb-dialog',{props:{isShow:t.formVisible,size:"middle"},on:{'update:isShow':(isShow)=>{t.formVisible = isShow;}}},[form]);
                 return dialog;
             },
             setting:function(){
