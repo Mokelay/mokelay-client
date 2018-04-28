@@ -211,13 +211,13 @@
 
                             th.searchOperation(th);
 
+                            th.getBoundary(th);
+
                             if (th.isSign) {
                                 th.signOperation(th);
 
                                 th.modifySignImageClick(th);
                             }
-
-                            // th.getBoundary(th);
 
                             th.addPoint(th, list.list);
                         });
@@ -261,10 +261,17 @@
                 }
                 // 标注回调函数
                 function attribute(e){
-                    map.clearOverlays();
                     let p = e.target;
                     let lng = p.getPosition().lng;
                     let lat = p.getPosition().lat;
+
+                    var allOverlay = map.getOverlays();
+                    for (var i = 0; i < allOverlay.length - 1; i++) {
+                        if (allOverlay[i].toString() == "[object Marker]") {
+                            map.removeOverlay(allOverlay[i]);
+                        }
+                    }
+                    
                     th.addPoint(th, th.pointData, p.getPosition().lat, p.getPosition().lng); 
                 }
                 // 向地图添加标注
@@ -272,9 +279,12 @@
                 let img;
                 let myIcon;
                 let point;
+                let child;
+                let child2;
                 for (var i = 0; i < data.length; i ++) {
                     point = new BMap.Point(data[i].x_coordinate, data[i].y_coordinate);
                     code = data[i].project_kind_code;
+                    
                     if (lat && lng && lng == data[i].x_coordinate && lat == data[i].y_coordinate) {
                         myIcon = new BMap.Icon(ditu0, new BMap.Size(32, 32));
                     } else {
@@ -293,6 +303,10 @@
                         }
                         myIcon = new BMap.Icon(img, new BMap.Size(22, 22));
                     }
+                    child = th.getDom(data[i].id + '-big');
+                    child && child.parentNode.removeChild(child);
+                    child2 = th.getDom(data[i].id + '-small');
+                    child2 && child2.parentNode.removeChild(child2);
                     addMarker(point, myIcon);
                 }
 
@@ -311,6 +325,7 @@
                 ComplexCustomOverlay.prototype.initialize = function(map){
                     this._map = map;
                     
+                    div.setAttribute('id', data.id + '-small');
                     div.style.position = "absolute";
                     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
                     div.style.backgroundColor = "#fff";
@@ -370,6 +385,7 @@
                 ComplexCustomOverlay.prototype.initialize = function(map){
                     this._map = map;
                     
+                    div.setAttribute('id', data.id + '-big');
                     div.style.position = "absolute";
                     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
                     div.style.backgroundColor = "#fff";
@@ -466,7 +482,6 @@
                 let map = th.map;
                 var bdary = new BMap.Boundary();
                 bdary.get(th.province + th.town + th.area, function(rs){      //获取行政区域
-                    map.clearOverlays();                    //清除地图覆盖物       
                     var count = rs.boundaries.length;       //行政区域的点有多少个
                     if (count === 0) {
                         // alert('未能获取当前输入行政区域');
@@ -640,7 +655,6 @@
              */
             localSearch(t, myValue, auto) {
                 // 清除地图上所有覆盖物
-                t.map.clearOverlays();    
                 let local = null;
                 // 智能搜索
                 if (auto) {
