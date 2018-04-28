@@ -194,6 +194,10 @@
           //获取页面信息
           t.layoutObject = JSON.parse(page.layoutObject) || {};
           t.layoutObject.title = t.layoutObject.title?t.layoutObject.title : page.name;
+
+          //初始化Window
+          t.initWindow();
+          
           //获取页面beTask任务
           t.runTask();
           //指定布局类型
@@ -441,6 +445,20 @@
         t.key = _TY_Tool.uuid();
         t.content = content;
         t.$emit('change',t.content);
+      },
+      //初始化Window相关业务
+      initWindow: function(){
+        const t =this;
+        //获取页面beTask任务
+        t.runTask();
+        //关闭提示配置
+        if(t.layoutObject['closingPrompt']){
+          window.onbeforeunload = function(){
+            event.returnValue = "";
+          };
+        }else{
+          window.onbeforeunload = null;
+        }
       },
       /*解析页面task
         beTask:[{
