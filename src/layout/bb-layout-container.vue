@@ -343,7 +343,7 @@
     .bb-layout-container{
         .el-header{
             height: 56px;
-            overflow-y: auto;
+            /*overflow-y: auto;*/
         }
         .el-container{
             height: calc(~'100vh - 56px');
@@ -351,7 +351,10 @@
         }
         .el-footer{
             height: 0px;
-            overflow-y: auto;
+            /*overflow-y: auto;*/
         }
+    }
+    .bb-layout-container>.el-container{
+        height:calc(~'100vh');
     }
 </style>
