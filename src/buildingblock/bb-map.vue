@@ -40,7 +40,6 @@
     import ditu4 from '../css/icon/map/ditu4.png';      // 4其他      4006
     import ditu5 from '../css/icon/map/ditu5.png';      // 5家具自营   4001
     import ditu6 from '../css/icon/map/ditu6.png';      // 6房地产    4004
-    import alertBack from '../css/icon/map/pao1.png';   // 6房地产    4004
 
     // 百度地图资源加载 
     const resourcesUrl = ['http://api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
