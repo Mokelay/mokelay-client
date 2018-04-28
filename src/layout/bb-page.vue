@@ -74,6 +74,7 @@
           var element = createElement('bb-layout-canvas', {ref:uuid,props:props});
             pbbElementList.push(element);
         }
+        break;
         //网格布局 grid
         //TODO
 
@@ -145,17 +146,7 @@
       //修改页面的title属性 metadata
       resetPageTitle:function(pageName){
         let t=this;
-        //用iframe 方式兼容ios的微信上bug
         document.title = pageName+" -- TY - 一个全新的开发平台";
-        var i = document.createElement('iframe');
-          i.src = '//m.baidu.com/favicon.ico';
-          i.style.display = 'none';
-          i.onload = function() {
-                setTimeout(function(){
-                  i.remove();
-                }, 9)
-        }
-        document.body.appendChild(i);
       },
       refresh:function(){
         this.loadData();

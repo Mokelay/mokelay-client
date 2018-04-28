@@ -19,6 +19,10 @@ window._TY_APIHost = _env.apiHost;
 window._TY_SSOURL = _env.ssoURL;
 window._TY_Page_Data = {};
 window._TY_HOSTS = _env.hosts || {};
+window._TY_Home = "/home";
+if(_env['home']){
+    window._TY_Home = _env['home'];
+}
 
 
 //定制化VUE
@@ -36,7 +40,7 @@ const router = new VueRouter({
     routes: [{
         path: '/',
         redirect: to => {
-            return "/home";
+            return window._TY_Home;
         }
     }, {
         path: '/:appAlias/index',

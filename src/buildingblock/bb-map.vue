@@ -30,14 +30,17 @@
     import Vue from 'vue';
     import Util from '../libs/util.js'
     import reloadJS from '../libs/reloadJS';
+    import '../css/DrawingManager_min.css';
+    import '../css/SearchInfoWindow_min.css';
 
-    import ditu0 from '../css/icon/map/ditu.png';  // 放大
-    import ditu1 from '../css/icon/map/ditu1.png'; // 1爱琴海    4003
-    import ditu2 from '../css/icon/map/ditu2.png'; // 2家具委管  4002
-    import ditu3 from '../css/icon/map/ditu3.png'; // 3星艺佳    4005
-    import ditu4 from '../css/icon/map/ditu4.png'; // 4其他      4006
-    import ditu5 from '../css/icon/map/ditu5.png'; // 5家具自营   4001
-    import ditu6 from '../css/icon/map/ditu6.png'; // 6房地产    4004
+    import ditu0 from '../css/icon/map/ditu.png';       // 放大
+    import ditu1 from '../css/icon/map/ditu1.png';      // 1爱琴海    4003
+    import ditu2 from '../css/icon/map/ditu2.png';      // 2家具委管  4002
+    import ditu3 from '../css/icon/map/ditu3.png';      // 3星艺佳    4005
+    import ditu4 from '../css/icon/map/ditu4.png';      // 4其他      4006
+    import ditu5 from '../css/icon/map/ditu5.png';      // 5家具自营   4001
+    import ditu6 from '../css/icon/map/ditu6.png';      // 6房地产    4004
+    import alertBack from '../css/icon/map/pao1.png';   // 6房地产    4004
 
     // 百度地图资源加载 
     const resourcesUrl = ['http://api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
@@ -53,7 +56,7 @@
             },
             isSign: {
                 type: Boolean,
-                default: false,
+                default: true,
             },
             isArea: {
                 type: Boolean,
@@ -296,11 +299,150 @@
                 th.addlabel(th, data, lat, lng);
             },
             /**
+             * 自定义label样式
+             */
+            customLabelCss(th, data) {
+                function ComplexCustomOverlay(point, text){
+                    this._point = point;
+                    this._text = text;
+                }
+                ComplexCustomOverlay.prototype = new BMap.Overlay();
+                var div = document.createElement("div");
+                ComplexCustomOverlay.prototype.initialize = function(map){
+                    this._map = map;
+                    
+                    div.style.position = "absolute";
+                    div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+                    div.style.backgroundColor = "#fff";
+                    div.style.border = "1px solid transparent";
+                    div.style.color = "#666666";
+                    div.style.height = "30px";
+                    div.style.padding = "0 10px";
+                    div.style.lineHeight = "30px";
+                    div.style.whiteSpace = "nowrap";
+                    div.style.MozUserSelect = "none";
+                    div.style.boxShadow = '1px 2px 1px rgba(0,0,0,.15)';
+                    div.style.fontSize = "12px"
+                    var span = this._span = document.createElement("span");
+                    div.appendChild(span);
+                    span.appendChild(document.createTextNode(this._text));      
+                    var that = this;
+
+                    var arrow = this._arrow = document.createElement("div");
+                    arrow.style.position = "absolute";
+                    arrow.style.width = "11px";
+                    arrow.style.height = "10px";
+                    arrow.style.top = "29px";
+                    arrow.style.left = "10px";
+                    arrow.style.overflow = "hidden";
+                    arrow.style.width = 0;
+                    arrow.style.height = 0;
+                    arrow.style.borderLeft = '5px solid transparent';
+                    arrow.style.borderRight = '5px solid transparent';
+                    arrow.style.borderTop = '5px solid #fff';
+                    div.appendChild(arrow);
+                    
+                    th.map.getPanes().labelPane.appendChild(div);
+                    
+                    return div;
+                }
+                ComplexCustomOverlay.prototype.draw = function(){
+                    var map = this._map;
+                    var pixel = map.pointToOverlayPixel(this._point);
+                    div.style.left = pixel.x - parseInt(this._arrow.style.left) -5 + "px";
+                    div.style.top  = pixel.y - 45 + "px";
+                }
+                    
+                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name);
+
+                return myCompOverlay;
+            },
+            /**
+             * 自定义label样式
+             */
+            customLabelCss2(th, data) {
+                function ComplexCustomOverlay(point, text){
+                    this._point = point;
+                    this._text = text;
+                }
+                ComplexCustomOverlay.prototype = new BMap.Overlay();
+                var div = document.createElement("div");
+                ComplexCustomOverlay.prototype.initialize = function(map){
+                    this._map = map;
+                    
+                    div.style.position = "absolute";
+                    div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+                    div.style.backgroundColor = "#fff";
+                    div.style.border = "1px solid transparent";
+                    div.style.color = "#666666";
+                    div.style.height = "66px";
+                    div.style.width = "200px";
+                    div.style.padding = "10px 10px";
+                    div.style.whiteSpace = "nowrap";
+                    div.style.MozUserSelect = "none";
+                    div.style.boxShadow = '1px 2px 1px rgba(0,0,0,.15)';
+                    div.style.fontSize = "12px"
+                    let span = this._span = document.createElement("span");
+                    span.style.whiteSpace = 'pre-wrap';
+                    span.style.wordWrap = 'break-word';
+                    span.style.lineHeight = '25px';
+
+                    let span2 = document.createElement("span");
+                    span2.style.marginLeft = '14px';
+                    span2.style.display = 'inline-block';
+                    span2.style.position = 'relative';
+                    span2.style.padding = '2px 10px';
+                    span2.style.border = '1px solid';
+                    span2.style.borderRadius = '20px';
+                    span2.style.color = 'rgb(68, 176, 239)';
+                    span2.style.background = '#fff';
+                    span2.style.lineHeight = '18px';
+                    span2.style.font = '400 12px Arial,sans-serif';
+                    span2.style.transform = 'scale(0.8)';
+                    
+                    div.appendChild(span);
+                    div.appendChild(span2);
+                    
+                    span.appendChild(document.createTextNode(this._text));      
+                    span2.appendChild(document.createTextNode(data.project_status)); 
+
+                    var that = this;
+
+                    var arrow = this._arrow = document.createElement("div");
+                    arrow.style.position = "absolute";
+                    arrow.style.width = "11px";
+                    arrow.style.height = "10px";
+                    arrow.style.top = "65px";
+                    arrow.style.left = "10px";
+                    arrow.style.overflow = "hidden";
+                    arrow.style.width = 0;
+                    arrow.style.height = 0;
+                    arrow.style.borderLeft = '5px solid transparent';
+                    arrow.style.borderRight = '5px solid transparent';
+                    arrow.style.borderTop = '5px solid #fff';
+                    
+                    div.appendChild(arrow);
+
+                    th.map.getPanes().labelPane.appendChild(div);
+                    
+                    return div;
+                }
+                ComplexCustomOverlay.prototype.draw = function(){
+                    var map = this._map;
+                    var pixel = map.pointToOverlayPixel(this._point);
+                    div.style.left = pixel.x - parseInt(this._arrow.style.left) -5 + "px";
+                    div.style.top  = pixel.y - 85 + "px";
+                }
+                    
+                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name);
+
+                return myCompOverlay;
+            },
+            /**
              * 行政区划添加备注
              */
             addlabel(th, data, lat, lng) {
                 let map = th.map;
-
                 let opts;
                 let point;
                 let label;
@@ -308,29 +450,11 @@
                     point = new BMap.Point(data[i].x_coordinate, data[i].y_coordinate);
 
                     if (lng && lat && lng == data[i].x_coordinate && lat == data[i].y_coordinate) {
-                        opts = {
-                            position : point,    // 指定文本标注所在的地理位置
-                            offset   : new BMap.Size(-30, -50)    //设置文本偏移量
-                        }
+                        label = th.customLabelCss2(th, data[i]);
                     } else {
-                        opts = {
-                            position : point,    // 指定文本标注所在的地理位置
-                            offset   : new BMap.Size(-30, -45)    //设置文本偏移量
-                        }
+                        label = th.customLabelCss(th, data[i]);
                     }
                     
-                    label = new BMap.Label(data[i].project_name, opts);  // 创建文本标注对象
-                    label.setStyle({
-                        color : "#7a7a7a",
-                        fontSize : "12px",
-                        height : "30px",
-                        lineHeight : "30px",
-                        border: '1px solid',
-                        borderColor: '#e8e8e8',
-                        boxShadow: '2px 2px 12px #888',
-                        fontFamily:"微软雅黑"
-                    });
-
                     map.addOverlay(label); 
                 }  
                 
@@ -668,9 +792,6 @@
 </style>
 
 <style lang='less' scoped>
-
-    @import 'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css';
-    @import 'http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css';
 
     .bb-map-contrast {
         height: 100vh;

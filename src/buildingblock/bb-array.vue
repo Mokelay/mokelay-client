@@ -1,7 +1,8 @@
 <template>
     <div>
         <div style="margin-bottom:10px;">
-            <bb-button-form ref="object_form" :fields="fields" v-model="valueBase" startButtonIcon="el-icon-plus" startButtonType="text" settingText="添加" @commit="setArray"></bb-button-form>
+            <bb-button-form ref="object_form" :fields="fields" startButtonIcon="el-icon-plus" startButtonType="text" settingText="添加" @commit="setArray"></bb-button-form>
+            
         </div>
         <el-table :data="array" border style="width: 100%" :height="height" stripe>
             <el-table-column v-for="field in fields" v-if="!field.hide" :prop="field.attributeName" :label="field.name"
@@ -12,8 +13,7 @@
             </el-table-column>
             <el-table-column label="操作" width="250" key="operation">
                 <template slot-scope="scope">
-                    <el-button type="text" icon="el-icon-edit"
-                               @click.native.prevent="editData(scope.$index)">修改</el-button>
+                    <bb-button-form v-model="array[scope.$index]" :fields="fields" startButtonIcon="el-icon-edit" startButtonType="text" settingText="修改"></bb-button-form>
                     <el-button type="text" icon="el-icon-delete"
                                @click.native.prevent="deleteData(scope.$index)">删除</el-button>
                     <el-button type="text" icon="el-icon-caret-top"
@@ -101,15 +101,6 @@ import Vue from 'vue';
                         message: '已取消删除'
                     });
                 });
-            },
-            editData: function (index) {
-                const t = this;
-                const param = {
-                       value:t.array[index],
-                       index:index
-                    }
-                t.$refs.object_form.showDialog(t.array[index]);
-                t.index = index;
             },
             upData: function (index) {
                 const t = this;
