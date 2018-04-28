@@ -180,7 +180,7 @@
         box-sizing: border-box;
         position: relative;
         margin: 0 auto !important;
-        padding: 27px 0 90px;
+        padding: 0px 0 0px;
         display: flex;
         flex-wrap: wrap;
         /*max-height: 80vh;*/
