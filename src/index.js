@@ -111,6 +111,9 @@ import bbseriationitemedit from './layout/bb-seriation-item-edit.vue';
 import bblayoutseriationedit from './layout/bb-layout-seriation-edit.vue';
 import bbpageedit from './layout/bb-page-edit.vue';
 
+// DEMO
+import helloworld from './buildingblock/demo/bb-hello-world'
+
 //引入minireset
 import './css/minireset.css';
 
@@ -227,6 +230,9 @@ let ty = {
 
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
+
+		// DEMO
+		Vue.component('bb-hello-world', helloworld);
 
 		// Vant
 		Vue.component('bb-vant-address-edit', vantAddressEdit);
