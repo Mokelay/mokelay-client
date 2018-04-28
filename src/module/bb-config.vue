@@ -10,7 +10,7 @@
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
             <bb-form v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
-            <bb-form size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange"></bb-form>
+            <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
@@ -70,6 +70,8 @@
                 valueBase:this.value,
                 layout:{},
                 alias:this.value.alias,
+                //积木详情
+                bbInfo:null,
                 animationForm:{},
                 tabs:null,
                 activeName:'attributes',
@@ -105,14 +107,52 @@
         watch: {
         },
         created: function () {
+            let t=this;
             this.getConfigEnv();
             this.key = _TY_Tool.uuid();
-            this.setEditor();
+            this.getBBInfo().then(()=>{
+                t.setEditor();
+            })
         },
         mounted:function(){
 
         },
         methods: {
+            //根据bbalias 获取bb的详细信息
+            getBBInfo:function(){
+                let t=this;
+                return new Promise((resolve,reject)=>{
+                    if(!t.alias){
+                        resolve();
+                    }
+                    _TY_Tool.post(_TY_ContentPath+"/read-bb",{
+                        bbAlias:t.alias
+                    }).then(function (response) {
+                            let data = response['data'];
+                            if(data.ok){
+                                t.bbInfo = data.data.data;
+                                if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
+                                    let tempOn = t.bbInfo.on;
+                                    const _arg = tempOn.match(/`[^]*?`/gi)
+                                    if(_arg&&_arg.length>0){
+                                        tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
+                                    }
+                                    t.bbInfo.on = JSON.parse(tempOn);
+                                    if(_arg&&_arg.length>0){
+                                        t.bbInfo.on.forEach((item,index)=>{
+                                            item['executeArgument'] = eval(_arg[index]);
+                                        });
+                                    }
+                                }
+                                resolve();
+                            }else{
+                                reject()
+                            }
+                    }).catch(function (error) {
+                        reject()
+                    });
+                });
+            },
             //载入当前积木的编辑内容
             editBB:function(content){
                 const t = this;
@@ -124,7 +164,10 @@
                 t.valueBase = content;
                 t.alias = content.alias;
                 t.key = _TY_Tool.uuid();
-                t.setEditor()
+                //选获取积木详情，获取交互
+                t.getBBInfo().then(()=>{
+                    t.setEditor();
+                })
             },
             //添加交互
             interactiveAdd:function(row){
@@ -189,7 +232,7 @@
                 t.activeName = 'attributes';
                 //属性配置
                 t.attributesDs = {
-                    api:'list-adByBbAlias',method:'get',category:'config',inputs: [{paramName: 'bbAlias', valueType: "template", variable: t.alias}],outputs:[{dataKey: 'tableData', valueKey: 'data_list.list'}]
+                    api:'list-adByBbAlias',method:'get',category:'config',inputs: [{paramName: 'bbAlias', valueType: "template", variable: t.alias}],outputs:[{dataKey: 'tableData', valueKey: 'data_list.list',handle:'bb-config-ad-fill-uuid'}]
                 };
                 t.$set(t.attributesDs,'inputs',[{paramName: 'bbAlias', valueType: "template", variable: t.alias}])
                 //交互新增表单

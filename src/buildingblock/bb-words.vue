@@ -157,6 +157,10 @@
       linkageTpl:{
         type:String,
         default:''
+      },
+      //主题 主题见上面的常量，主要早积木世界中配置交互
+      theme:{
+        type:String
       }
     },
     data() {

@@ -37,7 +37,7 @@
                         }
                     }
                     var pbbId = field['pbbId'];
-                    var on = t.on;
+                    var on = t.p_on;
                     var interactives = [];
                     if(on){
                         on.forEach(function(_on,index){
@@ -388,10 +388,16 @@
             },
             dsFields(val){
                 this.getFields();
+            },
+            on(val){
+                if(val){
+                    this.p_on = val;
+                }
             }
         },
         data() {
             return {
+                p_on:this.on,
                 initValue:null,
                 formData:{},
                 commitFormData:null,//因为表单提交后需要清空表单数据，但有时候又需要表单提交的值，所以这里缓存一个清空前的表单数据
@@ -517,7 +523,7 @@
                 args.forEach((val,key)=>{
                     if(val.type == 'custom'){
                         t.formData = Object.assign({},t.formData,val.arguments);
-                    }  
+                    }
                 })
             },
             //外部刷新表单项
