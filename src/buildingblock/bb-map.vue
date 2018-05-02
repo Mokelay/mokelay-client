@@ -90,8 +90,8 @@
                 area: '',                   // 区
                 pointData: {},              // 标记data
                 checkResourcesId: '',       // 选中资源id,
-                widthV: this.width ? this.width + 'px' : '',
-                heightV: this.height ? this.height + 'px' : ''
+                widthV: this.width ? this.width + 'px' : '',    // 宽 默认100%
+                heightV: this.height ? this.height + 'px' : ''  // 高 默认100%
             }
         },
         mounted() {
