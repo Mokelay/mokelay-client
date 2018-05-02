@@ -40,7 +40,7 @@
         },
         data() {
             return {
-                p_options:this.options,
+                p_options:typeof(this.options)==='string'?JSON.parse(this.options):this.options,
                 p_bbStyle:(typeof(this.bbStyle)==='string'?JSON.parse(this.bbStyle):this.bbStyle)
             }
         },
