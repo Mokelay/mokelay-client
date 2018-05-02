@@ -29,7 +29,7 @@
             },
             require:{
                 type:[Boolean,String],
-                default:true
+                default:false
             },
             //组件样式
             bbStyle:{
