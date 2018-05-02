@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-map-contrast">
+    <div class="bb-map-contrast" :style="{width: widthV, height: heightV}">
         <div id="mapContent" class="map-content">
 
         </div>
@@ -61,6 +61,14 @@
                 type: Boolean,
                 default: true,
             },
+            width: {
+                type: String,
+                default: '',
+            },
+            height: {
+                type: String,
+                default: '',
+            },
             ds: {
                 type: Object
             },
@@ -81,7 +89,9 @@
                 town: '',                   // 市
                 area: '',                   // 区
                 pointData: {},              // 标记data
-                checkResourcesId: '',       // 选中资源id
+                checkResourcesId: '',       // 选中资源id,
+                widthV: this.width ? this.width + 'px' : '',
+                heightV: this.height ? this.height + 'px' : ''
             }
         },
         mounted() {
