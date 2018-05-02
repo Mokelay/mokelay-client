@@ -1,5 +1,6 @@
 <% var hash = htmlWebpackPlugin.files.js[0].split(".")[htmlWebpackPlugin.files.js[0].split(".").length-2]%>
 <script type="text/javascript">
+    //通过种Cookie方式，同域下可行
     function getRootDomain(){
         var arr = document.domain.split('.');
         if(arr.length === 2){
@@ -13,10 +14,31 @@
     var currentDomain = getRootDomain();
     document.cookie = "staticHash=<%=hash%>; path=/; domain="+currentDomain;
 
+    //等domain ready，frame来调用，同域下可行
     function loadHashKey(){
         return "<%=hash%>";
     }
-    if(window.parent && window.parent.window && window.parent.window.loadTY){
-        window.parent.window.loadTY("<%=hash%>");
+
+    //主动调parent的方法，同域下可行
+    //if(window.parent && window.parent.window && window.parent.window.loadTY){
+    //    window.parent.window.loadTY("<%=hash%>");
+    //}
+
+    //通过加载parent的domain的irame，可以跨域
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+    var parentDomain = getQueryString("domain");
+    if(parentDomain && parentDomain.length >0){
+        var parentFrame = document.createElement('iframe');
+        parentFrame.name = 'tmp_frame';
+        parentFrame.src = parentDomain+"/static.html?version=<%=hash%>";
+        parentFrame.style.display = 'none';
+        document.body.appendChild(parentFrame);
     }
 </script>
