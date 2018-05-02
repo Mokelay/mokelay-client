@@ -102,6 +102,7 @@
                 }else{
                   this.valueBase = val;
                 }
+                this.$emit('mounted',this.valueBase);
             },
             ds(val){
                 this.getData();
