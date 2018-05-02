@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+</head>
+
+<body>
+</body>
+</html>
 <% var hash = htmlWebpackPlugin.files.js[0].split(".")[htmlWebpackPlugin.files.js[0].split(".").length-2]%>
 <script type="text/javascript">
     //通过种Cookie方式，同域下可行
@@ -37,7 +45,7 @@
     if(parentDomain && parentDomain.length >0){
         var parentFrame = document.createElement('iframe');
         parentFrame.name = 'tmp_frame';
-        parentFrame.src = parentDomain+"/static.html?version=<%=hash%>";
+        parentFrame.src = parentDomain+"/static?version=<%=hash%>";
         parentFrame.style.display = 'none';
         document.body.appendChild(parentFrame);
     }
