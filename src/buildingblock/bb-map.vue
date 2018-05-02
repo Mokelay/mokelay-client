@@ -1,26 +1,28 @@
 <template>
-    <div class="bb-map-contrast" :style="{width: widthV, height: heightV}">
-        <div id="mapContent" class="map-content">
+    <div class="bb-map">
+        <div class="bb-map-content" :style="mapSize">
+            <div id="mapContent" class="map-content">
 
-        </div>
+            </div>
 
-        <div v-show="isSearch" class="search-element">
-             <div id="searchbox" class="clearfix"> 
-                <div id="searchbox-container"> 
-                    <div id="sole-searchbox-content" class="searchbox-content"> 
-                        <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
-                        <div class="input-clear" title="清空"></div> 
+            <div v-show="isSearch" class="search-element">
+                <div id="searchbox" class="clearfix"> 
+                    <div id="searchbox-container"> 
+                        <div id="sole-searchbox-content" class="searchbox-content"> 
+                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
+                            <div class="input-clear" title="清空"></div> 
+                        </div> 
+                        <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
                     </div> 
-                    <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
-                </div> 
-                <button id="search-button" data-title="搜索" @click="searchClick"></button> 
+                    <button id="search-button" data-title="搜索" @click="searchClick"></button> 
+                </div>
             </div>
-        </div>
 
-        <div v-if="isSign" class="sign-element">
-            <div class="market-mode" @click="signDeleteClick">
-            </div>
-            <div class="market-mode-last" @click="signSaveClick">
+            <div v-if="isSign" class="sign-element">
+                <div class="market-mode" @click="signDeleteClick">
+                </div>
+                <div class="market-mode-last" @click="signSaveClick">
+                </div>
             </div>
         </div>
     </div>
@@ -61,11 +63,11 @@
                 type: Boolean,
                 default: true,
             },
-            width: {
+            widthMap: {
                 type: String,
                 default: '',
             },
-            height: {
+            heightMap: {
                 type: String,
                 default: '',
             },
@@ -90,8 +92,10 @@
                 area: '',                   // 区
                 pointData: {},              // 标记data
                 checkResourcesId: '',       // 选中资源id,
-                widthV: this.width ? this.width + 'px' : '',    // 宽 默认100%
-                heightV: this.height ? this.height + 'px' : ''  // 高 默认100%
+                mapSize: {
+                    width: this.widthMap ? this.widthMap + '% !important' : '100%',
+                    height: this.heightMap ? this.heightMap + '% !important' : '100%',
+                }
             }
         },
         mounted() {
@@ -749,166 +753,172 @@
 
 <style lang='less' scoped>
 
-    .bb-map-contrast {
+    .bb-map {
         height: 100vh;
-        margin: 0 auto;
-        position: relative;
-        .map-content {
-            height: 100%;
+        .bb-map-content {
+            margin: 0 auto;
             width: 100%;
-            text-align: center;
-        }
-        
-        .search-element {
-            position: absolute;
-            z-index: 2;
-            top: 20px;
-            left: 40px;
-            #searchbox {
-                border-radius: 2px;
-                width: 425px;
-                position: relative;
-                z-index: 5
+            height: 100%;
+            position: relative;
+            .map-content {
+                height: 100%;
+                width: 100%;
+                text-align: center;
             }
-
-            #searchbox #searchbox-container {
-                position: relative;
-                z-index: 2;
-                pointer-events: auto;
-                width: 360px;
-                float: left;
-                box-sizing: border-box;
-                box-shadow: 1px 2px 1px rgba(0,0,0,.15)
-            }
-
-            #searchbox #search-button {
-                pointer-events: auto;
-                background: url('../css/icon/map/searchbox_f175577.png') no-repeat 0 -76px #0091ea;
-                width: 57px;
-                height: 45px;
-                float: left;
-                border: 0;
-                padding: 0;
-                cursor: pointer;
-                border-radius: 0 2px 2px 0;
-                box-shadow: 1px 2px 1px rgba(0,0,0,.15)
-            }
-
-            #searchbox #search-button:hover {
-                background-color: #2e77e5
-            }
-
-            .searchbox-content {
-                width: 360px;
-                border-radius: 2px 0 0 2px;
-                background: #fff
-            }
-
-            .searchbox-content:after {
-                font-size: 0;
-                zoom:1;content: " ";
-                clear: both;
-                display: block;
-                hieght: 0;
-                visibility: hidden
-            }
-
-            .searchbox-content .input-clear {
-                cursor: pointer;
+            
+            .search-element {
                 position: absolute;
-                width: 27px;
-                height: 45px;
-                top: 0;
-                background: url('../css/icon/map/searchbox_f175577.png') no-repeat 0 -114px #fff;
-                display: none;
-                right: 39px
+                z-index: 2;
+                top: 20px;
+                left: 40px;
+                #searchbox {
+                    border-radius: 2px;
+                    width: 425px;
+                    position: relative;
+                    z-index: 5
+                }
+
+                #searchbox #searchbox-container {
+                    position: relative;
+                    z-index: 2;
+                    pointer-events: auto;
+                    width: 360px;
+                    float: left;
+                    box-sizing: border-box;
+                    box-shadow: 1px 2px 1px rgba(0,0,0,.15)
+                }
+
+                #searchbox #search-button {
+                    pointer-events: auto;
+                    background: url('../css/icon/map/searchbox_f175577.png') no-repeat 0 -76px #0091ea;
+                    width: 57px;
+                    height: 45px;
+                    float: left;
+                    border: 0;
+                    padding: 0;
+                    cursor: pointer;
+                    border-radius: 0 2px 2px 0;
+                    box-shadow: 1px 2px 1px rgba(0,0,0,.15)
+                }
+
+                #searchbox #search-button:hover {
+                    background-color: #2e77e5
+                }
+
+                .searchbox-content {
+                    width: 360px;
+                    border-radius: 2px 0 0 2px;
+                    background: #fff
+                }
+
+                .searchbox-content:after {
+                    font-size: 0;
+                    zoom:1;content: " ";
+                    clear: both;
+                    display: block;
+                    hieght: 0;
+                    visibility: hidden
+                }
+
+                .searchbox-content .input-clear {
+                    cursor: pointer;
+                    position: absolute;
+                    width: 27px;
+                    height: 45px;
+                    top: 0;
+                    background: url('../css/icon/map/searchbox_f175577.png') no-repeat 0 -114px #fff;
+                    display: none;
+                    right: 39px
+                }
+
+                .searchbox-content .searchbox-content-common {
+                    outline:none;
+                    box-sizing: border-box;
+                    float: left;
+                    width: 360px;
+                    height: 45px
+                }
+
+                #sole-input::-webkit-input-placeholder {
+                    color: #aaaaaa;
+                    font-size: 16px
+                }
+
+                #sole-input::-moz-placeholder {
+                    color: #aaaaaa;
+                    font-size: 16px
+                }
+
+                #sole-input:-moz-placeholder {
+                    color: #aaaaaa;
+                    font-size: 16px
+                }
+
+                #sole-input:-ms-input-placeholder {
+                    color: #aaaaaa;
+                    font-size: 16px
+                }
+
+                #sole-searchbox-content {
+                    position: relative
+                }
+
+                #sole-searchbox-content #sole-input {
+                    box-sizing: border-box;
+                    border: 0;
+                    padding: 9px 0;
+                    border-left: 10px solid transparent;
+                    border-right: 27px solid transparent;
+                    line-height: 20px;
+                    font-size: 16px;
+                    height: 45px;
+                    color: #333;
+                    position: relative;
+                    border-radius: 2px 0 0 2px
+                }
+
             }
 
-            .searchbox-content .searchbox-content-common {
-                outline:none;
-                box-sizing: border-box;
-                float: left;
-                width: 360px;
-                height: 45px
-            }
+            .sign-element {
+                position: absolute;
+                width: 110px;
+                height: 140px;
+                z-index: 1;
+                right: 20px;
+                top: 71px;
+                bottom: 0px;
+                margin: 20px 0 0 20px;
 
-            #sole-input::-webkit-input-placeholder {
-                color: #aaaaaa;
-                font-size: 16px
-            }
-
-            #sole-input::-moz-placeholder {
-                color: #aaaaaa;
-                font-size: 16px
-            }
-
-            #sole-input:-moz-placeholder {
-                color: #aaaaaa;
-                font-size: 16px
-            }
-
-            #sole-input:-ms-input-placeholder {
-                color: #aaaaaa;
-                font-size: 16px
-            }
-
-            #sole-searchbox-content {
-                position: relative
-            }
-
-            #sole-searchbox-content #sole-input {
-                box-sizing: border-box;
-                border: 0;
-                padding: 9px 0;
-                border-left: 10px solid transparent;
-                border-right: 27px solid transparent;
-                line-height: 20px;
-                font-size: 16px;
-                height: 45px;
-                color: #333;
-                position: relative;
-                border-radius: 2px 0 0 2px
-            }
-
-        }
-
-        .sign-element {
-            position: absolute;
-            width: 110px;
-            height: 140px;
-            z-index: 1;
-            right: 20px;
-            top: 71px;
-            bottom: 0px;
-            margin: 20px 0 0 20px;
-
-            .market-mode {
-                background: url('../css/icon/map/qingchu.png') no-repeat !important;
-                height: 71px;
-                width: 100%;
-                cursor: pointer;
-            }
-            
-            .market-mode1 {
-                background: url('../css/icon/map/qingchu1.png') no-repeat !important;
-                height: 71px;
-                width: 100%;
-                cursor: pointer;
-            }
-            
-            .market-mode-last {
-                background: url('../css/icon/map/baocun.png') no-repeat !important;
-                height: 71px;
-                width: 100%;
-                cursor: pointer;
-            }
-            
-            .market-mode-last1 {
-                background: url('../css/icon/map/baocun1.png') no-repeat !important;
-                height: 71px;
-                width: 100%;
-                cursor: pointer;
+                .market-mode {
+                    background: url('../css/icon/map/qingchu.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-mode1 {
+                    background: url('../css/icon/map/qingchu1.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-mode-last {
+                    background: url('../css/icon/map/baocun.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-mode-last1 {
+                    background: url('../css/icon/map/baocun1.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
             }
         }
     }
+
+    
 </style>
