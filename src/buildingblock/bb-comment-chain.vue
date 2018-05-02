@@ -28,12 +28,39 @@
     export default {
         name: 'bb-comment-chain',
         props: {
+            /** 静态数据源
+                [{
+                    title:'委管部意见',
+                    userPic:'',
+                    userName:'王五',
+                    comment:'请做好评估工作',
+                    opinion:'同意',
+                    commentTime:'2016年03月20日 10:45',
+                    files:[{
+                        fileName:'社保、公积金异地缴纳申请.docx',
+                        fileUrl:'/'
+                    }]
+                },{
+                    title:'委管部意见2',
+                    userPic:'',
+                    userName:'王五2',
+                    comment:'请做好评估工作2',
+                    opinion:'同意',
+                    commentTime:'2016年03月20日 10:45',
+                    files:[{
+                        fileName:'社保、公积金异地缴纳申请2.docx',
+                        fileUrl:'/'
+                    }]
+                }];
+            */
             options:{
                 type:[Array,String]
             },
+            //组件外层样式
             bbStyle:{
                 type:[String,Object]
             },
+            //数据源
             ds:{
                 type:Object
             }
@@ -50,29 +77,6 @@
         created: function () {
             let t=this;
             t.loadData();
-            // t.p_options = [{
-            //     title:'委管部意见',
-            //     userPic:'',
-            //     userName:'王五',
-            //     comment:'请做好评估工作',
-            //     opinion:'同意',
-            //     commentTime:'2016年03月20日 10:45',
-            //     files:[{
-            //         fileName:'社保、公积金异地缴纳申请.docx',
-            //         fileUrl:'/'
-            //     }]
-            // },{
-            //     title:'委管部意见2',
-            //     userPic:'',
-            //     userName:'王五2',
-            //     comment:'请做好评估工作2',
-            //     opinion:'同意',
-            //     commentTime:'2016年03月20日 10:45',
-            //     files:[{
-            //         fileName:'社保、公积金异地缴纳申请2.docx',
-            //         fileUrl:'/'
-            //     }]
-            // }];
         },
         mounted:function(){
             
@@ -170,7 +174,6 @@
     .ty_comment_content span{
         color: #666;
     }
-
     
     .flex {
         display: -webkit-box;
