@@ -78,6 +78,11 @@
             filterable:{
               type:Boolean,
               default:true
+            },
+            //是否文案显示value值
+            showValue:{
+              type:Boolean,
+              default:false
             }
         },
         data() {
@@ -128,7 +133,7 @@
                                     }
                                     let option = {
                                       value:ele,
-                                      text:list[i][t.textField]
+                                      text:list[i][t.textField]+(t.showValue?"("+ele+")":"")
                                     }
                                     t.items.push(option);
                                 }

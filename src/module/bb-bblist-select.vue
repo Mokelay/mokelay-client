@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-select :ds="selectDs" :textField="textField" :valueField="valueField" v-model="selectValue" @change='change'></bb-select>
+        <bb-select :ds="selectDs" :textField="textField" :valueField="valueField" v-model="selectValue" @change='change' :showValue="true"></bb-select>
     </div>
 </template>
 

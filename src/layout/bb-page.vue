@@ -291,7 +291,19 @@
         _TY_Root._TY_args = args;
         args.forEach((val,key)=>{
           if(val.type == 'custom'){
-            t.diaContent = val.arguments;
+            let dialogArgs = val.arguments;
+            t.dialogProp = {
+              'isShow':true,
+              content:dialogArgs,
+              closeOnClickModal:false
+            }
+            if(typeof(dialogArgs)==='object'&&!dialogArgs instanceof Array&&dialogArgs.hasOwnProperty('content')){
+              //说明不是数组，可能是一个bb-dialog的属性对象
+              t.dialogProp = Object.assign({},{
+                'isShow':true,
+                closeOnClickModal:false
+              },dialogArgs);
+            }
           }
         })
         if(!t.dialogKeys){
@@ -304,11 +316,7 @@
             router: t.$router,
             render: function(createElement){
                 return createElement('bb-dialog',{
-                  props:{
-                    'isShow':true,
-                    content:t.diaContent,
-                    closeOnClickModal:false
-                  },on:{
+                  props:t.dialogProp,on:{
                   "update:isShow":(val)=>{
                     if(!val){
                       //关闭弹窗销毁DOM中的当前弹窗节点
