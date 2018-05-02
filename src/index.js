@@ -62,6 +62,7 @@ import bbview from './buildingblock/bb-view.vue';
 import bbpagination from './buildingblock/bb-pagination.vue';
 import bbmap from './buildingblock/bb-map.vue';
 import bbspace from './buildingblock/bb-space.vue';
+import bbcommentchain from './buildingblock/bb-comment-chain.vue';
 
 // Vant相关的
 import vantAddressEdit from './buildingblock/vant/bb-vant-address-edit';
@@ -227,6 +228,7 @@ let ty = {
 		Vue.component('bb-pagination', bbpagination);
 		Vue.component('bb-map', bbmap);
 		Vue.component('bb-space', bbspace);
+		Vue.component('bb-comment-chain', bbcommentchain);
 
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);

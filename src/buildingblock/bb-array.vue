@@ -13,7 +13,7 @@
             </el-table-column>
             <el-table-column label="操作" width="250" key="operation">
                 <template slot-scope="scope">
-                    <bb-button-form v-model="array[scope.$index]" :fields="fields" startButtonIcon="el-icon-edit" startButtonType="text" settingText="修改"></bb-button-form>
+                    <bb-button-form v-model="array[scope.$index]" :fields="fields" startButtonIcon="el-icon-edit" startButtonType="text" settingText="修改" @commit="edit(scope,arguments)"></bb-button-form>
                     <el-button type="text" icon="el-icon-delete"
                                @click.native.prevent="deleteData(scope.$index)">删除</el-button>
                     <el-button type="text" icon="el-icon-caret-top"
@@ -122,6 +122,14 @@ import Vue from 'vue';
                 t.array.splice(index+1,0,item);
                 t.emitResult();
             },
+            edit:function (scope,formDatas) {
+                var fd;
+                if(formDatas&&formDatas.length>0){
+                    fd = formDatas[0];
+                }
+                this.array.splice(scope.$index,1,fd);
+                this.emitResult();
+            },
             add: function (formData,index) {
                 var fd = formData;
                 if(index != 'add'){
@@ -131,7 +139,7 @@ import Vue from 'vue';
                     this.array.push(fd);
                 }
                 this.emitResult();
-                this.$refs.object_form.$refs.form.clean()
+                this.$refs.object_form.$refs.form&&this.$refs.object_form.$refs.form.clean();
                 this.formDialog = null;
             },
             commit:function(){
@@ -147,8 +155,10 @@ import Vue from 'vue';
                 var _td = this.array.concat();
                 if (typeof this.value === 'string' || this.value === null) {
                     this.$emit('input', JSON.stringify(_td));
+                    this.$emit('change', JSON.stringify(_td));
                 } else {
                     this.$emit('input', _td);
+                    this.$emit('change', _td);
                 }
             }
         }
