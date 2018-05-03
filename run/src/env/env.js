@@ -18,7 +18,8 @@ var env = {
 		ssoURL: CurrentDomain + "/#/ty-login",
 		hosts:{
 			'default':CurrentDomain
-		}
+		},
+		home:"/home_ln"
 	}
 };
 // export default env;
