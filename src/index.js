@@ -81,6 +81,7 @@ import bbcountdown from './buildingblock/h5/bb-countdown.vue';
 import bbvote from './buildingblock/h5/bb-vote.vue';
 import bbhtml from './buildingblock/h5/bb-html.vue';
 import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
+import bbimg from './buildingblock/h5/bb-img';
 import bbtoast from './buildingblock/h5/bbToast';
 import bbmodal from './buildingblock/h5/bbModal';
 
@@ -202,6 +203,7 @@ let ty = {
 		Vue.component('bb-dropdown', bbdropdown);
 		Vue.component('bb-html', bbhtml);
 		Vue.component('bb-photo-single', bbphotosingle);
+		Vue.component('bb-img', bbimg);
 		Vue.component('bb-layout-grid', bblayoutgrid);
 		Vue.component('bb-layout-canvas', bblayoutcanvas);
 		Vue.component('bb-layout-canvas-edit', bblayoutcanvasedit);
