@@ -15,6 +15,7 @@
                     bb.attributes.value = t.formData?t.formData[bb['attributes']['attributeName']]:'';
                 })
             }else{
+                t.realFields = t.realFields?t.realFields:[];
                 t.realFields.forEach(function(field){
                     //支持etProps
                     var props = field['props'];
