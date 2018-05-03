@@ -6,9 +6,10 @@
             const itemList = t.renderItem(createElement);
             return createElement('el-form',{
                     props:{
+                        model:t.formData,
                         inline:true,
-                        'label-width':'100px',
                         'label-position':"left",
+                        size: 'mini'
                     },
                     class:'grid'
                 },itemList);
@@ -16,10 +17,22 @@
         props: {
             /*静态表单项
                 [{
-                    alias:''表单项键名
-                    aliasName:''表单项名称
-                    dt:'String,Number,File,Image' 值类型,
-                    width:'33.33%'
+                    uuid:'',
+                    alias:'',                   //积木别名
+                    aliasName:'',               //中文名称
+                    group:'',                   //积木分组 表单项显示的位置
+                    attributes:{
+                        attributeName:''    //表单项键值别名
+                        width:''            //表单项宽度
+                        dt:'String,Number,File,Image' //值类型,
+                        content:[]  //表单项中包含的其他积木
+                        type:"title,content"  //标点或者内容
+                        labelWidth:30%      //标签宽度
+                        show:true
+                    },              //积木属性
+                    animation:[],
+                    interactives:[],
+                    layout:{}                    //积木布局
                 }]
             */
             fields:{
@@ -54,8 +67,8 @@
         },
         data() {
             return {
-                formData:this.data,
-                realFields:this.fields
+                formData:_TY_Tool.deepClone(this.data),
+                realFields:_TY_Tool.deepClone(this.fields)
             }
         },
         watch: {
@@ -110,17 +123,23 @@
                     t.realFields.forEach((field,key)=>{
                         let content = [];
                         //如果是String或者Number则直接展示，File类型的展示现在链接，图片预览
-                        switch(field.dt){
+                        const realContent = field['attributes']['content'] || [];
+                        const dt = field['attributes']['dt'] || field.dt;
+                        const width = field['attributes']['width'] || field.width;
+                        const type = field['attributes']['type'] || "content";
+                        const attributeName = field['attributes']['attributeName'];
+                        const show = field['attributes']['show'];
+                        switch(dt){
                             case 'String':
                                 content.push(createElement('span',{
-                                },t.formData[field.alias]));
+                                },t.formData[attributeName]));
                                 break;
                             case 'Number':
                                 content.push(createElement('span',{
-                                },t.formData[field.alias]));
+                                },t.formData[attributeName]));
                                 break;
                             case 'File':
-                                t.formData[field.alias].forEach((val,index)=>{
+                                t.formData[attributeName].forEach((val,index)=>{
                                     const ele = createElement('a',{
                                         style:{color:'#0091ea',margin:'0 20px 0 0'},
                                         attrs:{
@@ -134,7 +153,7 @@
                                 break;
                             case 'Image':
                                 const images = [];
-                                t.formData[field.alias].forEach((val,index)=>{
+                                t.formData[attributeName].forEach((val,index)=>{
                                     images.push(val.href);
                                 });
                                 const ele = createElement('bb-picture-preview',{
@@ -144,21 +163,52 @@
                                     });
                                 content.push(ele);
                                 break;
-
-                        }
-                        const className = field.dt == 'Image'?'bb-view-item label':'bb-view-item';
+                        };
+                        const bb_children = _TY_Tool.bbRender(realContent, createElement, t);
+                        const bbs = createElement('div',{class:"bb-content"},bb_children);
+                        let className = dt == 'Image'?'bb-view-item label':'bb-view-item';
+                        className = type == "title"?className + " bb-view-title" : className;
                         const item = createElement('el-form-item',{
-                            props:{label:field.aliasName},
+                            props:{
+                                label:field.aliasName,
+                                show:field.show
+                            },
                             class:className,
                             style:{
-                                width:field.width,
+                                width:width,
                             }
-                        },content);
-                        itemList.push(item);
+                        },[content,bbs]);
+                        if(show){
+                            itemList.push(item);
+                        }
                     }) 
                 }
                 return itemList;
-            }
+            },
+            /*隐藏项或显示 
+                hideNumber:[1,2,3,4,5,6] || "1,2,3,4,5,6" 需要隐藏的项
+            */
+            hideOrShow(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        let hideArr = val.arguments;
+                        hideArr = typeof hideArr == 'string'?hideArr.split(','):hideArr;
+                        t.realFields.forEach((field,key)=>{
+                            hideArr.forEach((item,index)=>{
+                                if(key == item){
+                                    field['attributes']['show'] = !field['attributes']['show'];
+                                }
+                            })
+                        })
+                    }
+                });
+            },
+            //读取子积木
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
+            },
         }
     }
 </script>
@@ -170,6 +220,7 @@
         align-items: center;
     }
     .bb-view-item{
+        display: flex !important;
         margin:0 -1px -1px 0 !important;
         border: 1px solid #ccc;
         .el-form-item__label{
@@ -177,14 +228,34 @@
             margin: 1px;
             padding-left: 12px;
             border-right: 1px solid #ccc;
+            min-width: 100px;
         }
         .el-form-item__content{
             padding-left: 12px;
+            flex:1;
+            color: #999;
+        }
+        .bb-content{
+            float: right;
+            border-left: 1px solid #ccc;
+            padding: 0 5px;
         }
     }
     .label{
         &>label{
             line-height: 78px;
+        }
+    }
+    .bb-view-title{
+        .el-form-item__label{
+            background: none !important;
+            margin: none!important;
+            padding-left: none!important;
+            border-right: none!important;
+            font-weight: 800;
+        }
+        .bb-content{
+            border:none;
         }
     }
 </style>
