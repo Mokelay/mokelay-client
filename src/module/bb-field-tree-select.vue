@@ -3,7 +3,7 @@
         <el-tree class="bn"
                  :data="data"
                  :show-checkbox='true'
-                 node-key="id"
+                 node-key="fieldName"
                  ref="tree"
                  highlight-current
                  :props="defaultProps"
@@ -34,7 +34,7 @@
                 default: false
             },
             checkedField: {
-                type: Array
+                type: [Array,String]
             },
             ioftType:{
                 type:String
@@ -42,6 +42,11 @@
             ioft:{
                 type:String
             }
+        },
+        created:function(){
+            let t=this;
+            let tempVal= _TY_Tool.tpl(this.checkedField, _TY_Tool.buildTplParams(t));
+            this.p_checkedField = typeof(tempVal)==='string'?JSON.parse(tempVal):tempVal;
         },
         mounted: function () {
             let t=this;
@@ -62,7 +67,7 @@
         },
         data() {
             return {
-                p_checkedField:this.checkedField,
+                p_checkedField:null,
                 p_oiAlias: this.oiAlias,
                 first_oiAlias:this.oiAlias,
                 data: [{
@@ -87,8 +92,9 @@
                 this.loadData();
             },
             checkedField:function(val){
-                this.p_checkedField=val;
-//                this.$refs['tree'].setChecked(val,false);
+                let t=this;
+                let tempVal= _TY_Tool.tpl(val, _TY_Tool.buildTplParams(t));
+                this.p_checkedField = typeof(tempVal)==='string'?JSON.parse(tempVal):tempVal;
             }
         },
         methods: {
@@ -134,7 +140,6 @@
                                     //如果是外键字段，label显示格式 父label-子label
                                     row.label = node.label + "-" + row.label;
                                     row.connectorAlias = node.connTmpAlias;
-                                    debugger;
                                 }
                                 for (let m = 0; m < connectorList.length; m++) {
                                     let item = connectorList[m];

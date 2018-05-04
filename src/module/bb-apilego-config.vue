@@ -1121,7 +1121,8 @@
                                             "attributes": {
                                                 "multiple":true,
                                                 "ioftType":'ift',
-                                                "ioft":_ioft
+                                                "ioft":_ioft,
+                                                "checkedField":"<%var vals = _TY_Root._TY_Current_Edit_Item.data.ifList;var result=[];for(var i=0;i<vals.length;i++){(vals[i].ift=='"+_ioft+"')&&result.push(vals[i].fieldName);}print(JSON.stringify(result));%>"
                                                 // "value":{
                                                 //     "ct":"eq",
                                                 //     "ift":_ioft,
