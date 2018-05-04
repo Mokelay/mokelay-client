@@ -18,8 +18,11 @@
                     const formData = key == 0?t.formData:{}
                     const newForm = t.renderForm(createElement,content,formData,key);
                     if(t.group){
-                        _form_group.push(newForm); 
-                        _form = createElement('div',{},_form_group);
+                        //_form_group.push(newForm);
+                        const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_lajitong"}},on:{click:t.remove.bind(null,key)}},[]);
+                        const groupItem = createElement('div',{class:"groupItem"},[newForm,removeButton]);
+                        _form = createElement('div',{},[groupItem]);
+
                     }else{
                         _form = newForm;
                     }
@@ -475,8 +478,8 @@
                 this.formData = {};
             },
             formCommit:function(formData,key){
-                debugger
                 var t = this;
+                debugger
                 t.$refs["form_"+key].validate(function(valid){
                     if(valid){
                         t.$emit('commit', formData);
@@ -586,6 +589,28 @@
                 const newContent = _TY_Tool.copyContent(t.content);
                 t.contentGroup.push(newContent);
             },
+            remove:function(key){
+                const t = this;
+                t.$msgbox({
+                    title: '消息',
+                    message: '确认清空当前表单内容？',
+                    showCancelButton: true,
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    beforeClose: (action, instance, done) => {
+                        done();
+                    }
+                }).then(()=>{
+                    //删除表单
+                    t.contentGroup.splice(key,1);
+                    //清空该项表单数据
+                    if(Array.isArray(t.formData) && t.formData[key]){
+                        t.formData.splice(key,1);
+                    }
+                }).catch((err)=>{
+                    console.log('err:',err);
+                })
+            },
             //根据数据格式初始化 表单content数组  
             getContentGroup:function(){
                 const t = this;
@@ -599,7 +624,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="less">
     .form-item{
         /*margin-bottom: 5%;*/
     }
@@ -615,5 +640,20 @@
     .border{
         border:1px dashed #ccc;
         padding: 5px 0 5px 5px;
+    }
+    .groupItem{
+        position: relative;
+        .remove{
+            position: absolute;
+            left: 0px;
+            top: -20px;
+            opacity:0;
+        }
+        &:hover{
+            .remove{
+                opacity:1;
+                transition: opacity .5s;
+            }
+        }
     }
 </style>
