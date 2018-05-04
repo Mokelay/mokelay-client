@@ -404,7 +404,7 @@ util.resolveButton = function(button, valueobj) {
                 var d = dialog({
                     width: 800,
                     zIndex: 100,
-                    title: '消息',
+                    title: button.dialogTitle || '消息',
                     content: _page.$el,
                     onclose: function() {
                         if (t.dialog) {

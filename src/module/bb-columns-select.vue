@@ -169,6 +169,12 @@
                                 }]
                             }
                         }, {
+                            name: '弹窗页面标题',
+                            attributeName: 'dialogTitle',
+                            description:"点击类型为‘页面对话框’时有效",
+                            et: 'bb-input',
+                            props: {}
+                        },{
                             name: '跳转页面',
                             attributeName: 'url',
                             description:"点击类型选择URL跳转时需要填写",
