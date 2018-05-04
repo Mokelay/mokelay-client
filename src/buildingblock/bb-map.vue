@@ -1,7 +1,7 @@
 <template>
     <div class="bb-map">
         <div class="bb-map-content" :style="mapSize">
-            <div id="mapContent" class="map-content">
+            <div id="mapContent" class="map-content" @click="routerMapClick">
 
             </div>
 
@@ -63,6 +63,10 @@
                 type: Boolean,
                 default: true,
             },
+            isRouterJump: {
+                type: Boolean,
+                default: false,
+            },
             widthMap: {
                 type: String,
                 default: '',
@@ -83,6 +87,7 @@
         },
         data() {
             return {
+                isRouterJump: this.isRouterJump,
                 map: null,                  // 地图对象
                 overlays: [],               // 初始绘制坐标数据
                 saveSign: [],               // 保存坐标数据
@@ -171,6 +176,11 @@
             
         },
         methods: {
+            routerMapClick() {
+                if (this.isRouterJump) {
+                    this.$emit('router-map-click');
+                }
+            },
             getDom(id) {
                 return document.getElementById(id);
             },
