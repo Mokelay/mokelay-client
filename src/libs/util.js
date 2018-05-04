@@ -1039,6 +1039,32 @@ util.jsonFormat = function(json) {
     }
     return targetJson;
 }
+//复制content并重新生成uuid
+util.copyContent = function(content) {
+    if (!content) {
+        return;
+    }
+    //规范数据格式
+    content = typeof content == 'string' ? JSON.parse(content) : content;
+    content = JSON.stringify(content);
+    console.log('content:', content);
+    var uuids = {};
+    var items = content.match(/"uuid"\:\"?[a-zA-Z0-9_-]{1,}\"?\,?/g);
+    var newContent = content;
+    items.forEach((val, key) => {
+        var uuid = val.split(':')[1];
+        uuid = uuid.split(',')[0];
+        var uuidString = '"' + _TY_Tool.uuid() + '"';
+        uuids[uuid] = uuidString;
+    });
+    Object.keys(uuids).forEach((val, key) => {
+        var newUUID = uuids[val];
+        //去除双引号
+        var oldUUID = val.match(/\"?[a-zA-Z0-9_-]{1,}\"?/g);
+        newContent = newContent.replace(new RegExp(oldUUID, 'g'), newUUID);
+    });
+    return JSON.parse(newContent);
+}
 
 window._TY_Tool = util;
 
