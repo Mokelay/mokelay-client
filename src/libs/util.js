@@ -249,6 +249,11 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             new Promise(function(resolve, reject) {
                 const promiseArr = [];
                 outputs.forEach(function(output) {
+                    if (!output['valueKey'] && !output['handle']) {
+                        //没有valueKey 并且也没有handle 直接返回data对象
+                        output['value'] = realDataMap;
+                        return true;
+                    }
                     var _outputValue = null;
                     var paramArr = output['valueKey'].split('.');
                     if (paramArr.length > 1) { //支持参数形式  a.b[1].c.d[0][0].e

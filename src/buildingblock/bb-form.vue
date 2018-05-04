@@ -521,6 +521,11 @@
             //外部交互动态设置表单值
             setFormData:function(...args){
                 const t = this;
+                if(args[0]&&args[0] instanceof Array && args[0].length>0&&args[0][0]&&args[0][0].hasOwnProperty('value')&&args[0][0].value){
+                    //如果是一个 ds返回的map对象
+                    t.formData = Object.assign({},t.formData,args[0][0].value);
+                    return;
+                }
                 args.forEach((val,key)=>{
                     if(val.type == 'custom'){
                         t.formData = Object.assign({},t.formData,val.arguments);
