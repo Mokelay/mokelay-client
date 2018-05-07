@@ -142,10 +142,21 @@
             },
             getResources(){
                 const t=this;
-                _TY_Tool.get("/ty/resources/"+t.$route.params.appAlias).then(function (response) {
+                var url = _TY_ENV.name=='prd'?
+                    (_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias)
+                    :("/ty/resources/"+t.$route.params.appAlias);
+
+                _TY_Tool.get(url).then(function (response) {
+                    // console.log(response);
+                    // return;
                     let data = response['data'];
                     if (data['ok']) {
-                        let pages = data.data.pages;
+                        let pages = data.data.pages || data.data.pages2;
+                        pages = pages || {};
+                        if(pages['list']){
+                            pages = pages['list'];
+                        }
+
                         t.fieldsReady=[];
 
                         t.fieldsReady.splice(0,0,t.fieldsBanner);
