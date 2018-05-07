@@ -383,17 +383,13 @@
             value(val) {
                 // this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
                 const newData = (val&&typeof(val)==='string')?eval(val):val||[];
-                if(newData){
+                if(newData && newData.length > 0 && this.editAll){
                     const arr = Object.keys(this.tableData[this.tableData.length-1]);
-                    if(this.editAll && arr.length != 0){
+                    if(arr.length != 0){
                         newData.concat([{}]);
                         //this.tableData.push({});
                         this.haveEditor = true;
                     }
-                }else{
-                    newData.concat([{}]);
-                    //this.tableData.push({});
-                    this.haveEditor = true;
                 }
             }
         },
@@ -416,15 +412,12 @@
                     t.editAll = true;
                 }
             });
-            if(t.tableData && t.tableData.length > 0){
+            if(t.tableData && t.tableData.length > 0 && t.editAll){
                 const arr = Object.keys(t.tableData[t.tableData.length-1]);
-                if(t.editAll && arr.length != 0){
+                if(arr.length != 0){
                     t.tableData.push({});
                 }
-            }else{
-                t.tableData.push({});
             }
-            
         },
         mounted:function(){
             
@@ -649,14 +642,12 @@
                                 });
                             }
                         };
-                        if(t.tableData && t.tableData.length > 0){
+                        if(t.tableData && t.tableData.length > 0 && t.editAll){
                             const arr = Object.keys(t.tableData[t.tableData.length-1]);
-                            if(t.editAll && arr.length != 0){
+                            if(arr.length != 0){
                                 t.tableData.push({});
                             }
-                        }else{
-                            t.tableData.push({});
-                        }
+                        };
                         //初始化bb-select的数据
                         t.initBBSelectFields(true);
                         t.loading = false;
@@ -924,7 +915,6 @@
             //编辑状态，更新数据
             cellChange:function(val,scope){
                 const t = this;
-                console.log('t.tableData:',t.tableData);
                 if(scope){
                     //修改
                     const prop = scope.column.property;
@@ -1026,7 +1016,9 @@
                 // t.canEditRow = t.canEditRow == scope['$index']?null:scope['$index'];
                 t.$emit('edit',t.tableData[scope['$index']],scope['$index']);
                 if(t.canEditRow!=null){
-                    //当前编辑之后点击提交  
+                    //当前编辑之后点击提交 
+                    t.$emit('change',t.tableData);
+                    t.$emit('input',t.tableData); 
                     if(!t.adding){
                         //修改
                         t.cellDSSubmit(t.tableData[scope['$index']],'update').then(function(){
