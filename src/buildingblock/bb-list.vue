@@ -966,8 +966,11 @@
                     //如果是第一行在编辑状态，不能添加
                     return;
                 }
-                t.tableData.push({});
-                //t.tableData.splice(0,0,{});
+                if(t.editAll){
+                   t.tableData.push({}); 
+                }else{
+                    t.tableData.splice(0,0,{});
+                }
                 t.canEditRow = 0; 
                 t.adding = true;
             },
