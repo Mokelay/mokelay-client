@@ -851,6 +851,29 @@
                             },
                             interactives:[],
                         },{                      
+                            uuid:'layout_11',
+                            alias:'bb-select',                   
+                            aliasName:'定位',                                  
+                            attributes:{
+                                attributeName:'position',
+                                fields:[
+                                    {value:"inherit",text:"继承"},
+                                    {value:"absolute",text:"绝对"},
+                                    {value:"relative",text:"相对"},
+                                    {value:"static",text:"默认"},
+                                    {value:"fixed",text:"浮动"}
+                                ]
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_12',
+                            alias:'bb-input-number',                   
+                            aliasName:'层级',                                  
+                            attributes:{
+                                attributeName:'zIndex'
+                            },
+                            interactives:[],
+                        },{                      
                             uuid:'layout_04',
                             alias:'bb-form',                   
                             aliasName:'尺寸',                                  
@@ -885,7 +908,7 @@
                             alias:'bb-form',                   
                             aliasName:'坐标',                                  
                             attributes:{
-                                attributeName:'size',
+                                attributeName:'xy',
                                 labelWidth:"80px",
                                 grid:true,
                                 size:"mini",
