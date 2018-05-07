@@ -479,7 +479,6 @@
             },
             formCommit:function(formData,key){
                 var t = this;
-                debugger
                 t.$refs["form_"+key].validate(function(valid){
                     if(valid){
                         t.$emit('commit', formData);
