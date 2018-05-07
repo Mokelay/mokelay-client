@@ -1052,7 +1052,6 @@ util.copyContent = function(content) {
     //规范数据格式
     content = typeof content == 'string' ? JSON.parse(content) : content;
     content = JSON.stringify(content);
-    console.log('content:', content);
     var uuids = {};
     var items = content.match(/"uuid"\:\"?[a-zA-Z0-9_-]{1,}\"?\,?/g);
     var newContent = content;
