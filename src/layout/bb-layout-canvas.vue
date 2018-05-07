@@ -41,7 +41,8 @@
                                     //执行积木的方法
             containerMethodName:''  //容器方法 executeType = container_method
         }],
-        layout:{                    //积木布局
+        layout:{//积木布局
+            display:"fixed block inline inline-block absolut none"  //展示类型
             bgColor:"",             //背景颜色
             rotate:0,               //旋转
             transparency:0,         //透明度
@@ -66,7 +67,8 @@
                 size:"",            //阴影大小
                 color:'',       //阴影方向
                 align:''            //阴影模糊
-            }
+            },
+            
         }
     }]
 }"></canvas>
