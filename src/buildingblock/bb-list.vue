@@ -38,7 +38,7 @@
         </el-row>
         <el-row>
             <!-- 列表新增按钮 -->
-            <!-- <el-button v-if="editConfig && addButton" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button> -->
+            <el-button v-if="editConfig && addButton && !editAll" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
@@ -118,7 +118,7 @@
                         </div>
                         <div v-else>
                             <!-- 只读状态 -->
-                            <span v-if="scope['$index'] != canEditRow && !true || !column['et'] || onlyAddEditShow(scope,column)">
+                            <span v-if="scope['$index'] != canEditRow && !editAll || !column['et'] || onlyAddEditShow(scope,column)">
                                 <span v-if="column['et']&&column['et']=='bb-select' && column['etProp'] && checkDsInput(column['etProp'])" :title="canRender">
                                     {{bbSelectFill(scope,column)}}
                                 </span>
@@ -126,7 +126,7 @@
                             </span>
                         </div>
                         <!-- 编辑状态 -->
-                        <bb v-if="scope['$index'] == canEditRow && column['et'] && onlyAddEditShow(scope,column,true) || true" v-model="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" @change="cellChange" :parentData="scope"></bb>
+                        <bb v-if="scope['$index'] == canEditRow && column['et'] && onlyAddEditShow(scope,column,true) || editAll" v-model="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" @change="cellChange" :parentData="scope"></bb>
                     </template>
                 </el-table-column>
             </el-table>
@@ -353,7 +353,7 @@
         },
         data() {
             return {
-                realColumns:[].concat(this.columns),
+                realColumns:_TY_Tool.deepClone(this.columns),
                 tableData: (this.value&&typeof(this.value)==='string')?eval(this.value):this.value||[],
                 totalItems: 0,
                 pageSize:this.pageConfig.pageSize,
@@ -381,13 +381,20 @@
         },
         watch: {
             value(val) {
-                this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
-
-                // if(this.editConfig.editAll || true && this.tableData[length-1] == {}){
-                //     this.tableData.push({});
-                //     this.haveEditor = true;
-                //     debugger
-                // }
+                // this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
+                const newData = (val&&typeof(val)==='string')?eval(val):val||[];
+                if(newData){
+                    const arr = Object.keys(this.tableData[this.tableData.length-1]);
+                    if(this.editAll && arr.length != 0){
+                        newData.concat([{}]);
+                        //this.tableData.push({});
+                        this.haveEditor = true;
+                    }
+                }else{
+                    newData.concat([{}]);
+                    //this.tableData.push({});
+                    this.haveEditor = true;
+                }
             }
         },
         created: function () {
@@ -404,16 +411,23 @@
             }
             sessionStorage.removeItem(t.alias+'_selection');//清除上一个表单的脏数据
             t.editConfig.editable = typeof t.editConfig.editable == "string"?t.editConfig.editable.split(','):t.editConfig.editable;
-            console.log('t.editConfig.editable:',t.editConfig.editable);
             t.editConfig.editable.forEach((val,key)=>{
                 if(val == "editAll"){
                     t.editAll = true;
                 }
-            })
-            if(t.editConfig.editAll || true && !t.haveEditor){
+            });
+            if(t.tableData && t.tableData.length > 0){
+                const arr = Object.keys(t.tableData[t.tableData.length-1]);
+                if(t.editAll && arr.length != 0){
+                    t.tableData.push({});
+                }
+            }else{
                 t.tableData.push({});
-                t.haveEditor = true;
             }
+            
+        },
+        mounted:function(){
+            
         },
         methods: {
             //检查ds的输入是否是否有参数   只填充不带参数的下拉
@@ -634,6 +648,14 @@
                                     t.totalItems = (item['value']&&item['value']['totalRecords'])?item['value']['totalRecords']:0;
                                 });
                             }
+                        };
+                        if(t.tableData && t.tableData.length > 0){
+                            const arr = Object.keys(t.tableData[t.tableData.length-1]);
+                            if(t.editAll && arr.length != 0){
+                                t.tableData.push({});
+                            }
+                        }else{
+                            t.tableData.push({});
                         }
                         //初始化bb-select的数据
                         t.initBBSelectFields(true);
@@ -821,7 +843,7 @@
                         edit:{
                             action:"bbListeditorData",
                             icon:"el-icon-edit",
-                            text:"",
+                            text:"编辑",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'edit'
@@ -829,18 +851,18 @@
                         remove:{
                             action:"bbListeditorData",
                             icon:"ty-icon_lajitong",
-                            text:"",
+                            text:"删除",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'remove',
-                            // hideCheck:function(row,scope){
-                            //     return this.tableData.length != scope.$index + 1;
-                            // }
+                            hideCheck:function(row,scope){
+                                return this.tableData.length != scope.$index + 1 || !this.editAll;
+                            }
                         },
                         up:{
                             action:"bbListeditorData",
                             icon:"ty-icon_shangyi",
-                            text:"",
+                            text:"上",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'up'
@@ -848,10 +870,21 @@
                         down:{
                             action:"bbListeditorData",
                             icon:"ty-icon_xiayi",
-                            text:"",
+                            text:"下",
                             type:"text",
                             buzz:"buzzNull",
                             alias:'down'
+                        },
+                        editAll:{
+                            action:"bbListeditorData",
+                            icon:"ty-icon_tianjia",
+                            text:"新增",
+                            type:"text",
+                            buzz:"buzzNull",
+                            alias:'editAll',
+                            hideCheck:function(row,scope){
+                                return this.tableData.length == scope.$index + 1 && this.editAll;
+                            }
                         }
                     }
                 //如果是可编辑状态，默认添加操作列
@@ -872,15 +905,23 @@
                         if(ele == 'add'){
                             t.addButton = true
                         }
-                    })
-                    const lastRow = t.realColumns[t.realColumns.length];
+                    });
+                    const lastRow = t.realColumns[t.realColumns.length-1];
                     if(lastRow && lastRow.type == "button-group"){
-                        lastRow.buttons = editor.buttons.concat(lastRow.buttons);
+                        //清除按钮数组中已经存在的bbListeditorData
+                        // lastRow.buttons.forEach((val,key)=>{
+                        //     if(val.prop == "bbListeditorData"){
+                        //         lastRow.buttons.splice(key,1);
+                        //     }
+                        // })
+                        // lastRow.buttons = editor.buttons.concat(lastRow.buttons);
+                        // t.realColumns.push(editor);
                     }else{
                         t.realColumns.push(editor);
                     }
                 }
             },
+            //编辑状态，更新数据
             cellChange:function(val,scope){
                 const t = this;
                 console.log('t.tableData:',t.tableData);
@@ -889,6 +930,8 @@
                     const prop = scope.column.property;
                     //实现添加事件，配合bb-form实现表单v-model
                     t.$set(t.tableData[scope['$index']],prop,val);
+                    // t.$emit('input',t._returnStringOrArray());
+                    // t.$emit('change',t._returnStringOrArray());
                     //通过接口提交修改
                     //t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
                 }
