@@ -2,8 +2,9 @@
   export default {
     name: 'bb',
     render: function (createElement) {
-        this.realConfig.value = this.value || null;
-        return createElement(this.alias, {props: this.realConfig, on : this.on});
+        const t = this;
+        t.realConfig.value = t.value || null;
+        return createElement(t.alias, {props: t.realConfig, on : Object.assign({},t.on,{change:t.change})});
     },
     props: {
         value:{
@@ -62,6 +63,9 @@
       refresh:function(){
       },
       loadData:function(){
+      },
+      change:function(val){
+        this.$emit("change",val,this.parentData);
       }
     }
   }
