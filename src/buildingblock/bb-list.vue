@@ -38,7 +38,7 @@
         </el-row>
         <el-row>
             <!-- 列表新增按钮 -->
-            <el-button v-if="editConfig && addButton" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
+            <!-- <el-button v-if="editConfig && addButton" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button> -->
             <!-- 列表主体 -->
             <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
@@ -67,25 +67,26 @@
                         <div v-if="column['type'] == 'button-group'" >
                             <span v-for="(button,index) in column.buttons">
                                 <!-- 仅针对表单操作 其他业务禁止使用 -->
-                                <bb-popup-selection v-if="hideBtn(button,scope.row) && button['buttonType'] == 'popup'"
-                                            :valueField="button['popupConfig']['valueField']"
-                                            :textField="button['popupConfig']['textField']"
-                                            :popupGrid="button['popupConfig']['popupGrid']"
-                                            :buttonConfig="button['popupConfig']['buttonConfig']"
-                                            :showModal="button['popupConfig']['showModal']"
-                                            :parentParams="toChildParams"
-                                            :title="button['popupConfig']['title']"
-                                            :popupButtons="button['popupConfig']['popupButtons']"
-                                            @button-finish="hidePopup"
-                                            @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
-                                <el-button v-if="hideBtn(button,scope.row) && button['buttonType'] != 'popup'&& button['buttonType'] != 'dialog'"
-                                           :type="button.type" :key="index"
-                                           :style="{'color':button.wordColor,'user-select':'all'}"
-                                           :icon="button.icon" @click.native.prevent="btnClick(button,scope)">
+                                <bb-popup-selection v-if="hideBtn(button,scope) && button['buttonType'] == 'popup'"
+                                    :valueField="button['popupConfig']['valueField']"
+                                    :textField="button['popupConfig']['textField']"
+                                    :popupGrid="button['popupConfig']['popupGrid']"
+                                    :buttonConfig="button['popupConfig']['buttonConfig']"
+                                    :showModal="button['popupConfig']['showModal']"
+                                    :parentParams="toChildParams"
+                                    :title="button['popupConfig']['title']"
+                                    :popupButtons="button['popupConfig']['popupButtons']"
+                                    @button-finish="hidePopup"
+                                    @showPopup="popupClick(button,scope.row)"></bb-popup-selection>
+                                <el-button 
+                                    v-if="hideBtn(button,scope) && button['buttonType'] != 'popup' && button['buttonType'] != 'dialog'"
+                                   :type="button.type" :key="index"
+                                   :style="{'color':button.wordColor,'user-select':'all'}"
+                                   :icon="button.icon" @click.native.prevent="btnClick(button,scope)">
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
                                 <!-- 后续业务禁止应用 -->
-                                <bb v-if="hideBtn(button,scope.row) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb>
+                                <bb v-if="hideBtn(button,scope) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb>
                             </span>
                         </div>
                         <div v-else-if="column['type'] == 'edit' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
@@ -117,7 +118,7 @@
                         </div>
                         <div v-else>
                             <!-- 只读状态 -->
-                            <span v-if="scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column)">
+                            <span v-if="scope['$index'] != canEditRow && !true || !column['et'] || onlyAddEditShow(scope,column)">
                                 <span v-if="column['et']&&column['et']=='bb-select' && column['etProp'] && checkDsInput(column['etProp'])" :title="canRender">
                                     {{bbSelectFill(scope,column)}}
                                 </span>
@@ -125,7 +126,7 @@
                             </span>
                         </div>
                         <!-- 编辑状态 -->
-                        <bb v-if="scope['$index'] == canEditRow && column['et'] && onlyAddEditShow(scope,column,true)" :value="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" :on="column['on']"></bb>
+                        <bb v-if="scope['$index'] == canEditRow && column['et'] && onlyAddEditShow(scope,column,true) || true" v-model="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" @change="cellChange" :parentData="scope"></bb>
                     </template>
                 </el-table-column>
             </el-table>
@@ -324,12 +325,13 @@
                 type:[String,Object],
                 default:function(){
                     return {
-                        editable:[], // ['add','edit','up','down','remove']
+                        editable:[], // ['add','edit','up','down','remove','editAll']
                         editDs:{
                             add:null,
                             remove:null,
                             update:null,
                             sort:null,
+                            updateAll:null
                         }
                     }
                 }
@@ -372,26 +374,46 @@
                 adding:false,//是否添加状态
                 bbButtonFinishOnObj:this.bbButtonFinishOnfun(),//针对列表弹窗类编辑按钮 抛出button-finish的事件
                 addButton:false, //对添加按钮进行管理
-                canRender:false//通过这个data来操作render函数执行,主要用来局部刷新bb-select中文填充
+                canRender:false,//通过这个data来操作render函数执行,主要用来局部刷新bb-select中文填充
+                haveEditor:false,
+                editAll:false
             }
         },
         watch: {
             value(val) {
                 this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
+
+                // if(this.editConfig.editAll || true && this.tableData[length-1] == {}){
+                //     this.tableData.push({});
+                //     this.haveEditor = true;
+                //     debugger
+                // }
             }
         },
         created: function () {
+            const t = this;
             //初始化bb-select的数据
-            this.initBBSelectFields();
+            t.initBBSelectFields();
             //可编辑状态下对表头拓展
-            if(this.canPre){
-                this.canPre = false;
-                this.preColumns();
+            if(t.canPre){
+                t.canPre = false;
+                t.preColumns();
             }
-            if(!this.lazy){
-                this.startIntervalFresh();
+            if(!t.lazy){
+                t.startIntervalFresh();
             }
-            sessionStorage.removeItem(this.alias+'_selection');//清除上一个表单的脏数据
+            sessionStorage.removeItem(t.alias+'_selection');//清除上一个表单的脏数据
+            t.editConfig.editable = typeof t.editConfig.editable == "string"?t.editConfig.editable.split(','):t.editConfig.editable;
+            console.log('t.editConfig.editable:',t.editConfig.editable);
+            t.editConfig.editable.forEach((val,key)=>{
+                if(val == "editAll"){
+                    t.editAll = true;
+                }
+            })
+            if(t.editConfig.editAll || true && !t.haveEditor){
+                t.tableData.push({});
+                t.haveEditor = true;
+            }
         },
         methods: {
             //检查ds的输入是否是否有参数   只填充不带参数的下拉
@@ -652,9 +674,10 @@
                 this.page = page;
                 this.getData();
             },
-            hideBtn(button, row){
+            hideBtn(button, scope){
+                const row = scope.row;
                 if (button['hideCheck']) {
-                    return button['hideCheck'].call(this, row);
+                    return button['hideCheck'].call(this, row, scope);
                 }
                 if(button['showKey']){
                     var showKey = button['showKey'];
@@ -809,7 +832,10 @@
                             text:"",
                             type:"text",
                             buzz:"buzzNull",
-                            alias:'remove'
+                            alias:'remove',
+                            // hideCheck:function(row,scope){
+                            //     return this.tableData.length != scope.$index + 1;
+                            // }
                         },
                         up:{
                             action:"bbListeditorData",
@@ -826,7 +852,8 @@
                             type:"text",
                             buzz:"buzzNull",
                             alias:'down'
-                        }}
+                        }
+                    }
                 //如果是可编辑状态，默认添加操作列
                 if(t.editConfig&&t.editConfig.editable&&t.editConfig.editable.length){
                     t.editButtons = t.editConfig.editable;
@@ -846,30 +873,24 @@
                             t.addButton = true
                         }
                     })
-                    if(t.realColumns.length == t.columns.length){
+                    const lastRow = t.realColumns[t.realColumns.length];
+                    if(lastRow && lastRow.type == "button-group"){
+                        lastRow.buttons = editor.buttons.concat(lastRow.buttons);
+                    }else{
                         t.realColumns.push(editor);
                     }
                 }
             },
-            //编辑状态，更新数据
-            cellChange:function(column,val){
+            cellChange:function(val,scope){
                 const t = this;
-                if(t.scope){
+                console.log('t.tableData:',t.tableData);
+                if(scope){
                     //修改
-                    const scope = t.scope;
+                    const prop = scope.column.property;
                     //实现添加事件，配合bb-form实现表单v-model
-                    t.$set(t.tableData[scope['$index']],column.prop,val);
-                    t.$emit('input',t._returnStringOrArray());
-                    t.$emit('change',t._returnStringOrArray());
+                    t.$set(t.tableData[scope['$index']],prop,val);
                     //通过接口提交修改
                     //t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
-                }else{
-                    //新增
-                    t.$set(t.tableData[0],column.prop,val);
-                    //通过接口提交修改
-                    // t.cellDSSubmit(t.tableData[0],t.editConfig.editDs.add);
-                    t.$emit('input',t._returnStringOrArray());
-                    t.$emit('change',t._returnStringOrArray());
                 }
             },
             /*通过DS保存修改行
@@ -908,11 +929,12 @@
             rowAdd:function(){
                 const t = this;
                 const key = t.tableData.length;
-                if(t.canEditRow==0){
+                if(t.canEditRow==0 && !t.editAll){
                     //如果是第一行在编辑状态，不能添加
                     return;
                 }
-                t.tableData.splice(0,0,{});
+                t.tableData.push({});
+                //t.tableData.splice(0,0,{});
                 t.canEditRow = 0; 
                 t.adding = true;
             },
@@ -949,6 +971,9 @@
                         break;
                     case 'down':
                         t.cellDown(scope);
+                        break;
+                    case 'editAll':
+                        t.rowAdd();
                         break;
                 }
             },
