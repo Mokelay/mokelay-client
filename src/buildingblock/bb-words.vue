@@ -89,7 +89,7 @@
       return createElement(
           t.p_tagName,
           {
-            style:{fontSize:t.p_fontSize,fontFamily:t.p_fontFamily,color:t.p_fontColor,textAlign:t.p_textAlign,lineHeight:t.p_lineHeight},
+            style:{fontSize:t.p_fontSize,fontFamily:t.p_fontFamily,color:t.p_fontColor,textAlign:t.p_textAlign,lineHeight:t.p_lineHeight,'display':'block'},
             attrs:t.realTagAttributes
           },
           t.content
