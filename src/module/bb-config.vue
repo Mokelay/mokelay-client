@@ -125,32 +125,42 @@
                     if(!t.alias){
                         resolve();
                     }
-                    _TY_Tool.post(_TY_ContentPath+"/read-bb",{
-                        bbAlias:t.alias
-                    }).then(function (response) {
-                            let data = response['data'];
-                            if(data.ok){
-                                t.bbInfo = data.data.data;
-                                if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
-                                    let tempOn = t.bbInfo.on;
-                                    const _arg = tempOn.match(/`[^]*?`/gi)
-                                    if(_arg&&_arg.length>0){
-                                        tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
+                    if(_TY_Root._TY_BBInfo&&_TY_Root._TY_BBInfo[t.alias]){
+                         t.bbInfo = _TY_Root._TY_BBInfo[t.alias];
+                         resolve();
+                    }else{
+                        _TY_Tool.post(_TY_ContentPath+"/read-bb",{
+                            bbAlias:t.alias
+                        }).then(function (response) {
+                                let data = response['data'];
+                                if(data.ok){
+                                    t.bbInfo = data.data.data;
+                                    if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
+                                        let tempOn = t.bbInfo.on;
+                                        const _arg = tempOn.match(/`[^]*?`/gi)
+                                        if(_arg&&_arg.length>0){
+                                            tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
+                                        }
+                                        t.bbInfo.on = JSON.parse(tempOn);
+                                        if(_arg&&_arg.length>0){
+                                            t.bbInfo.on.forEach((item,index)=>{
+                                                item['executeArgument'] = eval(_arg[index]);
+                                            });
+                                        }
                                     }
-                                    t.bbInfo.on = JSON.parse(tempOn);
-                                    if(_arg&&_arg.length>0){
-                                        t.bbInfo.on.forEach((item,index)=>{
-                                            item['executeArgument'] = eval(_arg[index]);
-                                        });
+                                    if(!_TY_Root._TY_BBInfo){
+                                        _TY_Root._TY_BBInfo = {};
                                     }
+                                    //放到全局变量里面去
+                                    _TY_Root._TY_BBInfo[t.alias] = _TY_Tool.deepClone(t.bbInfo);
+                                    resolve();
+                                }else{
+                                    reject()
                                 }
-                                resolve();
-                            }else{
-                                reject()
-                            }
-                    }).catch(function (error) {
-                        reject()
-                    });
+                        }).catch(function (error) {
+                            reject()
+                        });
+                    }
                 });
             },
             //载入当前积木的编辑内容
