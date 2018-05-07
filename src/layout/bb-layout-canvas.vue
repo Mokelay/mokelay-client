@@ -54,7 +54,8 @@
                 color:"",           //边框颜色
                 size:"",            //边框尺寸
                 radian:"",          //边框弧度
-                margin:""           //边距
+                margin:""           //外边距
+                padding:""          //内边距
             },
             shadow:{                //阴影
                 color:"",           //阴影颜色

@@ -988,10 +988,28 @@
                                 },{                      
                                     uuid:'layout_06_04',
                                     alias:'bb-input',                   
-                                    aliasName:'边距',                                  
+                                    aliasName:'内边距',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'padding',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_06_05',
+                                    alias:'bb-input',                   
+                                    aliasName:'外边距',                                  
                                     attributes:{
                                         width:"95%",
                                         attributeName:'margin',
+                                    },
+                                    interactives:[],
+                                },{                      
+                                    uuid:'layout_06_06',
+                                    alias:'bb-input',                   
+                                    aliasName:'粗细',                                  
+                                    attributes:{
+                                        width:"95%",
+                                        attributeName:'size',
                                     },
                                     interactives:[],
                                 }]
