@@ -1,6 +1,6 @@
 <template>
     <div class="lh100">
-        <div :index="randomId" :key='randomId' type="text/plain" id="weditor"></div>
+        <div :index="randomId" :key='randomId' type="text/plain" ref="weditor"></div>
     </div>
 </template>
 
@@ -45,7 +45,7 @@
             require.ensure([ 'wangeditor','jquery'], function (require) {
                 let WangEditor = require("wangeditor");
                 var JQUERY = require("jquery");
-                t.editor = new WangEditor('#weditor');
+                t.editor = new WangEditor(t.$refs['weditor']);
                 t.createEditor(JQUERY);
             },'wangeditor_jquery');
         },
@@ -54,11 +54,12 @@
         },
         methods: {
             createEditor(JQUERY){  // 创建编辑器
+                let t=this;
                 this.initEditorConfig();  // 初始化编辑器配置，在create之前
                 this.editor.create();  // 生成编辑器
                 this.editor.txt.html(this.value);  // 初始化内容
-                document.getElementById('weditor').style.height='auto';  // 使编辑器内容区自动撑开，在css中定义min-height
-                document.getElementById('weditor').style.width='auto';
+                t.$refs['weditor'].style.height='auto';  // 使编辑器内容区自动撑开，在css中定义min-height
+                t.$refs['weditor'].style.width='auto';
                 JQUERY('.w-e-toolbar').css('flex-wrap',"wrap");
             },
             destroyEditor(){  // 销毁编辑器，官方没有给出完美方案。此方案是作者给出的临时方案
