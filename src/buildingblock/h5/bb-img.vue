@@ -33,13 +33,19 @@
         watch: {
         },
         created: function () {
+            var t =this;
             var src = this.src;
             if(typeof src == "string"){
                 this.imgSrc =  src;
             }else if(typeof src == "object"){
                 var type = src['type'];
                 if(type == "url"){
+                    this.imgSrc =  src['url'];
                 }else if(type == "ds"){
+                    Util.getDSData(src['ds'], _TY_Tool.buildTplParams(t), 
+                        function (map){},
+                        function (code, msg) {}
+                    );
                 }
             }
         },
