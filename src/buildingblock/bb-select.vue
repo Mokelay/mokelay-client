@@ -83,12 +83,22 @@
             showValue:{
               type:Boolean,
               default:false
+            },
+                        //基础配置
+            optionsConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        readonly:false
+                    }
+                }
             }
         },
         data() {
             return {
               items:this.fields.length>0?this.fields:this.options,
-              valueBase: (this.multiple&&this.value?JSON.parse(this.value):this.value),
+              valueBase: (this.multiple&&this.value&& typeof this.value == 'string'?JSON.parse(this.value):this.value),
               external:{}
             }
         },
