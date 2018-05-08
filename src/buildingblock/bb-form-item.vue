@@ -205,11 +205,11 @@
 </script>
 <style lang="less">
     .ds{
-        overflow: auto;
+        overflow: hidden;
     }
     .dn{
         display: none;
-        overflow: auto;
+        overflow: hidden;
     }
     .db{
         display: inline-block;
