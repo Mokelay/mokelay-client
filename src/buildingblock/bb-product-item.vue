@@ -1,6 +1,6 @@
 <template>
     <div :class="group?'bb-product-item-group':''" id="bb-product-item-group" ref="bb-product-item-group">
-        <div class="bb-product-item" v-for="(ele,key) in valueBase" v-if="ele" :key="key" @click="goUrl.bind(null,ele)()">
+        <div class="bb-product-item" v-for="(ele,key) in valueBase" v-if="ele" :key="key" @click="goUrl.bind(null,ele)()" ref="key">
             <el-button icon="ty-icon_tuichu" class="delete" type="text" @click="removeItem.bind(null,{type:'custom',arguments:key})()"></el-button>
             <img :src="ele.img" :class="styleType == 'horizontal'?'horizontal':'vertical'">
             <span class="title">{{ele.title}}</span>
@@ -112,6 +112,10 @@
                 } else {
                     t.$router.push(href);
                 }
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
         }
     }
