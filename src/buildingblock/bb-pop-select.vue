@@ -4,7 +4,7 @@
         <bb-words class="showText" v-model="showText" tagName="span"></bb-words>
     <!-- 清空按钮 -->
         <bb-button v-if="!selectionDialogConfig.hideClean" :button="{type:'default',size:'normal'}" @click="clean">清空</bb-button>
-        <bb-button :button="{type:'primary',size:'normal'}" @click="choose">选择</bb-button>
+        <bb-button :button="selectionDialogConfig.selectButton || {type:'primary',size:'normal'}" @click="choose">选择</bb-button>
         <bb-dialog
             class="bbPopSelectDia"
             :isShow.sync="popupVisible" 
@@ -74,7 +74,11 @@
                         size:'tiny',
                         appendToBody:true,
                         modalAppendToBody:true,
-                        hideClean:false
+                        hideClean:false,
+                        selectButton:{
+                            type:'primary',
+                            size:'normal'
+                        }
                     }
                 }
             },
