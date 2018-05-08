@@ -734,6 +734,7 @@
                             name:'表单项显示',
                             description:"",                               
                             props:{
+                                "defaultValTpl":true
                             }
                         },{                      
                             attributeName:'rules',
