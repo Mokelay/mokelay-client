@@ -204,17 +204,22 @@
             contentChange:function(formData){
                 const t = this;
                 //form表单的校验
-                t.$refs['bb-config-form-ad-form'].$children[0].validate((valid)=>{
-                    if(valid){
-                        t.$emit('input',t.valueBase);
-                        t.$emit('change',t.valueBase);
-                    }else{
-                        t.$message({
-                            type: 'info',
-                            message: '表单校验失败'
-                        });
-                    }
-                });
+                if(t.$refs['bb-config-form-ad-form']&&t.$refs['bb-config-form-ad-form'].$children[0]){
+                    t.$refs['bb-config-form-ad-form'].$children[0].validate((valid)=>{
+                        if(valid){
+                            t.$emit('input',t.valueBase);
+                            t.$emit('change',t.valueBase);
+                        }else{
+                            t.$message({
+                                type: 'info',
+                                message: '表单校验失败'
+                            });
+                        }
+                    });
+                }else{
+                    t.$emit('input',t.valueBase);
+                    t.$emit('change',t.valueBase);
+                }
             },
             //获取当前编辑器的环境判断是否需要显示积木选择功能
             getConfigEnv:function(){
