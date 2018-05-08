@@ -9,7 +9,7 @@
                 <p>积木别名：{{valueBase.alias}}</p>
                 <p>积木标识：{{valueBase.uuid}}</p>
             </div>
-            <bb-form v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
+            <bb-form ref="bb-config-form-ad-form" v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
@@ -203,8 +203,18 @@
             //content修改
             contentChange:function(formData){
                 const t = this;
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
+                //form表单的校验
+                t.$refs['bb-config-form-ad-form'].$children[0].validate((valid)=>{
+                    if(valid){
+                        t.$emit('input',t.valueBase);
+                        t.$emit('change',t.valueBase);
+                    }else{
+                        t.$message({
+                            type: 'info',
+                            message: '表单校验失败'
+                        });
+                    }
+                });
             },
             //获取当前编辑器的环境判断是否需要显示积木选择功能
             getConfigEnv:function(){
