@@ -779,15 +779,15 @@ let _setStyle = function(bb, t) {
     };
     if (layout && JSON.stringify(layout) != '{}') {
         style = {
-            'position': layout.position,
+            'position': layout.positionType,
             'z-index': layout.zIndex,
             'background-color': layout.bgColor,
             'transform': `rotate(${layout.bgColor}deg)`,
             'opacity': layout.transparency,
             'width': layout.size ? layout.size.width : "auto",
             'height': layout.size ? layout.size.height : "auto",
-            'left': layout.xy ? layout.xy.x : "auto",
-            'top': layout.xy ? layout.xy.y : "auto",
+            'left': layout.position ? layout.position.x : "auto",
+            'top': layout.position ? layout.position.y : "auto",
             'border-style': layout.border && layout.border.style,
             'border-color': layout.border && layout.border.color,
             'border-width': layout.border && layout.border.size,

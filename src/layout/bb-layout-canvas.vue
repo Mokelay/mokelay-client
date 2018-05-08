@@ -42,7 +42,7 @@
             containerMethodName:''  //容器方法 executeType = container_method
         }],
         layout:{//积木布局
-            display:"fixed block inline inline-block absolut none"  //展示类型
+            positionType:"fixed block inline inline-block absolut none"  //展示类型
             bgColor:"",             //背景颜色
             rotate:0,               //旋转
             transparency:0,         //透明度
