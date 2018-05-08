@@ -17,6 +17,7 @@
             const style = {
                 display:t.horizontal?'flex':'block'
             }
+            style.display = t.realShow?style.display:'none';
             return createElement('div',{style:style},bbList);
         },
         props: {
@@ -77,6 +78,11 @@
                 type:[Array,String]
             }
         },
+         data() {
+            return {
+                realShow:true,
+            }
+        },
         methods: {
             renderBB:function(createElement){
                 const t = this;
@@ -93,7 +99,23 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
-            }
+            },
+            //根据  事件的 executeArgument  来判断是否该隐藏或是显示
+            itemShowOrHide(..._data){
+                const t = this;
+                _data.forEach((val,key)=>{
+                  if(val.type == 'custom'){
+                    let flag = val.arguments;
+                    if(flag){
+                        t.realShow = true;
+                        t.$emit('show');
+                    }else{
+                        t.realShow = false;
+                        t.$emit('hide');
+                    }
+                  }
+                });
+            },
         },
         components:{
         }
