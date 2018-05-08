@@ -123,7 +123,7 @@
                 * 获取数据
                 */
                 if (th.ds) {
-                    th.loading = true;
+                    th.loading = true;debugger
                     Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
                         data.forEach(function (item) {
                             var list = item['value'];

@@ -26,7 +26,10 @@
             cssStyle:{
                 type:Object,
                 default:function(){
-                    return {}
+                    return {
+                        width: '200px',
+                        height: '200px'
+                    }
                 }
             },
             ds: {
@@ -44,17 +47,18 @@
             if (this.isGetUrl) {
                 th.loading = true;
                 Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
+                    console.log(data);
                     data.forEach(function (item) {
-                        var list = item['value'];
+                        let result = item['value'];
 
-                        
+                        th.imgSrc = result.logo;
                     });
                     th.loading = false;
                 }, function (code, msg) {
                     th.loading = false;
                 });
             } else {
-                this.imgSrc = this.src;
+                th.imgSrc = this.src;
             }
         },
         methods: {
