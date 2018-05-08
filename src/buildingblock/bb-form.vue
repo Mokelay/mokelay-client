@@ -6,7 +6,8 @@
             const t = this;
             const _form_group = [];
             let _form = "";
-            if(Array.isArray(t.formData)){
+            if(t.group){
+                t.formData = Array.isArray(t.formData)?t.formData:[];
                 t.contentGroup.forEach((content,key)=>{
                     const formData = t.formData[key]?t.formData[key]:{};
                     const newForm = t.renderForm(createElement,content,formData,key);
@@ -235,7 +236,7 @@
             t.formData = typeof t.value == 'string' && t.value.length?eval("("+t.value+")"):t.value;
             t.formData = t.formData?t.formData:{};
             t.initValue=(typeof(this.value) == 'string' && this.value.length)?eval("("+this.value+")"):this.value;
-            t.realFields = t.fields
+            t.realFields = t.fields;
             t.getFields();
             t.getData();
             //初始化表单项
