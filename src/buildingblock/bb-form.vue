@@ -479,7 +479,8 @@
             },
             formCommit:function(formData,key){
                 var t = this;
-                t.$refs["form_"+key].validate(function(valid){
+                const realKey = typeof key == 'undefined'?0:key;
+                t.$refs["form_"+realKey].validate(function(valid){
                     if(valid){
                         t.$emit('commit', formData);
                         t.commitFormData = _TY_Tool.deepClone(formData);
