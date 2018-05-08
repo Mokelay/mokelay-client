@@ -13,7 +13,7 @@
             <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
-            <bb-button-form :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
+            <bb-button-form ref="interactive_add_button_form" :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
             <bb-form size="mini" :content="interactiveContent" v-model="valueBase" @commit="contentChange"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="动画">
@@ -436,66 +436,30 @@
                         attributeName:'interactives',
                         editConfig:{editable:['edit','up','down','remove']},
                         columns:[
-                            {prop: 'uuid',label: '标识',type:'defalut',et: 'bb-uuid'},
-                            {prop: 'fromContentUUID',label: '事件积木',type:'defalut',et: 'bb-select',etProp:{fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}]},etOn:[{
-                                uuid:'interactive-fromContentUUID_01',
-                                fromContentEvent:'change',
-                                executeType:'trigger_method',
-                                executeContentUUID:'fromContentEvent',
-                                executeContentMethodName:'linkage',
-                            }]},
-                            {prop:'fromContentEvent',
-                                et:'bb-select',                   
-                                label:'事件',               
-                                //group:'交互事件',                   
-                                etProp:{
-                                    ds:{
-                                        api: "list-edByBbAlias",
-                                        method: "get",
-                                        inputs: [
-                                            {paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external['linkage'] == 'Page_Ref_Root'?'bb-page':bb.external['linkage']%>"}
-                                        ],
-                                        outputs: [
-                                            {dataKey: "fields", valueKey: "data_list"}
-                                        ]
-                                    },
-                                    textField:'name',
-                                    valueField:"eventName"
-                                }
+                            {prop: 'uuid',label: '标识',type:'defalut'},
+                            {prop: 'fromContentUUID',label: '事件积木',type:'defalut'
                             },
-                            {prop: 'executeArgument',label: '参数',et: 'bb-textarea',etProp:{}},
-                            {prop: 'executeType',label: '方法类型',et: 'bb-select',etProp:{fields:[
-                                {text:'预定义方法',value:'trigger_method'},
-                                {text:'自定义方法',value:'custom_script'},
-                                {text:'容器类方法',value:'container_method'}
-                            ]}},
-                            {prop: 'executeContentUUID',label: '目标',et: 'bb-bb-select'},
-                            {prop: 'executeContentMethodName',label: '目标积木方法',et:'bb-select',etProp:{ds:{
-                                api: "list-mdByBbAlias",
-                                method: "get",
-                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:"<%=bb.external.linkage%>"}],
-                                outputs: [
-                                    {dataKey: "fields", valueKey: "data_list"}
-                                ]
-                            },textField:'name',valueField:"methodName"}},
-                            {prop: 'executeScript',label: '巴斯',et:'bb-select',etProps:{ds:{
-                                api: "list-buzz",
-                                method: "get",
-                                inputs: [],
-                                outputs: [
-                                    {dataKey: "fields", valueKey: "data_list"}
-                                ]
-                            },textField:'name',valueField:"alias"}},
-                            {prop: 'containerMethodName',label: '容器方法',et:'bb-select',etProp:{ds:{
-                                api: "list-mdByBbAlias",
-                                method: "get",
-                                inputs: [{paramName: 'bbAlias',valueType:"template",variable:"bb-page"}],
-                                outputs: [
-                                    {dataKey: "fields", valueKey: "data_list"}
-                                ]
-                            },textField:'name',valueField:"methodName"}}
+                            {prop:'fromContentEvent',
+                                label:'事件',               
+                            },
+                            {prop: 'executeArgument',label: '参数'},
+                            {prop: 'executeType',label: '方法类型'},
+                            {prop: 'executeContentUUID',label: '目标'},
+                            {prop: 'executeContentMethodName',label: '目标积木方法'},
+                            {prop: 'executeScript',label: '巴斯'},
+                            {prop: 'containerMethodName',label: '容器方法'}
                         ]
-                    }
+                    },
+                    interactives: [
+                        {
+                            "uuid": "95270",
+                            "fromContentUUID": "interactiveEditor",
+                            "fromContentEvent": "edit",
+                            "executeType": "trigger_method",
+                            "executeContentUUID": "interactive_add_button_form",
+                            "executeContentMethodName": "showDialog"
+                        }
+                    ]
                 }];
                 //动画配置 新增表单
                 t.animationFormContent = [{                      
