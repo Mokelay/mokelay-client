@@ -226,6 +226,16 @@
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
             },
+            //外部设置表单值
+            setData:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        let newData = val.arguments;
+                        t.formData = newData;
+                    }
+                });
+            }
         }
     }
 </script>

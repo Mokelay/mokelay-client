@@ -171,6 +171,16 @@
                 this.page = page;
                 this.getData();
             },
+            //外部设置表单值
+            setData:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        let newData = val.arguments;
+                        t.viewList = newData;
+                    }
+                });
+            }
         }
     }
 </script>
