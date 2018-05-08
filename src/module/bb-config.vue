@@ -699,7 +699,8 @@
                             group:'表单选项',
                             description:"",                               
                             props:{
-                            }
+                            },
+                            rules:[{ required: true, message: '请输入字段别名', trigger: 'blur' }]
                         },{                      
                             attributeName:'width',
                             et:'bb-input',
