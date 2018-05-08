@@ -112,6 +112,8 @@
             clear() {
                 this.bb_value = '';
                 this.bb_input_value = '';
+                this.$emit('change', '');
+                this.$emit('input', '');
             },
             linkage: function (...data) { //提供给外部调用
                 if (data&&data.length>0&&data[0]) {
