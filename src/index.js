@@ -65,6 +65,7 @@ import bbspace from './buildingblock/bb-space.vue';
 import bbcommentchain from './buildingblock/bb-comment-chain.vue';
 import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
+import bbhyperlink from './buildingblock/bb-hyperlink.vue';
 
 // Vant相关的
 import vantAddressEdit from './buildingblock/vant/bb-vant-address-edit';
@@ -235,7 +236,9 @@ let ty = {
 		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-view-group', bbviewgroup);
 		Vue.component('bb-product-item', bbproductitem);
+		Vue.component('bb-hyperlink', bbhyperlink);
 
+		
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
 
