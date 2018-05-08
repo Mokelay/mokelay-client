@@ -3,7 +3,7 @@
     <!-- 选择文本显示，编译textTpl -->
         <bb-words class="showText" v-model="showText" tagName="span"></bb-words>
     <!-- 清空按钮 -->
-        <bb-button :button="{type:'default',size:'normal'}" @click="clean">清空</bb-button>
+        <bb-button v-if="!selectionDialogConfig.hideClean" :button="{type:'default',size:'normal'}" @click="clean">清空</bb-button>
         <bb-button :button="{type:'primary',size:'normal'}" @click="choose">选择</bb-button>
         <bb-dialog
             class="bbPopSelectDia"
@@ -73,7 +73,8 @@
                         title:'选择',
                         size:'tiny',
                         appendToBody:true,
-                        modalAppendToBody:true
+                        modalAppendToBody:true,
+                        hideClean:false
                     }
                 }
             },
