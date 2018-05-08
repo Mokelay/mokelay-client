@@ -47,7 +47,8 @@
                         prop:t.realProp,
                         rules:t.realRules,
                         show:t.realShow
-                    }
+                    },
+                    key:_TY_Tool.uuid()
                 },[label,bbList,tipEle]);
             });
             return formItem;
