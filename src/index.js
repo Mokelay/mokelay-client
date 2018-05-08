@@ -238,6 +238,7 @@ let ty = {
 		Vue.component('bb-product-item', bbproductitem);
 		Vue.component('bb-hyperlink', bbhyperlink);
 
+		
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
 
