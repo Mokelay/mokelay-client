@@ -87,7 +87,7 @@
         },
         data() {
             return {
-                isRouterJump: this.isRouterJump,
+                routerJump: this.isRouterJump,
                 map: null,                  // 地图对象
                 overlays: [],               // 初始绘制坐标数据
                 saveSign: [],               // 保存坐标数据
@@ -177,7 +177,7 @@
         },
         methods: {
             routerMapClick() {
-                if (this.isRouterJump) {
+                if (this.routerJump) {
                     this.$emit('router-map-click');
                 }
             },

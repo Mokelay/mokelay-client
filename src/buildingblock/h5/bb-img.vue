@@ -1,10 +1,13 @@
 <template>
     <div>
-        <img :src="src" v-bind:style="cssStyle"/>
+        <img :src="imgSrc" v-bind:style="cssStyle"/>
     </div>
 </template>
 
 <script>
+    import Vue from 'vue';
+    import Util from '../../libs/util.js'
+
     export default {
         name: 'bb-img',
         props: {
@@ -13,6 +16,10 @@
                 url
                 ds
             **/
+            isGetUrl: {
+                type: Boolean,
+                default: false,
+            },
             src:{
                 type:[String,Object]
             },
@@ -21,37 +28,37 @@
                 default:function(){
                     return {}
                 }
+            },
+            ds: {
+                type: Object
             }
         },
         data() {
             return {
-                imgSrc:""
-            }
-        },
-        computed:{
-        },
-        watch: {
-        },
-        created: function () {
-            var t =this;
-            var src = this.src;
-            if(typeof src == "string"){
-                this.imgSrc =  src;
-            }else if(typeof src == "object"){
-                var type = src['type'];
-                if(type == "url"){
-                    this.imgSrc =  src['url'];
-                }else if(type == "ds"){
-                    Util.getDSData(src['ds'], _TY_Tool.buildTplParams(t), 
-                        function (map){},
-                        function (code, msg) {}
-                    );
-                }
+                imgSrc: ""
             }
         },
         mounted:function(){
+            let th =this;
+
+            if (this.isGetUrl) {
+                th.loading = true;
+                Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
+                    data.forEach(function (item) {
+                        var list = item['value'];
+
+                        
+                    });
+                    th.loading = false;
+                }, function (code, msg) {
+                    th.loading = false;
+                });
+            } else {
+                this.imgSrc = this.src;
+            }
         },
         methods: {
+            
         }
     }
 </script>
