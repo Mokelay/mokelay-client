@@ -220,6 +220,44 @@
                         })
                     }
                 });
+            }, 
+            /*隐藏项 
+                hideNumber:[1,2,3,4,5,6] || "1,2,3,4,5,6" 需要隐藏的项
+            */
+            hide(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        let hideArr = val.arguments;
+                        hideArr = typeof hideArr == 'string'?hideArr.split(','):hideArr;
+                        t.realFields.forEach((field,key)=>{
+                            hideArr.forEach((item,index)=>{
+                                if(key == item){
+                                    field['attributes']['show'] = false
+                                }
+                            })
+                        })
+                    }
+                });
+            }, 
+            /*显示项 
+                showNumber:[1,2,3,4,5,6] || "1,2,3,4,5,6" 需要隐藏的项
+            */
+            show(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        let hideArr = val.arguments;
+                        hideArr = typeof hideArr == 'string'?hideArr.split(','):hideArr;
+                        t.realFields.forEach((field,key)=>{
+                            hideArr.forEach((item,index)=>{
+                                if(key == item){
+                                    field['attributes']['show'] = true
+                                }
+                            })
+                        })
+                    }
+                });
             },
             //读取子积木
             loadChildBB(){
