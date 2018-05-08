@@ -548,8 +548,8 @@
                         done();
                     }
                 }).then(()=>{
-                    t.formData = undefined;
-                    t.formCommit();
+                    t.formData = {};
+                    // t.formCommit();
                     //t.$router.back()
                 }).catch((err)=>{
                     console.log('err:',err);
