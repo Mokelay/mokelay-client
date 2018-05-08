@@ -382,7 +382,7 @@
         watch: {
             value(val) {
                 // this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
-                const newData = (val&&typeof(val)==='string')?eval(val):val||[];
+                const newData = (val&&typeof(val)==='string')?JSON.parse(val):val||[];
                 if(newData && newData.length > 0 && this.editAll){
                     const arr = Object.keys(this.tableData[this.tableData.length-1]);
                     if(arr.length != 0){
@@ -390,6 +390,9 @@
                         //this.tableData.push({});
                         this.haveEditor = true;
                     }
+                }
+                if(!this.editAll){
+                    this.tableData = newData;
                 }
             }
         },
