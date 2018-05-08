@@ -47,8 +47,7 @@
                         prop:t.realProp,
                         rules:t.realRules,
                         show:t.realShow
-                    },
-                    key:_TY_Tool.uuid()
+                    }
                 },[label,bbList,tipEle]);
             });
             return formItem;
@@ -205,8 +204,12 @@
     }
 </script>
 <style lang="less">
+    .ds{
+        overflow: auto;
+    }
     .dn{
         display: none;
+        overflow: auto;
     }
     .db{
         display: inline-block;
