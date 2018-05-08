@@ -44,7 +44,7 @@
             //[{pbbId:'',triggerEventName:'',executePbbId:'',executeBBMethodName:''}]
             //不在使用，被content代替
             on :{
-                type:Array,
+                type:[Array,String],
                 default:function(){
                     return [];
                 }

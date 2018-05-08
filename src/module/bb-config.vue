@@ -846,7 +846,7 @@
                             alias:'bb-select',                   
                             aliasName:'定位',                                  
                             attributes:{
-                                attributeName:'position',
+                                attributeName:'positionType',
                                 fields:[
                                     {value:"inherit",text:"继承"},
                                     {value:"absolute",text:"绝对"},
@@ -899,7 +899,7 @@
                             alias:'bb-form',                   
                             aliasName:'坐标',                                  
                             attributes:{
-                                attributeName:'xy',
+                                attributeName:'position',
                                 labelWidth:"80px",
                                 grid:true,
                                 size:"mini",
