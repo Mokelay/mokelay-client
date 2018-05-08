@@ -8,14 +8,14 @@
             let _form = "";
             if(Array.isArray(t.formData)){
                 t.contentGroup.forEach((content,key)=>{
-                    const formData = t.formData[key]?t.formData[key]:{}
+                    const formData = t.formData[key]?t.formData[key]:{};
                     const newForm = t.renderForm(createElement,content,formData,key);
                     _form_group.push(newForm); 
                     _form = createElement('div',{},_form_group);
                 });
             }else{
                 t.contentGroup.forEach((content,key)=>{
-                    const formData = key == 0?t.formData:{}
+                    const formData = key == 0?t.formData:{};
                     const newForm = t.renderForm(createElement,content,formData,key);
                     if(t.group){
                         //_form_group.push(newForm);
@@ -477,9 +477,10 @@
             clean: function () {
                 this.formData = {};
             },
-            formCommit:function(formData,key){
+            formCommit:function(eleFormData,key){
                 var t = this;
                 const realKey = typeof key == 'undefined'?0:key;
+                let formData = typeof eleFormData == 'undefined'?t.formData:eleFormData;
                 t.$refs["form_"+realKey].validate(function(valid){
                     if(valid){
                         t.$emit('commit', formData);
