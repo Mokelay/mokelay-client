@@ -173,7 +173,8 @@
                                 let button = {
                                     title: ele[t.titleField],
                                     url: ele[t.urlField],
-                                    icon:ele['icon']
+                                    icon:ele['icon'],
+                                    children:ele['children']
                                 }
                                 newArr.push(button);
                             }
