@@ -89,8 +89,7 @@
             getJson:function(){
                 const t = this;
                 if(t.ds){
-                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
-                        debugger
+                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                         t.jsonSource = map[0].value;
                     }, function (code, msg) {
                     });
