@@ -456,6 +456,7 @@ let _checkVueHasRef = function(uuid, vueObj) {
 let currentVue = null; //解决findBBByUuid方法查询慢的问题
 //深度遍历，可能会影响性能，后面考虑改成层级遍历   $refs和$children 一起查询
 let _findChildBB = function(uuid, children) {
+    console.log("findChildBB......");
     let resultVue = null;
     if (currentVue) {
         return currentVue;
@@ -522,7 +523,7 @@ let _findChildBB = function(uuid, children) {
 /**
     根据uuid 查询这个uuid的积木vue对象
 **/
-util.findBBByUuid = function(uuid, fromRoot) {
+util.findBBByUuid_deep = function(uuid, fromRoot) {
     let root = window._TY_Root; //初始根
     currentVue = null;
     if (!root) {
@@ -552,6 +553,114 @@ util.findBBByUuid = function(uuid, fromRoot) {
     // util.currentVueArray = currentVueArray;
     // return currentVueArray[currentVueArray.length - 1];
     return resultVue;
+}
+
+
+// 层级遍历 查询uuid对应的vue对象
+let _findChildBB_layer = function(uuid, _vue) {
+    let resultVue = null;
+    if (_vue.$children && _vue.$children.length > 0) {
+        //有子
+        let _childs = _vue.$children;
+        for (let i = 0; i < _childs.length; i++) {
+            resultVue = _checkVueHasRef(uuid, _childs[i]);
+            if (resultVue && resultVue != null) {
+                return resultVue;
+            }
+        }
+    }
+    if (_vue.$refs) {
+        //有refs
+        for (let j in _vue.$refs) {
+            if (!_vue.$refs[j]) {
+                //ref为undefined 直接过滤掉
+                continue;
+            }
+            if (uuid == j && _vue.$refs[j]._isVue) {
+                //如果ref的key等于uuid，则表示该对象就是要找的uuid对象(通过ref方式查找)
+                resultVue = _checkVueHasRef(uuid, _vue.$refs[j]);
+                if (resultVue && resultVue != null) {
+                    return resultVue;
+                }
+            }
+        }
+    }
+    return resultVue;
+}
+
+//层级遍历层级切换临时变量  可能会有并发的问题，后面优化
+let layerBBRow = [];
+
+let _findChildBB_layer_foreach = function(uuid) {
+    let resultVue = null;
+    if (!layerBBRow || layerBBRow.length <= 0) {
+        return null;
+    }
+    for (let i = 0; i < layerBBRow.length; i++) {
+        resultVue = _findChildBB_layer(uuid, layerBBRow[i]);
+        if (resultVue && resultVue != null) {
+            return resultVue;
+        }
+    }
+    //如果没有找到  切换下一行数据执行
+    _findChildBB_layer_change_bbrow();
+    resultVue = _findChildBB_layer_foreach(uuid);
+    if (resultVue && resultVue != null) {
+        return resultVue;
+    }
+}
+//layerBBRow切换到 下一层
+let _findChildBB_layer_change_bbrow = function() {
+    let result = [];
+    if (layerBBRow && layerBBRow.length > 0) {
+        layerBBRow.forEach((item) => {
+            if (item.$children && item.$children.length > 0) {
+                //有子
+                let _childs = item.$children;
+                for (let i = 0; i < _childs.length; i++) {
+                    if (result.indexOf(_childs[i]) >= 0) {
+                        continue;
+                    }
+                    result.push(_childs[i]);
+                }
+            }
+            if (item.$refs) {
+                //有refs
+                for (let j in item.$refs) {
+                    if (!item.$refs[j]) {
+                        //ref为undefined 直接过滤掉
+                        continue;
+                    }
+                    if (item.$refs[j]._isVue) {
+                        if (result.indexOf(item.$refs[j]) >= 0) {
+                            continue;
+                        }
+                        result.push(item.$refs[j]);
+                    }
+                }
+            }
+        });
+        layerBBRow = result;
+    }
+}
+
+/**
+    根据uuid 查询这个uuid的积木vue对象 层级遍历
+**/
+util.findBBByUuid = function(uuid, fromRoot) {
+    let root = window._TY_Root; //初始根
+    currentVue = null;
+    if (!root) {
+        return null; //没有页面
+    }
+    //判断当前vue对象是不是要找的vue组件
+    let resultVue = null;
+    resultVue = _checkVueHasRef(uuid, root);
+    if (resultVue && resultVue != null) {
+        return resultVue;
+    }
+    layerBBRow = [root];
+    return _findChildBB_layer_foreach(uuid);
 }
 
 //针对外面包了一层div的组件，查询div下面的组件对象

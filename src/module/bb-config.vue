@@ -272,7 +272,7 @@
                         length:5
                     }
                 },{                      
-                    uuid:'interactive-fromContentUUID',
+                    uuid:'interactive-fromContentUUID'+t.key,
                     alias:'bb-select',                   
                     aliasName:'事件积木',              
                     //group:'交互事件',                   
@@ -284,11 +284,11 @@
                         uuid:'interactive-fromContentUUID_01',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
-                        executeContentUUID:'interactive-fromContentEvent',
+                        executeContentUUID:'interactive-fromContentEvent'+t.key,
                         executeContentMethodName:'linkage',
                     }]
                 },{                      
-                    uuid:'interactive-fromContentEvent',
+                    uuid:'interactive-fromContentEvent'+t.key,
                     alias:'bb-select',                   
                     aliasName:'事件',               
                     //group:'交互事件',                   
@@ -332,33 +332,33 @@
                         uuid:'interactive-executeType_01',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
-                        executeContentUUID:'form-item_interactive-executeContentUUID',
+                        executeContentUUID:'form-item_interactive-executeContentUUID'+t.key,
                         executeContentMethodName:'itemShowOrHide',
                         executeArgument: "params[0]==='trigger_method'?true:false"
                     },{
                         uuid:'interactive-executeType_02',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
-                        executeContentUUID:'form-item_interactive-executeContentMethodName',
+                        executeContentUUID:'form-item_interactive-executeContentMethodName'+t.key,
                         executeContentMethodName:'itemShowOrHide',
                         executeArgument: "params[0]==='trigger_method'?true:false"
                     },{
                         uuid:'interactive-executeType_03',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
-                        executeContentUUID:'form-item_interactive-executeScript',
+                        executeContentUUID:'form-item_interactive-executeScript'+t.key,
                         executeContentMethodName:'itemShowOrHide',
                         executeArgument: "params[0]==='custom_script'?true:false"
                     },{
                         uuid:'interactive-executeType_04',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
-                        executeContentUUID:'form-item_interactive-containerMethodName',
+                        executeContentUUID:'form-item_interactive-containerMethodName'+t.key,
                         executeContentMethodName:'itemShowOrHide',
                         executeArgument: "params[0]==='container_method'?true:false"
                     }]
                 },{                      
-                    uuid:'interactive-executeContentUUID',
+                    uuid:'interactive-executeContentUUID'+t.key,
                     alias:'bb-bb-select',                   
                     aliasName:'目标积木',               
                     //group:'预定义方法',                   
@@ -370,11 +370,11 @@
                         uuid:_TY_Tool.uuid(),
                         fromContentEvent:'change',
                         executeType:'trigger_method',
-                        executeContentUUID:'interactive-executeContentMethodName',
+                        executeContentUUID:'interactive-executeContentMethodName'+t.key,
                         executeContentMethodName:'linkage'
                     }],
                 },{                      
-                    uuid:'interactive-executeContentMethodName',
+                    uuid:'interactive-executeContentMethodName'+t.key,
                     alias:'bb-select',                   
                     aliasName:'目标积木方法',               
                     //group:'预定义方法',                   
@@ -391,7 +391,7 @@
                         },textField:'name',valueField:"methodName"
                     }
                 },{                      
-                    uuid:'interactive-executeScript',
+                    uuid:'interactive-executeScript'+t.key,
                     alias:'bb-select',                   
                     aliasName:'巴斯方法',              
                     //group:'自定义方法',                   
@@ -408,7 +408,7 @@
                         },textField:'name',valueField:"alias"
                     }
                 },{                      
-                    uuid:'interactive-containerMethodName',
+                    uuid:'interactive-containerMethodName'+t.key,
                     alias:'bb-select',                   
                     aliasName:'容器类方法名称',               
                     //group:'容器类方法',                   
