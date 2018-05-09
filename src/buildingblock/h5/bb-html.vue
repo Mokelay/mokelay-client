@@ -36,7 +36,7 @@
         },
         watch: {
             value(val){
-
+                this.valueBase = val;
             }
         },
         created: function () {
@@ -54,14 +54,14 @@
                 const reg = /<#=.*?#>/ig;
                 const reg2 = /&lt;#=.*?#&gt;/ig;
                 let stringHasTransfer = false;
-                if(!this.value){
+                if(!this.valueBase){
                     return;
                 }
-                let fields = (this.value+"").match(reg);
+                let fields = (this.valueBase+"").match(reg);
                 //没有<#=#> 这种结构的填充数据 直接返回
                 if(!fields||fields.length<=0){
                     stringHasTransfer = true;
-                    fields = (this.value+"").match(reg2);
+                    fields = (this.valueBase+"").match(reg2);
                 }
                 if(!fields||fields.length<=0){
                     return;
@@ -155,7 +155,22 @@
                 t.$emit("input",t.valueBase,t);
                 //change事件将返回的所有数据 以参数形式传出去
                 t.$emit('change',t.resultHtmlString,t.resultString,t.resultObject,t);
-            }
+            },
+            //外部设置内容
+            setContent:function(...args){
+                let t=this;
+                if(args[0]&&args[0] instanceof Array && args[0].length>0&&args[0][0]&&args[0][0].hasOwnProperty('value')&&args[0][0].value){
+                    //如果是一个 ds返回的map对象
+                    t.valueBase = args[0][0].value;
+                    return;
+                }
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom'){
+                        t.valueBase = val.arguments;
+                    }
+                })
+                this.fillHtml();
+            },
         }
     }
 </script>
