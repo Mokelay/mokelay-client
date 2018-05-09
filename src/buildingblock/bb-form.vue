@@ -10,8 +10,10 @@
                 t.formData = Array.isArray(t.formData)?t.formData:[];
                 t.contentGroup.forEach((content,key)=>{
                     const formData = t.formData[key]?t.formData[key]:{};
+                    const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_lajitong"}},on:{click:t.remove.bind(null,key)}},[]);
                     const newForm = t.renderForm(createElement,content,formData,key);
-                    _form_group.push(newForm); 
+                    const groupItem = createElement('div',{class:"groupItem"},[newForm,removeButton]);
+                    _form_group.push(groupItem); 
                     _form = createElement('div',{},_form_group);
                 });
             }else{
@@ -23,7 +25,6 @@
                         const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_lajitong"}},on:{click:t.remove.bind(null,key)}},[]);
                         const groupItem = createElement('div',{class:"groupItem"},[newForm,removeButton]);
                         _form = createElement('div',{},[groupItem]);
-
                     }else{
                         _form = newForm;
                     }
@@ -591,6 +592,7 @@
                 const newContent = _TY_Tool.copyContent(t.content);
                 t.contentGroup.push(newContent);
             },
+            //删除表单
             remove:function(key){
                 const t = this;
                 t.$msgbox({
