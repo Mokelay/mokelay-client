@@ -44,9 +44,9 @@
     import ditu6 from '../css/icon/map/ditu6.png';      // 6房地产    4004
 
     // 百度地图资源加载 
-    const resourcesUrl = ['http://api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
-        'http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
-        'http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js']
+    const resourcesUrl = ['//api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
+        '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
+        '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js']
 
     export default {
         name: 'bb-map',
@@ -123,7 +123,7 @@
                 * 获取数据
                 */
                 if (th.ds) {
-                    th.loading = true;debugger
+                    th.loading = true;
                     Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
                         data.forEach(function (item) {
                             var list = item['value'];
