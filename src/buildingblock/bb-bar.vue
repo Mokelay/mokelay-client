@@ -2,7 +2,7 @@
     <div class="bb-bar-outer" :style="{'background':p_basicConfig.outerBgColor}">
         <div class="bb-bar" :style="{'background-image':p_basicConfig.backgroundColor,color:p_basicConfig.fontColor,height:p_basicConfig.height,width:p_basicConfig.width,'line-height':p_basicConfig.height}">
                 <div class="bb-bar-left " :style="p_basicConfig.leftStyle">
-                    <bb-button :button="p_logoButton" :style="{height:'100%',width:p_basicConfig.logoWidth,background:p_basicConfig.logoBackground}" class="bb-bar-logo">
+                    <bb-button v-if="logoBtn" :button="p_logoButton" :style="{height:'100%',width:p_basicConfig.logoWidth,background:p_basicConfig.logoBackground}" class="bb-bar-logo">
                         <img v-if="!p_logoButton.icon" :src="p_basicConfig.logoUrl" alt=""> 
                     </bb-button>
                     <bb-button v-if="foldBtn" :button="p_foldButton" @click="foldClick"></bb-button>
@@ -66,6 +66,11 @@
                         leftStyle:{}
                     }
                 }
+            },
+            //Logo按钮是否展示
+            logoBtn:{
+                type:Boolean,
+                default:true
             },
             //是否显示折叠按钮
             foldBtn:{
