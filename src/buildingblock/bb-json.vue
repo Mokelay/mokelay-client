@@ -45,6 +45,10 @@
             //默认展开第几列
             defaultOpen:{
                 type:[String,Number]
+            },
+            //动态数据源
+            ds:{
+                type:Object
             }
         },
         data() {
@@ -78,9 +82,30 @@
              });
         },
         mounted:function(){
+            this.getJson();
         },
         methods: {
-            
+            //获取动态数据
+            getJson:function(){
+                const t = this;
+                debugger
+                if(t.ds){
+                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
+                        debugger
+                        t.jsonSource = map[0].value;
+                    }, function (code, msg) {
+                    });
+                } 
+            },
+            //外部设置值
+            setJson:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        t.jsonSource = val.arguments;
+                    }  
+                })
+            }
         }
     }
 </script>
