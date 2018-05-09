@@ -90,7 +90,7 @@
                 const t = this;
                 if(t.ds){
                     _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
-                        t.jsonSource = map[0].value;
+                        t.jsonSource = typeof map[0].value == 'string'?JSON.parse(map[0].value):map[0].value;
                     }, function (code, msg) {
                     });
                 } 
