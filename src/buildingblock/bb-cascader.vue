@@ -6,6 +6,8 @@
         :filterable="filterable"
         :change-on-select="changeOnSelect"
         :show-all-levels="showAllLevels"
+        :disabled="option.disabled"
+        :size="option.size"
         @active-item-change="handleItemChange"
         @change="handleChange"
         :props="p_casProps"
@@ -124,6 +126,16 @@
             default:function(){
               return '';
             }
+          },
+          //基础配置
+          option:{
+              type:Object,
+              default:function(){
+                  return {
+                      disabled:false,
+                      size:""
+                  };
+              }
           }
         },
         data() {

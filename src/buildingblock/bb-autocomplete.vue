@@ -2,7 +2,8 @@
     <el-autocomplete
       placeholder="请输入内容"
       v-model="valueBase"
-      :disabled="disabled"
+      :disabled="option.disabled"
+      :size="option.size"
       :fetch-suggestions="querySearchAsync"
       @change="change"
       @select="handleSelect"
@@ -48,6 +49,16 @@
             */
             suggestionsDs:{
                 type:Object
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:""
+                    };
+                }
             }
         },
         data() {

@@ -1,9 +1,13 @@
 <template>
     <el-input
-      placeholder="请输入内容"
+      :placeholder="option.placeholder"
       v-model="valueBase"
       @change="change"
-      :disabled="disabled"
+      :disabled="option.disabled"
+      :readonly="option.readonly"
+      :size="option.size"
+      :prefix-icon="option.prefixIcon"
+      :suffix-icon="option.suffixIcon"
       >
     </el-input>
 </template>
@@ -22,6 +26,20 @@
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        readonly:false,
+                        size:"",
+                        prefixIcon:null,
+                        suffixIcon:null,
+                        placeholder:"请输入内容"
+                    };
+                }
             }
         },
         data() {

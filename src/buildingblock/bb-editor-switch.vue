@@ -1,5 +1,5 @@
 <template>
-    <el-switch active-text="是" inactive-text="否" v-model="p_value" @change="switchChange"></el-switch>
+    <el-switch :active-text="option.activeText" :inactive-text="option.inactiveText" :disabled="option.disabled" :size="option.size" v-model="p_value" @change="switchChange"></el-switch>
 </template>
 
 <script>
@@ -12,6 +12,19 @@
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        size:"",
+                        activeText:"是",
+                        inactiveText:"否",
+                        disabled:false,
+                        readonly:false
+                    }
+                }
             }
         },
         data() {

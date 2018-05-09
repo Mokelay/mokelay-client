@@ -6,7 +6,8 @@
             placeholder="请输入内容"
             v-model="valueBase"
             @change="change"
-            :disabled="disabled"
+            :disabled="option.disabled"
+            :size="option.size"
             :style="p_style"
             :resize="p_resize"
             :autosize="p_autosize"
@@ -57,6 +58,16 @@
             //可输入的最大长度
             maxLen:{
                 type:Number
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:""
+                    };
+                }
             }
         },
         data() {

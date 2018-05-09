@@ -39,6 +39,15 @@
                         text:'请设置按钮属性'
                     };
                 }
+            },
+            options:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        readonly:false
+                    };
+                }
             }
         },
         data() {

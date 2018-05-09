@@ -1,10 +1,8 @@
 <template>
-
-            <el-radio-group :value="p_value" @input="radioChange" @change="radioChange">
-                <el-radio v-if="type == 'radio'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-radio>
-                <el-radio-button v-if="type == 'button'" v-for="item in p_options" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-radio-button>
-            </el-radio-group>
-
+    <el-radio-group :value="p_value" @input="radioChange" :size="option.size" :disabled="option.disabled" @change="radioChange">
+        <el-radio v-if="type == 'radio'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-radio>
+        <el-radio-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-radio-button>
+    </el-radio-group>
 </template>
 
 <script>
@@ -38,7 +36,7 @@ import Util from '../libs/util';
             ds: {
                 type: Object,
                 default: function () {
-                    return null
+                    return null;
                 }
             },
             type:{
@@ -47,6 +45,16 @@ import Util from '../libs/util';
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:""
+                    };
+                }
             }
         },
         data() {

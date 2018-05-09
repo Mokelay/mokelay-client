@@ -6,15 +6,17 @@
       :allow-create="filterable"
       :multiple="multiple"
       :filterable="filterable"
-      :disabled="disabled"
-      default-first-option
+      :disabled="option.disabled"
+      :default-first-option="option.defaultFirstOption"
+      :size="option.size"
       @change='change'
       >
       <el-option
-              v-for="(option,key) in items"
+              v-for="(item,key) in items"
               :key="key"
-              :label="option.text"
-              :value="option.value">
+              :label="item.text"
+              :disabled="item.disabled"
+              :value="item.value">
       </el-option>
     </el-select>
 </template>
@@ -84,14 +86,16 @@
               type:Boolean,
               default:false
             },
-                        //基础配置
-            optionsConfig:{
+            //基础配置
+            option:{
                 type:Object,
                 default:function(){
                     return {
                         disabled:false,
-                        readonly:false
-                    }
+                        readonly:false,
+                        defaultFirstOption:true,
+                        size:""
+                    };
                 }
             }
         },

@@ -1,10 +1,8 @@
 <template>
-
-            <el-checkbox-group v-model="p_value"  @change="checkboxChange">
-                <el-checkbox v-if="type == 'checkbox'" v-for="item in p_options" :label="item.value" :key="item.value">{{item.text}}</el-checkbox>
-                <el-checkbox-button v-if="type == 'button'" v-for="item in p_options" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-checkbox-button>
-            </el-checkbox-group>
-
+    <el-checkbox-group v-model="p_value" :size="option.size" :disabled="option.disabled" @change="checkboxChange">
+        <el-checkbox v-if="type == 'checkbox'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-checkbox>
+        <el-checkbox-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-checkbox-button>
+    </el-checkbox-group>
 </template>
 
 <script>
@@ -16,6 +14,13 @@ import Util from '../libs/util';
                 type:[String,Number,Array],
                 default:''
             },
+            /*options
+                [{
+                    "disabled":false,
+                    "text":"text1",
+                    "value":"val1"
+                }]
+            */
             options:{
                 type:Array
             },
@@ -30,7 +35,7 @@ import Util from '../libs/util';
             ds: {
                 type: Object,
                 default: function () {
-                    return null
+                    return null;
                 }
             },
             type:{
@@ -39,6 +44,16 @@ import Util from '../libs/util';
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:""
+                    };
+                }
             }
         },
         data() {

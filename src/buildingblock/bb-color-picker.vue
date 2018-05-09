@@ -1,5 +1,5 @@
 <template>
-    <el-color-picker v-model="valueBase" show-alpha @change='change'></el-color-picker>
+    <el-color-picker v-model="valueBase" :show-alpha="option.showAlpha" :size="option.size" :disabled="option.disabled" @change='change'></el-color-picker>
 </template>
 
 <script>
@@ -13,6 +13,17 @@
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:"",
+                        showAlpha:true
+                    };
+                }
             }
         },
         data() {

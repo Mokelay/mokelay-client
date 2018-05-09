@@ -1,5 +1,5 @@
 <template>
-    <el-input-number v-model="valueBase" @change="change" :min="min" :max="max"></el-input-number>
+    <el-input-number v-model="valueBase" @change="change" :min="min" :max="max" :size="option.size" :disabled="option.disabled"></el-input-number>
 </template>
 
 <script>
@@ -23,6 +23,16 @@
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:""
+                    }
+                }
             }
         },
         data() {
