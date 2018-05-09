@@ -88,9 +88,8 @@
             //获取动态数据
             getJson:function(){
                 const t = this;
-                debugger
                 if(t.ds){
-                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
+                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
                         debugger
                         t.jsonSource = map[0].value;
                     }, function (code, msg) {
