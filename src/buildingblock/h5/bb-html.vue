@@ -45,7 +45,11 @@
             let t=this;
             //渲染默认值模板
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
+
             t.fillHtml();
+            setTimeout(function(){
+                t.$emit('mounted',t);
+            },0);
         },
         methods: {
             //填充html代码
