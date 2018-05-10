@@ -129,10 +129,12 @@
                                 map.centerAndZoom(th.area || th.town || list.province, 11); 
 
                                 th.searchOperation(th);
-                                
+
                                 // 包含搜索 标记功能
-                                if (th.isSign && th.isSearch) {
+                                if (th.isSign) {
+
                                     th.signOperation(th);
+                                    
                                     th.modifySignImageClick(th);
                                 }
                                 if (th.isArea) {
