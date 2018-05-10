@@ -135,19 +135,23 @@
             }
         },
         computed: {
+            p_urlLevel(){
+                let _urlLevel = (typeof(this.urlLevel)==='string'?new Number(this.urlLevel):this.urlLevel);
+                _urlLevel = typeof(_urlLevel)==='undefined'?-1:_urlLevel;
+                return _urlLevel
+            }
         },
         components: {},
         created: function () {
             const t=this;
             this.getData();
             const fullPath = this.$route.fullPath;
-            let _urlLevel = (typeof(t.urlLevel)==='string'?new Number(t.urlLevel):t.urlLevel);
-            _urlLevel = typeof(_urlLevel)==='undefined'?-1:_urlLevel;
+            
             let paths = fullPath.split("&");
-            if(_urlLevel>=0){
-                this.defaultActive = paths.slice(0,_urlLevel+1).join('&');
+            if(t.p_urlLevel>=0){
+                this.defaultActive = paths.slice(0,t.p_urlLevel+1).join('&');
             }else{
-               this.defaultActive = fullPath;
+                this.defaultActive = fullPath;
             }
         },
         methods: {
@@ -208,9 +212,14 @@
                 }, [])]);
                 var iconClass = item.icon;
                 var templateChild = item.icon ? createElement('i', {class: iconClass}, []) : '';
+
+                var menuIndex = item.url;
+                if(menuIndex.indexOf("&")>=0&&t.p_urlLevel>=0){
+                    menuIndex = menuIndex.split("&").slice(0,t.p_urlLevel+1).join('&')
+                }
                 return createElement('el-menu-item',
                         {
-                            props: {index: item.url, key: item.url, route: {path: item.url}},
+                            props: {index: menuIndex, key: item.url, route: {path: item.url}},
                             title: item.title,
                             class: item.class,
                             on: {
@@ -245,10 +254,14 @@
                     ref: item['url'],
                     class: 'bb-menu-badge'
                 }, [])]);
+                var menuIndex = item.url;
+                if(menuIndex.indexOf("&")>=0&&t.p_urlLevel>=0){
+                    menuIndex = menuIndex.split("&").slice(0,t.p_urlLevel+1).join('&')
+                }
                 return createElement(
                         'el-submenu',
                         {
-                            props: {index: item.url, key: item.url, route: {path: item.url}}, on: {
+                            props: {index: menuIndex, key: item.url, route: {path: item.url}}, on: {
                             click: function () {
                                 t.$emit('click')
                                 if (item.value && item.clickHide) {
