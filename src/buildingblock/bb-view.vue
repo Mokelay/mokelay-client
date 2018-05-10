@@ -9,7 +9,8 @@
                         model:t.formData,
                         inline:true,
                         'label-position':"left",
-                        size: 'mini'
+                        labelWidth:t.labelWidth || "100px",
+                        size: t.size || "mini"
                     },
                     class:'grid'
                 },itemList);
@@ -131,6 +132,8 @@
                         const type = field['attributes']['type'] || "content";
                         const attributeName = field['attributes']['attributeName'];
                         const show = field['attributes']['show'];
+                        t.labelWidth = field['attributes']['labelWidth'];
+                        t.size = field['attributes']['size'];
                         if(custom == 'all' && realContent){
                             //自定义积木展示表单值
                             realContent.forEach((con,index)=>{
