@@ -132,10 +132,11 @@
                                 
                                 // 包含搜索 标记功能
                                 if (th.isSign && th.isSearch) {
+                                    th.signOperation(th);
 
                                     th.modifySignImageClick(th);
                                 }
-                                if (true) {
+                                if (th.isArea) {
                                     boundary();
                                 }
                             });
@@ -152,8 +153,6 @@
                                 var list = item['value'];
 
                                 th.pointData = list.list;
-
-                                th.signOperation(th);
 
                                 th.getBoundary(th);
 
