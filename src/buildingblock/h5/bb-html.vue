@@ -162,6 +162,7 @@
                 if(args[0]&&args[0] instanceof Array && args[0].length>0&&args[0][0]&&args[0][0].hasOwnProperty('value')&&args[0][0].value){
                     //如果是一个 ds返回的map对象
                     t.valueBase = args[0][0].value;
+                    t.fillHtml();
                     return;
                 }
                 args.forEach((val,key)=>{
