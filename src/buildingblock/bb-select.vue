@@ -86,6 +86,11 @@
               type:Boolean,
               default:false
             },
+            //多选时有效   true 返回 abc,def; false 返回 ["abc","def"]
+            resultString:{
+              type:Boolean,
+              default:true
+            },
             //基础配置
             option:{
                 type:Object,
@@ -102,7 +107,7 @@
         data() {
             return {
               items:this.fields.length>0?this.fields:this.options,
-              valueBase: (this.multiple&&this.value&& typeof this.value == 'string'?JSON.parse(this.value):this.value),
+              valueBase: this.multipleValTransfer(this.value),
               external:{}
             }
         },
@@ -111,11 +116,7 @@
                 this.items = val;
             },
             value(val){
-                if(this.multiple){
-                  this.valueBase = JSON.parse(val);
-                }else{
-                  this.valueBase = val;
-                }
+                this.valueBase = this.multipleValTransfer(val);
                 this.$emit('mounted',this.valueBase);
             },
             ds(val){
@@ -133,6 +134,25 @@
             }
         },
         methods: {
+          //多选值 转换，string 数组转换成  多选逗号隔开
+            multipleValTransfer(val){
+              let t=this;
+              let result =val;
+              if(!val||(t.multiple&&val.lenth<=0)){
+                return result;
+              }
+              if(typeof(val)==='string'&&t.multiple){
+                try{
+                  result = JSON.parse(val);
+                }catch(e){
+                  result.split(",");
+                }
+                if(!(result instanceof Array)){
+                  result = [result];
+                }
+              }
+              return result;
+            },  
             getData: function () {
                 var t = this;
                 if (this.ds) {
@@ -176,11 +196,16 @@
             },
             change:function(val){
               if(Array.isArray(val)){
-                this.$emit('input',JSON.stringify(val))
-                this.$emit('change',JSON.stringify(val))
+                if(this.resultString){
+                  this.$emit('input',val.join(","));
+                  this.$emit('change',val.join(","));
+                }else{
+                  this.$emit('input',JSON.stringify(val));
+                  this.$emit('change',JSON.stringify(val));
+                }
               }else{
-                this.$emit('input',val)
-                this.$emit('change',val)
+                this.$emit('input',val);
+                this.$emit('change',val);
               }
              
             },

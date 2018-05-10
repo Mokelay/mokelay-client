@@ -89,7 +89,7 @@
             loadData:function(){
                 let t=this;
                 if(t.ds){
-                    Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
+                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                         if(map&&map.length>0&&map[0]&&map[0].value){
                             t.p_options = map[0].value;
                             if(t.p_options.hasOwnProperty("list")){
