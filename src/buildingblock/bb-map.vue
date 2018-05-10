@@ -133,7 +133,6 @@
                                 // 包含搜索 标记功能
                                 if (th.isSign && th.isSearch) {
                                     th.signOperation(th);
-
                                     th.modifySignImageClick(th);
                                 }
                                 if (th.isArea) {
