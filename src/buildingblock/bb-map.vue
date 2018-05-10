@@ -59,7 +59,7 @@
             },
             isArea: {
                 type: Boolean,
-                default: true,
+                default: false,
             },
             isRouterJump: {
                 type: Boolean,
