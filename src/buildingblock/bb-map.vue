@@ -44,9 +44,7 @@
     import ditu6 from '../css/icon/map/ditu6.png';      // 6房地产    4004
 
     // 百度地图资源加载 
-    const resourcesUrl = ['//api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=',
-        '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
-        '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js']
+    const resourcesUrl = ['//api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=false']
 
     export default {
         name: 'bb-map',
@@ -106,74 +104,72 @@
         mounted() {
             let th = this;
 
-            reloadJS(resourcesUrl).then(function () {
-                let map
-                try {
-                    map = new BMap.Map("mapContent");
-                } catch(e) {
-                    return;
-                }
+            try {
+                require.ensure(['../libs/DrawingManager_min.js', '../libs/SearchInfoWindow_min.js'],function(require){
+                    reloadJS(resourcesUrl).then(function () {
+                        let map = new BMap.Map("mapContent");
 
-                // 添加地图类型控件
-                map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
-                // 开启鼠标滚轮缩放      
-                map.enableScrollWheelZoom(true);
+                        // 添加地图类型控件
+                        map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
+                        // 开启鼠标滚轮缩放      
+                        map.enableScrollWheelZoom(true);
 
-                /**
-                * 获取数据
-                */
-                if (th.ds) {
-                    th.loading = true;
-                    Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
-                        data.forEach(function (item) {
-                            var list = item['value'];
+                        /**
+                        * 获取数据
+                        */
+                        if (th.ds) {
+                            th.loading = true;
+                            Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
+                                data.forEach(function (item) {
+                                    var list = item['value'];
 
-                            th.province = list.province;
-                            th.town = list.town;
-                            th.area = list.area;
-                            // 设置地图显示的城市 此项是必须设置的
-                            map.centerAndZoom(list.area, 11); 
+                                    th.province = list.province;
+                                    th.town = list.town;
+                                    th.area = list.area;
+                                    // 设置地图显示的城市 此项是必须设置的
+                                    map.centerAndZoom(list.area, 11); 
 
-                            th.searchOperation(th);
-                            
-                            // 包含搜索 标记功能
-                            if (th.isSign && th.isSearch) {
+                                    th.searchOperation(th);
+                                    
+                                    // 包含搜索 标记功能
+                                    if (th.isSign && th.isSearch) {
 
-                                th.modifySignImageClick(th);
-                            }
-                            if (true) {
-                                boundary();
-                            }
-                        });
-                        th.loading = false;
-                    }, function (code, msg) {
-                        th.loading = false;
+                                        th.modifySignImageClick(th);
+                                    }
+                                    if (true) {
+                                        boundary();
+                                    }
+                                });
+                                th.loading = false;
+                            }, function (code, msg) {
+                                th.loading = false;
+                            });
+                        }
+
+                        function boundary () {
+                            th.loading = true;
+                            Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
+                                data.forEach(function (item) {
+                                    var list = item['value'];
+
+                                    th.pointData = list.list;
+
+                                    th.signOperation(th);
+
+                                    th.getBoundary(th);
+
+                                    th.addPoint(th, list.list);
+                                });
+                                th.loading = false;
+                            }, function (code, msg) {
+                                th.loading = false;
+                            });
+                        }
+
+                        th.map = map;
                     });
-                }
-
-                function boundary () {
-                    th.loading = true;
-                    Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
-                        data.forEach(function (item) {
-                            var list = item['value'];
-
-                            th.pointData = list.list;
-
-                            th.signOperation(th);
-
-                            th.getBoundary(th);
-
-                            th.addPoint(th, list.list);
-                        });
-                        th.loading = false;
-                    }, function (code, msg) {
-                        th.loading = false;
-                    });
-                }
-
-                th.map = map;
-            });
-            
+                });
+            } catch(e) {}
         },
         methods: {
             routerMapClick() {
