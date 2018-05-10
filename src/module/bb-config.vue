@@ -478,8 +478,8 @@
                         fields:[{
                             icon:'ty-flower-off ty-font', 
                             src:'',
-                            title:'bounced',
-                            value:'bounced',
+                            title:'bounce',
+                            value:'bounce',
                         },{
                             icon:'ty-flower-off ty-font', 
                             src:'',
@@ -601,8 +601,8 @@
                             et:'bb-select',                   
                             etProp:{
                                 fields:[{
-                                    title:'bounced',
-                                    value:'bounced'
+                                    title:'bounce',
+                                    value:'bounce'
                                 },{
                                     title:'flash',
                                     value:'flash'
