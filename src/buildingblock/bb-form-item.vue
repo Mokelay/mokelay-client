@@ -149,7 +149,7 @@
         created: function () {
             const t =this;
             //随机数
-            t.key = _TY_Tool.uuid();
+            t.key = t.contentItem.uuid;
 
             t.contentItem['interactives'] = t.contentItem['interactives']?t.contentItem['interactives']:[];
             let _tempOn = {
@@ -158,15 +158,39 @@
                 executeType:'container_method',         //执行类型(预定义方法 trigger_method,
                 containerMethodName:'defaultVmodel'
             };
-            if(t.contentItem['interactives'].indexOf(_tempOn)<0){
+            //先清空无效的交互
+            t.clearInvalidInteractive();
+
+            let allowAdd = true;
+            t.contentItem['interactives'].forEach((item,index)=>{
+                if(item.uuid==t.key){
+                    //交互里面已经存在  这个交互，就不再添加交互了
+                    allowAdd = false;
+                    return false;
+                }
+            });
+            if(allowAdd){
                 t.contentItem['interactives'].push(_tempOn);
             }
-            
         },
         mounted:function(){
 
         },
         methods: {
+            //清除无效的交互
+            clearInvalidInteractive:function(){
+                let t=this;
+                if(t.contentItem['interactives']&&t.contentItem['interactives'].length>0){
+                    t.contentItem['interactives']
+                    for(let i=0;i<t.contentItem['interactives'].length;i++){
+                        if(t.contentItem['interactives'][i].containerMethodName=='defaultVmodel'&&
+                            t.contentItem['interactives'][i].fromContentEvent=='input'){
+                            t.contentItem['interactives'].splice(i,1);
+                            i--;//删除了之后下标会下移
+                        }
+                    }
+                }
+            },
             //事件：出现show 和 隐藏hide 事件
             //标签项展示
             itemShow(){

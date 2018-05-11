@@ -259,8 +259,8 @@
                 var formItems = [];
                 var bbContent = [];
                 //创建FormItem
-                if(t.content){
-                    bbContent = t.content;
+                if(content){
+                    bbContent = content;
                     bbContent.forEach((bb,key)=>{
                         bb.attributes.value = formData?formData[bb['attributes']['attributeName']]:'';
                     })
