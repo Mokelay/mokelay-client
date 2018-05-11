@@ -99,7 +99,7 @@
                 checkResourcesId: '',       // 选中资源id,
                 mapSize: {
                     width: this.widthMap ? this.widthMap + '% !important' : '100%',
-                    height: this.heightMap ? this.heightMap + '% !important' : '100%',
+                    height: this.heightMap ? this.heightMap + '% !important' : '100%'
                 }
             }
         },

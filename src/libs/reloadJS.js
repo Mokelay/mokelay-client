@@ -16,7 +16,6 @@ export default function remoteLoad(url) {
       }
   })();
 
-
   /**
    * 创建script
    * @param url
