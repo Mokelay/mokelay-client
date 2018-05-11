@@ -9,8 +9,19 @@
         name: 'bb-form-item',
         render: function (createElement) {
             const t = this;
-            const realContent = [t.contentItem];
-           
+            const realContent = [];
+            const realContentItem = _TY_Tool.deepClone(t.contentItem);
+            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
+            realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
+            realContentItem['interactives'].push({
+                uuid:_TY_Tool.uuid(),
+                fromContentEvent:'input',
+                executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                containerMethodName:'defaultVmodel'
+            });
+            realContent.push(realContentItem);
+            //处理标准格式数据
+            
             const bbList = _TY_Tool.bbRender(realContent, createElement, t);
             let formItem;
             realContent.forEach((field,key)=>{
@@ -36,8 +47,7 @@
                         prop:t.realProp,
                         rules:t.realRules,
                         show:t.realShow
-                    },
-                    key:t.key
+                    }
                 },[label,bbList,tipEle]);
             });
             return formItem;
@@ -130,67 +140,19 @@
                 realLabel:this.label,
                 realShow:this.show,
                 realRules:this.rules,
-                realProp:this.prop,
+                realProp:this.prop
             }
         },
         computed: {
-            form() {
-                let parent = this.$parent.$parent;
-                let parentName = parent.$options._componentTag;
-                while (parentName !== 'bb-form') {
-                  parent = parent.$parent;
-                  parentName = parent.$options._componentTag;
-                }
-                return parent;
-            }
         },
         watch: {
         },
         created: function () {
-            const t =this;
-            //随机数
-            t.key = t.contentItem.uuid;
-
-            t.contentItem['interactives'] = t.contentItem['interactives']?t.contentItem['interactives']:[];
-            let _tempOn = {
-                uuid:t.key,
-                fromContentEvent:'input',
-                executeType:'container_method',         //执行类型(预定义方法 trigger_method,
-                containerMethodName:'defaultVmodel'
-            };
-            //先清空无效的交互
-            t.clearInvalidInteractive();
-
-            let allowAdd = true;
-            t.contentItem['interactives'].forEach((item,index)=>{
-                if(item.uuid==t.key){
-                    //交互里面已经存在  这个交互，就不再添加交互了
-                    allowAdd = false;
-                    return false;
-                }
-            });
-            if(allowAdd){
-                t.contentItem['interactives'].push(_tempOn);
-            }
         },
         mounted:function(){
 
         },
         methods: {
-            //清除无效的交互
-            clearInvalidInteractive:function(){
-                let t=this;
-                if(t.contentItem['interactives']&&t.contentItem['interactives'].length>0){
-                    t.contentItem['interactives']
-                    for(let i=0;i<t.contentItem['interactives'].length;i++){
-                        if(t.contentItem['interactives'][i].containerMethodName=='defaultVmodel'&&
-                            t.contentItem['interactives'][i].fromContentEvent=='input'){
-                            t.contentItem['interactives'].splice(i,1);
-                            i--;//删除了之后下标会下移
-                        }
-                    }
-                }
-            },
             //事件：出现show 和 隐藏hide 事件
             //标签项展示
             itemShow(){
@@ -235,15 +197,6 @@
             */
             defaultVmodel:function (val) {
                 //表单值回填
-                let t=this;
-                //双向绑定
-                if(t.contentItem&&t.contentItem.attributes&&t.contentItem.attributes.hasOwnProperty('value')){
-                    // t.contentItem.attributes.value = val;
-                    // let _tempObj = Object.assign({},t.contentItem.attributes,{"value":val});
-                    // delete t.contentItem.attributes;
-                    // t.$set(t.contentItem,"attributes",_tempObj);
-                    t.$set(t.contentItem.attributes,"value",val);
-                }
                 this.$emit('input',val);
                 this.$emit('change',val);
             }
