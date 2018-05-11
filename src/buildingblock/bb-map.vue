@@ -134,7 +134,7 @@
 
                                 // 包含搜索 标记功能
                                 if (th.isSign) {
-
+                                    console.log('isSign : ' + th.isSign);
                                     th.signOperation(th);
                                     
                                     th.modifySignImageClick(th);
@@ -481,6 +481,8 @@
              * 标记逻辑处理
              */
             signOperation(th) {
+                console.log('signOperation : start');
+
                 let map = th.map;
                 th.overlays = [];
                 var overlaycomplete = function(e){
@@ -511,7 +513,7 @@
                 //添加鼠标绘制工具监听事件，用于获取绘制结果
                 drawingManager.addEventListener('overlaycomplete', overlaycomplete);
 
-                
+                console.log('signOperation : end' + drawingManager);
             },
             /**
              * 删除原百度地图拖动图标及功能
@@ -527,10 +529,10 @@
              * 修改原百度地图工具箱事件
              */
             modifySignImageClick(th) {
+                console.log('modifySignImageClick : start');
                 let obj = th.getDom("mapContent");
+                th.deleteOtherDom();
                 obj.addEventListener("click", function(ev){
-
-                    th.deleteOtherDom();
 
                     let clickSignMode = document.getElementsByClassName('BMapLib_last');
                     let clickSignMode1 = document.getElementsByClassName('market-sign-mode1');
@@ -541,6 +543,8 @@
                         th.modifySignImage('sign');
                     }
                 });
+
+                console.log('modifySignImageClick : end');
             },
             /**
              * 修改原百度地图工具箱功能
