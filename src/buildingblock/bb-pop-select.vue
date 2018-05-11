@@ -26,7 +26,7 @@
                 fixedColumn="500"
                 @list-select="listSelect" 
                 :showHeader="selectionGridConfig.showHeader"></bb-list>
-            <span class="buttons">
+            <span class="bbPopButtons">
                 <!-- 放一个确认和一个取消按钮 -->
                 <bb-button :button="{type:'defalut',size:'normal'}" @click="cancel">取消</bb-button>
                 <bb-button :button="{type:'primary',size:'normal'}" @click="confirm">确认</bb-button>
@@ -205,7 +205,7 @@
 </script>
 <style lang="less">
     .bbPopSelectDia{
-        .buttons{
+        .bbPopButtons{
             display: inline-block;
             width: 100%;
             text-align: right;
