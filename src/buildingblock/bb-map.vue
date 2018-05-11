@@ -138,6 +138,8 @@
                                     th.signOperation(th);
                                     
                                     th.modifySignImageClick(th);
+
+                                    th.showSignStyle();
                                 }
                                 if (th.isArea) {
                                     boundary();
@@ -481,8 +483,6 @@
              * 标记逻辑处理
              */
             signOperation(th) {
-                console.log('signOperation : start');
-
                 let map = th.map;
                 th.overlays = [];
                 var overlaycomplete = function(e){
@@ -513,7 +513,7 @@
                 //添加鼠标绘制工具监听事件，用于获取绘制结果
                 drawingManager.addEventListener('overlaycomplete', overlaycomplete);
 
-                console.log('signOperation : end' + drawingManager);
+                th.showSignStyle();
             },
             /**
              * 删除原百度地图拖动图标及功能
@@ -529,7 +529,6 @@
              * 修改原百度地图工具箱事件
              */
             modifySignImageClick(th) {
-                console.log('modifySignImageClick : start');
                 let obj = th.getDom("mapContent");
                 th.deleteOtherDom();
                 obj.addEventListener("click", function(ev){
@@ -544,7 +543,17 @@
                     }
                 });
 
-                console.log('modifySignImageClick : end');
+                th.showSignStyle();
+            },
+            /**
+             * 显示标记图标
+             */
+            showSignStyle() {
+                setTimeout(function () {
+                    if (document.getElementsByClassName('anchorTR') && document.getElementsByClassName('anchorTR')[0]) {
+                        document.getElementsByClassName('anchorTR')[0].setAttribute('class', 'BMapLib_Drawing BMap_noprint sign-right-top');
+                    }
+                }, 0);
             },
             /**
              * 修改原百度地图工具箱功能
@@ -718,6 +727,11 @@
 
 <style>
 
+    .sign-right-top {
+        top: 20px !important;
+        right: 20px !important;
+    }
+    
     .tangram-suggestion-main {
         z-index: 2;
     }
