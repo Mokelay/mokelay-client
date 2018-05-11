@@ -9,27 +9,16 @@
             if(t.group){
                 t.formData = Array.isArray(t.formData)?t.formData:[];
                 t.contentGroup.forEach((content,key)=>{
-                    const formData = t.formData[key]?t.formData[key]:{};
+                    t.formData[key] = t.formData[key]?t.formData[key]:{};
                     const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_lajitong"}},on:{click:t.remove.bind(null,key)}},[]);
-                    const newForm = t.renderForm(createElement,content,formData,key);
+                    const newForm = t.renderForm(createElement,content,t.formData[key],key);
                     const groupItem = createElement('div',{class:"groupItem"},[newForm,removeButton]);
                     _form_group.push(groupItem); 
                     _form = createElement('div',{},_form_group);
                 });
             }else{
-                t.contentGroup.forEach((content,key)=>{
-                    const formData = key == 0?t.formData:{};
-                    const newForm = t.renderForm(createElement,content,formData,key);
-                    if(t.group){
-                        //_form_group.push(newForm);
-                        const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_lajitong"}},on:{click:t.remove.bind(null,key)}},[]);
-                        const groupItem = createElement('div',{class:"groupItem"},[newForm,removeButton]);
-                        _form = createElement('div',{},[groupItem]);
-                    }else{
-                        _form = newForm;
-                    }
-                    
-                });
+                const newForm = t.renderForm(createElement,t.content,t.formData,0);
+                _form = newForm; 
             }
             return _form;
         },
@@ -263,7 +252,7 @@
                     bbContent = content;
                     bbContent.forEach((bb,key)=>{
                         bb.attributes.value = formData?formData[bb['attributes']['attributeName']]:'';
-                    })
+                    });
                 }else{
                     t.realFields = t.realFields?t.realFields:[];
                     t.realFields.forEach(function(field){
@@ -344,7 +333,6 @@
                         on:{
                             //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
                             change: function (val) {
-                                // formData = formData?formData:{};
                                 formData[field['attributes']['attributeName']] = val;
                             }
                         },
@@ -370,7 +358,6 @@
                     }else{
                         normalItems.push(formItem);
                     }
-                    //formItems.push(formItem);
                 });
                 Object.keys(groups).forEach((key,index)=>{
                     var key_contents = createElement('el-collapse-item',{
