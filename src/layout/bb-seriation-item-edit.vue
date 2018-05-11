@@ -26,7 +26,7 @@
                         break;
                 }
             })
-            const buttonElements = createElement('div',{props:{},attrs:{class:'buttons'},on:{}},buttons);
+            const buttonElements = createElement('div',{props:{},attrs:{class:'bb-seriation-item-buttons'},on:{}},buttons);
             //生成虚线框的编辑区域
             const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{click:t.onFocus}},[buttonElements,contentElements]);
             //生成箭头
@@ -213,7 +213,7 @@
             overflow-y: auto;
             position: relative;
             &:hover{
-                .buttons{
+                .bb-seriation-item-buttons{
                     opacity:1;
                     transition: opacity .5s;
                 }
@@ -241,7 +241,7 @@
         .legoborder{
             
         }
-        .buttons{
+        .bb-seriation-item-buttons{
             display: inline-block;
             text-align: right;
             opacity:0;
