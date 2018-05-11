@@ -4,33 +4,26 @@ export default function remoteLoad(url) {
     return;
   }
 
-  let result = null;
-
-  return (async function loopCreate() {
-      for (var i = 0; i < url.length; i++) {
-          result = fetch(await createScript(url[i]));
-      }
-
-      if (i === url.length) {
-        return result;
-      }
-  })();
-
+  return createScript(url.shift()).then(() => {
+    return createScript(url.shift()).then(() => {
+      return createScript(url.shift());
+    });
+  });
 
   /**
    * 创建script
    * @param url
    * @returns {Promise}
    */
-  function createScript(url) {
-    var promise;
+  function createScript(urlV) {
+    let promise;
     try {
       var scriptElement = document.createElement('script');
       document.body.appendChild(scriptElement);
 
       promise = new Promise((resolve, reject) => {
         scriptElement.addEventListener('load', e => {
-          resolve(e);
+            resolve(e);
         }, false);
 
         scriptElement.addEventListener('error', e => {
@@ -38,14 +31,15 @@ export default function remoteLoad(url) {
         }, false);
 
       });
-
-      scriptElement.src = url;
+      
+      scriptElement.src = urlV;
       scriptElement.src = 'text/javascript';
 
     } catch(e) {}
 
     return promise;
   }
+
 
 }
 
