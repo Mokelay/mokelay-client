@@ -694,32 +694,12 @@
                     });
                 }
 
-                this.saveSign = JSON.stringify(this.saveSign);
+                let result = {
+                    city_resource_id: this.$route.query.city_resource_id,
+                    signId: this.saveSign
+                };
 
-                Util.getDSData(this.saveds, _TY_Tool.buildTplParams(this), function (data) {
-                    data.forEach(function (item) {
-                        let result = item['value'];
-                        if (result.id && result.id > 0) {
-                            th.$message({
-                                type: 'success',
-                                message: '保存成功'
-                            });
-                        } else {
-                            th.$message({
-                                type: 'error',
-                                message: '保存失败'
-                            });
-                        }
-                    });
-
-                    th.clearAll();
-
-                    th.loading = false;
-                }, function (code, msg) {
-                    th.loading = false;
-                });
-
-                this.$emit('sign-save-click');
+                this.$emit('sign-save-click', JSON.stringify(result));
             }
         }
     }
