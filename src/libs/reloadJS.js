@@ -24,25 +24,29 @@ export default function remoteLoad(url) {
    */
   function createScript(url) {
 
-    var scriptElement = document.createElement('script');
-    document.body.appendChild(scriptElement);
+    try {
+      var scriptElement = document.createElement('script');
+      document.body.appendChild(scriptElement);
 
-    var promise = new Promise((resolve, reject) => {
-      scriptElement.addEventListener('load', e => {
-        removeScript(scriptElement);
-        resolve(e);
-      }, false);
+      var promise = new Promise((resolve, reject) => {
+        scriptElement.addEventListener('load', e => {
+          removeScript(scriptElement);
+          resolve(e);
+        }, false);
 
-      scriptElement.addEventListener('error', e => {
-        removeScript(scriptElement);
-        reject(e);
-      }, false);
+        scriptElement.addEventListener('error', e => {
+          removeScript(scriptElement);
+          reject(e);
+        }, false);
 
-    });
+      });
 
-    scriptElement.src = url;
+      scriptElement.src = url;
+  
 
-    return promise;
+      return promise;
+
+    } catch(e) {}
   }
 
     /**
