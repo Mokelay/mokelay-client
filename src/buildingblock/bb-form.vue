@@ -593,6 +593,9 @@
                     }
                 }).then(()=>{
                     //删除表单
+                    if(t.contentGroup.length == 1){
+                        return;
+                    }
                     t.contentGroup.splice(key,1);
                     //清空该项表单数据
                     if(Array.isArray(t.formData) && t.formData[key]){
