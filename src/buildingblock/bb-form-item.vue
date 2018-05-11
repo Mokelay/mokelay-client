@@ -215,9 +215,10 @@
                 //双向绑定
                 if(t.contentItem&&t.contentItem.attributes&&t.contentItem.attributes.hasOwnProperty('value')){
                     // t.contentItem.attributes.value = val;
-                    let _tempObj = Object.assign({},t.contentItem.attributes,{"value":val});
-                    delete t.contentItem.attributes;
-                    t.$set(t.contentItem,"attributes",_tempObj);
+                    // let _tempObj = Object.assign({},t.contentItem.attributes,{"value":val});
+                    // delete t.contentItem.attributes;
+                    // t.$set(t.contentItem,"attributes",_tempObj);
+                    t.$set(t.contentItem.attributes,"value",val);
                 }
                 this.$emit('input',val);
                 this.$emit('change',val);

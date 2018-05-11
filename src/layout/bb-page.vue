@@ -292,17 +292,18 @@
         args.forEach((val,key)=>{
           if(val.type == 'custom'){
             let dialogArgs = val.arguments;
-            t.dialogProp = {
-              'isShow':true,
-              content:dialogArgs,
-              closeOnClickModal:false
-            }
-            if(typeof(dialogArgs)==='object'&&!dialogArgs instanceof Array&&dialogArgs.hasOwnProperty('content')){
+            if(typeof(dialogArgs)==='object'&&!(dialogArgs instanceof Array)&&dialogArgs.hasOwnProperty('content')){
               //说明不是数组，可能是一个bb-dialog的属性对象
               t.dialogProp = Object.assign({},{
                 'isShow':true,
                 closeOnClickModal:false
               },dialogArgs);
+            }else{
+              t.dialogProp = {
+                'isShow':true,
+                content:dialogArgs,
+                closeOnClickModal:false
+              }
             }
           }
         })

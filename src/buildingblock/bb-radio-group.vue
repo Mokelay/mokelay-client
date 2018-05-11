@@ -59,13 +59,13 @@ import Util from '../libs/util';
         },
         data() {
             return {
-                p_value:this.value.toString(),
+                p_value:this.value,
                 p_options:this.options
             };
         },
         watch:{
             value(val){
-               this.p_value = val.toString();
+               this.p_value = val;
             }
         },
         mounted(){

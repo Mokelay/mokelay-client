@@ -182,9 +182,9 @@
                         const bbs = createElement('div',{class:contentClass},bb_children);
                         let className = dt == 'Image'?'bb-view-item label':'bb-view-item';
                         className = type == "title"?className + " bb-view-title" : className;
+                        //合并默认类型和自定义类型
                         const contents = [];
                         if(content.length > 0){
-                            console.log('content:',content);
                             contents.push(content)
                         };
                         contents.push(bbs);
@@ -272,6 +272,7 @@
                 const t = this;
                 args.forEach((val,key)=>{
                     if(val.type == 'custom' && val.arguments){
+                        console.log('val.arguments:',val.arguments);
                         let newData = val.arguments;
                         t.formData = newData;
                     }
