@@ -16,7 +16,7 @@ export default function remoteLoad(url) {
       }
   })();
 
-  
+
   /**
    * 创建script
    * @param url
@@ -30,12 +30,10 @@ export default function remoteLoad(url) {
 
       promise = new Promise((resolve, reject) => {
         scriptElement.addEventListener('load', e => {
-          removeScript(scriptElement);
           resolve(e);
         }, false);
 
         scriptElement.addEventListener('error', e => {
-          removeScript(scriptElement);
           reject(e);
         }, false);
 
@@ -47,14 +45,6 @@ export default function remoteLoad(url) {
     } catch(e) {}
 
     return promise;
-  }
-
-    /**
-   * 移除script标签
-   * @param scriptElement script dom
-   */
-  function removeScript(scriptElement) {
-    document.body.removeChild(scriptElement);
   }
 
 }
