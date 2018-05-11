@@ -23,12 +23,12 @@ export default function remoteLoad(url) {
    * @returns {Promise}
    */
   function createScript(url) {
-
+    var promise;
     try {
       var scriptElement = document.createElement('script');
       document.body.appendChild(scriptElement);
 
-      var promise = new Promise((resolve, reject) => {
+      promise = new Promise((resolve, reject) => {
         scriptElement.addEventListener('load', e => {
           removeScript(scriptElement);
           resolve(e);
@@ -42,11 +42,11 @@ export default function remoteLoad(url) {
       });
 
       scriptElement.src = url;
-  
-
-      return promise;
+      scriptElement.src = 'text/javascript';
 
     } catch(e) {}
+
+    return promise;
   }
 
     /**
