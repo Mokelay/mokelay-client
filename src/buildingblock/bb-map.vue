@@ -699,7 +699,7 @@
                     signId: this.saveSign
                 };
 
-                this.$emit('sign-save-click', JSON.stringify(result));
+                this.$emit('signSaveClick', result);
             }
         }
     }
