@@ -46,5 +46,6 @@ export default function remoteLoad(url) {
 
     return promise;
   }
+
 }
 
