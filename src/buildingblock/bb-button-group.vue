@@ -1,11 +1,11 @@
 <template>
     <div>
         <el-button-group v-if="groupConfig.type == 'group'">
-            <bb-button v-for="(button,index) in realButtons" :key="index" :button="button" @click="click"></bb-button>
+            <bb-button v-for="(button,index) in realButtons" @button-finish="buttonFinsih" :key="index" :button="button" @click="click"></bb-button>
         </el-button-group>
         <div v-if="groupConfig.type == 'normal'">
             <span v-for="(button,index) in realButtons" :key="index" class="button">
-                <bb-button :key="index" :button="button" @click="click"></bb-button>
+                <bb-button :key="index" :button="button" @button-finish="buttonFinsih" @click="click"></bb-button>
                 <i v-if="button.iconName" :class="button.iconName" @click='remove(button,index)'></i>
                 <bb-badge v-if="button.badgeDs" :textDs="button.badgeDs" class="icon"  @click='iconClick(button,index)'></bb-badge>
             </span>
@@ -142,6 +142,9 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            buttonFinsih:function(...params){
+                this.$emit("button-finish",params);
             }
         }
     }
