@@ -70,7 +70,11 @@ import Util from '../libs/util';
             },
             content:{
                 type:Array
-            }
+            },
+            closeOnClickModal:{
+                type:Boolean,
+                default:false
+            },
         },
 
         data() {
@@ -149,7 +153,7 @@ import Util from '../libs/util';
                     ref:"form",
                     key:formKey
                 },[]);
-                const dialog = createElement('bb-dialog',{props:{isShow:t.formVisible,size:"middle"},on:{'update:isShow':(isShow)=>{t.formVisible = isShow;}}},[form]);
+                const dialog = createElement('bb-dialog',{props:{closeOnClickModal:t.closeOnClickModal,modalAppendToBody:true,appendToBody:true,isShow:t.formVisible,size:"middle"},on:{'update:isShow':(isShow)=>{t.formVisible = isShow;}}},[form]);
                 return dialog;
             },
             setting:function(){
