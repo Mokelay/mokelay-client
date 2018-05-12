@@ -888,6 +888,7 @@ let _setStyle = function(bb, t) {
     };
     if (layout && JSON.stringify(layout) != '{}') {
         style = {
+            'display': layout.display,
             'position': layout.positionType,
             'z-index': layout.zIndex,
             'background-color': layout.bgColor,

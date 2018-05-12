@@ -681,6 +681,14 @@
                             },
                             rules:[{ required: true, message: '请输入字段别名', trigger: 'blur' }]
                         },{                      
+                            attributeName:'display',
+                            et:'bb-input',
+                            group:'表单选项',                 
+                            name:'表单项宽度',
+                            description:"表单项占整行的宽度",                               
+                            props:{
+                            }
+                        },{                      
                             attributeName:'width',
                             et:'bb-input',
                             group:'表单选项',                 
