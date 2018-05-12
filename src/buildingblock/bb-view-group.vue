@@ -1,7 +1,7 @@
 <template>
     <div class="bb-view-group">
         <div v-for="(view,key) in viewList">
-            <bb-view :key="key" class="bb-view-group-item" :fields="realFields" :data="view"></bb-view>
+            <bb-view :key="key" class="bb-view-group-item" :fields="realFields" :value="view"></bb-view>
         </div>
         <el-row v-if="pagination.show" type="flex" justify='end'>
             <bb-pagination 

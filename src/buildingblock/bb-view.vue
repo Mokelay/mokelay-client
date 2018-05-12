@@ -59,8 +59,8 @@
                     }]
                 }
             */
-            data:{
-                type:Object
+            value:{
+                type:[Object,String]
             },
             /*动态数据*/
             dataDS:{
@@ -69,7 +69,7 @@
         },
         data() {
             return {
-                formData:_TY_Tool.deepClone(this.data),
+                formData:_TY_Tool.deepClone(this.value),
                 realFields:_TY_Tool.deepClone(this.fields)
             }
         },
@@ -151,6 +151,9 @@
                                     },t.formData[attributeName]));
                                     break;
                                 case 'File':
+                                    if(!t.formData[attributeName]){
+                                        t.formData[attributeName] = []
+                                    }
                                     t.formData[attributeName].forEach((val,index)=>{
                                         const ele = createElement('a',{
                                             style:{color:'#0091ea',margin:'0 20px 0 0'},
@@ -165,6 +168,9 @@
                                     break;
                                 case 'Image':
                                     const images = [];
+                                    if(!t.formData[attributeName]){
+                                        t.formData[attributeName] = []
+                                    }
                                     t.formData[attributeName].forEach((val,index)=>{
                                         images.push(val.href);
                                     });
