@@ -28,6 +28,7 @@
                 :settingText="advancedSearchConfig.settingText" 
                 :formButtonName="advancedSearchConfig.formButtonName"></bb-button-form>
             <bb-form 
+                @bb-mounted="advancedSearchFn"
                 @commit="advancedSearchFn"
                 v-if="advancedSearchConfig.layoutType == 'inline-form'"
                 :labelInline="advancedSearchConfig.labelInline"
@@ -37,6 +38,7 @@
                 :content="advancedSearchConfig.content"
                 :grid="advancedSearchConfig.grid"
                 :size="advancedSearchConfig.size"
+                :defaultValTpl="advancedSearchConfig.defaultValTpl"
                 :settingButtonText="advancedSearchConfig.formButtonName"></bb-form>
             
         </el-row>
@@ -786,7 +788,7 @@
             advancedSearchFn:function(data){
                 const t = this;
                 t.page = 1;//搜索恢复到第一页
-                t.searchFormData = data;
+                t.searchFormData = data || arguments[1]['bb']['formData'];
                 t.getData();
             },
             hidePopup:function(button,objValue){
