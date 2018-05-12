@@ -108,7 +108,8 @@
                         content:"[]"
                         grid:"true || false"
                         size:"medium / small / mini"
-                        formButtonName:"选择"
+                        formButtonName:"选择",
+                        defaultValTpl:"默认值"
                     }
                 }
             */
