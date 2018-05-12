@@ -243,7 +243,7 @@
         },
         methods: {
             //渲染表单
-            renderForm:function(createElement,content,formData,key){
+            renderForm:function(createElement,content,formData,formKey){
                 var t =this;
                 var formItems = [];
                 var bbContent = [];
@@ -412,7 +412,7 @@
                         style:{textAlign:'center'},
                         props:{type:'primary'},
                         on:{
-                            click:t.formCommit.bind(null,formData,key)
+                            click:t.formCommit.bind(null,formData,formKey)
                         }
                     })
                 if(t.hideSubmitButton){
@@ -446,9 +446,9 @@
                         size: t.size
                     },on:{
                         submit:"return false;"
-                    },ref:"form_"+key,
+                    },ref:"form_"+formKey,
                     class:formClass,
-                    key:key
+                    key:formKey
                 },formItems);
             },
             //显示和隐藏的uuid数组
