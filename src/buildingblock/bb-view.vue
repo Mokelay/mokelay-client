@@ -6,6 +6,7 @@
             const itemList = t.renderItem(createElement);
             return createElement('el-form',{
                     props:{
+                        key:t.formKey,
                         model:t.formData,
                         inline:true,
                         'label-position':"left",
@@ -70,10 +71,16 @@
         data() {
             return {
                 formData:_TY_Tool.deepClone(this.value),
-                realFields:_TY_Tool.deepClone(this.fields)
+                realFields:_TY_Tool.deepClone(this.fields),
+                formKey:_TY_Tool.uuid()
             }
         },
         watch: {
+            formData:{
+                handler:(val,oldVal)=>{
+                },
+                deep:true
+            },
         },
         created: function () {
             const t = this;
@@ -127,7 +134,7 @@
                         //如果是String或者Number则直接展示，File类型的展示现在链接，图片预览
                         const realContent = field['attributes']['content'];
                         const dt = field['attributes']['dt'] || field.dt;
-                        const custom = field['attributes']['custom'] || 'all';
+                        const custom = field['attributes']['custom'] || 'default';
                         const width = field['attributes']['width'] || field.width;
                         const type = field['attributes']['type'] || "content";
                         const attributeName = field['attributes']['attributeName'];
@@ -278,8 +285,8 @@
                 const t = this;
                 args.forEach((val,key)=>{
                     if(val.type == 'custom' && val.arguments){
-                        console.log('val.arguments:',val.arguments);
                         let newData = val.arguments;
+                        t.formKey = _TY_Tool.uuid();
                         t.formData = newData;
                     }
                 });
