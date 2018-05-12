@@ -98,7 +98,18 @@
                         type:checkbox || radio  //searchType = searchSelection时
                         
                     }
-                    showHeader: 是否显示表头
+                    showHeader: 是否显示表头,
+                    advancedSearchConfig:{
+                        layoutType:'bb-button-form' || 'inline-form'
+                        labelInline:"true || false"
+                        labelWidth:"100px"
+                        labelPosition:right/left/top
+                        fields:"[]"
+                        content:"[]"
+                        grid:"true || false"
+                        size:"medium / small / mini"
+                        formButtonName:"选择"
+                    }
                 }
             */
             selectionGridConfig:{

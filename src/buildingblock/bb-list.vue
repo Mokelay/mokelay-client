@@ -30,9 +30,13 @@
             <bb-form 
                 @commit="advancedSearchFn"
                 v-if="advancedSearchConfig.layoutType == 'inline-form'"
-                :labelInline="true"
+                :labelInline="advancedSearchConfig.labelInline"
+                :labelWidth="advancedSearchConfig.labelWidth"
+                :labelPosition="advancedSearchConfig.labelPosition"
                 :fields="advancedSearchConfig.fields"
                 :content="advancedSearchConfig.content"
+                :grid="advancedSearchConfig.grid"
+                :size="advancedSearchConfig.size"
                 :settingButtonText="advancedSearchConfig.formButtonName"></bb-form>
             
         </el-row>
@@ -287,7 +291,7 @@
                         confirmText:null,
                         callback:'custom',//refresh
                         valueKey:null
-                    }
+                    };
                 }
             },
             border:{
@@ -298,6 +302,19 @@
                 type:Boolean,
                 default:false
             },
+            /*advancedSearchConfig 高级搜素表单配置
+                {
+                    layoutType:'bb-button-form' || 'inline-form'
+                    labelInline:"true || false"
+                    labelWidth:"100px"
+                    labelPosition:right/left/top
+                    fields:"[]"
+                    content:"[]"
+                    grid:"true || false"
+                    size:"medium / small / mini"
+                    formButtonName:"选择"
+                }
+            */
             advancedSearchConfig: {
                 type: Object,
                 default: function () {
