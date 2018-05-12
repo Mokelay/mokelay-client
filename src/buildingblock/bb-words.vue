@@ -97,7 +97,7 @@
     },
     props: {
       value:{
-        type:String
+        type:[String,Number,Boolean]
       },
       //文字内容，支持模板<%=params%>
       text: {
