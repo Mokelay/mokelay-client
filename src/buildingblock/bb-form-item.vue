@@ -5,23 +5,24 @@
 </template> -->
 
 <script>
+    //每个formItem 都有一个 input事件，实现v-model
+    const FormItemInteractive = {
+                uuid:_TY_Tool.uuid(),
+                fromContentEvent:'input',
+                executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                containerMethodName:'defaultVmodel'
+            };
+
     export default {
         name: 'bb-form-item',
         render: function (createElement) {
             const t = this;
             const realContent = [];
-            const realContentItem = _TY_Tool.deepClone(t.contentItem);
-            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
-            realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
-            realContentItem['interactives'].push({
-                uuid:_TY_Tool.uuid(),
-                fromContentEvent:'input',
-                executeType:'container_method',         //执行类型(预定义方法 trigger_method,
-                containerMethodName:'defaultVmodel'
-            });
-            realContent.push(realContentItem);
-            //处理标准格式数据
             
+            realContent.push(Object.assign({},t.realContentCopyItem,{
+                interactives:t.realContentCopyItem['interactives'].concat([FormItemInteractive])
+            }));
+            //处理标准格式数据
             const bbList = _TY_Tool.bbRender(realContent, createElement, t);
             let formItem;
             realContent.forEach((field,key)=>{
@@ -140,19 +141,47 @@
                 realLabel:this.label,
                 realShow:this.show,
                 realRules:this.rules,
-                realProp:this.prop
+                realProp:this.prop,
+                callbackVal:null,//change事件返回的value
+                realContentCopyItem:null
             }
         },
         computed: {
         },
         watch: {
+            contentItem(val){
+                this.realContentCopyItem = val;
+            }
         },
         created: function () {
+            let t=this;
+            //先清理无效交互
+            t.clearInvalidInteractive();
+
+            const realContentItem = _TY_Tool.deepClone(t.contentItem);
+            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
+            realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
+            // realContentItem['interactives'].push(FormItemInteractive);
+            t.realContentCopyItem = realContentItem;
+
         },
         mounted:function(){
 
         },
         methods: {
+            //清除无效的交互   前面产生了一些脏数据，需要清理（打开页面配置，重新保存即可）
+            clearInvalidInteractive:function(){
+                let t=this;
+                if(t.contentItem['interactives']&&t.contentItem['interactives'].length>0){
+                    for(let i=0;i<t.contentItem['interactives'].length;i++){
+                        if(t.contentItem['interactives'][i].containerMethodName=='defaultVmodel'&&
+                            t.contentItem['interactives'][i].fromContentEvent=='input'){
+                            t.contentItem['interactives'].splice(i,1);
+                            i--;//删除了之后下标会下移
+                        }
+                    }
+                }
+            },
             //事件：出现show 和 隐藏hide 事件
             //标签项展示
             itemShow(){
@@ -197,8 +226,21 @@
             */
             defaultVmodel:function (val) {
                 //表单值回填
+                this.callbackVal = val;
+                // t.contentItem['attributes']['value'] = val;
+                this.$set(this.contentItem['attributes'],"value",val);
+                this.$set(this.realContentCopyItem['attributes'],"value",val);
+
                 this.$emit('input',val);
                 this.$emit('change',val);
+            },
+            //清空表单内容
+            clearFormItem:function(){
+                let t=this;
+                t.$set(t.contentItem['attributes'],"value",undefined);
+                if(t.realContentCopyItem){
+                    t.$set(t.realContentCopyItem['attributes'],"value",undefined);
+                }
             }
         }
     }

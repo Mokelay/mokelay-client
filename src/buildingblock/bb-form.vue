@@ -197,11 +197,12 @@
             fields(val){
                 this.realFields = this.fields;
             },
-            formData:{
-                handler:(val,oldVal)=>{
-                },
-                deep:true
-            },
+            // formData:{
+            //     handler:(val,oldVal)=>{
+            //         debugger;
+            //     },
+            //     deep:true
+            // },
             dsFields(val){
                 this.getFields();
             },
@@ -231,7 +232,7 @@
             t.getData();
             //初始化表单项
             t.getContentGroup();
-        }, 
+        },
         mounted:function(){
             const t = this;
             /*bb-mounted 
@@ -537,6 +538,13 @@
                     }
                 }).then(()=>{
                     t.formData = {};
+
+                    let _refs = t.$refs;
+                    for(let i in _refs){
+                        if(i.startsWith('form-item_')){
+                            _refs[i].clearFormItem();
+                        }
+                    }
                     // t.formCommit();
                     //t.$router.back()
                 }).catch((err)=>{
