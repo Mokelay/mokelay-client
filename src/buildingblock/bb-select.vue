@@ -145,7 +145,7 @@
                 try{
                   result = JSON.parse(val);
                 }catch(e){
-                  result.split(",");
+                  result=val.split(",");
                 }
                 if(!(result instanceof Array)){
                   result = [result];
