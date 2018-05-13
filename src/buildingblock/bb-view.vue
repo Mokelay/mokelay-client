@@ -111,6 +111,7 @@
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey;
                             t.formData = val.value;
+                            t.$emit("afterLoadData",t.formData,t);
                         })
                     }, function (code, msg) {
                     });

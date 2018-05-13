@@ -517,6 +517,7 @@
                 if (t.ds) {
                     Util.getDSData(t.ds, _TY_Tool.buildTplParams(t,{'row-data':t.parentData['row-data']}), function (map) {
                         t.formData = map[0].value;
+                        t.$emit("afterLoadData",t.formData,t);
                     }, function (code, msg) {
                     });
                 }
