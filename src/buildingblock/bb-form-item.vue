@@ -20,7 +20,7 @@
             const realContent = [];
             
             realContent.push(Object.assign({},t.realContentCopyItem,{
-                interactives:t.realContentCopyItem['interactives'].concat([FormItemInteractive])
+                interactives:(t.realContentCopyItem['interactives']?t.realContentCopyItem['interactives'].concat([FormItemInteractive]):[FormItemInteractive])
             }));
             //处理标准格式数据
             const bbList = _TY_Tool.bbRender(realContent, createElement, t);
