@@ -6,7 +6,7 @@
 
 <script>
     export default {
-        name: 'bb-input-number',
+        name: 'bb-hyperlink',
         props: {
             // 文字内容
             contentValue:{
@@ -43,7 +43,22 @@
             }
         },
         methods: {
-            
+            /**
+                从外部改变超链接的内容，文案和跳转地址 
+                arguments:{
+                    text:"文案",
+                    href:"跳转地址"
+                }
+            */
+            fillContent:function(...args){
+                const t = this;
+                args.forEach((val,key)=>{
+                    if(val.type == 'custom' && val.arguments){
+                        t.contentV = val.arguments.text;
+                        t.hrefV = val.arguments.href;
+                    }  
+                })
+            }
         }
     }
 </script>

@@ -143,7 +143,7 @@
                 realRules:this.rules,
                 realProp:this.prop,
                 callbackVal:null,//change事件返回的value
-                realContentCopyItem:null
+                realContentCopyItem:this.contentItem
             }
         },
         computed: {
@@ -157,12 +157,6 @@
             let t=this;
             //先清理无效交互
             t.clearInvalidInteractive();
-
-            const realContentItem = _TY_Tool.deepClone(t.contentItem);
-            //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
-            realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
-            // realContentItem['interactives'].push(FormItemInteractive);
-            t.realContentCopyItem = realContentItem;
 
         },
         mounted:function(){
@@ -225,11 +219,16 @@
                 @bb:触发事件的积木
             */
             defaultVmodel:function (val) {
+                let t=this;
                 //表单值回填
                 this.callbackVal = val;
-                // t.contentItem['attributes']['value'] = val;
+
                 this.$set(this.contentItem['attributes'],"value",val);
-                this.$set(this.realContentCopyItem['attributes'],"value",val);
+
+                const realContentItem = _TY_Tool.deepClone(t.contentItem);
+                //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
+                realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
+                t.realContentCopyItem = realContentItem;
 
                 this.$emit('input',val);
                 this.$emit('change',val);
