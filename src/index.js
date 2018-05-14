@@ -46,7 +46,6 @@ import bbpreview from './buildingblock/bb-preview.vue';
 import bbechartsselect from './buildingblock/bb-echarts-select.vue';
 import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
-import ElTreeGrid from 'element-tree-grid';
 import bbautocomplete from './buildingblock/bb-autocomplete'
 import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
@@ -181,8 +180,6 @@ let ty = {
 
 		// Vant安装
 		vantBB.install(Vue);
-
-		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
 	}
 };
