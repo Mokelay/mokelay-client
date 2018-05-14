@@ -47,7 +47,7 @@
         },
         data() {
             return {
-                valueBase:[].concat(this.value)
+                valueBase:this.value?[].concat(this.value):[]
             }
         },
         watch: {
