@@ -4,6 +4,7 @@ import bbbadge from './bb-badge';
 import bbbreadcrumb from './bb-breadcrumb';
 import bbcard from './bb-card';
 import bbcascader from './bb-cascader.vue';
+import bbcheckboxgroup from './bb-checkbox-group';
 import bbcolorpicker from './bb-color-picker';
 import bbdatepicker from './bb-date-picker';
 import bbdropdown from './bb-dropdown.vue';
@@ -35,6 +36,7 @@ export default {
 		Vue.component('bb-breadcrumb', bbbreadcrumb);
 		Vue.component('bb-card', bbcard);
 		Vue.component('bb-cascader', bbcascader);
+		Vue.component('bb-checkbox-group', bbcheckboxgroup);
 		Vue.component('bb-color-picker', bbcolorpicker);
 		Vue.component('bb-date-picker', bbdatepicker);
 		Vue.component('bb-dropdown', bbdropdown);

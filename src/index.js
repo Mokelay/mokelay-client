@@ -13,7 +13,6 @@ import bbpopselect from './buildingblock/bb-pop-select';
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbselect from './buildingblock/bb-select';
 import bbeditorswitch from './buildingblock/bb-editor-switch';
-import bbcheckboxgroup from './buildingblock/bb-checkbox-group';
 import bbform from './buildingblock/bb-form';
 import bbarray from './buildingblock/bb-array';
 import bbbutton from './buildingblock/bb-button';
@@ -83,7 +82,6 @@ let ty = {
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-select', bbselect);
 		Vue.component('bb-editor-switch', bbeditorswitch);
-		Vue.component('bb-checkbox-group', bbcheckboxgroup);
 		Vue.component('bb-form', bbform);
 		Vue.component('bb-array', bbarray);
 		Vue.component('bb-button', bbbutton);
