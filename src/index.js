@@ -43,7 +43,6 @@ import bbtree from './buildingblock/bb-tree.vue';
 import bbtreeselect from './buildingblock/bb-tree-select.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 import bbpreview from './buildingblock/bb-preview.vue';
-import bbechartsselect from './buildingblock/bb-echarts-select.vue';
 import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
 import bbautocomplete from './buildingblock/bb-autocomplete'
@@ -142,7 +141,6 @@ let ty = {
 		Vue.component('bb-tree-select', bbtreeselect);
 		Vue.component('bb-button-transfer', bbbuttontransfer);
 		Vue.component('bb-preview', bbpreview);
-		Vue.component('bb-echarts-select', bbechartsselect);
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-upload', bbupload);
 		Vue.component('bb-autocomplete', bbautocomplete);
