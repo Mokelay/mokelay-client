@@ -1,13 +1,9 @@
 //pc 端积木
-import bb from './buildingblock/bb';
 import bblist from './buildingblock/bb-list';
 import bbdialog from './buildingblock/bb-dialog';
-import bbellipsetag from './buildingblock/bb-ellipse-tag';
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbform from './buildingblock/bb-form';
-import bbreadbb from './buildingblock/bb-read-bb';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
-import bbpreview from './buildingblock/bb-preview.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
@@ -52,15 +48,11 @@ import './libs/touch.js'
 let ty = {
 	install: function(Vue) {
 		console.log("开始加载积木....");
-		Vue.component('bb', bb);
 		Vue.component('bb-list', bblist);
 		Vue.component('bb-dialog', bbdialog);
-		Vue.component('bb-ellipse-tag', bbellipsetag);
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-form', bbform);
-		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb-picture-preview', bbpicturepreview);
-		Vue.component('bb-preview', bbpreview);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-form-item', bbformitem);

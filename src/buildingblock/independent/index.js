@@ -15,6 +15,10 @@ import bbuuid from './bb-uuid.vue';
 import bbvideo from './bb-video.vue';
 import bbvote from './bb-vote.vue';
 import bbwords from './bb-words.vue';
+import bbellipsetag from './bb-ellipse-tag';
+import bbpreview from './bb-preview.vue';
+import bbreadbb from './bb-read-bb';
+import bb from './bb';
 
 import helloworld from './bb-hello-world'
 
@@ -40,6 +44,10 @@ export default {
 		Vue.component('bb-video', bbvideo);
 		Vue.component('bb-vote', bbvote);
 		Vue.component('bb-words', bbwords);
+		Vue.component('bb-ellipse-tag', bbellipsetag);
+		Vue.component('bb-preview', bbpreview);
+		Vue.component('bb-read-bb', bbreadbb);
+		Vue.component('bb', bb);
 
 		Vue.component('bb-hello-world', helloworld);
 
