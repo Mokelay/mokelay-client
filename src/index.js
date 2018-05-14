@@ -1,15 +1,8 @@
 //pc 端积木
-import bblist from './buildingblock/bb-list';
-import bbdialog from './buildingblock/bb-dialog';
 import bbeditorcode from './buildingblock/bb-editor-code';
-import bbform from './buildingblock/bb-form';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
-import bbbar from './buildingblock/bb-bar.vue';
-import bbformitem from './buildingblock/bb-form-item.vue';
-import bbview from './buildingblock/bb-view.vue';
 import bbmap from './buildingblock/bb-map.vue';
-import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
 
 // Vant积木安装
@@ -48,17 +41,12 @@ import './libs/touch.js'
 let ty = {
 	install: function(Vue) {
 		console.log("开始加载积木....");
-		Vue.component('bb-list', bblist);
-		Vue.component('bb-dialog', bbdialog);
+
+		//以下五个积木需要把elementui解耦，然后再迁移到independent
 		Vue.component('bb-editor-code', bbeditorcode);
-		Vue.component('bb-form', bbform);
+		Vue.component('bb-map', bbmap);
 		Vue.component('bb-picture-preview', bbpicturepreview);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
-		Vue.component('bb-bar', bbbar);
-		Vue.component('bb-form-item', bbformitem);
-		Vue.component('bb-view', bbview);
-		Vue.component('bb-map', bbmap);
-		Vue.component('bb-view-group', bbviewgroup);
 		Vue.component('bb-product-item', bbproductitem);
 
 		//移动端积木安装

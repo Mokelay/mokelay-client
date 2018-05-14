@@ -38,6 +38,13 @@ import bbcollapse from './bb-collapse.vue';
 import bbeditorarray from './bb-editor-array';
 import bbeditorobject from './bb-editor-object';
 import bbpopselect from './bb-pop-select';
+import bbbar from './bb-bar.vue';
+import bbdialog from './bb-dialog';
+import bbform from './bb-form';
+import bbformitem from './bb-form-item.vue';
+import bblist from './bb-list';
+import bbviewgroup from './bb-view-group.vue';
+import bbview from './bb-view.vue';
 
 import ElTreeGrid from 'element-tree-grid';
 
@@ -82,6 +89,13 @@ export default {
 		Vue.component('bb-editor-array', bbeditorarray);
 		Vue.component('bb-editor-object', bbeditorobject);
 		Vue.component('bb-pop-select', bbpopselect);
+		Vue.component('bb-list', bblist);
+		Vue.component('bb-dialog', bbdialog);		
+		Vue.component('bb-form', bbform);
+		Vue.component('bb-bar', bbbar);
+		Vue.component('bb-form-item', bbformitem);
+		Vue.component('bb-view', bbview);
+		Vue.component('bb-view-group', bbviewgroup);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 

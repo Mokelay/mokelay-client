@@ -152,7 +152,7 @@
 </template>
 
 <script>
-    import Util from '../libs/util';
+    import Util from '../../libs/util';
     import Vue from 'vue'
 
     export default {
