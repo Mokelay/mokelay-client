@@ -64,7 +64,6 @@ import bbspace from './buildingblock/bb-space.vue';
 import bbcommentchain from './buildingblock/bb-comment-chain.vue';
 import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
-import bbhyperlink from './buildingblock/bb-hyperlink.vue';
 
 // Vant积木安装
 import vantBB from './buildingblock/vant/';
@@ -164,7 +163,6 @@ let ty = {
 		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-view-group', bbviewgroup);
 		Vue.component('bb-product-item', bbproductitem);
-		Vue.component('bb-hyperlink', bbhyperlink);
 
 		//移动端积木安装
 		independentBB.install(Vue);

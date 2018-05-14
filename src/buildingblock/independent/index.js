@@ -9,6 +9,8 @@ import bbscore from './bb-score.vue';
 import bbtext from './bb-text.vue';
 import bbvideo from './bb-video.vue';
 import bbvote from './bb-vote.vue';
+import bbhyperlink from './bb-hyperlink.vue';
+
 import helloworld from './bb-hello-world'
 
 //公用组件
@@ -29,6 +31,8 @@ export default {
 		Vue.component('bb-text', bbtext);
 		Vue.component('bb-video', bbvideo);
 		Vue.component('bb-vote', bbvote);
+		Vue.component('bb-hyperlink', bbhyperlink);
+
 		Vue.component('bb-hello-world', helloworld);
 
 		window._TY_Toast = bbtoast;
