@@ -1,6 +1,6 @@
 <script>
 import Vue from 'vue';
-import Util from '../libs/util';
+import Util from '../../libs/util';
     export default {
         name: 'bb-button-array',
         render: function(createElement){
