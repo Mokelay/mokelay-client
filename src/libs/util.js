@@ -1180,17 +1180,22 @@ util.copyContent = function(content) {
     return JSON.parse(newContent);
 }
 
-//复制content并重新生成uuid
+// 循环添加script
 util.reloadJS = function(url) {
     if (!url || !url.length) {
         return;
     }
 
-    return createScript(url.shift()).then(() => {
-        return createScript(url.shift()).then(() => {
-            return createScript(url.shift());
-        });
-    });
+    let result = null;
+
+    return (async () => {
+        for (var i = 0; i < url.length; i++) {
+            result = await createScript(url[i]);
+        }
+        if (i === url.length) {
+          return result;
+        }
+    })();
       
     /**
      * 创建script
@@ -1198,28 +1203,24 @@ util.reloadJS = function(url) {
      * @returns {Promise}
      */
     function createScript(urlV) {
-    let promise;
-    try {
-        var scriptElement = document.createElement('script');
+        let promise;
+        let scriptElement = document.createElement('script');
         document.body.appendChild(scriptElement);
 
         promise = new Promise((resolve, reject) => {
-        scriptElement.addEventListener('load', e => {
-            resolve(e);
-        }, false);
+            scriptElement.addEventListener('load', e => {
+                resolve(e);
+            }, false);
 
-        scriptElement.addEventListener('error', e => {
-            reject(e);
-        }, false);
-
+            scriptElement.addEventListener('error', e => {
+                reject(e);
+            }, false);
         });
         
-        scriptElement.src = urlV;
+        scriptElement.src = window.location.protocol + urlV;
         scriptElement.src = 'text/javascript';
 
-    } catch(e) {}
-
-    return promise;
+        return promise;
     }
 }
 
