@@ -65,7 +65,7 @@
 
 <script>
     
-    import bbjson from "./../buildingblock/bb-json";
+    import bbjson from "./../buildingblock/vendor/bb-json";
 
     const validateDict = [{
         alias: 'dateTypeCheck',

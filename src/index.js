@@ -7,7 +7,6 @@ import bblistscroll from './buildingblock/bb-list-scroll';
 import bbellipsetag from './buildingblock/bb-ellipse-tag';
 import bbsteps from './buildingblock/bb-steps';
 import bbmenu from './buildingblock/bb-menu';
-import bbecharts from './buildingblock/bb-echarts';
 import bbeditorarray from './buildingblock/bb-editor-array';
 import bbeditorobject from './buildingblock/bb-editor-object';
 import bbtransfer from './buildingblock/bb-transfer';
@@ -15,7 +14,6 @@ import bbtag from './buildingblock/bb-tag';
 import bbrelationchart from './buildingblock/bb-relation-chart';
 import bbtabs from './buildingblock/bb-tabs';
 import bbpopselect from './buildingblock/bb-pop-select';
-import bbeditorwe from './buildingblock/bb-editor-weditor';
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbselect from './buildingblock/bb-select';
 import bbbreadcrumb from './buildingblock/bb-breadcrumb';
@@ -46,7 +44,6 @@ import bbpreview from './buildingblock/bb-preview.vue';
 import bbbillboard from './buildingblock/bb-billboard.vue';
 import bbupload from './buildingblock/bb-upload.vue';
 import bbautocomplete from './buildingblock/bb-autocomplete'
-import bbeditormd from './buildingblock/bb-editor-md.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbdropdown from './buildingblock/bb-dropdown.vue';
@@ -55,7 +52,6 @@ import bbslider from './buildingblock/bb-slider.vue';
 import bbpanel from './buildingblock/bb-panel.vue';
 import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
-import bbjson from './buildingblock/bb-json.vue';
 import bbview from './buildingblock/bb-view.vue';
 import bbpagination from './buildingblock/bb-pagination.vue';
 import bbmap from './buildingblock/bb-map.vue';
@@ -72,6 +68,9 @@ import elementBB from './buildingblock/elementui/';
 
 //自主研发组件
 import independentBB from './buildingblock/independent/';
+
+//Vendor库积木安装
+import vendorBB from './buildingblock/vendor';
 
 //Module相关
 import moduleBB from './module/';
@@ -105,7 +104,6 @@ let ty = {
 		Vue.component('bb-ellipse-tag', bbellipsetag); // 2017-10-11 season add
 		Vue.component('bb-steps', bbsteps);
 		Vue.component('bb-menu', bbmenu);
-		Vue.component('bb-echarts', bbecharts);
 		Vue.component('bb-editor-array', bbeditorarray);
 		Vue.component('bb-editor-object', bbeditorobject);
 		Vue.component('bb-transfer', bbtransfer);
@@ -113,7 +111,6 @@ let ty = {
 		Vue.component('bb-relation-chart', bbrelationchart);
 		Vue.component('bb-tabs', bbtabs);
 		Vue.component('bb-pop-select', bbpopselect);
-		Vue.component('bb-editor-weditor', bbeditorwe);
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-select', bbselect);
 		Vue.component('bb-breadcrumb', bbbreadcrumb);
@@ -144,7 +141,6 @@ let ty = {
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-upload', bbupload);
 		Vue.component('bb-autocomplete', bbautocomplete);
-		Vue.component('bb-editor-md', bbeditormd);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-dropdown', bbdropdown);
@@ -153,7 +149,6 @@ let ty = {
 		Vue.component('bb-panel', bbpanel);
 		Vue.component('bb-collapse', bbcollapse);
 		Vue.component('bb-form-item', bbformitem);
-		Vue.component('bb-json', bbjson);
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-pagination', bbpagination);
 		Vue.component('bb-map', bbmap);
@@ -164,6 +159,9 @@ let ty = {
 
 		//移动端积木安装
 		independentBB.install(Vue);
+
+		//Vendor库安装
+		vendorBB.install(Vue);
 
 		//布局积木安装
 		layoutBB.install(Vue);
