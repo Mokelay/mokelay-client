@@ -82,7 +82,8 @@
                 pageSize:this.pagination.pageSize,
                 pageSizes:[this.pagination.pageSize*1, this.pagination.pageSize*2, this.pagination.pageSize*5, this.pagination.pageSize*10],
                 page:this.pagination.page,
-                totalItems:0
+                totalItems:0,
+                external:{}
             }
         },
         watch: {
