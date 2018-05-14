@@ -682,11 +682,27 @@
                             rules:[{ required: true, message: '请输入字段别名', trigger: 'blur' }]
                         },{                      
                             attributeName:'display',
-                            et:'bb-input',
+                            et:'bb-select',
                             group:'表单选项',                 
-                            name:'表单项宽度',
-                            description:"表单项占整行的宽度",                               
+                            name:'块级样式',
+                            description:"display设置",                               
                             props:{
+                                fields:[{
+                                    text:"inline",
+                                    value:"行内"
+                                },{
+                                    text:"inline-block",
+                                    value:"行内块"
+                                },{
+                                    text:"block",
+                                    value:"块"
+                                },{
+                                    text:"none",
+                                    value:"隐藏"
+                                },{
+                                    text:"flex",
+                                    value:"流式布局"
+                                }]
                             }
                         },{                      
                             attributeName:'width',
