@@ -469,7 +469,7 @@
             },
             formCommit:function(eleFormData,key){
                 var t = this;
-                const realKey = typeof key == 'undefined'?0:key;
+                const realKey = typeof key != 'number'?0:key;
                 let formData = typeof eleFormData == 'undefined'?t.formData:eleFormData;
                 t.$refs["form_"+realKey].validate(function(valid){
                     if(valid){
