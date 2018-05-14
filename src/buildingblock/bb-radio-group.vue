@@ -96,7 +96,7 @@ import Util from '../libs/util';
                 this.p_value = val;
                 let tempVal = val;
                 if(typeof(this.value)==='number'){
-                    tempVal = new Number(val);
+                    tempVal = Number(val);
                 }
                 this.$emit("input",tempVal);
                 this.$emit("change",tempVal);
