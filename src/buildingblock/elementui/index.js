@@ -2,6 +2,7 @@
 import bbautocomplete from './bb-autocomplete';
 import bbbadge from './bb-badge';
 import bbbreadcrumb from './bb-breadcrumb';
+import bbbuttongroup from './bb-button-group';
 import bbbutton from './bb-button';
 import bbcard from './bb-card';
 import bbcascader from './bb-cascader.vue';
@@ -15,6 +16,7 @@ import bbhidden from './bb-hidden';
 import bbinputnumber from './bb-input-number';
 import bbinput from './bb-input';
 import bblistscroll from './bb-list-scroll';
+import bbmenu from './bb-menu';
 import bbpagination from './bb-pagination.vue';
 import bbpanel from './bb-panel.vue';
 import bbradiogroup from './bb-radio-group';
@@ -38,6 +40,7 @@ export default {
 		Vue.component('bb-autocomplete', bbautocomplete);
 		Vue.component('bb-badge', bbbadge);
 		Vue.component('bb-breadcrumb', bbbreadcrumb);
+		Vue.component('bb-button-group', bbbuttongroup);
 		Vue.component('bb-button', bbbutton);
 		Vue.component('bb-card', bbcard);
 		Vue.component('bb-cascader', bbcascader);
@@ -51,6 +54,7 @@ export default {
 		Vue.component('bb-input-number', bbinputnumber);
 		Vue.component('bb-input', bbinput);
 		Vue.component('bb-list-scroll', bblistscroll);
+		Vue.component('bb-menu', bbmenu);
 		Vue.component('bb-pagination', bbpagination);
 		Vue.component('bb-panel', bbpanel);
 		Vue.component('bb-radio-group', bbradiogroup);

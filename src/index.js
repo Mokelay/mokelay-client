@@ -1,10 +1,8 @@
 //pc 端积木
 import bb from './buildingblock/bb';
-import bbbuttongroup from './buildingblock/bb-button-group';
 import bblist from './buildingblock/bb-list';
 import bbdialog from './buildingblock/bb-dialog';
 import bbellipsetag from './buildingblock/bb-ellipse-tag';
-import bbmenu from './buildingblock/bb-menu';
 import bbeditorarray from './buildingblock/bb-editor-array';
 import bbeditorobject from './buildingblock/bb-editor-object';
 import bbpopselect from './buildingblock/bb-pop-select';
@@ -63,11 +61,9 @@ let ty = {
 	install: function(Vue) {
 		console.log("begin ty bb init....");
 		Vue.component('bb', bb);
-		Vue.component('bb-button-group', bbbuttongroup);
 		Vue.component('bb-list', bblist);
 		Vue.component('bb-dialog', bbdialog);
 		Vue.component('bb-ellipse-tag', bbellipsetag);
-		Vue.component('bb-menu', bbmenu);
 		Vue.component('bb-editor-array', bbeditorarray);
 		Vue.component('bb-editor-object', bbeditorobject);
 		Vue.component('bb-pop-select', bbpopselect);
