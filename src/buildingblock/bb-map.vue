@@ -31,7 +31,6 @@
 <script>
     import Vue from 'vue';
     import Util from '../libs/util.js'
-    import reloadJS from '../libs/reloadJS';
     import '../css/DrawingManager_min.css';
     import '../css/SearchInfoWindow_min.css';
 
@@ -107,7 +106,7 @@
             let th = this;
 
             try {
-                reloadJS(resourcesUrl).then(function () {
+                Util.reloadJS(resourcesUrl).then(function () {
                     let map = new BMap.Map("mapContent");
 
                     // 添加地图类型控件
