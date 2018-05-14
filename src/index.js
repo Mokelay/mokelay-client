@@ -41,6 +41,8 @@ import './libs/touch.js'
 let ty = {
 	install: function(Vue) {
 		console.log("开始加载积木....");
+
+		//以下五个积木需要把elementui解耦，然后再迁移到independent
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-map', bbmap);
 		Vue.component('bb-picture-preview', bbpicturepreview);
