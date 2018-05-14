@@ -74,19 +74,8 @@ import vantAddressEdit from './buildingblock/vant/bb-vant-address-edit';
 // ElementUI相关的
 import bbEleLogin from './buildingblock/elementui/bb-ele-login';
 
-//移动端积木
-import bbtext from './buildingblock/h5/bb-text.vue';
-import bbphotos from './buildingblock/h5/bb-photos.vue';
-import bbvideo from './buildingblock/h5/bb-video.vue';
-import bbscore from './buildingblock/h5/bb-score.vue';
-import bbcount from './buildingblock/h5/bb-count.vue';
-import bbcountdown from './buildingblock/h5/bb-countdown.vue';
-import bbvote from './buildingblock/h5/bb-vote.vue';
-import bbhtml from './buildingblock/h5/bb-html.vue';
-import bbphotosingle from './buildingblock/h5/bb-photo-single.vue';
-import bbimg from './buildingblock/h5/bb-img';
-import bbtoast from './buildingblock/h5/bbToast';
-import bbmodal from './buildingblock/h5/bbModal';
+// 移动端
+import h5BB from './buildingblock/h5/';
 
 //Module相关
 import bbbblistselect from './module/bb-bblist-select';
@@ -193,20 +182,10 @@ let ty = {
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-upload', bbupload);
 		Vue.component('bb-autocomplete', bbautocomplete);
-		Vue.component('bb-text', bbtext);
 		Vue.component('bb-editor-md', bbeditormd);
-		Vue.component('bb-photos', bbphotos);
-		Vue.component('bb-video', bbvideo);
-		Vue.component('bb-score', bbscore);
-		Vue.component('bb-count', bbcount);
-		Vue.component('bb-countdown', bbcountdown);
-		Vue.component('bb-vote', bbvote);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-dropdown', bbdropdown);
-		Vue.component('bb-html', bbhtml);
-		Vue.component('bb-photo-single', bbphotosingle);
-		Vue.component('bb-img', bbimg);
 		Vue.component('bb-layout-grid', bblayoutgrid);
 		Vue.component('bb-layout-canvas', bblayoutcanvas);
 		Vue.component('bb-layout-canvas-edit', bblayoutcanvasedit);
@@ -238,6 +217,8 @@ let ty = {
 		Vue.component('bb-product-item', bbproductitem);
 		Vue.component('bb-hyperlink', bbhyperlink);
 
+		//移动端积木安装
+		h5BB.install(Vue);
 		
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
@@ -249,8 +230,6 @@ let ty = {
 		Vue.component('bb-vant-address-edit', vantAddressEdit);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
-		window._TY_Toast = bbtoast;
-		window._TY_Modal = bbmodal;
 		console.log("finish ty bb init....");
 	}
 };
