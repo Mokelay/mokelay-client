@@ -695,7 +695,8 @@ debugger
             signDeleteClick() {
                 this.deleteOtherDom();
                 this.modifySignImage('clear');
-                this.clearAll();
+                this.map.clearOverlays();
+                this.overlays = [];
                 this.map.removeEventListener("click", function() {});
                 this.$emit('sign-delete-click');
             },
