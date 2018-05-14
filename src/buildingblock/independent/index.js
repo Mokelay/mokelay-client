@@ -1,4 +1,4 @@
-//移动端积木
+//自主研发积木
 import bbbillboard from './bb-billboard.vue';
 import bbcommentchain from './bb-comment-chain.vue';
 import bbcount from './bb-count.vue';
@@ -11,6 +11,7 @@ import bbphotos from './bb-photos.vue';
 import bbscore from './bb-score.vue';
 import bbspace from './bb-space.vue';
 import bbtext from './bb-text.vue';
+import bbuuid from './bb-uuid.vue';
 import bbvideo from './bb-video.vue';
 import bbvote from './bb-vote.vue';
 import bbwords from './bb-words.vue';
@@ -37,6 +38,7 @@ export default {
 		Vue.component('bb-score', bbscore);
 		Vue.component('bb-space', bbspace);
 		Vue.component('bb-text', bbtext);
+		Vue.component('bb-uuid', bbuuid);
 		Vue.component('bb-video', bbvideo);
 		Vue.component('bb-vote', bbvote);
 		Vue.component('bb-words', bbwords);

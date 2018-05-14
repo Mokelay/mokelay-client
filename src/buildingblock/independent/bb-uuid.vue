@@ -1,11 +1,11 @@
 <template>
   <div>
-      {{v}} <el-button v-if="showButton" type="primary" @click="generate">生成UUID</el-button>
+      {{v}} <a href="javacript:void(0);" v-if="showButton" @click="generate">生成UUID</a>
   </div>
 </template>
 
 <script>
-import Util from '../libs/util';
+import Util from '../../libs/util';
 
     export default {
         name: 'bb-uuid',

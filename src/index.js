@@ -20,7 +20,6 @@ import bbbuttonform from './buildingblock/bb-button-form';
 import bbbuttonarray from './buildingblock/bb-button-array';
 import bbreadbb from './buildingblock/bb-read-bb';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
-import bbuuid from './buildingblock/bb-uuid.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 import bbpreview from './buildingblock/bb-preview.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
@@ -89,7 +88,6 @@ let ty = {
 		Vue.component('bb-button-array', bbbuttonarray);
 		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb-picture-preview', bbpicturepreview);
-		Vue.component('bb-uuid', bbuuid);
 		Vue.component('bb-button-transfer', bbbuttontransfer);
 		Vue.component('bb-preview', bbpreview);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
