@@ -13,6 +13,7 @@
       :default-first-option="option.defaultFirstOption"
       :size="option.size"
       @change='change'
+      @clear='clear'
       >
       <el-option
               v-for="(item,key) in items"
@@ -219,6 +220,12 @@
                 this.$emit('change',val);
               }
              
+            },
+            //清空方法
+            clear:function(){
+                this.$emit('input',"");
+                this.$emit('change',"");
+                this.$emit('clear',this);
             },
             clean:function(val){
               this.valueBase = null;
