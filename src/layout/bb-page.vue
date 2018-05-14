@@ -142,6 +142,12 @@
         t.$emit('mounted',t);
       },0);
     },
+    beforeDestroy:function(){
+      let t=this;
+      if(t.root){
+        t.closeDialog();
+      }
+    },
     methods: {
       //修改页面的title属性 metadata
       resetPageTitle:function(pageName){

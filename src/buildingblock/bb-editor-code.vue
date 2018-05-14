@@ -214,7 +214,11 @@
                     try{
                     　　result = JSON.parse(result);
                     }catch(e){
-                        result = eval(result);
+                        try{
+                            result = eval("("+result+")");
+                        }catch(e1){
+                            result = eval(result);
+                        }
                     }
                 }
                 t.$emit("input",result);

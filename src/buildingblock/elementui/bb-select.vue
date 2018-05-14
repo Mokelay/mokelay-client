@@ -1,6 +1,6 @@
 <template>
     <el-select 
-      placeholder="请选择" 
+      :placeholder="option.placeholder" 
       v-model="valueBase" 
       clearable
       :remote="remote"
@@ -103,7 +103,8 @@
                         disabled:false,
                         readonly:false,
                         defaultFirstOption:true,
-                        size:""
+                        size:"",
+                        placeholder:"请选择"
                     };
                 }
             },
