@@ -1,5 +1,5 @@
 <template>
-    <el-input-number v-model="valueBase" @change="change" :min="min" :max="max" :size="option.size" :disabled="option.disabled"></el-input-number>
+    <el-input-number v-model="valueBase" @change="change" :min="min" :controls="option.controls" :controls-position="option.controlsPosition" :max="max" :size="option.size" :disabled="option.disabled"></el-input-number>
 </template>
 
 <script>
@@ -30,7 +30,9 @@
                 default:function(){
                     return {
                         disabled:false,
-                        size:""
+                        size:"",
+                        controls:true,//是否显示控制器
+                        controlsPosition:""//默认控制器在两边 ，可选right
                     }
                 }
             }

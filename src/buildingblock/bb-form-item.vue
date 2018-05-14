@@ -220,18 +220,36 @@
             */
             defaultVmodel:function (val) {
                 let t=this;
+                let resultVal = t.checkNumberRule(val);
                 //表单值回填
-                this.callbackVal = val;
+                this.callbackVal = resultVal;
 
-                this.$set(this.contentItem['attributes'],"value",val);
+                this.$set(this.contentItem['attributes'],"value",resultVal);
 
                 const realContentItem = _TY_Tool.deepClone(t.contentItem);
                 //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
                 realContentItem['interactives'] = realContentItem['interactives']?realContentItem['interactives']:[];
                 t.realContentCopyItem = realContentItem;
 
-                this.$emit('input',val);
-                this.$emit('change',val);
+                this.$emit('input',resultVal);
+                this.$emit('change',resultVal);
+            },
+            // bb-form-item  number类型校验问题优化
+            checkNumberRule:function(val){
+                let t=this;
+                let result = val;
+                if(t.realRules&&t.realRules.length>0){
+                    for(let i=0;i<t.realRules.length;i++){
+                        if(t.realRules[i].type&&t.realRules[i].type==='number'){
+                            result = Number(val);
+                            if(isNaN(result)){
+                                return val;
+                            }
+                            return result;
+                        }
+                    }
+                }
+                return result;
             },
             //清空表单内容
             clearFormItem:function(){
