@@ -95,15 +95,8 @@ import bbfieldtreepopselect from './module/bb-field-tree-pop-select.vue';
 import bbconfigarray from './module/bb-config-array.vue';
 
 //布局相关
-import bbpage from './layout/bb-page';
-import bblayoutgrid from './layout/bb-layout-grid.vue';
-import bblayoutseriation from './layout/bb-layout-seriation.vue';
-import bblayoutcanvas from './layout/bb-layout-canvas.vue';
-import bblayoutcanvasedit from './layout/bb-layout-canvas-edit.vue';
-import bblayoutcontainer from './layout/bb-layout-container.vue';
-import bbseriationitemedit from './layout/bb-seriation-item-edit.vue';
-import bblayoutseriationedit from './layout/bb-layout-seriation-edit.vue';
-import bbpageedit from './layout/bb-page-edit.vue';
+import layoutBB from './layout/';
+
 
 // DEMO
 import helloworld from './buildingblock/demo/bb-hello-world'
@@ -127,7 +120,6 @@ let ty = {
 	install: function(Vue) {
 		console.log("begin ty bb init....");
 		Vue.component('bb', bb);
-		Vue.component('bb-page', bbpage);
 		Vue.component('bb-button-group', bbbuttongroup);
 		Vue.component('bb-list', bblist);
 		Vue.component('bb-dialog', bbdialog); // 2017-10-11 season add
@@ -186,12 +178,7 @@ let ty = {
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-dropdown', bbdropdown);
-		Vue.component('bb-layout-grid', bblayoutgrid);
-		Vue.component('bb-layout-canvas', bblayoutcanvas);
-		Vue.component('bb-layout-canvas-edit', bblayoutcanvasedit);
-		Vue.component('bb-layout-container', bblayoutcontainer);
 		Vue.component('bb-cascader', bbcascader);
-		Vue.component('bb-layout-seriation', bblayoutseriation);
 		Vue.component('bb-bb-select', bbbbselect);
 		Vue.component('bb-field-select', bbfieldselect);
 		Vue.component('bb-slider', bbslider);
@@ -200,9 +187,6 @@ let ty = {
 		Vue.component('bb-form-item', bbformitem);
 		Vue.component('bb-json', bbjson);
 		Vue.component('bb-config', bbconfig);
-		Vue.component('bb-seriation-item-edit', bbseriationitemedit);
-		Vue.component('bb-layout-seriation-edit', bblayoutseriationedit);
-		Vue.component('bb-page-edit', bbpageedit);
 		Vue.component('bb-api-info', bbapiinfo);
 		Vue.component('bb-apilego-config', bbapilegoconfig);
 		Vue.component('bb-field-tree-select', bbfieldtreeselect);
@@ -219,6 +203,9 @@ let ty = {
 
 		//移动端积木安装
 		h5BB.install(Vue);
+
+		//布局积木安装
+		layoutBB.install(Vue);
 		
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
