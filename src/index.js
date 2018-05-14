@@ -2,9 +2,9 @@
 import bb from './buildingblock/bb';
 import bbbuttongroup from './buildingblock/bb-button-group';
 import bblist from './buildingblock/bb-list';
-import bbdialog from './buildingblock/bb-dialog'; // 2017-10-11 season add
-import bblistscroll from './buildingblock/bb-list-scroll'; // 2017-10-11 season add
-import bbellipsetag from './buildingblock/bb-ellipse-tag'; // 2017-10-11 season add
+import bbdialog from './buildingblock/bb-dialog';
+import bblistscroll from './buildingblock/bb-list-scroll';
+import bbellipsetag from './buildingblock/bb-ellipse-tag';
 import bbsteps from './buildingblock/bb-steps';
 import bbmenu from './buildingblock/bb-menu';
 import bbecharts from './buildingblock/bb-echarts';
