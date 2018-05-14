@@ -9,6 +9,7 @@ import bbcolumnsselect from './bb-columns-select';
 import bbconfigarray from './bb-config-array.vue';
 import bbconfig from './bb-config.vue';
 import bbdsselect from './bb-ds-select';
+import bbechartsselect from './bb-echarts-select.vue';
 import bbfieldselect from './bb-field-select.vue';
 import bbfieldtreepopselect from './bb-field-tree-pop-select.vue';
 import bbfieldtreeselect from './bb-field-tree-select.vue';
@@ -29,6 +30,7 @@ export default {
 		Vue.component('bb-config-array', bbconfigarray);
 		Vue.component('bb-config', bbconfig);
 		Vue.component('bb-ds-select', bbdsselect);
+		Vue.component('bb-echarts-select', bbechartsselect);
 		Vue.component('bb-field-select', bbfieldselect);
 		Vue.component('bb-field-tree-pop-select', bbfieldtreepopselect);
 		Vue.component('bb-field-tree-select', bbfieldtreeselect);
