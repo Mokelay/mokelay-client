@@ -424,11 +424,13 @@
             }
             sessionStorage.removeItem(t.alias+'_selection');//清除上一个表单的脏数据
             t.editConfig.editable = typeof t.editConfig.editable == "string"?t.editConfig.editable.split(','):t.editConfig.editable;
-            t.editConfig.editable.forEach((val,key)=>{
-                if(val == "editAll"){
-                    t.editAll = true;
-                }
-            });
+            if(t.editConfig.editable){
+                t.editConfig.editable.forEach((val,key)=>{
+                    if(val == "editAll"){
+                        t.editAll = true;
+                    }
+                });
+            }
             if(t.tableData && t.tableData.length > 0 && t.editAll){
                 const arr = Object.keys(t.tableData[t.tableData.length-1]);
                 if(arr.length != 0){
