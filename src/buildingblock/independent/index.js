@@ -15,6 +15,10 @@ import bbuuid from './bb-uuid.vue';
 import bbvideo from './bb-video.vue';
 import bbvote from './bb-vote.vue';
 import bbwords from './bb-words.vue';
+import bbellipsetag from './bb-ellipse-tag';
+import bbpreview from './bb-preview.vue';
+import bbreadbb from './bb-read-bb';
+import bb from './bb';
 
 import helloworld from './bb-hello-world'
 
@@ -24,8 +28,6 @@ import bbmodal from './bbModal';
 
 export default {
 	install: function(Vue) {
-		console.log("begin independent bb init....");
-
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-count', bbcount);
@@ -42,11 +44,15 @@ export default {
 		Vue.component('bb-video', bbvideo);
 		Vue.component('bb-vote', bbvote);
 		Vue.component('bb-words', bbwords);
+		Vue.component('bb-ellipse-tag', bbellipsetag);
+		Vue.component('bb-preview', bbpreview);
+		Vue.component('bb-read-bb', bbreadbb);
+		Vue.component('bb', bb);
 
 		Vue.component('bb-hello-world', helloworld);
 
 		window._TY_Toast = bbtoast;
 		window._TY_Modal = bbmodal;
-		console.log("finish independent bb init;");
+		console.log("成功加载自主研发积木;");
 	}
 };

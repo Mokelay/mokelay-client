@@ -1,23 +1,11 @@
 //pc 端积木
-import bb from './buildingblock/bb';
 import bblist from './buildingblock/bb-list';
 import bbdialog from './buildingblock/bb-dialog';
-import bbellipsetag from './buildingblock/bb-ellipse-tag';
-import bbeditorarray from './buildingblock/bb-editor-array';
-import bbeditorobject from './buildingblock/bb-editor-object';
-import bbpopselect from './buildingblock/bb-pop-select';
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbform from './buildingblock/bb-form';
-import bbarray from './buildingblock/bb-array';
-import bbbuttonform from './buildingblock/bb-button-form';
-import bbbuttonarray from './buildingblock/bb-button-array';
-import bbreadbb from './buildingblock/bb-read-bb';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
-import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
-import bbpreview from './buildingblock/bb-preview.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
-import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
 import bbview from './buildingblock/bb-view.vue';
 import bbmap from './buildingblock/bb-map.vue';
@@ -59,26 +47,14 @@ import './libs/touch.js'
 
 let ty = {
 	install: function(Vue) {
-		console.log("begin ty bb init....");
-		Vue.component('bb', bb);
+		console.log("开始加载积木....");
 		Vue.component('bb-list', bblist);
 		Vue.component('bb-dialog', bbdialog);
-		Vue.component('bb-ellipse-tag', bbellipsetag);
-		Vue.component('bb-editor-array', bbeditorarray);
-		Vue.component('bb-editor-object', bbeditorobject);
-		Vue.component('bb-pop-select', bbpopselect);
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-form', bbform);
-		Vue.component('bb-array', bbarray);
-		Vue.component('bb-button-form', bbbuttonform);
-		Vue.component('bb-button-array', bbbuttonarray);
-		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb-picture-preview', bbpicturepreview);
-		Vue.component('bb-button-transfer', bbbuttontransfer);
-		Vue.component('bb-preview', bbpreview);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
-		Vue.component('bb-collapse', bbcollapse);
 		Vue.component('bb-form-item', bbformitem);
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-map', bbmap);
@@ -102,7 +78,8 @@ let ty = {
 
 		// Vant安装
 		vantBB.install(Vue);
-		console.log("finish ty bb init....");
+
+		console.log("积木加载完成!!");
 	}
 };
 

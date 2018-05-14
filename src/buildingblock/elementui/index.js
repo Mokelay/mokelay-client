@@ -30,13 +30,19 @@ import bbtransfer from './bb-transfer';
 import bbtreeselect from './bb-tree-select.vue';
 import bbtree from './bb-tree.vue';
 import bbupload from './bb-upload.vue';
+import bbarray from './bb-array';
+import bbbuttonarray from './bb-button-array';
+import bbbuttonform from './bb-button-form';
+import bbbuttontransfer from './bb-button-transfer.vue';
+import bbcollapse from './bb-collapse.vue';
+import bbeditorarray from './bb-editor-array';
+import bbeditorobject from './bb-editor-object';
+import bbpopselect from './bb-pop-select';
 
 import ElTreeGrid from 'element-tree-grid';
 
 export default {
 	install: function(Vue) {
-		console.log("begin elementui bb init....");
-
 		Vue.component('bb-autocomplete', bbautocomplete);
 		Vue.component('bb-badge', bbbadge);
 		Vue.component('bb-breadcrumb', bbbreadcrumb);
@@ -68,9 +74,17 @@ export default {
 		Vue.component('bb-tree', bbtree);
 		Vue.component('bb-tree-select', bbtreeselect);
 		Vue.component('bb-upload', bbupload);
+		Vue.component('bb-array', bbarray);
+		Vue.component('bb-button-array', bbbuttonarray);
+		Vue.component('bb-button-form', bbbuttonform);
+		Vue.component('bb-button-transfer', bbbuttontransfer);
+		Vue.component('bb-collapse', bbcollapse);
+		Vue.component('bb-editor-array', bbeditorarray);
+		Vue.component('bb-editor-object', bbeditorobject);
+		Vue.component('bb-pop-select', bbpopselect);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 
-		console.log("finish elementui bb init;");
+		console.log("成功加载ElementUI相关积木;");
 	}
 };

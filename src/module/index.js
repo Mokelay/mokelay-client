@@ -18,8 +18,6 @@ import bbicon from './bb-icon.vue';
 
 export default {
 	install: function(Vue) {
-		console.log("begin module bb init....");
-
 		Vue.component('bb-api-info', bbapiinfo);
 		Vue.component('bb-apilego-config', bbapilegoconfig);
 		Vue.component('bb-bb-select', bbbbselect);
@@ -37,6 +35,6 @@ export default {
 		Vue.component('bb-icon-select', bbiconselect);
 		Vue.component('bb-icon', bbicon);
 
-		console.log("finish module bb init;");
+		console.log("成功加载模块积木;");
 	}
 };

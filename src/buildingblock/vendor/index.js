@@ -7,14 +7,12 @@ import bbrelationchart from './bb-relation-chart';
 
 export default {
 	install: function(Vue) {
-		console.log("begin vendor bb init....");
-
 		Vue.component('bb-echarts', bbecharts);
 		Vue.component('bb-editor-md', bbeditormd);
 		Vue.component('bb-editor-weditor', bbeditorwe);
 		Vue.component('bb-json', bbjson);
 		Vue.component('bb-relation-chart', bbrelationchart);
 
-		console.log("finish vendor bb init;");
+		console.log("成功加载Vendor类库积木;");
 	}
 };
