@@ -13,7 +13,6 @@ import bbseriationitemedit from './bb-seriation-item-edit.vue';
 
 export default {
 	install: function(Vue) {
-		console.log("begin layout bb init....");
 		Vue.component('bb-layout-canvas-edit', bblayoutcanvasedit);
 		Vue.component('bb-layout-canvas', bblayoutcanvas);
 		Vue.component('bb-layout-container', bblayoutcontainer);
@@ -23,6 +22,6 @@ export default {
 		Vue.component('bb-page-edit', bbpageedit);
 		Vue.component('bb-page', bbpage);
 		Vue.component('bb-seriation-item-edit', bbseriationitemedit);
-		console.log("finish layout bb init;");
+		console.log("成功加载布局积木;");
 	}
 };

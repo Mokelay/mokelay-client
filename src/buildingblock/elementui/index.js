@@ -43,8 +43,6 @@ import ElTreeGrid from 'element-tree-grid';
 
 export default {
 	install: function(Vue) {
-		console.log("begin elementui bb init....");
-
 		Vue.component('bb-autocomplete', bbautocomplete);
 		Vue.component('bb-badge', bbbadge);
 		Vue.component('bb-breadcrumb', bbbreadcrumb);
@@ -87,6 +85,6 @@ export default {
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 
-		console.log("finish elementui bb init;");
+		console.log("成功加载ElementUI相关积木;");
 	}
 };

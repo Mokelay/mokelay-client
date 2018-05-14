@@ -24,8 +24,6 @@ import bbmodal from './bbModal';
 
 export default {
 	install: function(Vue) {
-		console.log("begin independent bb init....");
-
 		Vue.component('bb-billboard', bbbillboard);
 		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-count', bbcount);
@@ -47,6 +45,6 @@ export default {
 
 		window._TY_Toast = bbtoast;
 		window._TY_Modal = bbmodal;
-		console.log("finish independent bb init;");
+		console.log("成功加载自主研发积木;");
 	}
 };

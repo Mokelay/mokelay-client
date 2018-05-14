@@ -51,7 +51,7 @@ import './libs/touch.js'
 
 let ty = {
 	install: function(Vue) {
-		console.log("begin ty bb init....");
+		console.log("开始加载积木....");
 		Vue.component('bb', bb);
 		Vue.component('bb-list', bblist);
 		Vue.component('bb-dialog', bbdialog);
@@ -86,7 +86,8 @@ let ty = {
 
 		// Vant安装
 		vantBB.install(Vue);
-		console.log("finish ty bb init....");
+
+		console.log("积木加载完成!!");
 	}
 };
 
