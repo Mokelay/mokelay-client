@@ -1,5 +1,6 @@
 //移动端积木
 import bbbillboard from './bb-billboard.vue';
+import bbcommentchain from './bb-comment-chain.vue';
 import bbcount from './bb-count.vue';
 import bbcountdown from './bb-countdown.vue';
 import bbhtml from './bb-html.vue';
@@ -25,6 +26,7 @@ export default {
 		console.log("begin independent bb init....");
 
 		Vue.component('bb-billboard', bbbillboard);
+		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-count', bbcount);
 		Vue.component('bb-countdown', bbcountdown);
 		Vue.component('bb-html', bbhtml);

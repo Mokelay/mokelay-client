@@ -35,7 +35,6 @@ import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
 import bbview from './buildingblock/bb-view.vue';
 import bbmap from './buildingblock/bb-map.vue';
-import bbcommentchain from './buildingblock/bb-comment-chain.vue';
 import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
 
@@ -94,13 +93,10 @@ let ty = {
 		Vue.component('bb-checkbox-group', bbcheckboxgroup);
 		Vue.component('bb-form', bbform);
 		Vue.component('bb-array', bbarray);
-		
-		
 		Vue.component('bb-hidden', bbhidden);
 		Vue.component('bb-button', bbbutton);
 		Vue.component('bb-button-form', bbbuttonform);
 		Vue.component('bb-button-array', bbbuttonarray);
-		
 		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb-picture-preview', bbpicturepreview);
 		Vue.component('bb-uuid', bbuuid);
@@ -108,15 +104,12 @@ let ty = {
 		Vue.component('bb-tree-select', bbtreeselect);
 		Vue.component('bb-button-transfer', bbbuttontransfer);
 		Vue.component('bb-preview', bbpreview);
-
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-collapse', bbcollapse);
 		Vue.component('bb-form-item', bbformitem);
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-map', bbmap);
-		
-		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-view-group', bbviewgroup);
 		Vue.component('bb-product-item', bbproductitem);
 
