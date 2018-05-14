@@ -106,6 +106,7 @@
                     };
                 }
             },
+            //是否支持远程搜索
             remote:{
               type:Boolean,
               default:false
