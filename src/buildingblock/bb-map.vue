@@ -82,6 +82,13 @@
             },
             saveds: {
                 type: Object
+            },
+            /*坐标回填*/
+            signId:{
+                type: [Array,String],
+                default:function(){
+                    return [];
+                }
             }
         },
         data() {
@@ -139,6 +146,10 @@
                                     th.modifySignImageClick(th);
 
                                     th.showSignStyle();
+debugger
+                                    if (th.signId && th.signId.length) {
+                                        th.signShowOperation(th);
+                                    }
                                 }
                                 if (th.isArea) {
                                     boundary();
@@ -477,6 +488,24 @@
                     
                     th.localSearch(th, myValue, true);
                 });
+            },
+            /**
+             * 显示默认标记逻辑处理
+             */
+            signShowOperation(th) {
+                let map = th.map;
+                th.overlays = [];
+                let point = [];
+
+                for (let i = 0; i < th.signId.length; i++) {
+                    th.overlays.push({
+                        lat: th.signId[i].x,
+                        lng: th.signId[i].y
+                    });
+                    point.push(new BMap.Point(th.signId[i].y, th.signId[i].x));
+                }
+
+                map.addOverlay(new BMap.Polyline(point, {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5})); 
             },
             /**
              * 标记逻辑处理
