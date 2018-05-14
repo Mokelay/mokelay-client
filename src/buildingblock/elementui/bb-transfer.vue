@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import Util from '../libs/util';
+    import Util from '../../libs/util';
 
     export default {
         name: 'bb-transfer',

@@ -49,7 +49,7 @@
 
     //TODO 需要支持内容的Page渲染
     import Vue from 'vue';
-    import Util from '../libs/util.js'
+    import Util from '../../libs/util.js'
     export default {
         name: 'bb-tabs',
         render: function (createElement) {

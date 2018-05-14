@@ -1,15 +1,25 @@
 <template>
-    <el-color-picker v-model="valueBase" :show-alpha="option.showAlpha" :size="option.size" :disabled="option.disabled" @change='change'></el-color-picker>
+    <el-input-number v-model="valueBase" @change="change" :min="min" :controls="option.controls" :controls-position="option.controlsPosition" :max="max" :size="option.size" :disabled="option.disabled"></el-input-number>
 </template>
 
 <script>
-    import Util from '../libs/util';
+    import Util from '../../libs/util';
 
     export default {
-        name: 'bb-color-picker',
+        name: 'bb-input-number',
         props: {
+            disabled:{
+                type:Boolean
+            },
             value:{
-                type:String
+                type:[Number,String]
+            },
+            min:{
+                type:Number,
+                default:0
+            },
+            max:{
+                type:Number
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
@@ -21,14 +31,20 @@
                     return {
                         disabled:false,
                         size:"",
-                        showAlpha:true
-                    };
+                        controls:true,//是否显示控制器
+                        controlsPosition:""//默认控制器在两边 ，可选right
+                    }
                 }
             }
         },
         data() {
             return {
                 valueBase: this.value,
+            }
+        },
+        watch: {
+            value(val){
+                this.valueBase=val;
             }
         },
         created: function () {

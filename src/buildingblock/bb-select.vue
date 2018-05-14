@@ -116,7 +116,9 @@
                 this.items = val;
             },
             value(val){
-                this.valueBase = this.multipleValTransfer(val);
+                //如果开始多选则默认值时一个数据 否则是字符串
+                const defaultValue = this.multiple?[]:'';
+                this.valueBase = val?this.multipleValTransfer(val):defaultValue;
                 this.$emit('mounted',this.valueBase);
             },
             ds(val){

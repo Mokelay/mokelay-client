@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import Util from '../libs/util.js';
+    import Util from '../../libs/util.js';
     export default {
         name: 'bb-card',
         props: {

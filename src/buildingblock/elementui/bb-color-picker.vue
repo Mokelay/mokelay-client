@@ -1,33 +1,34 @@
 <template>
-    <el-input
-      type="hidden"
-      v-model="valueBase"
-      @change="change"
-      >
-    </el-input>
+    <el-color-picker v-model="valueBase" :show-alpha="option.showAlpha" :size="option.size" :disabled="option.disabled" @change='change'></el-color-picker>
 </template>
 
 <script>
-    import Util from '../libs/util';
+    import Util from '../../libs/util';
 
     export default {
-        name: 'bb-hidden',
+        name: 'bb-color-picker',
         props: {
             value:{
-                type:[String,Number]
+                type:String
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        size:"",
+                        showAlpha:true
+                    };
+                }
             }
         },
         data() {
             return {
                 valueBase: this.value,
-            }
-        },
-        watch: {
-            value(val){
-                this.valueBase=val;
             }
         },
         created: function () {
