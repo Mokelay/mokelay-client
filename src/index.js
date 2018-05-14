@@ -73,17 +73,14 @@ import vantBB from './buildingblock/vant/';
 // ElementUI相关的
 import elementBB from './buildingblock/elementui/';
 
-// 移动端
-import h5BB from './buildingblock/h5/';
+//自主研发组件
+import independentBB from './buildingblock/independent/';
 
 //Module相关
 import moduleBB from './module/';
 
 //布局相关
 import layoutBB from './layout/';
-
-// DEMO
-import helloworld from './buildingblock/demo/bb-hello-world'
 
 //引入minireset
 import './css/minireset.css';
@@ -171,7 +168,7 @@ let ty = {
 		Vue.component('bb-hyperlink', bbhyperlink);
 
 		//移动端积木安装
-		h5BB.install(Vue);
+		independentBB.install(Vue);
 
 		//布局积木安装
 		layoutBB.install(Vue);
@@ -181,9 +178,6 @@ let ty = {
 		
 		// ElementUI积木安装
 		elementBB.install(Vue);
-
-		// DEMO
-		Vue.component('bb-hello-world', helloworld);
 
 		// Vant安装
 		vantBB.install(Vue);

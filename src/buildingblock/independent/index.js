@@ -9,6 +9,7 @@ import bbscore from './bb-score.vue';
 import bbtext from './bb-text.vue';
 import bbvideo from './bb-video.vue';
 import bbvote from './bb-vote.vue';
+import helloworld from './bb-hello-world'
 
 //公用组件
 import bbtoast from './bbToast';
@@ -16,7 +17,8 @@ import bbmodal from './bbModal';
 
 export default {
 	install: function(Vue) {
-		console.log("begin h5 bb init....");
+		console.log("begin independent bb init....");
+
 		Vue.component('bb-count', bbcount);
 		Vue.component('bb-countdown', bbcountdown);
 		Vue.component('bb-html', bbhtml);
@@ -27,8 +29,10 @@ export default {
 		Vue.component('bb-text', bbtext);
 		Vue.component('bb-video', bbvideo);
 		Vue.component('bb-vote', bbvote);
+		Vue.component('bb-hello-world', helloworld);
+
 		window._TY_Toast = bbtoast;
 		window._TY_Modal = bbmodal;
-		console.log("finish h5 bb init;");
+		console.log("finish independent bb init;");
 	}
 };
