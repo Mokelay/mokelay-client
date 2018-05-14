@@ -67,22 +67,20 @@ import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
 import bbhyperlink from './buildingblock/bb-hyperlink.vue';
 
-// Vant相关的
-import vantAddressEdit from './buildingblock/vant/bb-vant-address-edit';
-
+// Vant积木安装
+import vantBB from './buildingblock/vant/';
 
 // ElementUI相关的
-import bbEleLogin from './buildingblock/elementui/bb-ele-login';
+import elementBB from './buildingblock/elementui/';
 
 // 移动端
 import h5BB from './buildingblock/h5/';
 
 //Module相关
-import moduleBB from './module';
+import moduleBB from './module/';
 
 //布局相关
 import layoutBB from './layout/';
-
 
 // DEMO
 import helloworld from './buildingblock/demo/bb-hello-world'
@@ -181,14 +179,14 @@ let ty = {
 		//Module积木安装
 		moduleBB.install(Vue);
 		
-		// ElementUI
-		Vue.component('bb-ele-login', bbEleLogin);
+		// ElementUI积木安装
+		elementBB.install(Vue);
 
 		// DEMO
 		Vue.component('bb-hello-world', helloworld);
 
-		// Vant
-		Vue.component('bb-vant-address-edit', vantAddressEdit);
+		// Vant安装
+		vantBB.install(Vue);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 		console.log("finish ty bb init....");
