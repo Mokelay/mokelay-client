@@ -53,11 +53,11 @@
             },
             appendToBody:{
                 type:Boolean,
-                default:false
+                default:true
             },
             modalAppendToBody:{
                 type:Boolean,
-                default:false
+                default:true
             },
             width:{
                 type:String
