@@ -400,15 +400,10 @@
         },
         watch: {
             value(val) {
-                // this.tableData = (val&&typeof(val)==='string')?eval(val):val||[];
                 const newData = (val&&typeof(val)==='string')?JSON.parse(val):val||[];
-                if(newData && newData.length > 0 && this.editAll){
-                    const arr = Object.keys(this.tableData[this.tableData.length-1]);
-                    if(arr.length != 0){
-                        newData.concat([{}]);
-                        //this.tableData.push({});
-                        this.haveEditor = true;
-                    }
+                if(newData && this.editAll){
+                    newData.concat([{}]);
+                    this.haveEditor = true;
                 }
                 if(!this.editAll){
                     this.tableData = newData;
@@ -630,9 +625,9 @@
                             if (t.pagination) {
                                 map.forEach(function (item) {
                                     var list = item['value']['currentRecords'];
-                                    t[item['dataKey']] = [];
+                                    t.tableData = [];
                                     for (var i in list) {
-                                        t[item['dataKey']].push(list[i]);
+                                        t.tableData.push(list[i]);
                                     }
                                     t.totalItems = item['value']['totalRecords'];
                                 });
@@ -648,27 +643,24 @@
                                             list = item['value'];
                                         }
                                     }
-                                    t[item['dataKey']] = [];
+                                    t.tableData = [];
                                     for (var i in list) {
                                         if(t.hiddenValueKey){
                                             t.hiddenItems.forEach((ele)=>{//前端支持列表筛选
                                                 if(list[i][t.hiddenValueKey] != ele ){
-                                                    t[item['dataKey']].push(list[i]);
+                                                    t.tableData.push(list[i]);
                                                 }
                                             })
                                         }else{
-                                            t[item['dataKey']].push(list[i]);
+                                            t.tableData.push(list[i]);
                                         }
                                     }
                                     t.totalItems = (item['value']&&item['value']['totalRecords'])?item['value']['totalRecords']:0;
                                 });
                             }
                         };
-                        if(t.tableData && t.tableData.length > 0 && t.editAll){
-                            const arr = Object.keys(t.tableData[t.tableData.length-1]);
-                            if(arr.length != 0){
-                                t.tableData.push({});
-                            }
+                        if(t.tableData && t.editAll){
+                            t.tableData.push({});
                         };
                         //初始化bb-select的数据
                         t.initBBSelectFields(true);
