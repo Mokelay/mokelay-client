@@ -14,6 +14,7 @@ import bbEleLogin from './bb-ele-login';
 import bbhidden from './bb-hidden';
 import bbinputnumber from './bb-input-number';
 import bbinput from './bb-input';
+import bblistscroll from './bb-list-scroll';
 import bbpagination from './bb-pagination.vue';
 import bbpanel from './bb-panel.vue';
 import bbradiogroup from './bb-radio-group';
@@ -49,6 +50,7 @@ export default {
 		Vue.component('bb-hidden', bbhidden);
 		Vue.component('bb-input-number', bbinputnumber);
 		Vue.component('bb-input', bbinput);
+		Vue.component('bb-list-scroll', bblistscroll);
 		Vue.component('bb-pagination', bbpagination);
 		Vue.component('bb-panel', bbpanel);
 		Vue.component('bb-radio-group', bbradiogroup);

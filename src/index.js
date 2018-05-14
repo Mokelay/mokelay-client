@@ -3,12 +3,10 @@ import bb from './buildingblock/bb';
 import bbbuttongroup from './buildingblock/bb-button-group';
 import bblist from './buildingblock/bb-list';
 import bbdialog from './buildingblock/bb-dialog';
-import bblistscroll from './buildingblock/bb-list-scroll';
 import bbellipsetag from './buildingblock/bb-ellipse-tag';
 import bbmenu from './buildingblock/bb-menu';
 import bbeditorarray from './buildingblock/bb-editor-array';
 import bbeditorobject from './buildingblock/bb-editor-object';
-import bbrelationchart from './buildingblock/bb-relation-chart';
 import bbpopselect from './buildingblock/bb-pop-select';
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbform from './buildingblock/bb-form';
@@ -67,13 +65,11 @@ let ty = {
 		Vue.component('bb', bb);
 		Vue.component('bb-button-group', bbbuttongroup);
 		Vue.component('bb-list', bblist);
-		Vue.component('bb-dialog', bbdialog); // 2017-10-11 season add
-		Vue.component('bb-list-scroll', bblistscroll); // 2017-10-11 season add
-		Vue.component('bb-ellipse-tag', bbellipsetag); // 2017-10-11 season add
+		Vue.component('bb-dialog', bbdialog);
+		Vue.component('bb-ellipse-tag', bbellipsetag);
 		Vue.component('bb-menu', bbmenu);
 		Vue.component('bb-editor-array', bbeditorarray);
 		Vue.component('bb-editor-object', bbeditorobject);
-		Vue.component('bb-relation-chart', bbrelationchart);
 		Vue.component('bb-pop-select', bbpopselect);
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-form', bbform);
