@@ -437,7 +437,7 @@
             }
         },
         mounted:function(){
-            
+            this.$emit('bb-mounted');
         },
         methods: {
             //检查ds的输入是否是否有参数   只填充不带参数的下拉
