@@ -62,6 +62,11 @@ import Util from '../../libs/util';
                 p_options:this.options,
             };
         },
+        watch:{
+            value(val){
+                this.p_value = this._changeToArray(val)
+            }
+        },
         mounted(){
             let t=this;
             if(this.ds){
