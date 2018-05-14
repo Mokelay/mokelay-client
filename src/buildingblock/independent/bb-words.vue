@@ -1,5 +1,5 @@
 <script>
-  import Util from '../libs/util.js';
+  import Util from '../../libs/util.js';
   const Themes = [{
     "text":"段落",
     "value":"p",

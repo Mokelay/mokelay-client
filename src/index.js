@@ -18,29 +18,29 @@ import bbradiogroup from './buildingblock/bb-radio-group';
 import bbcheckboxgroup from './buildingblock/bb-checkbox-group';
 import bbform from './buildingblock/bb-form';
 import bbarray from './buildingblock/bb-array';
-import bbtextarea from './buildingblock/bb-textarea';
-import bbinputnumber from './buildingblock/bb-input-number';
+
+
 import bbhidden from './buildingblock/bb-hidden';
 import bbbutton from './buildingblock/bb-button';
 import bbbuttonform from './buildingblock/bb-button-form';
 import bbbuttonarray from './buildingblock/bb-button-array';
-import bbbadge from './buildingblock/bb-badge';
+
 import bbreadbb from './buildingblock/bb-read-bb';
-import bbwords from './buildingblock/bb-words.vue';
+
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbuuid from './buildingblock/bb-uuid.vue';
 import bbtree from './buildingblock/bb-tree.vue';
 import bbtreeselect from './buildingblock/bb-tree-select.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 import bbpreview from './buildingblock/bb-preview.vue';
-import bbbillboard from './buildingblock/bb-billboard.vue';
+
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
 import bbview from './buildingblock/bb-view.vue';
 import bbmap from './buildingblock/bb-map.vue';
-import bbspace from './buildingblock/bb-space.vue';
+
 import bbcommentchain from './buildingblock/bb-comment-chain.vue';
 import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
@@ -100,29 +100,28 @@ let ty = {
 		Vue.component('bb-checkbox-group', bbcheckboxgroup);
 		Vue.component('bb-form', bbform);
 		Vue.component('bb-array', bbarray);
-		Vue.component('bb-textarea', bbtextarea);
-		Vue.component('bb-input-number', bbinputnumber);
+		
+		
 		Vue.component('bb-hidden', bbhidden);
 		Vue.component('bb-button', bbbutton);
 		Vue.component('bb-button-form', bbbuttonform);
 		Vue.component('bb-button-array', bbbuttonarray);
-		Vue.component('bb-badge', bbbadge);
+		
 		Vue.component('bb-read-bb', bbreadbb);
-		Vue.component('bb-words', bbwords);
 		Vue.component('bb-picture-preview', bbpicturepreview);
 		Vue.component('bb-uuid', bbuuid);
 		Vue.component('bb-tree', bbtree);
 		Vue.component('bb-tree-select', bbtreeselect);
 		Vue.component('bb-button-transfer', bbbuttontransfer);
 		Vue.component('bb-preview', bbpreview);
-		Vue.component('bb-billboard', bbbillboard);
+
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-collapse', bbcollapse);
 		Vue.component('bb-form-item', bbformitem);
 		Vue.component('bb-view', bbview);
 		Vue.component('bb-map', bbmap);
-		Vue.component('bb-space', bbspace);
+		
 		Vue.component('bb-comment-chain', bbcommentchain);
 		Vue.component('bb-view-group', bbviewgroup);
 		Vue.component('bb-product-item', bbproductitem);
