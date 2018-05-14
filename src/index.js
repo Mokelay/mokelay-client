@@ -78,21 +78,7 @@ import bbEleLogin from './buildingblock/elementui/bb-ele-login';
 import h5BB from './buildingblock/h5/';
 
 //Module相关
-import bbbblistselect from './module/bb-bblist-select';
-import bbbbtypeselect from './module/bb-bbtype-select';
-import bbbuttonselect from './module/bb-button-select';
-import bbcolumnsselect from './module/bb-columns-select';
-import bbdsselect from './module/bb-ds-select';
-import bbiconselect from './module/bb-icon-select.vue';
-import bbicon from './module/bb-icon.vue';
-import bbbbselect from './module/bb-bb-select.vue';
-import bbfieldselect from './module/bb-field-select.vue';
-import bbconfig from './module/bb-config.vue';
-import bbapiinfo from './module/bb-api-info.vue';
-import bbapilegoconfig from './module/bb-apilego-config.vue';
-import bbfieldtreeselect from './module/bb-field-tree-select.vue';
-import bbfieldtreepopselect from './module/bb-field-tree-pop-select.vue';
-import bbconfigarray from './module/bb-config-array.vue';
+import moduleBB from './module';
 
 //布局相关
 import layoutBB from './layout/';
@@ -144,7 +130,6 @@ let ty = {
 		Vue.component('bb-checkbox-group', bbcheckboxgroup);
 		Vue.component('bb-date-picker', bbdatepicker);
 		Vue.component('bb-color-picker', bbcolorpicker);
-		Vue.component('bb-ds-select', bbdsselect);
 		Vue.component('bb-form', bbform);
 		Vue.component('bb-array', bbarray);
 		Vue.component('bb-textarea', bbtextarea);
@@ -155,19 +140,13 @@ let ty = {
 		Vue.component('bb-button-form', bbbuttonform);
 		Vue.component('bb-button-array', bbbuttonarray);
 		Vue.component('bb-card', bbcard);
-		Vue.component('bb-button-select', bbbuttonselect);
-		Vue.component('bb-columns-select', bbcolumnsselect);
 		Vue.component('bb-badge', bbbadge);
-		Vue.component('bb-bblist-select', bbbblistselect);
-		Vue.component('bb-bbtype-select', bbbbtypeselect);
 		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb-words', bbwords);
 		Vue.component('bb-picture-preview', bbpicturepreview);
 		Vue.component('bb-uuid', bbuuid);
 		Vue.component('bb-tree', bbtree);
 		Vue.component('bb-tree-select', bbtreeselect);
-		Vue.component('bb-icon', bbicon);
-		Vue.component('bb-icon-select', bbiconselect);
 		Vue.component('bb-button-transfer', bbbuttontransfer);
 		Vue.component('bb-preview', bbpreview);
 		Vue.component('bb-echarts-select', bbechartsselect);
@@ -179,20 +158,12 @@ let ty = {
 		Vue.component('bb-bar', bbbar);
 		Vue.component('bb-dropdown', bbdropdown);
 		Vue.component('bb-cascader', bbcascader);
-		Vue.component('bb-bb-select', bbbbselect);
-		Vue.component('bb-field-select', bbfieldselect);
 		Vue.component('bb-slider', bbslider);
 		Vue.component('bb-panel', bbpanel);
 		Vue.component('bb-collapse', bbcollapse);
 		Vue.component('bb-form-item', bbformitem);
 		Vue.component('bb-json', bbjson);
-		Vue.component('bb-config', bbconfig);
-		Vue.component('bb-api-info', bbapiinfo);
-		Vue.component('bb-apilego-config', bbapilegoconfig);
-		Vue.component('bb-field-tree-select', bbfieldtreeselect);
-		Vue.component('bb-field-tree-pop-select', bbfieldtreepopselect);
 		Vue.component('bb-view', bbview);
-		Vue.component('bb-config-array', bbconfigarray);
 		Vue.component('bb-pagination', bbpagination);
 		Vue.component('bb-map', bbmap);
 		Vue.component('bb-space', bbspace);
@@ -206,6 +177,9 @@ let ty = {
 
 		//布局积木安装
 		layoutBB.install(Vue);
+
+		//Module积木安装
+		moduleBB.install(Vue);
 		
 		// ElementUI
 		Vue.component('bb-ele-login', bbEleLogin);
