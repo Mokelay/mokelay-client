@@ -16,13 +16,15 @@
                 [{
                     img:null,
                     title:null,
-                    href:null
+                    href:null,
+                    id:0 //必填唯一性校验
                 }]
                 group 关闭
                 {
                     img:null,
                     title:null,
-                    href:null
+                    href:null,
+                    id:0 ////必填唯一性校验
                 }
             */
             value:{
@@ -80,7 +82,19 @@
                 const t = this;
                 args.forEach((val,key)=>{
                     if(val.type == 'custom'){
-                        t.valueBase.push(val.arguments);
+                        let canAdd = true;
+                        t.valueBase.forEach((ele,index)=>{
+                            if(ele && ele.id == val.arguments.id){
+                                t.$message({
+                                    type: 'info',
+                                    message: '请勿重复添加'
+                                });
+                                canAdd = false
+                            }
+                        });
+                        if(canAdd){
+                            t.valueBase.push(val.arguments);
+                        }
                         //默认滚动到最底部
                         const container = t.$refs["bb-product-item-group"];
                         container.scrollTop = container.scrollHeight;
@@ -116,6 +130,9 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            layoutItems(){
+                return this.valueBase;
             }
         }
     }
