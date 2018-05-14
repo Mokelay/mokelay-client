@@ -146,7 +146,7 @@
                                     th.modifySignImageClick(th);
 
                                     th.showSignStyle();
-debugger
+
                                     if (th.signId && th.signId.length) {
                                         th.signShowOperation(th);
                                     }
