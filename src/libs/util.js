@@ -1218,7 +1218,7 @@ util.reloadJS = function(url) {
         });
         
         scriptElement.src = window.location.protocol + urlV;
-        scriptElement.src = 'text/javascript';
+        scriptElement.type = 'text/javascript';
 
         return promise;
     }
