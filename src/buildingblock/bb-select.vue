@@ -3,6 +3,9 @@
       placeholder="请选择" 
       v-model="valueBase" 
       clearable
+      :remote="remote"
+      :remote-method="remoteFn"
+      :reserve-keyword="filterable"
       :allow-create="filterable"
       :multiple="multiple"
       :filterable="filterable"
@@ -102,13 +105,18 @@
                         size:""
                     };
                 }
+            },
+            remote:{
+              type:Boolean,
+              default:false
             }
         },
         data() {
             return {
               items:this.fields.length>0?this.fields:this.options,
               valueBase: this.multipleValTransfer(this.value),
-              external:{}
+              external:{},
+              keyword:null,
             }
         },
         watch:{
@@ -118,7 +126,7 @@
             value(val){
                 //如果开始多选则默认值时一个数据 否则是字符串
                 const defaultValue = this.multiple?[]:'';
-                this.valueBase = val?this.multipleValTransfer(val):defaultValue;
+                this.valueBase = val == undefined || val == null?defaultValue:this.multipleValTransfer(val);
                 this.$emit('mounted',this.valueBase);
             },
             ds(val){
@@ -218,6 +226,16 @@
             cleanAll:function(){
               this.valueBase = null;
               this.items = null;
+            },
+            //关键字远程搜索
+            remoteFn:function(query){
+              const t = this;
+              if (query !== '') {
+                t.keyword = query;
+                t.getData();
+              }else{
+                t.items = [];
+              }
             }
 
         }
