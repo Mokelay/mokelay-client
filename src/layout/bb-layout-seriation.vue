@@ -14,11 +14,9 @@
             const t = this;
             const bbList = t.renderBB(createElement);
             //控制水平排列
-            const style = {
-                display:t.horizontal?'flex':'block'
-            }
-            style.display = t.realShow?style.display:'none';
-            return createElement('div',{style:style},bbList);
+            let itemClass = t.horizontal?"df":"db";
+            itemClass = t.realShow?itemClass:"dn";
+            return createElement('div',{class:itemClass},bbList);
         },
         props: {
             /*水平排列*/
@@ -76,11 +74,15 @@
             */
             content:{
                 type:[Array,String]
+            },
+            defaultHide:{
+                type:Boolean,
+                default:false
             }
         },
          data() {
             return {
-                realShow:true,
+                realShow:!this.defaultHide,
             }
         },
         methods: {
@@ -116,10 +118,31 @@
                   }
                 });
             },
+            //显示
+            show(){
+                const t = this;
+                t.realShow = true;
+                t.$emit('show');
+            },
+            //隐藏
+            hide(){
+                const t = this;
+                t.realShow = false;
+                t.$emit('hide');
+            }
         },
         components:{
         }
     }
 </script>
 <style lang="less">
+    .dn{
+        display:none;
+    }
+    .df{
+        display:flex;
+    }
+    .db{
+        display:block;
+    }
 </style>

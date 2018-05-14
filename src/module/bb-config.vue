@@ -688,20 +688,20 @@
                             description:"display设置",                               
                             props:{
                                 fields:[{
-                                    text:"inline",
-                                    value:"行内"
+                                    value:"inline",
+                                    text:"行内"
                                 },{
-                                    text:"inline-block",
-                                    value:"行内块"
+                                    value:"inline-block",
+                                    text:"行内块"
                                 },{
-                                    text:"block",
-                                    value:"块"
+                                    value:"block",
+                                    text:"块"
                                 },{
-                                    text:"none",
-                                    value:"隐藏"
+                                    value:"none",
+                                    text:"隐藏"
                                 },{
-                                    text:"flex",
-                                    value:"流式布局"
+                                    value:"flex",
+                                    text:"流式布局"
                                 }]
                             }
                         },{                      
@@ -863,6 +863,30 @@
                                 min:0,
                                 step:0.05,
                                 max:1
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_13',
+                            alias:'bb-select',                   
+                            aliasName:'块级样式',                                  
+                            attributes:{
+                                attributeName:'display',
+                                fields:[{
+                                    value:"inline",
+                                    text:"行内"
+                                },{
+                                    value:"inline-block",
+                                    text:"行内块"
+                                },{
+                                    value:"block",
+                                    text:"块"
+                                },{
+                                    value:"none",
+                                    text:"隐藏"
+                                },{
+                                    value:"flex",
+                                    text:"流式布局"
+                                }]
                             },
                             interactives:[],
                         },{                      
