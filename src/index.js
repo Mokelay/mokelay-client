@@ -18,29 +18,23 @@ import bbradiogroup from './buildingblock/bb-radio-group';
 import bbcheckboxgroup from './buildingblock/bb-checkbox-group';
 import bbform from './buildingblock/bb-form';
 import bbarray from './buildingblock/bb-array';
-
-
 import bbhidden from './buildingblock/bb-hidden';
 import bbbutton from './buildingblock/bb-button';
 import bbbuttonform from './buildingblock/bb-button-form';
 import bbbuttonarray from './buildingblock/bb-button-array';
-
 import bbreadbb from './buildingblock/bb-read-bb';
-
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbuuid from './buildingblock/bb-uuid.vue';
 import bbtree from './buildingblock/bb-tree.vue';
 import bbtreeselect from './buildingblock/bb-tree-select.vue';
 import bbbuttontransfer from './buildingblock/bb-button-transfer.vue';
 import bbpreview from './buildingblock/bb-preview.vue';
-
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbbar from './buildingblock/bb-bar.vue';
 import bbcollapse from './buildingblock/bb-collapse.vue';
 import bbformitem from './buildingblock/bb-form-item.vue';
 import bbview from './buildingblock/bb-view.vue';
 import bbmap from './buildingblock/bb-map.vue';
-
 import bbcommentchain from './buildingblock/bb-comment-chain.vue';
 import bbviewgroup from './buildingblock/bb-view-group.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
