@@ -34,6 +34,7 @@ import './css/iconfont/ty.css';
 
 //引入动画组件
 import 'animate.css/animate.min.css'
+
 //引入移动端手势组件
 import './libs/touch.js'
 
