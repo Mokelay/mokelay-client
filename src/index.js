@@ -2,7 +2,6 @@
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
-import bbmap from './buildingblock/vendor/map/bb-map.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
 
 // Vant积木安装
@@ -45,7 +44,6 @@ let ty = {
 
 		//以下五个积木需要把elementui解耦，然后再迁移到independent
 		Vue.component('bb-editor-code', bbeditorcode);
-		Vue.component('bb-map', bbmap);
 		Vue.component('bb-picture-preview', bbpicturepreview);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-product-item', bbproductitem);
