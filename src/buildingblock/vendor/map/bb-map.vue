@@ -30,17 +30,17 @@
 
 <script>
     import Vue from 'vue';
-    import Util from '../libs/util.js'
-    import '../css/DrawingManager_min.css';
-    import '../css/SearchInfoWindow_min.css';
+    import Util from '../../../libs/util.js'
+    import './css/DrawingManager_min.css';
+    import './css/SearchInfoWindow_min.css';
 
-    import ditu0 from '../css/icon/map/ditu.png';       // 放大
-    import ditu1 from '../css/icon/map/ditu1.png';      // 1爱琴海    4003
-    import ditu2 from '../css/icon/map/ditu2.png';      // 2家具委管  4002
-    import ditu3 from '../css/icon/map/ditu3.png';      // 3星艺佳    4005
-    import ditu4 from '../css/icon/map/ditu4.png';      // 4其他      4006
-    import ditu5 from '../css/icon/map/ditu5.png';      // 5家具自营   4001
-    import ditu6 from '../css/icon/map/ditu6.png';      // 6房地产    4004
+    import ditu0 from './img/ditu.png';       // 放大
+    import ditu1 from './img/ditu1.png';      // 1爱琴海    4003
+    import ditu2 from './img/ditu2.png';      // 2家具委管  4002
+    import ditu3 from './img/ditu3.png';      // 3星艺佳    4005
+    import ditu4 from './img/ditu4.png';      // 4其他      4006
+    import ditu5 from './img/ditu5.png';      // 5家具自营   4001
+    import ditu6 from './img/ditu6.png';      // 6房地产    4004
 
     // 百度地图资源加载 
     const resourcesUrl = ['//api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=&s=1',
@@ -765,19 +765,19 @@
     }
 
     .BMapLib_last {
-        background: url('../css/icon/map/biaoji.png') no-repeat !important;
+        background: url('./img/biaoji.png') no-repeat !important;
         height: 71px !important;
         width: 110px !important;
     }
 
     .map-content .market-sign-mode {
-        background: url('../css/icon/map/biaoji.png') no-repeat !important;
+        background: url('./img/biaoji.png') no-repeat !important;
         height: 71px !important;
         width: 110px !important;
     }
 
     .map-content .market-sign-mode1 {
-        background: url('../css/icon/map/biaoji1.png') no-repeat !important;
+        background: url('./img/biaoji1.png') no-repeat !important;
         height: 71px !important;
         width: 110px !important;
     }
@@ -823,7 +823,7 @@
 
                 #searchbox #search-button {
                     pointer-events: auto;
-                    background: url('../css/icon/map/searchbox_f175577.png') no-repeat 0 -76px #0091ea;
+                    background: url('./img/searchbox_f175577.png') no-repeat 0 -76px #0091ea;
                     width: 57px;
                     height: 45px;
                     float: left;
@@ -859,7 +859,7 @@
                     width: 27px;
                     height: 45px;
                     top: 0;
-                    background: url('../css/icon/map/searchbox_f175577.png') no-repeat 0 -114px #fff;
+                    background: url('./img/searchbox_f175577.png') no-repeat 0 -114px #fff;
                     display: none;
                     right: 39px
                 }
@@ -923,28 +923,28 @@
                 margin: 20px 0 0 20px;
 
                 .market-mode {
-                    background: url('../css/icon/map/qingchu.png') no-repeat !important;
+                    background: url('./img/qingchu.png') no-repeat !important;
                     height: 71px;
                     width: 100%;
                     cursor: pointer;
                 }
                 
                 .market-mode1 {
-                    background: url('../css/icon/map/qingchu1.png') no-repeat !important;
+                    background: url('./img/qingchu1.png') no-repeat !important;
                     height: 71px;
                     width: 100%;
                     cursor: pointer;
                 }
                 
                 .market-mode-last {
-                    background: url('../css/icon/map/baocun.png') no-repeat !important;
+                    background: url('./img/baocun.png') no-repeat !important;
                     height: 71px;
                     width: 100%;
                     cursor: pointer;
                 }
                 
                 .market-mode-last1 {
-                    background: url('../css/icon/map/baocun1.png') no-repeat !important;
+                    background: url('./img/baocun1.png') no-repeat !important;
                     height: 71px;
                     width: 100%;
                     cursor: pointer;

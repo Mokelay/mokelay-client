@@ -2,7 +2,7 @@
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
 import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
-import bbmap from './buildingblock/bb-map.vue';
+import bbmap from './buildingblock/vendor/map/bb-map.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
 
 // Vant积木安装
