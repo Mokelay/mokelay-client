@@ -158,6 +158,7 @@
                     if(fileList instanceof Array && fileList.length<=0){
                         resultFileList='';
                     }
+                    resultFileList = _TY_Tool.deepClone(fileList);
                     t.$emit(emit,resultFileList);
                     t.$emit('input',resultFileList);
                 }
