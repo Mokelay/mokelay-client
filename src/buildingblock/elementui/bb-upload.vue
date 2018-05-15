@@ -112,7 +112,7 @@
             //移除图片
             handleRemove:function(file, fileList) {
                 const t = this;
-                t.handleFileList('remove',fileList);
+                t.handleFileList('remove',fileList,file);
             },
             //预览图片
             picturePreview:function(file) {
@@ -132,15 +132,15 @@
             onSuccess:function(response,file,fileList){
                 const t = this;
                 this.$message.success('文件上传成功');
-                t.handleFileList('success',fileList)
+                t.handleFileList('success',fileList,file);
             },
             //上传失败
             onError:function(err,file,fileList){
                 const t = this;
                 this.$message.error('文件上传失败');
-                t.handleFileList('err',fileList)
+                t.handleFileList('err',fileList,file);
             },
-            handleFileList:function(emit,fileList){
+            handleFileList:function(emit,fileList,file){
                 const t = this;
                 //无handle情况下正常输出
                 if(t.handle){
@@ -176,6 +176,10 @@
                                 url:ele,
                                 name:name,
                                 fullName:fullName
+                            }
+                            if(t.realFileList.indexOf(item)>=0){
+                                //已存在
+                                return ture;
                             }
                             t.realFileList.push(item);
                         })
