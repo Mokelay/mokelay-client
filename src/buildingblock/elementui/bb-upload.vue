@@ -178,13 +178,11 @@
                                 name:name,
                                 fullName:fullName
                             }
-                            if(t.realFileList.indexOf(item)>=0){
-                                //已存在
-                                t.$message({
-                                    type: 'info',
-                                    message: "测试用，后面删除"
-                                });
-                                return ture;
+                            //这个文件已经存在，就直接返回
+                            for(let i=0;i<t.realFileList.length;i++){
+                                if(t.realFileList[i].fullName == fullName){
+                                    return true;
+                                }
                             }
                             t.realFileList.push(item);
                         })
