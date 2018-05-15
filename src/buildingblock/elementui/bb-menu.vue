@@ -311,8 +311,11 @@
         },
     }
 </script>
-<style lang='less'>
+<style lang='less' scoped>
     .bb-menu-badge .el-badge__content {
         right: -5px !important;
+    }
+    .el-menu-item>i{
+        color: inherit;
     }
 </style>
