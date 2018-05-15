@@ -225,7 +225,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
                 }
             }
             //格式化参数
-            paramValue = typeof paramValue == "object" ? JSON.stringify(paramValue) : paramValue;
+            paramValue = typeof paramValue == "object" ? (paramValue == null ? "" : JSON.stringify(paramValue)) : paramValue;
             requestParam[input['paramName']] = paramValue;
         });
     }
@@ -1193,10 +1193,10 @@ util.reloadJS = function(url) {
             result = await createScript(url[i]);
         }
         if (i === url.length) {
-          return result;
+            return result;
         }
     })();
-      
+
     /**
      * 创建script
      * @param url
@@ -1216,7 +1216,7 @@ util.reloadJS = function(url) {
                 reject(e);
             }, false);
         });
-        
+
         scriptElement.src = window.location.protocol + urlV;
         scriptElement.type = 'text/javascript';
 
