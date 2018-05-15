@@ -264,11 +264,9 @@
 </script>
 <style lang="less">
     .ds{
-        overflow: hidden;
     }
     .dn{
         display: none;
-        overflow: hidden;
     }
     .db{
         display: inline-block;
