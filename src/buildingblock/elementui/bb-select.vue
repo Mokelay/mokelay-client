@@ -152,6 +152,9 @@
               let t=this;
               let result =val;
               if(!val||(t.multiple&&val.lenth<=0)){
+                if(t.multiple){
+                  return [];
+                }
                 return result;
               }
               if(typeof(val)==='string'&&t.multiple){
@@ -161,6 +164,9 @@
                   result=val.split(",");
                 }
                 if(!(result instanceof Array)){
+                  if(typeof(result)==='number'){
+                    result +="";
+                  }
                   result = [result];
                 }
               }
