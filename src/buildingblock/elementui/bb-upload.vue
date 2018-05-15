@@ -79,6 +79,7 @@
         watch: {
             value(val){
                 const t = this;
+                t.realFileList=[];
                 t.setFileList(val,t);
             }
         },
