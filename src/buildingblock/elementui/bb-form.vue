@@ -526,6 +526,18 @@
                 const t = this;
                 t.$emit('cancel',t.formData);
             },
+            //清空表单没有提示框
+            clearFormWithoutConfirm:function(){
+                const t = this;
+                t.formData = {};
+                let _refs = t.$refs;
+                for(let i in _refs){
+                    if(i.startsWith('form-item_')){
+                        _refs[i].clearFormItem();
+                    }
+                }
+            },
+            //清空表单
             clearForm:function(){
                 const t = this;
                 t.$msgbox({
@@ -538,16 +550,8 @@
                         done();
                     }
                 }).then(()=>{
-                    t.formData = {};
-
-                    let _refs = t.$refs;
-                    for(let i in _refs){
-                        if(i.startsWith('form-item_')){
-                            _refs[i].clearFormItem();
-                        }
-                    }
+                    t.clearFormWithoutConfirm();
                     // t.formCommit();
-                    //t.$router.back()
                 }).catch((err)=>{
                     console.log('err:',err);
                 })
