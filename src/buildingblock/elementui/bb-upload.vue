@@ -180,6 +180,10 @@
                             }
                             if(t.realFileList.indexOf(item)>=0){
                                 //已存在
+                                t.$message({
+                                    type: 'info',
+                                    message: "测试用，后面删除"
+                                });
                                 return ture;
                             }
                             t.realFileList.push(item);
