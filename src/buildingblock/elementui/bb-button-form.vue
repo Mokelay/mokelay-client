@@ -164,7 +164,8 @@ import Util from '../../libs/util';
                         'update:isShow':(isShow)=>{
                             t.formVisible = isShow;
                             if(!isShow){
-                                t.formData = undefined;
+                                //下面清空表单数据后  关闭表单会清空表单项的值  暂时注释掉
+                                // t.formData = undefined;
                             }
                         }
                     }
