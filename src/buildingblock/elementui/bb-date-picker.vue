@@ -111,9 +111,10 @@
                 let newDate = val;
                 //判断如果输出的是date对象则string化
                 if(typeof val == "object"){
+                    debugger
                     newDate = [];
                     const startTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
-                    const endTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
+                    const endTime = typeof val[1] == "string"?val[1] : val[1].toDateString();
                     newDate.push(startTime);
                     newDate.push(endTime);
                 }
