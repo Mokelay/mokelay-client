@@ -3,7 +3,7 @@
       :placeholder="option.placeholder"
       v-model="valueBase"
       @change="change"
-      :disabled="option.disabled"
+      :disabled="disabled||option.disabled"
       :readonly="option.readonly"
       :size="option.size"
       :prefix-icon="option.prefixIcon"
