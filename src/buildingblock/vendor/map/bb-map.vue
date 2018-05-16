@@ -146,10 +146,9 @@
                                     th.modifySignImageClick(th);
 
                                     th.showSignStyle();
-
-                                    if (th.signId && th.signId.length) {
-                                        th.signShowOperation(th);
-                                    }
+                                }
+                                if (th.signId && th.signId.length) {
+                                    th.signShowOperation(th);
                                 }
                                 if (th.isArea) {
                                     boundary();
