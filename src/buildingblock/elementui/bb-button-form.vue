@@ -79,7 +79,8 @@ import Util from '../../libs/util';
 
         data() {
             return {
-                formData:this.value,
+                formData:Object.assign({},this.value),
+                defaultFormData:Object.assign({},this.value),
                 formVisible:false,
             }
         },
@@ -138,12 +139,13 @@ import Util from '../../libs/util';
                             t.formVisible = false;
                         },
                         commit: function(formData){
-                            if(!t.buttonConfig||!t.buttonConfig.ds){
-                                t.formVisible = false;
-                            }
                             //解决form表单h输出值后不能关闭弹窗
                             setTimeout(()=>{t.$emit('input', formData)},0);
                             t.$emit('commit', formData);
+                            t.formData = t.defaultFormData;
+                            if(!t.buttonConfig||!t.buttonConfig.ds){
+                                t.formVisible = false;
+                            }
                         },
                         cancel:function(formData){
                             t.$emit('cancel',formData);
@@ -165,7 +167,7 @@ import Util from '../../libs/util';
                             t.formVisible = isShow;
                             if(!isShow){
                                 //下面清空表单数据后  关闭表单会清空表单项的值  暂时注释掉
-                                // t.formData = undefined;
+                                t.formData = t.defaultFormData;
                             }
                         }
                     }
