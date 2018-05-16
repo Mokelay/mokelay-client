@@ -51,7 +51,7 @@
                 */
             },
             value:{
-                type:[String,Date]
+                type:[String,Date,Array]
             },
             /*选择器类型
                 {
@@ -92,10 +92,10 @@
         },
         watch:{
             value(val){
-                this.valueBase = val
+                this.valueBase = val;
             },
             valueBase(val){
-                this.change(val);
+                //this.change(val);
             }
         },
         created: function () {
@@ -108,8 +108,15 @@
         },
         methods: {
             change:function(val){
-                this.$emit('input',val)
-                this.$emit('change',val)
+                const newDate = [];
+                //判断如果输出的是date对象则string化
+                const startTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
+                const endTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
+                newDate.push(startTime);
+                newDate.push(endTime);
+                this.valueBase = val;
+                this.$emit('input',newDate);
+                this.$emit('change',newDate);
             },
             //通过buzz处理PickerOptions，实现返回自定义函数
             getPickerOptions:function(){
