@@ -26,7 +26,7 @@
                             'default-active': t.defaultActive,
                             'unique-opened': false,
                             collapse: t.p_collapse,
-                            'default-openeds': t.defaultOpeneds,
+                            'default-openeds': t.p_defaultOpeneds,
                             'active-text-color':t.activeTextColor,
                             'text-color':t.textColor,
                             'background-color':t.backgroundColor
@@ -115,6 +115,7 @@
         data() {
             return {
                 p_collapse:this.collapse,//是否折叠
+                p_defaultOpeneds:this.defaultOpeneds,
                 items: this.fields,
                 newMenu: true,
                 menuList: [],
@@ -185,9 +186,45 @@
                         });
                         t.shouldUpdate = true;
                         t.items = newArr;
+                        //展开父级菜单
+                        t.openDefaultParentMenu();
                     }, function (code, msg) {
                     });
                 }
+            },
+            //打开默认的菜单父级
+            openDefaultParentMenu:function(){
+                let t=this;
+                if(t.defaultActive&&t.items){
+                    let result = {};
+                    t._openParentMenu(t,t.items,null,result);
+                    if(result[t.defaultActive]){
+                        t.p_defaultOpeneds = result[t.defaultActive];
+                    }
+                }
+            },
+            _openParentMenu:function(t,items,parentIndex,result){
+                items.forEach((item,index)=>{
+                    var menuIndex = item.url;
+                    if(menuIndex.indexOf("&")>=0&&t.p_urlLevel>=0){
+                        menuIndex = menuIndex.split("&").slice(0,t.p_urlLevel+1).join('&')
+                    }
+                    if(parentIndex){
+                        result[menuIndex] = _TY_Tool.deepClone(result[parentIndex]);
+                        result[menuIndex].push(menuIndex);
+                    }else{
+                        result[menuIndex] = [menuIndex];
+                    }
+
+                    if(menuIndex == t.defaultActive){
+                        //找到了子页面 ,把菜单路径返回
+                         return false;                       
+                    }else{
+                       if(item.children&&item.children.length>0){
+                            t._openParentMenu(t,item.children,menuIndex,result);
+                       } 
+                    }
+                });
             },
             createMenu: function (createElement, items) {
                 var t = this;
