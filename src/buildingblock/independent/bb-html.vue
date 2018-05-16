@@ -68,6 +68,9 @@
                     fields = (this.valueBase+"").match(reg2);
                 }
                 if(!fields||fields.length<=0){
+                    t.resultHtmlString = t.valueBase;
+                    //填充无html的string
+                    t.fillResultString(t.resultHtmlString);
                     return;
                 }
                 let map = [];

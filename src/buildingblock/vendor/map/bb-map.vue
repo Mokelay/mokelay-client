@@ -43,7 +43,7 @@
     import ditu6 from './img/ditu6.png';      // 6房地产    4004
 
     // 百度地图资源加载 
-    const resourcesUrl = ['//api.map.baidu.com/getscript?v=2.0&ak=qp02aVl6tUyI3xKRBCeBqH8mjBICZHgs&services=&s=1',
+    const resourcesUrl = ['//api.map.baidu.com/getscript?v=2.0&ak=syxdUSGLOZInXcF9rMMGjKQcY9kzEd7W&services=&s=1',
         '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
         '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js'];
 
@@ -707,7 +707,7 @@
             /**
              * 保存标记点
              */
-            signSaveClick() {debugger
+            signSaveClick() {
                 if (!this.overlays.length) {
 					this.$emit('signSaveClick', {
 						city_resource_id: this.$route.query.city_resource_id,
@@ -721,18 +721,39 @@
 
                 console.log(this.overlays[0] || this.overlays[0].ia);
 
-                const th = this;
-
-                for (let i = 0; i < th.overlays.length; i++) {
-                    this.saveSign.push({
-                        x: th.overlays[i].lat,
-                        y: th.overlays[i].lng
-                    });
-                }
-
+				let resultOverlay = [];
+				
+				function mergeOverlaysFun (overlay, type) {
+					if (type) {
+						for (let i = 0; i < overlay.length; i++) {
+							resultOverlay.push({
+								x: overlay[i].lat,
+								y: overlay[i].lng
+							});
+						}
+					} else {
+						resultOverlay.push({
+							x: overlay.lat,
+							y: overlay.lng
+						});
+					}
+				}
+											
+				for (let i = 0; i < this.overlays.length; i++) {
+					if (this.overlays[i][0] && this.overlays[i][0].ia) {
+						mergeOverlaysFun(this.overlays[i][0].ia, true);
+					} else if (this.overlays[i] && this.overlays[i].ia) {
+						mergeOverlaysFun(this.overlays[i].ia, true);
+					} else {
+						mergeOverlaysFun(this.overlays[i], false);
+					}					
+				}
+				
+				debugger
+                
                 let result = {
                     city_resource_id: this.$route.query.city_resource_id,
-                    signId: this.saveSign
+                    signId: resultOverlay
                 };
 
                 this.$emit('signSaveClick', result);
