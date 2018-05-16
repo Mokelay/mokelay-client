@@ -107,7 +107,7 @@
                     width: this.widthMap ? this.widthMap + '% !important' : '100%',
                     height: this.heightMap ? this.heightMap + 'vh !important' : '100vh',
 					position: 'relative',
-					left: this.widthMap ? (this.widthMap / 2) + '%' : 0
+					left: (this.widthMap > 0 && this.widthMap < 100) ? (100 - this.widthMap / 2) + '%' : 0
                 }
             }
         },
