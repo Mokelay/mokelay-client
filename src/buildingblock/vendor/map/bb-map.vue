@@ -709,7 +709,10 @@
              */
             signSaveClick() {debugger
                 if (!this.overlays.length) {
-					this.$emit('signSaveClick', null);
+					this.$emit('signSaveClick', {
+						city_resource_id: this.$route.query.city_resource_id,
+						signId: []
+					});
                     return;
                 }
                 this.deleteOtherDom();
