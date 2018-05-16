@@ -609,6 +609,7 @@
                             if(item.paramName==t.treeConfig.parentKey){
                                 hasParam=true;
                                 item.constant=t.treeParentId;
+                                item.variable = t.treeParentId;
                             }
                         });
                         if(!hasParam){
@@ -616,7 +617,8 @@
                             inputs.push({
                                 paramName: t.treeConfig.parentKey,
                                 valueType: "constant",
-                                constant: t.treeParentId
+                                constant: t.treeParentId,
+                                variable: t.treeParentId
                             });
                         }
                     }
