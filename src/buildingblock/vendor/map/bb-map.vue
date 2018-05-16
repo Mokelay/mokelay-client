@@ -1,6 +1,6 @@
 <template>
-    <div class="bb-map">
-        <div class="bb-map-content" :style="mapSize">
+    <div class="bb-map" :style="mapSize">
+        <div class="bb-map-content">
             <div :id="'mapContent'+_key" class="map-content" @click="routerMapClick">
 
             </div>
@@ -105,7 +105,7 @@
                 checkResourcesId: '',       // 选中资源id,
                 mapSize: {
                     width: this.widthMap ? this.widthMap + '% !important' : '100%',
-                    height: this.heightMap ? this.heightMap + '% !important' : '100%',
+                    height: this.heightMap ? this.heightMap + 'px !important' : '100vh',
                 }
             }
         },
@@ -789,7 +789,6 @@
 <style lang='less' scoped>
 
     .bb-map {
-        height: 100vh;
         .bb-map-content {
             margin: 0 auto;
             width: 100%;
