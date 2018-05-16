@@ -103,16 +103,17 @@
             },
             //添加css 样式
             _addCss:function(doc) {
+                let t=this;
                 var style = doc.createElement("style");
                 style.type = "text/css";
                 var code =".CodeMirror {"+
                             "   border: 1px solid #eee;"+
-                            "   height: auto;"+
+                            "   height: 98%;"+
                             "   min-height: 360px;"+
                             "}"+
                             ".CodeMirror-scroll {"+
                             "   min-height: 360px;"+
-                            "    height: auto;"+
+                            "    height:100%;"+
                             "    overflow-y: hidden;"+
                             "    overflow-x: auto;"+
                             "}";
@@ -167,12 +168,17 @@
                 	t.key = _TY_Tool.uuid(8);
                 }
                 t.dialogVisible = true;
+                let _height="";
+                if(t.fullscreen){
+                    _height = "calc(100vh - 205px)";
+                }
                 setTimeout(function(){
                 	if(!opened){
 	                	let iframe = document.createElement("iframe");
 		                iframe.id = "childFrame_"+t.key;
 		                iframe.width="100%";
 		                iframe.style['min-height']="380px";
+                        iframe.style['height']=_height;
 		                t.$refs['frameBox'].appendChild(iframe);
 					}
                     let frame = document.getElementById('childFrame_'+t.key);
