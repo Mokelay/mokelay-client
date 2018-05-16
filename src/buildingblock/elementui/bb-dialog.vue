@@ -193,8 +193,11 @@
 <style lang="less">
     .bb-dialog{
         .el-dialog__body{
-            max-height: 70vh;
+            max-height: 100vh;
             overflow-y: auto;
+        }
+        .el-dialog.is-fullscreen{
+            overflow-y:hidden;
         }
     }
 </style>
