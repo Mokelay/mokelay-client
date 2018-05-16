@@ -170,7 +170,8 @@ import Util from '../../libs/util';
                                 t.formData = t.defaultFormData;
                             }
                         }
-                    }
+                    },
+                    key:_TY_Tool.uuid()
                 },[form]);
                 return dialog;
             },
