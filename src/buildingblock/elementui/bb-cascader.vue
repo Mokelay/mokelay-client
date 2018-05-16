@@ -13,6 +13,7 @@
         :props="p_casProps"
         v-model="selectedOptions"
         ref='cas'
+        :title="cascaderTitle"
       ></el-cascader>
     </div>
 </template>
@@ -144,7 +145,8 @@
                 selectedOptions:[],
                 itemVal:'',//当前点击的记录    用于接口配置
                 external:{},//外部参数
-                p_placeholder:this.placeholder
+                p_placeholder:this.placeholder,
+                cascaderTitle:""//需要title显示的内容，针对长度过程隐藏后需要能全部显示
             }
         },
         computed:{
@@ -174,9 +176,22 @@
         mounted:function(){
         },
         methods: {
+          setCascaderTitle:function(){
+            let t=this;
+            if(!this.$refs['cas']){
+              t.cascaderTitle = "";
+            }
+            let currentLabels = this.$refs['cas'].currentLabels;
+            if(currentLabels&&currentLabels.length>0){
+              t.cascaderTitle = currentLabels.join("/");
+            }else{
+              t.cascaderTitle = "";
+            }
+          },
             loadValue:function(val){
               let t=this;
               if(!val){
+                 t.setCascaderTitle();
                 return;
               }
               let vals=val;
@@ -193,6 +208,9 @@
                     },300);
                   }
               });
+              setTimeout(()=>{
+                t.setCascaderTitle();
+              },1000);
             },
             linkage:function(...data){
               let t=this;
