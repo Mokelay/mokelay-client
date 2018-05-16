@@ -339,7 +339,7 @@
                         },
                         ref: ref,
                         style: {
-                            'width': field['attributes']['width'] || '100%',
+                            'width': field['attributes']['width'] || 'auto',
                             'margin-bottom':field['attributes']['itemMargin'] || '10px',
                             'box-sizing': 'border-box;'
                         },
