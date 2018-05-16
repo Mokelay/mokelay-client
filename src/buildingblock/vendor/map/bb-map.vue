@@ -707,8 +707,9 @@
             /**
              * 保存标记点
              */
-            signSaveClick() {
+            signSaveClick() {debugger
                 if (!this.overlays.length) {
+					this.$emit('signSaveClick', null);
                     return;
                 }
                 this.deleteOtherDom();
@@ -718,12 +719,11 @@
                 console.log(this.overlays[0] || this.overlays[0].ia);
 
                 const th = this;
-                let overlays = this.overlays[0].ia;
 
-                for (let i = 0; i < overlays.length; i++) {
+                for (let i = 0; i < th.overlays.length; i++) {
                     this.saveSign.push({
-                        x: overlays[i].lat,
-                        y: overlays[i].lng
+                        x: th.overlays[i].lat,
+                        y: th.overlays[i].lng
                     });
                 }
 
