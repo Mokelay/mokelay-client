@@ -108,13 +108,16 @@
         },
         methods: {
             change:function(val){
-                const newDate = [];
+                let newDate = val;
                 //判断如果输出的是date对象则string化
-                const startTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
-                const endTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
-                newDate.push(startTime);
-                newDate.push(endTime);
-                this.valueBase = val;
+                if(typeof val == "object"){
+                    newDate = [];
+                    const startTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
+                    const endTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
+                    newDate.push(startTime);
+                    newDate.push(endTime);
+                }
+                this.valueBase = newDate;
                 this.$emit('input',newDate);
                 this.$emit('change',newDate);
             },
