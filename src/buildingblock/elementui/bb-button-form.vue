@@ -153,7 +153,22 @@ import Util from '../../libs/util';
                     ref:"form",
                     key:formKey
                 },[]);
-                const dialog = createElement('bb-dialog',{props:{closeOnClickModal:t.closeOnClickModal,modalAppendToBody:true,appendToBody:true,isShow:t.formVisible,size:"middle"},on:{'update:isShow':(isShow)=>{t.formVisible = isShow;}}},[form]);
+                const dialog = createElement('bb-dialog',{
+                    props:{
+                        closeOnClickModal:t.closeOnClickModal,
+                        modalAppendToBody:true,
+                        appendToBody:true,
+                        isShow:t.formVisible,
+                        size:"middle"
+                    },on:{
+                        'update:isShow':(isShow)=>{
+                            t.formVisible = isShow;
+                            if(!isShow){
+                                t.formData = undefined;
+                            }
+                        }
+                    }
+                },[form]);
                 return dialog;
             },
             setting:function(){

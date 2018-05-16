@@ -79,6 +79,7 @@
         watch: {
             value(val){
                 const t = this;
+                t.realFileList=[];
                 t.setFileList(val,t);
             }
         },
@@ -142,22 +143,24 @@
             },
             handleFileList:function(emit,fileList,file){
                 const t = this;
+                let resultFileList='';
                 //无handle情况下正常输出
                 if(t.handle){
                     _TY_Tool.loadBuzz(t.handle, function(code) {
-                        fileList = eval(code);
-                        if(fileList instanceof Array && fileList.length<=0){
-                            fileList='';
+                        resultFileList = eval(code);
+                        if(resultFileList instanceof Array && resultFileList.length<=0){
+                            resultFileList='';
                         }
-                        t.$emit(emit,fileList);
-                        t.$emit('input',fileList);
+                        t.$emit(emit,resultFileList);
+                        t.$emit('input',resultFileList);
                     });
                 }else{
                     if(fileList instanceof Array && fileList.length<=0){
-                        fileList='';
+                        resultFileList='';
                     }
-                    t.$emit(emit,fileList);
-                    t.$emit('input',fileList);
+                    resultFileList = _TY_Tool.deepClone(fileList);
+                    t.$emit(emit,resultFileList);
+                    t.$emit('input',resultFileList);
                 }
             },
             //回填图片
@@ -177,9 +180,11 @@
                                 name:name,
                                 fullName:fullName
                             }
-                            if(t.realFileList.indexOf(item)>=0){
-                                //已存在
-                                return ture;
+                            //这个文件已经存在，就直接返回
+                            for(let i=0;i<t.realFileList.length;i++){
+                                if(t.realFileList[i].fullName == fullName){
+                                    return true;
+                                }
                             }
                             t.realFileList.push(item);
                         })

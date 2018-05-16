@@ -1,7 +1,7 @@
 <template>
     <div class="bb-map">
         <div class="bb-map-content" :style="mapSize">
-            <div id="mapContent" class="map-content" @click="routerMapClick">
+            <div :id="'mapContent'+_key" class="map-content" @click="routerMapClick">
 
             </div>
 
@@ -109,12 +109,15 @@
                 }
             }
         },
+        created:function(){
+            let th =this;
+            th._key = _TY_Tool.uuid();
+        },
         mounted() {
             let th = this;
-
             try {
                 Util.reloadJS(resourcesUrl).then(function () {
-                    let map = new BMap.Map("mapContent");
+                    let map = new BMap.Map("mapContent"+th._key);
 
                     // 添加地图类型控件
                     map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
@@ -556,7 +559,7 @@
              * 修改原百度地图工具箱事件
              */
             modifySignImageClick(th) {
-                let obj = th.getDom("mapContent");
+                let obj = th.getDom("mapContent"+th._key);
                 th.deleteOtherDom();
                 obj.addEventListener("click", function(ev){
 
