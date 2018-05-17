@@ -79,8 +79,7 @@ import Util from '../../libs/util';
 
         data() {
             return {
-                formData:Object.assign({},this.value),
-                defaultFormData:Object.assign({},this.value),
+                formData:this.value,
                 formVisible:false,
                 dialogKey:_TY_Tool.uuid()
             }
@@ -144,7 +143,6 @@ import Util from '../../libs/util';
                             //解决form表单h输出值后不能关闭弹窗
                             setTimeout(()=>{t.$emit('input', formData)},0);
                             t.$emit('commit', formData);
-                            t.formData = t.defaultFormData;
                             if(!t.buttonConfig||!t.buttonConfig.ds){
                                 t.formVisible = false;
                                 t.dialogKey = _TY_Tool.uuid();
@@ -157,7 +155,7 @@ import Util from '../../libs/util';
                         }
                     },
                     ref:"form",
-                    key:formKey
+                    
                 },[]);
                 const dialog = createElement('bb-dialog',{
                     props:{
@@ -171,7 +169,6 @@ import Util from '../../libs/util';
                             t.formVisible = isShow;
                             if(!isShow){
                                 //下面清空表单数据后  关闭表单会清空表单项的值  暂时注释掉
-                                t.formData = t.defaultFormData;
                                 t.dialogKey = _TY_Tool.uuid();
                             }
                         }
@@ -183,6 +180,7 @@ import Util from '../../libs/util';
             setting:function(){
                 var t = this;
                 t.formVisible = true;
+                t.formData = t.value;
             },
             loadChildBB(){
                 let t=this;
@@ -192,7 +190,7 @@ import Util from '../../libs/util';
             showDialog(formData){
                 const t = this;
                 t.formData = formData;
-                t.setting();
+                t.formVisible = true;
             }
         }
     }
