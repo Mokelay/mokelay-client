@@ -82,6 +82,7 @@ import Util from '../../libs/util';
                 formData:Object.assign({},this.value),
                 defaultFormData:Object.assign({},this.value),
                 formVisible:false,
+                dialogKey:_TY_Tool.uuid()
             }
         },
         computed: {
@@ -137,6 +138,7 @@ import Util from '../../libs/util';
                         "button-finish":function(button, valueobj,map){
                             t.$emit('button-finish', button, valueobj);
                             t.formVisible = false;
+                            t.dialogKey = _TY_Tool.uuid();
                         },
                         commit: function(formData){
                             //解决form表单h输出值后不能关闭弹窗
@@ -145,11 +147,13 @@ import Util from '../../libs/util';
                             t.formData = t.defaultFormData;
                             if(!t.buttonConfig||!t.buttonConfig.ds){
                                 t.formVisible = false;
+                                t.dialogKey = _TY_Tool.uuid();
                             }
                         },
                         cancel:function(formData){
                             t.$emit('cancel',formData);
                             t.formVisible = false;
+                            t.dialogKey = _TY_Tool.uuid();
                         }
                     },
                     ref:"form",
@@ -168,10 +172,11 @@ import Util from '../../libs/util';
                             if(!isShow){
                                 //下面清空表单数据后  关闭表单会清空表单项的值  暂时注释掉
                                 t.formData = t.defaultFormData;
+                                t.dialogKey = _TY_Tool.uuid();
                             }
                         }
                     },
-                    key:_TY_Tool.uuid()
+                    key:t.dialogKey
                 },[form]);
                 return dialog;
             },
