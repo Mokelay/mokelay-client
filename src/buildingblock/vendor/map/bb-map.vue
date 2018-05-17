@@ -43,8 +43,7 @@
     import ditu6 from './img/ditu6.png';      // 6房地产    4004
 
     // 百度地图资源加载 
-    const resourcesUrl = [
-        '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
+    const resourcesUrl = ['//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
         '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js'];
 
     export default {
