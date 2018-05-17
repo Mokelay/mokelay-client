@@ -171,7 +171,7 @@ import Util from '../../libs/util';
                             }
                         }
                     },
-                    key:_TY_Tool.uuid()
+                    // key:_TY_Tool.uuid()
                 },[form]);
                 return dialog;
             },
