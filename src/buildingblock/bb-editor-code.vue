@@ -10,7 +10,7 @@
               :fullscreen="fullscreen"
               :before-close="handleClose">
               <div ref="frameBox">
-                    <el-button type="primary" @click="jsonFormat">JSON格式化</el-button>
+                    <el-button type="primary" @click="jsonFormat(true)">JSON格式化</el-button>
               </div>
               <!--   <iframe ref="childFrame" id="childFrame" width="100%" height="100%">
                 </iframe> -->
@@ -68,7 +68,7 @@
         },
         methods: {
             //json格式化
-            jsonFormat:function(){
+            jsonFormat:function(showMessage){
                 let t=this;
                 let frame = document.getElementById('childFrame_'+t.key);
                 if(frame.contentWindow.editor){
@@ -79,10 +79,12 @@
                         //如果不能json转换，说明不是json格式
                         JSON.parse(data);
                     }catch(e){
-                        t.$message({
-                            type: 'info',
-                            message: "数据非JSON格式或者JSON有错!"
-                        });
+                        if(showMessage){
+                            t.$message({
+                                type: 'info',
+                                message: "数据非JSON格式或者JSON有错!"
+                            });
+                        }
                         return;
                     }
                     editor.setValue(_TY_Tool.jsonFormat(data));
@@ -156,7 +158,12 @@
                 setTimeout(function(){
                     let frame = document.getElementById('childFrame_'+t.key);
                     frame.contentWindow.setEditorVal(t.p_value);
+
                 },300);
+                setTimeout(()=>{
+                    //如果能json格式化就显示格式化后的数据
+                     t.jsonFormat();
+                },600);
             },
             //打开弹窗
             openDialog:function(){
