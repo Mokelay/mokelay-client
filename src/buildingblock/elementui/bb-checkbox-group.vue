@@ -54,6 +54,11 @@ import Util from '../../libs/util';
                         size:""
                     };
                 }
+            },
+            //第一个是不是All，如果是All 应该和其他几项互斥,默认不是，主要用于checkbox作为搜索条件
+            firstIsAll:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -100,6 +105,13 @@ import Util from '../../libs/util';
                     result = str;
                 }else{
                     if(str){
+                        if(t.p_options&&t.p_options.length>0){
+                            for(let i=0;i<t.p_options.length;i++){
+                                if(t.p_options[i].value==str){
+                                    return [str];
+                                }
+                            }
+                        }
                         let arrayTemp = str.split(',');
                         arrayTemp.forEach(function(item){
                             result.push(item);
@@ -111,6 +123,22 @@ import Util from '../../libs/util';
            _changeToStr(array){
                 let t =this;
                 let result = '';
+                if(array.length>1&&t.firstIsAll){
+                    //如果选择了多个checkBox,并且第一项是全部，应该和其他几项互斥
+                    array.forEach((item,index)=>{
+                        let _index = index==0?index+1:index-1;
+                        if(item==''||item=='all'||item=='ALL'||item=='All'||item.indexOf(array[_index])>=0){
+                            if(index==array.length-1){
+                                //表示最后一个点击全部，则清空其他选项
+                                array = [];
+                                result = [item];
+                            }else{
+                                array.splice(index,1);
+                            }
+                            return false;
+                        }
+                    });
+                }
                 if(array&&array.length>0){
                     array.forEach(function(item,index){
                         if(index>0){
@@ -119,6 +147,8 @@ import Util from '../../libs/util';
                         result=result+item;
                     });
                 }
+                //设置p_value
+                this.p_value = this._changeToArray(result);
                 return result;
            } 
         }
