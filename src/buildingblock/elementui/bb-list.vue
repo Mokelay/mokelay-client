@@ -958,7 +958,8 @@
                     if(t.editConfig&&t.editConfig.editDs){
                         ds = t.editConfig.editDs[dsName];
                     }
-                    if (ds) {
+                    const dsArr = Object.keys(ds);
+                    if (dsArr.length) {
                         t.loading = true;
                         Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
                             t.loading = false;
