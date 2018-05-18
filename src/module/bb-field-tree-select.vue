@@ -59,8 +59,10 @@
                     type: 'info',
                     message: '请先选择模型'
                 });
-                //关闭弹窗
-                t.$emit("tree-commit", null);
+                setTimeout(()=>{
+                    //关闭弹窗
+                    t.$emit("tree-commit", null);
+                },500);
             }else{
                 t.loadData();
             }
