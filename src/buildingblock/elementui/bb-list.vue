@@ -536,7 +536,12 @@
                     let result = [];//多选返回字符串
                     if(multiple){
                         //如果是多选，转换成数组
-                        columnVal = JSON.parse(columnVal);
+                        // columnVal = JSON.parse(columnVal);
+                        try{
+                          columnVal = JSON.parse(columnVal);
+                        }catch(e){
+                          columnVal=columnVal.split(",");
+                        }
                     }
                     if(selectProp.ds&&selectProp.ds.api){
                         const opts = _TY_Root["_TY_"+selectProp.ds.api];
