@@ -41,10 +41,10 @@
     import ditu4 from './img/ditu4.png';      // 4其他      4006
     import ditu5 from './img/ditu5.png';      // 5家具自营   4001
     import ditu6 from './img/ditu6.png';      // 6房地产    4004
-    import $JQ from 'jquery';
 
     // 百度地图资源加载 
     const resourcesUrl = [
+        '//api.map.baidu.com/getscript?v=2.0&ak=syxdUSGLOZInXcF9rMMGjKQcY9kzEd7W',
         '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
         '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js'];
 
@@ -119,74 +119,72 @@
         mounted() {
             let th = this;
             try {
-                $JQ.getScript('//api.map.baidu.com/getscript?v=2.0&ak=syxdUSGLOZInXcF9rMMGjKQcY9kzEd7W', () => {
-                    Util.reloadJS(resourcesUrl).then(function () {
-                        let map = new BMap.Map("mapContent"+th._key);
+                Util.reloadJS(resourcesUrl).then(function () {
+                    let map = new BMap.Map("mapContent"+th._key);
 
-                        // 添加地图类型控件
-                        map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
-                        // 开启鼠标滚轮缩放      
-                        map.enableScrollWheelZoom(true);
+                    // 添加地图类型控件
+                    map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
+                    // 开启鼠标滚轮缩放      
+                    map.enableScrollWheelZoom(true);
 
-                        /**
-                        * 获取数据
-                        */
-                        if (th.ds) {
-                            th.loading = true;
-                            Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
-                                data.forEach(function (item) {
-                                    var list = item['value'];
+                    /**
+                    * 获取数据
+                    */
+                    if (th.ds) {
+                        th.loading = true;
+                        Util.getDSData(th.ds, _TY_Tool.buildTplParams(th), function (data) {
+                            data.forEach(function (item) {
+                                var list = item['value'];
 
-                                    th.province = list.province;
-                                    th.town = list.town;
-                                    th.area = list.area;
-                                    // 设置地图显示的城市 此项是必须设置的
-                                    map.centerAndZoom(th.area || th.town || list.province, 11); 
+                                th.province = list.province;
+                                th.town = list.town;
+                                th.area = list.area;
+                                // 设置地图显示的城市 此项是必须设置的
+                                map.centerAndZoom(th.area || th.town || list.province, 11); 
 
-                                    th.searchOperation(th);
+                                th.searchOperation(th);
 
-                                    // 包含搜索 标记功能
-                                    if (th.isSign) {
-                                        console.log('isSign : ' + th.isSign);
-                                        th.signOperation(th);
-                                        
-                                        th.modifySignImageClick(th);
+                                // 包含搜索 标记功能
+                                if (th.isSign) {
+                                    console.log('isSign : ' + th.isSign);
+                                    th.signOperation(th);
+                                    
+                                    th.modifySignImageClick(th);
 
-                                        th.showSignStyle();
-                                    }
-                                    if (th.signId && th.signId.length) {
-                                        th.signShowOperation(th);
-                                    }
-                                    if (th.isArea) {
-                                        boundary();
-                                    }
-                                });
-                                th.loading = false;
-                            }, function (code, msg) {
-                                th.loading = false;
+                                    th.showSignStyle();
+                                }
+                                if (th.signId && th.signId.length) {
+                                    th.signShowOperation(th);
+                                }
+                                if (th.isArea) {
+                                    boundary();
+                                }
                             });
-                        }
+                            th.loading = false;
+                        }, function (code, msg) {
+                            th.loading = false;
+                        });
+                    }
 
-                        function boundary () {
-                            th.loading = true;
-                            Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
-                                data.forEach(function (item) {
-                                    var list = item['value'];
+                    function boundary () {
+                        th.loading = true;
+                        Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
+                            data.forEach(function (item) {
+                                var list = item['value'];
 
-                                    th.pointData = list.list;
+                                th.pointData = list.list;
 
-                                    th.getBoundary(th);
+                                th.getBoundary(th);
 
-                                    th.addPoint(th, list.list);
-                                });
-                                th.loading = false;
-                            }, function (code, msg) {
-                                th.loading = false;
+                                th.addPoint(th, list.list);
                             });
-                        }
+                            th.loading = false;
+                        }, function (code, msg) {
+                            th.loading = false;
+                        });
+                    }
 
-                        th.map = map;
-                    });
+                    th.map = map;
                 });
             } catch(e) {
                 console.log(e);
