@@ -23,7 +23,7 @@ window._TY_Home = "/home";
 if(_env['home']){
     window._TY_Home = _env['home'];
 }
-
+window._TY_Platform = "PC";
 
 //定制化VUE
 import bbcustom from './custom/bb-custom';
