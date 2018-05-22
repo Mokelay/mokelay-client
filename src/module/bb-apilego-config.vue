@@ -62,8 +62,15 @@
         mounted() {
         },
         methods: {
+            //clear 清空oi 输入输出
+            clearForm:function(){
+                let t=this;
+                t._refreshBase(true);
+                t._refreshIf(true);
+                t._refreshOf(true);
+            },
             //刷新 基础
-            _refreshBase: function () {
+            _refreshBase: function (clear) {
                 let t = this;
                 t.dsList = [
                     {
@@ -127,9 +134,13 @@
                     t.$refs['oi'].loadValue(oiData);
                     //刷新描述
                     t.apiLegoDes = t.external.linkage[0].data.description || "";
+                    if(clear){
+                        t.$refs['oi'].loadValue([]);
+                        t.apiLegoDes = "";
+                    }
                 },10);
             },
-            _refreshIf: function () {
+            _refreshIf: function (clear) {
                 let t = this;
                 t.ifItemDs = {
                     "api": "list-ifdByLegoAlias",
@@ -150,12 +161,17 @@
                     ],
                     "category": "config"
                 };
+                
                 t.buildIfCollopaseData();
                 setTimeout(function () {
+                    if(clear){
+                        t.ifItemDs ={}; 
+                        t.ifCollapseData = [];
+                    }
                     t.$refs['_if'].buildTitle();
                 }, 300)
             },
-            _refreshOf: function () {
+            _refreshOf: function (clear) {
                 let t = this;
                 t.ofItemDs = {
                     "api": "list-ofdByLegoAlias",
@@ -176,8 +192,13 @@
                     ],
                     "category": "config"
                 };
+                
                 t.buildOfCollopaseData();
                 setTimeout(function () {
+                    if(clear){
+                        t.ofItemDs ={}; 
+                        t.ofCollapseData = [];
+                    }
                     t.$refs['_of'].buildTitle();
                 }, 300)
             },

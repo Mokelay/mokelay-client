@@ -117,17 +117,17 @@
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside  width="20%" :style="{background:realBgColor.leftAside}">
+                <el-aside  width="20%" :style="p_layoutObject.leftStyle">
                     <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
-                <el-main :style="{background:realBgColor.main}">
+                <el-main :style="p_layoutObject.mainStyle">
                     <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-aside width="30%" :style="{background:realBgColor.rightAside}">
+                <el-aside width="30%" :style="p_layoutObject.rightStyle">
                     <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
-            <el-footer :style="{background:realBgColor.footer}">
+            <el-footer :style="p_layoutObject.footerStyle">
                 <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
             </el-footer>
         </el-container>

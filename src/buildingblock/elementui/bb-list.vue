@@ -1099,6 +1099,8 @@
                                 t.canEditRow=scope['$index'];
                             }
                             t.adding = false;
+                            //总数加一
+                            t.totalItems +=1;
                         });
                     }
                 }else{
@@ -1134,6 +1136,8 @@
                         t.cellDSSubmit(t.tableData[index],'remove').then(function(){
                             t.canEditRow = null;
                             t.tableData.splice(index,1);
+                            //总数减一
+                            t.totalItems -=1;
                             t.$emit('input',t._returnStringOrArray());
                             t.$emit('change',t._returnStringOrArray());
                             t.$emit('remove',t._returnStringOrArray());
