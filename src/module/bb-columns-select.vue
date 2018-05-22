@@ -12,7 +12,6 @@
                 type:[Array,String]
             }
         },
-
         data() {
             return {
                 fields: [{
@@ -527,6 +526,87 @@
                                  "valueKey": "data_list"
                             }]
                          }
+                    }
+                }, {
+                    name: "表单验证",
+                    attributeName: "rules",
+                    hide: true,
+                    et: "bb-array",
+                    props: {
+                        defaultFormData: {
+                            required: false,
+                            type: "string",
+                            trigger: "blur"
+                        },
+                        fields: [{
+                            name: "是否必填",
+                            attributeName: "required",
+                            et: "bb-editor-switch",
+                            rules: [],
+                            props: {}
+                        }, {
+                            name: "数据类型",
+                            attributeName: "type",
+                            et: "bb-select",
+                            rules: [],
+                            props: {
+                                fields: [{
+                                    text: "整数(number)",
+                                    value: "number"
+                                }, {
+                                    text: "浮点数(Double)",
+                                    value: "double"
+                                }, {
+                                    text: "布尔值(Boolean)",
+                                    value: "boolean"
+                                }, {
+                                    text: "字符串(String)",
+                                    value: "string"
+                                }, {
+                                    text: "日期(Date)",
+                                    value: "date"
+                                }, {
+                                    text: "日期时间(DateTime)",
+                                    value: "time"
+                                }, {
+                                    text: "对象(Object)",
+                                    value: "object"
+                                }, {
+                                    text: "数组(Array)",
+                                    value: "array"
+                                }, {
+                                    text: "文件(File)",
+                                    value: "multipart"
+                                }]
+                            }
+                        }, {
+                            name: "提示",
+                            attributeName: "message",
+                            et: "bb-input",
+                            rules: [],
+                            props: {}
+                        }, {
+                            name: "最小长度",
+                            attributeName: "min",
+                            et: "bb-input-number",
+                            rules: [],
+                            props: {}
+                        }, {
+                            name: "最大长度",
+                            attributeName: "max",
+                            et: "bb-input-number",
+                            rules: [],
+                            props: {}
+                        }, {
+                            name: "自定义验证方法",
+                            attributeName: "validatePass",
+                            et: "bb-editor-code",
+                            group: "额外选项",
+                            rules: [],
+                            props: {
+                                returnObj: true
+                            }
+                        }]
                     }
                 }, {
                     name: '编辑器属性',
