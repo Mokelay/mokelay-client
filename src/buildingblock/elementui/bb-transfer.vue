@@ -28,7 +28,10 @@
                 default: 'label'
             },
             staticData: {
-                type: Array
+                type: Array,
+                default:function(){
+                    return []
+                }
             },
             ds: {
                 type: Object
@@ -39,6 +42,7 @@
         },
         data() {
             return {
+                bb_value_string:'',
                 bb_value: [],
                 datas: []
             }
@@ -62,7 +66,8 @@
         computed: {},
         mounted: function () {
             let t = this;
-            _TY_Tool.buildDefaultValTpl(t, "bb_value");
+            _TY_Tool.buildDefaultValTpl(t, "bb_value_string");
+            t.bb_value = eval(t.bb_value_string);
         },
         methods: {
             getData(node) {
@@ -71,7 +76,7 @@
                     Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
                             const {dataKey, value} = item;
-                            t[dataKey] = value;
+                            t.datas = value;
                         });
                     }, function (code, msg) {
                     });

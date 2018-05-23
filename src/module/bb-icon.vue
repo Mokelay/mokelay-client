@@ -1,5 +1,12 @@
 <template>
     <div class="p20">
+        <div class="searchInput" style="margin-top: 15px;">
+          <el-input placeholder="请输入搜索条件" v-model="keywords">
+            <el-button slot="append" icon="el-icon-search" @click="getData">
+            搜索
+            </el-button>
+          </el-input>
+        </div>
         <ul class="ty-icon-ul">
 
             <li class="ty-icon-li" v-for="(item,index) in tableData" @click="iconClick(item)">
@@ -28,7 +35,9 @@
                     return {
                         api: "/ty-list-icon",
                         method: "get",
-                        inputs: [],
+                        inputs: [
+                            {paramName:'keywords',valueType:"template",variable:"<%=bb.keywords%>"}
+                        ],
                         outputs: [
                             {dataKey: "tableData", valueKey: "data_list"}
                         ]
@@ -38,7 +47,8 @@
         },
         data() {
             return {
-                tableData: []
+                tableData: [],
+                keywords:''
             }
         },
         watch: {
@@ -148,5 +158,10 @@
     }
     .p20 {
         padding: 20px;
+    }
+    .searchInput{
+        max-width: 400px;
+        margin-right: 20px;
+        margin-bottom: 15px;
     }
 </style>

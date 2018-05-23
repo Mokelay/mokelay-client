@@ -148,7 +148,7 @@
         mounted: function () {
         },
         methods: {
-            commit() {
+            commit(data) {
                 const t = this;
                 let checkedNode = t.$refs.tree.getCheckedNodes();
                 let checkedNodeVal = [];//只有配置的主键字段
@@ -167,10 +167,10 @@
                 } else {
                     result = checkedNodeVal.join(",");
                 }
-                this.$emit('input', result);
+                this.$emit('input', result,data);
 
                 //往上级传送选择的字段
-                this.$emit("change", result);
+                this.$emit("change", result,data);
             },
             uncheckedKeys(keys) {
                 const treeInstance = this.$refs.tree;
@@ -196,7 +196,7 @@
                     }
                 }
 
-                this.commit();
+                this.commit(data);
             },
             //获取根节点数据
             getRootData() {

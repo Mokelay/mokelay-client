@@ -56,6 +56,7 @@
                     :childNumKey="treeConfig.childNumKey"
                     :parentKey="treeConfig.parentKey"
                     :prop="treeConfig.prop"
+                    :indent-size="20"
                     :label="treeConfig.label"></el-table-tree-column>
                 <el-table-column 
                     v-for="(column,key) in realColumns" 
@@ -133,6 +134,7 @@
                         </div>
                         <!-- 编辑状态 -->
                         <bb v-if="scope['$index'] == canEditRow && column['et'] && onlyAddEditShow(scope,column,true) || editAll" v-model="scope['row'][column.prop]" :ref="column['prop']" :key="scope['column']['id']" :config="column['etProp']" :alias="column['et']" @change="cellChange" :parentData="scope"></bb>
+                        <span v-if="validateMessageObj[column.prop + '_' + scope.$index]" class="table-item__error">{{validateMessageObj[column.prop + '_' + scope.$index]}}</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -153,7 +155,8 @@
 
 <script>
     import Util from '../../libs/util';
-    import Vue from 'vue'
+    import Vue from 'vue';
+    import AsyncValidator from 'async-validator';
 
     export default {
         name: 'bb-list',
@@ -395,7 +398,11 @@
                 addButton:false, //对添加按钮进行管理
                 canRender:false,//通过这个data来操作render函数执行,主要用来局部刷新bb-select中文填充
                 haveEditor:false,
-                editAll:false
+                editAll:false,
+                validateState: '',
+                validateMessage: '',
+                validateDisabled: false,
+                validateMessageObj:{}
             }
         },
         watch: {
@@ -408,7 +415,10 @@
                 if(!this.editAll){
                     this.tableData = newData;
                 }
-            }
+            },
+            validateMessageObj(val){
+
+            },
         },
         created: function () {
             const t = this;
@@ -536,7 +546,12 @@
                     let result = [];//多选返回字符串
                     if(multiple){
                         //如果是多选，转换成数组
-                        columnVal = JSON.parse(columnVal);
+                        // columnVal = JSON.parse(columnVal);
+                        try{
+                          columnVal = JSON.parse(columnVal);
+                        }catch(e){
+                          columnVal=columnVal.split(",");
+                        }
                     }
                     if(selectProp.ds&&selectProp.ds.api){
                         const opts = _TY_Root["_TY_"+selectProp.ds.api];
@@ -944,8 +959,20 @@
                     // t.$emit('change',t._returnStringOrArray());
                     //通过接口提交修改
                     //t.cellDSSubmit(t.tableData[scope['$index']],t.editConfig.editDs.update);
+                    t.onFieldChange(scope);
+                }
+            },            //编辑状态，更新数据
+            cellBlur:function(val,scope){
+                const t = this;
+                if(scope){
+                    //修改
+                    const prop = scope.column.property;
+                    //实现添加事件，配合bb-form实现表单v-model
+                    t.$set(t.tableData[scope['$index']],prop,val);
+                    t.onFieldBlur(scope);
                 }
             },
+
             /*通过DS保存修改行
                 @newRow 当前修改数据的整行数据
                 @ds 请求接口配置
@@ -958,7 +985,8 @@
                     if(t.editConfig&&t.editConfig.editDs){
                         ds = t.editConfig.editDs[dsName];
                     }
-                    if (ds) {
+                    const dsArr = ds?Object.keys(ds):[];
+                    if (dsArr.length) {
                         t.loading = true;
                         Util.getDSData(ds, _TY_Tool.buildTplParams(t,{"row-data":newRow,"rowData":newRow}), function (map) {
                             t.loading = false;
@@ -1029,7 +1057,14 @@
                         t.cellDown(scope);
                         break;
                     case 'editAll':
-                        t.rowAdd();
+                        t.validateRow(scope,(valid)=>{
+                            if(valid){
+                                t.rowAdd();
+                            }else{
+                                t.tableData.push({});
+                                t.tableData.splice(t.tableData.length-1,1); 
+                            }
+                        });
                         break;
                 }
             },
@@ -1065,6 +1100,8 @@
                                 t.canEditRow=scope['$index'];
                             }
                             t.adding = false;
+                            //总数加一
+                            t.totalItems +=1;
                         });
                     }
                 }else{
@@ -1100,6 +1137,8 @@
                         t.cellDSSubmit(t.tableData[index],'remove').then(function(){
                             t.canEditRow = null;
                             t.tableData.splice(index,1);
+                            //总数减一
+                            t.totalItems -=1;
                             t.$emit('input',t._returnStringOrArray());
                             t.$emit('change',t._returnStringOrArray());
                             t.$emit('remove',t._returnStringOrArray());
@@ -1154,6 +1193,101 @@
             filterHandler(column, value, row) {
                 const property = column['prop'];
                 return row[property] === value;
+            },
+            //全编辑表单验证
+            validate(trigger,scope,callback = function(){}) {
+                const t = this;
+                this.validateDisabled = false;
+                var rules = this.getFilteredRule(trigger,scope);
+                if ((!rules || rules.length === 0) && this.required === undefined) {
+                    callback();
+                    return true;
+                }
+
+                this.validateState = 'validating';
+
+                var descriptor = {};
+                if (rules && rules.length > 0) {
+                    rules.forEach(rule => {
+                        delete rule.trigger;
+                    });
+                }
+
+                descriptor[scope.column.property] = rules;
+                var validator = new AsyncValidator(descriptor);
+                var model = {};
+                model[scope.column.property] = scope.row[scope.column.property] || null;
+                validator.validate(model, { firstFields: true }, (errors, fields) => {
+                    var itemName = scope.column.property + '_' + scope.$index
+                    t.validateMessageObj[itemName] = errors ? errors[0].message : '';
+                    callback(t.validateMessageObj[itemName]);
+                });
+              },
+            clearValidate() {
+                this.validateState = '';
+                this.validateMessage = '';
+                this.validateDisabled = false;
+            },
+            getRules(scope) {
+                var selfRules = [];
+                this.realColumns.forEach((col,key)=>{
+                    if(col.prop == scope.column.property){
+                        selfRules = col.rules || [];
+                    }
+                });
+                return [].concat(selfRules);
+            },
+            getFilteredRule(trigger,scope) {
+                var rules = this.getRules(scope);
+                return rules.filter(rule => {
+                    return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
+                });
+            },
+            onFieldBlur(scope) {
+                this.validate('blur',scope);
+            },
+            onFieldChange(scope) {
+                if (this.validateDisabled) {
+                    this.validateDisabled = false;
+                    return;
+                }
+                this.validate('change',scope);
+            },
+            //整行校验，点击新增行时执行
+            validateRow(scope,callback) {
+                const t = this;
+                const rowKey = Object.keys(scope.row);
+                if (!rowKey.length) {
+                    console.warn('请按先填写当前行');
+                    //return;
+                }
+
+                let promise;
+
+                let valid = true;
+                let count = 0;
+                const columns = scope.store.states.columns;
+                columns.forEach((column,index)=>{
+                    const newScope = {
+                        $index:scope.$index,
+                        column:column,
+                        row:scope.row,
+                        Store:scope.store,
+                        _self:scope._self
+                    };
+                    t.validate('blur',newScope,errors => {
+                        console.log('errors:',errors);
+                        if (errors) {
+                            valid = false;
+                        }
+                    });
+                });
+                if (typeof callback === 'function') {
+                    callback(valid);
+                }
+                if (promise) {
+                    return promise;
+                }
             }
         }
     }
@@ -1182,5 +1316,10 @@
     }
     .fr{
         float: right;
+    }
+    .table-item__error{
+        font-size: 12px;
+        color: #fa5555;
+        margin-left: 4px;
     }
 </style>
