@@ -1,5 +1,5 @@
 <template>
-    <van-switch v-model="valueBase" />
+    <van-switch v-model="valueBase" :disabled="option.disabled" @change="change" />
 </template>
 
 <script>
@@ -39,14 +39,20 @@ import 'vant/lib/switch/style';
         },
         data() {
             return {
-                valueBase:this.value
+                valueBase:this.value,
+                valueBaseString:''
             };
         },
         mounted(){
-
+            _TY_Tool.buildDefaultValTpl(t, "valueBaseString");
+            t.valueBase = eval(t.valueBaseString);
         },
         //事件  change
         methods: {
+            //值改变
+            change(val){
+                this.$emit("change",val);
+            }
         }
     }
 </script>

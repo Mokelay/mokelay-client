@@ -68,14 +68,31 @@ import 'vant/lib/radio/style';
         data() {
             return {
                 realFields:this.fields,
-                valueBase:this.value
+                valueBase:this.value,
+                valueBaseString:''
             };
         },
         mounted(){
-
+            //获取数据
+            this.getData();
+            _TY_Tool.buildDefaultValTpl(t, "valueBaseString");
+            t.valueBase = eval(t.valueBaseString);
         },
         //事件 change 
         methods: {
+            //获取数据
+            getData() {
+                const t = this;
+                if (t.fieldsDs) {
+                    Util.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            const {dataKey, value} = item;
+                            t.realFields = value;
+                        });
+                    }, function (code, msg) {
+                    });
+                }
+            },
             //值改变
             change(val){
                 this.$emit("change",val);
