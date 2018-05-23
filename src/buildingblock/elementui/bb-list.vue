@@ -56,6 +56,7 @@
                     :childNumKey="treeConfig.childNumKey"
                     :parentKey="treeConfig.parentKey"
                     :prop="treeConfig.prop"
+                    :indent-size="20"
                     :label="treeConfig.label"></el-table-tree-column>
                 <el-table-column 
                     v-for="(column,key) in realColumns" 
