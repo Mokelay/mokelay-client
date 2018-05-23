@@ -23,6 +23,8 @@
                 </div>
                 <div class="market-mode-last" @click="signSaveClick">
                 </div>
+                <div class="market-ceju-last" @click="cejuClick">
+                </div>
             </div>
         </div>
     </div>
@@ -46,7 +48,8 @@
     const resourcesUrl = [
         '//api.map.baidu.com/getscript?v=2.0&ak=syxdUSGLOZInXcF9rMMGjKQcY9kzEd7W',
         '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
-        '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js'];
+        '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js',
+        '//api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js'];
 
     export default {
         name: 'bb-map',
@@ -109,7 +112,8 @@
                     height: this.heightMap ? this.heightMap + 'vh !important' : '100vh',
 					position: 'relative',
 					left: this.widthMap ? ((parseFloat(this.widthMap) > 0 && parseFloat(this.widthMap) < 100) ? ((100 - parseFloat(this.widthMap)) / 2) + '%' : 0) : 0
-                }
+                },
+                myDis: null
             }
         },
         created:function(){
@@ -126,6 +130,8 @@
                     map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
                     // 开启鼠标滚轮缩放      
                     map.enableScrollWheelZoom(true);
+                    // 测距
+                    th.myDis = new BMapLib.DistanceTool(map);
 
                     /**
                     * 获取数据
@@ -564,6 +570,7 @@
              * 修改原百度地图工具箱事件
              */
             modifySignImageClick(th) {
+                th.myDis.close();
                 let obj = th.getDom("mapContent"+th._key);
                 th.deleteOtherDom();
                 obj.addEventListener("click", function(ev){
@@ -605,12 +612,16 @@
                 let clickMode1 = document.getElementsByClassName('market-mode1');
                 let clickModeLast = document.getElementsByClassName('market-mode-last');
                 let clickModeLast1 = document.getElementsByClassName('market-mode-last1');
+                let clickCejuLast = document.getElementsByClassName('market-ceju-last');
+                let clickCejuLast1 = document.getElementsByClassName('market-ceju-last1');
 
                 if (type === 'sign' && clickSignMode1 && clickSignMode1[0]) {
                     return;
                 } else if (type === 'clear' && clickMode1 && clickMode1[0]) {
                     return;
                 }  else if (type === 'save' && clickModeLast1 && clickModeLast1[0]) {
+                    return;
+                }  else if (type === 'ceju' && clickCejuLast1 && clickCejuLast1[0]) {
                     return;
                 }
 
@@ -620,14 +631,18 @@
                     clickMode1[0].className = 'market-mode';
                 } else if (clickModeLast1 && clickModeLast1[0]) {
                     clickModeLast1[0].className = 'market-mode-last';
+                } else if (clickCejuLast1 && clickCejuLast1[0]) {
+                    clickCejuLast1[0].className = 'market-ceju-last';
                 }
 
                 if (type === 'sign') {
                     clickSignMode[0].className = 'BMapLib_box BMapLib_polyline market-sign-mode1';
                 } else if (type === 'clear') {
                     clickMode[0].className = 'market-mode1';
-                }  else if (type === 'save') {
+                } else if (type === 'save') {
                     clickModeLast[0].className = 'market-mode-last1';
+                } else if (type === 'ceju') {
+                    clickCejuLast[0].className = 'market-ceju-last1';
                 }
             },
             /**
@@ -706,6 +721,14 @@
                 this.overlays = [];
                 this.map.removeEventListener("click", function() {});
                 this.$emit('sign-delete-click');
+            },
+            /**
+             * 测距
+             */
+            cejuClick() {
+                this.modifySignImage('ceju');
+
+                this.myDis.open();
             },
             /**
              * 保存标记点
@@ -975,6 +998,20 @@
                 
                 .market-mode-last1 {
                     background: url('./img/baocun1.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-ceju-last {
+                    background: url('./img/ceju.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-ceju-last1 {
+                    background: url('./img/ceju1.png') no-repeat !important;
                     height: 71px;
                     width: 100%;
                     cursor: pointer;
