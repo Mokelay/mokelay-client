@@ -506,8 +506,8 @@
 
                 for (let i = 0; i < th.signId.length; i++) {
                     th.overlays.push({
-                        lat: th.signId[i].x,
-                        lng: th.signId[i].y
+                        lat: th.signId[i].y,
+                        lng: th.signId[i].x
                     });
                     point.push(new BMap.Point(th.signId[i].y, th.signId[i].x));
                 }
@@ -730,14 +730,14 @@
 					if (type) {
 						for (let i = 0; i < overlay.length; i++) {
 							resultOverlay.push({
-								x: overlay[i].lat,
-								y: overlay[i].lng
+								y: overlay[i].lat,
+								x: overlay[i].lng
 							});
 						}
 					} else {
 						resultOverlay.push({
-							x: overlay.lat,
-							y: overlay.lng
+							y: overlay.lat,
+							x: overlay.lng
 						});
 					}
 				}
