@@ -18,13 +18,15 @@
                     :ds="ds"
                     :external="external"
                     @tree-commit="treeCommit"
+                    @change="treeChange"
                     :check-strictly="checkStrictly"
                     ref="bbtree">
             </bb-tree>
             <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
         </el-popover>
         <div>
-            <el-input class="wa" placeholder="请选择" disabled v-model="bb_input_value"></el-input>
+            <el-input type="hidden"  v-model="bb_input_value"></el-input>
+            <el-input class="wa" placeholder="请选择" disabled  v-model="bb_input_text"></el-input>
             <el-button v-popover:popover><i class="el-icon-search"></i></el-button>
             <el-button class="ml0" @click="clear"><i class="el-icon-delete"></i></el-button>
         </div>
@@ -77,7 +79,9 @@
         data() {
             return {
                 bb_value: this.value,
-                bb_input_value: '',
+                bb_input_value: '',//输入框value值
+                bb_input_text:'',//输入框文本
+                selectedData:null,//选中的对象
                 external: {
                     linkage: ''//默认给一个条件,不然查询所有的数据，数据量很大。针对有外部参数的情况
                 }
@@ -92,11 +96,17 @@
             value(val) {
                 this.bb_value = val;
                 this.bb_input_value = val;
+                if(!this.bb_input_text){
+                    this.bb_input_text = val;
+                }
             }
         },
         computed: {},
         methods: {
             commit() {
+                //填充text值
+                this.fillInputText();
+
                 this.bb_input_value = this.bb_value;
                 //触发到父组件处理
                 this.$emit("input", this.bb_input_value);//让父组件能用v-model
@@ -108,6 +118,32 @@
             change(value) {
                 //触发上级change事件
                 this.$emit('change', value);
+            },
+            treeChange:function(values,data){
+                let t=this;
+                t.selectedData = data;
+            },
+            //填充bb_input_text 的值
+            fillInputText:function(){
+                let t=this;
+                if(t.bb_value&&t.selectedData){
+                    let result=[];
+                    if(t.multiple){
+                        //多选
+                        let _vals = t.bb_value.split(",");
+                        _vals.forEach((_val)=>{
+                            t.selectedData.forEach((_data)=>{
+                                if(_val == _data[t.nodeValue]){
+                                    result.push(_data[t.nodeText]);
+                                    return false;//终止循环
+                                }
+                            });
+                        });
+                    }else{
+                        result.push(t.selectedData[t.nodeText]);
+                    }
+                    t.bb_input_text = result.join(",");
+                }
             },
             clear() {
                 this.bb_value = '';
