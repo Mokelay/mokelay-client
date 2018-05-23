@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Switch  from 'vant/lib/switch ';
+import Switch  from 'vant/lib/switch';
 import 'vant/lib/switch/style';
 
     export default {

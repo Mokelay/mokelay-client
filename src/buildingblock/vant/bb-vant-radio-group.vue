@@ -1,10 +1,10 @@
 <template>
     <van-radio-group 
-        v-model="valueBase" 
-        v-for="(field,key) in realFields" 
+        v-model="valueBase"  
         @change="change"
         :disabled="option.disabled">
-        <van-radio  
+        <van-radio
+            v-for="(field,key) in realFields"
             :key="key" 
             :name="field.value"
             :disabled="field.disabled"
