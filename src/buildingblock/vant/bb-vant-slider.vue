@@ -3,14 +3,16 @@
 	v-model="value"
 	@change="onChange"
 	:disabled='disabled'
+	:min='min'
+	:step='step'
+	:barHeight='barHeight'
 	>
 	</van-slider>
 </template>
 <script>
-	import Slider from 'vant/lib/slider'
+	import {Slider} from 'vant'
 	import 'vant/lib/slider/style';
-	// import Vue from 'vue';
-	// Vue.use(Slider);
+
 	export default{
 		name: "bb-vant-slider",
 		components:{
@@ -45,6 +47,7 @@
 		  methods: {
 		    onChange(value) {
 		      this.$toast('当前值：' + value);
+		      this.$emit('change',value);
 		    }
 		  }
 	}
