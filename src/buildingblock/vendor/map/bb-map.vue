@@ -336,7 +336,7 @@
                     div.style.top  = pixel.y - 45 + "px";
                 }
                     
-                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name);
+                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name || data.project_code || data.resource_code);
 
                 return myCompOverlay;
             },
@@ -385,10 +385,10 @@
                     span2.style.transform = 'scale(0.8)';
                     
                     div.appendChild(span);
-                    div.appendChild(span2);
+                    data.project_status && div.appendChild(span2);
                     
                     span.appendChild(document.createTextNode(this._text));      
-                    span2.appendChild(document.createTextNode(data.project_status)); 
+                    data.project_status && span2.appendChild(document.createTextNode(data.project_status)); 
 
                     var that = this;
 
@@ -418,7 +418,7 @@
                     div.style.top  = pixel.y - 85 + "px";
                 }
                     
-                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name);
+                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name || data.project_code || data.resource_code);
 
                 return myCompOverlay;
             },
@@ -509,7 +509,7 @@
                 let map = th.map;
                 th.overlays = [];
                 let point = [];
-debugger
+
                 for (let i = 0; i < th.signId.length; i++) {
                     th.overlays.push({
                         lat: th.signId[i].y,
@@ -775,8 +775,6 @@ debugger
 					}					
 				}
 				
-				debugger
-                
                 let result = {
                     city_resource_id: this.$route.query.city_resource_id,
                     signId: resultOverlay
