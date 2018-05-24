@@ -91,7 +91,11 @@
 
       //返回页面内所有的内容
       const cssStyle = this.layoutObject?this.layoutObject.cssStyle:{};
-      return createElement('div',{style:cssStyle},pbbElementList);
+      const pageBB = {
+        layout:cssStyle
+      };
+      const pageStyle = _TY_Tool.setStyle(pageBB,this);
+      return createElement('div',{style:pageStyle,class:"test"},pbbElementList);
     },
     props: {
       root:{
