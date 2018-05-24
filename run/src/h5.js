@@ -9,14 +9,10 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 
 import env from './env/';
-env.init("PC");
-
-//定制化VUE
-import bbcustom from './custom/bb-custom';
-Vue.component('bb-custom', bbcustom);
+env.init("H5");
 
 //引用TY核心
-import TY from '../../src';
+import TY from '../../src/h5';
 Vue.use(TY);
 
 // 路由配置
