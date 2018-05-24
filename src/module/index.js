@@ -15,6 +15,8 @@ import bbfieldtreepopselect from './bb-field-tree-pop-select.vue';
 import bbfieldtreeselect from './bb-field-tree-select.vue';
 import bbiconselect from './bb-icon-select.vue';
 import bbicon from './bb-icon.vue';
+import bbcsseditor from './bb-css-editor.vue';
+import bbbuttoncsseditor from './bb-button-css-editor.vue';
 
 export default {
 	install: function(Vue) {
@@ -34,6 +36,8 @@ export default {
 		Vue.component('bb-field-tree-select', bbfieldtreeselect);
 		Vue.component('bb-icon-select', bbiconselect);
 		Vue.component('bb-icon', bbicon);
+		Vue.component('bb-css-editor', bbcsseditor);
+		Vue.component('bb-button-css-editor', bbbuttoncsseditor);
 
 		console.log("成功加载模块积木;");
 	}
