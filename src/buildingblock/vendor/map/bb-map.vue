@@ -509,13 +509,13 @@
                 let map = th.map;
                 th.overlays = [];
                 let point = [];
-
+debugger
                 for (let i = 0; i < th.signId.length; i++) {
                     th.overlays.push({
                         lat: th.signId[i].y,
                         lng: th.signId[i].x
                     });
-                    point.push(new BMap.Point(th.signId[i].y, th.signId[i].x));
+                    point.push(new BMap.Point(th.signId[i].x, th.signId[i].y));
                 }
 
                 map.addOverlay(new BMap.Polyline(point, {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5})); 
