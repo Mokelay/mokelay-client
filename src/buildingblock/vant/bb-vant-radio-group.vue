@@ -19,7 +19,7 @@ import Radio from 'vant/lib/radio';
 import 'vant/lib/radio/style';
 
     export default {
-        name: 'bb-vant-button',
+        name: 'bb-vant-raido-group',
         components: {
           "van-radio":Radio,
           "van-radio-group":RadioGroup

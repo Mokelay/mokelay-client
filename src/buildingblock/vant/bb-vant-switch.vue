@@ -7,7 +7,7 @@ import Switch  from 'vant/lib/switch';
 import 'vant/lib/switch/style';
 
     export default {
-        name: 'bb-vant-button',
+        name: 'bb-vant-switch',
         components: {
           "van-switch":Switch
         },
