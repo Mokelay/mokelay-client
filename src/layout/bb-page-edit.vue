@@ -102,7 +102,8 @@
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
-      return createElement('div',{},pbbElementList);
+      const cssStyle = this.layoutObject?this.layoutObject.cssStyle:{};
+      return createElement('div',{style:cssStyle},pbbElementList);
     },
     props: {
       root:{
