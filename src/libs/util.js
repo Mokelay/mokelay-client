@@ -805,7 +805,7 @@ util.bbRender = function(content, createElement, t) {
             const attributes = bb['attributes'];
             let onArr = _setEventMethod(bb, t);
             //渲染积木属性和动画
-            const style = _setStyle(bb, t);
+            const style = util.setStyle(bb, t);
             const bbele = createElement(bb['alias'], {
                 ref: bb['uuid'] || util.uuid(),
                 props: attributes,
@@ -839,7 +839,7 @@ util.bbCanvasRender = function(content, createElement, t) {
             const attributes = bb['attributes'];
             let onArr = _setEventMethod(bb, t);
             //渲染积木属性和动画
-            const style = _setStyle(bb, t);
+            const style = util.setStyle(bb, t);
             const bbele = createElement(bb['alias'], {
                 ref: bb['uuid'] || util.uuid(),
                 props: attributes,
@@ -881,7 +881,7 @@ util.bbCanvasRender = function(content, createElement, t) {
     layout: {} //积木布局
 }
  */
-let _setStyle = function(bb, t) {
+util.setStyle = function(bb, t) {
     const layout = bb.layout;
     let style = {
         'margin': '2px',
