@@ -163,7 +163,7 @@
                                     th.signShowOperation(th);
                                 }
                                 if (th.isArea) {
-                                    boundary();
+                                    th.boundary(th);
                                 }
                             });
                             th.loading = false;
@@ -172,23 +172,7 @@
                         });
                     }
 
-                    function boundary () {
-                        th.loading = true;
-                        Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
-                            data.forEach(function (item) {
-                                var list = item['value'];
-
-                                th.pointData = list.list;
-
-                                th.getBoundary(th);
-
-                                th.addPoint(th, list.list);
-                            });
-                            th.loading = false;
-                        }, function (code, msg) {
-                            th.loading = false;
-                        });
-                    }
+                    
 
                     th.map = map;
                 });
@@ -197,6 +181,23 @@
             }
         },
         methods: {
+            boundary (th) {
+                th.loading = true;
+                Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
+                    data.forEach(function (item) {
+                        var list = item['value'];
+
+                        th.pointData = list.list;
+
+                        th.getBoundary(th);
+
+                        th.addPoint(th, list.list);
+                    });
+                    th.loading = false;
+                }, function (code, msg) {
+                    th.loading = false;
+                });
+            },
             routerMapClick() {
                 if (this.routerJump) {
                     this.$emit('router-map-click');
@@ -720,6 +721,14 @@
                 this.map.clearOverlays();
                 this.overlays = [];
                 this.map.removeEventListener("click", function() {});
+
+                if (this.signId && this.signId.length) {
+                    this.signShowOperation(this);
+                }
+                if (this.isArea) {
+                    this.boundary(this);
+                }
+
                 this.$emit('sign-delete-click');
             },
             /**
