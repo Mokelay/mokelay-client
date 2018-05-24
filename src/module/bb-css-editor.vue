@@ -47,6 +47,7 @@
             }
         },
         data() {
+
             return {
                 valueBase:this.value,
                 layoutContent:null
@@ -55,6 +56,7 @@
         watch: {
         },
         created: function () {
+            this.setEditor();
         },
         mounted:function(){
 
@@ -62,6 +64,7 @@
         methods: {
             change(layout){
                 this.$emit('change',layout);
+                this.$emit('input',layout);
             },
             setEditor:function(){
                 const t = this;
@@ -336,11 +339,27 @@
                         grid:true,
                         content:[{                      
                             uuid:'layout_08_01',
-                            alias:'bb-input',                   
+                            alias:'bb-select',                   
                             aliasName:'字体名称',                                  
                             attributes:{
                                 width:"95%",
                                 attributeName:'family',
+                                fields:[{
+                                    text:"Arial",
+                                    value:"Arial"
+                                },{
+                                    text:"微软雅黑",
+                                    value:"Microsoft YaHei"
+                                },{
+                                    text:"黑体",
+                                    value:"黑体"
+                                },{
+                                    text:"宋体",
+                                    value:"宋体"
+                                },{
+                                    text:"sans-serif",
+                                    value:"sans-serif"
+                                }]
                             },
                             interactives:[],
                         },{                      
