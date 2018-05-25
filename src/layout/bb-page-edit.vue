@@ -53,7 +53,14 @@
       switch(this.layoutType){
         case 'seriation':
         //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation-edit', {key:this.key,ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
+            var element = createElement('bb-layout-seriation-edit', {
+              key:this.key,
+              ref:uuid,
+              props:{
+                platform:this.platform||"PC",
+                content:this.content,
+                horizontal:this.layoutObject?this.layoutObject['horizontal'] : false
+              },on:{
               onFocus:this.onFocus,
               onBlur:this.onBlur,
               change:this.change
@@ -138,7 +145,8 @@
         customFile:null,
         layoutObject:null,
         content:null,
-        ds:null
+        ds:null,
+        platform:'PC'//页面所属平台
       };
     },
     watch:{
@@ -188,6 +196,10 @@
           if(page['template']){
             //模板文件
             t.templatePageAlias = page['templatePageAlias'];
+          }
+          //设置平台
+          if(page['platform']){
+            t.platform = page['platform'];
           }
 
           //存储当前页面ds信息

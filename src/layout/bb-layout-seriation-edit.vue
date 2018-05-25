@@ -8,22 +8,65 @@
         c.积木动画渲染
     3.积木交互绑定（通过积木选择器，支持多级积木事件方法绑定）
 */  
+    //引入PC背景图
+    import PC_bg_01 from './../libs/imgs/pc_bg/pc_bg_01.png';
+    import PC_bg_02 from './../libs/imgs/pc_bg/pc_bg_02.png';
+    import PC_bg_03 from './../libs/imgs/pc_bg/pc_bg_03.png';
+    import PC_bg_04 from './../libs/imgs/pc_bg/pc_bg_04.png';
+    import PC_bg_05 from './../libs/imgs/pc_bg/pc_bg_05.png';
+    import PC_bg_06 from './../libs/imgs/pc_bg/pc_bg_06.png';
+    import PC_bg_07 from './../libs/imgs/pc_bg/pc_bg_07.png';
+    import PC_bg_08 from './../libs/imgs/pc_bg/pc_bg_08.png';
+    //引入H5背景图
+    import H5_bg_01 from './../libs/imgs/h5_bg/h5_bg_01.png';
+    import H5_bg_02 from './../libs/imgs/h5_bg/h5_bg_02.png';
+    import H5_bg_03 from './../libs/imgs/h5_bg/h5_bg_03.png';
+    import H5_bg_04 from './../libs/imgs/h5_bg/h5_bg_04.png';
+    import H5_bg_05 from './../libs/imgs/h5_bg/h5_bg_05.png';
+    import H5_bg_06 from './../libs/imgs/h5_bg/h5_bg_06.png';
+    import H5_bg_07 from './../libs/imgs/h5_bg/h5_bg_07.png';
+    import H5_bg_08 from './../libs/imgs/h5_bg/h5_bg_08.png';
+
     export default {
         name: 'bb-layout-seriation-edit',
         render:function(createElement){
             const t = this;
             const bbList = t.renderBB(createElement);
+            //平台场景设置
+            let bgStyle ={
+                "display":t.horizontal?'flex':'block'
+            };
+            let divClass = "pc_platform";
+            if(t.platform!="PC"){
+                divClass = "h5_platform";
+            }
+            const platformInstance = createElement('div',{
+                style:bgStyle,
+                "class":divClass
+            },bbList);
+
+            const bgInstances = t.renderBg(createElement);
             //控制水平排列
             const style = {
-                display:t.horizontal?'flex':'block'
+                "position":"relative",
+                "height": "calc(100vh - 126px)",
+                "overflow": "hidden"
             }
-            return createElement('div',{style:style},bbList);
+            return createElement('div',{
+                style:style,
+                'class':""
+            },bgInstances.concat([platformInstance]));
         },
         props: {
             /*水平排列*/
             horizontal:{
                 type:Boolean,
                 default:false
+            },
+            //平台
+            platform:{
+                type:String,
+                default:'PC'
             },
             /*
                 content:积木数据,
@@ -98,6 +141,41 @@
             this.quickKey();
         },
         methods: {
+            //渲染编辑页的背景图 手机和pc
+            renderBg:function(createElement){
+                let t=this;
+                let result = [];
+                const Pcbgs = [PC_bg_01,PC_bg_02,PC_bg_03,PC_bg_04,PC_bg_05,PC_bg_06,PC_bg_07,PC_bg_08];
+                const H5bgs = [H5_bg_01,H5_bg_02,H5_bg_03,H5_bg_04,H5_bg_05,H5_bg_06,H5_bg_07,H5_bg_08];
+                const ImgPosition = ['lt','t','rt','l','r','lb','b','rb'];
+                //有8张背景图
+                for(let i=0;i<8;i++){
+                    let clazz = "";
+                    let bgSrc;
+                    if(t.platform == 'PC'){
+                        clazz="pc_bg pc_bg_"+ImgPosition[i];
+                        bgSrc = Pcbgs[i];
+                    }else{
+                        clazz="h5_bg h5_bg_"+ImgPosition[i];
+                        bgSrc = H5bgs[i];
+                    }
+                    const bgInstance = createElement('img',{
+                        "class":clazz,
+                        attrs:{
+                            "src":bgSrc
+                        }
+                    },[]);
+                    result.push(bgInstance);
+                }
+                //滚动条要挡住上下部分
+                result.push(createElement('div',{
+                        "class":"blockUp",
+                    },[]));
+                result.push(createElement('div',{
+                        "class":"blockDown",
+                    },[]));
+                return result;
+            },
             renderBB:function(createElement){
                 const t = this;
                 if(t.realContent){
@@ -321,5 +399,130 @@
         }
     }
 </script>
-<style lang="less">
+<style scoped>
+    .pc_platform{
+        overflow-y: scroll;
+        padding: 27px 91px 54px 92px;
+        height: 100%;
+    }
+    .pc_platform::-webkit-scrollbar {
+         display: none;
+    }
+    .pc_bg{
+        position:absolute;
+        z-index: 100;
+    }
+    .pc_bg_lt{
+        left: 0;
+        top:0;
+    }
+    .pc_bg_t{
+        left: 91px;
+        top:0;
+        width: calc(100% - 180px);
+        height: 26px;
+    }
+    .pc_bg_rt{
+        right: 0;
+        top:0;
+    }
+    .pc_bg_l{
+        left: 1px;
+        top:27px;
+        height: calc(100% - 80px);
+        width: 91px;
+    }
+    .pc_bg_r{
+        right: 0;
+        top:27px;
+        height: calc(100% - 80px);
+        width: 91px;
+    }
+    .pc_bg_lb{
+        left: 0;
+        bottom:0;
+    }
+    .pc_bg_b{
+        left: 92px;
+        bottom:1px;
+        width: calc(100% - 181px);
+        height: 53px;
+    }
+    .pc_bg_rb{
+        right: 0;
+        bottom:0;
+    }
+
+    .h5_platform{
+        overflow-y: scroll;
+        padding: calc(5% + 85px) calc(25% + 25px);
+        height: 100%;
+    }
+    .h5_platform::-webkit-scrollbar {
+         display: none;
+    }
+    .h5_bg{
+        position:absolute;
+        z-index: 100;
+    }
+    .h5_bg_lt{
+        left: 25%;
+        top:5%;
+    }
+    .h5_bg_t{
+        left: calc(25% + 51px);
+        top:5%;
+        width: calc(50% - 103px);
+        height: 85px;
+    }
+    .h5_bg_rt{
+        right: 25%;
+        top:5%;
+    }
+    .h5_bg_l{
+        left: 25%;
+        top:calc(5% + 85px);
+        height: calc(90% - 170px);
+        width: 25px;
+    }
+    .h5_bg_r{
+        right: 25%;
+        top:calc(5% + 85px);
+        height: calc(90% - 170px);
+        width: 25px;
+    }
+    .h5_bg_lb{
+        left: 25%;
+        bottom:5%;
+    }
+    .h5_bg_b{
+        left: calc(25% + 51px);
+        bottom:5%;
+        width: calc(50% - 103px);
+        height: 86px;
+    }
+    .h5_bg_rb{
+        right: 25%;
+        bottom:5%;
+    }
+    .blockUp{
+        width: 50%;
+        padding-top: calc(5% + 85px);
+        position: absolute;
+        z-index: 90;
+        background: #fff;
+        left: 25%;
+        top:0;
+    }
+    .blockDown{
+        width: 50%;
+        padding-top: calc(5% + 85px);
+        position: absolute;
+        z-index: 90;
+        background: #fff;
+        left: 25%;
+        bottom:0;
+    }
+
+
 </style>
