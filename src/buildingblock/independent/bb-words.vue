@@ -80,16 +80,28 @@
       "textAlign":"left",
       "lineHeight":"1.45em"
     }
+  },{
+    "text":"自定义标题一",
+    "value":"zdy1",
+    "styleObj":{
+      "tagName":"p",
+      "fontSize":"1.125em",
+      "fontColor":"#666",
+      "textAlign":"left",
+      "lineHeight":"3.2em",
+      "background":"#f5f5f5",
+      "fontFamily":".PingFangSC-Regular",
+      "textIndent":"2em"
+    }
   }];
   export default {
     name:'bb-words',
     render:function(createElement){
       var t = this;
-
       return createElement(
           t.p_tagName,
           {
-            style:{fontSize:t.p_fontSize,fontFamily:t.p_fontFamily,color:t.p_fontColor,textAlign:t.p_textAlign,lineHeight:t.p_lineHeight,'display':'block'},
+            style:{fontSize:t.p_fontSize,textIndent:t.p_textIndent,fontFamily:t.p_fontFamily,color:t.p_fontColor,textAlign:t.p_textAlign,lineHeight:t.p_lineHeight,'display':'block',background:t.p_background},
             attrs:t.realTagAttributes
           },
           t.content
@@ -127,6 +139,12 @@
       },
       lineHeight:{
         type:String,
+      },
+      background:{
+        type:String,
+      },
+      textIndent:{
+        type:String
       },
       /**====dom相关属性 end====*/
 
@@ -174,7 +192,9 @@
         p_fontFamily:this.fontFamily,
         p_fontColor:this.fontColor,
         p_textAlign:this.textAlign,
-        p_lineHeight:this.lineHeight
+        p_lineHeight:this.lineHeight,
+        p_background:this.background,
+        p_textIndent:this.textIndent
       };
     },
     created: function () {
@@ -214,6 +234,9 @@
                 t.p_fontColor = item.styleObj.fontColor;
                 t.p_textAlign = item.styleObj.textAlign;
                 t.p_lineHeight = item.styleObj.lineHeight;
+                t.p_background = item.styleObj.background;
+                t.p_fontFamily = item.styleObj.fontFamily;
+                t.p_textIndent = item.styleObj.textIndent;
                 t.$emit("themeChange",item.styleObj);
                 return false;//break
               }
