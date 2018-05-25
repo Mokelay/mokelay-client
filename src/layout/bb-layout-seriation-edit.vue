@@ -167,13 +167,15 @@
                     },[]);
                     result.push(bgInstance);
                 }
-                //滚动条要挡住上下部分
-                result.push(createElement('div',{
-                        "class":"blockUp",
-                    },[]));
-                result.push(createElement('div',{
-                        "class":"blockDown",
-                    },[]));
+                if(t.platform != 'PC'){
+                    //滚动条要挡住上下部分
+                    result.push(createElement('div',{
+                            "class":"blockUp",
+                        },[]));
+                    result.push(createElement('div',{
+                            "class":"blockDown",
+                        },[]));
+                }
                 return result;
             },
             renderBB:function(createElement){
