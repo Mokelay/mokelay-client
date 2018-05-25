@@ -132,7 +132,6 @@
                     map.enableScrollWheelZoom(true);
                     // 测距
                     th.myDis = new BMapLib.DistanceTool(map);
-
                     /**
                     * 获取数据
                     */
