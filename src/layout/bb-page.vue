@@ -95,7 +95,7 @@
         layout:cssStyle
       };
       const pageStyle = _TY_Tool.setStyle(pageBB,this);
-      return createElement('div',{style:pageStyle,class:"test"},pbbElementList);
+      return createElement('div',{style:pageStyle},pbbElementList);
     },
     props: {
       root:{
