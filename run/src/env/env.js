@@ -10,7 +10,8 @@ var env = {
 		ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback", 
 		hosts:{
 			'default':"http://longyan.dev.rs.com"
-		}
+		},
+		questionnaireHost:"http://ty.saiyachina.com/survey",
 	},
 	prd: {
 		name: 'prd',
@@ -19,6 +20,7 @@ var env = {
 		hosts:{
 			'default':CurrentDomain
 		},
+		questionnaireHost:"http://ty.saiyachina.com/survey",
 		home:"/home_ln"
 	}
 };
