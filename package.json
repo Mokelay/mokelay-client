@@ -35,7 +35,7 @@
     "clipboard": "^1.5.12",
     "codemirror": "^5.36.0",
     "dragula": "^3.7.2",
-    "element-tree-grid": "0.1.3",
+    "element-tree-grid": "0.0.15",
     "element-ui": "2.0.7",
     "vant": "^1.0.8",
     "hammerjs": "^2.0.8",
