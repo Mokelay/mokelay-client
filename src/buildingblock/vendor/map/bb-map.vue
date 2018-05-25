@@ -149,6 +149,9 @@
 
                                 th.searchOperation(th);
 
+                                if (th.isArea) {
+                                    th.boundary(th);
+                                }
                                 // 包含搜索 标记功能
                                 if (th.isSign) {
                                     console.log('isSign : ' + th.isSign);
@@ -157,12 +160,6 @@
                                     th.modifySignImageClick(th);
 
                                     th.showSignStyle();
-                                }
-                                if (th.signId && th.signId.length) {
-                                    th.signShowOperation(th);
-                                }
-                                if (th.isArea) {
-                                    th.boundary(th);
                                 }
                             });
                             th.loading = false;
@@ -191,6 +188,10 @@
                         th.getBoundary(th);
 
                         th.addPoint(th, list.list);
+
+                        if (th.signId && th.signId.length) {
+                            th.signShowOperation(th);
+                        }
                     });
                     th.loading = false;
                 }, function (code, msg) {
@@ -721,9 +722,6 @@
                 this.overlays = [];
                 this.map.removeEventListener("click", function() {});
 
-                if (this.signId && this.signId.length) {
-                    this.signShowOperation(this);
-                }
                 if (this.isArea) {
                     this.boundary(this);
                 }
