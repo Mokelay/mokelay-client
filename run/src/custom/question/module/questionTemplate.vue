@@ -63,9 +63,9 @@ export default {
       var path = this.data.slide_page ? 'surveySlide' : 'survey'
       require.ensure(['qrcode'], function(require){
         var QRCode = require('qrcode');
-        // QRCode.toCanvas(document.getElementById('qrccode-canvas'+qsId), window._TY_ENV.questionnaireHost+"/#/survey?id="+qsId+'&surveystate='+surveystate,
+        // QRCode.toCanvas(document.getElementById('qrccode-canvas'+qsId), window._TY_ENV.questionnaireHost+"#/survey?id="+qsId+'&surveystate='+surveystate,
         //   (error)=>{});
-        QRCode.toCanvas(document.getElementById('qrccode-canvas'+qsId), `${window._TY_ENV.questionnaireHost}/#/${path}?id=${qsId}&surveystate=${surveystate}`,
+        QRCode.toCanvas(document.getElementById('qrccode-canvas'+qsId), `${window._TY_ENV.questionnaireHost}#/${path}?id=${qsId}&surveystate=${surveystate}`,
           (error)=>{});
       },'qrcode')
     },

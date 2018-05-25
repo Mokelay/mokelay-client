@@ -54,7 +54,7 @@ export default {
       previewButton:{
         text:'预览问卷',
         action:'url',
-        url:_TY_ENV.questionnaireHost+'/#/survey?surveystate=no&id='+this.$route.query.param,
+        url:_TY_ENV.questionnaireHost+'#/survey?surveystate=no&id='+this.$route.query.param,
         urlType:'openWindow'
       },
       //bb-tool 配置
