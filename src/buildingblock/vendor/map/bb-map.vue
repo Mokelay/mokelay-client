@@ -9,7 +9,7 @@
                 <div id="searchbox" class="clearfix"> 
                     <div id="searchbox-container"> 
                         <div id="sole-searchbox-content" class="searchbox-content"> 
-                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
+                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域"/> 
                             <div class="input-clear" title="清空"></div> 
                         </div> 
                         <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
@@ -132,7 +132,6 @@
                     map.enableScrollWheelZoom(true);
                     // 测距
                     th.myDis = new BMapLib.DistanceTool(map);
-
                     /**
                     * 获取数据
                     */
@@ -150,6 +149,9 @@
 
                                 th.searchOperation(th);
 
+                                if (th.isArea) {
+                                    th.boundary(th);
+                                }
                                 // 包含搜索 标记功能
                                 if (th.isSign) {
                                     console.log('isSign : ' + th.isSign);
@@ -158,12 +160,6 @@
                                     th.modifySignImageClick(th);
 
                                     th.showSignStyle();
-                                }
-                                if (th.signId && th.signId.length) {
-                                    th.signShowOperation(th);
-                                }
-                                if (th.isArea) {
-                                    th.boundary(th);
                                 }
                             });
                             th.loading = false;
@@ -192,6 +188,10 @@
                         th.getBoundary(th);
 
                         th.addPoint(th, list.list);
+
+                        if (th.signId && th.signId.length) {
+                            th.signShowOperation(th);
+                        }
                     });
                     th.loading = false;
                 }, function (code, msg) {
@@ -722,9 +722,6 @@
                 this.overlays = [];
                 this.map.removeEventListener("click", function() {});
 
-                if (this.signId && this.signId.length) {
-                    this.signShowOperation(this);
-                }
                 if (this.isArea) {
                     this.boundary(this);
                 }
