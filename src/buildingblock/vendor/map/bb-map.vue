@@ -9,7 +9,7 @@
                 <div id="searchbox" class="clearfix"> 
                     <div id="searchbox-container"> 
                         <div id="sole-searchbox-content" class="searchbox-content"> 
-                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
+                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域"/> 
                             <div class="input-clear" title="清空"></div> 
                         </div> 
                         <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
