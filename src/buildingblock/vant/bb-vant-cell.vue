@@ -1,5 +1,6 @@
 <template>
     <van-cell 
+        @click="click"
         :value="valueBase" 
         :icon="option.icon"
         :label="option.label"
@@ -48,6 +49,10 @@ import 'vant/lib/cell/style';
         },
         //事件click
         methods: {
+            //点击事件
+            click(param){
+                this.$emit('click',param);
+            }
         }
     }
 </script>
