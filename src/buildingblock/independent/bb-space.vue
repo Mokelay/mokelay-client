@@ -54,7 +54,7 @@
         },
         data() {
             return {
-                p_style:typeof(this.bbStyle)==='string'?JSON.parse(this.bbStyle):this.bbStyle
+                p_style:typeof(this.bbStyle)==='string'?JSON.parse(this.bbStyle):this.bbStyle,
                 p_titleStyle:typeof(this.titleStyle)==='string'?JSON.parse(this.titleStyle):this.titleStyle
             }
         },
