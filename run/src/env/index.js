@@ -11,11 +11,8 @@ export default {
 		window._TY_SSOURL = _env.ssoURL;
 		window._TY_Page_Data = {};
 		window._TY_HOSTS = _env.hosts || {};
-		window._TY_Home = "/home";
-		if(_env['home']){
-		    window._TY_Home = _env['home'];
-		}
-
+		window._TY_Home = _env['home']|| "/home";
 		window._TY_Platform = platform;
+		window._TY_DS_Cache = {};
 	}
 };
