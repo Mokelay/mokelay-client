@@ -57,7 +57,7 @@
               key:this.key,
               ref:uuid,
               props:{
-                platform:this.platform||"PC",
+                platform:this.platform,
                 content:this.content,
                 horizontal:this.layoutObject?this.layoutObject['horizontal'] : false
               },on:{
@@ -146,7 +146,7 @@
         layoutObject:null,
         content:null,
         ds:null,
-        platform:'PC'//页面所属平台
+        platform:''//页面所属平台
       };
     },
     watch:{

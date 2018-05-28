@@ -36,8 +36,10 @@
             let bgStyle ={
                 "display":t.horizontal?'flex':'block'
             };
-            let divClass = "pc_platform";
-            if(t.platform!="PC"){
+            let divClass = "";
+            if(t.platform=="PC"){
+                divClass = "pc_platform";
+            }else if(t.platform == 'H5'||t.platform == 'PAD'){
                 divClass = "h5_platform";
             }
             const platformInstance = createElement('div',{
@@ -47,10 +49,14 @@
 
             const bgInstances = t.renderBg(createElement);
             //控制水平排列
-            const style = {
-                "position":"relative",
-                "height": "calc(100vh - 126px)",
-                "overflow": "hidden"
+            let style = {
+                "position":"relative"
+            }
+            if(t.platform){
+                style =  Object.assign(style,{
+                    "height": "calc(100vh - 126px)",
+                    "overflow": "hidden"
+                });
             }
             return createElement('div',{
                 style:style,
@@ -66,7 +72,7 @@
             //平台
             platform:{
                 type:String,
-                default:'PC'
+                default:''
             },
             /*
                 content:积木数据,
@@ -144,6 +150,9 @@
             //渲染编辑页的背景图 手机和pc
             renderBg:function(createElement){
                 let t=this;
+                if(!t.platform){
+                    return [];
+                }
                 let result = [];
                 const Pcbgs = [PC_bg_01,PC_bg_02,PC_bg_03,PC_bg_04,PC_bg_05,PC_bg_06,PC_bg_07,PC_bg_08];
                 const H5bgs = [H5_bg_01,H5_bg_02,H5_bg_03,H5_bg_04,H5_bg_05,H5_bg_06,H5_bg_07,H5_bg_08];
@@ -155,7 +164,7 @@
                     if(t.platform == 'PC'){
                         clazz="pc_bg pc_bg_"+ImgPosition[i];
                         bgSrc = Pcbgs[i];
-                    }else{
+                    }else if(t.platform == 'H5'||t.platform == 'PAD'){
                         clazz="h5_bg h5_bg_"+ImgPosition[i];
                         bgSrc = H5bgs[i];
                     }
@@ -167,7 +176,7 @@
                     },[]);
                     result.push(bgInstance);
                 }
-                if(t.platform != 'PC'){
+                if(t.platform == 'H5'||t.platform == 'PAD'){
                     //滚动条要挡住上下部分
                     result.push(createElement('div',{
                             "class":"blockUp",
