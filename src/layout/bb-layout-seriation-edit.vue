@@ -26,6 +26,9 @@
     import H5_bg_06 from './../libs/imgs/h5_bg/h5_bg_06.png';
     import H5_bg_07 from './../libs/imgs/h5_bg/h5_bg_07.png';
     import H5_bg_08 from './../libs/imgs/h5_bg/h5_bg_08.png';
+    //引入微信小程序
+    import WX_exit from './../libs/imgs/wx_bg/wx_exit.png';
+    import WX_menu from './../libs/imgs/wx_bg/wx_menu.png';
 
     export default {
         name: 'bb-layout-seriation-edit',
@@ -41,6 +44,8 @@
                 divClass = "pc_platform";
             }else if(t.platform == 'H5'||t.platform == 'PAD'){
                 divClass = "h5_platform";
+            }else if(t.platform == 'WX'){
+                divClass="wx_platform";
             }
             const platformInstance = createElement('div',{
                 style:bgStyle,
@@ -164,7 +169,7 @@
                     if(t.platform == 'PC'){
                         clazz="pc_bg pc_bg_"+ImgPosition[i];
                         bgSrc = Pcbgs[i];
-                    }else if(t.platform == 'H5'||t.platform == 'PAD'){
+                    }else if(t.platform == 'H5'||t.platform == 'PAD'||t.platform == 'WX'){
                         clazz="h5_bg h5_bg_"+ImgPosition[i];
                         bgSrc = H5bgs[i];
                     }
@@ -176,7 +181,7 @@
                     },[]);
                     result.push(bgInstance);
                 }
-                if(t.platform == 'H5'||t.platform == 'PAD'){
+                if(t.platform == 'H5'||t.platform == 'PAD'||t.platform == 'WX'){
                     //滚动条要挡住上下部分
                     result.push(createElement('div',{
                             "class":"blockUp",
@@ -184,6 +189,23 @@
                     result.push(createElement('div',{
                             "class":"blockDown",
                         },[]));
+                }
+                if(t.platform == 'WX'){
+                    //渲染头部和微信小程序菜单
+                    const wxTitleInstance = createElement('img',{
+                        "class":"wx_menu",
+                        attrs:{
+                            "src":WX_menu
+                        }
+                    },[]);
+                    result.push(wxTitleInstance);
+                    const wxExitInstance = createElement('img',{
+                        "class":"wx_exit",
+                        attrs:{
+                            "src":WX_exit
+                        }
+                    },[]);
+                    result.push(wxExitInstance);
                 }
                 return result;
             },
@@ -533,6 +555,30 @@
         background: #fff;
         left: 25%;
         bottom:0;
+    }
+
+    .wx_platform{
+        overflow-y: scroll;
+        padding:  calc(5% + 152px) calc(25% + 25px) calc(5% + 85px) ;
+        height: 100%;
+    }
+    .wx_platform::-webkit-scrollbar {
+         display: none;
+    }
+    .wx_menu{
+        z-index: 100;
+        position: absolute;
+        left: calc(25% + 25px);
+        top: calc(5% + 85px);
+        height: 28px;
+        width: calc(50% - 50px);
+    }
+    .wx_exit{
+        z-index: 100;
+        position: absolute;
+        right: calc(25% + 25px);
+        top: calc(5% + 85px + 28px);
+        height: 36px;
     }
 
 
