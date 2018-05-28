@@ -9,7 +9,7 @@
                         key:t.formKey,
                         model:t.formData,
                         inline:true,
-                        'label-position':"left",
+                        'label-position':t.labelPosition,
                         labelWidth:t.labelWidth || "100px",
                         size: t.size || "mini"
                     },
@@ -66,6 +66,11 @@
             /*动态数据*/
             dataDS:{
                 type:Object
+            },
+            //表单域标签的位置right/left/top
+            labelPosition:{
+                type:String,
+                default:'left'
             },
         },
         data() {

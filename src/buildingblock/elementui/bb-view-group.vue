@@ -1,7 +1,7 @@
 <template>
     <div class="bb-view-group">
         <div v-for="(view,key) in viewList">
-            <bb-view :key="key" class="bb-view-group-item" :fields="realFields" :value="view"></bb-view>
+            <bb-view :key="key" class="bb-view-group-item" :fields="realFields" :labelPosition="labelPosition" :value="view"></bb-view>
         </div>
         <el-row v-if="pagination.show" type="flex" justify='end'>
             <bb-pagination 
@@ -73,7 +73,12 @@
                         pageSize:10
                     }
                 }
-            }
+            },
+            //表单域标签的位置right/left/top
+            labelPosition:{
+                type:String,
+                default:'left'
+            },
         },
         data() {
             return {

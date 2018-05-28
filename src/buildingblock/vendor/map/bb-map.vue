@@ -51,6 +51,10 @@
         '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js',
         '//api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js'];
 
+    // 
+
+
+
     export default {
         name: 'bb-map',
         props: {
@@ -91,7 +95,12 @@
             signId:{
                 type: [Array,String],
                 default:function(){
-                    return [];
+                    return [{y: 45.952397, x: 129.759399},
+                    {y: 45.666123, x: 129.628318},
+                    {y: 45.798186, x: 128.956816},
+                    {y: 45.960417, x: 129.653614},
+                    {y: 45.651609, x: 128.922322},
+                    {y: 45.782098, x: 128.586571}];
                 }
             }
         },
@@ -123,6 +132,11 @@
         mounted() {
             let th = this;
             try {
+
+                // this.city_resource_id=4
+                // this.target_province_code=230000
+                // this.target_town_code=230100
+                // this.target_area_code=230124
                 Util.reloadJS(resourcesUrl).then(function () {
                     let map = new BMap.Map("mapContent"+th._key);
 
@@ -189,9 +203,6 @@
 
                         th.addPoint(th, list.list);
 
-                        if (th.signId && th.signId.length) {
-                            th.signShowOperation(th);
-                        }
                     });
                     th.loading = false;
                 }, function (code, msg) {
@@ -280,6 +291,7 @@
                 }
 
                 th.addlabel(th, data, lat, lng);
+
             },
             /**
              * 自定义label样式
@@ -441,6 +453,12 @@
                     map.addOverlay(label); 
                 }  
                 
+                setTimeout(()=> {
+                    if (th.signId && th.signId.length) {
+                        th.signShowOperation(th);
+                    }
+                }, 1500);
+
             },
             /**
              * 添加行政区划
@@ -720,6 +738,7 @@
                 this.modifySignImage('clear');
                 this.map.clearOverlays();
                 this.overlays = [];
+                this.signId = [];
                 this.map.removeEventListener("click", function() {});
 
                 if (this.isArea) {
