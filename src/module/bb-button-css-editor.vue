@@ -39,7 +39,7 @@
                 }
             */
             value:{
-                type:Object,
+                type:[Object,String],
                 default:function(){
                     return { 
                     }
@@ -49,7 +49,7 @@
         data() {
 
             return {
-                valueBase:this.value,
+                valueBase:typeof(this.value)==='string'?JSON.parse(this.value):this.value,
                 layoutContent:null
             }
         },

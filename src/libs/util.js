@@ -884,7 +884,7 @@ util.bbCanvasRender = function(content, createElement, t) {
 util.setStyle = function(bb, t) {
     const layout = bb.layout;
     let style = {
-        'margin': '2px',
+        // 'margin': '2px',
     };
     if (layout && JSON.stringify(layout) != '{}') {
         style = {
