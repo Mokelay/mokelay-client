@@ -126,7 +126,7 @@
                     t.userInfo = data;
                     t.userName = data.user_name;
                 }else{
-                    var sessionAPI = _TY_ENV.name=='prd'?"/ty-read-session-user-info":"/read-session-user-info";
+                    var sessionAPI = _TY_ENV.name=='local'?"/read-session-user-info":"/ty-read-session-user-info";
                     _TY_Tool.get(_TY_ContentPath+sessionAPI).then(function (response) {
                         let data = response['data']['data'];
                         t.userInfo={};
@@ -142,9 +142,9 @@
             },
             getResources(){
                 const t=this;
-                var url = _TY_ENV.name=='prd'?
-                    (_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias)
-                    :("/ty/resources/"+t.$route.params.appAlias);
+                var url = _TY_ENV.name=='local'?
+                    ("/ty/resources/"+t.$route.params.appAlias)
+                    :(_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias);
 
                 _TY_Tool.get(url).then(function (response) {
                     // console.log(response);
