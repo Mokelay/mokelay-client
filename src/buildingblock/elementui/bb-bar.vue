@@ -203,12 +203,12 @@
       height: 0;
     }
     .bb-bar-outer{
-        height: 50px;
+        height: 52px;
         width:100%;
     }
     .bb-bar{
         margin:0 auto;
-        height: 50px;
+        height: 52px;
         display: flex;
         &>div{
             display: inline-block;
