@@ -678,6 +678,11 @@
              */
             localSearch(t, myValue, auto) {
                 // 清除地图上所有覆盖物
+                t.map.clearOverlays();
+                if (t.isArea) {
+                    t.boundary(t);
+                }
+
                 let local = null;
                 // 智能搜索
                 if (auto) {
