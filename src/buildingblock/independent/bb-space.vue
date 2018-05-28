@@ -40,7 +40,7 @@
             },
             //标题文字的样式设置
             titleStyle:{
-                type:[String,Object],
+                type:[Object],
                 default:function(){
                     return {};
                 }
@@ -54,13 +54,26 @@
         },
         data() {
             return {
-                p_style:typeof(this.bbStyle)==='string'?JSON.parse(this.bbStyle):this.bbStyle,
-                p_titleStyle:typeof(this.titleStyle)==='string'?JSON.parse(this.titleStyle):this.titleStyle
+                
             }
         },
         computed:{
             p_require:function(){
                 return typeof(this.require)==='string'?eval(this.require):this.require;
+            },
+            //标题样式
+            p_titleStyle(){
+                const _css = {
+                    layout:this.titleStyle
+                };
+               return _TY_Tool.setStyle(_css,this);
+            },
+            //组件样式
+            p_style(){
+                const _css = {
+                    layout:this.bbStyle
+                };
+               return _TY_Tool.setStyle(_css,this);
             }
         },
         watch: {
