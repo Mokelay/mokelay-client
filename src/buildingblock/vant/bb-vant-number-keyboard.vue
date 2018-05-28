@@ -1,12 +1,10 @@
 <template>
     <van-number-keyboard
-        :show="show"
-        theme="option.theme"
+        :show="valueBase"
+        :theme="option.theme"
         extra-key="."
         close-button-text="完成"
-        show-delete-key="option['show-delete-key']"
-        hide-on-click-outside="option['hide-on-click-outside']"
-        @blur="show = false"
+        @blur="valueBase = false"
         @input="onInput"
         @delete="onDelete"
         >
@@ -27,7 +25,7 @@ import 'vant/lib/number-keyboard/style';
             //内容
             show:{
                 type:Boolean,
-                default:true
+                default:false
             },
             /*其他属性配置
                 {
@@ -41,17 +39,22 @@ import 'vant/lib/number-keyboard/style';
                 type:Object,
                 default:function() {
                     return {
-                        "theme":"default",
+                        "theme":"custom",
                         "title":"",
                         "show-delete-key":true,
                         "hide-on-click-outside":true
                     };
                 }
+            },
+            //css布局样式是否允许自定义
+            cssStyleEditable:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
             return {
-                valueBase:this.value
+                valueBase:this.show
             };
         },
         mounted(){
@@ -59,6 +62,16 @@ import 'vant/lib/number-keyboard/style';
         },
         //事件click
         methods: {
+            //显示键盘
+            showKeyboard(){
+                const t = this;
+                t.valueBase = true;
+            }, 
+            //隐藏键盘
+            hideKeyboard(){
+                const t = this;
+                t.valueBase = false;
+            },
             //输入事件
             onInput(key){
                 this.$emit('input',key);
