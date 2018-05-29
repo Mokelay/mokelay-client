@@ -23,10 +23,10 @@ var env = {
 	},
 	demo:{
 		name: 'demo',
-		apiHost: "http://ty.saiyachina.com",
+		apiHost: "http://demo.greatbee.com",
 		ssoURL: CurrentDomain + "/#/ty-login",
 		hosts:{
-			'default':"http://ty.saiyachina.com"
+			'default':"http://demo.greatbee.com"
 		},
 		home:"/home_ln"
 	}
