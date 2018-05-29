@@ -95,4 +95,7 @@
     }
 </script>
 <style scoped>
+    .bb-button{
+        margin: 2px;
+    }
 </style>
