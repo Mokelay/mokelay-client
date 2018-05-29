@@ -384,25 +384,25 @@
           const t = this;
           t.key = _TY_Tool.uuid();
           const layout = {
-              bgColor: "",             //背景颜色
+              // bgColor: "",             //背景颜色
               rotate: 0,               //旋转
-              transparency: 1,         //透明度
-              zIndex: 0,               //层级
+              // transparency: 1,         //透明度
+              // zIndex: 0,               //层级
               size: {width: 200, height: 200},//大小
               position: {x: 100, y: 300},     //位置
-              border: {                //边框
-                  style: "",           //边框样式
-                  color: "",           //边框颜色
-                  size: "",            //边框尺寸
-                  radian: "",          //边框弧度
-                  margin: ""           //边距
-              },
-              shadow: {                //阴影
-                  color: "",           //阴影颜色
-                  size: "",            //阴影大小
-                  direction: '',       //阴影方向
-                  vague: ''            //阴影模糊
-              }
+              // border: {                //边框
+              //     style: "",           //边框样式
+              //     color: "",           //边框颜色
+              //     size: "",            //边框尺寸
+              //     radian: "",          //边框弧度
+              //     margin: ""           //边距
+              // },
+              // shadow: {                //阴影
+              //     color: "",           //阴影颜色
+              //     size: "",            //阴影大小
+              //     direction: '',       //阴影方向
+              //     vague: ''            //阴影模糊
+              // }
           };
           //初始化新增加的积木
           const newBB = {
