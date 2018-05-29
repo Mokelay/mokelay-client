@@ -113,10 +113,10 @@
                     let _html = '';
                     switch(_component){
                         case "input":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>"
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>"
                             break;
                         case "inputLine":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>"
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>"
                             break;
 
                     }

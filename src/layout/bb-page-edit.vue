@@ -53,7 +53,14 @@
       switch(this.layoutType){
         case 'seriation':
         //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation-edit', {key:this.key,ref:uuid,props:{content:this.content,horizontal:this.layoutObject?this.layoutObject['horizontal'] : false},on:{
+            var element = createElement('bb-layout-seriation-edit', {
+              key:this.key,
+              ref:uuid,
+              props:{
+                platform:this.platform,
+                content:this.content,
+                horizontal:this.layoutObject?this.layoutObject['horizontal'] : false
+              },on:{
               onFocus:this.onFocus,
               onBlur:this.onBlur,
               change:this.change
@@ -102,7 +109,12 @@
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
-      return createElement('div',{},pbbElementList);
+      const cssStyle = this.layoutObject?this.layoutObject.cssStyle:{};
+      const pageBB = {
+        layout:cssStyle
+      };
+      const pageStyle = _TY_Tool.setStyle(pageBB,this);
+      return createElement('div',{style:pageStyle},pbbElementList);
     },
     props: {
       root:{
@@ -133,11 +145,18 @@
         customFile:null,
         layoutObject:null,
         content:null,
-        ds:null
+        ds:null,
+        platform:''//页面所属平台
       };
     },
     watch:{
       content:{
+        handler:(val,oldVal)=>{
+
+        },
+        deep:true
+      },
+      layoutObject:{
         handler:(val,oldVal)=>{
 
         },
@@ -183,6 +202,10 @@
           if(page['template']){
             //模板文件
             t.templatePageAlias = page['templatePageAlias'];
+          }
+          //设置平台
+          if(page['platform']){
+            t.platform = page['platform'];
           }
 
           //存储当前页面ds信息
@@ -361,25 +384,25 @@
           const t = this;
           t.key = _TY_Tool.uuid();
           const layout = {
-              bgColor: "",             //背景颜色
+              // bgColor: "",             //背景颜色
               rotate: 0,               //旋转
-              transparency: 1,         //透明度
-              zIndex: 0,               //层级
+              // transparency: 1,         //透明度
+              // zIndex: 0,               //层级
               size: {width: 200, height: 200},//大小
               position: {x: 100, y: 300},     //位置
-              border: {                //边框
-                  style: "",           //边框样式
-                  color: "",           //边框颜色
-                  size: "",            //边框尺寸
-                  radian: "",          //边框弧度
-                  margin: ""           //边距
-              },
-              shadow: {                //阴影
-                  color: "",           //阴影颜色
-                  size: "",            //阴影大小
-                  direction: '',       //阴影方向
-                  vague: ''            //阴影模糊
-              }
+              // border: {                //边框
+              //     style: "",           //边框样式
+              //     color: "",           //边框颜色
+              //     size: "",            //边框尺寸
+              //     radian: "",          //边框弧度
+              //     margin: ""           //边距
+              // },
+              // shadow: {                //阴影
+              //     color: "",           //阴影颜色
+              //     size: "",            //阴影大小
+              //     direction: '',       //阴影方向
+              //     vague: ''            //阴影模糊
+              // }
           };
           //初始化新增加的积木
           const newBB = {

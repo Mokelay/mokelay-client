@@ -90,7 +90,12 @@
       pbbElementList.push(dialog);
 
       //返回页面内所有的内容
-      return createElement('div',{},pbbElementList);
+      const cssStyle = this.layoutObject?this.layoutObject.cssStyle:{};
+      const pageBB = {
+        layout:cssStyle
+      };
+      const pageStyle = _TY_Tool.setStyle(pageBB,this);
+      return createElement('div',{style:pageStyle},pbbElementList);
     },
     props: {
       root:{

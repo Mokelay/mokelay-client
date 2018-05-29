@@ -2,8 +2,8 @@
     <div class="_box" :style="p_style">
         <div class="_line clearfix">
             <span v-if="bbType=='title'" class="_title">
-                <span class="_title_icon"></span>
-                <h3>{{title}}</h3>
+                <span v-if="!removeIcon" class="_title_icon"></span>
+                <h3 :style="p_titleStyle">{{title}}</h3>
             </span>
             <span v-if="p_require && bbType=='title'" class="c_3f3f3f f_right"><span class="c_red">*</span> 为必填项</span>
         </div>
@@ -37,16 +37,43 @@
                 default:function(){
                     return {};
                 }
+            },
+            //标题文字的样式设置
+            titleStyle:{
+                type:[Object],
+                default:function(){
+                    return {};
+                }
+            },
+            //是否移除标题前面的icon
+            removeIcon:{
+                type:[Boolean,String,Number],
+                default:false
             }
+
         },
         data() {
             return {
-                p_style:typeof(this.bbStyle)==='string'?JSON.parse(this.bbStyle):this.bbStyle
+                
             }
         },
         computed:{
             p_require:function(){
                 return typeof(this.require)==='string'?eval(this.require):this.require;
+            },
+            //标题样式
+            p_titleStyle(){
+                const _css = {
+                    layout:this.titleStyle
+                };
+               return _TY_Tool.setStyle(_css,this);
+            },
+            //组件样式
+            p_style(){
+                const _css = {
+                    layout:this.bbStyle
+                };
+               return _TY_Tool.setStyle(_css,this);
             }
         },
         watch: {

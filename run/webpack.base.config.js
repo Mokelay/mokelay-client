@@ -4,7 +4,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        main: './run/src/main'
+        main: './run/src/main',
+        pc: './run/src/platform/pc',
+        h5: './run/src/platform/h5'
     },
     output: {
         path: path.join(__dirname, './run_dist')

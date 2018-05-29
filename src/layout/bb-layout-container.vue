@@ -1,11 +1,11 @@
 <template>
     <div class="bb-layout-container">
         <!-- 上下布局 -->
-        <el-container v-if="realLayout == 'h-f'">
-            <el-header :style="{background:realBgColor.header}">
+        <el-container v-if="realLayout == 'h-m'" :style="p_layoutObject.containerStyle">
+            <el-header :style="p_layoutObject.headerStyle">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
-            <el-main :style="{background:realBgColor.main}">
+            <el-main :style="p_layoutObject.mainStyle">
                 <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
             </el-main>
         </el-container>
@@ -112,22 +112,22 @@
             </el-container>
         </el-container>
         <!-- 上左中右下布局 -->
-        <el-container v-if="realLayout == 'h-l-m-r-f'">
+        <el-container v-if="realLayout == 'h-l-m-r-f'" :style="p_layoutObject.containerStyle">
             <el-header :style="{background:realBgColor.header}">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside  width="20%" :style="{background:realBgColor.leftAside}">
+                <el-aside  width="20%" :style="p_layoutObject.leftStyle">
                     <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
-                <el-main :style="{background:realBgColor.main}">
+                <el-main :style="p_layoutObject.mainStyle">
                     <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-aside width="30%" :style="{background:realBgColor.rightAside}">
+                <el-aside width="30%" :style="p_layoutObject.rightStyle">
                     <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
-            <el-footer :style="{background:realBgColor.footer}">
+            <el-footer :style="p_layoutObject.footerStyle">
                 <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
             </el-footer>
         </el-container>
@@ -151,6 +151,7 @@
                 {
                     type:'', 
                     leftAuto:false,//最侧菜单是否根据内容自适应宽度
+                    containerStyle:{},//最外层css样式
                     leftStyle:{},//上下左右的css样式
                     headerStyle:{padding: '0 2px'},
                     mainStyle:{},
@@ -165,6 +166,7 @@
                     return {
                         type:'h-l-m-r',
                         leftAuto:false,
+                        containerStyle:{},
                         leftStyle:{},
                         headerStyle:{},
                         mainStyle:{},
@@ -353,8 +355,15 @@
             height: 0px;
             /*overflow-y: auto;*/
         }
+        .el-main{
+             overflow-y: scroll;
+        }
+        .el-main::-webkit-scrollbar {
+             display: none;
+        }
     }
     .bb-layout-container>.el-container{
         height:calc(~'100vh');
     }
+
 </style>

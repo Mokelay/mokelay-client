@@ -9,7 +9,7 @@
                 <div id="searchbox" class="clearfix"> 
                     <div id="searchbox-container"> 
                         <div id="sole-searchbox-content" class="searchbox-content"> 
-                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域" value="" /> 
+                            <input id="sole-input" v-model="valueBase" class="searchbox-content-common" type="text" name="word" autocomplete="off" maxlength="256" placeholder="搜地点、区域"/> 
                             <div class="input-clear" title="清空"></div> 
                         </div> 
                         <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
@@ -22,6 +22,8 @@
                 <div class="market-mode" @click="signDeleteClick">
                 </div>
                 <div class="market-mode-last" @click="signSaveClick">
+                </div>
+                <div class="market-ceju-last" @click="cejuClick">
                 </div>
             </div>
         </div>
@@ -46,7 +48,12 @@
     const resourcesUrl = [
         '//api.map.baidu.com/getscript?v=2.0&ak=syxdUSGLOZInXcF9rMMGjKQcY9kzEd7W',
         '//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js',
-        '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js'];
+        '//api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js',
+        '//api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js'];
+
+    // 
+
+
 
     export default {
         name: 'bb-map',
@@ -88,7 +95,12 @@
             signId:{
                 type: [Array,String],
                 default:function(){
-                    return [];
+                    return [{y: 45.952397, x: 129.759399},
+                    {y: 45.666123, x: 129.628318},
+                    {y: 45.798186, x: 128.956816},
+                    {y: 45.960417, x: 129.653614},
+                    {y: 45.651609, x: 128.922322},
+                    {y: 45.782098, x: 128.586571}];
                 }
             }
         },
@@ -109,7 +121,8 @@
                     height: this.heightMap ? this.heightMap + 'vh !important' : '100vh',
 					position: 'relative',
 					left: this.widthMap ? ((parseFloat(this.widthMap) > 0 && parseFloat(this.widthMap) < 100) ? ((100 - parseFloat(this.widthMap)) / 2) + '%' : 0) : 0
-                }
+                },
+                myDis: null
             }
         },
         created:function(){
@@ -119,6 +132,11 @@
         mounted() {
             let th = this;
             try {
+
+                // this.city_resource_id=4
+                // this.target_province_code=230000
+                // this.target_town_code=230100
+                // this.target_area_code=230124
                 Util.reloadJS(resourcesUrl).then(function () {
                     let map = new BMap.Map("mapContent"+th._key);
 
@@ -126,7 +144,8 @@
                     map.addControl(new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT})); 
                     // 开启鼠标滚轮缩放      
                     map.enableScrollWheelZoom(true);
-
+                    // 测距
+                    th.myDis = new BMapLib.DistanceTool(map);
                     /**
                     * 获取数据
                     */
@@ -144,6 +163,9 @@
 
                                 th.searchOperation(th);
 
+                                if (th.isArea) {
+                                    th.boundary(th);
+                                }
                                 // 包含搜索 标记功能
                                 if (th.isSign) {
                                     console.log('isSign : ' + th.isSign);
@@ -153,12 +175,6 @@
 
                                     th.showSignStyle();
                                 }
-                                if (th.signId && th.signId.length) {
-                                    th.signShowOperation(th);
-                                }
-                                if (th.isArea) {
-                                    boundary();
-                                }
                             });
                             th.loading = false;
                         }, function (code, msg) {
@@ -166,23 +182,7 @@
                         });
                     }
 
-                    function boundary () {
-                        th.loading = true;
-                        Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
-                            data.forEach(function (item) {
-                                var list = item['value'];
-
-                                th.pointData = list.list;
-
-                                th.getBoundary(th);
-
-                                th.addPoint(th, list.list);
-                            });
-                            th.loading = false;
-                        }, function (code, msg) {
-                            th.loading = false;
-                        });
-                    }
+                    
 
                     th.map = map;
                 });
@@ -191,6 +191,24 @@
             }
         },
         methods: {
+            boundary (th) {
+                th.loading = true;
+                Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
+                    data.forEach(function (item) {
+                        var list = item['value'];
+
+                        th.pointData = list.list;
+
+                        th.getBoundary(th);
+
+                        th.addPoint(th, list.list);
+
+                    });
+                    th.loading = false;
+                }, function (code, msg) {
+                    th.loading = false;
+                });
+            },
             routerMapClick() {
                 if (this.routerJump) {
                     this.$emit('router-map-click');
@@ -273,6 +291,7 @@
                 }
 
                 th.addlabel(th, data, lat, lng);
+
             },
             /**
              * 自定义label样式
@@ -330,7 +349,7 @@
                     div.style.top  = pixel.y - 45 + "px";
                 }
                     
-                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name);
+                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name || data.project_code || data.resource_code);
 
                 return myCompOverlay;
             },
@@ -379,10 +398,10 @@
                     span2.style.transform = 'scale(0.8)';
                     
                     div.appendChild(span);
-                    div.appendChild(span2);
+                    data.project_status && div.appendChild(span2);
                     
                     span.appendChild(document.createTextNode(this._text));      
-                    span2.appendChild(document.createTextNode(data.project_status)); 
+                    data.project_status && span2.appendChild(document.createTextNode(data.project_status)); 
 
                     var that = this;
 
@@ -412,7 +431,7 @@
                     div.style.top  = pixel.y - 85 + "px";
                 }
                     
-                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name);
+                var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(data.x_coordinate, data.y_coordinate), data.project_name || data.project_code || data.resource_code);
 
                 return myCompOverlay;
             },
@@ -434,6 +453,12 @@
                     map.addOverlay(label); 
                 }  
                 
+                setTimeout(()=> {
+                    if (th.signId && th.signId.length) {
+                        th.signShowOperation(th);
+                    }
+                }, 1500);
+
             },
             /**
              * 添加行政区划
@@ -506,10 +531,10 @@
 
                 for (let i = 0; i < th.signId.length; i++) {
                     th.overlays.push({
-                        lat: th.signId[i].x,
-                        lng: th.signId[i].y
+                        lat: th.signId[i].y,
+                        lng: th.signId[i].x
                     });
-                    point.push(new BMap.Point(th.signId[i].y, th.signId[i].x));
+                    point.push(new BMap.Point(th.signId[i].x, th.signId[i].y));
                 }
 
                 map.addOverlay(new BMap.Polyline(point, {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5})); 
@@ -564,6 +589,7 @@
              * 修改原百度地图工具箱事件
              */
             modifySignImageClick(th) {
+                th.myDis.close();
                 let obj = th.getDom("mapContent"+th._key);
                 th.deleteOtherDom();
                 obj.addEventListener("click", function(ev){
@@ -605,12 +631,16 @@
                 let clickMode1 = document.getElementsByClassName('market-mode1');
                 let clickModeLast = document.getElementsByClassName('market-mode-last');
                 let clickModeLast1 = document.getElementsByClassName('market-mode-last1');
+                let clickCejuLast = document.getElementsByClassName('market-ceju-last');
+                let clickCejuLast1 = document.getElementsByClassName('market-ceju-last1');
 
                 if (type === 'sign' && clickSignMode1 && clickSignMode1[0]) {
                     return;
                 } else if (type === 'clear' && clickMode1 && clickMode1[0]) {
                     return;
                 }  else if (type === 'save' && clickModeLast1 && clickModeLast1[0]) {
+                    return;
+                }  else if (type === 'ceju' && clickCejuLast1 && clickCejuLast1[0]) {
                     return;
                 }
 
@@ -620,14 +650,18 @@
                     clickMode1[0].className = 'market-mode';
                 } else if (clickModeLast1 && clickModeLast1[0]) {
                     clickModeLast1[0].className = 'market-mode-last';
+                } else if (clickCejuLast1 && clickCejuLast1[0]) {
+                    clickCejuLast1[0].className = 'market-ceju-last';
                 }
 
                 if (type === 'sign') {
                     clickSignMode[0].className = 'BMapLib_box BMapLib_polyline market-sign-mode1';
                 } else if (type === 'clear') {
                     clickMode[0].className = 'market-mode1';
-                }  else if (type === 'save') {
+                } else if (type === 'save') {
                     clickModeLast[0].className = 'market-mode-last1';
+                } else if (type === 'ceju') {
+                    clickCejuLast[0].className = 'market-ceju-last1';
                 }
             },
             /**
@@ -644,6 +678,11 @@
              */
             localSearch(t, myValue, auto) {
                 // 清除地图上所有覆盖物
+                t.map.clearOverlays();
+                if (t.isArea) {
+                    t.boundary(t);
+                }
+
                 let local = null;
                 // 智能搜索
                 if (auto) {
@@ -704,8 +743,22 @@
                 this.modifySignImage('clear');
                 this.map.clearOverlays();
                 this.overlays = [];
+                this.signId = [];
                 this.map.removeEventListener("click", function() {});
+
+                if (this.isArea) {
+                    this.boundary(this);
+                }
+
                 this.$emit('sign-delete-click');
+            },
+            /**
+             * 测距
+             */
+            cejuClick() {
+                this.modifySignImage('ceju');
+
+                this.myDis.open();
             },
             /**
              * 保存标记点
@@ -730,14 +783,14 @@
 					if (type) {
 						for (let i = 0; i < overlay.length; i++) {
 							resultOverlay.push({
-								x: overlay[i].lat,
-								y: overlay[i].lng
+								y: overlay[i].lat,
+								x: overlay[i].lng
 							});
 						}
 					} else {
 						resultOverlay.push({
-							x: overlay.lat,
-							y: overlay.lng
+							y: overlay.lat,
+							x: overlay.lng
 						});
 					}
 				}
@@ -752,8 +805,6 @@
 					}					
 				}
 				
-				debugger
-                
                 let result = {
                     city_resource_id: this.$route.query.city_resource_id,
                     signId: resultOverlay
@@ -975,6 +1026,20 @@
                 
                 .market-mode-last1 {
                     background: url('./img/baocun1.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-ceju-last {
+                    background: url('./img/ceju.png') no-repeat !important;
+                    height: 71px;
+                    width: 100%;
+                    cursor: pointer;
+                }
+                
+                .market-ceju-last1 {
+                    background: url('./img/ceju1.png') no-repeat !important;
                     height: 71px;
                     width: 100%;
                     cursor: pointer;
