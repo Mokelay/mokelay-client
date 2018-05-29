@@ -10,6 +10,8 @@ import vantCheckbox from './bb-vant-checkbox';
 import vantNumberkeyboard from './bb-vant-number-keyboard';
 import bbvantfield from './bb-vant-field';
 import bbvantfieldnumber from './bb-vant-field-number';
+import bbvantswipe from './bb-vant-swipe';
+import bbvanttag from './bb-vant-tag';
 
 export default {
 	install: function(Vue) {
@@ -24,6 +26,8 @@ export default {
 		Vue.component('bb-vant-number-keyboard', vantNumberkeyboard);
 		Vue.component('bb-vant-field', bbvantfield);
 		Vue.component('bb-vant-field-number', bbvantfieldnumber);
+		Vue.component('bb-vant-swipe', bbvantswipe);
+		Vue.component('bb-vant-tag', bbvanttag);
 
 		console.log("成功加载Vant积木;");
 	}
