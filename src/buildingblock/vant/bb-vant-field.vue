@@ -70,7 +70,9 @@ import 'vant/lib/field/style';
             };
         },
         mounted(){
-
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");  
+            t.$emit('mounted',this.valueBase); 
         },
         //事件click
         methods: {

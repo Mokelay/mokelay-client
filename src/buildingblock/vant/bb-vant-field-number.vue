@@ -36,6 +36,14 @@ import 'vant/lib/field/style';
           "van-field":Field,
         },
         props: {
+            //v-model
+            value:{
+                type:Number
+            },
+            /*模板默认值*/
+            defaultValTpl:{
+                type:[String,Number,Boolean]
+            },
             /*其他属性配置
                 {
                     theme:String 主题,
@@ -65,11 +73,17 @@ import 'vant/lib/field/style';
         data() {
             return {
                 valueBase:this.value,
+                valueBaseString:this.value,
                 show:false
             };
         },
         mounted(){
-
+            let t=this;
+            //解析模板默认值
+            _TY_Tool.buildDefaultValTpl(t,"valueBaseString");
+            //对模板解析输出的字符串转换格式
+            t.valueBase = Number(t.valueBaseString); 
+            t.$emit('mounted',this.valueBase); 
         },
         //事件click
         methods: {
