@@ -8,6 +8,8 @@ import cell from './bb-vant-cell';
 import cellGroup from './bb-vant-cell-group';
 import vantCheckbox from './bb-vant-checkbox';
 import vantNumberkeyboard from './bb-vant-number-keyboard';
+import bbvantfield from './bb-vant-field';
+import bbvantfieldnumber from './bb-vant-field-number';
 
 export default {
 	install: function(Vue) {
@@ -20,6 +22,8 @@ export default {
 		Vue.component('bb-vant-cell-group', cellGroup);
 		Vue.component('bb-vant-checkbox', vantCheckbox);
 		Vue.component('bb-vant-number-keyboard', vantNumberkeyboard);
+		Vue.component('bb-vant-field', bbvantfield);
+		Vue.component('bb-vant-field-number', bbvantfieldnumber);
 
 		console.log("成功加载Vant积木;");
 	}
