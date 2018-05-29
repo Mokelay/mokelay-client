@@ -1,29 +1,13 @@
 <template>
-    <div>
-        <van-field 
-            v-model="valueBase" 
-            type="number"
-            :label="option.label"
-            :icon="option.icon"
-            :leftIcon="option.leftIcon"
-            :required="option.required"
-            :disabled="option.disabled"
-            :error="option.error" 
-            :errorMessage="option.errorMessage" 
-            :autosize="option.autosize"
-            @focus="showKeyboard"
-            @change="onInput" 
-            @click-icon="clickIcon" />
-        <bb-vant-number-keyboard
-            :show="show"
-            @showKeyboard="(val)=>{show = false}"
-            @input="onInput"
-            @delete="onDelete"
-            >
-        </bb-vant-number-keyboard>
-    </div>
-
-        
+    <span class="tagClass">
+        <van-tag
+            v-for="(tag,key) in valueBase"
+            :key="key" 
+            :type="tag.type"
+            :plain="tag.plain"
+            :mark="tag.mark"
+            >{{tag.text}}</van-tag>
+    </span>
 </template>
 
 <script>
@@ -36,76 +20,65 @@ import 'vant/lib/tag/style';
           "van-tag":Tag,
         },
         props: {
-            /*其他属性配置
-                {
-                    theme:String 主题,
-                    title:String 标题,
-                    show-delete-key:Boolean 是否展示删除按钮,
-                    hide-on-click-outside:Boolean 点击外部时是否收起键盘
-                }
+            /*静态标签数据源
+                [{
+                    text:'标签内容',
+                    type:"primary success danger" 类型
+                    plain:false  是否为空心样式   
+                    mark:false 是否为圆角样式
+                }]
             */
-            option:{
-                type:Object,
-                default:function() {
-                    return {
-                        type:"number",
-                        placeholder:"",
-                        label:"标签名",
-                        icon:"",
-                        leftIcon:"",
-                        required:false,
-                        disabled:false,
-                        error:false,
-                        errorMessage:"",
-                        autosize:true
-                    };
-                }
+            tags:{
+                type:Array
+            },
+            /*模板默认值*/
+            defaultValTpl:{
+                type:String
+            },
+            //动态标签数据源
+            tagDs:{
+                type:Object
             }
         },
         data() {
             return {
-                valueBase:this.value,
+                valueBase:this.tags,
+                valueBaseString:'',
                 show:false
             };
         },
         mounted(){
-
+            let t=this;
+            _TY_Tool.buildDefaultValTpl(t,"valueBaseString");
+            t.valueBase = t.defaultValTpl?eval(t.valueBaseString):t.valueBase;
+            t.$emit('mounted',t.valueBase); 
         },
         //事件click
         methods: {
-            //显示键盘
-            showKeyboard(){
+            //获取数据
+            getData() {
                 const t = this;
-                t.show = true;
-            }, 
-            //隐藏键盘
-            hideKeyboard(){
-                const t = this;
-                t.show = false;
+                if (t.tagDs) {
+                    Util.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            const {dataKey, value} = item;
+                            t.realFields = value;
+                        });
+                    }, function (code, msg) {
+                    });
+                }
             },
-            //输入事件
-            onInput(key){
-                const newValueBase = this.valueBase?this.valueBase + '' + key : '' + key;
-                this.valueBase = Number(newValueBase);
-                this.$emit('input',key);
-                this.$emit('change',key);
-            },
-            //删除事件
-            onDelete(key){
-                let newValueBase = this.valueBase?this.valueBase + '': null;
-                newValueBase = newValueBase?newValueBase.slice(0,newValueBase.length-1):newValueBase;
-                this.valueBase = newValueBase?Number(newValueBase):null;
-                this.$emit('delete',key);
-                this.$emit('change',key);
-            },
-            onBlur(){
-                this.show = false;
-            },
-            clickIcon(param){
-            }
         }
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+    .tagClass{
+        span{
+            margin-left:0.6rem;  
+        }
+        span:first-child{
+            margin-left:0;
+        }
+    }
 </style>

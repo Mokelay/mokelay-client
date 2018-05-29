@@ -12,6 +12,7 @@ import bbvantfield from './bb-vant-field';
 import bbvantfieldnumber from './bb-vant-field-number';
 import bbvantswipe from './bb-vant-swipe';
 import bbvanttag from './bb-vant-tag';
+import bbvantpasswordinput from './bb-vant-password-input';
 
 export default {
 	install: function(Vue) {
@@ -28,6 +29,7 @@ export default {
 		Vue.component('bb-vant-field-number', bbvantfieldnumber);
 		Vue.component('bb-vant-swipe', bbvantswipe);
 		Vue.component('bb-vant-tag', bbvanttag);
+		Vue.component('bb-vant-password-input', bbvantpasswordinput);
 
 		console.log("成功加载Vant积木;");
 	}
