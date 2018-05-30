@@ -237,6 +237,7 @@
         .borderSelected{
             border-color: #0091ea;
             transition: border-color .1s;
+            min-height: 45px;
         }
         .legoborder{
             
