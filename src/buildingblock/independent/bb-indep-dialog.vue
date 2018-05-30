@@ -114,7 +114,6 @@
         },
         created: function () {
             const t=this;
-            window._TY_Platform = 'PC';
             //按需加载弹窗组件
             if(window._TY_Platform=='PC'){
                 t._initPcDialog();
