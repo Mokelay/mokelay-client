@@ -75,16 +75,14 @@
         },
         data() {
             return {
-                formData:_TY_Tool.deepClone(this.value),
+                formData:this.value,
                 realFields:_TY_Tool.deepClone(this.fields),
                 formKey:_TY_Tool.uuid()
             }
         },
         watch: {
-            formData:{
-                handler:(val,oldVal)=>{
-                },
-                deep:true
+            value(val){
+                this.formData = val;
             },
         },
         created: function () {
