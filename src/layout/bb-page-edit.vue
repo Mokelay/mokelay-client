@@ -329,7 +329,7 @@
         var _dialog = new Vue({
             router: t.$router,
             render: function(createElement){
-                return createElement('bb-dialog',{props:{'isShow':true,content:t.diaContent},on:{
+                return createElement('bb-indep-dialog',{props:{'isShow':true,content:t.diaContent},on:{
                   "update:isShow":(val)=>{
                     if(!val){
                       //关闭弹窗销毁DOM中的当前弹窗节点
