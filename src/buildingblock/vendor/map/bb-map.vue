@@ -36,7 +36,8 @@
     import './css/DrawingManager_min.css';
     import './css/SearchInfoWindow_min.css';
 
-    import ditu0 from './img/ditu.png';       // 放大
+    import icon2 from './img/icon2.png';      // 搜索icon
+	import ditu0 from './img/ditu.png';       // 放大
     import ditu1 from './img/ditu1.png';      // 1爱琴海    4003
     import ditu2 from './img/ditu2.png';      // 2家具委管  4002
     import ditu3 from './img/ditu3.png';      // 3星艺佳    4005
@@ -683,7 +684,7 @@
                     t.boundary(t, true);
                 }
                 let local = null;
-                let myIcon = new BMap.Icon(ditu1, new BMap.Size(30, 35));  
+                let myIcon = new BMap.Icon(icon2, new BMap.Size(30, 35));  
                 // 智能搜索
                 if (auto) {
                     local = new BMap.LocalSearch(t.map, { 
