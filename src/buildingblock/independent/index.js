@@ -19,6 +19,7 @@ import bbellipsetag from './bb-ellipse-tag';
 import bbpreview from './bb-preview.vue';
 import bbreadbb from './bb-read-bb';
 import bb from './bb';
+import bbindepdialog from './bb-indep-dialog';
 
 import helloworld from './bb-hello-world'
 
@@ -48,6 +49,7 @@ export default {
 		Vue.component('bb-preview', bbpreview);
 		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb', bb);
+		Vue.component('bb-indep-dialog', bbindepdialog);
 
 		Vue.component('bb-hello-world', helloworld);
 
