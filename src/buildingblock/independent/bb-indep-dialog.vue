@@ -239,6 +239,7 @@
             closeDialog:function(){
                 this.active = false;
             },
+            //主要用于积木选择器
             loadChildBB:function(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
