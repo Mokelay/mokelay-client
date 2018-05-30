@@ -238,8 +238,11 @@
             //对外提供方法 关闭弹窗
             closeDialog:function(){
                 this.active = false;
+            },
+            loadChildBB:function(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
             }
-            
             
         }
     }
