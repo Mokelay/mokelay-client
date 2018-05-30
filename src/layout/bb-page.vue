@@ -327,7 +327,7 @@
         var _dialog = new Vue({
             router: t.$router,
             render: function(createElement){
-                return createElement('bb-dialog',{
+                return createElement('bb-indep-dialog',{
                   props:t.dialogProp,on:{
                   "update:isShow":(val)=>{
                     if(!val){

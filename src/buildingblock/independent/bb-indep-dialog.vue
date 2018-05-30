@@ -224,20 +224,24 @@
                 let t=this;
                 t.active=false;
                 t.$emit("confirm",t);//弹窗确认事件
+                t.$emit('update:isShow', false);
             },
             //点击取消按钮触发事件
             _cancel:function(){
                 let t=this;
                 t.active = false;
                 t.$emit("cancel",t);//弹窗取消事件
+                t.$emit('update:isShow', false);
             },
             //对外提供方法 打开弹窗
             openDialog:function(){
                 this.active = true;
+                this.$emit('update:isShow', false);
             },
             //对外提供方法 关闭弹窗
             closeDialog:function(){
                 this.active = false;
+                this.$emit('update:isShow', false);
             },
             //主要用于积木选择器
             loadChildBB:function(){
