@@ -793,7 +793,6 @@
 						});
 					}
 				}
-											
 				for (let i = 0; i < this.overlays.length; i++) {
 					if (this.overlays[i][0] && this.overlays[i][0].ia) {
 						mergeOverlaysFun(this.overlays[i][0].ia, true);
