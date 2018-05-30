@@ -118,7 +118,8 @@
 					position: 'relative',
 					left: this.widthMap ? ((parseFloat(this.widthMap) > 0 && parseFloat(this.widthMap) < 100) ? ((100 - parseFloat(this.widthMap)) / 2) + '%' : 0) : 0
                 },
-                myDis: null
+                myDis: null,
+                pageSignId: []
             }
         },
         created:function(){
@@ -128,6 +129,8 @@
         mounted() {
             let th = this;
             try {
+
+                this.pageSignId = this.signId;
 
                 // this.city_resource_id=4
                 // this.target_province_code=230000
@@ -450,7 +453,7 @@
                 }  
                 
                 setTimeout(()=> {
-                    if (th.signId && th.signId.length) {
+                    if (th.pageSignId && th.pageSignId.length) {
                         th.signShowOperation(th);
                     }
                 }, 1500);
@@ -525,12 +528,12 @@
                 th.overlays = [];
                 let point = [];
 
-                for (let i = 0; i < th.signId.length; i++) {
+                for (let i = 0; i < th.pageSignId.length; i++) {
                     th.overlays.push({
-                        lat: th.signId[i].y,
-                        lng: th.signId[i].x
+                        lat: th.pageSignId[i].y,
+                        lng: th.pageSignId[i].x
                     });
-                    point.push(new BMap.Point(th.signId[i].x, th.signId[i].y));
+                    point.push(new BMap.Point(th.pageSignId[i].x, th.pageSignId[i].y));
                 }
 
                 map.addOverlay(new BMap.Polyline(point, {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5})); 
@@ -739,7 +742,7 @@
                 this.modifySignImage('clear');
                 this.map.clearOverlays();
                 this.overlays = [];
-                this.signId = [];
+                this.pageSignId = [];
                 this.map.removeEventListener("click", function() {});
 
                 if (this.isArea) {
@@ -763,7 +766,7 @@
                 if (!this.overlays.length) {
 					this.$emit('signSaveClick', {
 						city_resource_id: this.$route.query.city_resource_id,
-						signId: []
+						pageSignId: []
 					});
                     return;
                 }
