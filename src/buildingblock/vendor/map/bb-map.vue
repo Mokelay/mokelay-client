@@ -36,7 +36,8 @@
     import './css/DrawingManager_min.css';
     import './css/SearchInfoWindow_min.css';
 
-    import ditu0 from './img/ditu.png';       // 放大
+    import icon2 from './img/icon2.png';      // 搜索icon
+	import ditu0 from './img/ditu.png';       // 放大
     import ditu1 from './img/ditu1.png';      // 1爱琴海    4003
     import ditu2 from './img/ditu2.png';      // 2家具委管  4002
     import ditu3 from './img/ditu3.png';      // 3星艺佳    4005
@@ -191,7 +192,7 @@
             }
         },
         methods: {
-            boundary (th) {
+            boundary (th, flag) {
                 th.loading = true;
                 Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
                     data.forEach(function (item) {
@@ -199,7 +200,7 @@
 
                         th.pointData = list.list;
 
-                        th.getBoundary(th);
+                        th.getBoundary(th, flag);
 
                         th.addPoint(th, list.list);
 
@@ -463,7 +464,7 @@
             /**
              * 添加行政区划
              */
-            getBoundary(th){       
+            getBoundary(th, flag){       
                 let map = th.map;
                 var bdary = new BMap.Boundary();
                 bdary.get(th.area || th.town || list.province, function(rs){      //获取行政区域
@@ -478,7 +479,7 @@
                         map.addOverlay(ply);  //添加覆盖物
                         pointArray = pointArray.concat(ply.getPath());
                     }    
-                    map.setViewport(pointArray);    //调整视野  
+                    !flag && map.setViewport(pointArray);    //调整视野  
                 });   
             },            
             /**
@@ -680,10 +681,10 @@
                 // 清除地图上所有覆盖物
                 t.map.clearOverlays();
                 if (t.isArea) {
-                    t.boundary(t);
+                    t.boundary(t, true);
                 }
-
                 let local = null;
+                let myIcon = new BMap.Icon(icon2, new BMap.Size(30, 35));  
                 // 智能搜索
                 if (auto) {
                     local = new BMap.LocalSearch(t.map, { 
@@ -695,7 +696,7 @@
                             let pp = local.getResults().getPoi(0).point;    
                             t.map.centerAndZoom(pp, 18);
                             // 添加标注
-                            t.map.addOverlay(new BMap.Marker(pp));
+                            t.map.addOverlay(new BMap.Marker(pp, {icon: myIcon}));
                         }
                     });
                 } else {
@@ -708,8 +709,9 @@
 
                             t.map.centerAndZoom(ppList[0].point, 18);
 
+                            let resultPoint = null;
                             ppList.map(function(item, index) {
-                                t.map.addOverlay(new BMap.Marker(item.point));
+                                t.map.addOverlay(new BMap.Marker(item.point, {icon: myIcon}));
                             });
                         }
                     });
@@ -721,11 +723,10 @@
              * 搜索点击功能
              */
             searchClick() {
-                if (!this.valueBase) {
+                if (!document.getElementById('sole-input').value) {
                     return;
                 }
-
-                this.localSearch(this, this.valueBase, false);
+                this.localSearch(this, document.getElementById('sole-input').value, false);
 
                 this.$emit('search-click');
             },

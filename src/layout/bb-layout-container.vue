@@ -32,14 +32,14 @@
         </el-container>
         <!-- 上下左右布局 -->
         <el-container v-if="realLayout == 'h-l-m'">
-            <el-header :style="{background:realBgColor.header}">
+            <el-header :style="p_layoutObject.headerStyle">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside width="20%" :style="{background:realBgColor.leftAside}">
+                <el-aside width="20%" :style="p_layoutObject.leftStyle">
                     <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
-                <el-main :style="{background:realBgColor.main}">
+                <el-main :style="p_layoutObject.mainStyle">
                     <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
             </el-container>
