@@ -51,7 +51,7 @@ import 'vant/lib/number-keyboard/style';
         },
         data() {
             return {
-                valueBase:this.value,
+                valueBase:this.value || '',
                 showKeyboard: false
             };
         },
@@ -61,13 +61,15 @@ import 'vant/lib/number-keyboard/style';
         methods: {
             onInput(key) {
                 this.valueBase = (this.valueBase + key).slice(0, 6);
-                this.$emit("input",this.value);
-                this.$emit("change",this.value);
+                const param = typeof this.valueBase == "string"?Number(this.valueBase):this.valueBase;
+                this.$emit("input",param);
+                this.$emit("change",param);
             },
             onDelete() {
-                this.value = this.value.slice(0, this.value.length - 1);
-                this.$emit("delete",this.value);
-                this.$emit("change",this.value);
+                this.valueBase = this.valueBase.slice(0, this.valueBase.length - 1);
+                const param = typeof this.valueBase == "string"?Number(this.valueBase):this.valueBase;
+                this.$emit("delete",param);
+                this.$emit("change",param);
             }
         }
     }
