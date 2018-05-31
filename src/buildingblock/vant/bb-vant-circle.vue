@@ -12,7 +12,8 @@
     :text="text"
   />
 </template>
-<script>
+<script>  
+
 import Circle from 'vant/lib/circle';
 import 'vant/lib/circle/style';
 
@@ -67,6 +68,7 @@ export default {
         default:true
        }
     },
+    
     data() {
             return {
                 currentRate:this.value,
