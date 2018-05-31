@@ -17,6 +17,7 @@ import bbvanttabbar from './bb-vant-tab-bar';
 import bbvantdialog from './bb-vant-dialog';
 import bbvantswitchcell from './bb-vant-switch-cell';
 import bbvantsearch from './bb-vant-search';
+import bbvantstepper from './bb-vant-stepper';
 
 export default {
 	install: function(Vue) {
@@ -38,6 +39,7 @@ export default {
 		Vue.component('bb-vant-dialog', bbvantdialog);
 		Vue.component('bb-vant-switch-cell', bbvantswitchcell);
 		Vue.component('bb-vant-search', bbvantsearch);
+		Vue.component('bb-vant-stepper', bbvantstepper);
 
 		console.log("成功加载Vant积木;");
 	}
