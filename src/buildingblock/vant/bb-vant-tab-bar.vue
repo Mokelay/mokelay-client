@@ -7,6 +7,7 @@
             :url="field.url"
             :to="field.to"
             :replace="field.replace"
+            :key="key"
             >{{field.text}}</van-tabbar-item>
     </van-tabbar>
 </template>
