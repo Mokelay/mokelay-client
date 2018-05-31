@@ -16,8 +16,6 @@
                 dialog = t._renderH5Dialog(createElement,bbItems);
                 console.log("dialog:",dialog);
             }
-
-            // return dialog;
             return dialog
         },
         props: {
