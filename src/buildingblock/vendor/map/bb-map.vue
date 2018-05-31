@@ -160,7 +160,7 @@
                                 // 设置地图显示的城市 此项是必须设置的
                                 map.centerAndZoom(th.area || th.town || list.province, 11); 
 
-                                th.searchOperation(th);
+                                // th.searchOperation(th);
 
                                 if (th.isArea) {
                                     th.boundary(th);
@@ -861,8 +861,6 @@
         height: 71px !important;
         width: 110px !important;
     }
-
-    .tangram-suggestion-main, .tangram-suggestion {z-index: 9999999999;}
 
 </style>
 
