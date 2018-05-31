@@ -75,6 +75,12 @@
         watch: {
             totalItems(val){
                 this.p_totalItems = val;
+            },
+            pageSize(val){
+                this.p_pageSize = val;
+            },
+            page(val){
+                this.p_page = val;
             }
         },
         created: function () {
