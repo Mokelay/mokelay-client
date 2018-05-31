@@ -1,15 +1,11 @@
 <template>
     <el-tabs v-show="show" :key="key" :type="showBBSelect?'card':'border-card'">
         <el-tab-pane label="属性">
-            <div class="bb-info">
-                <p>积木名称：<bb-input :style="{width:'auto'}" v-model="valueBase.aliasName" ></bb-input></p>
-                <div v-if="showBBSelect">
-                    选择积木：<bb-select v-model="valueBase.alias" textField="name" valueField="alias" :ds="bbFieldsDs" @change="bbChange"></bb-select>
-                </div>
-                <p>积木别名：{{valueBase.alias}}</p>
-                <p>积木标识：{{valueBase.uuid}}</p>
-            </div>
+            <!-- 基础属性 -->
+            <bb-form ref="bb-config-form-base" size="mini" labelWidth="80px" :hideSubmitButton="true" :content="formItemFieldsBase" v-model="valueBase"></bb-form>
+            <!-- 表单属性 -->
             <bb-form ref="bb-config-form-ad-form" v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
+            <!-- 积木属性 -->
             <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
@@ -100,6 +96,7 @@
                          "valueKey": "data_list"
                     }]
                 },
+                formItemFieldsBase:null,
                 formItemFields:null,
                 layoutContent:null
             }
@@ -206,6 +203,17 @@
                 //form表单的校验
                 if(t.$refs['bb-config-form-ad-form']&&t.$refs['bb-config-form-ad-form'].$children[0]){
                     t.$refs['bb-config-form-ad-form'].$children[0].validate((valid)=>{
+                        if(valid){
+                            t.$emit('input',t.valueBase);
+                            t.$emit('change',t.valueBase);
+                        }else{
+                            t.$message({
+                                type: 'info',
+                                message: '表单校验失败'
+                            });
+                        }
+                    });
+                    t.$refs['bb-config-form-base'].$children[0].validate((valid)=>{
                         if(valid){
                             t.$emit('input',t.valueBase);
                             t.$emit('change',t.valueBase);
@@ -677,6 +685,63 @@
                         }]
                     }
                 }];
+                //积木属性必填字段
+                t.formItemFieldsBase = [{                       
+                            uuid: _TY_Tool.uuid(),
+                            alias: 'bb-input', //布局类积木 || 普通积木
+                            aliasName: '积木名称', 
+                            attributes: {
+                                attributeName:'aliasName',
+                                rules:[{ required: true, message: '请输入积木名称', trigger: 'blur' }]
+                            }, //积木属性
+                            animation: [{ //动画
+                            }],
+                            interactives: [{ //触发交互
+                            }],
+                            layout: {} //积木布局,
+                        },{                       
+                            uuid: _TY_Tool.uuid(),
+                            alias: 'bb-select', //布局类积木 || 普通积木
+                            aliasName: '选择积木', 
+                            attributes: {
+                                attributeName:'alias',
+                                textField:"name",
+                                valueField:"alias",
+                                ds:t.bbFieldsDs,
+                                rules:[{ required: true, message: '请输入积木名称', trigger: 'blur' }]
+                            }, //积木属性
+                            animation: [{ //动画
+                            }],
+                            interactives: [{
+                                uuid:_TY_Tool.uuid(),
+                                fromContentEvent:'change',
+                                executeType:'trigger_method',
+                                executeArgument:'t.$parent.$parent.$parent.$parent.$parent.bbChange(params[0])',
+                            }],
+                            layout: {} //积木布局,
+                        },{                       
+                            uuid: _TY_Tool.uuid(),
+                            alias: 'bb-words', //布局类积木 || 普通积木
+                            aliasName: '积木别名', 
+                            attributes: {
+                                attributeName:'alias'
+                            }, //积木属性
+                            animation: [{ //动画
+                            }],
+                            interactives: [],
+                            layout: {} //积木布局,
+                        },{                       
+                            uuid: _TY_Tool.uuid(),
+                            alias: 'bb-words', //布局类积木 || 普通积木
+                            aliasName: '积木标识', 
+                            attributes: {
+                                attributeName:'uuid',
+                            }, //积木属性
+                            animation: [{ //动画
+                            }],
+                            interactives: [],
+                            layout: {} //积木布局,
+                        }]
                 //设置表单项积木时需要额外增的字段
                 t.formItemFields = [{                      
                             attributeName:'attributeName',
