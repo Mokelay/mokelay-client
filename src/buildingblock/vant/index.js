@@ -18,6 +18,9 @@ import bbvantdialog from './bb-vant-dialog';
 import bbvantswitchcell from './bb-vant-switch-cell';
 import bbvantsearch from './bb-vant-search';
 
+import bbvantcircle from "./bb-vant-circle";
+import helloworld from "./bb-helloworld"
+
 export default {
 	install: function(Vue) {
 		Vue.component('bb-vant-address-edit', vantAddressEdit);
@@ -38,6 +41,9 @@ export default {
 		Vue.component('bb-vant-dialog', bbvantdialog);
 		Vue.component('bb-vant-switch-cell', bbvantswitchcell);
 		Vue.component('bb-vant-search', bbvantsearch);
+
+		Vue.component('bb-vant-circle', bbvantcircle);
+		Vue.component("bb-helloworld",helloworld);
 
 		console.log("成功加载Vant积木;");
 	}
