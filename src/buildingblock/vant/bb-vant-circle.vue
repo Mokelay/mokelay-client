@@ -9,25 +9,23 @@
     :speed="option.speed"
     :stroke-width="option.stroke_width"
     :clockwise="option.clockwise"
-  />{{text}}
-
+    :text="text"
+  />
 </template>
-
 <script>
-import Button from 'vant/lib/circle';
+import Circle from 'vant/lib/circle';
 import 'vant/lib/circle/style';
 
 export default {
     name:"bb-vant-circle",
     components:{
-        "vant-circle"：circle
+        "vant-circle":Circle
     },
-    data() {
-            return {
-                currentRate:0,
-            };
-        },
     props:{
+      text:{
+        type:String,
+        default:"",
+      },
        // 目标进度 
        rate:{
         type:Number,
@@ -44,14 +42,14 @@ export default {
         default:"#38f",
        },
        // 轨道颜色
-       layer-color:{
+       layer_color:{
         type:String,
         default:"#fff"
        },
        // 填充颜色
        fill:{
         type:String,
-        default:none
+        default:""
        },
        // 动画速度
        speed:{
@@ -68,6 +66,17 @@ export default {
         type:Boolean,
         default:true
        }
+    },
+    data() {
+            return {
+                currentRate:this.value,
+                currentRateString:this.value,
+            };
+        },
+    computed:{
+        text(){
+            return this.currentRate.toFixed(0) + '%'
+        }
     }
 
 }
