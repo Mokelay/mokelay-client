@@ -862,6 +862,8 @@
         width: 110px !important;
     }
 
+    .tangram-suggestion-main, .tangram-suggestion {z-index: 9999999999;}
+
 </style>
 
 <style lang='less' scoped>
