@@ -46,7 +46,7 @@
             <!-- 列表新增按钮 -->
             <el-button v-if="editConfig && addButton && !editAll" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" :element-loading-text="customLoading.text" :element-loading-spinner="customLoading.spinner" :element-loading-background="customLoading.background" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55"></el-table-column>
 
@@ -379,6 +379,10 @@
                     };
                     return style;
                 }
+                或
+                {
+                    color:'#FF0000'
+                }
             */
             cellStyleFn:{
                 type:String
@@ -390,9 +394,30 @@
                     };
                     return style;
                 }
+                或
+                {
+                    color:'#FF0000'
+                }
             */
             headerCellStyleFn:{
                 type:String
+            },
+            /*用户自定义loading样式
+                {
+                    text:"拼命加载中",
+                    spinner:"el-icon-loading",
+                    background:"rgba(0, 0, 0, 0.8)"
+                }
+            */
+            customLoading:{
+                type:Object,
+                default:function(){
+                    return {
+                        text:null,
+                        spinner:null,
+                        background:null
+                    };
+                }
             }
         },
         data() {
