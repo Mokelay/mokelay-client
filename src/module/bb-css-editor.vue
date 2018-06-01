@@ -247,7 +247,7 @@
                             aliasName:'圆角',                                  
                             attributes:{
                                 width:"95%",
-                                attributeName:'radian',
+                                attributeName:'radius',
                             },
                             interactives:[],
                         },{                      
