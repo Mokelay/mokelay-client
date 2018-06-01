@@ -155,6 +155,9 @@
                 this.defaultActive = fullPath;
             }
         },
+        mounted:function(){
+            
+        },
         methods: {
             closeOrOpenMenu:function(...args){
                 let t=this;
@@ -348,11 +351,34 @@
         },
     }
 </script>
-<style lang='less' scoped>
+<style scoped>
     .bb-menu-badge .el-badge__content {
         right: -5px !important;
     }
     .el-menu-item>i{
         color: inherit;
     }
+    .el-menu-item.is-active{
+        background:#fff;
+        margin-right: -1px;
+    }
+    .el-menu .el-menu-item:first-child{
+        /*border-top:1px solid #e4e4e4;*/
+    }
+
+    /*影藏滚动条*/
+    .el-menu{
+        overflow-x: inherit;
+    }
+    .el-menu::-webkit-scrollbar {
+         display: none;
+    }
+    
 </style>
+
+<style lang='less'>
+    .el-menu .el-menu-item-group>.el-menu-item-group__title{
+        padding:0;
+    }
+</style>
+

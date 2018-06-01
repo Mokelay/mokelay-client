@@ -233,6 +233,7 @@
             display: inline-block;
             float: left;
             transition: border-color .1s;
+            min-height: 45px;
         }
         .borderSelected{
             border-color: #0091ea;

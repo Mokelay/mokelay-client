@@ -139,7 +139,7 @@
                         logoWidth:'120px',
                         logoBackground:'',
                         width:'100%',
-                        height:'50px',
+                        height:'52px',
                         fontColor:'#ffffff',
                         fontSize:'30px',
                         showBarRight:true//是否显示右边组件s
@@ -226,6 +226,7 @@
             .bb-bar-logo{
                 display: inline-block;
                 float: left;
+                border-radius:0;
                 margin:0 10px 0 0;
                 padding: 0;
                 border: none;

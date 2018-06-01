@@ -1,6 +1,6 @@
 <template>
     <div class="p20">
-        <div class="searchInput" style="margin-top: 15px;">
+        <div class="_searchInput" style="margin-top: 15px;">
           <el-input placeholder="请输入搜索条件" v-model="keywords">
             <el-button slot="append" icon="el-icon-search" @click="getData">
             搜索
@@ -159,7 +159,7 @@
     .p20 {
         padding: 20px;
     }
-    .searchInput{
+    ._searchInput{
         max-width: 400px;
         margin-right: 20px;
         margin-bottom: 15px;

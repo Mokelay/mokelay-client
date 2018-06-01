@@ -1224,6 +1224,23 @@ util.reloadJS = function(url) {
     }
 }
 
+//判断当前环境是否是 pc 环境,区分移动端还是pc端
+util.isPC = function() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+        "SymbianOS", "Windows Phone",
+        "iPad", "iPod"
+    ];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}
+
 window._TY_Tool = util;
 
 export default util;

@@ -96,12 +96,7 @@
             signId:{
                 type: [Array,String],
                 default:function(){
-                    return [{y: 45.952397, x: 129.759399},
-                    {y: 45.666123, x: 129.628318},
-                    {y: 45.798186, x: 128.956816},
-                    {y: 45.960417, x: 129.653614},
-                    {y: 45.651609, x: 128.922322},
-                    {y: 45.782098, x: 128.586571}];
+                    return [];
                 }
             }
         },
@@ -123,7 +118,8 @@
 					position: 'relative',
 					left: this.widthMap ? ((parseFloat(this.widthMap) > 0 && parseFloat(this.widthMap) < 100) ? ((100 - parseFloat(this.widthMap)) / 2) + '%' : 0) : 0
                 },
-                myDis: null
+                myDis: null,
+                pageSignId: []
             }
         },
         created:function(){
@@ -133,6 +129,8 @@
         mounted() {
             let th = this;
             try {
+
+                this.pageSignId = this.signId;
 
                 // this.city_resource_id=4
                 // this.target_province_code=230000
@@ -162,7 +160,7 @@
                                 // 设置地图显示的城市 此项是必须设置的
                                 map.centerAndZoom(th.area || th.town || list.province, 11); 
 
-                                th.searchOperation(th);
+                                // th.searchOperation(th);
 
                                 if (th.isArea) {
                                     th.boundary(th);
@@ -455,7 +453,7 @@
                 }  
                 
                 setTimeout(()=> {
-                    if (th.signId && th.signId.length) {
+                    if (th.pageSignId && th.pageSignId.length) {
                         th.signShowOperation(th);
                     }
                 }, 1500);
@@ -530,12 +528,12 @@
                 th.overlays = [];
                 let point = [];
 
-                for (let i = 0; i < th.signId.length; i++) {
+                for (let i = 0; i < th.pageSignId.length; i++) {
                     th.overlays.push({
-                        lat: th.signId[i].y,
-                        lng: th.signId[i].x
+                        lat: th.pageSignId[i].y,
+                        lng: th.pageSignId[i].x
                     });
-                    point.push(new BMap.Point(th.signId[i].x, th.signId[i].y));
+                    point.push(new BMap.Point(th.pageSignId[i].x, th.pageSignId[i].y));
                 }
 
                 map.addOverlay(new BMap.Polyline(point, {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5})); 
@@ -744,7 +742,7 @@
                 this.modifySignImage('clear');
                 this.map.clearOverlays();
                 this.overlays = [];
-                this.signId = [];
+                this.pageSignId = [];
                 this.map.removeEventListener("click", function() {});
 
                 if (this.isArea) {
@@ -768,7 +766,7 @@
                 if (!this.overlays.length) {
 					this.$emit('signSaveClick', {
 						city_resource_id: this.$route.query.city_resource_id,
-						signId: []
+						pageSignId: []
 					});
                     return;
                 }
@@ -795,7 +793,6 @@
 						});
 					}
 				}
-											
 				for (let i = 0; i < this.overlays.length; i++) {
 					if (this.overlays[i][0] && this.overlays[i][0].ia) {
 						mergeOverlaysFun(this.overlays[i][0].ia, true);

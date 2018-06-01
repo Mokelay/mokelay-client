@@ -2,7 +2,7 @@
     <div class="bb-list">
         <el-row v-if="search">
             <!-- 全局搜索 -->
-            <div v-if="searchConfig.searchType == 'searchInput'" class="searchInput">
+            <div v-if="searchConfig.searchType == 'searchInput'" class="_searchInput">
                 <el-input v-model="keywords" @keyup.native.enter="globalSearch"
                        style="width: 100%;" placeholder="请输入搜索内容">
                     <el-button type="primary" slot="append" icon="el-icon-search" @click="globalSearch">{{searchConfig.searchButtonName}}</el-button>
@@ -1297,7 +1297,7 @@
     .m10 {
         width: 100%;
     }
-    .searchInput,.advancedSearch{
+    ._searchInput,.advancedSearch{
         max-width: 400px;
         float: left;
         margin-right: 20px;
