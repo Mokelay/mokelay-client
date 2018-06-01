@@ -33,7 +33,7 @@
         props: {
             /*实现v-model*/
             value:{
-              type: [String,Array,Number],
+              type: [String,Array,Number,Object],
               default:''
             },
             /*选项静态数据源*/
