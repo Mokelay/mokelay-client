@@ -46,7 +46,7 @@
             <!-- 列表新增按钮 -->
             <el-button v-if="editConfig && addButton && !editAll" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="cellStyle.cellStyleFn" :header-cell-style="cellStyle.headerCellStyleFn">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55"></el-table-column>
 
@@ -372,25 +372,27 @@
                     };
                 }
             },
-            //table样式调整
-            cellStyle:{
-                type:[Object,Function],
-                default:function(){
-                    return {
-                        //内容单元格
-                        cellStyleFn:function({row, column, rowIndex, columnIndex}){
-                            const style = {
-                            };
-                            return style;
-                        },
-                        //t头部单元格
-                        headerCellStyleFn:function({row, column, rowIndex, columnIndex}){
-                            const style = {
-                            };
-                            return style;
-                        }
+            /*内容单元格样式
+                function({row, column, rowIndex, columnIndex}){
+                    const style = {
+                        'text-align':'center'
                     };
+                    return style;
                 }
+            */
+            cellStyleFn:{
+                type:String
+            },
+            /*头部单元格样式
+                function({row, column, rowIndex, columnIndex}){
+                    const style = {
+                        'text-align':'center'
+                    };
+                    return style;
+                }
+            */
+            headerCellStyleFn:{
+                type:String
             }
         },
         data() {
@@ -422,7 +424,9 @@
                 validateState: '',
                 validateMessage: '',
                 validateDisabled: false,
-                validateMessageObj:{}
+                validateMessageObj:{},
+                realCellStyleFn:eval("("+this.cellStyleFn+")"),
+                realHeaderCellStyleFn:eval("("+this.headerCellStyleFn+")")
             }
         },
         watch: {
