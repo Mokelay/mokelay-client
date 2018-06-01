@@ -19,7 +19,7 @@ import bbvantswitchcell from './bb-vant-switch-cell';
 import bbvantsearch from './bb-vant-search';
 
 import bbvantcircle from "./bb-vant-circle";
-import helloworld from "./bb-helloworld"
+import bbvantrate from "./bb-vant-rate"
 
 export default {
 	install: function(Vue) {
@@ -43,7 +43,7 @@ export default {
 		Vue.component('bb-vant-search', bbvantsearch);
 
 		Vue.component('bb-vant-circle', bbvantcircle);
-		Vue.component("bb-helloworld",helloworld);
+		Vue.component("bb-vant-rate",bbvantrate);
 
 		console.log("成功加载Vant积木;");
 	}

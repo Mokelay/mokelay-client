@@ -1,14 +1,14 @@
 <template>
   <vant-circle 
     v-model="currentRate"
-    :rate="option.rate"
-    :size="option.size"
-    :color="option.color"
-    :layer-color="option.layer_color"
-    :fill="option.fill"
-    :speed="option.speed"
-    :stroke-width="option.stroke_width"
-    :clockwise="option.clockwise"
+    :rate="rate"
+    :size="circleSize"
+    :color="color"
+    :layer-color="layerColor"
+    :fill="fill"
+    :speed="speed"
+    :stroke-width="strokeWidth"
+    :clockwise="clockwise"
     :text="text"
   />
 </template>
@@ -23,17 +23,13 @@ export default {
         "vant-circle":Circle
     },
     props:{
-      text:{
-        type:String,
-        default:"",
-      },
        // 目标进度 
        rate:{
         type:Number,
         default:100,
        },
        // 圆环直径
-       size:{
+       circleSize:{
         type:String,
         default:"100px",
        },
@@ -43,14 +39,13 @@ export default {
         default:"#38f",
        },
        // 轨道颜色
-       layer_color:{
+       layerColor:{
         type:String,
         default:"#fff"
        },
        // 填充颜色
        fill:{
-        type:String,
-        default:""
+        type:String
        },
        // 动画速度
        speed:{
@@ -58,7 +53,7 @@ export default {
         default:""
        },
        // 进度条宽度
-       stroke_width:{
+       strokeWidth:{
         type:Number,
         default:40
        },
@@ -66,21 +61,19 @@ export default {
        clockwise:{
         type:Boolean,
         default:true
-       }
+       },
     },
-    
-    data() {
-            return {
-                currentRate:this.value,
-                currentRateString:this.value,
-            };
-        },
-    computed:{
-        text(){
-            return this.currentRate.toFixed(0) + '%'
-        }
-    }
 
+   data(){ 
+        return{
+          currentRate:0,
+        }
+      },
+    computed:{
+         text() {
+            return this.currentRate.toFixed(0) + '%'
+          }
+    }
 }
 </script>
 
