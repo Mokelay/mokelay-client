@@ -180,9 +180,17 @@
             interactiveAdd:function(row){
                 const t = this;
                 t.interactiveForm = {};
-                if(t.valueBase.interactives){
+                //通过uuid判断当前row是新增还是编辑
+                let editData = false;
+                t.valueBase.interactives.forEach((interactive,key)=>{
+                    if(interactive.uuid == row.uuid){
+                        interactive = row;
+                        editData = true
+                    }
+                })
+                if(t.valueBase.interactives && !editData){
                     t.valueBase.interactives.push(row);
-                }else{
+                }else if(!editData){
                     t.valueBase.interactives = [].push(row);
                 }
             },
@@ -457,7 +465,7 @@
                             {prop:'fromContentEvent',
                                 label:'事件',               
                             },
-                            {prop: 'executeArgument',label: '参数'},
+                            //{prop: 'executeArgument',label: '参数'},
                             {prop: 'executeType',label: '方法类型'},
                             {prop: 'executeContentUUID',label: '目标'},
                             {prop: 'executeContentMethodName',label: '目标积木方法'},

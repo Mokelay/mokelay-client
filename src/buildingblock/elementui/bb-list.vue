@@ -2,7 +2,7 @@
     <div class="bb-list">
         <el-row v-if="search">
             <!-- 全局搜索 -->
-            <div v-if="searchConfig.searchType == 'searchInput'" class="searchInput">
+            <div v-if="searchConfig.searchType == 'searchInput'" class="_searchInput">
                 <el-input v-model="keywords" @keyup.native.enter="globalSearch"
                        style="width: 100%;" placeholder="请输入搜索内容">
                     <el-button type="primary" slot="append" icon="el-icon-search" @click="globalSearch">{{searchConfig.searchButtonName}}</el-button>
@@ -46,7 +46,7 @@
             <!-- 列表新增按钮 -->
             <el-button v-if="editConfig && addButton && !editAll" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" @selection-change="selectionChange" @current-change="radioChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="cellStyle.cellStyleFn" :header-cell-style="cellStyle.headerCellStyleFn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55"></el-table-column>
 
@@ -369,7 +369,27 @@
                     return {
                         page:1,
                         pageSize:10
-                    }
+                    };
+                }
+            },
+            //table样式调整
+            cellStyle:{
+                type:[Object,Function],
+                default:function(){
+                    return {
+                        //内容单元格
+                        cellStyleFn:function({row, column, rowIndex, columnIndex}){
+                            const style = {
+                            };
+                            return style;
+                        },
+                        //t头部单元格
+                        headerCellStyleFn:function({row, column, rowIndex, columnIndex}){
+                            const style = {
+                            };
+                            return style;
+                        }
+                    };
                 }
             }
         },
@@ -1297,7 +1317,7 @@
     .m10 {
         width: 100%;
     }
-    .searchInput,.advancedSearch{
+    ._searchInput,.advancedSearch{
         max-width: 400px;
         float: left;
         margin-right: 20px;
