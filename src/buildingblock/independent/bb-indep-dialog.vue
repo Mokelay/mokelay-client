@@ -28,13 +28,11 @@
             },
             //弹窗标题
             title:{
-                type:String,
-                default:'提示'
+                type:String
             },
             //消息内容  针对H5
             message:{
-                type:String,
-                default:'测试内容'
+                type:String
             },
             //是否展示确认按钮  针对H5
             showConfirmButton:{
@@ -78,8 +76,11 @@
             },
             //dialog宽度 针对pc
             width:{
+                type:String
+            },
+            size:{
                 type:String,
-                default:'50%'
+                default:'small'
             },
             //是否全屏 针对pc
             fullscreen:{
@@ -102,6 +103,28 @@
         computed:{
             key() {//解决router指向同一个component，页面不刷新的问题
                 return this.$route.name !== undefined? this.$route.name + +new Date(): this.$route + +new Date()
+            },
+            realWidth:function(){
+                const t = this;
+                let width = "50%"
+                switch(t.size){
+                    case "tiny":
+                        width = "25%";
+                        break;
+                    case "small":
+                        width = "50%";
+                        break;
+                    case "large":
+                        width = "75%";
+                        break;
+                    case "full":
+                        width = "100%";
+                        break;
+                }
+                if(t.width){
+                    width = t.width
+                }
+                return width
             }
         },
         watch: {
@@ -150,7 +173,7 @@
                         'show-close':t.showClose,//是否显示关闭按钮 右上角
                         'modal-append-to-body':true,//遮罩层插入到body元素上
                         'append-to-body':true,//弹窗自身插入到body元素上
-                        'width':t.width,
+                        'width':t.realWidth||t.width,
                         'top':t.top,
                         "fullscreen":t.fullscreen
                     },
