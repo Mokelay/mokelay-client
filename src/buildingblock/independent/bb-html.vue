@@ -29,7 +29,8 @@
                 contenteditable:false,
                 resultObject:{},//最后返回模板中的变量值对象
                 resultString:'',//最后生成的完整String
-                resultHtmlString:''//最后生成的完整html String
+                resultHtmlString:'',//最后生成的完整html String
+                resultReadOnlyHtmlString:''
             }
         },
         computed:{
@@ -101,6 +102,8 @@
                 if(map.length<=0){
                     return;
                 }
+                //返回只读的html
+                t.resultReadOnlyHtmlString = t.valueBase;
                 let bbVal = t.valueBase;//先复制valueBase数据，以免响应式会触发渲染
                 let bbResultVal = t.valueBase;//用于value替换
                 map.forEach(function(item,index){
@@ -111,15 +114,19 @@
                         fieldValue = valObject[_fieldName];
                     }
                     let _html = '';
+                    let _htmlRead='';
                     switch(_component){
                         case "input":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>"
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>";
+                             _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>";
                             break;
                         case "inputLine":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>"
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>";
+                            _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>";
                             break;
 
                     }
+                    t.resultReadOnlyHtmlString=bbVal.replace(new RegExp(item.src, 'gi'),"<bb-html name="+_fieldName+" >"+_htmlRead+"</bb-html>");
                     bbVal=bbVal.replace(new RegExp(item.src, 'gi'),"<bb-html name="+_fieldName+" >"+_html+"</bb-html>");
                     //加标签是用于标记
                     bbResultVal = bbResultVal.replace(new RegExp(item.src, 'gi'),"<bb-item name="+_fieldName+">"+fieldValue+"</bb-item>");
@@ -179,6 +186,15 @@
                 })
                 this.fillHtml();
             },
+            //外部设置只读内容
+            setReadOnlyContent:function(...args){
+                let t=this;
+                t.setContent(...args);
+                debugger;
+                if(t.resultReadOnlyHtmlString){
+                    t.valueBase = t.resultReadOnlyHtmlString
+                }
+            }
         }
     }
 </script>

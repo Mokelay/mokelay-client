@@ -373,6 +373,9 @@
     .el-menu::-webkit-scrollbar {
          display: none;
     }
+    .el-submenu .el-menu-item{
+        min-width: 180px;
+    }
     
 </style>
 
