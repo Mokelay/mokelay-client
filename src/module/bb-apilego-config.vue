@@ -78,7 +78,7 @@
                         "index": 1,
                         "isleaf": false,
                         "ds": {
-                            "api": "ty-list-ds-by-lego-alias",
+                            "api": (t.$route.params.pageAlias==='ty-lego-config-self'?"config-list-ds-by-lego-alias":"ty-list-ds-by-lego-alias"),
                             "category": "config",
                             "method": "get",
                             "inputs": [
