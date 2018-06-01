@@ -20,7 +20,6 @@ import bbvantsearch from './bb-vant-search';
 import bbvantstepper from './bb-vant-stepper';
 
 import bbvantcircle from "./bb-vant-circle";
-import bbvantrate from "./bb-vant-rate"
 
 export default {
 	install: function(Vue) {
@@ -45,7 +44,6 @@ export default {
 		Vue.component('bb-vant-stepper', bbvantstepper);
 
 		Vue.component('bb-vant-circle', bbvantcircle);
-		Vue.component("bb-vant-rate",bbvantrate);
 
 		console.log("成功加载Vant积木;");
 	}
