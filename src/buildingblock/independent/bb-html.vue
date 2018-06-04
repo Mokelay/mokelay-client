@@ -21,6 +21,11 @@
             //如果value中有 类似 <#=input.fieldNameA#> 这种替换标识，并且defaultValObject 传值{fieldNameA:'xxx'},value自动换成input输入框，并且填充默认值'xxx'；支持模板
             defaultValObject:{
                 type:[String,Object]
+            },
+            //输入框内字体样式
+            inputStyle:{
+                type:String,
+                default:"font-size: inherit;border: 0;border-bottom: 1px solid #444;"
             }
         },
         data() {
@@ -30,7 +35,8 @@
                 resultObject:{},//最后返回模板中的变量值对象
                 resultString:'',//最后生成的完整String
                 resultHtmlString:'',//最后生成的完整html String
-                resultReadOnlyHtmlString:''
+                resultReadOnlyHtmlString:'',
+                realInputStyle:this.inputStyle
             }
         },
         computed:{
@@ -117,12 +123,13 @@
                     let _htmlRead='';
                     switch(_component){
                         case "input":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>";
-                             _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>";
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
+                             _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
                             break;
                         case "inputLine":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>";
-                            _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>";
+                            t.realInputStyle =  'border: 0;border-bottom: 1px solid #444;' + t.realInputStyle;
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
+                            _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
                             break;
 
                     }
