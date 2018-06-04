@@ -788,6 +788,9 @@
                                                                 {
                                                                     "text": "模糊搜索",
                                                                     "value": "like"
+                                                                },{
+                                                                    "text": "NOT LIKE",
+                                                                    "value": "notLike"
                                                                 },
                                                                 {
                                                                     "text": "左链接搜索",
