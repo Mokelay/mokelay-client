@@ -20,6 +20,7 @@ export default {
         "vant-rate":Rate
     },
     props:{
+      
       value:{
         type:[String,Number]
       },

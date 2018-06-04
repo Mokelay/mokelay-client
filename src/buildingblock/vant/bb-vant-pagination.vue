@@ -7,6 +7,7 @@
 		:nextText="nextText"
 		:showPageSize="showPageSize"
 		:forceEllipses="forceEllipses"
+		
 	>
 	</van-pagination>
 </template>
