@@ -21,6 +21,8 @@ import bbvantstepper from './bb-vant-stepper';
 
 import bbvantcircle from "./bb-vant-circle";
 import bbvantrate from "./bb-vant-rate"
+import bbvantprogress from "./bb-vant-progress"
+import bbvantpagination from "./bb-vant-pagination"
 
 export default {
 	install: function(Vue) {
@@ -46,6 +48,8 @@ export default {
 
 		Vue.component('bb-vant-circle', bbvantcircle);
 		Vue.component("bb-vant-rate",bbvantrate);
+		Vue.component("bb-vant-progress",bbvantprogress);
+		Vue.component("bb-vant-pagination",bbvantpagination);
 
 		console.log("成功加载Vant积木;");
 	}

@@ -63,7 +63,6 @@ export default {
         default:true
        },
     },
-
    data(){ 
         return{
           currentRate:0,
