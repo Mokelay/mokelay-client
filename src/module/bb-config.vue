@@ -749,6 +749,17 @@
                             }],
                             interactives: [],
                             layout: {} //积木布局,
+                        },{                       
+                            uuid: _TY_Tool.uuid(),
+                            alias: 'bb-input', //布局类积木 || 普通积木
+                            aliasName: '积木分组', 
+                            attributes: {
+                                attributeName:'group',
+                            }, //积木属性
+                            animation: [{ //动画
+                            }],
+                            interactives: [],
+                            layout: {} //积木布局,
                         }]
                 //设置表单项积木时需要额外增的字段
                 t.formItemFields = [{                      
