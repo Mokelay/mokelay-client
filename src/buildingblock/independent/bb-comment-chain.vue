@@ -167,6 +167,7 @@
         color: #444;
         font-size: 14px;
         line-height: 1.5em;
+        word-break: break-all;
     }
     .ty_comment_content a{
         color: #0091EA;
