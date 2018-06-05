@@ -64,10 +64,19 @@
                 let t=this;
                 const reg = /<#=.*?#>/ig;
                 const reg2 = /&lt;#=.*?#&gt;/ig;
+                const reg3 = /<div style=.*?>/;
+                const reg4 = /width:.*?;/
+                
                 let stringHasTransfer = false;
                 if(!this.valueBase){
                     return;
                 }
+                //解决words中自带的margin样式导致的展示不对称
+                let old = (this.valueBase+"").match(reg3);
+                let oldWidth = old?old[0].match(reg4)[0]:'';
+                const contentBody = '<div style="'+ oldWidth +'margin:auto">'
+                
+                t.valueBase = t.valueBase.replace(old,contentBody);
                 let fields = (this.valueBase+"").match(reg);
                 //没有<#=#> 这种结构的填充数据 直接返回
                 if(!fields||fields.length<=0){
@@ -206,4 +215,9 @@
     }
 </script>
 <style lang='less' scoped>
+    .bb-html{
+        &>div{
+            margin: auto !important;
+        }
+    }
 </style>
