@@ -154,11 +154,11 @@
                             //默认展示表单值
                             switch(dt){
                                 case 'String':
-                                    content.push(createElement('span',{
+                                    content.push(createElement('span',{style:{'word-break': 'break-word'}
                                     },t.formData[attributeName]));
                                     break;
                                 case 'Number':
-                                    content.push(createElement('span',{
+                                    content.push(createElement('span',{style:{'word-break': 'break-word'}
                                     },t.formData[attributeName]));
                                     break;
                                 case 'File':
