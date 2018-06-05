@@ -861,6 +861,7 @@
     }
 
     .map-content .market-sign-mode1 {
+        border-right: inset !important;
         background: url('./img/biaoji1.png') no-repeat !important;
         height: 71px !important;
         width: 110px !important;
