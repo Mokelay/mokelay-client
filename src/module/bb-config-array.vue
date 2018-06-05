@@ -61,6 +61,7 @@
                 const t = this;
                 if(t.key == 'add'){
                     t.valueBase.push(formData);
+                    t.key = t.valueBase.length - 1;
                 }else{
                     t.valueBase[t.key] = formData;
                 }
