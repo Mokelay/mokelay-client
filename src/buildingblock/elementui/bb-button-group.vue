@@ -4,7 +4,7 @@
             <bb-button v-for="(button,index) in realButtons" @button-finish="buttonFinsih" :key="index" :button="button" @click="click"></bb-button>
         </el-button-group>
         <div v-if="groupConfig.type == 'normal'">
-            <span v-for="(button,index) in realButtons" :key="index" class="button">
+            <span v-for="(button,index) in realButtons" :key="index" class="button" :style="groupConfig.customStyle">
                 <bb-button :key="index" :button="button" @button-finish="buttonFinsih" @click="click"></bb-button>
                 <i v-if="button.iconName" :class="button.iconName" @click='remove(button,index)'></i>
                 <bb-badge v-if="button.badgeDs" :textDs="button.badgeDs" class="icon"  @click='iconClick(button,index)'></bb-badge>
@@ -21,6 +21,7 @@
             /* groupConfig按钮组设置
             {
                 type:'group 并联 || normal 有间隔'  //按钮组样式
+                customStyle:'' 用户自定义按钮组样式
             }
             */
             groupConfig:{
@@ -28,7 +29,8 @@
                 default:function(){
                     return {
                         type:'normal',
-                    }
+                        customStyle:''
+                    };
                 }
             },
             /* 按钮组配置
