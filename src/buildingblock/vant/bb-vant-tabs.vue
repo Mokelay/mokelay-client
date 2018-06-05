@@ -135,7 +135,7 @@ import 'vant/lib/tab/style';
                 const t = this;
                 const tabObj = {};
                 const tabArr = [];
-                const disabledTabsArr = t.option.disabledTabs.split(',');
+                const disabledTabsArr = t.option.disabledTabs?t.option.disabledTabs.split(','):[];
                 t.realContent.forEach((item,key)=>{
                     tabObj[item.group] = tabObj[item.group]?tabObj[item.group]:[];
                     tabObj[item.group].push(item);
