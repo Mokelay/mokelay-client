@@ -3,7 +3,7 @@
         <el-button-group v-if="groupConfig.type == 'group'">
             <bb-button v-for="(button,index) in realButtons" @button-finish="buttonFinsih" :key="index" :button="button" @click="click"></bb-button>
         </el-button-group>
-        <div v-if="groupConfig.type == 'normal'">
+        <div v-if="groupConfig.type == 'normal' || !groupConfig.type">
             <span v-for="(button,index) in realButtons" :key="index" class="button" :style="groupConfig.customStyle">
                 <bb-button :key="index" :button="button" @button-finish="buttonFinsih" @click="click"></bb-button>
                 <i v-if="button.iconName" :class="button.iconName" @click='remove(button,index)'></i>
@@ -89,7 +89,6 @@
             this.loadData();
         },
         mounted:function(){
-
         },
         methods: {
             loadData:function(){
