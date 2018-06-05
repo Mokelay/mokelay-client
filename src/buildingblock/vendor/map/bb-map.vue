@@ -902,7 +902,7 @@
 
                 #searchbox #search-button {
                     pointer-events: auto;
-                    background: url('./img/searchbox_f175577.png') no-repeat 0 -76px #0091ea;
+                    background: url('./img/searchbox_f175577.png') no-repeat 0 -72px #0091ea;
                     width: 57px;
                     height: 45px;
                     float: left;
@@ -928,7 +928,7 @@
                     zoom:1;content: " ";
                     clear: both;
                     display: block;
-                    hieght: 0;
+                    height: 0;
                     visibility: hidden
                 }
 
