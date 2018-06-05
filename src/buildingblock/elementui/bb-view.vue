@@ -26,6 +26,7 @@
                     attributes:{
                         attributeName:''    //表单项键值别名
                         width:''            //表单项宽度
+                        height:''           //表单项高度
                         dt:'String,Number,File,Image' //值类型,
                         custom:"default all"  //定制化积木  默认：第一项展示值，用户自定义积木跟在后面  全部定制：所有积木都用户自定义
                         content:[]  //表单项中包含的其他积木
@@ -140,6 +141,7 @@
                         const dt = field['attributes']['dt'] || field.dt;
                         const custom = field['attributes']['custom'] || 'default';
                         const width = field['attributes']['width'] || field.width;
+                        const height = field['attributes']['height'] || 'auto';
                         const type = field['attributes']['type'] || "content";
                         const attributeName = field['attributes']['attributeName'];
                         const show = field['attributes']['show'];
@@ -213,6 +215,7 @@
                             class:className,
                             style:{
                                 width:width,
+                                height:height,
                             }
                         },contents);
                         if(show){
