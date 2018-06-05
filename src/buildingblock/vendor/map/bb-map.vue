@@ -191,16 +191,20 @@
         },
         methods: {
             boundary (th, flag) {
-                th.loading = true;
+                th.loading = true;debugger
                 Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
                     data.forEach(function (item) {
                         var list = item['value'];
 
-                        th.pointData = list.list;
+                        if (list instanceof Array) {
+                            th.pointData = list;
+                            th.addPoint(th, list);
+                        } else {
+                            th.pointData = list.list;
+                            th.addPoint(th, list.list);
+                        }
 
                         th.getBoundary(th, flag);
-
-                        th.addPoint(th, list.list);
 
                     });
                     th.loading = false;
