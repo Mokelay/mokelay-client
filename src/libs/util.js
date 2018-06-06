@@ -912,6 +912,7 @@ util.setStyle = function(bb, t) {
             'font-size': layout.font && layout.font.size,
             'text-align': layout.font && layout.font.align,
             'text-decoration': layout.font && layout.font.decoration,
+            'line-height': layout.font && layout.font.lineHeight,
         }
     }
     const animation = _setAnimation(bb);
