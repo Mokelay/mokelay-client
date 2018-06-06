@@ -1,7 +1,6 @@
 <script>
 import Area from 'vant/lib/area';
 import 'vant/lib/area/style';
-import AreaList from './area.js';
 
     export default {
         name: 'bb-vant-area',
@@ -9,17 +8,18 @@ import AreaList from './area.js';
           "van-area":Area
         },
         props: {
-          /*默认值 支持v-model*/
+            /*默认值 支持v-model*/
             value:{
-                type:String
+                type:String,
+                default:'110100'
             },
             /*模板默认值*/
             defaultValTpl:{
-                type:[String,Number,Boolean]
+                type:String
             },
             /*顶部栏标题*/
             title:{
-                type:String
+                type:String,
             },
             /*其他属性配置
                 {
@@ -57,7 +57,6 @@ import AreaList from './area.js';
                 type:Object,
                 default:function(){
                     return {
-                        'area-list':AreaList,
                         'columns-num':3, //省市县显示列数
                         'loading': false, //显示加载状态
                         'item-height':44, //选项高度
@@ -65,10 +64,16 @@ import AreaList from './area.js';
                     }
                 }
             },
+            //动态获取省市区数据
+            areaListDs:{
+                type:Object
+            }
         },
         data() {
             return {
-                valueBase:this.value
+                valueBase:this.value,
+                realAreaList:null,
+                loading:this.option['loading']
             };
         },
         render: function (createElement) {
@@ -76,11 +81,12 @@ import AreaList from './area.js';
             return createElement('van-area',{
                 props:{
                     'value':t.valueBase,
+                    'title':t.title,
                     'columns-num':t.option['columns-num'],  //省市县显示列数
-                    'loading': t.option['loading'], //显示加载状态
+                    'loading': t.loading, //显示加载状态
                     'item-height':t.option['item-height'], //选项高度
                     'visible-item-count':t.option['visible-item-count'], //可见的选项个数
-                    'area-list':t.option['area-list']
+                    'area-list':t.realAreaList //省 市 区 数据
                 },
                 on:{
                     confirm:t.confirm,
@@ -91,18 +97,38 @@ import AreaList from './area.js';
         },
         mounted(){
             let t = this;
+            require.ensure(['./area.js'], function (require) {
+                t.realAreaList = require("./area.js").default;
+            });
+            t.getAreaList();
             _TY_Tool.buildDefaultValTpl(t,"valueBase");  
-            t.$emit('mounted',this.valueBase); 
+            t.$emit('mounted',this.valueBase);
         },
         methods: {
+            //动态获取省 市 区 数据
+            getAreaList(){
+                const t = this;
+                if (t.areaListDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.areaListDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            t.loading = false;
+                            const {dataKey, value} = item;
+                            t.realAreaList = value;
+                        });
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
+            },
             confirm(val){
                 this.$emit('input',val);
                 this.$emit('change',val);
             },
-            cancel(){
+            cancel(val){
                 this.$emit('cancel',val);
             },
-            change(){
+            change(val){
                 this.$emit('input',val);
                 this.$emit('change',val);
             }
