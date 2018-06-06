@@ -27,6 +27,7 @@ import bbvantNavBar from "./bb-vant-nav-bar"
 import bbvantNoticeBar from "./bb-vant-notice-bar"
 import bbvanttabs from "./bb-vant-tabs"
 import bbvantarea from "./bb-vant-area/index.vue"
+import bbvantcard from "./bb-vant-card"
 /*import bbvantBadgeGroup from "./bb-vant-badge-group"*/
 
 export default {
@@ -59,6 +60,7 @@ export default {
 		Vue.component("bb-vant-notice-bar", bbvantNoticeBar);
 		Vue.component("bb-vant-tabs", bbvanttabs);
 		Vue.component("bb-vant-area", bbvantarea);
+		Vue.component("bb-vant-card", bbvantcard);
 		/*Vue.component("bb-vant-badge-group",bbvantBadgeGroup);*/
 		console.log("成功加载Vant积木;");
 	}
