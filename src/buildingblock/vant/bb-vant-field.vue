@@ -82,7 +82,6 @@ import 'vant/lib/field/style';
             }, 
             //输入事件
             onInput(key){
-                debugger
                 this.$emit('input',key);
                 this.$emit('change',key);
             }
