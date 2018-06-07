@@ -33,6 +33,7 @@ import bbvantBadgeGroup from "./bb-vant-badge-group"
 import bbvantSubmitBar from "./bb-vant-submit-bar"
 import bbvantGoodsAction from "./bb-vant-goods-action"
 import bbvantcollapse from "./bb-vant-collapse"
+import bbvantpanel from "./bb-vant-panel"
 
 export default {
 	install: function(Vue) {
@@ -70,6 +71,7 @@ export default {
 		Vue.component("bb-vant-submit-bar", bbvantSubmitBar);
 		Vue.component("bb-vant-goods-action", bbvantGoodsAction);
 		Vue.component("bb-vant-collapse", bbvantcollapse);
+		Vue.component("bb-vant-panel", bbvantpanel);
 		console.log("成功加载Vant积木;");
 	}
 };
