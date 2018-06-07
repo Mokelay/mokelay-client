@@ -123,13 +123,29 @@ import 'vant/lib/tab/style';
             };
         },
         mounted(){
-
+            this.getData();
         },
         //事件click
         methods: {
             //点击事件
             click(param){
                 this.$emit('click',param);
+            },
+            //动态获取tab内容
+            getData(){
+                const t = this;
+                if (t.contentDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            t.loading = false;
+                            const {dataKey, value} = item;
+                            t.realContent = value;
+                        });
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
             },
             renderTabItem(createElement){
                 const t = this;
