@@ -44,6 +44,7 @@ import 'vant/lib/switch/style';
             };
         },
         mounted(){
+            const t = this;
             _TY_Tool.buildDefaultValTpl(t, "valueBaseString");
             t.valueBase = eval(t.valueBaseString);
         },
