@@ -28,7 +28,10 @@ import bbvantNoticeBar from "./bb-vant-notice-bar"
 import bbvanttabs from "./bb-vant-tabs"
 import bbvantarea from "./bb-vant-area/index.vue"
 import bbvantcard from "./bb-vant-card"
-/*import bbvantBadgeGroup from "./bb-vant-badge-group"*/
+import bbvantBadgeGroup from "./bb-vant-badge-group"
+/*import bbvantUploader from "./bb-vant-uploader"*/
+import bbvantSubmitBar from "./bb-vant-submit-bar"
+import bbvantGoodsAction from "./bb-vant-goods-action"
 
 export default {
 	install: function(Vue) {
@@ -61,7 +64,10 @@ export default {
 		Vue.component("bb-vant-tabs", bbvanttabs);
 		Vue.component("bb-vant-area", bbvantarea);
 		Vue.component("bb-vant-card", bbvantcard);
-		/*Vue.component("bb-vant-badge-group",bbvantBadgeGroup);*/
+		Vue.component("bb-vant-badge-group",bbvantBadgeGroup);
+		/*Vue.component("bb-vant-uploader",bbvantUploader);*/
+		Vue.component("bb-vant-submit-bar",bbvantSubmitBar);
+		Vue.component("bb-vant-goods-action",bbvantGoodsAction);
 		console.log("成功加载Vant积木;");
 	}
 };
