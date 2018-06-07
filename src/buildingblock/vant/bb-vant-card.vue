@@ -19,7 +19,18 @@ import 'vant/lib/card/style';
                 }
             */
             card:{
-                type:Object
+                type:Object,
+                default:function(){
+                    return {
+                        'thumb':'https://img1.mklimg.com/g2/M00/2C/34/rBBrClpqxmyAVzYrAABkOxACkVs880.png!',
+                        'title':'卡片',
+                        'desc':'商品描述',
+                        'num': 10,
+                        'price':20,
+                        'centered':false,
+                        'currency':"￥",
+                    };
+                }
             },
             /*动态数据源*/
             cardDs:{
@@ -49,9 +60,10 @@ import 'vant/lib/card/style';
                 'desc':t.realCard['desc'],  //省市县显示列数
                 'num': t.realCard['num'], //显示加载状态
                 'price':t.realCard['price'], //选项高度
-                'centered':t.realCard['centered'], //可见的选项个数
-                'currency':t.realCard['currency'] //省 市 区 数据
+                'centered':t.realCard['centered'] || false, //可见的选项个数
+                'currency':t.realCard['currency'] || '￥' //省 市 区 数据
             };
+            const slotArr = t.renderSlotItem(createElement);
             return createElement('van-card',{props:props},slotArr);
         },
         mounted(){
@@ -80,16 +92,18 @@ import 'vant/lib/card/style';
                 const slotObj = {};
                 const slotArr = [];
                 //根据slot生成对应的content对象
-                t.realContent.forEach((item,key)=>{
-                    slotObj[item.group] = slotObj[item.group]?slotObj[item.group]:[];
-                    slotObj[item.group].push(item);
-                });
-                //生成slot嵌套的子积木
-                Object.keys(slotObj).forEach((val,index)=>{
-                    const slotBBs =  _TY_Tool.bbRender(slotObj[val], createElement, t);
-                    const item = createElement('div',{props:{slot:val}},slotBBs);
-                    slotArr.push(item);
-                });
+                if(t.realContent){
+                    t.realContent.forEach((item,key)=>{
+                        slotObj[item.group] = slotObj[item.group]?slotObj[item.group]:[];
+                        slotObj[item.group].push(item);
+                    });
+                    //生成slot嵌套的子积木
+                    Object.keys(slotObj).forEach((val,index)=>{
+                        const slotBBs =  _TY_Tool.bbRender(slotObj[val], createElement, t);
+                        const item = createElement('div',{props:{slot:val}},slotBBs);
+                        slotArr.push(item);
+                    });
+                }
                 return slotArr;
             }
         }
