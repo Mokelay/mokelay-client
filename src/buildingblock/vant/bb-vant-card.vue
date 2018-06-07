@@ -18,11 +18,11 @@ import 'vant/lib/card/style';
                     'currency':"￥" 货币符号
                 }
             */
-            option:{
+            card:{
                 type:Object
             },
             /*动态数据源*/
-            optionDs:{
+            cardDs:{
                 type:Object
             },
             /*静态用户自定义内容积木数据*/
@@ -37,36 +37,60 @@ import 'vant/lib/card/style';
         },
         data() {
             return {
-                valueBase:this.value
+                realCard:this.card,
+                realContent:this.content
             };
         },
         render: function (createElement) {
             const t = this;
-            return createElement('van-card',{
-                props:{
-                    'thumb':t.valueBase,
-                    'title':t.title,
-                    'desc':t.option['columns-num'],  //省市县显示列数
-                    'num': t.loading, //显示加载状态
-                    'price':t.option['item-height'], //选项高度
-                    'centered':t.option['visible-item-count'], //可见的选项个数
-                    'currency':t.realAreaList //省 市 区 数据
-                },
-                on:{
-                    confirm:t.confirm,
-                    cancel:t.cancel,
-                    change:t.change
-                }
-            });
+            const props = {
+                'thumb':t.realCard['thumb'],
+                'title':t.realCard['title'],
+                'desc':t.realCard['desc'],  //省市县显示列数
+                'num': t.realCard['num'], //显示加载状态
+                'price':t.realCard['price'], //选项高度
+                'centered':t.realCard['centered'], //可见的选项个数
+                'currency':t.realCard['currency'] //省 市 区 数据
+            };
+            return createElement('van-card',{props:props},slotArr);
         },
         mounted(){
-
+            this.getData();
         },
         //事件click
         methods: {
-            //点击事件
-            click(param){
-                this.$emit('click',param);
+            //动态获取卡片内容
+            getData(){
+                const t = this;
+                if (t.contentDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            t.loading = false;
+                            const {dataKey, value} = item;
+                            t.realContent = value;
+                        });
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
+            },
+            renderSlotItem(createElement){
+                const t = this;
+                const slotObj = {};
+                const slotArr = [];
+                //根据slot生成对应的content对象
+                t.realContent.forEach((item,key)=>{
+                    slotObj[item.group] = slotObj[item.group]?slotObj[item.group]:[];
+                    slotObj[item.group].push(item);
+                });
+                //生成slot嵌套的子积木
+                Object.keys(slotObj).forEach((val,index)=>{
+                    const slotBBs =  _TY_Tool.bbRender(slotObj[val], createElement, t);
+                    const item = createElement('div',{props:{slot:val}},slotBBs);
+                    slotArr.push(item);
+                });
+                return slotArr;
             }
         }
     }
