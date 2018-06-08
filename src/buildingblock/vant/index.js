@@ -36,6 +36,9 @@ import bbvantcollapse from "./bb-vant-collapse";
 import bbvantpanel from "./bb-vant-panel";
 import bbvantpopup from "./bb-vant-popup";
 import bbvantaddresslist from "./bb-vant-address-list";
+import bbvantcontactcard from "./bb-vant-contact-card";
+import bbvantcontactedit from "./bb-vant-contact-edit";
+import bbvantcontactlist from "./bb-vant-contact-list";
 
 export default {
 	install: function(Vue) {
@@ -76,6 +79,10 @@ export default {
 		Vue.component("bb-vant-panel", bbvantpanel);
 		Vue.component("bb-vant-popup", bbvantpopup);
 		Vue.component("bb-vant-address-list", bbvantaddresslist);
+		Vue.component("bb-vant-contact-card", bbvantcontactcard);
+		Vue.component("bb-vant-contact-edit", bbvantcontactedit);
+		Vue.component("bb-vant-contact-list", bbvantcontactlist);
+
 		console.log("成功加载Vant积木;");
 	}
 };
