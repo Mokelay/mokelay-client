@@ -20,21 +20,22 @@ import bbvantsearch from './bb-vant-search';
 import bbvantstepper from './bb-vant-stepper';
 
 import bbvantcircle from "./bb-vant-circle";
-import bbvantrate from "./bb-vant-rate"
-import bbvantprogress from "./bb-vant-progress"
-import bbvantpagination from "./bb-vant-pagination"
-import bbvantNavBar from "./bb-vant-nav-bar"
-import bbvantNoticeBar from "./bb-vant-notice-bar"
-import bbvanttabs from "./bb-vant-tabs"
-import bbvantarea from "./bb-vant-area/index.vue"
-import bbvantcard from "./bb-vant-card"
-import bbvantBadgeGroup from "./bb-vant-badge-group"
-import bbvantUploader from "./bb-vant-uploader"
-import bbvantSubmitBar from "./bb-vant-submit-bar"
-import bbvantGoodsAction from "./bb-vant-goods-action"
-import bbvantcollapse from "./bb-vant-collapse"
-import bbvantpanel from "./bb-vant-panel"
-import bbvantpopup from "./bb-vant-popup"
+import bbvantrate from "./bb-vant-rate";
+import bbvantprogress from "./bb-vant-progress";
+import bbvantpagination from "./bb-vant-pagination";
+import bbvantNavBar from "./bb-vant-nav-bar";
+import bbvantNoticeBar from "./bb-vant-notice-bar";
+import bbvanttabs from "./bb-vant-tabs";
+import bbvantarea from "./bb-vant-area/index.vue";
+import bbvantcard from "./bb-vant-card";
+import bbvantBadgeGroup from "./bb-vant-badge-group";
+import bbvantUploader from "./bb-vant-uploader";
+import bbvantSubmitBar from "./bb-vant-submit-bar";
+import bbvantGoodsAction from "./bb-vant-goods-action";
+import bbvantcollapse from "./bb-vant-collapse";
+import bbvantpanel from "./bb-vant-panel";
+import bbvantpopup from "./bb-vant-popup";
+import bbvantaddresslist from "./bb-vant-address-list";
 
 export default {
 	install: function(Vue) {
@@ -74,6 +75,7 @@ export default {
 		Vue.component("bb-vant-collapse", bbvantcollapse);
 		Vue.component("bb-vant-panel", bbvantpanel);
 		Vue.component("bb-vant-popup", bbvantpopup);
+		Vue.component("bb-vant-address-list", bbvantaddresslist);
 		console.log("成功加载Vant积木;");
 	}
 };
