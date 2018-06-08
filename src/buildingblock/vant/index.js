@@ -34,6 +34,7 @@ import bbvantSubmitBar from "./bb-vant-submit-bar"
 import bbvantGoodsAction from "./bb-vant-goods-action"
 import bbvantcollapse from "./bb-vant-collapse"
 import bbvantpanel from "./bb-vant-panel"
+import bbvantpopup from "./bb-vant-popup"
 
 export default {
 	install: function(Vue) {
@@ -67,11 +68,12 @@ export default {
 		Vue.component("bb-vant-area", bbvantarea);
 		Vue.component("bb-vant-card", bbvantcard);
 		Vue.component("bb-vant-badge-group", bbvantBadgeGroup);
-		Vue.component("bb-vant-uploader",bbvantUploader);
+		Vue.component("bb-vant-uploader", bbvantUploader);
 		Vue.component("bb-vant-submit-bar", bbvantSubmitBar);
 		Vue.component("bb-vant-goods-action", bbvantGoodsAction);
 		Vue.component("bb-vant-collapse", bbvantcollapse);
 		Vue.component("bb-vant-panel", bbvantpanel);
+		Vue.component("bb-vant-popup", bbvantpopup);
 		console.log("成功加载Vant积木;");
 	}
 };
