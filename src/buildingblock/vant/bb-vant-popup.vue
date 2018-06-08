@@ -164,6 +164,11 @@ import 'vant/lib/popup/style';
                 this.valueBase = false;
                 this.$emit('hide');
             },
+            //加载子积木
+            loadChildBB:function(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
+            },
         }
     }
 </script>
