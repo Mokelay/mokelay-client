@@ -7,6 +7,7 @@
         :url="field.url"
         :value="activeKey"
         @click="onClick"
+        :key="key"
     />
   </vant-badge-group>
 
