@@ -39,6 +39,7 @@ import bbvantaddresslist from "./bb-vant-address-list";
 import bbvantcontactcard from "./bb-vant-contact-card";
 import bbvantcontactedit from "./bb-vant-contact-edit";
 import bbvantcontactlist from "./bb-vant-contact-list";
+import bbvantsku from "./bb-vant-sku";
 
 export default {
 	install: function(Vue) {
@@ -82,6 +83,7 @@ export default {
 		Vue.component("bb-vant-contact-card", bbvantcontactcard);
 		Vue.component("bb-vant-contact-edit", bbvantcontactedit);
 		Vue.component("bb-vant-contact-list", bbvantcontactlist);
+		Vue.component("bb-vant-sku", bbvantsku);
 
 		console.log("成功加载Vant积木;");
 	}
