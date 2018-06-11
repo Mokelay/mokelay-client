@@ -252,6 +252,14 @@
                 }, [])]);
                 var iconClass = item.icon;
                 var templateChild = item.icon ? createElement('i', {class: iconClass}, []) : '';
+                var img = item.img? createElement('img',{
+                    style:{
+
+                    },
+                    attrs:{
+                        src:item.img
+                    }
+                },[]):'';
 
                 var menuIndex = item.url;
                 if(menuIndex.indexOf("&")>=0&&t.p_urlLevel>=0){
@@ -281,13 +289,20 @@
                                 backgroud:(t.itemHoverBg?t.itemHoverBg:'')
                             }
                         },
-                        [templateChild, titleEle]);
+                        [templateChild,img, titleEle]);
             },
             createSubmenu: function (createElement, item) {
                 var t = this;
                 var child = [];
                 var iconClass = item.icon;
                 var icon = item.icon ? createElement('i', {class: iconClass}, []) : '';
+                var img = item.img? createElement('img',{
+                    style:{
+                    },
+                    attrs:{
+                        src:item.img
+                    }
+                },[]):'';
                 var title = createElement('span', {slot: "title"}, [item.title]);
                 var groupSpan = createElement('span', {slot: "title"}, [item.title, createElement('bb-badge', {
                     props: {value: item.value},
@@ -311,7 +326,7 @@
                             }
                         }
                         },
-                        [createElement('template', {slot: "title"}, [icon, title, createElement('bb-badge', {
+                        [createElement('template', {slot: "title"}, [icon,img, title, createElement('bb-badge', {
                             props: {value: item.value},
                             ref: item['url'],
                             class: 'bb-menu-badge'
