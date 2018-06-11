@@ -42,6 +42,7 @@ import bbvantcontactlist from "./bb-vant-contact-list";
 import bbvantTreeSelect from "./bb-vant-tree-select"
 import bbvantPicker from "./bb-vant-picker"
 import bbvantDatetimePicker from "./bb-vant-datetime-picker"
+import bbvantsku from "./bb-vant-sku";
 
 export default {
 	install: function(Vue) {
@@ -85,9 +86,10 @@ export default {
 		Vue.component("bb-vant-contact-card", bbvantcontactcard);
 		Vue.component("bb-vant-contact-edit", bbvantcontactedit);
 		Vue.component("bb-vant-contact-list", bbvantcontactlist);
-		Vue.component("bb-vant-tree-select",bbvantTreeSelect);
-		Vue.component("bb-vant-picker",bbvantPicker);
-		Vue.component("bb-vant-datetime-picker",bbvantDatetimePicker);
+		Vue.component("bb-vant-tree-select", bbvantTreeSelect);
+		Vue.component("bb-vant-picker", bbvantPicker);
+		Vue.component("bb-vant-datetime-picker", bbvantDatetimePicker);
+		Vue.component("bb-vant-sku", bbvantsku);
 		console.log("成功加载Vant积木;");
 	}
 };
