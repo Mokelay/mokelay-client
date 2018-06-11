@@ -46,7 +46,14 @@
       switch(this.layoutType){
         case 'seriation':
         //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
+            var element = createElement('bb-layout-seriation', {
+              ref:uuid,
+              props:{
+                content:this.content,
+                horizontal:this.layoutObject['horizontal'],
+                platform:this.platform,
+              }
+            });
             pbbElementList.push(element);
             break;
         //容器布局 container
@@ -129,6 +136,7 @@
         customFile:null,
         layoutObject:null,
         content:null,
+        platform:''//页面所属平台
       };
     },
     created: function () {
@@ -194,6 +202,10 @@
           if(page['template']){
             //模板文件
             t.templatePageAlias = page['templatePageAlias'];
+          }
+          //设置平台
+          if(page['platform']){
+            t.platform = page['platform'];
           }
 
           //获取页面信息
