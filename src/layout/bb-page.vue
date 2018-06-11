@@ -157,7 +157,16 @@
       //修改页面的title属性 metadata
       resetPageTitle:function(pageName){
         let t=this;
-        document.title = pageName+" -- TY - 一个全新的开发平台";
+        const appAlias = t.$route.params.appAlias;
+        Util.get(window._TY_ContentPath+"/ty_read_app_name_and_company_name",{
+          appAlias:appAlias
+        }).then(function(response){
+          var data = response['data']['data'];
+          const appName = data['name'];
+          const companyName = data['companyName'];
+          // pageName + appName + 公司名
+          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+companyName;
+        });
       },
       refresh:function(){
         this.loadData();
