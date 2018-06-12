@@ -9,6 +9,7 @@
         :to="miniBtn.to"
         :replace="miniBtn.replace"
         v-for="(miniBtn,key) in miniBtns"
+        :key="key"
     ></vant-goods-action-mini-btn>
     <vant-goods-action-big-btn
         :text="bigBtn.text"
@@ -17,6 +18,7 @@
         :to="bigBtn.to"
         :replace="bigBtn.replace"
         v-for="(bigBtn,key) in bigBtns"
+        :key="key"
     ></vant-goods-action-big-btn>
   </vant-goods-action>
 
