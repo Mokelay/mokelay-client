@@ -1,5 +1,5 @@
 <template>
-    <span :style="relButton.style" class="bb-indep-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i class="relButton.icon"></i>{{relButton.selectText || relButton.text}}<slot></slot></span>
+    <span :style="relButton.style" class="bb-indep-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i class="relButton.icon"></i><slot></slot></span>
 </template>
 
 <script>
