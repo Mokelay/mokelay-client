@@ -1,7 +1,6 @@
 //pc 端积木
 import bbeditorcode from './buildingblock/bb-editor-code';
 import bbpicturepreview from './buildingblock/bb-picture-preview.vue';
-import bbportalitemlist from './buildingblock/bb-portal-item-list.vue';
 import bbproductitem from './buildingblock/bb-product-item.vue';
 
 // Vant积木安装
@@ -45,7 +44,6 @@ let ty = {
 		//以下五个积木需要把elementui解耦，然后再迁移到independent
 		Vue.component('bb-editor-code', bbeditorcode);
 		Vue.component('bb-picture-preview', bbpicturepreview);
-		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-product-item', bbproductitem);
 
 		//移动端积木安装
@@ -59,7 +57,7 @@ let ty = {
 
 		//Module积木安装
 		moduleBB.install(Vue);
-		
+
 		// ElementUI积木安装
 		elementBB.install(Vue);
 

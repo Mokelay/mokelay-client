@@ -20,6 +20,8 @@ import bbpreview from './bb-preview.vue';
 import bbreadbb from './bb-read-bb';
 import bb from './bb';
 import bbindepdialog from './bb-indep-dialog';
+import bbindepbutton from './bb-indep-button';
+import bbportalitemlist from './bb-portal-item-list';
 
 import helloworld from './bb-hello-world'
 
@@ -50,6 +52,8 @@ export default {
 		Vue.component('bb-read-bb', bbreadbb);
 		Vue.component('bb', bb);
 		Vue.component('bb-indep-dialog', bbindepdialog);
+		Vue.component('bb-indep-button', bbindepbutton);
+		Vue.component('bb-portal-item-list', bbportalitemlist);
 
 		Vue.component('bb-hello-world', helloworld);
 
