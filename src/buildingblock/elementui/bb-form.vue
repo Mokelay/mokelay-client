@@ -10,7 +10,7 @@
                 t.formData = Array.isArray(t.formData)?t.formData:[];
                 t.contentGroup.forEach((content,key)=>{
                     t.formData[key] = t.formData[key]?t.formData[key]:{};
-                    const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_lajitong"}},on:{click:t.remove.bind(null,key)}},[]);
+                    const removeButton = createElement('bb-button',{class:"remove",props:{button:{type:'text',icon:"ty-icon_tuichu"}},on:{click:t.remove.bind(null,key)}},[]);
                     const newForm = t.renderForm(createElement,content,t.formData[key],key);
                     const groupItem = createElement('div',{class:"groupItem"},[newForm,removeButton]);
                     _form_group.push(groupItem); 
@@ -651,8 +651,9 @@
     .groupItem{
         position: relative;
         .remove{
+            color:#333333;
             position: absolute;
-            left: 0px;
+            right: 0px;
             top: -20px;
             opacity:0;
         }

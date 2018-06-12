@@ -46,7 +46,14 @@
       switch(this.layoutType){
         case 'seriation':
         //顺序排列布局 seriation
-            var element = createElement('bb-layout-seriation', {ref:uuid,props:{content:this.content,horizontal:this.layoutObject['horizontal']}});
+            var element = createElement('bb-layout-seriation', {
+              ref:uuid,
+              props:{
+                content:this.content,
+                horizontal:this.layoutObject['horizontal'],
+                platform:this.platform,
+              }
+            });
             pbbElementList.push(element);
             break;
         //容器布局 container
@@ -129,6 +136,7 @@
         customFile:null,
         layoutObject:null,
         content:null,
+        platform:''//页面所属平台
       };
     },
     created: function () {
@@ -157,7 +165,16 @@
       //修改页面的title属性 metadata
       resetPageTitle:function(pageName){
         let t=this;
-        document.title = pageName+" -- TY - 一个全新的开发平台";
+        const appAlias = t.$route.params.appAlias;
+        Util.get(window._TY_ContentPath+"/ty_read_app_name_and_company_name",{
+          appAlias:appAlias
+        }).then(function(response){
+          var data = response['data']['data'];
+          const appName = data['name'];
+          const companyName = data['companyName'];
+          // pageName + appName + 公司名
+          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+companyName;
+        });
       },
       refresh:function(){
         this.loadData();
@@ -185,6 +202,10 @@
           if(page['template']){
             //模板文件
             t.templatePageAlias = page['templatePageAlias'];
+          }
+          //设置平台
+          if(page['platform']){
+            t.platform = page['platform'];
           }
 
           //获取页面信息

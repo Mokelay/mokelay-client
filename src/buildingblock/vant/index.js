@@ -19,6 +19,33 @@ import bbvantswitchcell from './bb-vant-switch-cell';
 import bbvantsearch from './bb-vant-search';
 import bbvantstepper from './bb-vant-stepper';
 
+import bbvantcircle from "./bb-vant-circle";
+import bbvantrate from "./bb-vant-rate";
+import bbvantprogress from "./bb-vant-progress";
+import bbvantpagination from "./bb-vant-pagination";
+import bbvantNavBar from "./bb-vant-nav-bar";
+import bbvantNoticeBar from "./bb-vant-notice-bar";
+import bbvanttabs from "./bb-vant-tabs";
+import bbvantarea from "./bb-vant-area/index.vue";
+import bbvantcard from "./bb-vant-card";
+import bbvantBadgeGroup from "./bb-vant-badge-group";
+import bbvantUploader from "./bb-vant-uploader";
+import bbvantSubmitBar from "./bb-vant-submit-bar";
+import bbvantGoodsAction from "./bb-vant-goods-action";
+import bbvantcollapse from "./bb-vant-collapse";
+import bbvantpanel from "./bb-vant-panel";
+import bbvantpopup from "./bb-vant-popup";
+import bbvantaddresslist from "./bb-vant-address-list";
+import bbvantcontactcard from "./bb-vant-contact-card";
+import bbvantcontactedit from "./bb-vant-contact-edit";
+import bbvantcontactlist from "./bb-vant-contact-list";
+
+import bbvantTreeSelect from "./bb-vant-tree-select"
+import bbvantPicker from "./bb-vant-picker"
+import bbvantDatetimePicker from "./bb-vant-datetime-picker"
+
+import bbvantsku from "./bb-vant-sku";
+
 export default {
 	install: function(Vue) {
 		Vue.component('bb-vant-address-edit', vantAddressEdit);
@@ -40,6 +67,33 @@ export default {
 		Vue.component('bb-vant-switch-cell', bbvantswitchcell);
 		Vue.component('bb-vant-search', bbvantsearch);
 		Vue.component('bb-vant-stepper', bbvantstepper);
+
+		Vue.component('bb-vant-circle', bbvantcircle);
+		Vue.component("bb-vant-rate", bbvantrate);
+		Vue.component("bb-vant-progress", bbvantprogress);
+		Vue.component("bb-vant-pagination", bbvantpagination);
+		Vue.component("bb-vant-nav-bar", bbvantNavBar);
+		Vue.component("bb-vant-notice-bar", bbvantNoticeBar);
+		Vue.component("bb-vant-tabs", bbvanttabs);
+		Vue.component("bb-vant-area", bbvantarea);
+		Vue.component("bb-vant-card", bbvantcard);
+		Vue.component("bb-vant-badge-group", bbvantBadgeGroup);
+		Vue.component("bb-vant-uploader", bbvantUploader);
+		Vue.component("bb-vant-submit-bar", bbvantSubmitBar);
+		Vue.component("bb-vant-goods-action", bbvantGoodsAction);
+		Vue.component("bb-vant-collapse", bbvantcollapse);
+		Vue.component("bb-vant-panel", bbvantpanel);
+		Vue.component("bb-vant-popup", bbvantpopup);
+		Vue.component("bb-vant-address-list", bbvantaddresslist);
+		Vue.component("bb-vant-contact-card", bbvantcontactcard);
+		Vue.component("bb-vant-contact-edit", bbvantcontactedit);
+		Vue.component("bb-vant-contact-list", bbvantcontactlist);
+
+		Vue.component("bb-vant-sku", bbvantsku);
+
+		Vue.component("bb-vant-tree-select", bbvantTreeSelect);
+		Vue.component("bb-vant-picker", bbvantPicker);
+		Vue.component("bb-vant-datetime-picker", bbvantDatetimePicker);
 
 		console.log("成功加载Vant积木;");
 	}

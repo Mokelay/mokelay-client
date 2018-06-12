@@ -191,16 +191,20 @@
         },
         methods: {
             boundary (th, flag) {
-                th.loading = true;
+                th.loading = true;debugger
                 Util.getDSData(th.tds, _TY_Tool.buildTplParams(th), function (data) {
                     data.forEach(function (item) {
                         var list = item['value'];
 
-                        th.pointData = list.list;
+                        if (list instanceof Array) {
+                            th.pointData = list;
+                            th.addPoint(th, list);
+                        } else {
+                            th.pointData = list.list;
+                            th.addPoint(th, list.list);
+                        }
 
                         th.getBoundary(th, flag);
-
-                        th.addPoint(th, list.list);
 
                     });
                     th.loading = false;
@@ -857,6 +861,7 @@
     }
 
     .map-content .market-sign-mode1 {
+        border-right: inset !important;
         background: url('./img/biaoji1.png') no-repeat !important;
         height: 71px !important;
         width: 110px !important;
@@ -902,7 +907,7 @@
 
                 #searchbox #search-button {
                     pointer-events: auto;
-                    background: url('./img/searchbox_f175577.png') no-repeat 0 -76px #0091ea;
+                    background: url('./img/searchbox_f175577.png') no-repeat 0 -72px #0091ea;
                     width: 57px;
                     height: 45px;
                     float: left;
@@ -928,7 +933,7 @@
                     zoom:1;content: " ";
                     clear: both;
                     display: block;
-                    hieght: 0;
+                    height: 0;
                     visibility: hidden
                 }
 

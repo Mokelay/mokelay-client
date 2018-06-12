@@ -60,6 +60,25 @@
                             value: 'text'
                         }]
                     }
+                },{
+                    name: '按钮大小',
+                    attributeName: 'size',
+                    et: 'bb-select',
+                    props: {
+                        options: [{
+                            text: '默认',
+                            value: 'default'
+                        }, {
+                            text: '一般',
+                            value: 'medium'
+                        }, {
+                            text: '小',
+                            value: 'small'
+                        }, {
+                            text: '微型',
+                            value: 'mini'
+                        }]
+                    }
                 }, {
                     name: '图标',
                     attributeName: 'icon',

@@ -84,7 +84,7 @@ import 'vant/lib/radio/style';
             getData() {
                 const t = this;
                 if (t.fieldsDs) {
-                    Util.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
+                    _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
                             const {dataKey, value} = item;
                             t.realFields = value;

@@ -247,7 +247,7 @@
                             aliasName:'圆角',                                  
                             attributes:{
                                 width:"95%",
-                                attributeName:'radian',
+                                attributeName:'radius',
                             },
                             interactives:[],
                         },{                      
@@ -411,6 +411,15 @@
                                     {text:"闪烁",value:"blink"},
                                     {text:"从父元素继承",value:"inherit"}
                                     ]
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_08_06',
+                            alias:'bb-input',                   
+                            aliasName:'字体行高',                                  
+                            attributes:{
+                                width:"95%",
+                                attributeName:'lineHeight',
                             },
                             interactives:[],
                         }]

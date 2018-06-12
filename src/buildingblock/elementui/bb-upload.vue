@@ -12,9 +12,9 @@
             :file-list="realFileList"
             :on-exceed="onExceed"
             :disabled="option.disabled"
-            :size="option.size"
             >
-            <i v-if="!option.disabled" class="el-icon-plus"></i>
+            <!-- <i v-if="!option.disabled" class="el-icon-plus"></i> -->
+            <bb-button v-if="!option.disabled" :button="option.uploadButton"></bb-button>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible" size="tiny">
             <img width="100%" :src="dialogImageUrl" alt="">
@@ -56,13 +56,26 @@
                 type:Boolean,
                 default:false
             },
-            //基础配置
+            /*基础配置
+                {
+                    disabled:false, //禁用
+                    uploadButton:{ //上传按钮配置
+                        type:'primary', 按钮主题
+                        text:'上传', 按钮文字
+                        size:'mini' 按钮大小
+                    }
+                }
+            */
             option:{
                 type:Object,
                 default:function(){
                     return {
                         disabled:false,
-                        size:""
+                        uploadButton:{
+                            type:'primary',
+                            text:'上传',
+                            size:'mini'
+                        }
                     };
                 }
             }

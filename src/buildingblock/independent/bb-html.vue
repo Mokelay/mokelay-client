@@ -21,6 +21,11 @@
             //如果value中有 类似 <#=input.fieldNameA#> 这种替换标识，并且defaultValObject 传值{fieldNameA:'xxx'},value自动换成input输入框，并且填充默认值'xxx'；支持模板
             defaultValObject:{
                 type:[String,Object]
+            },
+            //输入框内字体样式
+            inputStyle:{
+                type:String,
+                default:"font-size: inherit;border: 0;border-bottom: 1px solid #444;"
             }
         },
         data() {
@@ -29,7 +34,9 @@
                 contenteditable:false,
                 resultObject:{},//最后返回模板中的变量值对象
                 resultString:'',//最后生成的完整String
-                resultHtmlString:''//最后生成的完整html String
+                resultHtmlString:'',//最后生成的完整html String
+                resultReadOnlyHtmlString:'',
+                realInputStyle:this.inputStyle
             }
         },
         computed:{
@@ -57,10 +64,19 @@
                 let t=this;
                 const reg = /<#=.*?#>/ig;
                 const reg2 = /&lt;#=.*?#&gt;/ig;
+                const reg3 = /<div style=.*?>/;
+                const reg4 = /width:.*?;/
+                
                 let stringHasTransfer = false;
                 if(!this.valueBase){
                     return;
                 }
+                //解决words中自带的margin样式导致的展示不对称
+                let old = (this.valueBase+"").match(reg3);
+                let oldWidth = old?old[0].match(reg4)[0]:'';
+                const contentBody = '<div style="'+ oldWidth +'margin:auto">'
+                
+                t.valueBase = t.valueBase.replace(old,contentBody);
                 let fields = (this.valueBase+"").match(reg);
                 //没有<#=#> 这种结构的填充数据 直接返回
                 if(!fields||fields.length<=0){
@@ -101,6 +117,8 @@
                 if(map.length<=0){
                     return;
                 }
+                //返回只读的html
+                t.resultReadOnlyHtmlString = t.valueBase;
                 let bbVal = t.valueBase;//先复制valueBase数据，以免响应式会触发渲染
                 let bbResultVal = t.valueBase;//用于value替换
                 map.forEach(function(item,index){
@@ -111,15 +129,20 @@
                         fieldValue = valObject[_fieldName];
                     }
                     let _html = '';
+                    let _htmlRead='';
                     switch(_component){
                         case "input":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;' value='"+(fieldValue?fieldValue:"")+"'/>"
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
+                             _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
                             break;
                         case "inputLine":
-                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='font-size: inherit;border: 0;border-bottom: 1px solid #444;' value='"+(fieldValue?fieldValue:"")+"'/>"
+                            t.realInputStyle =  'border: 0;border-bottom: 1px solid #444;' + t.realInputStyle;
+                            _html = _html+"<input type='text' name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
+                            _htmlRead = _htmlRead+"<input type='text' disabled name='"+_fieldName+"' autocomplete='off' style='"+t.realInputStyle+"' value='"+(fieldValue?fieldValue:"")+"'/>";
                             break;
 
                     }
+                    t.resultReadOnlyHtmlString=bbVal.replace(new RegExp(item.src, 'gi'),"<bb-html name="+_fieldName+" >"+_htmlRead+"</bb-html>");
                     bbVal=bbVal.replace(new RegExp(item.src, 'gi'),"<bb-html name="+_fieldName+" >"+_html+"</bb-html>");
                     //加标签是用于标记
                     bbResultVal = bbResultVal.replace(new RegExp(item.src, 'gi'),"<bb-item name="+_fieldName+">"+fieldValue+"</bb-item>");
@@ -179,8 +202,22 @@
                 })
                 this.fillHtml();
             },
+            //外部设置只读内容
+            setReadOnlyContent:function(...args){
+                let t=this;
+                t.setContent(...args);
+                debugger;
+                if(t.resultReadOnlyHtmlString){
+                    t.valueBase = t.resultReadOnlyHtmlString
+                }
+            }
         }
     }
 </script>
 <style lang='less' scoped>
+    .bb-html{
+        &>div{
+            margin: auto !important;
+        }
+    }
 </style>

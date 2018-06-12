@@ -46,7 +46,13 @@
         data() {
             return {
                 fields:[],
-                fieldsBanner:{title:'',url:"http://" + document.location.host + "/#" + window._TY_Home,icon:'ty-icon_M_b ty-font',class:'wy-banner-left wy-banner-lg'},
+                fieldsBanner:{
+                    title:'',
+                    url:"http://" + document.location.host + "/#" + window._TY_Home,
+                    // icon:'ty-icon_M_b ty-font',
+                    img:"",
+                    class:'wy-banner-left wy-banner-lg'
+                },
                 horizontal:'vertical',
                 collapse:false,
                 userName:null,
@@ -110,11 +116,33 @@
                 this.buttonClass = this.collapse?'ty-icon_shezhi ty-font':'ty-icon_tuichu ty-font';
                 this.colLeft = this.colLeft == 4?2:4;
                 this.colRight = this.colRight == 20?22:20;
-                const newArr = this.fieldsReady;
-                newArr[0].icon = newArr[0].icon == "ty-icon_M ty-font"?"ty-icon_M_b ty-font":"ty-icon_M ty-font";
+                this.updateMenu();
+            },
+            //更新菜单
+            updateMenu:function(_init){
+                let t=this;
+                const newArr = t.fieldsReady;
+                if(!newArr){
+                    return;
+                }
+                // newArr[0].icon = newArr[0].icon == "ty-icon_M ty-font"?"ty-icon_M_b ty-font":"ty-icon_M ty-font";
+                // newArr[0].img = newArr[0].img == "ty-icon_M ty-font"?"ty-icon_M_b ty-font":"ty-icon_M ty-font";
+                if(_init){
+                    //初始化
+                    newArr[0].icon = '';
+                    newArr[0].img = t.userInfo&&t.userInfo['logo'];
+                }else{
+                    if(newArr[0].icon&&newArr[0].icon=="ty-icon_M ty-font"){
+                        newArr[0].icon = '';
+                        newArr[0].img = t.userInfo&&t.userInfo['logo'];
+                    }else{
+                        newArr[0].icon = "ty-icon_M ty-font";
+                        newArr[0].img = '';
+                    }   
+                }
                 newArr[0].class = newArr[0].class == "wy-banner-left wy-banner-xs"?"wy-banner-left wy-banner-lg":"wy-banner-left wy-banner-xs";
-                this.$set(this.fieldsReady,newArr);
-                this.setMinHeight();
+                t.$set(t.fieldsReady,newArr);
+                t.setMinHeight();
             },
             getValue:function(){
             },
@@ -125,6 +153,9 @@
                     let data =JSON.parse(userInfo);
                     t.userInfo = data;
                     t.userName = data.user_name;
+                    setTimeout(()=>{
+                        t.updateMenu(true);
+                    },500);
                 }else{
                     var sessionAPI = _TY_ENV.name=='local'?"/read-session-user-info":"/ty-read-session-user-info";
                     _TY_Tool.get(_TY_ContentPath+sessionAPI).then(function (response) {
@@ -134,8 +165,11 @@
                         t.userInfo['user_name']=data.name;
                         t.userInfo['market_id']=data.marketId;
                         t.userInfo['market_name']=data.marketDesc;
+                        t.userInfo['logo']=data.logo;
+                        t.userInfo['tenantSerialNumber']=data.tenantSerialNumber;
                         t.userName = data.name
                         localStorage.setItem('userInfo', JSON.stringify(t.userInfo));
+                        t.updateMenu(true);
                     }).catch(function (error) {
                     });
                 }
@@ -313,6 +347,7 @@
         background-repeat: no-repeat;
         background-size: 60%;
         background-color: #0181D0;
+        background-color:#006ebd;
         background-position: center;
         width: 100%;
         height: 50px;
