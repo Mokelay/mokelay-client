@@ -134,10 +134,11 @@
             //渲染二维码
             renderQrCode:function(createElement){
                 let t=this;
+                let _host= _TY_H5Host|| (window.location.protocol + "//" + window.location.host);
                 const qrCodeInstance = createElement('qriously',{
                     props:{
                         size:200,
-                        value:location.href
+                        value:(_host+"/#/"+t.$route.query.pageAlias)
                     },
                     style:{
                         position: 'absolute',
