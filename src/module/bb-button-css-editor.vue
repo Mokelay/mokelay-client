@@ -41,19 +41,20 @@
             value:{
                 type:[Object,String],
                 default:function(){
-                    return { 
-                    }
+                    return {}
                 }
             }
         },
         data() {
-
             return {
                 valueBase:typeof(this.value)==='string'?JSON.parse(this.value):this.value,
                 layoutContent:null
             }
         },
         watch: {
+            value(val){
+                this.valueBase = val;
+            }
         },
         created: function () {
             this.setEditor();
@@ -70,6 +71,97 @@
                 const t = this;
                 //样式表单设置
                 t.layoutContent = [{                      
+                    uuid:'layout_14',
+                    alias:'bb-input',                   
+                    aliasName:'背景图地址',                                 
+                    attributes:{
+                        attributeName:'bgUrl',
+                        show:true,
+                    },
+                    interactives:[],
+                },{                      
+                    uuid:'layout_15',
+                    alias:'bb-select',                   
+                    aliasName:'背景图重复',                                 
+                    attributes:{
+                        attributeName:'bgRepeat',
+                        show:true,
+                        fields:[{
+                            text:"重复",
+                            value:"repeat"
+                        },{
+                            text:"x轴重复",
+                            value:"repeat-x"
+                        },{
+                            text:"y轴重复",
+                            value:"repeat-y"
+                        },{
+                            text:"不重复",
+                            value:"no-repeat"
+                        },{
+                            text:"继承",
+                            value:"inherit"
+                        }]
+                    },
+                    interactives:[],
+                },{                      
+                    uuid:'layout_16',
+                    alias:'bb-select',                   
+                    aliasName:'背景图起始位置',                                 
+                    attributes:{
+                        attributeName:'bgOrigin',
+                        show:true,
+                        fields:[{
+                            text:"相对于内边距框来定位",
+                            value:"padding-box"
+                        },{
+                            text:"相对于边框盒来定位",
+                            value:"border-box"
+                        },{
+                            text:"相对于内容框来定位",
+                            value:"content-box"
+                        }]
+
+                    },
+                    interactives:[],
+                },{                      
+                    uuid:'layout_17',
+                    alias:'bb-input',                   
+                    aliasName:'背景图起始位置',                                 
+                    attributes:{
+                        attributeName:'bgPosition',
+                        show:true,
+                    },
+                    interactives:[],
+                },{                      
+                    uuid:'layout_18',
+                    alias:'bb-input',                   
+                    aliasName:'背景图尺寸',                                 
+                    attributes:{
+                        attributeName:'bgSize',
+                        show:true
+                    },
+                    interactives:[],
+                },{                      
+                    uuid:'layout_19',
+                    alias:'bb-select',                   
+                    aliasName:'背景图固定或者随着页面的其余部分滚动',                                 
+                    attributes:{
+                        attributeName:'bgAttachment',
+                        show:true,
+                        fields:[{
+                            text:"随页面滚动",
+                            value:"scroll"
+                        },{
+                            text:"图像不会移动",
+                            value:"fixed"
+                        },{
+                            text:"继承",
+                            value:"inherit"
+                        }]
+                    },
+                    interactives:[],
+                },{                      
                     uuid:'layout_01',
                     alias:'bb-color-picker',                   
                     aliasName:'背景色',                                 
