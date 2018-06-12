@@ -82,7 +82,6 @@
               }
             },
             click:function(button){
-                debugger
                 this.vue = Vue;
                 Util.resolveButton(button,_TY_Tool.buildTplParams(this),button.afterClick);
                 this.$emit('buttonClick',button,this);
