@@ -18,7 +18,7 @@
             <el-tab-pane label="媒体库" name="store">
                 <!-- 媒体库 -->
                 <div class="flex">
-                    <section class="flex1 box_left">
+                    <section ref="box_left" class="flex1 box_left">
                         <div class="media_search">
                             <!-- 搜索条 -->
                         </div>
@@ -34,7 +34,7 @@
                               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                               <!-- <div class="el-upload__tip" slot="tip">上传文件不能超过2MB</div> -->
                             </el-upload>
-                            <ul>
+                            <ul ref="media_box" class="clearfix media_box">
                                 <li v-for="(item,index) in fileList" :class="{
                                     'media_file_lis':true,
                                     'details':checkSelectedHasItem(index),
@@ -123,11 +123,18 @@
              //上传接口配置
             uploadDs:{
                 type:Object
+            },
+            //媒体库列表接口
+            mediaDs:{
+                type:Object
             }
         },
         data() {
             return {
                 activeName:"upload",
+                page:1,//第几页
+                pageSize:10,//每页多少条记录
+                totalPages:0,//总页数
                 /**
                     [{
                         index:0,
@@ -179,36 +186,6 @@
                     uploadDate:'2018-06-12 10:22:00',
                     length:'143KB',
                     size:'1920 x 1109'
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png"
                 }]
             }
         },
@@ -227,14 +204,76 @@
                 if (type == 'config') {
                     //如果不是自定义接口
                     apiUrl = window._TY_ContentPath + "/" + api;
+                    if(location.host.startsWith('local')){
+                        apiUrl = location.protocol+"//longyan.dev.rs.com"+apiUrl;
+                    }
                 }
                 t.uploadUrl = apiUrl;
             }
+            t.page=1;
+            //加载媒体数据
+            t.loadMeidaList();
         },
         mounted:function(){
             let t=this;
+            //监听滚动事件
+            t.listenScroll();
         },
         methods: {
+            //监听滚动事件
+            listenScroll:function(){
+                let t=this;
+                t.$refs['box_left'].addEventListener('scroll',()=>{
+                    const _scrollTop = t.$refs['box_left'].scrollTop;
+                    const ulHeight = t.$refs['media_box'].offsetHeight;
+                    const contentHeight = t.$refs['box_left'].offsetHeight;
+                    let flag = true;//标记，避免重复请求
+                    if(_scrollTop>=(ulHeight-contentHeight) && t.totalPages>0 && t.page<t.totalPages &&flag){
+                        //到底了,如果不是最后一页，继续加载
+                        t.page = t.page+1;
+                        if(flag){
+                            flag = false;
+                            t.loadMeidaList();
+                        }
+                        window.setTimeout(()=>{
+                            //加载后，两秒不能再请求，避免重复请求
+                            flag=true;
+                        },2000);
+                    }
+                },true);
+            },
+            //加载媒体数据
+            loadMeidaList:function(){
+                let t=this;
+                if(t.mediaDs){
+                    _TY_Tool.getDSData(t.mediaDs, _TY_Tool.buildTplParams(t,{}), function (map) {
+                        map.forEach(function (item) {
+                            var list = item['value']['currentRecords'];
+                            if(t.page==1){
+                                t.fileList = [];
+                            }
+                            for (var i in list) {
+                                //这里可能需要中间件处理一下接口返回的数据fileList 的item结果如下：
+                                /**
+                                    {
+                                        title:'测试1',
+                                        src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png",
+                                        desc:'说明',
+                                        replaceText:'替换文本',
+                                        fileName:'xxxxxx.jpg',
+                                        uploadDate:'2018-06-12 10:22:00',
+                                        length:'143KB',
+                                        size:'1920 x 1109'
+                                    }
+                                */
+                                t.fileList.push(list[i]);
+                            }
+                            t.totalPages = item['value']['totalPages'];
+                        });
+                    }, function (code, msg) {
+                    });
+                }
+            },
             //检查item 是否勾选上了
             checkSelectedHasItem:function(_index){
                 let t=this;
@@ -249,6 +288,11 @@
             //tab点击事件
             handleClick:function(tab,event){
                 let t=this;
+                if(tab.name==='store'){
+                    //如果是媒体库，重新加载数据
+                    t.page=1;
+                    t.loadMeidaList();
+                }
             },
             //清空选中
             clearSelected:function(){
@@ -260,6 +304,7 @@
                 let t=this;
                 console.log("resposne",response);
                 console.log("file=",file);
+                t.activeName = "store";
             },
             //文件点击事件
             fileItemClick:function(file,index){
@@ -282,11 +327,8 @@
             //媒体库提交事件
             mediaCommit:function(){
                 let t=this;
-            },
-            //文件详情修改
-            detailChange:function(){
-                let t=this;
-                debugger;
+                //提交媒体库
+                t.$emit("commit",t.selecteds,t);
             }
         }
     }
@@ -348,7 +390,7 @@
         box-sizing: content-box;
     }
     .media_file_lis{
-        width:20%;
+        width:25%;
         position: relative;
         float: left;
         padding: 8px;
@@ -501,6 +543,17 @@
 
 </style>
 <style>
+    .clearfix:after{
+        display: block;
+        clear: both;
+        content: "";
+        visibility: hidden;
+        height: 0;
+    }
+    .clearfix{
+        zoom:1;
+    }
+
     .media_upload .el-upload-dragger{
         width: 100%;
         min-height:345px;
