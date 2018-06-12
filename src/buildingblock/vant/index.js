@@ -39,12 +39,12 @@ import bbvantaddresslist from "./bb-vant-address-list";
 import bbvantcontactcard from "./bb-vant-contact-card";
 import bbvantcontactedit from "./bb-vant-contact-edit";
 import bbvantcontactlist from "./bb-vant-contact-list";
-
 import bbvantTreeSelect from "./bb-vant-tree-select"
 import bbvantPicker from "./bb-vant-picker"
 import bbvantDatetimePicker from "./bb-vant-datetime-picker"
-
 import bbvantsku from "./bb-vant-sku";
+import bbvantcouponcell from "./bb-vant-coupon-cell";
+import bbvantcouponlist from "./bb-vant-coupon-list";
 
 export default {
 	install: function(Vue) {
@@ -67,7 +67,6 @@ export default {
 		Vue.component('bb-vant-switch-cell', bbvantswitchcell);
 		Vue.component('bb-vant-search', bbvantsearch);
 		Vue.component('bb-vant-stepper', bbvantstepper);
-
 		Vue.component('bb-vant-circle', bbvantcircle);
 		Vue.component("bb-vant-rate", bbvantrate);
 		Vue.component("bb-vant-progress", bbvantprogress);
@@ -88,12 +87,12 @@ export default {
 		Vue.component("bb-vant-contact-card", bbvantcontactcard);
 		Vue.component("bb-vant-contact-edit", bbvantcontactedit);
 		Vue.component("bb-vant-contact-list", bbvantcontactlist);
-
 		Vue.component("bb-vant-sku", bbvantsku);
-
 		Vue.component("bb-vant-tree-select", bbvantTreeSelect);
 		Vue.component("bb-vant-picker", bbvantPicker);
 		Vue.component("bb-vant-datetime-picker", bbvantDatetimePicker);
+		Vue.component("bb-vant-coupon-cell", bbvantcouponcell);
+		Vue.component("bb-vant-coupon-list", bbvantcouponlist);
 
 		console.log("成功加载Vant积木;");
 	}
