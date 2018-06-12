@@ -43,6 +43,8 @@ import bbvantTreeSelect from "./bb-vant-tree-select"
 import bbvantPicker from "./bb-vant-picker"
 import bbvantDatetimePicker from "./bb-vant-datetime-picker"
 import bbvantsku from "./bb-vant-sku";
+import bbvantcouponcell from "./bb-vant-coupon-cell";
+import bbvantcouponlist from "./bb-vant-coupon-list";
 
 export default {
 	install: function(Vue) {
@@ -90,6 +92,8 @@ export default {
 		Vue.component("bb-vant-picker", bbvantPicker);
 		Vue.component("bb-vant-datetime-picker", bbvantDatetimePicker);
 		Vue.component("bb-vant-sku", bbvantsku);
+		Vue.component("bb-vant-coupon-cell", bbvantcouponcell);
+		Vue.component("bb-vant-coupon-list", bbvantcouponlist);
 		console.log("成功加载Vant积木;");
 	}
 };
