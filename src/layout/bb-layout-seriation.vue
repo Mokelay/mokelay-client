@@ -8,6 +8,21 @@
         c.积木动画渲染
     3.积木交互绑定（通过积木选择器，支持多级积木事件方法绑定）
 */  
+
+    //引入H5背景图
+    import H5_bg_01 from './../libs/imgs/h5_bg/h5_bg_01.png';
+    import H5_bg_02 from './../libs/imgs/h5_bg/h5_bg_02.png';
+    import H5_bg_03 from './../libs/imgs/h5_bg/h5_bg_03.png';
+    import H5_bg_04 from './../libs/imgs/h5_bg/h5_bg_04.png';
+    import H5_bg_05 from './../libs/imgs/h5_bg/h5_bg_05.png';
+    import H5_bg_06 from './../libs/imgs/h5_bg/h5_bg_06.png';
+    import H5_bg_07 from './../libs/imgs/h5_bg/h5_bg_07.png';
+    import H5_bg_08 from './../libs/imgs/h5_bg/h5_bg_08.png';
+
+    import Vue from 'vue'
+    import VueQriously from 'vue-qriously'
+    Vue.use(VueQriously)
+
     export default {
         name: 'bb-layout-seriation',
         render:function(createElement){
@@ -16,13 +31,43 @@
             //控制水平排列
             let itemClass = t.horizontal?"df":"db";
             itemClass = t.realShow?itemClass:"dn";
-            return createElement('div',{class:itemClass},bbList);
+            if((t.platform == 'H5'||t.platform == 'PAD'||t.platform == 'WX')&&_TY_Tool.isPC()){
+                //如果是移动端页面，并且当前在pc环境下（非google的手机模式）,模拟展示手机内容，并且展示二维码
+                const platformInstance = createElement('div',{
+                    style:{},
+                    "class":"h5_platform"
+                },bbList);
+                const bgInstances = t.renderBg(createElement);
+                
+                const qrCode = t.renderQrCode(createElement);
+                let style = {
+                    "position":"relative"
+                }
+                if(t.platform){
+                    style =  Object.assign(style,{
+                        "height": "812px",
+                        "width" : "375px",
+                        "margin-left":"30%"
+                    });
+                }
+                return createElement('div',{
+                    style:style,
+                    'class':""
+                },bgInstances.concat(qrCode).concat([platformInstance]));
+            }else{
+                return createElement('div',{class:itemClass},bbList);
+            }
         },
         props: {
             /*水平排列*/
             horizontal:{
                 type:Boolean,
                 default:false
+            },
+             //平台
+            platform:{
+                type:String,
+                default:''
             },
             /*
                 content:积木数据,
@@ -86,6 +131,69 @@
             }
         },
         methods: {
+            //渲染二维码
+            renderQrCode:function(createElement){
+                let t=this;
+                const qrCodeInstance = createElement('qriously',{
+                    props:{
+                        size:200,
+                        value:location.href
+                    },
+                    style:{
+                        position: 'absolute',
+                        right: '-200px',
+                        top: '30%'
+                    }
+                },[]);
+                const pInstance = createElement('p',{
+                        domProps:{
+                            innerHTML:"手机扫一扫，更好看！"
+                        },
+                        style:{
+                            position: 'absolute',
+                            right: '-182px',
+                            top: 'calc(30% + 210px)',
+                            color:'#333'
+                        }
+                    },[]);
+                return [pInstance,qrCodeInstance];
+            },
+            //渲染的背景图 手机
+            renderBg:function(createElement){
+                let t=this;
+                if(!t.platform){
+                    return [];
+                }
+                let result = [];
+                const H5bgs = [H5_bg_01,H5_bg_02,H5_bg_03,H5_bg_04,H5_bg_05,H5_bg_06,H5_bg_07,H5_bg_08];
+                const ImgPosition = ['lt','t','rt','l','r','lb','b','rb'];
+                //有8张背景图
+                for(let i=0;i<8;i++){
+                    let clazz = "";
+                    let bgSrc;
+                    if(t.platform == 'H5'||t.platform == 'PAD'||t.platform == 'WX'){
+                        clazz="h5_bg h5_bg_"+ImgPosition[i];
+                        bgSrc = H5bgs[i];
+                    }
+                    const bgInstance = createElement('img',{
+                        "class":clazz,
+                        attrs:{
+                            "src":bgSrc
+                        }
+                    },[]);
+                    result.push(bgInstance);
+                }
+                if(t.platform == 'H5'||t.platform == 'PAD'||t.platform == 'WX'){
+                    //滚动条要挡住上下部分
+                    result.push(createElement('div',{
+                            "class":"blockUp",
+                        },[]));
+                    result.push(createElement('div',{
+                            "class":"blockDown",
+                        },[]));
+                }
+                return result;
+            },
             renderBB:function(createElement){
                 const t = this;
                 const bbList = _TY_Tool.bbRender(t.content, createElement, t);
@@ -135,6 +243,78 @@
         }
     }
 </script>
+<style scoped>
+    .h5_platform{
+        overflow-y: scroll;
+        padding: calc(5% + 108px) calc(5% + 25px);
+        height: 100%;
+    }
+    .h5_platform::-webkit-scrollbar {
+         display: none;
+    }
+    .h5_bg{
+        position:absolute;
+        z-index: 100;
+    }
+    .h5_bg_lt{
+        left: 5%;
+        top:5%;
+    }
+    .h5_bg_t{
+        left: calc(5% + 51px);
+        top:5%;
+        width: calc(90% - 103px);
+        height: 85px;
+    }
+    .h5_bg_rt{
+        right: 5%;
+        top:5%;
+    }
+    .h5_bg_l{
+        left: 5%;
+        top:calc(5% + 85px);
+        height: calc(90% - 170px);
+        width: 25px;
+    }
+    .h5_bg_r{
+        right: 5%;
+        top:calc(5% + 85px);
+        height: calc(90% - 170px);
+        width: 25px;
+    }
+    .h5_bg_lb{
+        left: 5%;
+        bottom:5%;
+    }
+    .h5_bg_b{
+        left: calc(5% + 51px);
+        bottom:5%;
+        width: calc(90% - 103px);
+        height: 86px;
+    }
+    .h5_bg_rb{
+        right: 5%;
+        bottom:5%;
+    }
+    .blockUp{
+        width: 90%;
+        padding-top: calc(5% + 85px);
+        position: absolute;
+        z-index: 90;
+        background: #fff;
+        left: 5%;
+        top:0;
+    }
+    .blockDown{
+        width: 90%;
+        padding-top: calc(5% + 85px);
+        position: absolute;
+        z-index: 90;
+        background: #fff;
+        left: 5%;
+        bottom:0;
+    }
+</style>
 <style lang="less">
     .dn{
         display:none;

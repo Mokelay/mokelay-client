@@ -127,13 +127,17 @@
             //媒体库列表接口
             mediaDs:{
                 type:Object
+            },
+            //每页多少条
+            pageSize:{
+                type:[Number,String],
+                default:15
             }
         },
         data() {
             return {
                 activeName:"upload",
                 page:1,//第几页
-                pageSize:10,//每页多少条记录
                 totalPages:0,//总页数
                 /**
                     [{
