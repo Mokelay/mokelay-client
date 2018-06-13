@@ -154,7 +154,8 @@
                             position: 'absolute',
                             right: '-182px',
                             top: 'calc(30% + 210px)',
-                            color:'#333'
+                            color:'#333',
+                            'font-size':'16px'
                         }
                     },[]);
                 return [pInstance,qrCodeInstance];
