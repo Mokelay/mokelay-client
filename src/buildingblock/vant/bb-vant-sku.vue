@@ -195,8 +195,8 @@ import 'vant/lib/sku/style';
                 on:{
                     'add-cart':t.addCart,
                     'buy-clicked':t.buyClicked,
-                }
-
+                    'input':t.change
+                },
             },[]);
         },
         mounted(){
@@ -233,6 +233,13 @@ import 'vant/lib/sku/style';
             buyClicked(data){
                 this.$emit("buy-clicked",data);
             },
+            //外部设置sku展示
+            showSku(){
+                this.valueBase = true;
+            },
+            change(show){
+                this.valueBase = show;
+            }
         }
     }
 </script>
