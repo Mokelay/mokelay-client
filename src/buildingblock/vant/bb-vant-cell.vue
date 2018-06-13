@@ -5,6 +5,10 @@
         :icon="option.icon"
         :label="option.label"
         :required="option.required"
+        :is-link="option.isLink"
+        :center="option.center"
+        :url="option.url"
+        :clickable="option.clickable"
         :title="option.title"/>
 </template>
 
@@ -31,8 +35,12 @@ import 'vant/lib/cell/style';
                     icon:String 左侧图标,
                     title:String 左侧标题,
                     label:String 标题下方的描述信息,
-                    required:Boolean 是否显示表单必填星号
-                }
+                    required:Boolean 是否显示表单必填星号,
+                    isLink:Boolean 展示右侧箭头并开启点击反馈
+                    center:Boolean 使内容垂直居中
+                    url:""  跳转链接
+                    clickable:Boolean 开启点击反馈
+                 }
             */
             option:{
                 type:Object,
