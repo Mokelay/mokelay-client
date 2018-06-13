@@ -87,3 +87,30 @@ th {
   -webkit-margin-before: 0.67em;
   -webkit-margin-after: 0.67em;
 }
+
+.clearfix:after{
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0;
+}
+.clearfix{
+  zoom:1;
+}
+.flex{
+    display:flex;
+    display:-webkit-flex;
+    display:-ms-flex;
+    display:-moz-flex;
+    display:-o-flex;
+}
+.flex_center{
+    align-items:center;
+}
+.flex1{
+    -moz-box-flex:1.0; /* Firefox */
+    -webkit-box-flex:1.0; /* Safari 和 Chrome */
+    box-flex:1.0;
+    flex:1.0;
+}
