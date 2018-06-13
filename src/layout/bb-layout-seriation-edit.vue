@@ -44,8 +44,12 @@
                 divClass = "pc_platform";
             }else if(t.platform == 'H5'||t.platform == 'PAD'){
                 divClass = "h5_platform";
+                //rem基准值更正
+                t.changeParentRemSize();
             }else if(t.platform == 'WX'){
                 divClass="wx_platform";
+                //rem基准值更正
+                t.changeParentRemSize();
             }
             const platformInstance = createElement('div',{
                 style:bgStyle,
@@ -152,6 +156,12 @@
             this.quickKey();
         },
         methods: {
+            //针对h5页面在pc上的预览，修改html的size，以更正rem基准值
+            changeParentRemSize:function(){
+                let t=this;
+                const _size = window.innerWidth/40;//window.innerWidth * 25% / 10
+                document.children[0].style['font-size']= _size+ "px";
+            },
             //渲染编辑页的背景图 手机和pc
             renderBg:function(createElement){
                 let t=this;
