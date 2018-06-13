@@ -1,4 +1,6 @@
 import 'babel-polyfill';
+//引入rem适配插件
+import 'amfe-flexible';
 
 import Vue from 'vue';
 

@@ -1,6 +1,6 @@
 <template>
-    <div class="bb-billboard">
-        <div class="bb-billboard-item" v-for = "ele in realData" :style="{backgroundColor:ele.bgColor || defaultBgColor}">
+    <div :class="['bb-billboard',theme]">
+        <div v-if="theme=='pc_block'" class="bb-billboard-item" v-for = "ele in realData" :style="{backgroundColor:ele.bgColor || defaultBgColor}">
             <span class="bb-billboard-digit"><i :class="ele.icon"></i><span>{{ele.digit}}</span></span>
             <p class="bb-billboard-text">{{ele.text}}</p>
         </div>
@@ -20,6 +20,14 @@
             lazy:{//初始不加载数据
                 type:Boolean,
                 default: false
+            },
+            /**
+                主题：目前分PC块和 H5块两种，后面有需要再扩展
+                ['pc_block','h5_block']
+            */
+            theme:{
+                type:String,
+                default:'pc_block'
             }
         },
         data() {
@@ -68,9 +76,10 @@
     }
 </script>
 <style lang='less' scoped>
-    .bb-billboard{
+    .bb-billboard.pc_block{
         display: flex;
         margin: auto;
+        flex-wrap: wrap;
         .bb-billboard-item{
             flex:1;
             text-align: center;

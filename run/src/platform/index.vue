@@ -155,7 +155,7 @@
                     t.userName = data.user_name;
                     setTimeout(()=>{
                         t.updateMenu(true);
-                    },500);
+                    },1000);
                 }else{
                     var sessionAPI = _TY_ENV.name=='local'?"/read-session-user-info":"/ty-read-session-user-info";
                     _TY_Tool.get(_TY_ContentPath+sessionAPI).then(function (response) {
