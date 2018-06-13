@@ -64,13 +64,19 @@ import 'vant/lib/card/style';
                 'currency':t.realCard['currency'] || '￥' //省 市 区 数据
             };
             const slotArr = t.renderSlotItem(createElement);
-            return createElement('van-card',{props:props},slotArr);
+            const card = createElement('van-card',{props:props,on:{click:t.click}},slotArr);
+            return createElement('div',{on:{click:t.click}},[card]);
+
         },
         mounted(){
             this.getData();
         },
         //事件click
         methods: {
+            //点击事件
+            click(){
+                this.$emit('click',this);
+            },
             //动态获取卡片内容
             getData(){
                 const t = this;
