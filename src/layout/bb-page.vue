@@ -146,6 +146,10 @@
       window._TY_Page_Data[this.p_pageAlias] = this;
       if(this.root){
         window._TY_Root = this;
+        if(_TY_Tool.isPC()){
+          // 针对PC端  基准值更正
+          document.body.style.fontSize = "16px";
+        }
       }
       this.loadData();
     },

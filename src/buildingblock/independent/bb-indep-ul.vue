@@ -120,7 +120,7 @@
                             ]
                             break;
                         case 'card':
-
+                            t.itemContent=[];
                             break;
                         default:
                             return
