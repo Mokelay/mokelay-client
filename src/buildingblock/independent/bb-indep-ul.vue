@@ -134,7 +134,67 @@
                             ]
                             break;
                         case 'card':
-                            t.itemContent=[];
+                            t.itemContent=[
+                                {
+                                    "uuid": "D9E26950-31C3-41EF-9E3B-9C227129D561",
+                                    "alias": "bb-img",
+                                    "aliasName": "小图片",
+                                    "attributes": {
+                                        "show": true,
+                                        "src": "<%=rowData.img%>",
+                                        "cssStyle": {
+                                            "width": "50px",
+                                            "height": "50px",
+                                            "margin": "auto",
+                                            "border-radius": "50%",
+                                            "display": "block",
+                                            "overflow": "hidden"
+                                        },
+                                        "attributeName": "img"
+                                    },
+                                    "animation": [
+                                        
+                                    ],
+                                    "interactives": [
+                                        
+                                    ],
+                                    "layout": {
+                                        
+                                    }
+                                },
+                                {
+                                    "uuid": "279454A8-0FFA-4CF0-89DE-F5D3AD5EB2A2",
+                                    "alias": "bb-words",
+                                    "aliasName": "文案",
+                                    "attributes": {
+                                        "show": true,
+                                        "attributeName": "title",
+                                        "lineHeight": "1.5rem",
+                                        "textAlign": "center",
+                                        "display": "block",
+                                        "value": "<%=rowData.title%>"
+                                    },
+                                    "animation": [
+                                        
+                                    ],
+                                    "interactives": [
+                                        
+                                    ],
+                                    "layout": {
+                                        
+                                    }
+                                }
+                            ];
+                            t.itemStyle= {
+                                "border": {
+                                    "margin": "",
+                                    "size": "0 0.05rem 0 0",
+                                    "color": "rgba(234, 234, 234, 1)",
+                                    "style": "solid",
+                                    "radian": "0.1rem",
+                                    "padding": "0.5rem 0.5rem 0.2rem 0.5rem"
+                                }
+                            }
                             break;
                         default:
                             return
