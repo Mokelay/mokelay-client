@@ -149,6 +149,7 @@
         if(_TY_Tool.isPC()){
           // 针对PC端  基准值更正
           document.body.style.fontSize = "16px";
+          document.documentElement.style.fontSize = '28px';
         }
       }
       this.loadData();
