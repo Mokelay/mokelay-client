@@ -1,26 +1,33 @@
 <script>
-import CellSwipe from 'vant/lib/cell-swipe';
-import 'vant/lib/cell-swipe/style';
-
+import CellGroup from 'vant/lib/cell-group';
+import 'vant/lib/cell-group/style';
+    //当每项swipe数据格式相同时可以使用list
     export default {
-        name: 'bb-vant-cell-swipe',
+        name: 'bb-vant-cell-swipe-list',
         components: {
-          "van-cell-swipe":CellSwipe,
+          "van-cell-group":CellGroup,
         },
         props: {
-            //左侧滑动区域宽度
-            leftWidth:{
-                type:Number,
-                default:65
+            /*单元格内容
+                [{
+                    uuid:123,
+                    title:String,
+                    value:String
+                }]
+            */
+            value:{
+                type:Array
+            }, 
+            //动态数据源
+            valueDs:{
+                type:Object
             },
-            //右侧滑动区域宽度
-            rightWidth:{
-                type:Number,
-                default:65
-            },
-            /*
-            content:积木数据,
-                content:[{                      //页面内容
+            /*cellSwipe 模板
+                {
+                    leftWidth:Number,
+                    rightWidth:Number,
+                    contentDs:Object,
+                    content:[{                      //页面内容
                         uuid:'',
                         alias:'',                   //积木别名
                         aliasName:'',               //中文名称
@@ -71,63 +78,87 @@ import 'vant/lib/cell-swipe/style';
                             }
                         }
                     }]
+                }
             */
-            content:{
-                type:Array
-            },
-            //动态模板
-            contentDs:{
-                type:Object
+            cellSwipeConfig:{
+                type:Object,
+                default:function(){
+                    return  {}
+                }
             }
         },
         data() {
             return {
-                valueBase:this.value,
-                realContent:this.content
+                valueBase:this.value || []
             };
         },
         render: function(createElement){
             const t = this;
             const children = [];
-            t.realContent.forEach((ele,key)=>{
-                const child = _TY_Tool.bbRender([ele], createElement, t);
-                if(ele.group == "left" || ele.group == "right"){
-                    const outside = createElement('div',{slot:ele.group},[child]);
-                    children.push(outside);
-                }else{
-                    children.push(child);
-                }
+            t.valueBase.forEach((val,index)=>{
+                const contentTpl = _TY_Tool.deepClone(t.cellSwipeConfig.content);
+                contentTpl.forEach((ele,key)=>{
+                    if(ele.group != "left" && ele.group != "right"){
+                        ele['attributes']['value'] = val['value'];
+                        ele['attributes']['option']['title'] = val['title'];
+                    }
+                })
+                const cellSwipeItem = createElement('bb-vant-cell-swipe',{props:{
+                        "rightWidth":t.cellSwipeConfig.rightWidth,
+                        "leftWidth":t.cellSwipeConfig.leftWidth,
+                        "content":contentTpl,
+                        "contentDs":t.cellSwipeConfig.contentDs,
+                    },on:{
+                        'left':t.onLeft.bind(t,index),
+                        'cell':t.onCell.bind(t,index),
+                        'outside':t.onOutside.bind(t,index),
+                        'right':t.onRight.bind(t,index)
+                    }},[]);
+                children.push(cellSwipeItem);
             });
-            return createElement('van-cell-swipe',{props:{
-                "right-width":t.rightWidth,
-                "left-width":t.leftWidth,
-                "on-close":t.onClose
-            }},children);
+            return createElement('van-cell-group',{props:{}},children);
+
         },
         mounted(){
-
+            this.getData();
         },
         //事件click
         methods: {
             //动态获swipe内容
-            getAreaList(){
+            getData(){
                 const t = this;
-                if (t.contentDs) {
+                if (t.valueDs) {
                     t.loading = true;
-                    _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
+                    _TY_Tool.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
                             t.loading = false;
                             const {dataKey, value} = item;
-                            t.realContent = value;
+                            t.valueBase = value;
                         });
                     }, function (code, msg) {
                         t.loading = false;
                     });
                 }
             },
-            onClose(clickPosition, instance) {
-                // left right cell outside
-                this.$emit(clickPosition,instance);
+            //左侧点击
+            onLeft(index){
+                this.$emit('left',index,this.valueBase);
+            },
+            //单元格被点击
+            onCell(index){
+                this.$emit('cell',index,this.valueBase);
+            },
+            //外部被点击
+            onOutside(index){
+                this.$emit('outside',index,this.valueBase);
+            },
+            //右侧被点击
+            onRight(index){
+                this.$emit('right',index,this.valueBase);
+            },
+            //外部设置valueBase
+            setValueBase(value){
+                this.valueBase = value;
             }
         }
     }
