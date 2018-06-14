@@ -882,7 +882,13 @@ util.bbCanvasRender = function(content, createElement, t) {
 }
  */
 util.setStyle = function(bb, t) {
-    const layout = bb.layout;
+    let layout = bb;
+    let simpleCss = true;
+    // 兼容处理，方便传参
+    if (bb && bb.layout) {
+        layout = bb.layout;
+        simpleCss = false;
+    }
     let style = {
         // 'margin': '2px',
     };
@@ -921,8 +927,10 @@ util.setStyle = function(bb, t) {
             'line-height': layout.font && layout.font.lineHeight,
         }
     }
-    const animation = _setAnimation(bb);
-    style['animation'] = animation;
+    if (!simpleCss) {
+        const animation = _setAnimation(bb);
+        style['animation'] = animation;
+    }
     return style;
 }
 /**

@@ -49,7 +49,21 @@
             //列表数据  数据源
             ds:{
                 type:Object
+            },
+            //======样式控制区======
+            //li 的样式设置
+            itemStyle:{
+                type:Object
+            },
+            //第一个item样式
+            firstItemStyle:{
+                type:Object
+            },
+            //最后一个item的样式
+            lastItemStyle:{
+                type:Object
             }
+
         },
         data() {
             return {
@@ -178,9 +192,17 @@
                             float:"left"
                         }
                     }
+                    let _cssStyle = Object.assign({},_TY_Tool.setStyle(t.itemStyle),_style);
+                    if(index==0&&t.firstItemStyle){
+                        //第一个的样式
+                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setStyle(t.firstItemStyle),_style);
+                    }else if(index==t.list.length-1 &&t.lastItemStyle){
+                        //最后一个的样式
+                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setStyle(t.lastItemStyle),_style);
+                    }
                     let liItem = createElement('li',{
                         class:clazz,
-                        style:_style,
+                        style:_cssStyle,
                         on:{
                             click:function(){
                                 t.$emit('itemClick',item,t);
