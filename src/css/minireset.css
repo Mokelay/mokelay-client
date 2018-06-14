@@ -109,6 +109,9 @@ th {
 .flex_center{
     align-items:center;
 }
+.flex_nowrap{
+      flex-wrap: nowrap;
+}
 .flex1{
     -webkit-box-flex: 1;
     -webkit-flex: 1;
