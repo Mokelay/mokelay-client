@@ -164,6 +164,8 @@
       }
     },
     created: function () { 
+      //积木配置平台编辑状态
+      window._TY_BB_Edit = true;
       this.realPageAlias = _TY_Tool.tpl(this.pageAlias, _TY_Tool.buildTplParams(this));
       //把bb-page的全局对象注册到window下
       window._TY_Page_Data[this.realPageAlias] = this;

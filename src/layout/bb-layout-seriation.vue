@@ -255,8 +255,11 @@
 <style scoped>
     .h5_platform{
         overflow-y: scroll;
-        padding: calc(5% + 108px) calc(5% + 25px);
+        padding: calc(5% + 105px) 0;
         height: 100%;
+        transform: scale(1);
+        width: 75%;
+        margin-left: 50px
     }
     .h5_platform::-webkit-scrollbar {
          display: none;
