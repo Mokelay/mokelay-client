@@ -865,6 +865,12 @@ util.bbCanvasRender = function(content, createElement, t) {
     }
     return bbList;
 }
+//建议css色值方法
+util.setSimpleStyle = function(_css) {
+    return util.setStyle({
+        layout: _css
+    });
+}
 /**
  *setStyle 设置积木样式
  *私有只在bbRender中使用
@@ -882,13 +888,7 @@ util.bbCanvasRender = function(content, createElement, t) {
 }
  */
 util.setStyle = function(bb, t) {
-    let layout = bb;
-    let simpleCss = true;
-    // 兼容处理，方便传参
-    if (bb && bb.layout) {
-        layout = bb.layout;
-        simpleCss = false;
-    }
+    const layout = bb.layout;
     let style = {
         // 'margin': '2px',
     };
@@ -927,10 +927,8 @@ util.setStyle = function(bb, t) {
             'line-height': layout.font && layout.font.lineHeight,
         }
     }
-    if (!simpleCss) {
-        const animation = _setAnimation(bb);
-        style['animation'] = animation;
-    }
+    const animation = _setAnimation(bb);
+    style['animation'] = animation;
     return style;
 }
 /**

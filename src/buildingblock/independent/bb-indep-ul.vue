@@ -252,13 +252,13 @@
                             float:"left"
                         }
                     }
-                    let _cssStyle = Object.assign({},_TY_Tool.setStyle(t.itemStyle),_style);
+                    let _cssStyle = Object.assign({},_TY_Tool.setSimpleStyle(t.itemStyle),_style);
                     if(index==0&&t.firstItemStyle){
                         //第一个的样式
-                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setStyle(t.firstItemStyle),_style);
+                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setSimpleStyle(t.firstItemStyle),_style);
                     }else if(index==t.list.length-1 &&t.lastItemStyle){
                         //最后一个的样式
-                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setStyle(t.lastItemStyle),_style);
+                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setSimpleStyle(t.lastItemStyle),_style);
                     }
                     let liItem = createElement('li',{
                         class:clazz,
