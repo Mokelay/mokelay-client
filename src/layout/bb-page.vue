@@ -140,6 +140,8 @@
       };
     },
     created: function () {
+      //积木配置平台编辑状态
+      window._TY_BB_Edit = false;
       //解析pageAlias 模板（如果是模板的话）
       this.p_pageAlias = _TY_Tool.tpl(this.pageAlias,_TY_Tool.buildTplParams(this));
       //把bb-page的全局对象注册到window下

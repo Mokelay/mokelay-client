@@ -498,8 +498,11 @@
 
     .h5_platform{
         overflow-y: scroll;
-        padding: calc(5% + 85px) calc(25% + 25px);
+        padding: calc(5% + 85px) 0;
         height: 100%;
+        transform: scale(1);
+        width: calc(50% - 50px);
+        margin-left: calc(25% + 25px);
     }
     .h5_platform::-webkit-scrollbar {
          display: none;
