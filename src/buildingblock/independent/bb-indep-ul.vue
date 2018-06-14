@@ -43,17 +43,7 @@
             staticList:{
                 type:[String,Array],
                 default:function(){
-                    return [{
-                        title:'你好世界你好世界你好世界你好世界你好世界你好世界1'
-                    },{
-                        title:'你好世界你好世界你好世界你好世界2'
-                    },{
-                        title:'你好世界你好世界你好世界你好世界你好世界你好世界你好世界3'
-                    },{
-                        title:'你好世界4'
-                    },{
-                        title:'你好世界5'
-                    }]
+                    return []
                 }
             },
             //列表数据  数据源
@@ -193,7 +183,6 @@
                         style:_style,
                         on:{
                             click:function(){
-                                debugger;
                                 t.$emit('itemClick',item,t);
                             }
                         }
