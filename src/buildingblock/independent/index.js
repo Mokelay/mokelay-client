@@ -23,6 +23,7 @@ import bbindepdialog from './bb-indep-dialog';
 import bbindepbutton from './bb-indep-button';
 import bbportalitemlist from './bb-portal-item-list';
 import bbindepul from './bb-indep-ul';
+import bbindepportal from './bb-indep-portal';
 
 import helloworld from './bb-hello-world'
 
@@ -56,6 +57,7 @@ export default {
 		Vue.component('bb-indep-button', bbindepbutton);
 		Vue.component('bb-portal-item-list', bbportalitemlist);
 		Vue.component('bb-indep-ul', bbindepul);
+		Vue.component('bb-indep-portal', bbindepportal);
 
 		Vue.component('bb-hello-world', helloworld);
 

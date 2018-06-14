@@ -112,6 +112,9 @@ th {
 .flex_nowrap{
       flex-wrap: nowrap;
 }
+.flex_col{
+  flex-direction:column;
+}
 .flex1{
     -webkit-box-flex: 1;
     -webkit-flex: 1;
