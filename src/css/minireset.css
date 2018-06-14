@@ -99,18 +99,36 @@ th {
   zoom:1;
 }
 .flex{
-    display:flex;
-    display:-webkit-flex;
-    display:-ms-flex;
-    display:-moz-flex;
-    display:-o-flex;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
 }
 .flex_center{
     align-items:center;
 }
 .flex1{
-    -moz-box-flex:1.0; /* Firefox */
-    -webkit-box-flex:1.0; /* Safari 和 Chrome */
-    box-flex:1.0;
-    flex:1.0;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    display: block;
 }
+.flex_wrap {
+    -webkit-box-flex: initial;
+    -webkit-flex: initial;
+    flex: initial;
+    display: block;
+}
+
+/*一行显示不换行 多出的部分省略号*/
+.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.pointer{
+  cursor:pointer;
+}
+

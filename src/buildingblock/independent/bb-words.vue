@@ -102,7 +102,8 @@
           t.p_tagName,
           {
             style:{fontSize:t.p_fontSize,textIndent:t.p_textIndent,fontFamily:t.p_fontFamily,color:t.p_fontColor,textAlign:t.p_textAlign,lineHeight:t.p_lineHeight,'display':'block',background:t.p_background},
-            attrs:t.realTagAttributes
+            attrs:Object.assign({title:t.realText},t.realTagAttributes),
+            class:t.cssClass
           },
           t.content
       );
@@ -144,6 +145,10 @@
         type:String,
       },
       textIndent:{
+        type:String
+      },
+      // 外部 css class
+      cssClass:{
         type:String
       },
       /**====dom相关属性 end====*/

@@ -16,7 +16,8 @@
 
             return createElement('ul',{
                 class:{
-                    indep_ul:true
+                    indep_ul:true,
+                    clearfix:true
                 }
             },liInstance);
         },
@@ -31,26 +32,11 @@
                 type:String,
                 default:'line'
             },
-            //内容模板,通过数据填充展示的组件
+            //内容模板,通过数据填充展示的组件 <%=rowData.title%>
             itemContent:{
                 type:[String,Array],
                 default:function(){
-                    return [{
-                        "uuid": "392D2A99-A533-4E5B-BF87-D8DAFE76A895",
-                        "alias": "bb-words",
-                        "aliasName": "纯文本",
-                        "attributes": {
-                            "tagName": "h3",
-                            "text": "H3标签-<%=rowData.title%>"
-                        },
-                        "animation": [
-                        ],
-                        "interactives": [
-                        ],
-                        "layout": {
-                        },
-                        "onFocus": false
-                    }]
+                    return []
                 }
             },
             //静态的数据
@@ -58,13 +44,15 @@
                 type:[String,Array],
                 default:function(){
                     return [{
-                        title:'你好世界1'
+                        title:'你好世界你好世界你好世界你好世界你好世界你好世界1'
                     },{
-                        title:'你好世界2'
+                        title:'你好世界你好世界你好世界你好世界2'
                     },{
-                        title:'你好世界3'
+                        title:'你好世界你好世界你好世界你好世界你好世界你好世界你好世界3'
                     },{
                         title:'你好世界4'
+                    },{
+                        title:'你好世界5'
                     }]
                 }
             },
@@ -97,11 +85,49 @@
             //根据主题，修改 内容模板itemContent
             changeContentByTheme:function(){
                 let t=this;
-                if(!t.itemContent&&t.theme){
+                if((!t.itemContent||t.itemContent.length<=0)&&t.theme){
                     //根据不同的主题设置不同de itemContent
                     switch(t.theme){
                         case 'line':
-
+                            t.itemContent = [
+                                {
+                                    "uuid": "0B87493A-AB7B-4721-AE2A-0B42732DE002",
+                                    "alias": "bb-words",
+                                    "aliasName": "标题",
+                                    "attributes": {
+                                        "show": true,
+                                        "attributeName": "title",
+                                        "value": "<%=rowData.title%>",
+                                        "theme": "",
+                                        "textAlign": "left",
+                                        "lineHeight": "1rem",
+                                        "tagName": "a",
+                                        "cssClass": "flex1 ellipsis pointer",
+                                        "fontColor": "#0091ea"
+                                    },
+                                    "animation": [],
+                                    "interactives": [],
+                                    "layout": {}
+                                },
+                                {
+                                    "uuid": "546FEF5B-BE46-44EF-9EA9-8B441244D797",
+                                    "alias": "bb-words",
+                                    "aliasName": "日期",
+                                    "attributes": {
+                                        "show": true,
+                                        "attributeName": "date",
+                                        "theme": "",
+                                        "tagName": "span",
+                                        "lineHeight": "1rem",
+                                        "value": "<%=rowData.createDate%>",
+                                        "cssClass": "flex_wrap",
+                                        "fontColor": "#666"
+                                    },
+                                    "animation": [],
+                                    "interactives": [],
+                                    "layout": {}
+                                }
+                            ]
                             break;
                         case 'card':
 
@@ -122,7 +148,9 @@
                             if(item['valueKey'].split('.').length > 1){//支持定制接口
                                 _list = item['value']
                             }else{
-                                if(item['value']&&item['value']['list']){
+                                if(item['value']&&item['value']['currentRecords']){
+                                    _list = item['value']['currentRecords'];
+                                }else if(item['value']&&item['value']['list']){
                                     _list = item['value']['list'];    
                                 }else{
                                     _list = item['value'];
@@ -147,13 +175,24 @@
                     const _content = _TY_Tool.tpl(t.itemContent,{
                         rowData:item
                     });
-
+                    let clazz=  [];
+                    let _style={}
+                    if(t.theme==='line'){
+                        //如果是line的话，li是flex布局
+                        clazz = ["flex"]
+                    }
+                    const col = Number(t.columns);
+                    if(col>1){
+                        _style = {
+                            width:1/col*100 + "%",
+                            float:"left"
+                        }
+                    }
                     let liItem = createElement('li',{
-                        class:{
-
-                        },
+                        class:clazz,
+                        style:_style,
                         on:{
-                            click:function(item){
+                            click:function(){
                                 debugger;
                                 t.$emit('itemClick',item,t);
                             }
