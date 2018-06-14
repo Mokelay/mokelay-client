@@ -1,46 +1,22 @@
-<!-- <template>
-    <van-cell-group>
-        <van-cell-swipe :right-width="65" :left-width="65">
-            <div slot="left"><p>选择</p></div>
-                <van-cell title="单元格" value="内容" />
-            <div slot="right"><p>删除</p></div>
-        </van-cell-swipe>
-        <van-cell-swipe :right-width="65" :left-width="65">
-            <div slot="left"><p>选择</p></div>
-                <van-cell title="单元格" value="内容" />
-            <div slot="right"><p>删除</p></div>
-        </van-cell-swipe>
-        <van-cell-swipe :right-width="65" :left-width="65">
-            <div slot="left"><p>选择</p></div>
-                <van-cell title="单元格" value="内容" />
-            <div slot="right"><p>删除</p></div>
-        </van-cell-swipe>
-    </van-cell-group>
-</template> -->
-
 <script>
 import CellSwipe from 'vant/lib/cell-swipe';
 import 'vant/lib/cell-swipe/style';
-import CellGroup from 'vant/lib/cell-group';
-import 'vant/lib/cell-group/style';
-import Cell from 'vant/lib/cell';
-import 'vant/lib/cell/style';
 
     export default {
         name: 'bb-vant-cell-swipe',
         components: {
           "van-cell-swipe":CellSwipe,
-          "van-cell-group":CellGroup,
-          "van-cell":Cell,
         },
         props: {
             //左侧滑动区域宽度
             leftWidth:{
-                type:Number
+                type:Number,
+                default:65
             },
             //右侧滑动区域宽度
             rightWidth:{
-                type:Number
+                type:Number,
+                default:65
             },
             /*
             content:积木数据,
@@ -48,7 +24,7 @@ import 'vant/lib/cell/style';
                         uuid:'',
                         alias:'',                   //积木别名
                         aliasName:'',               //中文名称
-                        group:'',                   //积木分组 表单项显示的位置
+                        group:'',                   //对应slot
                         attributes:{
                             attributeName:''    //表单项键值别名
                             rules:[]            //验证规则
@@ -99,29 +75,59 @@ import 'vant/lib/cell/style';
             content:{
                 type:Array
             },
+            //动态模板
             contentDs:{
                 type:Object
             }
         },
         data() {
             return {
-                valueBase:this.value
+                valueBase:this.value,
+                realContent:this.content
             };
         },
         render: function(createElement){
             const t = this;
-            t.setValue();
-            const bbList = _TY_Tool.bbRender(t.realContent, createElement, t);
-            return createElement('van-cell-swipe',{props:{border:t.option.border}},bbList);
+            const children = [];
+            t.realContent.forEach((ele,key)=>{
+                const child = _TY_Tool.bbRender([ele], createElement, t);
+                if(ele.group == "left" || ele.group == "right"){
+                    const outside = createElement('div',{slot:ele.group},[child]);
+                    children.push(outside);
+                }else{
+                    children.push(child);
+                }
+            });
+            return createElement('van-cell-swipe',{props:{
+                "right-width":t.rightWidth,
+                "left-width":t.leftWidth,
+                "on-close":t.onClose
+            }},children);
         },
         mounted(){
 
         },
         //事件click
         methods: {
-            //点击事件
-            click(param){
-                this.$emit('click',param);
+            //动态获swipe内容
+            getAreaList(){
+                const t = this;
+                if (t.contentDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            t.loading = false;
+                            const {dataKey, value} = item;
+                            t.realContent = value;
+                        });
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
+            },
+            onClose(clickPosition, instance) {
+                // left right cell outside
+                this.$emit(clickPosition,instance);
             }
         }
     }

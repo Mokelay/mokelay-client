@@ -46,6 +46,7 @@ import bbvantsku from "./bb-vant-sku";
 import bbvantcouponcell from "./bb-vant-coupon-cell";
 import bbvantcouponlist from "./bb-vant-coupon-list";
 import bbvantcellswipe from "./bb-vant-cell-swipe";
+import bbvantcellswipelist from "./bb-vant-cell-swipe-list";
 
 export default {
 	install: function(Vue) {
@@ -95,6 +96,7 @@ export default {
 		Vue.component("bb-vant-coupon-cell", bbvantcouponcell);
 		Vue.component("bb-vant-coupon-list", bbvantcouponlist);
 		Vue.component("bb-vant-cell-swipe", bbvantcellswipe);
+		Vue.component("bb-vant-cell-swipe-list", bbvantcellswipelist);
 
 		console.log("成功加载Vant积木;");
 	}
