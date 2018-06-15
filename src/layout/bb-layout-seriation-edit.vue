@@ -500,7 +500,6 @@
         overflow-y: scroll;
         padding: calc(5% + 85px) 0;
         height: 100%;
-        transform: scale(1);
         width: calc(50% - 50px);
         margin-left: calc(25% + 25px);
     }
@@ -595,4 +594,11 @@
     }
 
 
+</style>
+<style>
+    .pc_platform{
+        &>div{
+            transform: scale(1);
+        }
+    }
 </style>
