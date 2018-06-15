@@ -272,6 +272,10 @@
                 border-color: transparent;
                 margin: 0;
                 padding:0;
+                &:hover,&:focus{
+                    background: transparent;
+                    border-color: transparent;
+                }
             }
             &:hover{
                 .item-container{
@@ -320,6 +324,10 @@
                 font-size: 12px;
                 margin: 0;
                 padding:0;
+                &:hover,&:focus{
+                    background: transparent;
+                    border-color: transparent;
+                }
             }
         }
     }
