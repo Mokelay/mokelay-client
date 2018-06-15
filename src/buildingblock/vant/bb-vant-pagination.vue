@@ -7,7 +7,7 @@
 		:nextText="nextText"
 		:showPageSize="showPageSize"
 		:forceEllipses="forceEllipses"
-		
+		:total-items="realTotalItems"
 	>
 	</van-pagination>
 </template>
@@ -21,6 +21,11 @@
 			'van-pagination':Pagination
 		},
 		props:{
+			//总条数
+			totalItems:{
+				type:[Number,String],
+				default:0,
+			},
 			value:{
 				type:[Number,String]
 			},
@@ -56,6 +61,7 @@
 	   data(){ 
 	        return{
 	         currentPage:this.value,
+	         realTotalItems:this.totalItems,
 	        }
 	      },
 	    computed:{
@@ -72,6 +78,14 @@
 	        let t=this;
 	        t.$emit('input',val,t);
 	        t.$emit('change',val,t);
+	       },
+	       //从外部传入总条数
+	       setTotalItems(totalItems){
+	       	this.realTotalItems = totalItems;
+	       },
+	       //外部传入当前页
+	       setVal(val){
+	       	this.currentPage = val;
 	       }
 	    }
 

@@ -1,8 +1,8 @@
 <template>
   <vant-notice-bar 
     :mode="mode"
-    :delay="delay"
-    :speed="speed"
+    :delay="option.delay"
+    :speed="option.speed"
     :scrollable="scrollable"
     :leftIcon="leftIcon"
     :color="color"
@@ -32,7 +32,7 @@ export default {
         type:String,
       },
       //动画延迟时间
-      delay:{
+      /*delay:{
         type:Number,
         default:1
       },
@@ -40,7 +40,7 @@ export default {
       speed:{
         type:Number,
         default:50
-      },
+      },*/
       //左侧图标URL
       leftIcon:{
         type:String,
@@ -63,6 +63,20 @@ export default {
       //滚动条文字
       text:{
         type:String,
+      },
+      //动态数据
+      valueDs:{
+      	type:Object,
+      },
+      //其他属性
+      option:{
+      	type:Object,
+      	default:function(){
+      		return {
+      			delay:1,
+      			speed:50,
+      		}
+      	}
       }
     },
    data(){ 
@@ -73,12 +87,33 @@ export default {
     computed:{
         
     },
+    mounted(){
+    	const t = this;
+    	t.getData();
+    },
     //事件click
     methods: {
         //点击事件
         click(param){
             this.$emit('click',param);
-        }
+        },
+        //动态获取展示内容
+        getData(){
+            const t = this;
+            if (t.valueDs) {
+                t.loading = true;
+                _TY_Tool.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        t.loading = false;
+                        const {dataKey, value} = item;
+                        t.valueBase = value;
+                        t.emit("buttonFinish",t);
+                    });
+                }, function (code, msg) {
+                    t.loading = false;
+                });
+            }
+        },    
     }
 }
 </script>
