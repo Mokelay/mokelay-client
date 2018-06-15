@@ -10,7 +10,7 @@ import 'vant/lib/cell/style';
         props: {
             //内容
             value:{
-                type:[Number,String,Boolean]
+                type:[Number,String]
             },
             /*模板默认值*/
             defaultValTpl:{
