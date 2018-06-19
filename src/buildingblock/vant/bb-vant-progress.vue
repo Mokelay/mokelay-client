@@ -1,23 +1,23 @@
 <template>
-	<van-progress
+	<vant-progress
 		:inactive="inactive"
-		:percentage="percentage"
+		:percentage="percentageShow"
 		:showPivot="showPivot"
 		:color="color"
 		:textColor="textColor"
 		:pivotText="pivotText"
 		:pivotColor="pivotColor"
 	>
-	</van-progress>
+	</vant-progress>
 </template>
 <script>
-	import {Progress} from 'vant'
+	import Progress from 'vant/lib/progress'
 	import 'vant/lib/progress/style';
 
 	export default{
 		name: "bb-vant-progress",
 		components:{
-			'van-progress':Progress
+			'vant-progress':Progress
 		},
 		props:{
 			
@@ -56,10 +56,14 @@
 		    }
 		},
 		data(){
-			return {};
+			return {
+				percentageShow:this.percentage,
+			};
 		},
 	  	methods: {
-	   
+	   		setTage:function(tage){
+	   			this.percentageShow = tage
+	   		}
 	  	}
 	}
 </script>
