@@ -13,6 +13,7 @@
   </vant-notice-bar>
 
 </template>
+
 <script>  
 
 import NoticeBar from 'vant/lib/notice-bar';

@@ -22,7 +22,7 @@ export default {
     props:{
       
       value:{
-        type:[String,Number]
+        type:Number,
       },
       //图标总数
       count:{
@@ -74,7 +74,11 @@ export default {
         let t=this;
         t.$emit('input',val,t);
         t.$emit('change',val,t);
-       }
+       },
+       //从外部设置是否禁用评分
+       setDisabled:function(val){
+       		this.disabled = val;
+       },
 
     }
 }

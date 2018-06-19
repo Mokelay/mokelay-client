@@ -3,7 +3,7 @@
 		v-model="currentPage"
 		:mode="mode"
 		:itemsPerPage="itemsPerPage"
-		:previousText="previousText"
+		:previous-text="previousText"
 		:nextText="nextText"
 		:showPageSize="showPageSize"
 		:forceEllipses="forceEllipses"
@@ -12,7 +12,7 @@
 	</van-pagination>
 </template>
 <script>
-	import {Pagination} from 'vant'
+	import Pagination from 'vant/lib/pagination'
 	import 'vant/lib/pagination/style';
 
 	export default{
@@ -42,10 +42,12 @@
 			//上一页
 			previousText:{
 				type:String,
+				default:"11",
 			},
 			//下一页
 			nextText:{
 				type:String,
+				default:"22",
 			},
 			//显示的页码个数
 		    showPageSize:{

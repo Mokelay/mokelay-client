@@ -53,7 +53,7 @@ export default {
     },
    data(){ 
         return{
-            valueBase:this.value          
+                     
         }
       },
     computed:{
@@ -61,12 +61,18 @@ export default {
     },
     //事件click
     methods: {
+    	//左侧点击事件
         onClickLeft(param) {
           this.$emit('click',param);
         },
+        //右侧点击事件
         onClickRight(param) {
           this.$emit('click',param);
-        }       
+        },
+        //外部传入标题
+        setTitle(val){
+        	this.title = val;
+        }     
     }
 }
 </script>
