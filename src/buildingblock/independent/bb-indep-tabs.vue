@@ -37,7 +37,8 @@
                 class:[
                     'bb-tab',
                     'bb-tab-theme--'+t.tabTheme,
-                    'bb-tab-position--'+t.tabPosition
+                    'bb-tab-position--'+t.tabPosition,
+                    'clearfix'
                 ]
             },tabBox);
         },
@@ -57,7 +58,7 @@
             */
             tabTheme:{
                 type:String,
-                default:'default'
+                default:'FB_card'
             },
             //默认展开的tab名称
             activeName: String,
@@ -92,6 +93,22 @@
                 default:function(){
                     return [];
                 }
+            },
+            //单个tab的样式
+            itemStyle:{
+                type:Object
+            },
+            //单个tab选中的样式
+            activeItemStyle:{
+                type:Object
+            },
+            //header 的样式设置
+            headerStyle:{
+                type:Object
+            },
+            //content的样式设置
+            panelStyle:{
+                type:Object
             }
         },
         data() {
@@ -194,8 +211,11 @@
                 }
                 t.canRender=true;
             },
+            //tab点击事件
             tabClick:function(tab,t){
                 t.p_activeName = tab.name;
+                //分发tab点击事件
+                t.$emit('tab-click',tab,t);
             },
             renderTabData: function (createElement) {
                 const t = this;
@@ -206,12 +226,14 @@
                         if(!tabData.show){
                             return true;
                         }
-                        
+                        const _itemStyle = _TY_Tool.setSimpleStyle(t.itemStyle);
+                        const _activeItemStyle = _TY_Tool.setSimpleStyle(t.activeItemStyle);
                         const label = createElement('div', {
                             class:"bb-tab-header-item "+(t.p_activeName==tabData.name?'is-active':''),
                             attrs:{
                                 'tab-name':'tab_'+tabData.name
                             },
+                            style:(t.p_activeName==tabData.name?Object.assign(_itemStyle,_activeItemStyle):_itemStyle),
                             on:{
                                 click:function(){
                                     t.tabClick(tabData,t);
@@ -237,16 +259,22 @@
                     });
                 }
                 const headerBox = createElement('div',{
-                        class:['bb-tab-header']
+                        class:['bb-tab-header'],
+                        style:Object.assign({
+                            float:(t.tabPosition==='left'||t.tabPosition==='right')?t.tabPosition:'none'
+                        },_TY_Tool.setSimpleStyle(t.headerStyle))
                     },[createElement('div',{
-                        class:['bb-tab-header-scroll']
+                        class:['bb-tab-header-scroll','clearfix']
                     },[createElement('div',{
                         class:['bb-tab-header-box']
                         },headerArr)]
                     )
                 ]);
                 const panelBox = createElement('div',{
-                    class:['bb-tab-panel-box']
+                    class:['bb-tab-panel-box'],
+                    style:Object.assign({
+                        
+                    },_TY_Tool.setSimpleStyle(t.panelStyle))
                 },paneArr);
                 const tabBox = t.tabPosition!=='bottom' ? [headerBox,panelBox] : [panelBox,headerBox];
 
@@ -271,18 +299,17 @@
     }
     .bb-tab-header{
         overflow: hidden;
-        margin-bottom: -1px;
+        margin-bottom: -0.0357rem;
         position: relative;
     }
     .bb-tab-header-scroll{
-        overflow-x: scroll;
+        overflow: scroll;
         font-weight: 500;
         position: relative;
     }
     .bb-tab-header-box{
         white-space: nowrap;
         transition: transform .3s;
-        float: left;
         position: relative;
         .bb-tab-header-item{
             display:inline-block;
@@ -293,6 +320,7 @@
             list-style: none;
             color: #303133;
             position: relative;
+            text-align: center;
             cursor:pointer;
 
             &:hover,&:focus{
@@ -304,36 +332,31 @@
         }
 
     }
+    .bb-tab-header:after{
+        content: "";
+        position: absolute;
+        background-color: #e4e7ed;
+        z-index: 5;
+    }
 
+/* position top */
     .bb-tab-position--top {
-        .bb-tab-header:after{
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #e4e7ed;
-            z-index: 5;
+        .bb-tab-header{
+            margin-bottom:0.357rem;
+            &:after{
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 0.0714rem;
+            }
         }
         .bb-tab-header-scroll::-webkit-scrollbar{
             display:none;
         }
-        .bb-tab-header-active-bar{
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 2px;
-            background-color: #409eff;
-            z-index: 10;
-            transition: transform .3s cubic-bezier(.645,.045,.355,1);
-            list-style: none;
-        }
         .bb-tab-header-item.is-active{
             z-index: 20;
             &>span{
-                border-bottom: 2px solid #000;
-                border-bottom-color:#409eff;
+                border-bottom: 0.0714rem solid #409eff;
                 display: inline-block;
             }
         }
@@ -344,14 +367,233 @@
             padding-right: 0;
         }
     }
-     
 
-    .bb-tab-panel-box{
-
-        .bb-tab-panel{
-
+/* position bottom */
+    .bb-tab-position--bottom {
+        .bb-tab-header{
+            margin-top:0.357rem;
+            &:after{
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 0.0714rem;
+            }
+        }
+        .bb-tab-header-scroll::-webkit-scrollbar{
+            display:none;
+        }
+        .bb-tab-header-item.is-active{
+            z-index: 20;
+            &>span{
+                border-top: 0.0714rem solid #409eff;
+                display: inline-block;
+            }
+        }
+        .bb-tab-header-item:first-child{
+            padding-left: 0;
+        }
+        .bb-tab-header-item:last-child{
+            padding-right: 0;
         }
     }
+
+/* position left */
+    .bb-tab-position--left{
+        min-height:7.14rem;
+        .bb-tab-header{
+            margin-right:0.357rem;
+            &:after{
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 0.0714rem;
+            }
+        }
+        .bb-tab-header-item{
+            display:block;
+            text-align: right;
+            border-right:0.0714rem solid transparent;
+            &.is-active{
+                border-right: 0.0714rem solid #409eff;
+                z-index:20;
+            }
+        }
+    }
+
+/* position right */
+    .bb-tab-position--right{
+        min-height:7.14rem;
+        .bb-tab-header{
+            margin-left:0.357rem;
+            &:after{
+                left: 0;
+                top: 0;
+                height: 100%;
+                width: 0.0714rem;
+            }
+        }
+        .bb-tab-header-item{
+            display:block;
+            text-align: left;
+            border-left:0.0714rem solid transparent;
+            &.is-active{
+                border-left: 0.0714rem solid #409eff;
+                z-index:20;
+            }
+        }
+    }
+
+/*FB 主题样式*/
+    .bb-tab-theme--FB_card{
+        .bb-tab-header{
+            box-shadow: 0 0.0714rem 0.0714rem #ccc;
+            .bb-tab-header-box{
+                text-align: center;
+            }
+        }
+        .bb-tab-header:after{
+            height:0;
+        }
+        .bb-tab-header-item{
+            line-height: 1.48rem;
+            margin:0 0.6rem;
+            border:0;
+            text-align: center;
+            &.is-active{
+                border:0;
+                color:#fff;
+                background:#409eff;    
+            }
+            &>span{
+                border-bottom: 0;
+            }
+        }
+        .bb-tab-header-item:first-child,.bb-tab-header-item:last-child{
+            padding: 0 0.714rem;
+        }
+    }
+    .bb-tab-theme--FB_card.bb-tab-position--left{
+        .bb-tab-header{
+            box-shadow: 0.0714rem 0 0.0714rem #ccc;
+            .bb-tab-header-item{
+                margin:0;
+            }
+        }
+    }
+    .bb-tab-theme--FB_card.bb-tab-position--right{
+        .bb-tab-header{
+            box-shadow: -0.0714rem 0 0.0714rem #ccc;
+            .bb-tab-header-item{
+                margin:0;
+            }
+        }
+    }
+    .bb-tab-theme--FB_card.bb-tab-position--bottom{
+        .bb-tab-header{
+            box-shadow: 0 -0.0714rem 0.0714rem #ccc;
+            .bb-tab-header-item{
+                margin:0;
+            }
+        }
+    }
+
+/*big_card 主题样式*/
+    .bb-tab-theme--big_card{
+        .bb-tab-header{
+            .bb-tab-header-box{
+                
+            }
+            background:#f3f4f5;
+        }
+        .bb-tab-header:after{
+            height:0.0357rem;
+        }
+        .bb-tab-header-item{
+            line-height: 1.48rem;
+            margin:0;
+            text-align: center;
+            border-left:0.0357rem solid #ccc;
+            min-width:4.285rem;
+            &:hover,&:focus{
+                color:#8a5ebf;
+            }
+            &:last-child{
+                border-right:0.0357rem solid #ccc;
+            }
+            &.is-active{
+                color:#8a5ebf;
+                border-top:0.0714rem solid #8a5ebf;
+            }
+            &>span{
+                border-bottom: 0;
+            }
+        }
+        .bb-tab-header-item:first-child,.bb-tab-header-item:last-child{
+            padding: 0 0.714rem;
+        }
+    }
+    .bb-tab-theme--big_card.bb-tab-position--left{
+        .bb-tab-header{
+            .bb-tab-header-item{
+                margin:0;
+                text-align: right;
+                border-left:0;
+                border-right:0.0714rem solid transparent;
+                &.is-active{
+                    border-top:0;
+                    border-right:0.0714rem solid #8a5ebf;
+                }
+            }
+            &:after{
+                width:0.0357rem;
+                height:100%;
+                right: 0;
+                top: 0;
+            }
+        }
+    }
+    .bb-tab-theme--big_card.bb-tab-position--right{
+        .bb-tab-header{
+            .bb-tab-header-item{
+                margin:0;
+                text-align: left;
+                border-left:0;
+                border-right:0.0714rem solid transparent;
+                &.is-active{
+                    border-top:0;
+                    border-left:0.0714rem solid #8a5ebf;
+                }
+            }
+            &:after{
+                width:0.0357rem;
+                height:100%;
+                left: 0;
+                top: 0;
+            }
+        }
+    }
+    .bb-tab-theme--big_card.bb-tab-position--bottom{
+        .bb-tab-header{
+            .bb-tab-header-item{
+                margin:0;
+                &.is-active{
+                    border-top:0;
+                    border-bottom:0.0714rem solid #8a5ebf;
+                }
+            }
+            &:after{
+                height:0.0357rem;
+                width:100%;
+                left: 0;
+                top: 0;
+            }
+        }
+    }
+     
+
+
+
+    
 
     
 
