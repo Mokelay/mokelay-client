@@ -339,7 +339,7 @@
                             aliasName:'圆角',                                  
                             attributes:{
                                 width:"95%",
-                                attributeName:'radian',
+                                attributeName:'radius',
                             },
                             interactives:[],
                         },{                      
@@ -470,6 +470,15 @@
                             attributes:{
                                 width:"95%",
                                 attributeName:'size',
+                            },
+                            interactives:[],
+                        },{                      
+                            uuid:'layout_08_06',
+                            alias:'bb-input',                   
+                            aliasName:'字体行高',                                  
+                            attributes:{
+                                width:"95%",
+                                attributeName:'lineHeight',
                             },
                             interactives:[],
                         },{                      

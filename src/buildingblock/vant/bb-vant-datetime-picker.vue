@@ -82,7 +82,10 @@ export default {
         },
         value:{
           type:[String,Number,Date]
-        }
+        },
+        defaultValTpl:{
+            type:String
+        },
     },
    data(){ 
         return{
@@ -96,6 +99,10 @@ export default {
       }, 
     computed:{
 
+    },
+    mounted:function(){
+      let t=this;
+      _TY_Tool.buildDefaultValTpl(t,"valueBase");
     },
     methods:{
         onChange(val){

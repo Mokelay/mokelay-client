@@ -26,6 +26,11 @@ import bbindepul from './bb-indep-ul';
 import bbindepportal from './bb-indep-portal';
 import bbindeptabs from './bb-indep-tabs';
 
+import bbindepTextarea from './bb-indep-textarea';
+import bblxItem from './bb-lx-item';
+import bblxItemList from './bb-lx-item-list';
+import bbindepTag from './bb-indep-tag';
+
 import helloworld from './bb-hello-world'
 
 //公用组件
@@ -60,6 +65,10 @@ export default {
 		Vue.component('bb-indep-ul', bbindepul);
 		Vue.component('bb-indep-portal', bbindepportal);
 		Vue.component('bb-indep-tabs', bbindeptabs);
+		Vue.component('bb-indep-textarea', bbindepTextarea);
+		Vue.component('bb-lx-item', bblxItem);
+		Vue.component('bb-lx-item-list', bblxItemList);
+		Vue.component('bb-indep-tag', bbindepTag);
 
 		Vue.component('bb-hello-world', helloworld);
 

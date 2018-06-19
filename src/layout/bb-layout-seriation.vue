@@ -257,9 +257,8 @@
         overflow-y: scroll;
         padding: calc(5% + 105px) 0;
         height: 100%;
-        transform: scale(1);
         width: 75%;
-        margin-left: 50px
+        margin-left: 50px;
     }
     .h5_platform::-webkit-scrollbar {
          display: none;
@@ -336,5 +335,10 @@
     }
     .db{
         display:block;
+    }
+    .h5_platform{
+        &>div{
+            transform: scale(1);
+        }
     }
 </style>
