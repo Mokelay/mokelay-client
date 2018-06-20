@@ -8,6 +8,7 @@
             },
             /*联系人列表数据
                 [{
+                    id:唯一标识
                     icon:"头像",
                     name:"姓名",
                     subtitle:"副标题",
@@ -96,6 +97,8 @@
                 type:Object,
                 default:function(){
                     return {
+                        editable:true,
+                        select:true,
                         styleType:"detail",
                         selectType:"checkbox",
                     }
@@ -153,8 +156,7 @@
                 },class:"contactItemRight"},[department,post,jobNumber,phone,email]);
                 let checked = false;
                 t.valueBase.forEach((val,index)=>{
-                    if(val == contact){
-                        debugger
+                    if(val.id == contact.id){
                         checked = true
                     }
                 });
@@ -170,14 +172,22 @@
                 const allContent = [];
                 switch(t.option.styleType){
                     case "simple":
-                        allContent.push(contactItemLeft,select);
+                        allContent.push(contactItemLeft);
                         break;
                     case "detail":
-                        allContent.push(contactItemLeft,contactItemRight,select,edit);
+                        allContent.push(contactItemLeft,contactItemRight);
                         break;
                     case "words":
-                        allContent.push(contactItemRight,select,edit);
+                        allContent.push(contactItemRight);
                         break;
+                };
+                //可编辑
+                if(t.option.editable){
+                    allContent.push(edit);
+                };
+                //可选择
+                if(t.option.select){
+                    allContent.push(select);
                 };
                 let itemClass = _TY_Tool.isPC()?"contactItem":"contactItem h5"
                 //联系人卡片
