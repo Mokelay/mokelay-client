@@ -145,7 +145,7 @@
                 const qrCodeInstance = createElement('qriously',{
                     props:{
                         size:200,
-                        value:(_host+"/#/"+t.$route.query.pageAlias)
+                        value:(_host+"/#/"+(t.$route.params.pageAlias||t.$route.query.pageAlias))
                     },
                     style:{
                         position: 'absolute',

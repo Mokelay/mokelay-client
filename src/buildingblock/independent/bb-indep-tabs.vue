@@ -524,7 +524,7 @@
                 color:#8a5ebf;
                 border-top:0.0714rem solid #8a5ebf;
             }
-            &>span{
+            &.is-active>span,&>span{
                 border-bottom: 0;
             }
         }
