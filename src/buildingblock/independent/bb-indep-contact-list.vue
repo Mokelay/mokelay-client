@@ -109,7 +109,13 @@
             return {
                 realContactlist:this.contactList,
                 valueBase:this.value || [],
-                editContactKey:null //当前编辑器联系人在数组中的下标
+                editContactKey:null, //当前编辑器联系人在数组中的下标
+                realOption:Object.assign({
+                        editable:true,
+                        select:true,
+                        styleType:"detail",
+                        selectType:"checkbox",
+                    },this.option),
             }
         },
         watch: {
@@ -130,7 +136,7 @@
                 },class:"subtitle"},[contact.subtitle]);
 
                 const leftContent = [];
-                switch(t.option.styleType){
+                switch(t.realOption.styleType){
                     case "simple":
                         leftContent.push(icon,name);
                         break;
@@ -152,44 +158,52 @@
                 const email = createElement('p',{props:{
                 },class:"email"},[`邮箱：${contact.email}`]);
 
-                const contactItemRight = createElement('div',{props:{
+                let contactItemRight = createElement('div',{props:{
                 },class:"contactItemRight"},[department,post,jobNumber,phone,email]);
+                if(t.contentTpl){
+                    contactItemRight = _TY_Tool.bbRender(t.contentTpl, createElement, t);
+                }
+                
                 let checked = false;
                 t.valueBase.forEach((val,index)=>{
                     if(val.id == contact.id){
                         checked = true
                     }
                 });
+
                 //选择框
                 const select = createElement('input',{attrs:{
-                    type:t.option.selectType,
+                    type:t.realOption.selectType,
                     checked:checked
                 },class:"selectButton",on:{change:t.selectContact.bind(t,contact)}},[]);
                 //编辑安娜
-                const edit = createElement('div',{props:{type:t.option.selectType
+                const edit = createElement('div',{props:{type:t.realOption.selectType
                 },class:"editButton",on:{click:t.edit.bind(t,key)}},["编辑"]);
-
+                let itemClass = "contactItem";
                 const allContent = [];
-                switch(t.option.styleType){
+                switch(t.realOption.styleType){
                     case "simple":
                         allContent.push(contactItemLeft);
+                        itemClass = itemClass + " simple";
                         break;
                     case "detail":
                         allContent.push(contactItemLeft,contactItemRight);
+                        itemClass = itemClass + " detail";
                         break;
                     case "words":
                         allContent.push(contactItemRight);
+                        itemClass = itemClass + " words";
                         break;
                 };
                 //可编辑
-                if(t.option.editable){
+                if(t.realOption.editable){
                     allContent.push(edit);
                 };
                 //可选择
-                if(t.option.select){
+                if(t.realOption.select){
                     allContent.push(select);
                 };
-                let itemClass = _TY_Tool.isPC()?"contactItem":"contactItem h5"
+                itemClass = _TY_Tool.isPC()?itemClass:itemClass + " h5";
                 //联系人卡片
                 const contactItem = createElement('div',{props:{
                     value:t.valueBase
@@ -228,7 +242,7 @@
             edit(key){
                 const t = this;
                 t.editContactKey = key;
-                this.$emit("edit",t.realContactlist(key));
+                this.$emit("edit",t.realContactlist[key]);
 
             },
             //选中联系人
@@ -289,7 +303,6 @@
 <style lang='less'>
     .contactList{
         .contactItem{
-            min-width: 10rem;
             position: relative;
             font-size: 0.5rem;
             box-sizing: border-box;
@@ -340,6 +353,23 @@
         .h5{
             display: list-item;
             min-width: auto
+        }
+        .detail{
+            min-width: 10rem;
+        }
+        .simple{
+            border:none;
+            .contactItemLeft{
+                width: 100%;
+            }
+            .selectButton{
+                right: 0rem;
+            }
+        }
+        .words{
+            .contactItemRight{
+                width: 100%;
+            }
         }
     }
 </style>
