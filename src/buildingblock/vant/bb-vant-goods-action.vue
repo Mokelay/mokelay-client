@@ -69,30 +69,31 @@ export default {
         
     },
     mounted(){ 
-    	this.getData();
+      this.getBigBtns();
+    	this.getMiniBtns();
     },
     //事件click
     methods: {
     	//获取数据
-        getData() {
+        getBigBtns() {
             const t = this;
             if (t.fieldsDs) {
                 Util.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.realFields = value;
+                        t.bigBtns = value;
                     });
                 }, function (code, msg) {
                 });
             }
         },
-        getData() {
+        getMiniBtns() {
             const t = this;
             if (t.valueDs) {
                 Util.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.realFields = value;
+                        t.miniBtns = value;
                     });
                 }, function (code, msg) {
                 });
