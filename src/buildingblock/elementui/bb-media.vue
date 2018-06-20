@@ -48,7 +48,7 @@
                                         </div>
                                     </div>
                                     <button type="button" class="media_check">
-                                        <i class="iconfont ty-wj_multiple_choice_q"></i>
+                                        <i class="iconfont ty-wj_multiple_choice_q" style="vertical-align:top;"></i>
                                     </button>
                                 </li>
                             </ul>
@@ -154,43 +154,7 @@
                 */
                 selecteds:[],
                 uploadUrl:'',//上传接口地址
-                fileList:[{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png",
-                    desc:'说明',
-                    replaceText:'替换文本',
-                    fileName:'xxxxxx.jpg',
-                    uploadDate:'2018-06-12 10:22:00',
-                    length:'143KB',
-                    size:'1920 x 1109'
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png",
-                    desc:'说明',
-                    replaceText:'替换文本',
-                    fileName:'xxxxxx.jpg',
-                    uploadDate:'2018-06-12 10:22:00',
-                    length:'143KB',
-                    size:'1920 x 1109'
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png",
-                    desc:'说明',
-                    replaceText:'替换文本',
-                    fileName:'xxxxxx.jpg',
-                    uploadDate:'2018-06-12 10:22:00',
-                    length:'143KB',
-                    size:'1920 x 1109'
-                },{
-                    title:'测试1',
-                    src:"http://ty.greatbee.com/wp-content/uploads/2018/05/test-300x202.png",
-                    desc:'说明',
-                    replaceText:'替换文本',
-                    fileName:'xxxxxx.jpg',
-                    uploadDate:'2018-06-12 10:22:00',
-                    length:'143KB',
-                    size:'1920 x 1109'
-                }]
+                fileList:[]
             }
         },
         watch: {

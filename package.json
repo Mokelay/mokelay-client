@@ -1,6 +1,6 @@
 {
   "name": "ty-client-core",
-  "version": "2.2.10",
+  "version": "2.2.16",
   "description": "TY Client Core",
   "main": "./dist/index.js",
   "scripts": {
@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/iamcarlchen/ty-client-core#readme",
   "dependencies": {
+    "amfe-flexible": "^2.2.1",
     "animate.css": "^3.5.2",
     "art-dialog": "^7.0.0",
     "axios": "^0.15.3",

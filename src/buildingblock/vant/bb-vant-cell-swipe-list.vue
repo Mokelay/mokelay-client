@@ -1,56 +1,37 @@
 <script>
-    import Tabbar from 'vant/lib/tabbar';
-    import 'vant/lib/tabbar/style';
-    import TabbarItem from 'vant/lib/tabbar-item';
-    import 'vant/lib/tabbar-item/style';
-
+import CellGroup from 'vant/lib/cell-group';
+import 'vant/lib/cell-group/style';
+    //当每项swipe数据格式相同时可以使用list
     export default {
-        name: 'bb-vant-tab-bar',
+        name: 'bb-vant-cell-swipe-list',
         components: {
-            "van-tabbar":Tabbar,
-            "van-tabbar-item":TabbarItem
+          "van-cell-group":CellGroup,
         },
         props: {
-            //v-model 当前索引
-            value:{
-                type:Number
-            },
-            /*静态标签数据
+            /*单元格内容
                 [{
-                    text:"标签名称"  标签名称
-                    icon:"chat", 图标
-                    dot:false, 显示小红点
-                    info:"String || Number" 图标右上角提示信息
-                    url:"String" 跳转链接
-                    to:"String || Object"   路由跳转对象，同 vue-router 的 to
-                    replace:false  跳转时是否替换当前history
+                    uuid:123,
+                    title:String,
+                    value:String
                 }]
             */
-            fields:{
-                type:Array,
-                default:function() {
-                    return [{
-                        text:'标签1',
-                        icon:'ty-yy_ty',
-                    },{
-                        text:'标签2',
-                        icon:'ty-yy_ty',
-                    },{
-                        text:'标签3',
-                        icon:'ty-yy_ty',
-                    }];
-                }
-            },
-            //动态标签数据
-            fieldsDs:{
+            value:{
+                type:Array
+            }, 
+            //动态数据源
+            valueDs:{
                 type:Object
             },
-            /*  自定义图标
-                content:[{                      //页面内容
+            /*cellSwipe 模板
+                {
+                    leftWidth:Number,
+                    rightWidth:Number,
+                    contentDs:Object,
+                    content:[{                      //页面内容
                         uuid:'',
                         alias:'',                   //积木别名
                         aliasName:'',               //中文名称
-                        group:'',                   //对应图标的text
+                        group:'',                   //对应slot
                         attributes:{
                             attributeName:''    //表单项键值别名
                             rules:[]            //验证规则
@@ -97,91 +78,92 @@
                             }
                         }
                     }]
+                }
             */
-            content:{
-                type:Array
-            },
-            /*动态自定义图标*/
-            contentDs:{
-                type:Object
+            cellSwipeConfig:{
+                type:Object,
+                default:function(){
+                    return  {}
+                }
             }
         },
         data() {
             return {
-                active:this.value || 0,
-                realFields:this.fields,
-                realContent:this.content || []
+                valueBase:this.value || []
             };
         },
         render: function(createElement){
             const t = this;
-            const tabbars = [];
-            t.realFields.forEach((field,key)=>{
-                //自定义图标
-                const icons = [];
-                t.realContent.forEach((item,index)=>{
-                    // item['slot'] = 'icon';
-                    // item['slot-scope'] = 'props';
-                    if(item.group == field.text){
-                        const bb = _TY_Tool.bbRender([item], createElement, t);
-                        const bbTpl = createElement('template',{props:{"slot-scope":"props"},slot:'icon'},[bb]);
-                        icons.push(bbTpl);
+            const children = [];
+            t.valueBase.forEach((val,index)=>{
+                const contentTpl = _TY_Tool.deepClone(t.cellSwipeConfig.content);
+                contentTpl.forEach((ele,key)=>{
+                    if(ele.group != "left" && ele.group != "right"){
+                        ele['attributes']['value'] = val['value'];
+                        ele['attributes']['option']['title'] = val['title'];
                     }
-                });
-                const tabbar = createElement('van-tabbar-item',{props:{
-                    "icon":'ty ' + field.icon,
-                    "dot":field.dot,
-                    "info":field.info,
-                    "url":field.url,
-                    "to":field.to,
-                    "replace":field.replace,
-                    "key":key
-                }},[icons,field.text]);
-                tabbars.push(tabbar);
+                })
+                const cellSwipeItem = createElement('bb-vant-cell-swipe',{props:{
+                        "rightWidth":t.cellSwipeConfig.rightWidth,
+                        "leftWidth":t.cellSwipeConfig.leftWidth,
+                        "content":contentTpl,
+                        "contentDs":t.cellSwipeConfig.contentDs,
+                    },on:{
+                        'left':t.onLeft.bind(t,index),
+                        'cell':t.onCell.bind(t,index),
+                        'outside':t.onOutside.bind(t,index),
+                        'right':t.onRight.bind(t,index)
+                    }},[]);
+                children.push(cellSwipeItem);
             });
+            return createElement('van-cell-group',{props:{}},children);
 
-
-            return createElement('van-tabbar',{props:{value:t.active},on:{change:t.onChange}},[tabbars]);
         },
-        mounted(){ 
+        mounted(){
             this.getData();
-            this.getIcon();
         },
         //事件click
         methods: {
-            //切换标签w
-            onChange(key) {
-                this.$emit("change",key);
-            },
-            //获取数据
-            getData() {
+            //动态获swipe内容
+            getData(){
                 const t = this;
-                if (t.fieldsDs) {
-                    Util.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
+                if (t.valueDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
+                            t.loading = false;
                             const {dataKey, value} = item;
-                            t.realFields = value;
+                            t.valueBase = value;
                         });
                     }, function (code, msg) {
+                        t.loading = false;
                     });
                 }
             },
-            //获取数据
-            getIcon() {
-                const t = this;
-                if (t.contentDs) {
-                    Util.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
-                        data.forEach((item) => {
-                            const {dataKey, value} = item;
-                            t.realFields = value;
-                        });
-                    }, function (code, msg) {
-                    });
-                }
+            //左侧点击
+            onLeft(index){
+                this.$emit('left',index,this.valueBase);
             },
+            //单元格被点击
+            onCell(index){
+                this.$emit('cell',index,this.valueBase);
+            },
+            //外部被点击
+            onOutside(index){
+                this.$emit('outside',index,this.valueBase);
+            },
+            //右侧被点击
+            onRight(index){
+                this.$emit('right',index,this.valueBase);
+            },
+            //外部设置valueBase
+            setValueBase(value){
+                this.valueBase = value;
+            }
         }
     }
 </script>
 
-<style scoped>
+<style lang="less">
+
 </style>

@@ -114,7 +114,7 @@ import 'vant/lib/cell-group/style';
             return createElement('van-cell-group',{props:{border:t.option.border}},bbList);
         },
         mounted(){
-
+            this.getData();
         },
         //事件click
         methods: {

@@ -1,15 +1,15 @@
 <template>
-    <van-radio-group 
+    <vant-radio-group 
         v-model="valueBase"  
         @change="change"
         :disabled="option.disabled">
-        <van-radio
+        <vant-radio
             v-for="(field,key) in realFields"
             :key="key" 
             :name="field.value"
             :disabled="field.disabled"
-            >{{field.text}}</van-radio>
-    </van-radio-group>
+            >{{field.text}}{{field.subDescription}}</vant-radio>
+    </vant-radio-group>
 </template>
 
 <script>
@@ -21,8 +21,8 @@ import 'vant/lib/radio/style';
     export default {
         name: 'bb-vant-raido-group',
         components: {
-          "van-radio":Radio,
-          "van-radio-group":RadioGroup
+          "vant-radio":Radio,
+          "vant-radio-group":RadioGroup
         },
         props: {
             //默认值  支持v-model
@@ -33,6 +33,7 @@ import 'vant/lib/radio/style';
             defaultValTpl:{
                 type:[String,Number,Boolean]
             },
+            
             /*选项数据 静态
                 [{
                     text:'选项1'，
@@ -45,7 +46,20 @@ import 'vant/lib/radio/style';
                 }]
             */
             fields:{
-                type:Array
+                type:Array,
+                default:function(){
+                	return [{
+                		text:'选项1',
+                        value:1,
+                        subDescription:"默认值1",
+                        disabled:false
+                   },{
+                        text:'选项2',
+                        value:2,
+                        subDescription:"默认值2",
+                        disabled:false
+                	}]
+                }
             },
             /*选项数据 动态
                 通过DS接口获取
@@ -75,19 +89,19 @@ import 'vant/lib/radio/style';
         mounted(){
             //获取数据
             this.getData();
-            _TY_Tool.buildDefaultValTpl(t, "valueBaseString");
-            t.valueBase = eval(t.valueBaseString);
+            _TY_Tool.buildDefaultValTpl(this, "valueBaseString");
+            this.valueBase = eval(this.valueBaseString);
         },
         //事件 change 
         methods: {
             //获取数据
             getData() {
-                const t = this;
-                if (t.fieldsDs) {
-                    _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
+                //var t = this;
+                if (this.fieldsDs) {
+                    _TY_Tool.getDSData(this.fieldsDs, _TY_Tool.buildTplParams(this), function (data) {
                         data.forEach((item) => {
                             const {dataKey, value} = item;
-                            t.realFields = value;
+                            this.realFields = value;
                         });
                     }, function (code, msg) {
                     });

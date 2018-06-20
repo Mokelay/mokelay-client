@@ -3,16 +3,16 @@
 		v-model="currentPage"
 		:mode="mode"
 		:itemsPerPage="itemsPerPage"
-		:previousText="previousText"
+		:previous-text="previousText"
 		:nextText="nextText"
 		:showPageSize="showPageSize"
 		:forceEllipses="forceEllipses"
-		
+		:total-items="realTotalItems"
 	>
 	</van-pagination>
 </template>
 <script>
-	import {Pagination} from 'vant'
+	import Pagination from 'vant/lib/pagination'
 	import 'vant/lib/pagination/style';
 
 	export default{
@@ -21,6 +21,11 @@
 			'van-pagination':Pagination
 		},
 		props:{
+			//总条数
+			totalItems:{
+				type:[Number,String],
+				default:0,
+			},
 			value:{
 				type:[Number,String]
 			},
@@ -37,10 +42,12 @@
 			//上一页
 			previousText:{
 				type:String,
+				default:"11",
 			},
 			//下一页
 			nextText:{
 				type:String,
+				default:"22",
 			},
 			//显示的页码个数
 		    showPageSize:{
@@ -56,6 +63,7 @@
 	   data(){ 
 	        return{
 	         currentPage:this.value,
+	         realTotalItems:this.totalItems,
 	        }
 	      },
 	    computed:{
@@ -72,6 +80,14 @@
 	        let t=this;
 	        t.$emit('input',val,t);
 	        t.$emit('change',val,t);
+	       },
+	       //从外部传入总条数
+	       setTotalItems(totalItems){
+	       	this.realTotalItems = totalItems;
+	       },
+	       //外部传入当前页
+	       setVal(val){
+	       	this.currentPage = val;
 	       }
 	    }
 

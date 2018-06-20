@@ -140,12 +140,20 @@
       };
     },
     created: function () {
+      //积木配置平台编辑状态
+      window._TY_BB_Edit = false;
       //解析pageAlias 模板（如果是模板的话）
       this.p_pageAlias = _TY_Tool.tpl(this.pageAlias,_TY_Tool.buildTplParams(this));
       //把bb-page的全局对象注册到window下
       window._TY_Page_Data[this.p_pageAlias] = this;
       if(this.root){
         window._TY_Root = this;
+
+        if(_TY_Tool.isPC()){
+          // 针对PC端  基准值更正
+          document.body.style.fontSize = "18px";
+          document.documentElement.style.fontSize = '28px';
+        }
       }
       this.loadData();
     },
@@ -154,6 +162,15 @@
       setTimeout(function(){
         t.$emit('mounted',t);
       },0);
+      window.onresize = () => {
+            return (() => {
+              if(_TY_Tool.isPC()){
+                // 针对PC端  基准值更正
+                document.body.style.fontSize = "18px";
+                document.documentElement.style.fontSize = '28px';
+              }
+            })()
+        }
     },
     beforeDestroy:function(){
       let t=this;

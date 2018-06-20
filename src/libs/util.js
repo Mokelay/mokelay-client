@@ -865,6 +865,12 @@ util.bbCanvasRender = function(content, createElement, t) {
     }
     return bbList;
 }
+//建议css色值方法
+util.setSimpleStyle = function(_css) {
+    return util.setStyle({
+        layout: _css
+    });
+}
 /**
  *setStyle 设置积木样式
  *私有只在bbRender中使用

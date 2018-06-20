@@ -33,6 +33,8 @@
             itemClass = t.realShow?itemClass:"dn";
             if((t.platform == 'H5'||t.platform == 'PAD'||t.platform == 'WX')&&_TY_Tool.isPC()){
                 //如果是移动端页面，并且当前在pc环境下（非google的手机模式）,模拟展示手机内容，并且展示二维码
+                //rem基准值更正
+                t.changeParentRemSize();
                 const platformInstance = createElement('div',{
                     style:{},
                     "class":"h5_platform"
@@ -131,6 +133,11 @@
             }
         },
         methods: {
+            //针对h5页面在pc上的预览，修改html的size，以更正rem基准值
+            changeParentRemSize:function(){
+                let t=this;
+                document.children[0].style['font-size']='28.8px';
+            },
             //渲染二维码
             renderQrCode:function(createElement){
                 let t=this;
@@ -154,7 +161,8 @@
                             position: 'absolute',
                             right: '-182px',
                             top: 'calc(30% + 210px)',
-                            color:'#333'
+                            color:'#333',
+                            'font-size':'16px'
                         }
                     },[]);
                 return [pInstance,qrCodeInstance];
@@ -247,8 +255,10 @@
 <style scoped>
     .h5_platform{
         overflow-y: scroll;
-        padding: calc(5% + 108px) calc(5% + 25px);
+        padding: calc(5% + 105px) 0;
         height: 100%;
+        width: 75%;
+        margin-left: 50px;
     }
     .h5_platform::-webkit-scrollbar {
          display: none;
@@ -325,5 +335,10 @@
     }
     .db{
         display:block;
+    }
+    .h5_platform{
+        &>div{
+            transform: scale(1);
+        }
     }
 </style>

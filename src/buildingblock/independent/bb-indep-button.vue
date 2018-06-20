@@ -1,5 +1,5 @@
 <template>
-    <span :style="relButton.style" class="bb-indep-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i class="relButton.icon"></i><slot></slot></span>
+    <button :class="['indep_btn',relButton.type]" :style="relButton.style" class="bb-indep-button" :type="button" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':relButton.selectText}}<slot></slot></button>
 </template>
 
 <script>
@@ -19,6 +19,7 @@
                     size:'small',//按钮大小
                     icon:'icon',//按钮图标
                     text:'按钮文字',//
+                    selectText:'按钮文字',
                     action:'url 地址跳转|| execute-ds执行接口 || dialog-page弹窗 || code自定义代码 || buzz 巴斯代码',
                     url:''跳转地址 action:'url’时有效
                     urlType:'openWindow 在新标签中打开 
@@ -36,7 +37,7 @@
                 default: function(){
                     return {
                         type:'primary',
-                        text:'请设置按钮属性'
+                        selectText:'设置按钮'
                     };
                 }
             },
@@ -66,7 +67,10 @@
                 if(this.button.fontSize){
                     this.button.style.fontSize=this.button.fontSize;
                 }
-                return this.button;
+                return Object.assign({
+                        type:'primary',
+                        selectText:'设置按钮'
+                    },this.button);
             }
         },
         created: function () {
@@ -94,9 +98,108 @@
         }
     }
 </script>
-<style scoped>
+<style lang="less" scoped>
     .bb-indep-button{
-        margin: 2px;
+        margin: 0.2rem;
         display: inline-block;
     }
+    .indep_btn{
+        display: inline-block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid #dcdfe6;
+        border-color: #dcdfe6;
+        color: #606266;
+        -webkit-appearance: none;
+        text-align: center;
+        box-sizing: border-box;
+        outline: none;
+        margin: 0;
+        transition: .1s;
+        font-weight: 500;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.5rem;
+        border-radius: 0.2rem;
+        &:hover,&:focus{
+            background: #fff;
+            border-color: #0091EA;
+            color: #0091EA;
+        }
+    }
+    .indep_btn.primary{
+        color: #fff;
+        background-color: #0091EA;
+        border-color: #0091EA;
+    }
+    .indep_btn.primary:hover,.indep_btn.primary:focus{
+        background: #33a7ee;
+        border-color: #33a7ee;
+        color: #fff; 
+    }
+    .indep_btn.is-disabled, .indep_btn.is-disabled:hover, .indep_btn.is-disabled:focus, .indep_btn.is-disabled:active {
+        color: #b4bccc;
+        cursor: not-allowed;
+        background-image: none;
+        background-color: #fff;
+        border-color: #efefef;
+    }
+    .indep_btn.success{
+        color: #fff;
+        background-color: #67c23a;
+        border-color: #67c23a; 
+        &:hover,&:focus{
+            background: #85ce61;
+            border-color: #85ce61;
+            color: #fff;
+        }
+    }
+    .indep_btn.warning{
+        color: #fff;
+        background-color: #eb9e05;
+        border-color: #eb9e05;
+        &:hover,&:focus{
+            background: #efb137;
+            border-color: #efb137;
+            color: #fff;
+        }
+    }
+    .indep_btn.danger{
+        color: #fff;
+        background-color: #fa5555;
+        border-color: #fa5555;
+        &:hover,&:focus{
+            background: #fb7777;
+            border-color: #fb7777;
+            color: #fff;
+        }
+    }
+    .indep_btn.info{
+        color: #fff;
+        background-color: #878d99;
+        border-color: #878d99;
+        &:hover,&:focus{
+            background: #9fa4ad;
+            border-color: #9fa4ad;
+            color: #fff;
+        }
+    }
+    .indep_btn.text{
+        border-color: transparent;
+        color: #0091EA;
+        background: transparent;
+        padding-left: 0;
+        padding-right: 0;
+        &:hover,&:focus{
+            color: #33a7ee;
+            border-color: transparent;
+            background-color: transparent;
+        }
+    }
+
+
 </style>

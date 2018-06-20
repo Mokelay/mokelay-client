@@ -1,17 +1,24 @@
 <template>
-     <van-field 
-        v-model="valueBase" 
-        :type="option.type"
-        :label="option.label"
-        :icon="option.icon"
-        :leftIcon="option.leftIcon"
-        :required="option.required"
-        :disabled="option.disabled"
-        :error="option.error" 
-        :errorMessage="option.errorMessage" 
-        :autosize="option.autosize"
-        @change="onInput" 
-        @click-icon="clickIcon" />
+    <div>
+         <van-field 
+            v-model="valueBase" 
+            :type="option.type"
+            :label="option.label"
+            :icon="option.icon"
+            :leftIcon="option.leftIcon"
+            :required="option.required"
+            :disabled="option.disabled"
+            :error="option.error" 
+            :errorMessage="option.errorMessage" 
+            :autosize="option.autosize"
+            :maxText="maxTextShow"
+            @change="onInput" 
+            @click-icon="clickIcon" 
+            @keyup="keyup"/>
+         <p class="showText">{{writeText}}/{{messageText}}</p>
+     </div>
+
+
 </template>
 
 <script>
@@ -59,14 +66,19 @@ import 'vant/lib/field/style';
                         disabled:false,
                         error:false,
                         errorMessage:"",
-                        autosize:true
+                        autosize:true,
+                        maxText:0
                     };
                 }
             }
         },
         data() {
             return {
-                valueBase:this.value
+                valueBase:this.value,
+                writeText:"0",
+                maxTextShow:this.option.maxText,
+                messageText:this.option.maxTextShow,
+                isShowText:true
             };
         },
         mounted(){
@@ -84,6 +96,11 @@ import 'vant/lib/field/style';
             onInput(key){
                 this.$emit('input',key);
                 this.$emit('change',key);
+            },
+            //显示字符
+            keyup(){
+                this.writeText = this.valueBase.length;
+                
             }
 
         }
@@ -91,4 +108,5 @@ import 'vant/lib/field/style';
 </script>
 
 <style scoped>
+.showText{text-align:right; margin-right:5%;}
 </style>
