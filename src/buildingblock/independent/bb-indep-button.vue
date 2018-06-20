@@ -87,7 +87,7 @@
             },
             click:function(button){
                 this.vue = Vue;
-                Util.resolveButton(button,_TY_Tool.buildTplParams(this),button.afterClick);
+                Util.resolveButton(button,_TY_Tool.buildTplParams(this));
                 this.$emit('buttonClick',button,this);
                 this.$emit('click',button,this);
             },

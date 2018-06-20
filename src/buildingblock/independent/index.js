@@ -30,6 +30,7 @@ import bbindepTextarea from './bb-indep-textarea';
 import bblxItem from './bb-lx-item';
 import bblxItemList from './bb-lx-item-list';
 import bbindepTag from './bb-indep-tag';
+import bbindepsku from './bb-indep-sku';
 
 import helloworld from './bb-hello-world'
 
@@ -69,6 +70,7 @@ export default {
 		Vue.component('bb-lx-item', bblxItem);
 		Vue.component('bb-lx-item-list', bblxItemList);
 		Vue.component('bb-indep-tag', bbindepTag);
+		Vue.component('bb-indep-sku', bbindepsku);
 
 		Vue.component('bb-hello-world', helloworld);
 
