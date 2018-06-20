@@ -7,6 +7,7 @@
 		    :placeholder="placeholder"
 		    :showText="onShowText"
 		    @keyup="onKeyup"
+		    @change="change"
 		></textarea>
     	<p>{{writeNumber}}/{{limitNumber}}</p>
     </div>
@@ -117,7 +118,15 @@
         			this.writeNumber = this.valueBase.length;
         		}
         	},
-        	
+        	//change事件
+        	change:function(val){
+        		this.$emit("change",val);
+        		this.$emit("input",val);
+        	},
+        	//外部设值
+        	setNumber:function(val){
+        		this.showText = val;
+        	}
             
         }
     }
