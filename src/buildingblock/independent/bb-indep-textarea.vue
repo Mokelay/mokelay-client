@@ -62,21 +62,18 @@
                         resize:"none",
                         height:"50px",
                         padding:"5px",
-
+                        margin:"",
                     }
                 }
             },
-            limitNumberShow:{
-            	type:Number,
-            	default:20,
-            }
+            
         },
         data() {
             return {
                 valueBase:this.value,
                 writeNumber:"0",
                 onShowText:this.showText,
-                limitNumber:this.limitNumberShow,
+                limitNumber:this.showText,
             }
         },
         computed:{
@@ -86,6 +83,7 @@
                 const styles = {
                 	"border-radius":t.styleConfig.borderRadius,
                 	"padding":t.styleConfig.padding,
+                	"margin":t.styleConfig.margin,
                 	"height":t.styleConfig.height,
                 	"resize":t.styleConfig.resize,
                 	"width":t.styleConfig.width,
@@ -107,11 +105,17 @@
         },
         watch: {},
         methods: {
-        	//获取输入的字符串长度
+        	//获取输入的字符串长度,超出设置的长度截取
         	onKeyup:function(){
         		this.writeNumber = this.valueBase.length;
-        		//this.limitNumber = this.onShowText;
-        		//console.log(this.onShowText);
+        		var t = this.valueBase;
+        		var w = this.writeNumber;
+        		var s = this.showText;
+        		if(w>s){
+        			var a = this.valueBase.substring(0,s);
+        			this.valueBase = a;
+        			this.writeNumber = this.valueBase.length;
+        		}
         	},
         	
             

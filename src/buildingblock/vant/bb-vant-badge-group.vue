@@ -29,53 +29,45 @@ export default {
         value:{
           type:[String,Number]
         },
-        //内容
-        title:{
-          type:String,
-        },
-        //提示消息
-        info:{
-          type:String
-        },
-        //跳转链接
-        url:{
-          type:String
-        },  
-        //动态数据
-       /* fields:{
-          type:Array,
-          default:function(){
-            return {
-              badgeGroupData
-            };
-          }
-        }*/
+        //静态数据
+        realFields:{
+        	type:Array,
+        }, 
+      //动态数据
+      valueDs:{
+      	type:Object,
+      },
     },
    data(){ 
         return {
-            realFields:[{
-              "title":"111",
-              "info":"20",
-              "value":1,
-              "url":""
-            },{
-              "title":"111",
-              "info":"20",
-              "value":2,
-              "url":""
-            }],
             activeKey:this.value
         }
       },
     computed:{
         
     },
+    mounted(){ 
+	    this.getData();
+	},
     //事件click
     methods: {
+    	//获取数据
+        getData() {
+            const t = this;
+            if (t.valueDs) {
+                Util.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        t.realFields = value;
+                    });
+                }, function (code, msg) {
+                });
+            }
+        },        
         //点击事件
         onClick(key) {
-          var t = this;
-          t.activeKey = key;
+          this.activeKey = key;
+          this.emit("click",key);
         }
     }
 }

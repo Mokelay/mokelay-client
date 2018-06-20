@@ -10,6 +10,7 @@
         :replace="miniBtn.replace"
         v-for="(miniBtn,key) in miniBtns"
         :key="key"
+        @click="miniClick"
     ></vant-goods-action-mini-btn>
     <vant-goods-action-big-btn
         :text="bigBtn.text"
@@ -18,7 +19,8 @@
         :to="bigBtn.to"
         :replace="bigBtn.replace"
         v-for="(bigBtn,key) in bigBtns"
-        :key="key"
+        :keys="bigBtn.text+'key'"
+        @click="bigClick"
     ></vant-goods-action-big-btn>
   </vant-goods-action>
 
@@ -40,79 +42,22 @@ export default {
         "vant-goods-action-mini-btn":GoodsActionMinibtn
     },
     props:{
+    	//左侧图标静态数组
        mini:{
         type:Array,
-        default:function() {
-            return [{
-                  text:"service",
-                  icon:"chat",
-                  iconClass:"10",
-                  info:"10",
-                  url:"",
-                  to:"",
-                  replace:true
-            },{
-                  text:"shop_car",
-                  icon:"chat",
-                  iconClass:"10",
-                  info:"10",
-                  url:"",
-                  to:"",
-                  replace:true
-            }];
-          }
        },
+       //右侧图标静态数组
        big:{
         type:Array,
-        default:function(){
-          return [{
-                text:"joinShopCar",
-                primary:false,
-                url:"",
-                to:"",
-                replace:true
-            },{
-                text:"joinShopCar",
-                primary:true,
-                url:"",
-                to:"",
-                replace:true
-            }]
-        }
-       },       
-       //按钮文字
-       text:{
-        type:String,
-       },
-       //图标
-       icon:{
-        type:String,
-       },
-       //图标额外类命
-       iconClass:{
-        type:String
-       },
-       //图标右上角提示信息
-       info:{
-        type:[String,Number]
-       },
-       //跳转链接
-       url:{
-        type:String
-       },
-       //路由跳转对象
-       to:{
-        type:[String,Object]
-       },
-       //跳转时是否替换当前history
-       replace:{
-        type:String
-       },
-       //是否主行动按钮，主行动按钮默认为红色
-       primary:{
-        type:Boolean,
-        default:false
-       },
+       },     
+       //左侧图标动态数组
+        fieldsDs:{
+            type:Object
+        }, 
+        //右侧图标动态数组
+        valueDs:{
+        	type:Object
+        }   
     },
    data(){ 
         return {
@@ -123,9 +68,44 @@ export default {
     computed:{
         
     },
+    mounted(){ 
+    	this.getData();
+    },
     //事件click
     methods: {
-            
+    	//获取数据
+        getData() {
+            const t = this;
+            if (t.fieldsDs) {
+                Util.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        t.realFields = value;
+                    });
+                }, function (code, msg) {
+                });
+            }
+        },
+        getData() {
+            const t = this;
+            if (t.valueDs) {
+                Util.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        t.realFields = value;
+                    });
+                }, function (code, msg) {
+                });
+            }
+        },    	
+        //小图标点击事件
+         miniClick:function(val){
+         	this.$emit("miniClick",val);
+         },
+         //大图标点击事件
+         bigClick:function(val){
+         	this.$emit("bigClick",val);
+         } 
     }
 }
 </script>
