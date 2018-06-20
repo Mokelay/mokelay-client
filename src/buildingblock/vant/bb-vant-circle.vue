@@ -76,13 +76,17 @@ export default {
       },
     computed:{
          text() {
-            return this.rate.toFixed(0) + '%'
+            return this.setCurrentRate.toFixed(0) + '%';
           }
     },
     methods:{
     	//从外部传入的进度条进度
-    	setRate:function(rate){
-    		this.currentRate = rate;
+    	setRate:function(...params){
+        params.forEach((val,key)=>{
+          if(val.type == "custom"){
+            this.setCurrentRate =  val.arguments;
+          }
+        });
     	}
     }
 }
