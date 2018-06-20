@@ -1,5 +1,6 @@
 <template>
     <van-address-edit
+        class="addressEdit"
         :area-list="areaList"
         :address-info="valueBase"
         :show-postal="option.showPostal"
@@ -52,8 +53,7 @@ import 'vant/lib/address-edit/style';
                         showSetDefault:false,
                         showSearchResult:false,
                         isSaving:false,
-                        isDeleting:false,
-                        telValidator:fn
+                        isDeleting:false
                     };
                 }
             }
@@ -112,4 +112,7 @@ import 'vant/lib/address-edit/style';
 </script>
 
 <style scoped>
+.addressEdit{
+    font-size: 0.4rem;
+}
 </style>
