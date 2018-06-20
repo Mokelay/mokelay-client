@@ -6,7 +6,7 @@
                 <div class="item-container" :style="{height:p_styleConfig.imgHeight}">
                     <i v-if="p_value&&p_value==field.value" class="el-icon-check"></i>
                     <i v-if="field.icon" :class="field.icon + ' ty-font'" :style="{'line-height':p_styleConfig.imgHeight,'font-size':p_styleConfig.imgWidth,'border':p_value&&p_value==field.value?'2px dashed #0091ea':''}"></i>
-                    <img v-else  class="item-image" :src="field.src" alt="">
+                    <img v-else  class="item-image" :src="field.src" alt="" >
                 </div>
                 <!-- 主标题 -->
                 <div class="item-title" :style="{color:p_styleConfig.fontColor,'font-size':p_styleConfig.fontSize}">{{field.title}}</div>
@@ -181,9 +181,7 @@
         position: relative;
         margin: 0 auto !important;
         padding: 0px 0 0px;
-        display: flex;
-        flex-wrap: wrap;
-        /*max-height: 80vh;*/
+        float: left;
         overflow-y: auto;
         .grid-item{
             .item-container{
@@ -191,14 +189,16 @@
             }
         }
     }
+    .grid-item{
+        display: inline-block;
+    }
     .bb-portal-item-list-inner{
         box-sizing: border-box;
         position: relative;
         margin: 0 auto !important;
         padding: 0;
-        display: flex;
+        float: left;
         overflow: hidden; 
-        flex-wrap: wrap;
         max-height: 87vh;
         overflow-y: auto;
         .grid-item{
