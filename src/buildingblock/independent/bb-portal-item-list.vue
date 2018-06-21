@@ -181,7 +181,6 @@
         position: relative;
         margin: 0 auto !important;
         padding: 0px 0 0px;
-        float: left;
         overflow-y: auto;
         .grid-item{
             .item-container{
@@ -197,7 +196,6 @@
         position: relative;
         margin: 0 auto !important;
         padding: 0;
-        float: left;
         overflow: hidden; 
         max-height: 87vh;
         overflow-y: auto;

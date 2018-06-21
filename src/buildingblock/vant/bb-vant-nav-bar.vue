@@ -1,8 +1,8 @@
 <template>
   <vant-nav-bar 
-    :title="title"
-    :leftText="leftText"
-    :rightText="rightText"
+    :title="showTitle"
+    :leftText="showLeftText"
+    :rightText="showRightText"
     :leftArrow="leftArrow"
     :fixed="fixed"
     :zIndex="zIndex"
@@ -23,7 +23,7 @@ export default {
         "vant-nav-bar":NavBar
     },
     props:{
-       //标题
+       	//标题
           title:{
             type:String,
           },
@@ -53,7 +53,9 @@ export default {
     },
    data(){ 
         return{
-                     
+             showTitle:this.title,
+             showLeftText:this.leftText,
+             showRightText:this.rightText, 
         }
       },
     computed:{
@@ -63,11 +65,11 @@ export default {
     methods: {
     	//左侧点击事件
         onClickLeft(param) {
-          this.$emit('click',param);
+          this.$emit('onClickLeft',param);
         },
         //右侧点击事件
         onClickRight(param) {
-          this.$emit('click',param);
+          this.$emit('onClickRight',param);
         },
         //外部传入标题
         setTitle(val){

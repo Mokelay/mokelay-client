@@ -1,7 +1,7 @@
 <template>
   <vant-circle 
-    v-model="currentRate"
-    :rate="rate"
+    v-model="setCurrentRate"
+    :rate="showRate"
     :size="circleSize"
     :color="color"
     :layer-color="layerColor"
@@ -26,7 +26,7 @@ export default {
        // 目标进度 
        rate:{
         type:Number,
-        default:100,
+        default:0,
        },
        // 圆环直径
        circleSize:{
@@ -50,7 +50,7 @@ export default {
        // 动画速度
        speed:{
         type:Number,
-        default:""
+        default:0,
        },
        // 进度条宽度
        strokeWidth:{
@@ -62,16 +62,32 @@ export default {
         type:Boolean,
         default:true
        },
+       //当前进度
+       currentRate:{
+       	type:Number,
+       	default:0,
+       }
     },
    data(){ 
         return{
-          currentRate:0,
+          setCurrentRate:this.currentRate,
+          showRate:this.rate,
         }
       },
     computed:{
          text() {
-            return this.currentRate.toFixed(0) + '%'
+            return this.setCurrentRate.toFixed(0) + '%';
           }
+    },
+    methods:{
+    	//从外部传入的进度条进度
+    	setRate:function(...params){
+        params.forEach((val,key)=>{
+          if(val.type == "custom"){
+            this.setCurrentRate =  val.arguments;
+          }
+        });
+    	}
     }
 }
 </script>
