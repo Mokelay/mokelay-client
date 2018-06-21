@@ -54,7 +54,7 @@
                     <a href="javascript:;" @click="amount('reduce')" class="reduce">-</a>
                 </div>
                 <bb-indep-button :button="Object.assign({'selectText':'加入我的需求'},joinButton)" @click="joinClick" class="sku-btn join" ref="join"></bb-indep-button>
-                <bb-indep-button :button="Object.assign({'selectText':'试用体验'},trialButton)" class="sku-btn trial" ref="trial"></bb-indep-button>
+                <bb-indep-button :button="Object.assign({'selectText':'试用体验'},trialButton)" @click="trialClick" class="sku-btn trial" ref="trial"></bb-indep-button>
             </div>
         </div>
     </div>
@@ -184,10 +184,8 @@
         },
         created:function(){
             let t=this;
-            if(!t.ds){
-                //如果没有配置ds，就用测试数据显示
-                t.testData();
-            }
+            //加载数据
+            t.loadData();
             //轮播图定时器
             t.picBroadCast();
         },
@@ -205,29 +203,26 @@
             //测试数据
             testData:function(){
                 let t=this;
-                t.title="智能家具类A型";
-                t.description="此模板是一款专门针对智能硬件的，基于机智云SDK的适用于智能空气净化器的模版。它涵盖了扫码绑定设备、WiFi绑定设备、设备控制等IOT类APP的基本功能，同时支持搜索附近设备、自定义设备属性，模板操作灵活，也适用于定制更多其他类型智能硬件产品";
+                t.title="测试标题001";
+                t.description="测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈测试描述哈哈哈";
                 t.picList=[
-                    "https://longyanpc.mmall.com/image/app_longyan.png",
-                    "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
-                    "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
                     "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
                     "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png"
                 ];
                 t.types=[{
-                    text:'超值套餐1',
+                    text:'套餐1',
                     value:'type1',
                     price:9999,
-                    description:'APP前端+后端+管理后台+云服务器+APP个性化调整'
+                    description:'lego配置+积木配置+接口配置+页面配置'
                 },{
-                    text:'超值套餐2',
+                    text:'套餐2',
                     value:'type2',
-                    price:999,
-                    description:'APP前端+后端+管理后台+云服务器+APP个性化调整2'
+                    price:2999,
+                    description:'接口配置+页面配置'
                 }];
                 t.tags=[{
-                    text:'空气净化器',
-                    value:'kqjhq'
+                    text:'底代码开发',
+                    value:'ddmkf'
                 }];
                 //促销
                 t.promotion=[{
@@ -240,6 +235,27 @@
                     year:3,
                     discount:7
                 }];
+            },
+            //加载数据
+            loadData:function(){
+                let t=this;
+                if(t.ds){
+                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
+                        var _data = map[0].value;
+                        t.title = _data.title;
+                        t.description=_data.description;
+                        t.picList=_data.picList;
+                        t.types=_data.types;
+                        t.tags=_data.tags;
+                        //促销
+                        t.promotion=_data.promotion;
+                    }, function (code, msg) {
+
+                    });
+                }else{
+                    //放一点测试数据
+                    t.testData()
+                }
             },
             //图片轮播
             picBroadCast:function(){
@@ -269,13 +285,21 @@
                 let t=this;
                 return {
                     type:t.types[t.activeTypeIndex],
-                    
+                    originPrice:t.originPrice,
+                    discount:t.discount,
+                    price:t.price,
+                    year:t.year,
+                    title:t.title
                 }
             },
             //加入我的需求click事件
             joinClick:function(button){
                 let t=this;
-
+                t.$emit('joinClick',t.buildSkuData(),t,button);
+            },
+            trialClick:function(button){
+                let t=this;
+                t.$emit('trialClick',t.buildSkuData(),t,button);
             },
             //计算年份
             amount:function(type){
