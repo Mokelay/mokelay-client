@@ -1,39 +1,31 @@
 <template>
 <div id="app">
     <div class="flex">
-        <div>
-            <span>弹出框</span>
-            <input type="text" @click="openByDrop($event)" v-model="calendar3.display" readonly>
-            <input type="text" @click="openByDialog" :value="calendar4.display" readonly>
+        <!-- 日期输入框 -->
+        <div style="border:none" v-if="calendarType == 'input'">
+            <input type="text" @click="openByDrop($event)" v-model="option.display" readonly>
         </div>
-
-        <div>
-            <span>单选/英文/事件</span>
-            <calendar :events="calendar1.events" :lunar="calendar1.lunar" :value="calendar1.value" :begin="calendar1.begin" :end="calendar1.end" :weeks="calendar1.weeks" :months="calendar1.months" @select="calendar1.select"></calendar>
+        <!-- 日期区间输入框 -->
+        <div style="border:none" v-if="calendarType == 'inputRange'">
+            <input type="text" @click="openByDialog" :value="option.display" readonly>
         </div>
-
-        <div>
-            <span>多选/农历</span>
-            <calendar :range="calendar2.range" :lunar="calendar2.lunar" :value="calendar2.value" :begin="calendar2.begin" :end="calendar2.end" @select="calendar2.select"></calendar>
+        <!-- 日期选择器 -->
+        <div v-if="calendarType == 'select'">
+            <calendar :events="realEvents" :lunar="option.lunar" :value="valueBase" :begin="option.begin" :end="option.end" :weeks="option.weeks" :months="option.months" @select="clickSelect"></calendar>
+        </div>
+        <!-- 日期区间选择器 -->
+        <div v-if="calendarType == 'selectRange'">
+            <calendar :events="realEvents" :range="true" :lunar="option.lunar" :value="valueBase" :begin="option.begin" :end="option.end" :weeks="option.weeks" :months="option.months" @select="clickSelectRange"></calendar>
         </div>
     </div>
-
-    <transition name="fade">
-    <div class="calendar-dropdown" :style="{'left':calendar3.left+'px','top':calendar3.top+'px'}" v-if="calendar3.show">
-        <calendar :zero="calendar3.zero" :lunar="calendar3.lunar" :value="calendar3.value" :begin="calendar3.begin" :end="calendar3.end" @select="calendar3.select"></calendar>
-    </div>
-    </transition>
-
-    <transition name="fade">
-    <div class="calendar-dialog" v-if="calendar4.show">
-        <div class="calendar-dialog-mask" @click="closeByDialog"></div>
-        
-        <div class="calendar-dialog-body">
-            <calendar :range="calendar4.range" :zero="calendar4.zero" :lunar="calendar4.lunar" :value="calendar4.value"  @select="calendar4.select"></calendar>
-        </div>
-        
-    </div>
-    </transition>
+    <!-- 日期选择器弹窗 -->
+    <bb-indep-dialog :isShow="selectShow" :width="isPc?'500px':'98%'">
+        <calendar :events="realEvents" :zero="true" :lunar="option.lunar" :value="valueBase" :begin="option.begin" :end="option.end" :weeks="option.weeks" :months="option.months" @select="clickSelect"></calendar>
+    </bb-indep-dialog>
+    <!-- 日期区间选择器弹窗 -->
+    <bb-indep-dialog :isShow="selectRangeShow" :width="isPc?'500px':'98%'">
+        <calendar :events="realEvents" :range="true" :zero="true" :lunar="option.lunar" begin="option.begin" :end="option.end" :weeks="option.weeks" :months="option.months" :value="valueBase"  @select="clickSelectRange"></calendar>
+    </bb-indep-dialog>
 </div>
 </template>
 
@@ -46,83 +38,142 @@ export default {
     components: {
         calendar
     },
-    data(){
-        return {
-            calendar1:{
-                value:[2018,2,16], //默认日期
-                // lunar:true, //显示农历
+    props: {
+        /*默认值 支持v-model*/
+        value:{
+            type:Array
+
+        },
+        defaultValTpl:{
+            type:[String,Number,Boolean]
+        },
+        /*日期选择器类型
+            input 输入框 inputRange 输入框 select 选择器 selectRange 选择器
+        */
+        calendarType:{
+            type:String,
+            default:'input'
+        },
+        /*自定义标记
+            {
+            '2018-2-14':'$408',默认支持字符串
+            '2018-2-27':{
+                'type':'badge',   内容类型 text 文字  icon 图标  badge标记
+                'icon':'edit',    图标
+                'text':'文字内容',  文字内容
+                'color':'#0091ea', 颜色
+                'left':'80%', 横坐标
+                'top':'0' 纵坐标
+            }
+        */
+        events:{
+            type:Object
+        },
+        /*自定义标记动态数据源*/
+        eventsDs:{
+            type:Object
+        },
+        /*其他属性设置
+            {
+                display:"2018/02/16 ~ 2019/02/16",
+                lunar:true  显示农历
                 weeks:['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 months:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                events:{
-                    '2018-2-14':'$408','2018-2-15':'$460','2018-2-16':'$500',
-                },
-                select(value){
-                    console.log(value.toString());
-                }
-            },
-            calendar2:{
-                range:true,
-                value:[[2018,2,16],[2019,2,16]], //默认日期
-                lunar:true, //显示农历
                 begin:[2017,2,16], //可选开始日期
                 end:[2019,2,16], //可选结束日期
-                select(begin,end){
-                    // console.log(begin.toString(),end.toString());
-                }
-            },
-            calendar3:{
-                display:"2018/02/16",
-                show:false,
-                zero:true,
-                value:[2018,2,16], //默认日期
-                lunar:true, //显示农历
-                select:(value)=>{
-                    this.calendar3.show=false;
-                    this.calendar3.value=value;
-                    this.calendar3.display=value.join("/");
-                }
-            },
-            calendar4:{
-                display:"2018/02/16 ~ 2019/02/16",
-                show:false,
-                range:true,
-                zero:true,
-                value:[[2018,2,16],[2019,2,16]], //默认日期
-                lunar:true, //显示农历
-                select:(begin,end)=>{
-                    console.log(begin,end)
-                    this.calendar4.show=false;
-                    this.calendar4.value=[begin,end];
-                    this.calendar4.display=begin.join("/")+" ~ "+end.join("/");
-                }
-            },
+            }
+        */
+        option:{
+            type:Object,
+            default:function(){
+                return {
+                    lunar:false
+                };
+            }
         }
     },
+    data(){
+        return {
+            valueBase: this.value,
+            realEvents: this.events,
+            realOption: Object.assign({lunar:false},this.option),
+            selectRangeShow:false,
+            selectShow:false,
+            isPc:_TY_Tool.isPC()
+        };
+    },
+    mounted:function(){
+        let t=this;
+        if(t.defaultValTpl){
+            t.valueBase = eval(_TY_Tool.buildDefaultValTpl(t,"valueBase"));
+        }
+        t.getData();
+    },
     methods:{
+        //动态获取自定义标记
+        getData(){
+            const t = this;
+            if (t.eventsDs) {
+                t.loading = true;
+                _TY_Tool.getDSData(t.eventsDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        t.loading = false;
+                        const {dataKey, value} = item;
+                        t.realList = value;
+                    });
+                }, function (code, msg) {
+                    t.loading = false;
+                });
+            }
+        },
         openByDrop(e){
-            this.calendar3.show=true;
-            this.calendar3.left=e.target.offsetLeft+19;
-            this.calendar3.top=e.target.offsetTop+70;
-           
+            this.selectShow=true;           
             e.stopPropagation();
             window.setTimeout(()=>{
                 document.addEventListener("click",(e)=>{
-                    this.calendar3.show=false;
+                    this.selectShow=false;
                     document.removeEventListener("click",()=>{},false);
                 },false);
-            },1000)
+            },1000);
         },
         openByDialog(){
-            this.calendar4.show=true;
+            if(this.calendarType == "select"){
+                this.selectShow = true;
+            }
+            if(this.calendarType == "selectRange"){
+                this.selectRangeShow = true;
+            }
+            
         },
         closeByDialog(){
-            this.calendar4.show=false;
+            if(this.calendarType == "select"){
+                this.selectShow = false;
+            }
+            if(this.calendarType == "selectRange"){
+                this.selectRangeShow = false;
+            }
+        },
+        //选择器 点击事件
+        clickSelect(value){
+            this.selectShow=false;
+            this.valueBase = value;
+            this.option.display=value.join("/");
+            this.$emit('input',this.valueBase);
+            this.$emit('change',this.valueBase);
+        },
+        //区间选择器 点击事件
+        clickSelectRange(begin,end){
+            this.selectRangeShow = false;
+            this.valueBase=[begin,end];
+            this.option.display=begin.join("/")+" ~ "+end.join("/");
+            this.$emit('input',this.valueBase);
+            this.$emit('change',this.valueBase);
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 /*demo*/
 .flex{
     box-sizing: border-box;
@@ -143,11 +194,13 @@ export default {
 .flex>div{
     margin:10px;
     padding:20px;
-    width:25%;
+    /*width:25%;*/
     min-width:300px;
     border: 1px solid #eee;
     border-radius: 2px;
     position: relative;
+    margin-left: auto;
+    margin-right: auto;
 }
 .flex>div>span{
     position: absolute;
@@ -186,7 +239,7 @@ export default {
 /*下拉框*/
 .calendar-dropdown{
     background: #fff;
-    position: absolute;
+    /*position: absolute;*/
     left:0;
     top:0;
     padding:20px;

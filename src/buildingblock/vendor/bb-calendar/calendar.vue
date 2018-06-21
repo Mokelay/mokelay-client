@@ -1,5 +1,5 @@
 
-<style scoped>
+<style lang="less" scoped>
 .calendar {
     margin:auto;
     width: 100%;
@@ -136,6 +136,11 @@
 .calendar td .isGregorianFestival,
 .calendar td .isLunarFestival{
     color:#ea6151;
+    .badge{
+        border-radius: 50%;
+        width: 5px;
+        height: 5px;
+    }
 }
 .calendar td.selected span.red{
     background-color: #ea6151;
@@ -252,7 +257,15 @@
         <tr v-for="(day,k1) in days" style="{'animation-delay',(k1*30)+'ms'}">
             <td v-for="(child,k2) in day" :class="{'selected':child.selected,'disabled':child.disabled}" @click="select(k1,k2,$event)">
                 <span :class="{'red':k2==0||k2==6||((child.isLunarFestival||child.isGregorianFestival) && lunar)}">{{child.day}}</span>
-                <div class="text" v-if="child.eventName!=undefined">{{child.eventName}}</div>
+                <!-- <div class="text" v-if="child.eventName!=undefined">{{child.eventName}}</div> -->
+                <!-- 默认文字 -->
+                <div class="text" v-if="typeof child.eventName == 'string'">{{child.eventName}}</div>
+                <!-- 自定义图标或者小圆点 -->
+                <div class="text" v-if="typeof child.eventName == 'object'" :style="{'color':child.eventName.color,'left':child.eventName.left,'top':child.eventName.top,'font-size':child.eventName.size}">
+                    <div v-if="child.eventName.type == 'text'">{{child.eventName.text}}</div>
+                    <div v-if="child.eventName.type == 'badge'" :style="{'width':child.eventName.size || '5px','height':child.eventName.size || '5px','border-radius':'50%','background-color':child.eventName.color}"></div>
+                    <div v-if="child.eventName.type == 'icon'"><i :class="'ty '+ child.eventName.icon"></i></div>
+                </div>
                 <div class="text" :class="{'isLunarFestival':child.isLunarFestival,'isGregorianFestival':child.isGregorianFestival}" v-if="lunar">{{child.lunar}}</div>
             </td>
         </tr>
@@ -267,7 +280,10 @@
 </template>
 
 <script>
-import calendar from './calendar.js'
+let calendar = null;
+require.ensure(['./calendar.js'], function (require) {
+    calendar = require("./calendar.js").default;
+},"calendar");
 export default {
     props: {
         // 多选模式
@@ -334,7 +350,18 @@ export default {
                 return window.navigator.language.toLowerCase() == "zh-cn"?['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
             }
         },
-        // 自定义事件
+        /*自定义事件
+            {
+            '2018-2-14':'$408',默认支持字符串
+            '2018-2-27':{
+                'type':'badge',   内容类型 text 文字  icon 图标  badge标记
+                'icon':'edit',    图标
+                'text':'文字内容',  文字内容
+                'color':'#0091ea', 颜色
+                'left':'80%', 横坐标
+                'top':'0' 纵坐标
+            }
+        */ 
         events:  {
             type: Object,
             default: function(){
