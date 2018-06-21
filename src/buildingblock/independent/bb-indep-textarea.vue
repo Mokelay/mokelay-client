@@ -124,8 +124,12 @@
         		this.$emit("input",val);
         	},
         	//外部设值
-        	setNumber:function(val){
-        		this.showText = val;
+        	setNumber:function(...params){
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        this.valueBase = param.arguments
+                    }
+                })        		
         	}
             
         }
