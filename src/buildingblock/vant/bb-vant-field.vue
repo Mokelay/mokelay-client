@@ -33,7 +33,7 @@ import 'vant/lib/field/style';
         props: {
             //内容
             value:{
-                type:[Number,String,Boolean]
+                type:String,
             },
             /*模板默认值*/
             defaultValTpl:{
@@ -77,7 +77,7 @@ import 'vant/lib/field/style';
                 valueBase:this.value,
                 writeText:"0",
                 maxTextShow:this.option.maxText,
-                messageText:this.option.maxTextShow,
+                messageText:this.option.maxText,
                 isShowText:true
             };
         },
@@ -97,10 +97,17 @@ import 'vant/lib/field/style';
                 this.$emit('input',key);
                 this.$emit('change',key);
             },
-            //显示字符
+            //显示字符，超出限制字符截取
             keyup(){
                 this.writeText = this.valueBase.length;
-                
+                var t = this.valueBase;
+        		var w = this.writeText;
+        		var s = this.option.maxText;
+        		if(w>s){
+        			var a = this.valueBase.substring(0,s);
+        			this.valueBase = a;
+        			this.writeText = this.valueBase.length;
+        		}                
             }
 
         }

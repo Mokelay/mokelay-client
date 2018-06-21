@@ -22,42 +22,6 @@ export default {
         //分类显示所需的数据
         itemsArray:{
             type:Array,
-            default:function(){
-                return [{
-	                text:"All city",
-	                children:[
-	                    {
-	                        text:"wenzhou",
-	                        id:1003
-	                    },{
-	                        text:"hangzhou",
-	                        id:1002
-	                    },{
-			                  text:"wuxi",
-			                  id:1001
-	        			}]
-                    },{
-		              text:"zhejiang",
-		              children:[
-		                {
-		                  text:"wenzhou",
-		                  id:2002
-		                },{
-		                  text:"hangzhou",
-		                  id:2001
-		                }]
-            		},{
-		              text:"jiangsu",
-		              children:[
-		                {
-		                  text:"wuxi",
-		                  id:3002
-		                },{
-		                  text:"changzhou",
-		                  id:3001
-		                }]
-            		}]
-            }
         },
         //左侧导航高亮的索引
         mainActiveIndex:{
