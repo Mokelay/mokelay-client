@@ -32,6 +32,8 @@ import bblxItemList from './bb-lx-item-list';
 import bbindepTag from './bb-indep-tag';
 import bbindepsku from './bb-indep-sku';
 import bbindepcontactlist from './bb-indep-contact-list';
+import bbindepBlogPost from './bb-indep-blog-post';
+import bbindepBlog from './bb-indep-blog';
 
 import helloworld from './bb-hello-world'
 
@@ -73,6 +75,8 @@ export default {
 		Vue.component('bb-indep-tag', bbindepTag);
 		Vue.component('bb-indep-sku', bbindepsku);
 		Vue.component('bb-indep-contact-list', bbindepcontactlist);
+		Vue.component('bb-indep-blog-post', bbindepBlogPost);
+		Vue.component('bb-indep-blog', bbindepBlog);
 
 		Vue.component('bb-hello-world', helloworld);
 

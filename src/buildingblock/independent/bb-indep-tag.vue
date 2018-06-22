@@ -60,6 +60,7 @@
 					}
 				}			
 			},
+			//静态数据
 			tagsArray:{
 				type:Array,
 				default:function(){
@@ -85,6 +86,10 @@
 						}]
 					}]
 				}
+			},
+			//动态数据
+			tagDs:{
+				type:Object,
 			}
 		},
 		 data() {
@@ -141,12 +146,29 @@
                 return styles;            
             }
 		},
+		mounted:function(){
+          	this.getTag();
+        },
 		methods:{
+			//动态数据
+			getTag() {
+	            const t = this;
+	            if (t.tagDs) {
+	                Util.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.tag = value;
+	                    });
+	                }, function (code, msg) {
+	                });
+	            }
+	        },
 			//点击事件
 			 toggleChildren: function(tag) {
 			 	debugger
 			 	//debugger
  				tag.expanded = tag.expanded?false:true;
+ 				this.$emit("toggleChildren",tag);
  			  },
 		},
 	}

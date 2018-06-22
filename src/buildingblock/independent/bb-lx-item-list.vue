@@ -170,7 +170,15 @@
             			text:"学习"           		
             		}]
             	}
-            }
+            },
+            //点击加载更多动态数据
+            itemMoreDs:{
+                type:Object
+            },
+            //初始化动态数据
+            itemDs:{
+				type:Object
+            },
         },
         data() {
             return {
@@ -287,9 +295,36 @@
         created: function () {
         },
         mounted:function(){
-           
+          	this.getItem();
+    		this.getItemMore(); 
         },
         methods: {
+        	//初始化动态数据
+	        getItem() {
+	            const t = this;
+	            if (t.itemDs) {
+	                Util.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.item = value;
+	                    });
+	                }, function (code, msg) {
+	                });
+	            }
+	        },
+        	//点击更多动态数据
+        	getItemMore() {
+	            const t = this;
+	            if (t.itemMoreDs) {
+	                Util.getDSData(t.itemMoreDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.itemMore = value;
+	                    });
+	                }, function (code, msg) {
+	                });
+	            }
+	        },
         	//点击事件
         	onClick:function(){
         		var aa = {
