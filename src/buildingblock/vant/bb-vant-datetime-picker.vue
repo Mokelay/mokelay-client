@@ -76,7 +76,7 @@ export default {
     },
    data(){ 
         return{
-          valueBase:this.value,
+          valueBase:typeof this.value == "string"?new Date(this.value):this.value,
           title:this.option.title,
           confirmButtonText:this.option.confirmButtonText,
           realMaxDate:new Date(this.maxDate),
@@ -87,13 +87,14 @@ export default {
       },
       watch:{
         value(val){
-          this.valueBase = val         
+          this.valueBase = val;         
         }
       }, 
     computed:{},
     mounted:function(){
       let t=this;
       _TY_Tool.buildDefaultValTpl(t,"valueBase");
+      t.valueBase = new Date(t.valueBase);
     },
     methods:{
     	//改变
@@ -118,14 +119,12 @@ export default {
 
     	//外部设值
     	setTime:function(...params){
-            params.forEach((param,key)=>{
-                if(param.type == "custom"){
-                    this.valueBase = param.arguments
-                }
-            })        		
+        params.forEach((param,key)=>{
+          if(param.type == "custom"){
+            this.valueBase = new Date(param.arguments);
+          }
+        });       		
     	}
-
-
      }
 }
 </script>
