@@ -57,7 +57,7 @@ import 'vant/lib/field/style';
                 type:Object,
                 default:function() {
                     return {
-                        type:"number",
+                        type:"textarea",
                         placeholder:"",
                         label:"标签名",
                         icon:"",
@@ -67,7 +67,7 @@ import 'vant/lib/field/style';
                         error:false,
                         errorMessage:"",
                         autosize:true,
-                        maxText:0
+                        maxText:100000
                     };
                 }
             }
@@ -82,6 +82,7 @@ import 'vant/lib/field/style';
             };
         },
         mounted(){
+            console.log("this.value:",this.value);
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");  
             t.$emit('mounted',this.valueBase); 
@@ -94,8 +95,8 @@ import 'vant/lib/field/style';
             }, 
             //输入事件
             onInput(key){
-                this.$emit('input',key);
-                this.$emit('change',key);
+                this.$emit('input',this.valueBase);
+                this.$emit('change',this.valueBase);
             },
             //显示字符，超出限制字符截取
             keyup(){
@@ -115,5 +116,5 @@ import 'vant/lib/field/style';
 </script>
 
 <style scoped>
-.showText{text-align:right; margin-right:5%;}
+.showText{text-align:right; margin-right:5%;font-size: 0.2rem;}
 </style>
