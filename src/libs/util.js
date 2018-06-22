@@ -14,7 +14,10 @@ util.invoke = function(options) {
             });
         }
         util.ajax(options).then(function(response) {
-            if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401) {
+            if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401 && util.isWX() && response['data']['message']) {
+                //微信端没有登录，跳转微信授权
+                location.href = response['data']['message'] || window._TY_SSOURL;
+            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401) {
                 //未登录
                 location.href = window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
@@ -1252,6 +1255,18 @@ util.isPC = function() {
         }
     }
     return flag;
+}
+
+//判断当前环境是否是微信环境
+util.isWX = function() {
+    //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+    var ua = window.navigator.userAgent.toLowerCase();
+    //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 window._TY_Tool = util;
