@@ -61,10 +61,8 @@
 				}			
 			},
 			//静态数据
-			tagsArray:{
-				type:Array,
-				default:function(){
-					return [{
+			/*
+				 [{
 						title:"教育",
 						value:1,
 						children:[{
@@ -85,7 +83,9 @@
 							value:6
 						}]
 					}]
-				}
+			*/
+			tagsArray:{
+				type:Array,
 			},
 			//动态数据
 			tagDs:{
@@ -165,7 +165,7 @@
 	        },
 			//点击事件
 			 toggleChildren: function(tag) {
-			 	debugger
+			 	//debugger
 			 	//debugger
  				tag.expanded = tag.expanded?false:true;
  				this.$emit("toggleChildren",tag);
