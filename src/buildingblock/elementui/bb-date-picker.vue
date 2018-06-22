@@ -110,12 +110,14 @@
             change:function(val){
                 let newDate = val;
                 //判断如果输出的是date对象则string化
-                if(val && typeof val == "object"){
+                if(val && Array.isArray(val)){
                     newDate = [];
                     const startTime = typeof val[0] == "string"?val[0] : val[0].toDateString();
                     const endTime = typeof val[1] == "string"?val[1] : val[1].toDateString();
                     newDate.push(startTime);
                     newDate.push(endTime);
+                }else{
+                    newDate = val.toDateString();
                 }
                 this.valueBase = newDate;
                 this.$emit('input',newDate);
