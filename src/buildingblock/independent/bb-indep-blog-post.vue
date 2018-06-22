@@ -16,8 +16,7 @@
  			<a
  				v-for="item in items"
  				:href="item.href"
- 				class="listStyle"
- 			>
+ 				class="listStyle">
  				<i 
  				:style="listLeftIconStyle" 
  				:class="item.leftIcon"></i>
@@ -31,7 +30,8 @@
  			<h6 class="buttonList"> 
  				<button 
  				:style="canceclStyle" 
- 				v-for="button in buttons">
+ 				v-for="button in buttons"
+ 				@click="buttonFinish">
  					{{button.text}}
  				</button>
  			</h6>
@@ -344,7 +344,10 @@ export default {
     },
     watch:{},
     methods:{
-
+    	//按钮点击事件
+    	buttonFinish:function(val){
+    		this.$emit("buttonFinish",val);
+    	},
     }
 }
 </script>

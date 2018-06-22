@@ -17,8 +17,8 @@
 	    			</b>	
 	    		</p>
 	    	</span>
-	    	<span class="rightStyle">	
-	    		<b :style="rightText">{{content.text}}</b>			
+	    	<span class="bb-layout-seriation">	
+	    		<!--<b :style="rightText">{{content.text}}</b>	-->		
 	    	</span>
 		</li>
 		<p @click="onClick">查看更多</p>
@@ -179,6 +179,24 @@
             itemDs:{
 				type:Object
             },
+            content:{
+	          type:Array,
+	          default:function(){
+	            return [{                      //页面内容
+	                uuid:'1',
+	                alias:'bb-words',                   //积木别名
+	                aliasName:'a',               //中文名称
+	                group:'',                   //积木分组 表单项显示的位置
+	                attributes:{
+	                  value:"123123"
+	                },              //积木属性
+	                animation:[],
+	                interactives:[],
+	                layout:{                    //积木布局
+	                }
+	            }];
+	          }
+        	},
         },
         data() {
             return {
@@ -292,6 +310,16 @@
         },
         watch: {
         },
+        render: function(createElement){
+	        const t = this;
+	        const bb = _TY_Tool.bbRender(t.realContent, createElement, t);
+	        const bbTpl = createElement('template',{slot:"tip"},[bb]);
+	        return createElement('bb-layout-seriation',{props:{
+	            "text":t.text,
+	        },on:{
+	            
+	        }},[bbTpl]);
+    	},
         created: function () {
         },
         mounted:function(){
@@ -306,7 +334,7 @@
 	                Util.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.item = value;
+	                        t.contentsArray = value;
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -319,7 +347,8 @@
 	                Util.getDSData(t.itemMoreDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.itemMore = value;
+	                        //t.contents.push(value) = value;
+	                        t.contentsArray = value;
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -345,7 +374,7 @@
     .content{
         width: 100%;
         display: flex;
-        justify-content:center;
+        justify-content:left;
         align-items:center;
     }
     .leftStyle{
