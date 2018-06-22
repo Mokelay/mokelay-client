@@ -1,5 +1,6 @@
 <template>
     <vant-radio-group 
+        class="bb-vant-raido-group"
         v-model="valueBase"  
         @change="change"
         :disabled="option.disabled">
@@ -8,7 +9,7 @@
             :key="key" 
             :name="field.value"
             :disabled="field.disabled"
-            >{{field.text}}{{field.subDescription}}</vant-radio>
+            >{{field.text}}<span class="subTitle">{{field.subDescription}}</span></vant-radio>
     </vant-radio-group>
 </template>
 
@@ -115,5 +116,13 @@ import 'vant/lib/radio/style';
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+    .bb-vant-raido-group{
+        font-size: 0.4rem;
+        .subTitle{
+            color: #999999;
+            font-size: 0.2rem;
+            margin-left:1rem;
+        }
+    }
 </style>
