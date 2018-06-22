@@ -334,7 +334,7 @@
 	                Util.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.contentsArray = value;
+	                        t.contents = value;
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -348,7 +348,7 @@
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
 	                        //t.contents.push(value) = value;
-	                        t.contentsArray = value;
+	                        t.contents.push(value);
 	                    });
 	                }, function (code, msg) {
 	                });
