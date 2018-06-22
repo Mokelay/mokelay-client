@@ -1,10 +1,10 @@
 <template>
   <vant-datetime-picker 
     :type="datetimeType"
-    :min-date="minDate"
-    :max-date="maxDate"
-    :min-hour="minHour"
-    :max-hour="maxHour"
+    :min-date="realMinDate"
+    :max-date="realMaxDate"
+    :min-hour="realMinHour"
+    :max-hour="realMaxHour"
     :title="title"
     :loading="option.loading"
     :value="valueBase"
@@ -35,11 +35,13 @@ export default {
         },
         //可选的最小日期
         minDate:{
-          type:Date,
+          type:String,
+          default:"1990/01/01"
         },
         //可选的最大日期
         maxDate:{
-          type:Date,
+          type:String,
+          default:"2050/10/01"
         },
         //可选的最小小时
         minHour:{
@@ -77,7 +79,11 @@ export default {
           valueBase:this.value,
           title:this.option.title,
           confirmButtonText:this.option.confirmButtonText,
-        }
+          realMaxDate:new Date(this.maxDate),
+          realMinDate:new Date(this.minDate),
+          realMinHour:this.minHour,
+          realMaxHour:this.maxHour,
+        };
       },
       watch:{
         value(val){
