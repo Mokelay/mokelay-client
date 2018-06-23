@@ -238,7 +238,7 @@
                 }
                 t.list.forEach((item,index)=>{
                     //数据解析到模板中去
-                    const _content = _TY_Tool.tpl(t.itemContent,{
+                    const _content = _TY_Tool.tpl(JSON.stringify(t.itemContent),{
                         rowData:item
                     });
                     let clazz=  [];
@@ -270,7 +270,7 @@
                                 t.$emit('itemClick',item,t);
                             }
                         }
-                    },_TY_Tool.bbRender(_content,createElement,t));
+                    },_TY_Tool.bbRender(JSON.parse(_content),createElement,t));
                     result.push(liItem);
                 });
 
