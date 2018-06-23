@@ -7,16 +7,55 @@
 			>
 			{{tag.title}}
 			</b>
-			<span v-if='tag.expanded == true'><i v-for="child in tag.children" :style="tagTwoLabelWrite">{{child.text}}</i></span>
-			
+			<span v-if='tag.expanded == true'>
+				<i v-for="child in tag.children" :style="tagTwoLabelWrite">{{child.text}}</i> 
+			</span>
 		</span>
-
+		<span> 
+			<b 
+			:style="tagTwoLabelWrite" 
+			@click="customPopShow"
+			>
+			{{customWriteShow}}
+			</b>
+		</span>
+		<div class="customPop" v-show="showPop"> 
+			<div class="customPopBg"></div>
+			<div class="customPopCon">
+				<p class="customPopTitleStyle">{{customPopTitle}}</p> 
+				<p class="customPopInput">
+					<input type="text" 
+					v-model="valueBase"> 
+				</p>
+				<p class="customPopButton">
+					<button @click="customPopCancel">取消</button>
+					<button @click="customPopSubmit">确认</button>
+				</p>
+			</div>
+		</div>
 	</div>
 </template>
 <script> 
 	export default {
 		name:"tagContent",
 		props:{
+			customWrite:{
+				style:String,
+				default:"111",
+			},
+			show:{
+				type:Boolean,
+				default:false,
+			},
+			//弹框内标题
+			customPopTitle:{
+				type:String,
+				default:"填写自定义标签",
+			},
+			value:{
+				type:[String,Number],
+				default:"",
+			},
 			//一级标签样式
 			tagOneLabelWriteConfig:{
 				type:Object,
@@ -60,10 +99,9 @@
 					}
 				}			
 			},
-			tagsArray:{
-				type:Array,
-				default:function(){
-					return [{
+			//静态数据
+			/*
+				 [{
 						title:"教育",
 						value:1,
 						children:[{
@@ -84,13 +122,21 @@
 							value:6
 						}]
 					}]
-				}
+			*/
+			tagsArray:{
+				type:Array,
+			},
+			//动态数据
+			tagDs:{
+				type:Object,
 			}
 		},
 		 data() {
             return {
                tags:this.tagsArray,
-               show:false,
+               valueBase:this.value,
+               showPop:this.show,
+               customWriteShow:this.customWrite,
             }
         },
 		computed:{
@@ -141,23 +187,112 @@
                 return styles;            
             }
 		},
+		mounted:function(){
+          	this.getTag();
+        },
 		methods:{
+			//动态数据
+			getTag() {
+	            const t = this;
+	            if (t.tagDs) {
+	                Util.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.tag = value;
+	                    });
+	                }, function (code, msg) {
+	                });
+	            }
+	        },
 			//点击事件
 			 toggleChildren: function(tag) {
-			 	debugger
+			 	//debugger
 			 	//debugger
  				tag.expanded = tag.expanded?false:true;
+ 				this.$emit("toggleChildren",tag);
  			  },
+ 			//弹框取消点击事件
+ 			customPopCancel:function(){
+ 				this.showPop = false;
+ 			},
+ 			//弹框确定点击事件
+ 			customPopSubmit:function(){
+ 				var val = this.valueBase;
+ 				this.showPop = false;
+ 				this.customWriteShow = this.valueBase;
+ 			},
+ 			//点击自定义的事件
+ 			customPopShow:function(){
+ 				this.showPop = true;
+ 			},
 		},
 	}
 </script>
 <style lang='less' scoped> 
  .tagContent{
  	width:100%;
- 	height:auto;
+ 	height:500px;
  }
  .tagOneLabel{
  	width:auto;
  	height:auto;
  }
+ .customPop{
+ 	width:100%;
+ 	height:100%;
+ 	position:absolute;
+ 	top:0;
+ 	left:0; 
+ }
+.customPopBg{
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.3);
+}
+.customPopCon{
+	width:80%; 
+	height:135px;
+	background:#fff;
+	position:absolute;
+	left:10%;
+	top:50%;
+	margin-top:-67.5px;
+}
+.customPopTitleStyle{
+	width:100%;
+	text-align:center;
+	line-height:40px;
+	font-size:16px;
+}
+.customPopInput{
+	width:90%;
+	height:auto;
+	margin:0 5%;
+}
+.customPopInput input{
+	width:100%;
+	line-height:30px;
+	color:#666;
+	font-size:14px;
+	border:1px solid #ddd;
+}
+.customPopButton{
+	border-top:1px solid #ddd;
+	margin-top:20px;
+	display:flex;
+	justify-content:center;
+}
+.customPopButton button{
+	width:50%;
+	line-height:40px;
+	text-align:center;
+	font-size:14px;
+	color:#000;
+	border-right:1px solid #ddd;
+	border-left:none;
+	border-top:none;
+	border-bottom:none;
+	background:#fff;
+}
+
 </style>

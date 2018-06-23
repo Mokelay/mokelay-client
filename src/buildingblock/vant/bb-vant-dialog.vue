@@ -26,7 +26,7 @@
             //是否显示
             isShow:{
                 type: Boolean,
-                default: true
+                default: false
             },
             //弹窗标题
             title:{
@@ -110,7 +110,7 @@
                 let t=this;
                 return createElement('van-dialog',{
                     props:{
-                        'value':true,
+                        'value':t.active,
                         'title':t.title,
                         'message':t.message,
                         'show-confirm-button':t.option.showConfirmButton,

@@ -1,33 +1,14 @@
-<!-- <template>
-    <div class="contactList">
-        <div class="contactItem" v-for="(contact,key) in realContactlist">
-            <div class="contactItemLeft">
-                <img :src="contact.icon" alt="contact.name">
-                <p class="name">{{contact.name}}</p>
-                <p class="status" v-if="option.styleType == 'detail'">{{contact.subtitle}}</p>
-            </div>
-            <div class="contactItemRight" v-if="option.styleType == 'detail'">
-                <p>部门：{{contact.department}}</p>
-                <p>岗位：{{contact.post}}</p>
-                <p>工号：{{contact.jobNumber}}</p>
-                <p>手机号：{{contact.phone}}</p>
-                <p>邮箱：{{contact.email}}</p>
-            </div>
-            <input class="selectButton" :type="option.selectType" @change="selectContact">
-            <div class="editButton" @click="edit">编辑</div>
-        </div>
-    </div>
-</template> -->
 <script>
     export default {
         name: 'bb-indep-contact-list',
         props: {
             /*默认值 支持v-model*/
             value:{
-                type:Object
+                type:Array
             },
             /*联系人列表数据
                 [{
+                    id:唯一标识
                     icon:"头像",
                     name:"姓名",
                     subtitle:"副标题",
@@ -40,19 +21,7 @@
 
             */
             contactList:{
-                type:Array,
-                default:function(){
-                    return [{
-                        icon:"https://img1.mklimg.com/g2/M00/2C/26/rBBrCVpqxeiAJ9ZNAAAa9tYa42U290.png!",
-                        name:"姓名",
-                        subtitle:"副标题",
-                        department:"部门",
-                        post:"岗位",
-                        jobNumber:"工号",
-                        phone:"18888888888",
-                        email:"email@test.com"
-                    }]
-                }
+                type:Array
             },
             /*联系人动态数据源*/
             contactListDs:{
@@ -128,6 +97,8 @@
                 type:Object,
                 default:function(){
                     return {
+                        editable:true,
+                        select:true,
                         styleType:"detail",
                         selectType:"checkbox",
                     }
@@ -137,7 +108,14 @@
         data() {
             return {
                 realContactlist:this.contactList,
-                valueBase:this.value
+                valueBase:this.value || [],
+                editContactKey:null, //当前编辑器联系人在数组中的下标
+                realOption:Object.assign({
+                        editable:true,
+                        select:true,
+                        styleType:"detail",
+                        selectType:"checkbox",
+                    },this.option),
             }
         },
         watch: {
@@ -158,7 +136,7 @@
                 },class:"subtitle"},[contact.subtitle]);
 
                 const leftContent = [];
-                switch(t.option.styleType){
+                switch(t.realOption.styleType){
                     case "simple":
                         leftContent.push(icon,name);
                         break;
@@ -180,36 +158,61 @@
                 const email = createElement('p',{props:{
                 },class:"email"},[`邮箱：${contact.email}`]);
 
-                const contactItemRight = createElement('div',{props:{
+                let contactItemRight = createElement('div',{props:{
                 },class:"contactItemRight"},[department,post,jobNumber,phone,email]);
+                if(t.contentTpl){
+                    contactItemRight = _TY_Tool.bbRender(t.contentTpl, createElement, t);
+                }
+                
+                let checked = false;
+                t.valueBase.forEach((val,index)=>{
+                    if(val.id == contact.id){
+                        checked = true
+                    }
+                });
+
                 //选择框
-                const select = createElement('input',{attrs:{type:t.option.selectType
+                const select = createElement('input',{attrs:{
+                    type:t.realOption.selectType,
+                    checked:checked
                 },class:"selectButton",on:{change:t.selectContact.bind(t,contact)}},[]);
                 //编辑安娜
-                const edit = createElement('div',{props:{type:t.option.selectType
-                },class:"editButton",on:{click:t.edit.bind(t,contact)}},["编辑"]);
-
+                const edit = createElement('div',{props:{type:t.realOption.selectType
+                },class:"editButton",on:{click:t.edit.bind(t,key)}},["编辑"]);
+                let itemClass = "contactItem";
                 const allContent = [];
-                switch(t.option.styleType){
+                switch(t.realOption.styleType){
                     case "simple":
-                        allContent.push(contactItemLeft,select);
+                        allContent.push(contactItemLeft);
+                        itemClass = itemClass + " simple";
                         break;
                     case "detail":
-                        allContent.push(contactItemLeft,contactItemRight,select,edit);
+                        allContent.push(contactItemLeft,contactItemRight);
+                        itemClass = itemClass + " detail";
                         break;
                     case "words":
-                        allContent.push(contactItemRight,select,edit);
+                        allContent.push(contactItemRight);
+                        itemClass = itemClass + " words";
                         break;
                 };
+                //可编辑
+                if(t.realOption.editable){
+                    allContent.push(edit);
+                };
+                //可选择
+                if(t.realOption.select){
+                    allContent.push(select);
+                };
+                itemClass = _TY_Tool.isPC()?itemClass:itemClass + " h5";
                 //联系人卡片
-                const contactItem = createElement('form',{props:{
+                const contactItem = createElement('div',{props:{
                     value:t.valueBase
-                },class:"contactItem",ref:"form"},allContent);
+                },class:itemClass},allContent);
                 children.push(contactItem);
             });
             //联系人卡片列表
             return createElement('div',{props:{
-                },class:"contactList"},[children]);
+                },class:"contactList",ref:"div"},[children]);
         },
         created: function () {
             const t = this;
@@ -236,14 +239,35 @@
                 }
             },
             //编辑当前项
-            edit(contact){
-                this.$emit("edit",contact);
+            edit(key){
+                const t = this;
+                t.editContactKey = key;
+                this.$emit("edit",t.realContactlist[key]);
+
             },
             //选中联系人
             selectContact(contact){
-                debugger
-
+                const t = this;
+                let checked = true
+                if(!t.valueBase.length){
+                    t.valueBase.push(contact);
+                }else{
+                    //判断是选中还是取消选中
+                    t.valueBase.forEach((val,key)=>{
+                        if(val == contact){
+                            t.valueBase.splice(key,1);
+                            checked = false
+                            this.$emit("checkedOff",t.valueBase);
+                        }
+                    });
+                    if(checked){
+                        t.valueBase = t.option.selectType == "radio"?[]:t.valueBase;
+                        t.valueBase.push(contact);
+                        this.$emit("checkedOn",t.valueBase);
+                    }
+                }
             },
+            //获取更多联系人
             getMore(){
                 const t = this;
                 if (t.moreDs) {
@@ -258,6 +282,20 @@
                         t.loading = false;
                     });
                 }
+            },
+            //外部设置列表
+            setContactList(list){
+                this.realContactlist = list;
+            },
+            //外部设置联系人卡片
+            setContact(contact){
+                const t = this;
+                if(t.editContactKey != null){
+                    t.realContactlist[t.editContactKey] = contact;
+                }else{
+                    this.$emit("add",contact);
+                    t.realContactlist.push(contact);
+                }
             }
         }
     }
@@ -265,14 +303,14 @@
 <style lang='less'>
     .contactList{
         .contactItem{
-            max-width: 11rem;
             position: relative;
             font-size: 0.5rem;
             box-sizing: border-box;
             border:1px solid rgba(204, 204, 204, 1);
             padding: 0.25rem;
             margin: 0.25rem;
-            float: left;
+            /*float: left;*/
+            display: inline-block;
             .contactItemLeft,.contactItemRight{
                 display: inline-block;
             }
@@ -286,7 +324,7 @@
                 }
             }
             .contactItemRight{
-                width: 73%;
+                width: 75%;
                 p{
                     word-break: break-all;
                 }
@@ -310,6 +348,27 @@
                     opacity:1;
                     transition: opacity .5s;
                 }
+            }
+        }
+        .h5{
+            display: list-item;
+            min-width: auto
+        }
+        .detail{
+            min-width: 10rem;
+        }
+        .simple{
+            border:none;
+            .contactItemLeft{
+                width: 100%;
+            }
+            .selectButton{
+                right: 0rem;
+            }
+        }
+        .words{
+            .contactItemRight{
+                width: 100%;
             }
         }
     }

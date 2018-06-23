@@ -72,7 +72,7 @@ import 'vant/lib/field/style';
         },
         data() {
             return {
-                valueBase:this.value,
+                valueBase:typeof this.value == "string"?Number(this.value):this.value,
                 valueBaseString:this.value,
                 show:false
             };

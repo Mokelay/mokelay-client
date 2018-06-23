@@ -33,7 +33,7 @@ import 'vant/lib/field/style';
         props: {
             //内容
             value:{
-                type:[Number,String,Boolean]
+                type:String,
             },
             /*模板默认值*/
             defaultValTpl:{
@@ -57,7 +57,7 @@ import 'vant/lib/field/style';
                 type:Object,
                 default:function() {
                     return {
-                        type:"number",
+                        type:"textarea",
                         placeholder:"",
                         label:"标签名",
                         icon:"",
@@ -67,7 +67,7 @@ import 'vant/lib/field/style';
                         error:false,
                         errorMessage:"",
                         autosize:true,
-                        maxText:0
+                        maxText:100000
                     };
                 }
             }
@@ -77,11 +77,12 @@ import 'vant/lib/field/style';
                 valueBase:this.value,
                 writeText:"0",
                 maxTextShow:this.option.maxText,
-                messageText:this.option.maxTextShow,
+                messageText:this.option.maxText,
                 isShowText:true
             };
         },
         mounted(){
+            console.log("this.value:",this.value);
             let t=this;
             _TY_Tool.buildDefaultValTpl(t,"valueBase");  
             t.$emit('mounted',this.valueBase); 
@@ -94,13 +95,20 @@ import 'vant/lib/field/style';
             }, 
             //输入事件
             onInput(key){
-                this.$emit('input',key);
-                this.$emit('change',key);
+                this.$emit('input',this.valueBase);
+                this.$emit('change',this.valueBase);
             },
-            //显示字符
+            //显示字符，超出限制字符截取
             keyup(){
                 this.writeText = this.valueBase.length;
-                
+                var t = this.valueBase;
+        		var w = this.writeText;
+        		var s = this.option.maxText;
+        		if(w>s){
+        			var a = this.valueBase.substring(0,s);
+        			this.valueBase = a;
+        			this.writeText = this.valueBase.length;
+        		}                
             }
 
         }
@@ -108,5 +116,5 @@ import 'vant/lib/field/style';
 </script>
 
 <style scoped>
-.showText{text-align:right; margin-right:5%;}
+.showText{text-align:right; margin-right:5%;font-size: 0.2rem;}
 </style>

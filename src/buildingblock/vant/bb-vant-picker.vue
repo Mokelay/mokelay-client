@@ -89,6 +89,10 @@ export default {
             }]
         } 
       },
+      //动态数据
+      valueDs:{
+        	type:Object
+       }, 
       //多层动态数据源,dsList[0] 表示第一层，dsList[1]表示第二层
       /**
         {
@@ -115,7 +119,23 @@ export default {
       },
     computed:{},
     watch:{},
+    mounted(){ 
+      	this.getData();
+    },
     methods:{
+    	//动态数据
+    	getData() {
+	            const t = this;
+	            if (t.valueDs) {
+	                Util.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.data = value;
+	                    });
+	                }, function (code, msg) {
+	                }); 
+	            }
+	   },
       //构建数据到vant-picker能识别
       buildData:function(list){
           let t=this;
@@ -164,6 +184,7 @@ export default {
         }*/
         onChange(picker,values){
           picker.setColumnValues(1,values[0]['children']);
+          this.$emit("onChange",values,picker);
         },
     }
 }

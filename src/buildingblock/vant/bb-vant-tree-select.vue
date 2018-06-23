@@ -20,52 +20,8 @@ export default {
     },
     props:{
         //分类显示所需的数据
-        items:{
+        itemsArray:{
             type:Array,
-            default:function(){
-                return [
-                    {
-                        text:"All city",
-                        children:[
-                            {
-                                text:"wenzhou",
-                                id:1003
-                            },{
-                                text:"hangzhou",
-                                id:1002
-                            },{
-                  text:"wuxi",
-                  id:1001
-                }
-                        ]
-                    },
-            {
-              text:"zhejiang",
-              children:[
-                {
-                  text:"wenzhou",
-                  id:2002
-                },{
-                  text:"hangzhou",
-                  id:2001
-                }
-              ]
-            },
-            {
-              text:"jiangsu",
-              children:[
-                {
-                  text:"wuxi",
-                  id:3002
-                },{
-                  text:"changzhou",
-                  id:3001
-                }
-              ]
-            },
-
-            ]
-            }
         },
         //左侧导航高亮的索引
         mainActiveIndex:{
@@ -76,18 +32,25 @@ export default {
         activeId:{
             type:[String,Number],
         	default:1001
-        }
-      
+        },
+        //动态数据源
+	    valueDs:{
+	      type:Object,
+	     },      
     },
    data(){ 
         return{
+           items:this.itemsArray,
            mainActiveIndexDefault:this.mainActiveIndex,
            activeIdDefault:this.activeId,
         }
       },
     watch:{
         
-      },    
+      },
+    mounted(){ 
+	   this.getData();
+	},    
     methods: {
        onNavClick(index) {
             //debugger
@@ -96,7 +59,36 @@ export default {
         onItemClick(data) {
             //debugger
           this.activeIdDefault = data.id;
-        } 
+        },
+        //获取数据
+        getData() {
+            const t = this;
+            if (t.valueDs) {
+                Util.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        t.realFields = value;
+                    });
+                }, function (code, msg) {
+                });
+            }
+        }, 
+        change:function(val){
+        	this.$emit("change",val);
+        	this.$emit("input",val);
+        },
+        //外部修改数据的方法
+        setItem:function(val){
+        	this.itemsArray = val;
+        },
+        setItem:function(...params){
+	        params.forEach((param,key)=>{
+	          if(param.type == "custom"){
+	            this.items = param;
+	          }
+	        });       		
+    	}
+        
     }
   }
 </script>

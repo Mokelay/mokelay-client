@@ -143,7 +143,7 @@ export default {
             "after-read":t.afterRead,
         },on:{
             oversize:t.oversize
-        }},[children]);
+        }},[children,this.$slots.default]);
     },
     watch:{
         value(val){

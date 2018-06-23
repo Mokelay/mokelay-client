@@ -142,7 +142,8 @@ export default {
    data(){ 
         return{
             valueBase:this.value,
-            realContent:this.content         
+            realContent:this.content,
+            valueBaseString:''         
         }
       },
     render: function(createElement){
@@ -166,12 +167,27 @@ export default {
     computed:{
         
     },
-    watch:{
-        value(val){
-          this.valueBase = val;
-        }
-      },    
+    mounted(){
+    	const t = this;
+    	t.getData();
+    }, 
     methods: {
+        //动态获取展示内容
+        getData(){
+            const t = this;
+            if (t.contentDs) {
+                t.loading = true;
+                _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        t.loading = false;
+                        const {dataKey, value} = item;
+                        t.contentDs = value;
+                    });
+                }, function (code, msg) {
+                    t.loading = false;
+                });
+            }
+        },    
       //事件submit
         onSubmit(val){
           let t=this;

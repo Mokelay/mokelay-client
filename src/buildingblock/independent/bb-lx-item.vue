@@ -1,24 +1,22 @@
 <template>
-    <div class="content">
+    <div class="itemContent">
     	<span class="leftStyle"> 
     		<img :src="leftImgShow">
     	</span>
     	<span class="centerStyle">				
-    		<h1 :style="centerTitle">{{content.title}}</h1>
+    		<h1 :style="centerTitle">{{item.title}}</h1>
     		<p class="centerContent">
     			<b class="centerContentTime">	
     				<i><img :src="contentTimeIcon" :style="contentTimeIconStyle"></i>
-    				<strong :style="contentTimeStyle">{{content.time}}</strong>
+    				<strong :style="contentTimeStyle">{{item.time}}</strong>
     			</b>
     			<b class="centerContentTime">	
     				<i><img :src="userNumberIcon"  :style="userNumberIconStyle"></i>
-    				<strong :style="userNumberStyle">{{content.userNumber}}{{content.userText}}</strong>
+    				<strong :style="userNumberStyle">{{item.userNumber}}{{item.userText}}</strong>
     			</b>	
     		</p>
     	</span>
-    	<span class="rightStyle">	
-    		<b :style="rightText">{{content.text}}</b>			
-    	</span>
+    	<span class="bb-layout-seriation"></span>
     </div>
 </template>
 
@@ -145,7 +143,7 @@
                 }               
             },
             //内容
-            content:{
+            item:{
             	type:Object,
             	default:function(){
             		return {
@@ -156,11 +154,33 @@
             			leftImg:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
             		}
             	}
-            }
+            },
+            content:{
+	          type:Array,
+	          default:function(){
+	            return [{                      //页面内容
+	                uuid:'1',
+	                alias:'bb-words',                   //积木别名
+	                aliasName:'a',               //中文名称
+	                group:'',                   //积木分组 表单项显示的位置
+	                attributes:{
+	                  value:"123123"
+	                },              //积木属性
+	                animation:[],
+	                interactives:[],
+	                layout:{                    //积木布局
+	                }
+	            }];
+	          }
+        	},
+        	 //初始化动态数据
+            itemDs:{
+				type:Object
+            },
         },
         data() {
             return {
-               leftImgShow:this.content.leftImg,
+               leftImgShow:this.item.leftImg,
                contentTimeIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
                userNumberIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
             }
@@ -269,21 +289,43 @@
         },
         watch: {
         },
+        render: function(createElement){
+	        const t = this;
+	        const bb = _TY_Tool.bbRender(t.realContent, createElement, t);
+	        const bbTpl = createElement('template',{slot:"tip"},[bb]);
+	        return createElement('bb-layout-seriation',{props:{
+	            "text":t.text,
+	        },on:{
+	            
+	        }},[bbTpl]);
+    	},
         created: function () {
         },
         mounted:function(){
-           
+           this.getItem();
         },
         methods: {
-            
+            //动态数据
+            getItem() {
+	            const t = this;
+	            if (t.itemDs) {
+	                Util.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.item = value;
+	                    });
+	                }, function (code, msg) {
+	                });
+	            }
+	        },
         }
     }
 </script>
 <style lang='less' scoped>
-    .content{
+    .itemContent{
         width: 100%;
         display: flex;
-        justify-content:center;
+        justify-content:left;
         align-items:center;
     }
     .leftStyle{

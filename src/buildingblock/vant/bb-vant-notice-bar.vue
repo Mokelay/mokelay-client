@@ -88,33 +88,28 @@ export default {
     computed:{
         
     },
-    mounted(){
-    	const t = this;
-    	t.getData();
-    },
+    mounted(){ 
+	    this.getData();
+	},
     //事件click
     methods: {
         //点击事件
         click(param){
             this.$emit('click',param);
         },
-        //动态获取展示内容
-        getData(){
+    	//获取数据
+        getData() {
             const t = this;
             if (t.valueDs) {
-                t.loading = true;
-                _TY_Tool.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
+                Util.getDSData(t.valueDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
-                        t.loading = false;
                         const {dataKey, value} = item;
-                        t.valueBase = value;
-                        t.emit("buttonFinish",t);
+                        t.realFields = value;
                     });
                 }, function (code, msg) {
-                    t.loading = false;
                 });
             }
-        },    
+        },        
     }
 }
 </script>

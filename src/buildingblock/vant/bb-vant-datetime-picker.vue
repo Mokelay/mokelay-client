@@ -1,17 +1,17 @@
 <template>
   <vant-datetime-picker 
     :type="datetimeType"
-    :min-date="minDate"
-    :max-date="maxDate"
-    :min-hour="minHour"
-    :max-hour="maxHour"
+    :min-date="realMinDate"
+    :max-date="realMaxDate"
+    :min-hour="realMinHour"
+    :max-hour="realMaxHour"
     :title="title"
-    :loading="loading"
+    :loading="option.loading"
     :value="valueBase"
-    :item-height="itemHeight"
+    :item-height="option.itemHeight"
     :confirm-button-text="confirmButtonText"
-    :cancel-button-text="cancelButtonText"
-    :visible-item-count="visibleItemCount"
+    :cancel-button-text="option.cancelButtonText"
+    :visible-item-count="option.visibleItemCount"
     @change="onChange"
     @confirm="onConfirm"
     @cancel="onCancel"
@@ -35,50 +35,23 @@ export default {
         },
         //可选的最小日期
         minDate:{
-          type:Date,
+          type:String,
+          default:"1990/01/01"
         },
         //可选的最大日期
         maxDate:{
-          type:Date,
+          type:String,
+          default:"2050/10/01"
         },
         //可选的最小小时
         minHour:{
-          type:Number,
-          default:0
+       	  type:Number,
+       	  default:0,
         },
         //可选的最大小时
         maxHour:{
           type:Number,
-          default:23
-        },
-        //顶部栏标题
-        title:{
-          type:String,
-        },
-        //是否显示加载状态
-        loading:{
-          type:Boolean,
-          default:false
-        },
-        //选项高度
-        itemHeight:{
-          type:Number,
-          default:44
-        },
-        //确认按钮文字
-        confirmButtonText:{
-          type:String,
-          default:"确认"
-        },
-        //取消按钮文字
-        cancelButtonText:{
-          type:String,
-          default:"取消"
-        },
-        //可见选项个数
-        visibleItemCount:{
-          type:Number,
-          type:5
+          default:10
         },
         value:{
           type:[String,Number,Date]
@@ -86,40 +59,73 @@ export default {
         defaultValTpl:{
             type:String
         },
+        //其他属性
+        option:{
+        	type:Object,
+        	default:function(){
+        		return {
+	        		title:"",  //标题
+	        		loading:false,  //是否显示加载状态
+	        		itemHeight:44,  //行高
+	        		confirmButtonText:"确认",  //确认按钮文字
+	        		cancelButtonText:"取消",	//取消按钮文字
+	        		visibleItemCount:3,		//可显示选项个数
+        		}
+        	}
+        }
     },
    data(){ 
         return{
-          valueBase:this.value
-        }
+          valueBase:typeof this.value == "string"?new Date(this.value):this.value,
+          title:this.option.title,
+          confirmButtonText:this.option.confirmButtonText,
+          realMaxDate:new Date(this.maxDate),
+          realMinDate:new Date(this.minDate),
+          realMinHour:this.minHour,
+          realMaxHour:this.maxHour,
+        };
       },
       watch:{
         value(val){
-          this.valueBase = val;
+          this.valueBase = val;         
         }
       }, 
-    computed:{
-
-    },
+    computed:{},
     mounted:function(){
       let t=this;
       _TY_Tool.buildDefaultValTpl(t,"valueBase");
+      t.valueBase = new Date(t.valueBase);
     },
     methods:{
+    	//改变
         onChange(val){
           let t=this;
           t.$emit('input',val,t);
           t.$emit('onChange',val,t);
-         },  
+         },
+         //确认  
         onConfirm(val){
           let t=this;
           t.$emit('input',val,t);
           t.$emit('onConfirm',val,t);
-         },  
+         }, 
+         //取消 
         onCancel(val){
+        	console.log(this.value);
           let t=this;
           t.$emit('input',val,t);
           t.$emit('onCancel',val,t);
-         },      }
+         },
+
+    	//外部设值
+    	setTime:function(...params){
+	        params.forEach((param,key)=>{
+	          if(param.type == "custom"){
+	            this.valueBase = new Date(param.arguments);
+	          }
+	        });       		
+    	}
+     }
 }
 </script>
 
