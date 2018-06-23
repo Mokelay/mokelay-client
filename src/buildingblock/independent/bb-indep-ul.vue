@@ -80,6 +80,8 @@
             let t=this;
             //根据主题修改content
             t.changeContentByTheme();
+            //加载数据
+            t.loadData();
         },
         mounted:function(){
             let t=this;
