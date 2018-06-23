@@ -119,11 +119,11 @@ export default {
 
     	//外部设值
     	setTime:function(...params){
-        params.forEach((param,key)=>{
-          if(param.type == "custom"){
-            this.valueBase = new Date(param.arguments);
-          }
-        });       		
+	        params.forEach((param,key)=>{
+	          if(param.type == "custom"){
+	            this.valueBase = new Date(param.arguments);
+	          }
+	        });       		
     	}
      }
 }

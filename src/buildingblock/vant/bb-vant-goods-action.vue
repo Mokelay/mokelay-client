@@ -69,7 +69,7 @@ export default {
         
     },
     mounted(){ 
-      this.getBigBtns();
+      	this.getBigBtns();
     	this.getMiniBtns();
     },
     //事件click

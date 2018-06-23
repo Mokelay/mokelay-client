@@ -17,6 +17,7 @@ import bbiconselect from './bb-icon-select.vue';
 import bbicon from './bb-icon.vue';
 import bbcsseditor from './bb-css-editor.vue';
 import bbbuttoncsseditor from './bb-button-css-editor.vue';
+import bbh5config from './bb-h5-config.vue';
 
 export default {
 	install: function(Vue) {
@@ -38,6 +39,7 @@ export default {
 		Vue.component('bb-icon', bbicon);
 		Vue.component('bb-css-editor', bbcsseditor);
 		Vue.component('bb-button-css-editor', bbbuttoncsseditor);
+		Vue.component('bb-h5-config', bbh5config);
 
 		console.log("成功加载模块积木;");
 	}

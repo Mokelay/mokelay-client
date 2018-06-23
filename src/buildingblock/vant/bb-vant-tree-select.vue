@@ -81,6 +81,14 @@ export default {
         setItem:function(val){
         	this.itemsArray = val;
         },
+        setItem:function(...params){
+	        params.forEach((param,key)=>{
+	          if(param.type == "custom"){
+	            this.items = param;
+	          }
+	        });       		
+    	}
+        
     }
   }
 </script>

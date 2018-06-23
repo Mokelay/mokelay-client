@@ -34,6 +34,7 @@ import bbindepsku from './bb-indep-sku';
 import bbindepcontactlist from './bb-indep-contact-list';
 import bbindepBlogPost from './bb-indep-blog-post';
 import bbindepBlog from './bb-indep-blog';
+import bbindepform from './bb-indep-form';
 
 import helloworld from './bb-hello-world'
 
@@ -77,6 +78,7 @@ export default {
 		Vue.component('bb-indep-contact-list', bbindepcontactlist);
 		Vue.component('bb-indep-blog-post', bbindepBlogPost);
 		Vue.component('bb-indep-blog', bbindepBlog);
+		Vue.component('bb-indep-form', bbindepform);
 
 		Vue.component('bb-hello-world', helloworld);
 
