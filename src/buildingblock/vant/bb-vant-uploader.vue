@@ -11,8 +11,12 @@ export default {
         "vant-icon":Icon
     },
     props:{
+        /*默认值  回填图片  音频 或者 视频
+            "http://www.baidu.com/1.img,http://www.baidu.com/2.img"
+            ["http://www.baidu.com/1.img","http://www.baidu.com/2.img"]
+        */
         value:{
-            type:[String,Number]
+            type:[Array,String]
         },
         //文件读取结果类型，可选值dataUrl，test
         resultType:{
@@ -108,10 +112,24 @@ export default {
         uploadDs:{
             type:Object
         },
+        /*其他属性设置
+            {
+                theme:"card" "photograph" "custom"
+            }
+        */
+        option:{
+            type:Object,
+            default:function(){
+                return {
+                    theme:"card"
+                };
+            }
+            
+        }
     },
    data(){ 
         return{
-            valueBase:this.value,
+            valueBase:typeof this.value == "string"?this.value.split(","):this.value,
             uploadUrl:""
         };
     },
@@ -130,11 +148,26 @@ export default {
     },
     render: function(createElement){
         const t = this;
-        let children = createElement('vant-icon',{props:{name:'photograph'}},[]);
-        if(t.content){
-            children = _TY_Tool.bbRender(t.content, createElement, t);
+        let children = [];
+        let className = "default";
+        switch(t.option.theme){
+            case "card":
+                children = createElement('i',{props:{},class:'ty ty-icon_tianjia'},[]);
+                className = "card";
+                break;
+            case "photograph":
+                children = createElement('vant-icon',{props:{name:'photograph'}},[]);
+                className = "";
+                break;
+            case "custom":
+                if(t.content){
+                    children = _TY_Tool.bbRender(t.content, createElement, t);
+                    className = "";
+                }
+                break;
         }
-        return createElement('vant-uploader',{props:{
+        
+        const vantUpload = createElement('vant-uploader',{props:{
             "resultType":t.resultType,
             "accept":t.accept,
             "disabled":t.disabled,      
@@ -143,7 +176,18 @@ export default {
             "after-read":t.afterRead,
         },on:{
             oversize:t.oversize
-        }},[children,this.$slots.default]);
+        },class:className},[children,this.$slots.default]);
+        //渲染已经上传的图片或音频或视频
+        const picList = [];
+        t.valueBase.forEach((ele,index)=>{
+            const Img = createElement('img',{props:{},attrs:{src:ele},class:"uploaded-child"},[vantUpload]);
+            const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
+            const item = createElement('li',{props:{},class:"uploaded-item"},[Img,del]);
+            picList.push(item);
+        }); 
+        const ul = createElement('ul',{props:{},class:"uploaded-item"},[picList]);
+
+        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
     },
     watch:{
         value(val){
@@ -154,7 +198,6 @@ export default {
       //事件submit
         oversize(val){
             let t=this;
-            t.$emit('input',val,t);
             t.$emit('oversize',val,t);
         },
         //读取文件前
@@ -164,6 +207,7 @@ export default {
         //读取完成后
         afterRead(file){
             this.$emit("after-read",file);
+            this.uploadeFile(file);
         },
         //文件上传
         uploadeFile(file){
@@ -178,20 +222,71 @@ export default {
             console.log(param.get('file')); 
             //添加请求头
             let config = {
-                headers:{'Content-Type':'multipart/form-data'}
+                headers:{
+                    'Content-Type':'multipart/form-data'
+                }
             };  
             _TY_Tool.post(t.uploadUrl,param,config)
             .then(response=>{
                 t.$emit("upload-success",response.data);
                 console.log(response.data);
-            })
+                t.$emit('input',t.valueBase);
+                t.$emit('change',t.valueBase);
+            });
         },
         //获取子积木
         loadChildBB(){
             let t=this;
             return _TY_Tool.loadChildBB(t);                
+        },
+        //删除图片
+        remove(index){
+            const t = this;
+            t.valueBase.splice(index,1);
+            t.$emit('input',t.valueBase);
+            t.$emit('change',t.valueBase);
         }
     }
   }
 </script>
+<style lang="less">
+    .bb-vant-uploader{
+        margin:0.5rem;
+        width: auto;
+        display: inline-block;
+        position: relative;
+        .card{
+            width: 2rem;
+            height: 2rem;
+            text-align: center;
+            line-height: 2rem;
+            background: rgba(142, 140, 140, 0.2);
+            color: #999999;
+            display: inline-block;
+            margin-bottom: 0.1rem;
+        }
+        .uploaded-item{
+            display: inline-block;
+            position: relative;
+            margin-right: 0.1rem;
+            &:hover{
+                &>i{
+                    opacity:1;
+                    transition: opacity .5s;
+                }
+            }
+            &>i{
+                color: #999;
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 0.5rem;
+                opacity:1;
+            }
+            .uploaded-child{
+                width: 2rem;
+            }
+        }
+    }
+</style>
 
