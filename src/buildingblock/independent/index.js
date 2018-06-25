@@ -35,6 +35,9 @@ import bbindepcontactlist from './bb-indep-contact-list';
 import bbindepBlogPost from './bb-indep-blog-post';
 import bbindepBlog from './bb-indep-blog';
 import bbindepform from './bb-indep-form';
+import bbindepBlogAction from './bb-indep-blog-action';
+import bbindepBlogPraise from './bb-indep-blog-praise';
+import bbindepBlogComment from './bb-indep-blog-comment';
 
 import helloworld from './bb-hello-world'
 
@@ -79,6 +82,10 @@ export default {
 		Vue.component('bb-indep-blog-post', bbindepBlogPost);
 		Vue.component('bb-indep-blog', bbindepBlog);
 		Vue.component('bb-indep-form', bbindepform);
+		Vue.component('bb-indep-blog-action', bbindepBlogAction);
+		Vue.component('bb-indep-blog-praise', bbindepBlogPraise);
+		Vue.component('bb-indep-blog-comment', bbindepBlogComment);
+
 
 		Vue.component('bb-hello-world', helloworld);
 

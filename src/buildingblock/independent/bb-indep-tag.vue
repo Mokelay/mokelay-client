@@ -15,8 +15,10 @@
 			<b 
 			:style="tagTwoLabelWrite" 
 			@click="customPopShow"
+			v-for="custom in customs"
+			@click.stop="customStop"
 			>
-			{{customWriteShow}}
+			{{custom.writeShow}}
 			</b>
 		</span>
 		<div class="customPop" v-show="showPop"> 
@@ -39,9 +41,14 @@
 	export default {
 		name:"tagContent",
 		props:{
-			customWrite:{
-				style:String,
-				default:"111",
+			//自定义数组
+			customs:{
+				type:Array,
+				default:function(){
+					return [{
+						writeShow:"自定义",
+					}]
+				}
 			},
 			show:{
 				type:Boolean,
@@ -220,10 +227,30 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
+ 				//点击时将增加的数组放置于原数组前
+ 				var c = this.customWriteShow;
+ 				var w = { writeShow : c};
+ 				this.customs.unshift(w);
+ 				//自定义标签不能超过三个
+ 				var l =this.customs.length;
+ 				if(l > 3){
+ 					this.customs.splice(3);
+ 				};
+ 				
  			},
  			//点击自定义的事件
  			customPopShow:function(){
  				this.showPop = true;
+ 				
+ 			},
+ 			customStop:function(e){
+ 				var z = "自定义";
+ 				var v =this.customWriteShow;
+ 				if( z != v){
+ 					console.log("1");
+ 					//this.customs.click().self.prevent;
+ 					e.stopPropagation();
+ 				}
  			},
 		},
 	}
