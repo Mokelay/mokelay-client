@@ -227,7 +227,8 @@
                     t.realContent.forEach((bbEle,index)=>{
                         //根据group 来区分是否这个item 可以编辑
                         const notCanOpt = bbEle.group&&bbEle.group==='notCanOpt';
-                        const bbItem = createElement('bb-seriation-item-edit', {
+                        const tag = _TY_Tool.isPC()?'bb-seriation-item-edit':'bb-seriation-item-edit-h5'
+                        const bbItem = createElement(tag, {
                             ref:'bb-seriation-item-edit-' + index,
                             props:{
                                 content:bbEle,
@@ -436,6 +437,10 @@
                             t.onBlur();
                     }   
                  };
+            },
+            //外部获取最新的content
+            getContents(){
+                return this.realContent;
             }
         },
         components:{

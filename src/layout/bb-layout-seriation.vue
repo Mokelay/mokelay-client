@@ -127,9 +127,15 @@
                 default:false
             }
         },
-         data() {
+        watch:{
+            content(val){
+                this.realContent = val;
+            }
+        },
+        data() {
             return {
                 realShow:!this.defaultHide,
+                realContent:this.content
             }
         },
         methods: {
@@ -205,7 +211,7 @@
             },
             renderBB:function(createElement){
                 const t = this;
-                const bbList = _TY_Tool.bbRender(t.content, createElement, t);
+                const bbList = _TY_Tool.bbRender(t.realContent, createElement, t);
                 //水平排列垂直排列控制
                 bbList.forEach((bbEle,index)=>{
                     const bbItem = createElement('div', {style:{flex:1}},[bbEle]);
