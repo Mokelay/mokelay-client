@@ -16,6 +16,7 @@ var env = {
 	prd: {
 		name: 'prd',
 		apiHost: CurrentDomain,
+		h5Host: CurrentDomain,
 		ssoURL: CurrentDomain + "/#/ty-login",
 		hosts: {
 			'default': CurrentDomain
