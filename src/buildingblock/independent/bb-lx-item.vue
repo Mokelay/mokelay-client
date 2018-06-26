@@ -19,7 +19,7 @@
 	    	</span>
 	    	<span class="bb-layout-seriation"></span>
 	    </div>
-	    <bb-vant-cell-swipe :content="rightContent"/>	
+	    	
 	</bb-vant-cell-swipe>
 </template>
 
@@ -193,26 +193,24 @@
                rightContent:[{                      //页面内容
                         uuid:'1',
                         alias:'bb-vant-button',                   //积木别名
-                        aliasName:'a',               //中文名称
+                        aliasName:'删除',               //中文名称
                         group:'right',                   //积木分组 表单项显示的位置
                         attributes:{
-                          selectText:"right"
-                        },              //积木属性
+                          selectText:"right",
+                          width:"100%",
+                        },             
                         animation:[],
                         interactives:[],
-                        layout:{                    //积木布局
-                        }
-                    },{                      //页面内容
-                        uuid:'2',
-                        alias:'bb-vant-button',                   //积木别名
-                        aliasName:'a',               //中文名称
-                        group:'left',                   //积木分组 表单项显示的位置
-                        attributes:{
-                          selectText:"left"
-                        },              //积木属性
-                        animation:[],
-                        interactives:[],
-                        layout:{                    //积木布局
+                        layout:{
+                        	bgColor:"#f00",
+                        	height:"1rem",
+                        	border:{                
+                                color:"#f00",       
+                            },
+                            size:{
+                            	width:"100%",
+                            	height:"72px",
+                            }          
                         }
                     }]
             }
@@ -359,6 +357,7 @@
         display: flex;
         justify-content:left;
         align-items:center;
+        font-size:0;
     }
     .leftStyle{
     	width:15%;
@@ -383,13 +382,21 @@
     	width:50%;
         display: flex;
         justify-content:left;
-        align-items:flex-end;
+        align-items:flex-start;
         overflow:hidden;
+    }
+    .centerContentTime i{
+    	display:inline-block;
+    	height:10px;
     }
     .centerContentUser{
     	width:50%;
     	display: flex;
         justify-content:center;
         align-items:center;
+    }
+    .van-cell-swipe__right div{
+    	width:100%;
+    	height:100%;
     }
 </style>

@@ -115,6 +115,14 @@ export default {
                 });
             }
         },
+        //外部获取头像数据
+        setCommentImg:function(...params){
+            params.forEach((param,key)=>{
+                if(param.type == "custom"){
+                    this.imgs = param.arguments
+                }
+            })        		
+        },
      }
 }
 </script>

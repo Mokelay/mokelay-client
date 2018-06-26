@@ -25,6 +25,7 @@
 			<b 
 			:style="tagTwoLabelWrite" 
 			@click="customPopShow('add')"
+			v-show="customButton"
 			>
 			自定义
 			</b>
@@ -150,7 +151,8 @@
                valueBase:this.value,
                showPop:this.show,
                customWriteShow:this.customWrite,
-               customEditKey:"add"
+               customEditKey:"add",
+               customButton:true,
             }
         },
 		computed:{
@@ -251,7 +253,9 @@
  				//自定义标签不能超过三个
  				var l =this.customs.length;
  				if(l > 3){
+ 					//console.log(this.customButton);
  					this.customs.splice(3);
+ 					this.customButton = false;
  				};
  				//清空输入框
  				this.valueBase = null;
@@ -262,7 +266,7 @@
  				this.customEditKey = key
  				this.valueBase = key == "add"?"":this.customs[key]['writeShow'];
  			},
- 			customStop:function(e){
+ 			/*customStop:function(e){
  				var z = "自定义";
  				var v =this.customWriteShow;
  				if( z != v){
@@ -270,7 +274,7 @@
  					//this.customs.click().self.prevent;
  					e.stopPropagation();
  				}
- 			},
+ 			},*/
 		},
 	}
 </script>
