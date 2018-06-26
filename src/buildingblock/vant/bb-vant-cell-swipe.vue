@@ -102,7 +102,7 @@ import 'vant/lib/cell-swipe/style';
                 "right-width":t.rightWidth,
                 "left-width":t.leftWidth,
                 "on-close":t.onClose
-            }},children);
+            }},[children,t.$slots.default]);
         },
         mounted(){
 
