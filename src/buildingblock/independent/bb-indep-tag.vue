@@ -13,12 +13,20 @@
 		</span>
 		<span> 
 			<b 
-			:style="tagTwoLabelWrite" 
-			@click="customPopShow"
-			v-for="custom in customs"
-			@click.stop="customStop"
+			:style="tagTwoLabelWrite"
+			v-for="(custom,key) in customs" 
+			@click="customPopShow(key)"
 			>
 			{{custom.writeShow}}
+			</b>
+		</span>
+		<!-- 自定义添加按钮 -->
+		<span> 
+			<b 
+			:style="tagTwoLabelWrite" 
+			@click="customPopShow('add')"
+			>
+			自定义
 			</b>
 		</span>
 		<div class="customPop" v-show="showPop"> 
@@ -45,9 +53,7 @@
 			customs:{
 				type:Array,
 				default:function(){
-					return [{
-						writeShow:"自定义",
-					}]
+					return []
 				}
 			},
 			show:{
@@ -144,6 +150,7 @@
                valueBase:this.value,
                showPop:this.show,
                customWriteShow:this.customWrite,
+               customEditKey:"add"
             }
         },
 		computed:{
@@ -227,21 +234,33 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
- 				//点击时将增加的数组放置于原数组前
- 				var c = this.customWriteShow;
- 				var w = { writeShow : c};
- 				this.customs.unshift(w);
+
+ 				if(this.customWriteShow){
+ 					//点击时将增加的数组放置于原数组前
+	 				var c = this.customWriteShow;
+	 				if(this.customEditKey == "add"){
+	 					var w = { writeShow : c};
+	 					this.customs.unshift(w);
+	 				}else{
+	 					this.customs[this.customEditKey]['writeShow'] = c;
+	 				}
+ 				}else{
+ 					const arr = this.customEditKey == "add"?null:this.customs.splice(this.customEditKey,1);
+ 				}
+ 				
  				//自定义标签不能超过三个
  				var l =this.customs.length;
  				if(l > 3){
  					this.customs.splice(3);
  				};
- 				
+ 				//清空输入框
+ 				this.valueBase = null;
  			},
  			//点击自定义的事件
- 			customPopShow:function(){
+ 			customPopShow:function(key){
  				this.showPop = true;
- 				
+ 				this.customEditKey = key
+ 				this.valueBase = key == "add"?"":this.customs[key]['writeShow'];
  			},
  			customStop:function(e){
  				var z = "自定义";
