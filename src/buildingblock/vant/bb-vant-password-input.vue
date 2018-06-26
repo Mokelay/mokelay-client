@@ -31,7 +31,7 @@ import 'vant/lib/number-keyboard/style';
         props: {
             //v-model
             value:{
-                type:Number
+                type:[Number,String]
             },
             /*其他属性配置
                 {
