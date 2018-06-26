@@ -83,7 +83,7 @@ import 'vant/lib/cell-swipe/style';
         data() {
             return {
                 valueBase:this.value,
-                realContent:this.content
+                realContent:this.content || []
             };
         },
         render: function(createElement){
