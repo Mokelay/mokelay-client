@@ -1,5 +1,5 @@
 <template>
-	<bb-vant-cell-swipe> 
+	<bb-vant-cell-swipe :content="rightContent"> 
 	    <div class="itemContent">
 	    	<span class="leftStyle"> 
 	    		<img :src="leftImgShow">
@@ -190,22 +190,31 @@
                leftImgShow:this.item.leftImg,
                contentTimeIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
                userNumberIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-               rightContent:{
-		          type:Object,
-		          default:{                      //页面内容
-		                uuid:'1',
-		                alias:'bb-vant-button',                   //积木别名
-		                aliasName:'a',               //中文名称
-		                group:'right',                   //积木分组 表单项显示的位置
-		                attributes:{
-		                  value:"123123"
-		                },              //积木属性
-		                animation:[],
-		                interactives:[],
-		                layout:{                    //积木布局
-		                }
-		            }
-        		},
+               rightContent:[{                      //页面内容
+                        uuid:'1',
+                        alias:'bb-vant-button',                   //积木别名
+                        aliasName:'a',               //中文名称
+                        group:'right',                   //积木分组 表单项显示的位置
+                        attributes:{
+                          selectText:"right"
+                        },              //积木属性
+                        animation:[],
+                        interactives:[],
+                        layout:{                    //积木布局
+                        }
+                    },{                      //页面内容
+                        uuid:'2',
+                        alias:'bb-vant-button',                   //积木别名
+                        aliasName:'a',               //中文名称
+                        group:'left',                   //积木分组 表单项显示的位置
+                        attributes:{
+                          selectText:"left"
+                        },              //积木属性
+                        animation:[],
+                        interactives:[],
+                        layout:{                    //积木布局
+                        }
+                    }]
             }
         },
         computed:{
