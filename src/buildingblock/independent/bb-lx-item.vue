@@ -1,28 +1,34 @@
 <template>
-    <div class="itemContent">
-    	<span class="leftStyle"> 
-    		<img :src="leftImgShow">
-    	</span>
-    	<span class="centerStyle">				
-    		<h1 :style="centerTitle">{{item.title}}</h1>
-    		<p class="centerContent">
-    			<b class="centerContentTime">	
-    				<i><img :src="contentTimeIcon" :style="contentTimeIconStyle"></i>
-    				<strong :style="contentTimeStyle">{{item.time}}</strong>
-    			</b>
-    			<b class="centerContentTime">	
-    				<i><img :src="userNumberIcon"  :style="userNumberIconStyle"></i>
-    				<strong :style="userNumberStyle">{{item.userNumber}}{{item.userText}}</strong>
-    			</b>	
-    		</p>
-    	</span>
-    	<span class="bb-layout-seriation"></span>
-    </div>
+	<bb-vant-cell-swipe> 
+	    <div class="itemContent">
+	    	<span class="leftStyle"> 
+	    		<img :src="leftImgShow">
+	    	</span>
+	    	<span class="centerStyle">				
+	    		<h1 :style="centerTitle">{{item.title}}</h1>
+	    		<p class="centerContent">
+	    			<b class="centerContentTime">	
+	    				<i><img :src="contentTimeIcon" :style="contentTimeIconStyle"></i>
+	    				<strong :style="contentTimeStyle">{{item.time}}</strong>
+	    			</b>
+	    			<b class="centerContentTime">	
+	    				<i><img :src="userNumberIcon"  :style="userNumberIconStyle"></i>
+	    				<strong :style="userNumberStyle">{{item.userNumber}}{{item.userText}}</strong>
+	    			</b>	
+	    		</p>
+	    	</span>
+	    	<span class="bb-layout-seriation"></span>
+	    </div>
+	    <bb-vant-cell-swipe :content="rightContent"/>	
+	</bb-vant-cell-swipe>
 </template>
 
 <script>
+
+
     export default {
         name: 'bb-text',
+        
         props: {
             //左侧样式
             leftStyleConfig:{
@@ -177,12 +183,29 @@
             itemDs:{
 				type:Object
             },
+            
         },
         data() {
             return {
                leftImgShow:this.item.leftImg,
                contentTimeIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
                userNumberIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+               rightContent:{
+		          type:Object,
+		          default:{                      //页面内容
+		                uuid:'1',
+		                alias:'bb-vant-button',                   //积木别名
+		                aliasName:'a',               //中文名称
+		                group:'right',                   //积木分组 表单项显示的位置
+		                attributes:{
+		                  value:"123123"
+		                },              //积木属性
+		                animation:[],
+		                interactives:[],
+		                layout:{                    //积木布局
+		                }
+		            }
+        		},
             }
         },
         computed:{
