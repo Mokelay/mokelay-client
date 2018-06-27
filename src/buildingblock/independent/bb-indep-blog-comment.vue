@@ -22,6 +22,10 @@
 				</div>
 			</span>
 		</div>
+		<div class="blogWriteReply" v-show="blogWriteReplyShow"> 
+			<input v-model="valueBase">
+			<button @click="replySubmit">发表</button>
+		</div>
   </div>
 </template>
 <script>  
@@ -62,7 +66,7 @@ export default {
     					replyContent:"111111111",
     				}]   			
     			}]*/
-    	replys:{
+    	replysArray:{
     		type:Array,
     	},
     	//动态数据
@@ -216,10 +220,16 @@ export default {
     			}
     		}    
     	},
+    	model:{
+           type:[String,Number]
+        },
     },
    	data(){ 
         return{    	
         	replyIcon:"ty-icon_xiaoxi1",
+        	replys:this.replysArray,
+        	valueBase:this.model,
+        	blogWriteReplyShow:false,
         }
     },
     watch:{}, 
@@ -367,11 +377,10 @@ export default {
         getData() {
             const t = this;
             if (t.commentDs) {
-                Util.getDSData(t.commentDs, _TY_Tool.buildTplParams(t), function (data) {
+                _TY_Tool.getDSData(t.commentDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
                         t.replys = value;
-                        console.log(value);
                     });
                 }, function (code, msg) {
                 });
@@ -379,14 +388,20 @@ export default {
         },  
         //一级回复
         replyClick:function(event){
-        	var useName = event.currentTarget.user;
-        	console.log(useName);
+        	this.blogWriteReplyShow = true;
+        	var useName = event.currentTarget;
+        	console.log(reply);
 
         }, 
         //二级回复
         replyContentClick:function(){
 
-        },  
+        }, 
+        //提交评论
+        replySubmit:function(){
+        	var val = this.valueBase;
+        	console.log(val);
+        },
     }
 }
 </script>
@@ -409,6 +424,27 @@ export default {
 	.replycomment{
 		line-height:20px;
 	}
-
+	.blogWriteReply{
+		width:100%;
+		height:auto;
+		display:flex;
+		justify-content:left;
+	}
+	.blogWriteReply input{
+		width:75%;
+		height:35px;
+		background:none;
+		border:1px solid #eee;
+		border-radius:3px;
+		font-size:14px;
+	}
+	.blogWriteReply button{
+		border:1px solid #33befe;
+		background:#33befe;
+		height:35px;
+		width:25%;
+		color:#fff;
+		font-size:14px;
+	}
 </style>
 
