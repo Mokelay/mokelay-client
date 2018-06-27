@@ -153,6 +153,7 @@
                customWriteShow:this.customWrite,
                customEditKey:"add",
                customButton:true,
+               
             }
         },
 		computed:{
@@ -214,7 +215,7 @@
 	                _TY_Tool.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.tag = value;
+	                        t.tags = value;
 	                    });
 	                }, function (code, msg) {
 	                });
