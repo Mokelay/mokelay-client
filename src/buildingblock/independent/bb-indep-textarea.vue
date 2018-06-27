@@ -9,7 +9,7 @@
 		    @keyup="onKeyup"
 		    @change="change"
 		></textarea>
-    	<p>{{writeNumber}}/{{limitNumber}}</p>
+    	<p v-if="showText" class="limitNumber">{{writeNumber}}/{{limitNumber}}</p>
     </div>
 </template>
 
@@ -112,7 +112,7 @@
         		var t = this.valueBase;
         		var w = this.writeNumber;
         		var s = this.showText;
-        		if(w>s){
+        		if(w>s && s != 0){
         			var a = this.valueBase.substring(0,s);
         			this.valueBase = a;
         			this.writeNumber = this.valueBase.length;
@@ -120,8 +120,8 @@
         	},
         	//change事件
         	change:function(val){
-        		this.$emit("change",val);
-        		this.$emit("input",val);
+        		this.$emit("change",this.valueBase);
+        		this.$emit("input",this.valueBase);
         	},
         	//外部设值
         	setNumber:function(...params){
@@ -139,5 +139,9 @@
     .bb-indep-textarea{
         width: 100%;
         display: inline-block;
+        .limitNumber{
+            text-align: right;
+            color: #999999;
+        }
     }
 </style>

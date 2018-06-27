@@ -13,10 +13,21 @@
 		</span>
 		<span> 
 			<b 
-			:style="tagTwoLabelWrite" 
-			@click="customPopShow"
+			:style="tagTwoLabelWrite"
+			v-for="(custom,key) in customs" 
+			@click="customPopShow(key)"
 			>
-			{{customWriteShow}}
+			{{custom.writeShow}}
+			</b>
+		</span>
+		<!-- 自定义添加按钮 -->
+		<span> 
+			<b 
+			:style="tagTwoLabelWrite" 
+			@click="customPopShow('add')"
+			v-show="customButton"
+			>
+			自定义
 			</b>
 		</span>
 		<div class="customPop" v-show="showPop"> 
@@ -39,9 +50,12 @@
 	export default {
 		name:"tagContent",
 		props:{
-			customWrite:{
-				style:String,
-				default:"111",
+			//自定义数组
+			customs:{
+				type:Array,
+				default:function(){
+					return []
+				}
 			},
 			show:{
 				type:Boolean,
@@ -137,6 +151,9 @@
                valueBase:this.value,
                showPop:this.show,
                customWriteShow:this.customWrite,
+               customEditKey:"add",
+               customButton:true,
+               
             }
         },
 		computed:{
@@ -195,10 +212,10 @@
 			getTag() {
 	            const t = this;
 	            if (t.tagDs) {
-	                Util.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
+	                _TY_Tool.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.tag = value;
+	                        t.tags = value;
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -220,11 +237,45 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
+
+ 				if(this.customWriteShow){
+ 					//点击时将增加的数组放置于原数组前
+	 				var c = this.customWriteShow;
+	 				if(this.customEditKey == "add"){
+	 					var w = { writeShow : c};
+	 					this.customs.unshift(w);
+	 				}else{
+	 					this.customs[this.customEditKey]['writeShow'] = c;
+	 				}
+ 				}else{
+ 					const arr = this.customEditKey == "add"?null:this.customs.splice(this.customEditKey,1);
+ 				}
+ 				
+ 				//自定义标签不能超过三个
+ 				var l =this.customs.length;
+ 				if(l > 3){
+ 					//console.log(this.customButton);
+ 					this.customs.splice(3);
+ 					this.customButton = false;
+ 				};
+ 				//清空输入框
+ 				this.valueBase = null;
  			},
  			//点击自定义的事件
- 			customPopShow:function(){
+ 			customPopShow:function(key){
  				this.showPop = true;
+ 				this.customEditKey = key
+ 				this.valueBase = key == "add"?"":this.customs[key]['writeShow'];
  			},
+ 			/*customStop:function(e){
+ 				var z = "自定义";
+ 				var v =this.customWriteShow;
+ 				if( z != v){
+ 					console.log("1");
+ 					//this.customs.click().self.prevent;
+ 					e.stopPropagation();
+ 				}
+ 			},*/
 		},
 	}
 </script>

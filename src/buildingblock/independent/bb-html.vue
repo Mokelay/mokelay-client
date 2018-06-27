@@ -26,6 +26,118 @@
             inputStyle:{
                 type:String,
                 default:"font-size: inherit;border: 0;border-bottom: 1px solid #444;"
+            },
+            /*静态内容
+                [{ 
+                    uuid: '',
+                    alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+                    aliasName: '自由式布局', 
+                    attributes: {}, //积木属性
+                    animation: [{ //动画
+                    }],
+                    interactives: [{ //触发交互
+                    }],
+                    layout: {} //积木布局
+                }]
+            */
+            content:{
+                type:[Array],
+                default:function(){
+                    return [{
+                        uuid: '',
+                        alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                        aliasName: '添加视频', 
+                        attributes: {
+                            accept:"image/*",
+                            value:"https://img3.mklimg.com/g1/M00/2C/35/rBBrBlpqyhCAeF5aAAA0ZbU_4VA929.png!,https://img3.mklimg.com/g1/M00/2C/35/rBBrBlpqyhCAeF5aAAA0ZbU_4VA929.png!,https://img3.mklimg.com/g1/M00/2C/35/rBBrBlpqyhCAeF5aAAA0ZbU_4VA929.png!,https://img3.mklimg.com/g1/M00/2C/35/rBBrBlpqyhCAeF5aAAA0ZbU_4VA929.png!,https://img3.mklimg.com/g1/M00/2C/35/rBBrBlpqyhCAeF5aAAA0ZbU_4VA929.png!,https://img3.mklimg.com/g1/M00/2C/35/rBBrBlpqyhCAeF5aAAA0ZbU_4VA929.png!"
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },{
+                        uuid: '',
+                        alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                        aliasName: '添加视频', 
+                        attributes: {
+                            accept:"audio/*",
+                            value:"http://www.w3school.com.cn/i/horse.ogg"
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },{
+                        uuid: '',
+                        alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                        aliasName: '添加视频', 
+                        attributes: {
+                            accept:"video/*",
+                            value:"http://www.w3school.com.cn/i/movie.ogg"
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },{
+                        uuid: '',
+                        alias: 'bb-indep-textarea', //布局类积木 || 普通积木
+                        aliasName: '添加文字', 
+                        attributes: {
+                            accept:"image/*",
+                            value:"this is a test",
+                            placeholder:"请输入练习活动简介",
+                            styleConfig:{
+                                fontFamily:'',
+                                fontSize:'14px',
+                                fontColor:'#9a9a9a',
+                                bold:false ,
+                                italic:false ,
+                                underline:false,
+                                textAlign:'left',
+                                lingHeight:1.5,
+                                letterSpacing:0,
+                                borderWidth:0,
+                                borderColor:"#6298D8",
+                                borderStyle:"solid",
+                                borderRadius:"2px",
+                                width:"100%",
+                                resize:"none",
+                                height:"5rem",
+                                padding:"5px",
+                                margin:"",
+                            }
+                        }, 
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    }]
+                }
+            },
+            //动态内容数据源
+            contentDs:{
+                type:Object
             }
         },
         data() {
@@ -36,7 +148,8 @@
                 resultString:'',//最后生成的完整String
                 resultHtmlString:'',//最后生成的完整html String
                 resultReadOnlyHtmlString:'',
-                realInputStyle:this.inputStyle
+                realInputStyle:this.inputStyle,
+                realContent:this.content || window.realContent
             }
         },
         computed:{
@@ -66,7 +179,7 @@
                 const reg2 = /&lt;#=.*?#&gt;/ig;
                 const reg3 = /<div style=.*?>/;
                 const reg4 = /width:.*?;/
-                
+                t.renderContent();
                 let stringHasTransfer = false;
                 if(!this.valueBase){
                     return;
@@ -148,7 +261,7 @@
                     bbResultVal = bbResultVal.replace(new RegExp(item.src, 'gi'),"<bb-item name="+_fieldName+">"+fieldValue+"</bb-item>");
                     t.resultObject[_fieldName]=fieldValue;
                 });
-                t.resultHtmlString = bbResultVal;
+                t.resultHtmlString = bbResultVal || t.renderContent();
                 //填充无html的string
                 t.fillResultString(t.resultHtmlString);
                 t.valueBase = bbVal;
@@ -206,10 +319,59 @@
             setReadOnlyContent:function(...args){
                 let t=this;
                 t.setContent(...args);
-                debugger;
                 if(t.resultReadOnlyHtmlString){
                     t.valueBase = t.resultReadOnlyHtmlString
                 }
+            },
+            //动态获取内容
+            getData(){
+                const t = this;
+                if (t.contentDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
+                        data.forEach((item) => {
+                            t.loading = false;
+                            const {dataKey, value} = item;
+                            t.realContent = value;
+                        });
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
+            },
+            //处理content数据
+            renderContent(){
+                const t = this;
+                let tags = "";
+                t.realContent.forEach((content,key)=>{
+                    switch(content.alias){
+                        case "bb-indep-textarea":
+                            tags = tags + `<p style="font-size:0.4rem;text-align:left">${content.attributes.value}</p>`
+                            break;
+                        case "bb-vant-uploader":
+                            const values = typeof content.attributes.value == "string"?content.attributes.value.split(','):content.attributes.value;
+                            values.forEach((val,index)=>{
+                                switch(content.attributes.accept){
+                                    case "image/*":
+                                        tags = tags + `<img style="max-width:100%" src="${val}" />`
+                                        break;
+                                    case "audio/*":
+                                        tags = tags + `<audio style="height: 54px;" src="${val}" controls="controls">
+                                            您的浏览器不支持 audio 标签。
+                                            </audio>`
+                                        break;
+                                    case "video/*":
+                                        tags = tags + `<video src="${val}" controls="controls">
+                                            您的浏览器不支持 video 标签。
+                                            </video>`
+                                        break;
+                                }
+                            })
+                            break;
+                    }
+                });
+                tags = `<section style="text-align:center">${tags}</section>`
+                t.valueBase = t.realContent?tags:t.valueBase;
             }
         }
     }

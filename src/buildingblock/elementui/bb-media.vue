@@ -7,7 +7,7 @@
                 <el-upload
                   class="media_upload"
                   drag
-                  @on-success="uploadSuccess"
+                  :on-success="uploadSuccess"
                   :action="uploadUrl"
                   :multiple="false">
                   <i class="el-icon-upload"></i>
@@ -27,7 +27,7 @@
                               v-if="fileList.length==0"
                               class="media_upload"
                               drag
-                              @on-success="uploadSuccess"
+                              :on-success="uploadSuccess"
                               :action="uploadUrl"
                               :multiple="false">
                               <i class="el-icon-upload"></i>
@@ -75,9 +75,9 @@
                                 <el-form-item size="small" label="标题">
                                     <el-input  v-model="selecteds[0].title"></el-input>
                                 </el-form-item>
-                                <el-form-item size="small" label="说明">
+                               <!--  <el-form-item size="small" label="说明">
                                     <el-input type="textarea" v-model="selecteds[0].desc"></el-input>
-                                </el-form-item>
+                                </el-form-item> -->
                                 <el-form-item size="small" label="替代文本">
                                     <el-input v-model="selecteds[0].replaceText"></el-input>
                                 </el-form-item>
@@ -173,7 +173,7 @@
                     //如果不是自定义接口
                     apiUrl = window._TY_ContentPath + "/" + api;
                     if(location.host.startsWith('local')){
-                        apiUrl = location.protocol+"//longyan.dev.rs.com"+apiUrl;
+                        apiUrl = location.protocol+"//ty.saiyachina.com"+apiUrl;
                     }
                 }
                 t.uploadUrl = apiUrl;
@@ -270,9 +270,15 @@
             //上传成功  时触发
             uploadSuccess:function(response,file,fileList){
                 let t=this;
+                this.$message.success('文件上传成功');
                 console.log("resposne",response);
                 console.log("file=",file);
+                t.$emit("uploadSuccess",file,t);
                 t.activeName = "store";
+
+                //媒体库，重新加载数据
+                t.page=1;
+                t.loadMeidaList();
             },
             //文件点击事件
             fileItemClick:function(file,index){

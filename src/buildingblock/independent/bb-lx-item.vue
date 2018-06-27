@@ -1,28 +1,34 @@
 <template>
-    <div class="itemContent">
-    	<span class="leftStyle"> 
-    		<img :src="leftImgShow">
-    	</span>
-    	<span class="centerStyle">				
-    		<h1 :style="centerTitle">{{item.title}}</h1>
-    		<p class="centerContent">
-    			<b class="centerContentTime">	
-    				<i><img :src="contentTimeIcon" :style="contentTimeIconStyle"></i>
-    				<strong :style="contentTimeStyle">{{item.time}}</strong>
-    			</b>
-    			<b class="centerContentTime">	
-    				<i><img :src="userNumberIcon"  :style="userNumberIconStyle"></i>
-    				<strong :style="userNumberStyle">{{item.userNumber}}{{item.userText}}</strong>
-    			</b>	
-    		</p>
-    	</span>
-    	<span class="bb-layout-seriation"></span>
-    </div>
+	<bb-vant-cell-swipe :content="rightContent"> 
+	    <div class="itemContent">
+	    	<span class="leftStyle"> 
+	    		<img :src="leftImgShow">
+	    	</span>
+	    	<span class="centerStyle">				
+	    		<h1 :style="centerTitle">{{item.title}}</h1>
+	    		<p class="centerContent">
+	    			<b class="centerContentTime">	
+	    				<i><img :src="contentTimeIcon" :style="contentTimeIconStyle"></i>
+	    				<strong :style="contentTimeStyle">{{item.time}}</strong>
+	    			</b>
+	    			<b class="centerContentTime">	
+	    				<i><img :src="userNumberIcon"  :style="userNumberIconStyle"></i>
+	    				<strong :style="userNumberStyle">{{item.userNumber}}{{item.userText}}</strong>
+	    			</b>	
+	    		</p>
+	    	</span>
+	    	<span class="bb-layout-seriation"></span>
+	    </div>
+	    	
+	</bb-vant-cell-swipe>
 </template>
 
 <script>
+
+
     export default {
         name: 'bb-text',
+        
         props: {
             //左侧样式
             leftStyleConfig:{
@@ -177,12 +183,36 @@
             itemDs:{
 				type:Object
             },
+            
         },
         data() {
             return {
                leftImgShow:this.item.leftImg,
                contentTimeIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
                userNumberIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+               rightContent:[{                      //页面内容
+                        uuid:'1',
+                        alias:'bb-vant-button',                   //积木别名
+                        aliasName:'删除',               //中文名称
+                        group:'right',                   //积木分组 表单项显示的位置
+                        attributes:{
+                          selectText:"right",
+                          width:"100%",
+                        },             
+                        animation:[],
+                        interactives:[],
+                        layout:{
+                        	bgColor:"#f00",
+                        	height:"1rem",
+                        	border:{                
+                                color:"#f00",       
+                            },
+                            size:{
+                            	width:"100%",
+                            	height:"72px",
+                            }          
+                        }
+                    }]
             }
         },
         computed:{
@@ -327,6 +357,7 @@
         display: flex;
         justify-content:left;
         align-items:center;
+        font-size:0;
     }
     .leftStyle{
     	width:15%;
@@ -351,13 +382,21 @@
     	width:50%;
         display: flex;
         justify-content:left;
-        align-items:flex-end;
+        align-items:flex-start;
         overflow:hidden;
+    }
+    .centerContentTime i{
+    	display:inline-block;
+    	height:10px;
     }
     .centerContentUser{
     	width:50%;
     	display: flex;
         justify-content:center;
         align-items:center;
+    }
+    .van-cell-swipe__right div{
+    	width:100%;
+    	height:100%;
     }
 </style>

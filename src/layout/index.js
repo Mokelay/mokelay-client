@@ -10,6 +10,7 @@ import bblayoutseriation from './bb-layout-seriation.vue';
 import bbpageedit from './bb-page-edit.vue';
 import bbpage from './bb-page';
 import bbseriationitemedit from './bb-seriation-item-edit.vue';
+import bbseriationitemedith5 from './bb-seriation-item-edit-h5.vue';
 
 export default {
 	install: function(Vue) {
@@ -22,6 +23,7 @@ export default {
 		Vue.component('bb-page-edit', bbpageedit);
 		Vue.component('bb-page', bbpage);
 		Vue.component('bb-seriation-item-edit', bbseriationitemedit);
+		Vue.component('bb-seriation-item-edit-h5', bbseriationitemedith5);
 		console.log("成功加载布局积木;");
 	}
 };
