@@ -211,7 +211,7 @@
 			getTag() {
 	            const t = this;
 	            if (t.tagDs) {
-	                Util.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
+	                _TY_Tool.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
 	                        t.tag = value;
