@@ -205,11 +205,12 @@
                         	bgColor:"#f00",
                         	height:"1rem",
                         	border:{                
-                                color:"#f00",       
+                                color:"#f00",
+                                padding:"0" ,     
                             },
                             size:{
-                            	width:"100%",
-                            	height:"72px",
+                            	width:"60px",
+                            	height:"59px",
                             }          
                         }
                     }]

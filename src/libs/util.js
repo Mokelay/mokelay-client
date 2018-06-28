@@ -1256,7 +1256,6 @@ util.isPC = function() {
     }
     return flag;
 }
-
 //判断当前环境是否是微信环境
 util.isWX = function() {
     //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
@@ -1268,6 +1267,40 @@ util.isWX = function() {
         return false;
     }
 }
+
+//appUrl：应用域名   apiArray：需要调用的微信api
+util.wx = function(appUrl, apiArray) {
+    const encodeApp = appUrl ? encodeURI(appUrl) : encodeURI("http://ty.saiyachina.com");
+    const configUrl = `http://ty.saiyachina.com/config/xlx_c_wx_get_config?sign_url=http%3A%2F%2Fty.saiyachina.com`;
+    const wx_sdk = new Promise(function(resolve, reject) {
+        util.get(configUrl)
+            .then(response => {
+                let wx_config = response.data.data.wx_config;
+                wx_config.jsApiList = apiArray;
+                wx_config.debugger = true;
+                require.ensure(['weixin-js-sdk'], function(require) {
+                    var wx = require('weixin-js-sdk');
+                    wx.config(wx_config);
+                    wx.checkJsApi({
+                        jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                        success: function(res) {
+                            console.log("微信可用api检测结果:", res)
+                        }
+                    });
+                    wx.ready(function() {
+                        debugger
+                    })
+                    wx.error(function(res) {
+                        debugger
+                    })
+                    resolve(wx);
+                }, 'weixin-js-sdk');
+            });
+    });
+    return wx_sdk;
+}
+
+
 
 window._TY_Tool = util;
 

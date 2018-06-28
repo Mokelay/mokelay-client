@@ -1,6 +1,6 @@
 <template>
 	<ul> 
-		<li class="content" v-for="content in contents"> 
+		<li class="itemList" v-for="content in contents"> 
 	    	<bb-lx-item></bb-lx-item>
 		</li>
 		<p @click="onClick" class="more">查看更多</p>
@@ -106,12 +106,12 @@
     }
 </script>
 <style lang='less' scoped>
-    .content{
+    .itemList{
         width: 100%;
         display: flex;
         justify-content:left;
         align-items:center;
-        margin-top:10px;
+        margin:10px 0 0 0;
     }
 
     .more{
