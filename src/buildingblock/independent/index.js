@@ -38,7 +38,7 @@ import bbindepform from './bb-indep-form';
 import bbindepBlogAction from './bb-indep-blog-action';
 import bbindepBlogPraise from './bb-indep-blog-praise';
 import bbindepBlogComment from './bb-indep-blog-comment';
-
+import bbindepBlogList from './bb-indep-blog-list';
 import helloworld from './bb-hello-world'
 
 //公用组件
@@ -85,7 +85,7 @@ export default {
 		Vue.component('bb-indep-blog-action', bbindepBlogAction);
 		Vue.component('bb-indep-blog-praise', bbindepBlogPraise);
 		Vue.component('bb-indep-blog-comment', bbindepBlogComment);
-		
+		Vue.component('bb-indep-blog-List', bbindepBlogList);
 
 
 		Vue.component('bb-hello-world', helloworld);

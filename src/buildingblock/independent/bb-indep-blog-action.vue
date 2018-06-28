@@ -2,18 +2,17 @@
   <div class="bb-indep-blog">
 		<div class="blogCommetHref"> 
 			<b @click="shareClick">
-				<i :class="shareIcon"></i>
+				<i :class="shareIcon" class="actionIcon"></i>
 				<span :style="shareTextStyle">{{shareText}}</span>
 			</b>
 			<b @click="replyClick">
-				<i :class="replyIcon"></i>
+				<i :class="replyIcon" class="actionIcon"></i>
 				<span :style="shareTextStyle">{{commetText}}</span>
 			</b>
 			<b @click="praiseClick">
 				<strong :class="{'color':isColor}"> 
-					<i :class="commetListIcon"></i> 
+					<i :class="commetListIcon" class="actionIcon"></i> 
 				</strong>
-
 				<span :style="shareTextStyle">{{praiseText}}</span> 
 			</b>
 		</div>
@@ -37,8 +36,8 @@ export default {
     		default:"评论"
     	},
     	//点赞
-    	praiseText:{
-    		type:String,
+    	praiseTextShow:{
+    		type:[String,Number],
     		default:"点赞"
     	},
     	//分享文字样式
@@ -73,6 +72,10 @@ export default {
    		defaultValTpl:{
             type:String
         },
+    	//动态数据
+    	praiseDs:{
+    		type:Object,
+    	}
     },
    	data(){ 
         return{    	
@@ -80,6 +83,7 @@ export default {
         	replyIcon:"ty-icon_xiaoxi1",
         	shareIcon:"ty-wj_skip_long_questio",
         	isColor:this.praiseColor,
+        	praiseText:this.praiseTextShow,
         }
       },
     watch:{}, 
@@ -107,6 +111,9 @@ export default {
             return styles;           
         },
     },
+   	mounted(){ 
+	   this.getData();
+	},   
     mounted:function(){
       let t=this;
       _TY_Tool.buildDefaultValTpl(t,"praiseColor");
@@ -125,6 +132,20 @@ export default {
     		this.isColor = this.isColor?false:true;
     		this.$emit("praiseClick",val);
     	},
+    	//动态数据获取
+        getData() {
+            const t = this;
+            if (t.praiseDs) {
+                _TY_Tool.getDSData(t.praiseDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        t.blogs = value;
+                        //console.log(value);
+                    });
+                }, function (code, msg) {
+                });
+            }
+        },  
      }
 }
 </script>
@@ -135,5 +156,8 @@ export default {
 	}
 	.color{
 		color:#f00;
+	}
+	.actionIcon{
+		font-size:18px;
 	}
 </style>
