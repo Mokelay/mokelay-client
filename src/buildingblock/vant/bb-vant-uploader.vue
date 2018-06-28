@@ -3,6 +3,8 @@ import Uploader from 'vant/lib/uploader';
 import 'vant/lib/uploader/style';
 import Icon from 'vant/lib/icon';
 import 'vant/lib/icon/style';
+import Toast from 'vant/lib/toast';
+import 'vant/lib/toast/style';
 
 export default {
     name:"bb-vant-uploader",
@@ -16,7 +18,10 @@ export default {
             ["http://www.baidu.com/1.img","http://www.baidu.com/2.img"]
         */
         value:{
-            type:[Array,String]
+            type:[Array,String],
+            default:function(){
+                return []
+            }
         },
         //文件读取结果类型，可选值dataUrl，test
         resultType:{
@@ -26,7 +31,7 @@ export default {
         //接受的文件类型。默认值image/*
         accept:{
             type:String,
-            default:"image/*"
+            default:"audio/*"
         },
         //是否禁用图片上传
         disabled:{
@@ -130,7 +135,8 @@ export default {
    data(){ 
         return{
             valueBase:typeof this.value == "string"?this.value.split(","):this.value,
-            uploadUrl:""
+            uploadUrl:"",
+            recordTime:0
         };
     },
     created: function () {
@@ -145,6 +151,7 @@ export default {
             }
             t.uploadUrl = apiUrl;
         }
+        //t.wxChooseImage();
     },
     render: function(createElement){
         const t = this;
@@ -177,7 +184,7 @@ export default {
         },on:{
             oversize:t.oversize
         },class:className},[children,this.$slots.default]);
-        //渲染已经上传的图片或音频或视频
+        //渲染已经上传的图片
         const picList = [];
         t.valueBase.forEach((ele,index)=>{
             const Img = createElement('img',{props:{},attrs:{src:ele},class:"uploaded-child"},[vantUpload]);
@@ -186,8 +193,17 @@ export default {
             picList.push(item);
         }); 
         const ul = createElement('ul',{props:{},class:"uploaded-item"},[picList]);
+        const info = createElement('p',{props:{},class:"info"},["录音时长10分钟内,结束前请勿进行其他操作"]);
+        const time = createElement('p',{props:{},class:"time"},[t.getTime()]);
+        const button = createElement('i',{props:{},class:"ty ty-lvyin recordStart"},[]);
+        const recordRight = createElement('div',{props:{},class:"recordRight"},[time,info]);
+        const record = createElement('div',{props:{},class:"record",on:{
+            touchstart:t.startRecord,
+            touchend:t.endRecord
+        }},[button,recordRight]);
 
-        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
+        //return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
+        return record;
     },
     watch:{
         value(val){
@@ -211,6 +227,7 @@ export default {
         },
         //文件上传
         uploadeFile(file){
+            debugger
             const t = this;
             //创建form对象          
             let param = new FormData(); 
@@ -226,6 +243,7 @@ export default {
                     'Content-Type':'multipart/form-data'
                 }
             };  
+            t.uploadUrl = "http://ty.saiyachina.com/config/ty_oss_upload";
             _TY_Tool.post(t.uploadUrl,param,config)
             .then(response=>{
                 t.$emit("upload-success",response.data);
@@ -245,6 +263,83 @@ export default {
             t.valueBase.splice(index,1);
             t.$emit('input',t.valueBase);
             t.$emit('change',t.valueBase);
+        },
+        startRecord(){
+            if(_TY_Tool.isWX()){
+                this.wxRecord()
+            }else{
+                Toast.fail("请在微信中打开");
+            }
+        },
+        endRecord(){
+            debugger
+            const t = this;
+            // t.wx.stopRecord({
+            //     success: function(voice){
+            //         debugger
+            //         clearinterval(timeInter);
+            //         const localId = voice.localId;
+            //         // wx.uploadVoice({
+            //         //     localId:localId,
+            //         //     isShowProgressTips:1,
+            //         //     success:function(res){
+            //         //         debugger
+            //         //         const url = "http://ty.saiyachina.com/config/ty_oss_upload";
+            //         //         clearinterval(t.timeInter);
+            //         //     }
+            //         // })
+            //     },
+            //     cancel: function () {
+            //     }
+            // });
+        },
+        wxRecord(){
+            const  t = this;
+            _TY_Tool.wx("http://ty.saiyachina.com",
+                ["startRecord","stopRecord","uploadVoice"]
+                ).then((wx)=>{
+                    t.wx = wx;
+                    const recordTimer = setTimeout(function(){
+                        t.wx.startRecord({
+                            success: function(res){
+                                debugger
+                                localStorage.rainAllowRecord = 'true';
+                                const timeInter = setInterval(()=>{
+                                    t.recordTime = t.recordTime + 1;
+                                },1000)
+                            },
+                            cancel: function () {
+                                alert('用户拒绝授权录音');
+                            }
+                        });
+                    },300);
+            });
+        },
+        wxChooseImage(){
+            _TY_Tool.wx("http://ty.saiyachina.com",
+                ["chooseImage","previewImage","uploadImage","downloadImage","getLocalImgData"]
+                ).then((wx)=>{
+                const recordTimer = setTimeout(function(){
+                    wx.chooseImage({
+                        count: 1, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            debugger
+                            var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                        }
+                    });
+                },2000);
+            });
+        },
+        getTime(){
+            const t = this;
+            let minute = parseInt(t.recordTime/60);
+            let second = t.recordTime%60;
+            minute = minute < 10?"0"+minute:minute;
+            second = second < 10?"0"+second:second;
+            let finelTime = minute + ":" + second;
+            return finelTime;
         }
     }
   }
@@ -285,6 +380,22 @@ export default {
             }
             .uploaded-child{
                 width: 2rem;
+            }
+        }
+    }
+    .record{
+        .recordStart{
+            font-size: 2rem;
+            color: #ed2b2c;
+            display: inline-block;
+            float: left;
+        }
+        .recordRight{
+            padding-top:0.5rem;
+            font-size:0.4rem;
+            color:#8c8c8c;
+            .time{
+                color:#ed2b2c;
             }
         }
     }
