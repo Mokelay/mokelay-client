@@ -13,7 +13,8 @@ import 'vant/lib/cell/style';
         props: {
             //内容
             value:{
-                type:[Number,String]
+                type:[Object,String],
+                default:"所在位置"
             },
             /*模板默认值*/
             defaultValTpl:{
@@ -49,12 +50,11 @@ import 'vant/lib/cell/style';
         },
         data() {
             return {
-                valueBase:this.value,
+                location:this.value,
                 realContent:this.content || []
             };
         },
         mounted(){
-            this.getData();
         },
         //事件click
         methods: {
@@ -66,20 +66,18 @@ import 'vant/lib/cell/style';
             wxLocation(){
                 const  t = this;
                 _TY_Tool.wx("http://ty.saiyachina.com",
-                    ["startRecord","stopRecord","uploadVoice"]
+                    ["openLocation","getLocation"]
                     ).then((wx)=>{
                         t.wx = wx;
                         const recordTimer = setTimeout(function(){
-                            t.wx.startRecord({
-                                success: function(res){
-                                    debugger
-                                    localStorage.rainAllowRecord = 'true';
-                                    const timeInter = setInterval(()=>{
-                                        t.recordTime = t.recordTime + 1;
-                                    },1000)
-                                },
-                                cancel: function () {
-                                    alert('用户拒绝授权录音');
+                            t.wx.getLocation({
+                                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                                success: function (res) {
+                                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                                    var speed = res.speed; // 速度，以米/每秒计
+                                    var accuracy = res.accuracy; // 位置精度
+                                    t.location = res;
                                 }
                             });
                         },300);
