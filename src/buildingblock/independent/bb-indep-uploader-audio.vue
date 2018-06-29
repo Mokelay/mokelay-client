@@ -53,11 +53,13 @@ export default {
     },
     created: function () {
         const t = this;
+        debugger
         _TY_Tool.wx("http://ty.saiyachina.com",
-            ["startRecord","stopRecord","uploadVoice"]
+            ["startRecord","stopRecord","onVoiceRecordEnd","playVoice","pauseVoice","stopVoice","onVoicePlayEnd","uploadVoice"]
             ).then((wx)=>{
                 t.wx = wx;
-        });
+                debugger
+            });
     },
     render: function(createElement){
         const t = this;
