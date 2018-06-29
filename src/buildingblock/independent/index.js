@@ -40,8 +40,9 @@ import bbindepBlogPraise from './bb-indep-blog-praise';
 import bbindepBlogComment from './bb-indep-blog-comment';
 import bbindepuploaderaudio from './bb-indep-uploader-audio';
 import bbindepaudioplay from './bb-indep-audio-player';
+import bbindepBlogList from './bb-indep-blog-list';
 
-import helloworld from './bb-hello-world'
+import helloworld from './bb-hello-world';
 
 //公用组件
 import bbtoast from './bbToast';
@@ -89,8 +90,7 @@ export default {
 		Vue.component('bb-indep-blog-comment', bbindepBlogComment);
 		Vue.component('bb-indep-uploader-audio', bbindepuploaderaudio);
 		Vue.component('bb-indep-audio-player', bbindepaudioplay);
-
-
+		Vue.component('bb-indep-blog-List', bbindepBlogList);
 
 		Vue.component('bb-hello-world', helloworld);
 
