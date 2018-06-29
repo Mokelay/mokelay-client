@@ -38,6 +38,8 @@ import bbindepform from './bb-indep-form';
 import bbindepBlogAction from './bb-indep-blog-action';
 import bbindepBlogPraise from './bb-indep-blog-praise';
 import bbindepBlogComment from './bb-indep-blog-comment';
+import bbindepuploaderaudio from './bb-indep-uploader-audio';
+import bbindepaudioplay from './bb-indep-audio-player';
 
 import helloworld from './bb-hello-world'
 
@@ -85,7 +87,9 @@ export default {
 		Vue.component('bb-indep-blog-action', bbindepBlogAction);
 		Vue.component('bb-indep-blog-praise', bbindepBlogPraise);
 		Vue.component('bb-indep-blog-comment', bbindepBlogComment);
-		
+		Vue.component('bb-indep-uploader-audio', bbindepuploaderaudio);
+		Vue.component('bb-indep-audio-player', bbindepaudioplay);
+
 
 
 		Vue.component('bb-hello-world', helloworld);
