@@ -227,6 +227,7 @@
                             }          
                         }
                     }],
+               page:"",
             }
         },
         computed:{
@@ -347,7 +348,7 @@
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
 	                        t.items = value;
-	                    
+	                    	console.log(value);
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -360,8 +361,8 @@
 	                 _TY_Tool.getDSData(t.itemMoreDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.items.push(item);
-	                    
+	                        //console.log(value);
+	                        t.items.push(value);	                    
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -369,7 +370,16 @@
 	        },
 	        //点击加载更多事件
 	        clickMore(){
-	        	console.log(1);
+	        	var t = this;
+				var param = {
+					currentPage:1,
+				};
+				//console.log(param);
+				t.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_participation_theme_query_page";
+				_TY_Tool.post(t.uploadUrl,param)
+	            .then(response=>{
+	                console.log("请求成功");
+	            });
 	        },
         }
     }

@@ -24,6 +24,16 @@
   					</span>
   					<span :class="blog.themeRightIcon"></span>
   				</div>-->
+  				<div class="blogJoinPractice"> 
+  					<span class="blogJoinPracticeLeft"><img :src="practice.img"></span>
+  					<span class="blogJoinPracticeCenter"> 
+  						<p>{{practice.title}}</p>
+  						<p>{{practice.number}}</p>
+  					</span>
+  					<span class="blogJoinPracticeRight">
+  						<i :class="practice.blogJoinXlxIcon"></i> 
+  					</span>
+  				</div>
   			</div>
   			<bb-indep-blog-action></bb-indep-blog-action>
   		</div>  	
@@ -36,7 +46,18 @@
 export default {
     name:"bb-indep-blog",
     props:{
-
+    	//参与日记中的小练习
+    	practiceData:{
+    		type:Object,
+    		default:function(){
+    			return {
+    				img:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+    				title:"1111111111111",
+    				number:"200人参与",
+    				blogJoinXlxIcon:"ty-icon_jiantou_right_l",
+    			}
+    		}
+    	},
     	//发表日记用户头像样式
     	userImgStyleConfig:{
     		type:Object,
@@ -188,6 +209,7 @@ export default {
     data(){ 
         return{    	
         	blogs:this.blogArray,
+        	practice:this.practiceData,
         }
     },
     watch:{},
@@ -330,7 +352,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 	.content{
 
 		
@@ -338,7 +360,7 @@ export default {
 		height:100%;
 		display:flex;
 		justify-content:center;
-		margin:0;
+		margin:0 0 50px 0;
 		padding:10px 2.5%;
 		background:#fff;
 		border-top:1px solid #eee;
@@ -399,6 +421,25 @@ export default {
 	.userTimeDate{
 		margin:0;
 		line-height:20px;
+	}
+	.blogJoinPractice{
+		width:100%;
+		height:auto;
+		background:#eee;
+		display:flex;
+		justify-content:left;
+		padding:5px 0 3px 5px;
+	}
+	.blogJoinPracticeLeft{
+		width:20%;
+	}
+	.blogJoinPracticeCenter{
+		width:60%;
+		font-size:14px;
+		padding:5px 0;
+	}
+	.blogJoinPracticeRight{
+		width:20%;
 	}
 </style>
 

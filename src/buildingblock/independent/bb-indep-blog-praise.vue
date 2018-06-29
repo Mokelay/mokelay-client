@@ -58,7 +58,8 @@ export default {
     				padding:"0",
     				height:"15px",
     				width:"15px",
-    				display:"inline-block"
+    				display:"inline-block",
+    				fontSize:"18px",
     			}
     		}    	  
     	},
@@ -96,7 +97,8 @@ export default {
             	"margin":t.commetListIconStyleConfig.margin,
             	"height":t.commetListIconStyleConfig.height,
             	"width":t.commetListIconStyleConfig.width,
-            	"display":t.commetListIconStyleConfig.display
+            	"display":t.commetListIconStyleConfig.display,
+            	"font-size":t.commetListIconStyleConfig.fontSize,
             }
             return styles;          
         },       
@@ -126,8 +128,10 @@ export default {
      }
 }
 </script>
-<style>
-
+<style scoped>
+	.bb-indep-blog{
+		font-size:14px;
+	}
 	.commetListImgCss{
 		display:inline-block;
 	}
