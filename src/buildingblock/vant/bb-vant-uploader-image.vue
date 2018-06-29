@@ -151,7 +151,6 @@ export default {
             }
             t.uploadUrl = apiUrl;
         }
-        //t.wxChooseImage();
     },
     render: function(createElement){
         const t = this;
@@ -159,7 +158,7 @@ export default {
         let className = "default";
         switch(t.option.theme){
             case "card":
-                children = createElement('i',{props:{},class:'ty ty-icon_tianjia'},[]);
+                children = createElement('i',{props:{},class:'ty ty-icon_tianjia',on:{click:t.wxChooseImage}},[]);
                 className = "card";
                 break;
             case "photograph":
@@ -173,8 +172,8 @@ export default {
                 }
                 break;
         }
-        
-        const vantUpload = createElement('vant-uploader',{props:{
+        const upTag = _TY_Tool.isWX()?"div":"vant-uploader";
+        const vantUpload = createElement(upTag,{props:{
             "resultType":t.resultType,
             "accept":t.accept,
             "disabled":t.disabled,      
