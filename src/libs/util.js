@@ -1287,12 +1287,6 @@ util.wx = function(appUrl, apiArray) {
                             console.log("微信可用api检测结果:", res)
                         }
                     });
-                    wx.ready(function() {
-                        debugger
-                    })
-                    wx.error(function(res) {
-                        debugger
-                    })
                     resolve(wx);
                 }, 'weixin-js-sdk');
             });

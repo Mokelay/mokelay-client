@@ -10,8 +10,8 @@
 					<span class="replyMessagrStyle"> 
 						<p :style="replyMessageUserStyle">{{reply.user}}</p>
 						<p :style="replyMessageDate">{{reply.date}}</p>
-						<h6 :style="replyMessage" @click="replyClick($event)">{{reply.message}}</h6>
-						<h5 v-for="comment in reply.children" class="replycomment">
+						<h6 :style="replyMessage" @click="replyClick(reply)">{{reply.message}}</h6>
+						<h5 v-for="comment in reply.children" ref="replyRef" class="replycomment">
 							<b :style="replyUserStyle">{{comment.replyUser}}</b>
 							<i :style="replyObjectStyle">{{comment.replyObject}}</i>
 							<i :style="replyUserStyle">{{comment.replyObjectName}}</i>
@@ -230,6 +230,7 @@ export default {
         	replys:this.replysArray,
         	valueBase:this.model,
         	blogWriteReplyShow:false,
+        	useName:"",
         }
     },
     watch:{}, 
@@ -387,21 +388,52 @@ export default {
             }
         },  
         //一级回复
-        replyClick:function(event){
+        replyClick:function(reply){
         	this.blogWriteReplyShow = true;
-        	var useName = event.currentTarget;
-        	console.log(reply);
-
-        }, 
-        //二级回复
-        replyContentClick:function(){
-
+        	this.useName = reply.user;
         }, 
         //提交评论
+        replyContentClick:function(){},
         replySubmit:function(){
         	var val = this.valueBase;
-        	console.log(val);
+        	var replyName = this.useName;
+			//let param = new formData();
+			//param.append(val,replyName);
+
+			/* let param = new FormData(); 
+            //通过append向form对象添加数据
+            param.append(val,replyName);
+			console.log(param);
+
+ 			_TY_Tool.post('/ty-lego-config-self?param=xlx_c_comment',{
+ 				val:this.valueBase,
+ 				replyName:this.useName,
+ 			}).then(response=>{
+ 				console.log("success");
+            }).catch(error=>{
+
+            });*/
+
+        	/*_TY_Tool.post(val).sponse.data.data.wx_config;
+                wx_config.jsApiList = apiArray;
+                require.ensure(['weixin-js-sdk'], function(require) {
+                    var wx = require('weixin-js-sdk');
+                    wx.config(wx_config);
+	                    wx.checkJsApi({then(response => {
+	                let wx_config = re
+                        jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                        success: function(res) {
+                            console.log("微信可用api检测结果:", res)
+                        }
+                    });
+                    resolve(wx);
+                }, 'weixin-js-sdk');
+            });*/
+
+        	
         },
+        //提交信息
+
     }
 }
 </script>

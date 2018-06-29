@@ -2,39 +2,25 @@
  	<div class="bb-indep-blog-post"> 
  		<div class="postMessage"> 
  			<textarea 
+                value="valueBase.text"
  				:style="realStyle"
  				:placeholder="placeholder"
+                @change="textareaChange"
  			> 
  			</textarea>
- 			<p>
+            <bb-layout-seriation-edit ref="editContent" class="h5configEdit" :horizontal="false" :content="realContent"></bb-layout-seriation-edit>
+ 			<p class="uploadIcon">
  				<i 
  				v-for="icon in icons" 
  				:class="icon.class"
- 				:style="iconStyle"> 
+ 				:style="iconStyle"
+                @click="addUpload(icon)"
+                > 
  				</i>
  			</p>
- 			<a
- 				v-for="item in items"
- 				:href="item.href"
- 				class="listStyle">
- 				<i 
- 				:style="listLeftIconStyle" 
- 				:class="item.leftIcon"></i>
- 				<span :style="listTextStyle">{{item.text}}</span>
- 				<b :style="listMessageStyle">{{item.message}}</b>
- 				<strong 
- 				:style="listRightIconStyle"
- 				:class="item.rightIcon">
- 			</strong> 
- 			</a>
- 			<h6 class="buttonList"> 
- 				<button 
- 				:style="canceclStyle" 
- 				v-for="button in buttons"
- 				@click="buttonFinish">
- 					{{button.text}}
- 				</button>
- 			</h6>
+            <bb-vant-cell-location></bb-vant-cell-location>
+ 			<bb-vant-cell :option="privacyOption" v-model="privacy" @click="showPicker"></bb-vant-cell>
+            <bb-vant-picker v-show="privacyPicker" :showToolbar="pickerOption.showToolbar" :staticData="pickerOption.staticData"></bb-vant-picker>
  		</div>
  	</div>
 </template>
@@ -44,53 +30,24 @@
 export default {
     name:"bb-indep-blog-post",
     props:{
-    	//输入框样式
-    	styleConfig:{
-                type:Object,
-                default:function(){
-                    return {
-                        fontFamily:'',
-                        fontSize:'14px',
-                        fontColor:'#9a9a9a',
-                        bold:false ,
-                        italic:false ,
-                        underline:false,
-                        textAlign:'left',
-                        lingHeight:1.5,
-                        letterSpacing:0,
-                        borderWidth:1,
-                        borderColor:"#eee",
-                        borderStyle:"solid",
-                        borderRadius:"2px",
-                        width:"95%",
-                        resize:"none",
-                        height:"100px",
-                        padding:"5%",
-                        margin:"0 2.5%",
-                        backgroundColor:"#eee",
-                    }
+        /*日记编辑器的值  支持v-model
+            {
+                text:"", 文本框内容
+                content:[]日记内容   content标准数据格式
+                location:"",  地址名称
+                privacy:"publicity"  "secret"
+            }
+        */ 
+        value:{
+            type:Object,
+            default:function(){
+                return {
+                    text:"",
+                    content:[],
+                    location:"",
+                    privacy:"publicity"
                 }
-        },
-        //按钮样式
-        canceclStyleCongig:{
-        	type:Object,
-        	default:function(){
-        		return {
-        			width:"50%",
-        			height:"40px",
-        			lineHeight:"40px",
-        			margin:"0",
-        			padding:"0",
-        			borderWidth:"1px",
-        			borderColor:"#eee",
-        			borderStyle:"solid",
-        			fontFamily:"",
-        			fontSize:"14px",
-        			fontStyle:"",
-        			fontWeight:"",
-        			color:"#666",
-        		}
-        	}
+            }
         },
         //输入框默认值
         placeholder:{
@@ -102,9 +59,65 @@ export default {
         	type:Array,
         	default:function(){
         		return[{
-        			class:"",
-        		},{	
-        			class:"",
+        			class:"ty ty-fbrj-pic",
+                    alias:"image",
+                    content:{
+                        uuid: _TY_Tool.uuid(),
+                        alias: 'bb-vant-uploader-image', //布局类积木 || 普通积木
+                        aliasName: '添加图片', 
+                        attributes: {
+                            accept:"image/*",
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },
+        		},{   
+                    class:"ty ty-fbrj-yinpin",
+                    alias:"audio",
+                    content:{
+                        uuid: _TY_Tool.uuid(),
+                        alias: 'bb-indep-uploader-audio', //布局类积木 || 普通积木
+                        aliasName: '添加音频', 
+                        attributes: {
+                            accept:"audio/*",
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },
+                },{	
+        			class:"ty ty-fbrj-shipin",
+                    alias:"video",
+                    content:{
+                        uuid: _TY_Tool.uuid(),
+                        alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                        aliasName: '添加视频', 
+                        attributes: {
+                            accept:"video/*",
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },
         		}]
         	}
         },
@@ -127,98 +140,125 @@ export default {
         		}]
         	}
         },
-        //按钮数据
-        buttons:{
-        	type:Array,
-        	default:function(){
-        		return [{
-        			text:"取消",
-        		},{
-        			text:"发表日记"
-        		}]
-        	}
-        },
-        //列表左侧图标样式
-        listLeftIconStyleConfig:{
-        	type:Object,
-        	default:function(){
-        		return {
-        			width:"20px",
-        			height:"20px",
-        			margin:"0",
-        			padding:"0"
-        		}
-        	}
-        },
-        //列表中间文字样式
-        listTextStyleConfig:{
-        	type:Object,
-        	default:function(){
-        		return {
-        			width:"70%",
-        			height:"",
-        			lineHeight:"",
-        			maigin:"",
-        			padding:"",
-        			fontFamily:"",
-        			fontSize:"14px",
-        			color:"#000",
-        			fontStyle:"",
-        			fontWeight:"normal",
-        			display:"inline-block",
-        			textAlign:"left",
-        		}
-        	}
-        },
-        //列表中间提示文字样式
-        listMessageStyleConfig:{
-        	type:Object,
-        	default:function(){
-        		return {
-        			width:"20%",
-        			height:"",
-        			lineHeight:"",
-        			maigin:"",
-        			padding:"",
-        			fontFamily:"",
-        			fontSize:"14px",
-        			color:"#666",
-        			fontStyle:"",
-        			fontWeight:"normal",
-        			display:"inline-block",
-        			textAlign:"right",
-        		}
-        	}
-        },
-        //列表右侧图标样式
-        listRightIconStyleConfig:{
-        	type:Object,
-        	default:function(){
-        		return {
-        			width:"20px",
-        			height:"20px",
-        			margin:"0",
-        			padding:"0"
-        		}
-        	}        
-        },
-        //图标样式
-        iconStyleConfig:{
-        	type:Object,
-        	default:function(){
-        		return {
-        			width:"25px",
-        			height:"25px",
-        			margin:"0 10px 0 0",
-        			padding:"0",
-        		}
-        	}
-        },
+        //其他属性设置
+        option:{
+            type:Object,
+            default:function(){
+            return {
+                styleConfig:{
+                fontFamily:'',
+                fontSize:'14px',
+                fontColor:'#9a9a9a',
+                bold:false ,
+                italic:false ,
+                underline:false,
+                textAlign:'left',
+                lingHeight:1.5,
+                letterSpacing:0,
+                borderWidth:1,
+                borderColor:"#eee",
+                borderStyle:"solid",
+                borderRadius:"2px",
+                width:"95%",
+                resize:"none",
+                height:"100px",
+                padding:"5%",
+                margin:"0 2.5%",
+                backgroundColor:"#eee",
+            },
+            canceclStyleCongig:{
+                width:"50%",
+                height:"40px",
+                lineHeight:"40px",
+                margin:"0",
+                padding:"0",
+                borderWidth:"1px",
+                borderColor:"#eee",
+                borderStyle:"solid",
+                fontFamily:"",
+                fontSize:"14px",
+                fontStyle:"",
+                fontWeight:"",
+                color:"#666",
+            },
+            listLeftIconStyleConfig:{
+                width:"20px",
+                height:"20px",
+                margin:"0",
+                padding:"0"
+            },
+            //列表中间文字样式
+            listTextStyleConfig:{
+                width:"70%",
+                height:"",
+                lineHeight:"",
+                maigin:"",
+                padding:"",
+                fontFamily:"",
+                fontSize:"14px",
+                color:"#000",
+                fontStyle:"",
+                fontWeight:"normal",
+                display:"inline-block",
+                textAlign:"left",
+            },
+            listMessageStyleConfig:{
+                width:"20%",
+                height:"",
+                lineHeight:"",
+                maigin:"",
+                padding:"",
+                fontFamily:"",
+                fontSize:"14px",
+                color:"#666",
+                fontStyle:"",
+                fontWeight:"normal",
+                display:"inline-block",
+                textAlign:"right",
+            },
+            //列表右侧图标样式
+            listRightIconStyleConfig:{
+                width:"20px",
+                height:"20px",
+                margin:"0",
+                padding:"0"        
+            },
+            //图标样式
+            iconStyleConfig:{
+                width:"25px",
+                height:"25px",
+                margin:"0 10px 0 0",
+                padding:"0",
+            },
+        }}
+        }
     },
 
    data(){ 
         return{
-            
+            valueBase:this.value,
+            privacyOption:{
+                icon:"ty ty-wo",
+                title:"谁可以看",
+                required:false,
+                isLink:true,
+                center:false,
+                clickable:true
+            },
+            privacy:"公开 其他成员可以见",
+            privacyPicker:false,
+            pickerOption:{
+                showToolbar:true,
+                staticData:[{
+                    text:"公开 其他成员可以见",
+                    value:"publicity"
+                },{
+                    text:"私密 仅自己可见",
+                    value:"secret",
+                }]
+            },
+            realContent:this.value.content
+
         }
       },
     computed:{
@@ -226,25 +266,25 @@ export default {
         realStyle:function(){
             const t = this;
             const styles = {
-            	"border-radius":t.styleConfig.borderRadius,
-            	"padding":t.styleConfig.padding,
-            	"margin":t.styleConfig.margin,
-            	"height":t.styleConfig.height,
-            	"resize":t.styleConfig.resize,
-            	"width":t.styleConfig.width,
-            	"border-style":t.styleConfig.borderStyle,
-            	"border-color":t.styleConfig.borderColor,
-            	"border-width":t.styleConfig.borderWidth,
-                'font-family':t.styleConfig.fontFamily,
-                'font-size':t.styleConfig.fontSize,
-                'color':t.styleConfig.fontColor,
-                'font-weight':t.styleConfig.bold?'bold':'normal',
-                'font-style':t.styleConfig.italic?'italic':'normal',
-                'ling-height':t.styleConfig.lingHeight,
-                'letter-spacing':t.styleConfig.letterSpacing,
-                'text-decoration':t.styleConfig.underline?'underline':'none',
-                'text-align':t.styleConfig.textAlign,
-                'background-color':t.styleConfig.backgroundColor,
+            	"border-radius":t.option.styleConfig.borderRadius,
+            	"padding":t.option.styleConfig.padding,
+            	"margin":t.option.styleConfig.margin,
+            	"height":t.option.styleConfig.height,
+            	"resize":t.option.styleConfig.resize,
+            	"width":t.option.styleConfig.width,
+            	"border-style":t.option.styleConfig.borderStyle,
+            	"border-color":t.option.styleConfig.borderColor,
+            	"border-width":t.option.styleConfig.borderWidth,
+                'font-family':t.option.styleConfig.fontFamily,
+                'font-size':t.option.styleConfig.fontSize,
+                'color':t.option.styleConfig.fontColor,
+                'font-weight':t.option.styleConfig.bold?'bold':'normal',
+                'font-style':t.option.styleConfig.italic?'italic':'normal',
+                'ling-height':t.option.styleConfig.lingHeight,
+                'letter-spacing':t.option.styleConfig.letterSpacing,
+                'text-decoration':t.option.styleConfig.underline?'underline':'none',
+                'text-align':t.option.styleConfig.textAlign,
+                'background-color':t.option.styleConfig.backgroundColor,
             }
             return styles;
         },
@@ -252,19 +292,19 @@ export default {
         canceclStyle:function(){
             const t = this;
             const styles = {
-            	"width":t.canceclStyleCongig.width,
-            	"height":t.canceclStyleCongig.height,
-            	"ling-height":t.canceclStyleCongig.lineHeight,
-            	"margin":t.canceclStyleCongig.margin,
-            	"padding":t.canceclStyleCongig.padding,
-            	"border-width":t.canceclStyleCongig.borderWidth,
-            	"border-color":t.canceclStyleCongig.borderColor,
-            	"border-style":t.canceclStyleCongig.borderStyle,
-            	"font-family":t.canceclStyleCongig.fontFamily,
-            	"font-size":t.canceclStyleCongig.fontSize,
-            	"font-style":t.canceclStyleCongig.fontStyle,
-            	"font-weight":t.canceclStyleCongig.fontWeight,
-            	"color":t.canceclStyleCongig.color,
+            	"width":t.option.canceclStyleCongig.width,
+            	"height":t.option.canceclStyleCongig.height,
+            	"ling-height":t.option.canceclStyleCongig.lineHeight,
+            	"margin":t.option.canceclStyleCongig.margin,
+            	"padding":t.option.canceclStyleCongig.padding,
+            	"border-width":t.option.canceclStyleCongig.borderWidth,
+            	"border-color":t.option.canceclStyleCongig.borderColor,
+            	"border-style":t.option.canceclStyleCongig.borderStyle,
+            	"font-family":t.option.canceclStyleCongig.fontFamily,
+            	"font-size":t.option.canceclStyleCongig.fontSize,
+            	"font-style":t.option.canceclStyleCongig.fontStyle,
+            	"font-weight":t.option.canceclStyleCongig.fontWeight,
+            	"color":t.option.canceclStyleCongig.color,
             }
             return styles;
         },
@@ -272,10 +312,10 @@ export default {
         iconStyle:function(){
             const t = this;
             const styles = {
-            	"width":t.iconStyleConfig.width,
-            	"height":t.iconStyleConfig.height,
-            	"margin":t.iconStyleConfig.margin,
-            	"padding":t.iconStyleConfig.padding,
+            	"width":t.option.iconStyleConfig.width,
+            	"height":t.option.iconStyleConfig.height,
+            	"margin":t.option.iconStyleConfig.margin,
+            	"padding":t.option.iconStyleConfig.padding,
             }
             return styles;           
         },
@@ -283,10 +323,10 @@ export default {
         listLeftIconStyle:function(){
             const t = this;
             const styles = {
-            	"width":t.listLeftIconStyleConfig.width,
-            	"height":t.listLeftIconStyleConfig.height,
-            	"margin":t.listLeftIconStyleConfig.margin,
-            	"padding":t.listLeftIconStyleConfig.padding,
+            	"width":t.option.listLeftIconStyleConfig.width,
+            	"height":t.option.listLeftIconStyleConfig.height,
+            	"margin":t.option.listLeftIconStyleConfig.margin,
+            	"padding":t.option.listLeftIconStyleConfig.padding,
             }
             return styles;        
         },
@@ -294,18 +334,18 @@ export default {
         listTextStyle:function(){
             const t = this;
             const styles = {
-            	"width":t.listTextStyleConfig.width,
-            	"height":t.listTextStyleConfig.height,
-            	"display":t.listTextStyleConfig.display,
-            	"line-height":t.listTextStyleConfig.lineHeight,
-            	"margin":t.listTextStyleConfig.margin,
-            	"padding":t.listTextStyleConfig.padding,
-            	"font-family":t.listTextStyleConfig.fontFamily,
-            	"font-size":t.listTextStyleConfig.fontSize,
-            	"color":t.listTextStyleConfig.color,
-            	"font-style":t.listTextStyleConfig.fontStyle,
-            	"font-weight":t.listTextStyleConfig.fontWeight,         	
-            	"text-align":t.listTextStyleConfig.textAlign,         	
+            	"width":t.option.listTextStyleConfig.width,
+            	"height":t.option.listTextStyleConfig.height,
+            	"display":t.option.listTextStyleConfig.display,
+            	"line-height":t.option.listTextStyleConfig.lineHeight,
+            	"margin":t.option.listTextStyleConfig.margin,
+            	"padding":t.option.listTextStyleConfig.padding,
+            	"font-family":t.option.listTextStyleConfig.fontFamily,
+            	"font-size":t.option.listTextStyleConfig.fontSize,
+            	"color":t.option.listTextStyleConfig.color,
+            	"font-style":t.option.listTextStyleConfig.fontStyle,
+            	"font-weight":t.option.listTextStyleConfig.fontWeight,         	
+            	"text-align":t.option.listTextStyleConfig.textAlign,         	
             }
             return styles;        
         },
@@ -313,18 +353,18 @@ export default {
         listMessageStyle:function(){
             const t = this;
             const styles = {
-            	"width":t.listMessageStyleConfig.width,
-            	"height":t.listMessageStyleConfig.height,
-            	"display":t.listMessageStyleConfig.display,
-            	"line-height":t.listMessageStyleConfig.lineHeight,
-            	"margin":t.listMessageStyleConfig.margin,
-            	"padding":t.listMessageStyleConfig.padding,
-            	"font-family":t.listMessageStyleConfig.fontFamily,
-            	"font-size":t.listMessageStyleConfig.fontSize,
-            	"color":t.listMessageStyleConfig.color,
-            	"font-style":t.listMessageStyleConfig.fontStyle,
-            	"font-weight":t.listMessageStyleConfig.fontWeight, 
-            	"text-align":t.listMessageStyleConfig.textAlign,         	
+            	"width":t.option.listMessageStyleConfig.width,
+            	"height":t.option.listMessageStyleConfig.height,
+            	"display":t.option.listMessageStyleConfig.display,
+            	"line-height":t.option.listMessageStyleConfig.lineHeight,
+            	"margin":t.option.listMessageStyleConfig.margin,
+            	"padding":t.option.listMessageStyleConfig.padding,
+            	"font-family":t.option.listMessageStyleConfig.fontFamily,
+            	"font-size":t.option.listMessageStyleConfig.fontSize,
+            	"color":t.option.listMessageStyleConfig.color,
+            	"font-style":t.option.listMessageStyleConfig.fontStyle,
+            	"font-weight":t.option.listMessageStyleConfig.fontWeight, 
+            	"text-align":t.option.listMessageStyleConfig.textAlign,         	
 
             }
             return styles;        
@@ -333,10 +373,10 @@ export default {
         listRightIconStyle:function(){
             const t = this;
             const styles = {
-            	"width":t.listRightIconStyleConfig.width,
-            	"height":t.listRightIconStyleConfig.height,
-            	"margin":t.listRightIconStyleConfig.margin,
-            	"padding":t.listRightIconStyleConfig.padding,
+            	"width":t.option.listRightIconStyleConfig.width,
+            	"height":t.option.listRightIconStyleConfig.height,
+            	"margin":t.option.listRightIconStyleConfig.margin,
+            	"padding":t.option.listRightIconStyleConfig.padding,
 
             }
             return styles;        
@@ -348,35 +388,57 @@ export default {
     	buttonFinish:function(val){
     		this.$emit("buttonFinish",val);
     	},
+        showPicker(){
+            this.privacyPicker = true;
+        },
+        addUpload(icon){
+            this.realContent.push(icon.content);
+        },
+        textareaChange(val){
+            this.valueBase.text = val;
+            this.$emit("change",this.valueBase);
+            this.$emit("input",this.valueBase);
+        }
     }
 }
 </script>
-<style>
-	.postMessage{
-		width:100%;
-		height:400px;
-		background:#fff;
-	}
-	.listStyle{
-		width:80%;
-		height:auto;
-		line-height:40px;
-		display:flex;
-		justify-content:center;
-		border-top:1px solid #eee;
-		border-bottom:1px solid #eee;
-		display:inline-block;
-		margin:0 10%;
-	}
-	.listStyle:nth-child(even){
-		border-top:none;
-	}
-	.buttonList{
-		width:100%;
-		position:fixed;
-		bottom:0;
-		left:0;
-		display:flex;
-		justify-content:center;
-	}
+<style lang="less" scoped>
+    .bb-indep-blog-post{
+        .postMessage{
+            width:100%;
+            height:400px;
+            background:#fff;
+        }
+        .listStyle{
+            width:80%;
+            height:auto;
+            line-height:40px;
+            display:flex;
+            justify-content:center;
+            border-top:1px solid #eee;
+            border-bottom:1px solid #eee;
+            display:inline-block;
+            margin:0 10%;
+        }
+        .listStyle:nth-child(even){
+            border-top:none;
+        }
+        .buttonList{
+            width:100%;
+            position:fixed;
+            bottom:0;
+            left:0;
+            display:flex;
+            justify-content:center;
+        }
+        .uploadIcon{
+            font-size: 1rem;
+            color: #666;
+        }
+        .h5configEdit{
+            margin: 1rem 0.2rem;
+        }
+    }
+
+
 </style>

@@ -1,26 +1,31 @@
 <template>
-	<bb-vant-cell-swipe :content="rightContent"> 
-	    <div class="itemContent">
-	    	<span class="leftStyle"> 
-	    		<img :src="leftImgShow">
-	    	</span>
-	    	<span class="centerStyle">				
-	    		<h1 :style="centerTitle">{{item.title}}</h1>
-	    		<p class="centerContent">
-	    			<b class="centerContentTime">	
-	    				<i><img :src="contentTimeIcon" :style="contentTimeIconStyle"></i>
-	    				<strong :style="contentTimeStyle">{{item.time}}</strong>
-	    			</b>
-	    			<b class="centerContentTime">	
-	    				<i><img :src="userNumberIcon"  :style="userNumberIconStyle"></i>
-	    				<strong :style="userNumberStyle">{{item.userNumber}}{{item.userText}}</strong>
-	    			</b>	
-	    		</p>
-	    	</span>
-	    	<span class="bb-layout-seriation"></span>
-	    </div>
-	    	
-	</bb-vant-cell-swipe>
+	<ul class="lxItemBg"> 
+		<li class="itemList" v-for="item in items">
+			<bb-vant-cell-swipe :content="rightContent"> 
+			    <div class="itemContent">
+			    	<span class="leftStyle"> 
+			    		<img :src="item.leftImgShow">
+			    	</span>
+			    	<span class="centerStyle">				
+			    		<h1 :style="centerTitle">{{item.title}}</h1>
+			    		<p class="centerContent">
+			    			<b class="centerContentTime">	
+			    				<i :class="contentTimeIcon" :style="contentTimeIconStyle"></i>
+			    				<strong :style="contentTimeStyle">{{item.time}}</strong>
+			    			</b>
+			    			<b class="centerContentTime">	
+			    				<i :class="userNumberIcon"  :style="userNumberIconStyle"></i>
+			    				<strong :style="userNumberStyle">{{item.userNumber}}</strong>
+			    			</b>	
+			    		</p>
+			    	</span>
+			    	<bb-layout-seriation :content="content"></bb-layout-seriation>	    	
+			    </div>	    	
+			</bb-vant-cell-swipe>
+		</li>
+		<p class="itemMore" @click="clickMore">查看更多</p>
+	</ul>
+
 </template>
 
 <script>
@@ -132,8 +137,9 @@
                 default:function(){
                     return {
                         width:"13px",
-                        margin:"0 5px 0 0",
+                        margin:"2px 5px 0 0",
                         padding:"0",
+                        fontSize:"14px",
                     }
                 }            
             },
@@ -143,23 +149,28 @@
                 default:function(){
                     return {
                         width:"13px",
-                        margin:"0 5px",
-                        padding:"0"
+                        margin:"3px 5px",
+                        padding:"0",
+                        fontSize:"14px",
                     }
                 }               
             },
             //内容
-            item:{
-            	type:Object,
-            	default:function(){
-            		return {
-            			title:"这个是一个标题标题标题标题",
+            /*
+            [{
+            			title:"这个是一个标题标题标题标题1111",
             			time:"07:00:00",
-            			userNumber:"292",
-            			userText:"人打卡",
-            			leftImg:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-            		}
-            	}
+            			userNumber:"292人打卡",
+            			leftImgShow:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+            		},{
+            			title:"这个是一个标题标题标题标题1111",
+            			time:"07:00:00",
+            			userNumber:"292人打卡",
+            			leftImgShow:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+            		}]
+            */
+            itemData:{
+            	type:Array,
             },
             content:{
 	          type:Array,
@@ -174,22 +185,24 @@
 	                },              //积木属性
 	                animation:[],
 	                interactives:[],
-	                layout:{                    //积木布局
-	                }
-	            }];
+	                layout:{}
+	            }]
 	          }
         	},
         	 //初始化动态数据
             itemDs:{
 				type:Object
             },
-            
+            //加载更多动态数据
+            itemMoreDs:{
+            	type:Object
+            }
         },
         data() {
             return {
-               leftImgShow:this.item.leftImg,
-               contentTimeIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-               userNumberIcon:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+               items:this.itemData,
+               contentTimeIcon:"ty-icon_riqi",
+               userNumberIcon:"ty-icon_tongyi",
                rightContent:[{                      //页面内容
                         uuid:'1',
                         alias:'bb-vant-button',                   //积木别名
@@ -213,7 +226,7 @@
                             	height:"59px",
                             }          
                         }
-                    }]
+                    }],
             }
         },
         computed:{
@@ -305,6 +318,7 @@
                     'width':t.contentTimeIconStyleConfig.width,
                     "margin":t.contentTimeIconStyleConfig.margin,
                     "padding":t.contentTimeIconStyleConfig.padding,
+                    "font-size":t.contentTimeIconStyleConfig.fontSize,
                 }
                 return styles;               
             },
@@ -313,41 +327,49 @@
                 const styles = {
                     'width':t.userNumberIconStyleConfig.width,
                     "margin":t.userNumberIconStyleConfig.margin,
-                    "padding":t.userNumberIconStyleConfig.padding,                
+                    "padding":t.userNumberIconStyleConfig.padding,
+                    "font-size":t.contentTimeIconStyleConfig.fontSize,
                 }
                 return styles;                  
             }
         },
-        watch: {
-        },
-        render: function(createElement){
-	        const t = this;
-	        const bb = _TY_Tool.bbRender(t.realContent, createElement, t);
-	        const bbTpl = createElement('template',{slot:"tip"},[bb]);
-	        return createElement('bb-layout-seriation',{props:{
-	            "text":t.text,
-	        },on:{
-	            
-	        }},[bbTpl]);
-    	},
-        created: function () {
-        },
+        watch: {},
         mounted:function(){
            this.getItem();
+           this.getItemMore();
         },
         methods: {
-            //动态数据
+            //初始化动态数据
             getItem() {
 	            const t = this;
 	            if (t.itemDs) {
-	                Util.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
+	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.item = value;
+	                        t.items = value;
+	                    
 	                    });
 	                }, function (code, msg) {
 	                });
 	            }
+	        },
+	        //加载更多动态数据
+            getItemMore() {
+	            const t = this;
+	            if (t.itemMoreDs) {
+	                 _TY_Tool.getDSData(t.itemMoreDs, _TY_Tool.buildTplParams(t), function (data) {
+	                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.items.push(item);
+	                    
+	                    });
+	                }, function (code, msg) {
+	                });
+	            }
+	        },
+	        //点击加载更多事件
+	        clickMore(){
+	        	console.log(1);
 	        },
         }
     }
@@ -368,7 +390,7 @@
     	width:100%;
     }
     .centerStyle{
-    	width:60%;
+    	width:70%;
     	padding:0 3%;
     }
     .rightStyle{
@@ -399,5 +421,26 @@
     .van-cell-swipe__right div{
     	width:100%;
     	height:100%;
+    }
+    .itemMore{
+    	width:100%;
+    	line-height:30px;
+    	text-align:center;
+    	font-size:14px;
+    	color:#666;
+    }
+    .itemList{
+    	width:100%;
+    	margin:0;
+    	padding:5px 5%;
+    	border-top:1px solid #eee;
+
+    }
+    .itemList:nth-child(1){
+    	border-top:none;
+    }
+    .lxItemBg{
+    	background:#fff;
+    	margin:10px 0 10px 0;
     }
 </style>
