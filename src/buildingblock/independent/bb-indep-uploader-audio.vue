@@ -52,6 +52,12 @@ export default {
         };
     },
     created: function () {
+        const t = this;
+        _TY_Tool.wx("http://ty.saiyachina.com",
+            ["startRecord","stopRecord","uploadVoice"]
+            ).then((wx)=>{
+                t.wx = wx;
+        });
     },
     render: function(createElement){
         const t = this;
@@ -119,31 +125,26 @@ export default {
         wxRecord(){
             const  t = this;
             t.recordButtonClass = "ty ty-lvyin recordStart recordIng";
-            _TY_Tool.wx("http://ty.saiyachina.com",
-                ["startRecord","stopRecord","uploadVoice"]
-                ).then((wx)=>{
-                    t.wx = wx;
-                    const recordTimer = setTimeout(function(){
-                        t.wx.startRecord({
-                            success: function(res){
-                                debugger
-                                localStorage.rainAllowRecord = 'true';
-                                t.timeInter = setInterval(()=>{
-                                    //时长控制
-                                    if(t.recordTime >= t.maxSize){
-                                        t.endRecord();
-                                        clearinterval(t.timeInter);
-                                    }else{
-                                        t.recordTime = t.recordTime + 1;
-                                    }
-                                },1000);
-                            },
-                            cancel: function () {
-                                alert('用户拒绝授权录音');
+            const recordTimer = setTimeout(function(){
+                t.wx.startRecord({
+                    success: function(res){
+                        debugger
+                        localStorage.rainAllowRecord = 'true';
+                        t.timeInter = setInterval(()=>{
+                            //时长控制
+                            if(t.recordTime >= t.maxSize){
+                                t.endRecord();
+                                clearinterval(t.timeInter);
+                            }else{
+                                t.recordTime = t.recordTime + 1;
                             }
-                        });
-                    },300);
-            });
+                        },1000);
+                    },
+                    cancel: function () {
+                        alert('用户拒绝授权录音');
+                    }
+                });
+            },300);
         },
         //计算录音时间
         getTime(){
