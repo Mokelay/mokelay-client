@@ -76,7 +76,7 @@
                     }
                 },
                 addTextContent:{
-                    uuid: '',
+                    uuid: _TY_Tool.uuid(),
                     alias: 'bb-indep-textarea', //布局类积木 || 普通积木
                     aliasName: '添加文字', 
                     attributes: {
@@ -113,8 +113,8 @@
                     layout: {} //积木布局
                 },
                 addPicContent:{
-                    uuid: '',
-                    alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                    uuid: _TY_Tool.uuid(),
+                    alias: 'bb-vant-uploader-image', //布局类积木 || 普通积木
                     aliasName: '添加图片', 
                     attributes: {
                         accept:"image/*",
@@ -130,8 +130,8 @@
                     layout: {} //积木布局
                 },
                 addAudioContent:{
-                    uuid: '',
-                    alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                    uuid: _TY_Tool.uuid(),
+                    alias: 'bb-vant-uploader-audio', //布局类积木 || 普通积木
                     aliasName: '添加音频', 
                     attributes: {
                         accept:"audio/*",
@@ -147,7 +147,7 @@
                     layout: {} //积木布局
                 },
                 addVideoContent:{
-                    uuid: '',
+                    uuid: _TY_Tool.uuid(),
                     alias: 'bb-vant-uploader', //布局类积木 || 普通积木
                     aliasName: '添加视频', 
                     attributes: {
