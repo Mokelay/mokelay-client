@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img :src="imgSrc" v-bind:style="cssStyle"/>
+        <img :src="imgSrc" @click="imgClick" v-bind:style="cssStyle"/>
     </div>
 </template>
 
@@ -114,7 +114,11 @@
             }
         },
         methods: {
-            
+            //img点击事件
+            imgClick:function(){
+                let t=this;
+                t.$emit("click",t);
+            }
         }
     }
 </script>

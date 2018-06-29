@@ -1281,19 +1281,19 @@ util.wx = function(appUrl, apiArray) {
                 require.ensure(['weixin-js-sdk'], function(require) {
                     var wx = require('weixin-js-sdk');
                     wx.config(wx_config);
-                    wx.checkJsApi({
-                        jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
-                        success: function(res) {
-                            console.log("微信可用api检测结果:", res)
-                        }
-                    });
                     wx.ready(function() {
-                        debugger
+                        wx.checkJsApi({
+                            jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                            success: function(res) {
+                                console.log("微信可用api检测结果:", res);
+                                resolve(wx);
+                            },
+                        });
                     })
                     wx.error(function(res) {
-                        debugger
-                    })
-                    resolve(wx);
+                        console.log("res:", res);
+                    });
+
                 }, 'weixin-js-sdk');
             });
     });

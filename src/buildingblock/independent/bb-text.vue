@@ -1,5 +1,5 @@
 <template>
-    <span class="bb-text" :style="realStyle" :contenteditable="contenteditable" v-on:dblclick="dblclick" v-on:blur="blur" v-html="relValueBase"></span>
+    <span class="bb-text" :style="realStyle" :contenteditable="contenteditable" @click="textClick" v-on:dblclick="dblclick" v-on:blur="blur" v-html="relValueBase"></span>
 </template>
 
 <script>
@@ -88,6 +88,11 @@
         methods: {
             dblclick:function(params){
                 this.$emit('bb-dblclick');
+            },
+            //点击事件
+            textClick:function(){
+                let t=this;
+                t.$emit("click",t);
             },
             blur:function(params){
                 this.$emit('bb-blur');

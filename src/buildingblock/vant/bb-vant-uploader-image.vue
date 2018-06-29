@@ -7,7 +7,7 @@ import Toast from 'vant/lib/toast';
 import 'vant/lib/toast/style';
 
 export default {
-    name:"bb-vant-uploader",
+    name:"bb-vant-uploader-image",
     components:{
         "vant-uploader":Uploader,
         "vant-icon":Icon
@@ -31,7 +31,7 @@ export default {
         //接受的文件类型。默认值image/*
         accept:{
             type:String,
-            default:"image/*"
+            default:"audio/*"
         },
         //是否禁用图片上传
         disabled:{
@@ -150,7 +150,12 @@ export default {
                 apiUrl = window._TY_ContentPath + "/" + api;
             }
             t.uploadUrl = apiUrl;
-        }
+        };
+        _TY_Tool.wx("http://ty.saiyachina.com",
+            ["chooseImage","previewImage","uploadImage"]
+            ).then((wx)=>{
+            t.wx = wx;
+        });
     },
     render: function(createElement){
         const t = this;
@@ -158,7 +163,7 @@ export default {
         let className = "default";
         switch(t.option.theme){
             case "card":
-                children = createElement('i',{props:{},class:'ty ty-icon_tianjia'},[]);
+                children = createElement('i',{props:{},class:'ty ty-icon_tianjia',on:{click:t.wxChooseImage}},[]);
                 className = "card";
                 break;
             case "photograph":
@@ -172,8 +177,8 @@ export default {
                 }
                 break;
         }
-        
-        const vantUpload = createElement('vant-uploader',{props:{
+        const upTag = _TY_Tool.isWX()?"div":"vant-uploader";
+        const vantUpload = createElement(upTag,{props:{
             "resultType":t.resultType,
             "accept":t.accept,
             "disabled":t.disabled,      
@@ -217,7 +222,6 @@ export default {
         },
         //文件上传
         uploadeFile(file){
-            debugger
             const t = this;
             //创建form对象          
             let param = new FormData(); 
@@ -253,6 +257,44 @@ export default {
             t.valueBase.splice(index,1);
             t.$emit('input',t.valueBase);
             t.$emit('change',t.valueBase);
+        },
+        wxChooseImage(){
+            const t = this;
+            debugger
+            t.wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    debugger
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    wx.uploadImage({
+                        localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            t.uploadOss(serverId);
+                        }
+                    });
+                },
+                error:function(res) {
+                    console.log("res:", res);
+                }
+            });
+        },
+        //上传到oss  tx_id腾讯服务器上文件的id
+        uploadOss(tx_id){
+            const t = this;
+            _TY_Tool.get('/config/ty_wx_media_to_oss',{
+                media_id:tx_id
+            }).then((res)=>{
+                //上传的文件路径
+                const file_url = res.data.file_url;
+                //上传的文件名
+                const file_name = res.data.file_serialize_name;
+                t.valueBase.push(file_url);
+                t.$emit("uploaded",t.valueBase);
+            })
         }
     }
   }
