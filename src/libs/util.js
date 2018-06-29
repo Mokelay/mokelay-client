@@ -1292,6 +1292,7 @@ util.wx = function(appUrl, apiArray) {
                     })
                     wx.error(function(res) {
                         console.log("res:", res);
+                        debugger
                     });
 
                 }, 'weixin-js-sdk');
