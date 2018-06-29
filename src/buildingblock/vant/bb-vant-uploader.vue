@@ -31,7 +31,7 @@ export default {
         //接受的文件类型。默认值image/*
         accept:{
             type:String,
-            default:"audio/*"
+            default:"image/*"
         },
         //是否禁用图片上传
         disabled:{
@@ -151,7 +151,6 @@ export default {
             }
             t.uploadUrl = apiUrl;
         }
-        //t.wxChooseImage();
     },
     render: function(createElement){
         const t = this;
@@ -193,17 +192,8 @@ export default {
             picList.push(item);
         }); 
         const ul = createElement('ul',{props:{},class:"uploaded-item"},[picList]);
-        const info = createElement('p',{props:{},class:"info"},["录音时长10分钟内,结束前请勿进行其他操作"]);
-        const time = createElement('p',{props:{},class:"time"},[t.getTime()]);
-        const button = createElement('i',{props:{},class:"ty ty-lvyin recordStart"},[]);
-        const recordRight = createElement('div',{props:{},class:"recordRight"},[time,info]);
-        const record = createElement('div',{props:{},class:"record",on:{
-            touchstart:t.startRecord,
-            touchend:t.endRecord
-        }},[button,recordRight]);
 
-        //return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
-        return record;
+        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
     },
     watch:{
         value(val){
@@ -263,83 +253,6 @@ export default {
             t.valueBase.splice(index,1);
             t.$emit('input',t.valueBase);
             t.$emit('change',t.valueBase);
-        },
-        startRecord(){
-            if(_TY_Tool.isWX()){
-                this.wxRecord()
-            }else{
-                Toast.fail("请在微信中打开");
-            }
-        },
-        endRecord(){
-            debugger
-            const t = this;
-            // t.wx.stopRecord({
-            //     success: function(voice){
-            //         debugger
-            //         clearinterval(timeInter);
-            //         const localId = voice.localId;
-            //         // wx.uploadVoice({
-            //         //     localId:localId,
-            //         //     isShowProgressTips:1,
-            //         //     success:function(res){
-            //         //         debugger
-            //         //         const url = "http://ty.saiyachina.com/config/ty_oss_upload";
-            //         //         clearinterval(t.timeInter);
-            //         //     }
-            //         // })
-            //     },
-            //     cancel: function () {
-            //     }
-            // });
-        },
-        wxRecord(){
-            const  t = this;
-            _TY_Tool.wx("http://ty.saiyachina.com",
-                ["startRecord","stopRecord","uploadVoice"]
-                ).then((wx)=>{
-                    t.wx = wx;
-                    const recordTimer = setTimeout(function(){
-                        t.wx.startRecord({
-                            success: function(res){
-                                debugger
-                                localStorage.rainAllowRecord = 'true';
-                                const timeInter = setInterval(()=>{
-                                    t.recordTime = t.recordTime + 1;
-                                },1000)
-                            },
-                            cancel: function () {
-                                alert('用户拒绝授权录音');
-                            }
-                        });
-                    },300);
-            });
-        },
-        wxChooseImage(){
-            _TY_Tool.wx("http://ty.saiyachina.com",
-                ["chooseImage","previewImage","uploadImage","downloadImage","getLocalImgData"]
-                ).then((wx)=>{
-                const recordTimer = setTimeout(function(){
-                    wx.chooseImage({
-                        count: 1, // 默认9
-                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-                        success: function (res) {
-                            debugger
-                            var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                        }
-                    });
-                },2000);
-            });
-        },
-        getTime(){
-            const t = this;
-            let minute = parseInt(t.recordTime/60);
-            let second = t.recordTime%60;
-            minute = minute < 10?"0"+minute:minute;
-            second = second < 10?"0"+second:second;
-            let finelTime = minute + ":" + second;
-            return finelTime;
         }
     }
   }
