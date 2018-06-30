@@ -2,7 +2,10 @@
 	<div class="audioPlayer">
 <!-- 		<i :class="playButtonClass" @click="play"></i>
 		<p class="shiftTime">{{time}}</p> -->
-		<audio id="audio" :src="valueBase" controls="controls"></audio>
+        <audio style="height: 54px;" :src="valueBase" controls="controls">
+                                            您的浏览器不支持 audio 标签。
+                                            </audio>
+		<audio id="audio" style="display:none" :src="valueBase" controls="controls"></audio>
 	</div>
 </template>
 <script>  

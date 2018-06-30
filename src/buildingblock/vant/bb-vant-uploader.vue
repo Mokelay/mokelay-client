@@ -189,12 +189,12 @@ export default {
             const tag = t.accept == "video/*"?"bb-video":"img";
             const Img = createElement(tag,{props:{value:ele},attrs:{src:ele,controls:"controls"},class:"uploaded-child"},[vantUpload]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
-            const item = createElement('li',{props:{},class:"uploaded-item"},[Img,del]);
+            const item = createElement('div',{props:{},class:"uploaded-item"},[Img,del]);
             picList.push(item);
         }); 
-        const ul = createElement('ul',{props:{},class:"uploaded-item"},[picList]);
+        const ul = createElement('ul',{props:{}},[picList]);
 
-        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
+        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,picList]);
     },
     watch:{
         value(val){
@@ -227,7 +227,7 @@ export default {
                 }
             };
             _TY_Tool.post(t.uploadUrl,{
-                file:file.file
+                file:file
             },config).then(response=>{
                 t.valueBase.push(response.data.file_url);
                 t.$emit('input',t.valueBase);
@@ -271,6 +271,9 @@ export default {
             display: inline-block;
             position: relative;
             margin-right: 0.1rem;
+            width: 2rem;
+            height: 2rem;
+            overflow: hidden;
             &:hover{
                 &>i{
                     opacity:1;

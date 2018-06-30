@@ -20,7 +20,7 @@ export default {
         value:{
             type:[Array,String],
             default:function(){
-                return ["https://longyanpc.mmall.com/image/app_nvwa_manager.png","https://longyanpc.mmall.com/image/app_nvwa_manager.png"]
+                return ["https://longyanpc.mmall.com/image/app_nvwa_manager.png","https://longyanpc.mmall.com/image/app_nvwa_manager.png","http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=379c5e675e2d1f114ad0f8cfda189787.jpg","http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=379c5e675e2d1f114ad0f8cfda189787.jpg"]
             }
         },
         //文件读取结果类型，可选值dataUrl，test
@@ -193,12 +193,12 @@ export default {
         t.valueBase.forEach((ele,index)=>{
             const Img = createElement('img',{props:{},attrs:{src:ele},class:"uploaded-child"},[]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
-            const item = createElement('li',{props:{},class:"uploaded-item"},[Img,del]);
+            const item = createElement('div',{props:{},class:"uploaded-item"},[Img,del]);
             picList.push(item);
         }); 
-        const ul = createElement('ul',{props:{},class:"uploaded-item"},[picList]);
+        const ul = createElement('ul',{props:{}},[picList]);
 
-        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,ul]);
+        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,picList]);
     },
     watch:{
         value(val){
@@ -237,7 +237,7 @@ export default {
                 }
             };
             _TY_Tool.post(t.uploadUrl,{
-                file:file.file
+                file:file
             },config)
             .then(response=>{
                 t.$emit("upload-success",response.data);
@@ -321,6 +321,9 @@ export default {
             display: inline-block;
             position: relative;
             margin-right: 0.1rem;
+            width: 2rem;
+            height: 2rem;
+            overflow: hidden;
             &:hover{
                 &>i{
                     opacity:1;

@@ -10,6 +10,7 @@ export default {
         */
         value:{
             type:[Array,String],
+            default:"http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=186cd8cc802a1bcbd9ec7d7bd5e040c2.amr"
         },
         //接受的文件类型。默认值image/*
         accept:{
