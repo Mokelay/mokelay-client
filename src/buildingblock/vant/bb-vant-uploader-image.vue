@@ -289,10 +289,9 @@ export default {
                 media_id:tx_id
             }).then((res)=>{
                 //上传的文件路径
-                const file_url = res.data.file_url;
+                const file_url = res.data.data.file_url;
                 //上传的文件名
-                const file_name = res.data.file_serialize_name;
-                t.valueBase.push("https://img1.mklimg.com/g2/M00/2C/26/rBBrCVpqyfOAOfxwAAAwkjl-zw8472.png!");
+                const file_name = res.data.data.file_serialize_name;
                 t.valueBase.push(file_url);
                 t.$emit("uploaded",t.valueBase);
             })
@@ -338,6 +337,8 @@ export default {
             }
             .uploaded-child{
                 width: 2rem;
+                text-align: center;
+                line-height: 2rem;
             }
         }
     }
