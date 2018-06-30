@@ -2,28 +2,18 @@
   <div class="bb-indep-blog">
   	<div class="content"> 
   		<div class="blogLeft"> 
-  			<img :src="user.user_portrait" :style="userImgStyle">
+  			<img :src="user.useImg" :style="userImgStyle">
   		</div>
   		<div class="blogRight">
   			<div class="blogUser"> 
-  				<p :style="userStyle">{{user.nickname}}</p>
+  				<p :style="userStyle">{{user.useName}}</p>
   				<h5 class="userTimeDate"> 
-  					<b :style="userTime">{{user.time}}</b>
-  					<i :style="userDate">{{user.date}}</i>
+  					<b :style="userTime">{{user.blogDate}}</b>
+  					<i :style="userDate">{{user.continuousDate}}</i>
   				</h5>
   			</div> 
   			<div class="blogContent"> 
   				<p :style="contentWrite">{{user.content}}</p>
-  				<p :style="contentImg"><img :src="user.clock_img"></p>
-  				<!--<div :style="contentVoice"></div>
-  				<div :style="contentTheme">
-  					<span><img :src="blog.themeImg"></span>
-  					<span> 
-  						<p>{{blog.themeTitle}}</p>
-  						<p>{{blog.themeNumber}}</p>
-  					</span>
-  					<span :class="blog.themeRightIcon"></span>
-  				</div>-->
   			</div>
   		</div>  	
   	</div>
@@ -47,20 +37,14 @@ export default {
 			content:"日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容",
 			clock_img:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",   			
     			}*/
-    	userArray:{
+    	userObject:{
     		type:Object,
     		default:function(){
     			return {
-					user_portrait:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-					nickname:"Slience",
-					time:"20秒前",
-					date:"已经坚持100天" ,
-					content:"日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容",
-					clock_img:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",     			
-				}
+    				
+    			}
     		}
-    	},
-    	
+    	},    	
     	//发表日记用户头像样式
     	userImgStyleConfig:{
     		type:Object,
@@ -192,7 +176,8 @@ export default {
     },
     data(){ 
         return{    	
-        	user:this.userArray,
+        	user:this.userObject,
+
         }
     },
     watch:{},
@@ -324,7 +309,7 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.user = value;
+                        t.user = value.currentRecords[0];
                     });
                 }, function (code, msg) {
                 });
