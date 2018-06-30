@@ -231,9 +231,14 @@ export default {
             const t = this;
             //添加请求头 
             t.uploadUrl = "/config/ty_oss_upload";
+            let config = {
+                headers:{
+                    'Content-Type':'application/json;charset=UTF-8'
+                }
+            };
             _TY_Tool.post(t.uploadUrl,{
                 file:file.file
-            })
+            },config)
             .then(response=>{
                 t.$emit("upload-success",response.data);
                 console.log(response.data);
@@ -284,10 +289,9 @@ export default {
                 media_id:tx_id
             }).then((res)=>{
                 //上传的文件路径
-                const file_url = res.data.file_url;
+                const file_url = res.data.data.file_url;
                 //上传的文件名
-                const file_name = res.data.file_serialize_name;
-                t.valueBase.push("https://img1.mklimg.com/g2/M00/2C/26/rBBrCVpqyfOAOfxwAAAwkjl-zw8472.png!");
+                const file_name = res.data.data.file_serialize_name;
                 t.valueBase.push(file_url);
                 t.$emit("uploaded",t.valueBase);
             })
@@ -310,6 +314,8 @@ export default {
             color: #999999;
             display: inline-block;
             margin-bottom: 0.1rem;
+            float: left;
+            margin-right: 0.1rem;
         }
         .uploaded-item{
             display: inline-block;
@@ -331,6 +337,8 @@ export default {
             }
             .uploaded-child{
                 width: 2rem;
+                text-align: center;
+                line-height: 2rem;
             }
         }
     }

@@ -186,8 +186,8 @@ export default {
         //渲染已经上传的图片
         const picList = [];
         t.valueBase.forEach((ele,index)=>{
-            const tag = accept == "video/*"?"video":"image";
-            const Img = createElement(tag,{props:{},attrs:{src:ele,controls:"controls"},class:"uploaded-child"},[vantUpload]);
+            const tag = t.accept == "video/*"?"bb-video":"img";
+            const Img = createElement(tag,{props:{value:ele},attrs:{src:ele,controls:"controls"},class:"uploaded-child"},[vantUpload]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
             const item = createElement('li',{props:{},class:"uploaded-item"},[Img,del]);
             picList.push(item);
@@ -221,6 +221,11 @@ export default {
             debugger
             const t = this; 
             t.uploadUrl = "/config/ty_oss_upload";
+            let config = {
+                headers:{
+                    'Content-Type':'application/json;charset=UTF-8'
+                }
+            };
             _TY_Tool.post(t.uploadUrl,{
                 file:file.file
             },config).then(response=>{
@@ -259,6 +264,8 @@ export default {
             color: #999999;
             display: inline-block;
             margin-bottom: 0.1rem;
+            float: left;
+            margin-right: 0.1rem;
         }
         .uploaded-item{
             display: inline-block;
@@ -280,6 +287,8 @@ export default {
             }
             .uploaded-child{
                 width: 2rem;
+                text-align: center;
+                line-height: 2rem;
             }
         }
     }

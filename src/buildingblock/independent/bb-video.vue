@@ -1,18 +1,31 @@
 <template>
-    <div class="bb-video">
-        <div v-if="!show" class="button-play" v-tap="showDia"><img :src="playConfig.cover" alt=""><i class="ty-icon_qiyong ty-font"></i></div>
-        <div v-if="show && playConfig.model == 'static'" class="video" v-html="realUrl"></div>
-        <div v-if="show && playConfig.model == 'dialog'" class="dialog">
-            <div class="bg"><i class="ty-icon_tuichu ty-font" v-tap="closeDia"></i></div>
-            <div class="video" v-html="realUrl"></div>
+    <div class="bb-indep-video">
+        <div class="iframe bb-video" v-if="!value">
+            <div v-if="!show" class="button-play" v-tap="showDia"><img :src="playConfig.cover" alt=""><i class="ty-icon_qiyong ty-font"></i></div>
+            <div v-if="show && playConfig.model == 'static'" class="video" v-html="realUrl"></div>
+            <div v-if="show && playConfig.model == 'dialog'" class="dialog">
+                <div class="bg"><i class="ty-icon_tuichu ty-font" v-tap="closeDia"></i></div>
+                <div class="video" v-html="realUrl"></div>
+            </div>
+        </div>
+        <div class="local" else>
+            <i class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
+            <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update="closeDia">
+                <video class="" controls="controls" :src="realUrl"></video>
+            </bb-indep-dialog>
         </div>
     </div>
+
 </template>
 
 <script>
     export default {
         name: 'bb-video',
         props: {
+            //音频地址 非iframe嵌入式音频地址
+            value:{
+                type:String
+            },
             /*
                 transformConfig 样式
                 {
@@ -28,11 +41,18 @@
             },
             playConfig:{
                 type:Object,
+                default:function(){
+                    return {
+                        source:'',
+                        model:'static',
+                        cover:''
+                    }
+                }
             }
         },
         data() {
             return {
-                realUrl:null,
+                realUrl:this.value,
                 show:false
             }
         },
