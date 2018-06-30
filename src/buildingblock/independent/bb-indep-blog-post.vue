@@ -408,6 +408,36 @@ export default {
     }
 }
 </script>
+<<<<<<< HEAD
+<style scoped>
+	.postMessage{
+		width:100%;
+		height:400px;
+		background:#fff;
+	}
+	.listStyle{
+		width:80%;
+		height:auto;
+		line-height:40px;
+		display:flex;
+		justify-content:center;
+		border-top:1px solid #eee;
+		border-bottom:1px solid #eee;
+		display:inline-block;
+		margin:0 10%;
+	}
+	.listStyle:nth-child(even){
+		border-top:none;
+	}
+	.buttonList{
+		width:100%;
+		position:fixed;
+		bottom:0;
+		left:0;
+		display:flex;
+		justify-content:center;
+	}
+=======
 <style lang="less" scoped>
     .bb-indep-blog-post{
         .postMessage{
@@ -447,4 +477,5 @@ export default {
     }
 
 
+>>>>>>> 4873cb65fff31ddcd76da8daff736e8b4c593be6
 </style>

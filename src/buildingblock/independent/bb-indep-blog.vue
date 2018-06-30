@@ -2,19 +2,19 @@
   <div class="bb-indep-blog">
   	<div class="content"> 
   		<div class="blogLeft"> 
-  			<img :src="user.userImg" :style="userImgStyle">
+  			<img :src="user.user_portrait" :style="userImgStyle">
   		</div>
   		<div class="blogRight">
   			<div class="blogUser"> 
-  				<p :style="userStyle">{{user.name}}</p>
+  				<p :style="userStyle">{{user.nickname}}</p>
   				<h5 class="userTimeDate"> 
   					<b :style="userTime">{{user.time}}</b>
   					<i :style="userDate">{{user.date}}</i>
   				</h5>
   			</div> 
   			<div class="blogContent"> 
-  				<p :style="contentWrite">{{blog.write}}</p>
-  				<p :style="contentImg"><img :src="blog.img"></p>
+  				<p :style="contentWrite">{{user.content}}</p>
+  				<p :style="contentImg"><img :src="user.clock_img"></p>
   				<!--<div :style="contentVoice"></div>
   				<div :style="contentTheme">
   					<span><img :src="blog.themeImg"></span>
@@ -25,13 +25,9 @@
   					<span :class="blog.themeRightIcon"></span>
   				</div>-->
   			</div>
-  			<bb-indep-blog-action></bb-indep-blog-action>
   		</div>  	
   	</div>
-	<div class="blogCommet">
-		<bb-indep-blog-praise></bb-indep-blog-praise>
-		<bb-indep-blog-comment></bb-indep-blog-comment>
-	</div>
+
   </div>
 </template>
 <script>  
@@ -42,30 +38,29 @@ export default {
     props:{
     	
 
-    	//发表日记用户信息
-    	user:{
+    	//发表日记用户信息静态数据
+    	/*{
+			user_portrait:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+			nickname:"Slience",
+			time:"20秒前",
+			date:"已经坚持100天" ,
+			content:"日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容",
+			clock_img:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",   			
+    			}*/
+    	userArray:{
     		type:Object,
     		default:function(){
     			return {
-	    			userImg:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-	    			name:"Slience",
-	    			time:"20秒前",
-	    			date:"已经坚持100天"    			
-    			}
+					user_portrait:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
+					nickname:"Slience",
+					time:"20秒前",
+					date:"已经坚持100天" ,
+					content:"日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容",
+					clock_img:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",     			
+				}
     		}
     	},
-    	//日记内容数据
-    	blog:{
-    		type:Object,
-    		default:function(){
-    			return {
-    				write:"日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容日记内容",
-    				img:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-
-    			}
-    		}
-    	},
- 
+    	
     	//发表日记用户头像样式
     	userImgStyleConfig:{
     		type:Object,
@@ -197,7 +192,7 @@ export default {
     },
     data(){ 
         return{    	
-
+        	user:this.userArray,
         }
     },
     watch:{},
@@ -321,16 +316,15 @@ export default {
         },
 
     },
-
     methods:{
     	//动态数据获取
         getData() {
             const t = this;
-            if (t.commentDs) {
-                _TY_Tool.getDSData(t.commentDs, _TY_Tool.buildTplParams(t), function (data) {
+            if (t.blogDs) {
+                _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.replys = value;
+                        t.user = value;
                     });
                 }, function (code, msg) {
                 });
@@ -339,15 +333,14 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 	.content{
-
-		
 		width:95%;
 		height:100%;
 		display:flex;
 		justify-content:center;
-		margin:50px 2.5% 0 2.5%;
+		margin:10px 2.5% 0 2.5%;
+		font-size:14px;
 	}
 	
 	.blogRight{

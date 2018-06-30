@@ -16,6 +16,24 @@
 				<span :style="shareTextStyle">{{praiseText}}</span> 
 			</b>
 		</div>
+		<!--分享点击出现弹框-->
+		<div class="blogActionPop" v-show="blog.blogActionPopShow"> 
+	  		<div class="blogActionPopBg" @click="blogActionPopHide"></div>
+	  		<div class="blogActionPopContent"> 
+	  			<div class="blogActionPopContentIcon"> 
+	  				<span> 
+	  					<i :class="blog.wxFriend" class="actionIcon"></i>
+	  					<p>{{blog.actionPopFriend}}</p>
+	  				</span>
+	  				<span> 
+	  					<i :class="blog.wxFriendCircle" class="actionIcon"></i>
+	  					<p>{{blog.actionPopFriendCircle}}</p>
+	  				</span>
+	  			</div>
+	  			<p class="blogActionPopCancel" @click="blogActionPopHide">取消</p>
+	  		</div>
+  		</div>
+
   	</div>  	
 
 </template>
@@ -25,6 +43,19 @@
 export default {
     name:"bb-indep-blog",
     props:{
+    	
+    	blogData:{
+    		type:Object,
+    		default:function(){
+    			return {
+    				wxFriend:"ty-icon_daiban",
+			        wxFriendCircle:"ty-icon_chenggong_lv",    
+    				actionPopFriend:"微信好友",
+    				actionPopFriendCircle:"朋友圈",
+    				blogActionPopShow:false,
+    			}
+    		}
+    	},
     	//分享文字
     	shareText:{
     		type:String,
@@ -84,7 +115,9 @@ export default {
         	shareIcon:"ty-wj_skip_long_questio",
         	isColor:this.praiseColor,
         	praiseText:this.praiseTextShow,
-        }
+        	blog:this.blogData,
+
+    		}
       },
     watch:{}, 
     computed:{
@@ -121,6 +154,7 @@ export default {
     methods:{
     	//分享点击事件
     	shareClick:function(val){
+    		this.blog.blogActionPopShow = true;
     		this.$emit("shareClick",val);
     	},
     	//评论点击事件
@@ -132,7 +166,7 @@ export default {
     		this.isColor = this.isColor?false:true;
     		this.$emit("praiseClick",val);
     	},
-    	//动态数据获取
+    	//点赞动态数据获取
         getData() {
             const t = this;
             if (t.praiseDs) {
@@ -145,12 +179,19 @@ export default {
                 }, function (code, msg) {
                 });
             }
-        },  
+        }, 
+        //分享弹框取消事件
+        blogActionPopHide:function(){
+        	this.blog.blogActionPopShow = false;
+        },
+
      }
 }
 </script>
-<style>
-
+<style scoped>
+	.bb-indep-blog{
+		font-size:14px;
+	}
 	.blogCommetHref b{
 		cursor:pointer;
 	}
@@ -159,5 +200,46 @@ export default {
 	}
 	.actionIcon{
 		font-size:18px;
+	}
+	.blogActionPop{
+		width:100%;
+		height:100%;
+		position:fixed;
+		top:0;
+		left:0;
+		z-index:3;
+	}
+	.blogActionPopBg{
+		width:100%; 
+		height:100%;
+		background:rgba(0,0,0,.3);
+		position:absolute;
+		top:0;
+		left:0;
+	}
+	.blogActionPopContent{
+		width:100%;
+		height:auto;
+		background:rgba(255,255,255,.86);
+		position:absolute;
+		bottom:0;
+		left:0;
+	}
+	.blogActionPopCancel{
+		width:100%;
+		line-height:40px;
+		border-top:1px solid #ddd;
+		text-align:center;
+	}
+
+	.blogActionPopContentIcon{
+		width:100%;
+		padding:10px 5%;
+	}
+	.blogActionPopContentIcon span{
+		width:25%;
+		display:inline-block;
+		text-align:center;
+		line-height:25px;
 	}
 </style>

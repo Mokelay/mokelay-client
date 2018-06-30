@@ -16,7 +16,7 @@
 							<i :style="replyObjectStyle">{{comment.replyObject}}</i>
 							<i :style="replyUserStyle">{{comment.replyObjectName}}</i>
 							<i :style="replyObjectStyle">{{comment.replyObjectSymbol}}</i>
-							<i :style="replyObjectStyle" @click="replyContentClick">{{comment.replyContent}}</i>
+							<i :style="replyObjectStyle" @click="replyContentClick(reply)">{{comment.replyContent}}</i>
 						</h5>						
 					</span>
 				</div>
@@ -391,45 +391,33 @@ export default {
         replyClick:function(reply){
         	this.blogWriteReplyShow = true;
         	this.useName = reply.user;
+
         }, 
-        //提交评论
-        replyContentClick:function(){},
+        //二级回复
+        replyContentClick:function(reply){
+        	this.blogWriteReplyShow = true;
+        	//this.useName = comment.replyUser;
+        	console.log(reply.children);
+        },
         replySubmit:function(){
+        	var t = this;
         	var val = this.valueBase;
         	var replyName = this.useName;
-			//let param = new formData();
-			//param.append(val,replyName);
-
-			/* let param = new FormData(); 
-            //通过append向form对象添加数据
-            param.append(val,replyName);
+			var param = {
+				reply_comment:val,
+				to_uid:replyName,
+				parent_id:1,
+				practice_id:1, //主题id
+				clock_in_id:1 , //打卡id
+			};
+			//param.append('comment',val);
+			//param.append('to_id',replyName);
 			console.log(param);
-
- 			_TY_Tool.post('/ty-lego-config-self?param=xlx_c_comment',{
- 				val:this.valueBase,
- 				replyName:this.useName,
- 			}).then(response=>{
- 				console.log("success");
-            }).catch(error=>{
-
-            });*/
-
-        	/*_TY_Tool.post(val).sponse.data.data.wx_config;
-                wx_config.jsApiList = apiArray;
-                require.ensure(['weixin-js-sdk'], function(require) {
-                    var wx = require('weixin-js-sdk');
-                    wx.config(wx_config);
-	                    wx.checkJsApi({then(response => {
-	                let wx_config = re
-                        jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
-                        success: function(res) {
-                            console.log("微信可用api检测结果:", res)
-                        }
-                    });
-                    resolve(wx);
-                }, 'weixin-js-sdk');
-            });*/
-
+			t.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_comment";
+			_TY_Tool.post(t.uploadUrl,param)
+            .then(response=>{
+                console.log("请求成功");
+            });
         	
         },
         //提交信息
@@ -437,7 +425,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 
 	.blogReply{
 		width:100%;
