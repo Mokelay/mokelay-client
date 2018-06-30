@@ -236,7 +236,7 @@ export default {
             };  
             t.uploadUrl = "http://ty.saiyachina.com/config/ty_oss_upload";
             _TY_Tool.post(t.uploadUrl,{
-                file:file
+                file:file.file
             },config).then(response=>{
                 t.valueBase.push(response.data.file_url);
                 t.$emit('input',t.valueBase);

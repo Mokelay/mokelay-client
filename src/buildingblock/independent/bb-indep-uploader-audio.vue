@@ -85,7 +85,13 @@ export default {
     watch:{
         value(val){
             this.valueBase = val;
-        }
+        },
+        valueBase:{
+            handler:(val,oldVal)=>{
+                debugger;
+            },
+            deep:true
+        },
       },    
     methods: {
         //获取子积木
@@ -172,6 +178,7 @@ export default {
                 media_id:tx_id
             }).then((res)=>{
                 //上传的文件路径
+                t.valueBase = "http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=6c6da9f1b4b8942dc067f41ed597ac7a.amr";
                 t.valueBase = res.data.file_url;
                 //上传的文件名
                 t.file_name = res.data.file_serialize_name;
