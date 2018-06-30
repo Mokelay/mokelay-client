@@ -1,6 +1,6 @@
 <template>
 	<ul class="lxItemBg"> 
-		<li class="itemList" v-for="item in items">
+		<li class="itemList" v-for="item in items" :page="pageData">
 			<bb-vant-cell-swipe :content="rightContent"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
@@ -15,7 +15,7 @@
 			    			</b>
 			    			<b class="centerContentTime">	
 			    				<i :class="userNumberIcon"  :style="userNumberIconStyle"></i>
-			    				<strong :style="userNumberStyle">{{item.userNumber}}</strong>
+			    				<strong :style="userNumberStyle">{{userNumber}}</strong>
 			    			</b>	
 			    		</p>
 			    	</span>
@@ -23,7 +23,7 @@
 			    </div>	    	
 			</bb-vant-cell-swipe>
 		</li>
-		<p class="itemMore" @click="clickMore">查看更多</p>
+		<p class="itemMore" @click="clickMore">{{seeMore}}</p>
 	</ul>
 
 </template>
@@ -155,6 +155,16 @@
                     }
                 }               
             },
+            //分页属性设置
+            pageConfig:{
+            	type:Object,
+            	default:function(){
+            		return {
+            			page:1,
+            			pageSize:5,
+            		}
+            	}
+            },
             //内容
             /*
             [{
@@ -191,12 +201,17 @@
         	},
         	 //初始化动态数据
             itemDs:{
-				type:Object
+				type:Object,
+
             },
             //加载更多动态数据
             itemMoreDs:{
             	type:Object
-            }
+            },
+            seeMoreWrite:{
+            	type:String,
+            	default:"查看更多",
+            },
         },
         data() {
             return {
@@ -227,7 +242,10 @@
                             }          
                         }
                     }],
-               page:"",
+               pageData:this.pageConfig,
+               page:this.pageConfig.page,
+               pageSize:this.pageConfig.pageSize,
+               seeMore:this.seeMoreWrite,
             }
         },
         computed:{
@@ -337,7 +355,7 @@
         watch: {},
         mounted:function(){
            this.getItem();
-           this.getItemMore();
+           
         },
         methods: {
             //初始化动态数据
@@ -347,39 +365,36 @@
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.items = value;
-	                    	console.log(value);
+	                        t.items = value.itemList;
+	                        t.userNumber = value.userNumber;	    
+	                        t.page = value.page;  //当前页码
+	                        t.pageSize = value.pageSize; //当前页总条数
+	                        t.totalPage = value.totalPages;  //总页数
 	                    });
 	                }, function (code, msg) {
 	                });
 	            }
 	        },
-	        //加载更多动态数据
-            getItemMore() {
-	            const t = this;
-	            if (t.itemMoreDs) {
-	                 _TY_Tool.getDSData(t.itemMoreDs, _TY_Tool.buildTplParams(t), function (data) {
-	                    data.forEach((item) => {
-	                        const {dataKey, value} = item;
-	                        //console.log(value);
-	                        t.items.push(value);	                    
-	                    });
-	                }, function (code, msg) {
-	                });
-	            }
-	        },
+
 	        //点击加载更多事件
 	        clickMore(){
 	        	var t = this;
-				var param = {
-					currentPage:1,
-				};
-				//console.log(param);
-				t.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_participation_theme_query_page";
-				_TY_Tool.post(t.uploadUrl,param)
-	            .then(response=>{
-	                console.log("请求成功");
-	            });
+	        	t.page = t.page + 1;
+	        	if(t.itemMoreDs){
+	        		_TY_Tool.getDSData(t.itemMoreDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+	                        const {dataKey, value} = item;
+	                        t.items = t.items.concat(value.itemList);
+	                    });
+	                }, function (code, msg) {
+	                });
+	        	};
+	        	//如果当前页码等于总页码，修改文字显示内容
+	        	var nowPage = this.page;
+	        	var sumPage = this.totalPage;
+	        	if(nowPage == sumPage){
+	        		this.seeMore = "没有更多内容了";
+	        	}	            
 	        },
         }
     }
