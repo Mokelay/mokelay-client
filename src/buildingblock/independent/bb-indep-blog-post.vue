@@ -259,7 +259,7 @@ export default {
                     value:"publicity"
                 },{
                     text:"私密 仅自己可见",
-                    value:"secret",
+                    value:"privacy",
                 }]
             },
         }
@@ -397,8 +397,8 @@ export default {
         addUpload(icon){
             this.realContent.push(icon.content);
         },
-        textareaChange(val){
-            this.valueBase.text = val;
+        textareaChange(e){
+            this.valueBase.text = e.target.value;
             this.valueBase.content = this.$refs.postContent.getContents();
             this.$emit("change",this.valueBase);
             this.$emit("input",this.valueBase);
@@ -406,10 +406,11 @@ export default {
         //外部获取最新的content
         getContents(){
             this.valueBase.content = this.$refs.postContent.getContents();
+            this.$emit("change",this.valueBase);
+            this.$emit("input",this.valueBase);
             return this.valueBase;
         },
         privacyChange(value){
-            debugger
             this.privacy = value;
             this.valueBase.privacy = value;
             this.valueBase.content = this.$refs.postContent.getContents();
