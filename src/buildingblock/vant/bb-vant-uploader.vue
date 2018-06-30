@@ -186,7 +186,8 @@ export default {
         //渲染已经上传的图片
         const picList = [];
         t.valueBase.forEach((ele,index)=>{
-            const Img = createElement('img',{props:{},attrs:{src:ele},class:"uploaded-child"},[vantUpload]);
+            const tag = accept == "video/*"?"video":"image";
+            const Img = createElement(tag,{props:{},attrs:{src:ele,controls:"controls"},class:"uploaded-child"},[vantUpload]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
             const item = createElement('li',{props:{},class:"uploaded-item"},[Img,del]);
             picList.push(item);
@@ -220,13 +221,13 @@ export default {
             debugger
             const t = this;
             //创建form对象          
-            let param = new FormData(); 
-            //通过append向form对象添加数据
-            param.append('file',file,file.name);
-            //添加form表单中其他数据
-            param.append('chunk','0');
-            //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-            console.log(param.get('file')); 
+            // let param = new FormData(); 
+            // //通过append向form对象添加数据
+            // param.append('file',file,file.name);
+            // //添加form表单中其他数据
+            // param.append('chunk','0');
+            // //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+            // console.log(param.get('file')); 
             //添加请求头
             let config = {
                 headers:{
@@ -234,10 +235,10 @@ export default {
                 }
             };  
             t.uploadUrl = "http://ty.saiyachina.com/config/ty_oss_upload";
-            _TY_Tool.post(t.uploadUrl,param,config)
-            .then(response=>{
-                t.$emit("upload-success",response.data);
-                console.log(response.data);
+            _TY_Tool.post(t.uploadUrl,{
+                file:file
+            },config).then(response=>{
+                t.valueBase.push(response.data.file_url);
                 t.$emit('input',t.valueBase);
                 t.$emit('change',t.valueBase);
             });

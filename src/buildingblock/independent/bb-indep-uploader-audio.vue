@@ -241,8 +241,27 @@ export default {
             }
         }
         .recordIng{
-            color:#FF4500;
-            transition: color 1s;
+            color:#FFAEB9;
+            animation: reacording 1s infinite;
+        }
+        @keyframes reacording{
+            from {opacity:1}
+            to {opacity:0.5}
+        }
+
+        @-moz-keyframes reacording /* Firefox */{
+            from {opacity:1}
+            to {opacity:0.5}
+        }
+
+        @-webkit-keyframes reacording /* Safari 和 Chrome */{
+            from {opacity:1}
+            to {opacity:0.5}
+        }
+
+        @-o-keyframes reacording /* Opera */{
+            from {opacity:1}
+            to {opacity:0.5}
         }
     }
 </style>
