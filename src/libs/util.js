@@ -1322,7 +1322,7 @@ util.wx = function(apiArray) {
             .then(response => {
                 let wx_config = response.data.data.wx_config;
                 wx_config.jsApiList = apiArray;
-                wx_config.debug = true;
+                wx_config.debug = false;
                 require.ensure(['weixin-js-sdk'], function(require) {
                     var wx = require('weixin-js-sdk');
                     wx.config(wx_config);
