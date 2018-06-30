@@ -343,40 +343,80 @@ util.resolveButton = function(button, valueobj) {
             var confirmText = button['confirmText'] ? util.tpl(button['confirmText'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "是否执行此操作";
             button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
             var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "操作成功";
-            t.$confirm(confirmText, confirmTitle, {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                util.getDSData(ds, valueobj, function(map) {
-                    //TODO
-                    t.$message({
-                        type: 'success',
-                        message: messageInfo
+            if (util.isPC()) {
+                t.$confirm(confirmText, confirmTitle, {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    util.getDSData(ds, valueobj, function(map) {
+                        //TODO
+                        t.$message({
+                            type: 'success',
+                            message: messageInfo
+                        });
+                        resolve();
+                        // util.buttonCallback(button, valueobj, callback, map);
+                        //触发按钮执行完成事件
+                        t.$emit("button-finish", button, valueobj, map);
+                        t.$emit("button-finish-success", button, valueobj, map);
+                    }, function(err, msg) {
+                        t.$message({
+                            type: 'warning',
+                            message: msg || messageInfo
+                        });
+                        reject();
+                        // util.buttonCallback(button, valueobj, callback, err);
+                        //触发按钮执行完成事件
+                        t.$emit("button-finish", button, valueobj, err);
+                        t.$emit("button-finish-error", button, valueobj, err);
                     });
-                    resolve();
-                    // util.buttonCallback(button, valueobj, callback, map);
-                    //触发按钮执行完成事件
-                    t.$emit("button-finish", button, valueobj, map);
-                    t.$emit("button-finish-success", button, valueobj, map);
-                }, function(err, msg) {
+                }).catch(() => {
                     t.$message({
-                        type: 'warning',
-                        message: msg || messageInfo
+                        type: 'info',
+                        message: '操作未完成'
                     });
                     reject();
-                    // util.buttonCallback(button, valueobj, callback, err);
-                    //触发按钮执行完成事件
-                    t.$emit("button-finish", button, valueobj, err);
-                    t.$emit("button-finish-error", button, valueobj, err);
                 });
-            }).catch(() => {
-                t.$message({
-                    type: 'info',
-                    message: '操作未完成'
+            } else {
+                _TY_Modal({
+                    title: confirmTitle,
+                    message: confirmText,
+                    btns: [{
+                        text: '取消',
+                        $action: (modal) => {
+                            modal.doclose();
+                            reject();
+                        }
+                    }, {
+                        text: '确认',
+                        $action: (modal) => {
+                            util.getDSData(ds, valueobj, function(map) {
+                                //TODO
+                                _TY_Toast({
+                                    content: messageInfo
+                                });
+                                resolve();
+                                // util.buttonCallback(button, valueobj, callback, map);
+                                //触发按钮执行完成事件
+                                t.$emit("button-finish", button, valueobj, map);
+                                t.$emit("button-finish-success", button, valueobj, map);
+                            }, function(err, msg) {
+                                _TY_Toast({
+                                    content: msg || messageInfo
+                                });
+                                reject();
+                                // util.buttonCallback(button, valueobj, callback, err);
+                                //触发按钮执行完成事件
+                                t.$emit("button-finish", button, valueobj, err);
+                                t.$emit("button-finish-error", button, valueobj, err);
+                            });
+                            modal.doclose();
+                        }
+                    }]
                 });
-                reject();
-            });
+
+            }
         } else if (button['action'] == 'dialog-page') {
             //TODO 弹出一个页面对话框
             require.ensure(["art-dialog"], function(require) {
