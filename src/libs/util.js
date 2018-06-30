@@ -849,7 +849,11 @@ util.bbRender = function(content, createElement, t) {
             let onArr = _setEventMethod(bb, t);
             //渲染积木属性和动画
             const style = util.setStyle(bb, t);
-            const bbele = createElement(bb['alias'], {
+            let tag = bb['alias'];
+            if (bb['showAlias']) {
+                tag = window._TY_BB_Edit ? bb['alias'] : bb['showAlias']
+            }
+            const bbele = createElement(tag, {
                 ref: bb['uuid'] || util.uuid(),
                 props: attributes,
                 attrs: {
@@ -1346,10 +1350,20 @@ util.wx = function(apiArray) {
 }
 //等具体方案出来后 立即替换     转换积木编辑状态的积木editAlias和展示状态的积木showAlias
 util.transferContent = function(contents) {
-    contents.forEach((content, key) => {
-        content.alias = content.showAlias
-    });
-    return contents;
+    const newArry = [];
+    let realContents;
+    if (typeof contents == 'string') {
+        realContents = eval("(" + contents + ")");
+    }
+    if (typeof realContents == "object") {
+        realContents.forEach((content, key) => {
+            content.alias = content.showAlias
+            newArry.push(content);
+        });
+        return newArry;
+    } else {
+        return contents
+    }
 }
 
 

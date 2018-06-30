@@ -13,7 +13,7 @@
   				</h5>
   			</div> 
   			<div class="blogContent"> 
-  				<p :style="contentWrite" @click="joinBlogDetails(blog)">{{blog.content}}</p>
+                <bb-layout-seriation :style="contentWrite" @click="joinBlogDetails(blog)" :content="blog.content"></bb-layout-seriation>
   				<!--<div :style="contentVoice"></div>
   				<div :style="contentTheme">
   					<span><img :src="blog.themeImg"></span>
@@ -33,7 +33,7 @@
   						<i :class="blogJoinXlxIcon"></i> 
   					</span>
   				</div>
-  				<div>{{blog.log_id}}{{blog.practiveId}}</div>
+  				<div class="display">{{blog.log_id}}{{blog.practiveId}}</div>
   			</div>
   			<bb-indep-blog-action></bb-indep-blog-action>
   		</div>  	
@@ -332,7 +332,14 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.blogs = value.currentRecords;               
+                        t.blogs = value.currentRecords;
+                        // const newArry = [];
+                        // value.currentRecords.forEach((blog,key)=>{
+                        //     blog.content = _TY_Tool.transferContent(blog.content);
+                        //     newArry.push(blog);
+                        // });
+                        // console.log(newArry);
+                        // t.blogs = newArry;
                     });
                 }, function (code, msg) {
                 });
