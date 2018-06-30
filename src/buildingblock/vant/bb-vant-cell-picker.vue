@@ -1,11 +1,31 @@
+<template>
+    <div class="bb-vant-cell-picker">
+        <bb-vant-cell @click="showPopup" :value="valueBase" :option="option" :content="content" :contentDs="contentDs"></bb-vant-cell>
+        <van-popup v-model="pickerShow" position="bottom" @click-overlay="onCancel">
+            <van-picker
+              :show-toolbar="pickerConfig.showToolbar"
+              :title="pickerConfig.title"
+              :columns="pickerConfig.columns"
+              @cancel="onCancel"
+              @confirm="onConfirm"
+            />
+        </van-popup>
+    </div>
+</template>
 <script>
+import Popup from 'vant/lib/popup';
+import 'vant/lib/popup/style';
+import Picker from 'vant/lib/picker';
+import 'vant/lib/picker/style';
 import Cell from 'vant/lib/cell';
 import 'vant/lib/cell/style';
 
     export default {
-        name: 'bb-vant-cell',
+        name: 'bb-vant-cell-picker',
         components: {
           "van-cell":Cell,
+          "van-popup":Popup,
+          "van-picker":Picker
         },
         props: {
             //内容
@@ -15,6 +35,26 @@ import 'vant/lib/cell/style';
             /*模板默认值*/
             defaultValTpl:{
                 type:[String,Number,Boolean]
+            },
+            /*选择器属性
+                showToolbar:true //显示头部
+              title:"标题"
+              columns:
+                单级['杭州', '宁波', '温州', '嘉兴', '湖州']
+                多级[
+                    {
+                        values: Object.keys(citys),
+                        className: 'column1'
+                    },
+                    {
+                        values: citys['浙江'],
+                        className: 'column2',
+                        defaultIndex: 2
+                    }
+                ]
+            */
+            pickerConfig:{
+                type:Object
             },
             /*其他属性配置
                 {
@@ -102,62 +142,42 @@ import 'vant/lib/cell/style';
         data() {
             return {
                 valueBase:this.value,
-                realContent:this.content || []
+                pickerShow:false
             };
         },
         watch:{
             value(val){
-                this.valueBase = val;
+                const t = this;
+                if(t.pickerConfig.columns){
+                   t.pickerConfig.columns.forEach((ele,key)=>{
+                        t.valueBase = ele.value == val?ele.text:t.valueBase;
+                   });
+                }
             }
         },
-        render: function(createElement){
-            const t = this;
-            const children = [];
-            t.realContent.forEach((ele,index)=>{
-                const bb = _TY_Tool.bbRender([ele], createElement, t);
-                const child = createElement('div',{slot:ele.group},[bb]);
-                children.push(child);
-            });
-            return createElement('van-cell',{props:{
-                "value":t.valueBase, 
-                "icon":t.option.icon,
-                "label":t.option.label,
-                "required":t.option.required,
-                "is-link":t.option.isLink,
-                "center":t.option.center,
-                "url":t.option.url,
-                "clickable":t.option.clickable,
-                "title":t.option.title
-            },on:{
-                click:t.click
-            }},[children]);
-        },
         mounted(){
-            this.getData();
+            const t = this;
+            if(t.pickerConfig.columns){
+               t.pickerConfig.columns.forEach((ele,key)=>{
+                    t.valueBase = ele.value == t.value?ele.text:t.valueBase;
+               });
+            }
         },
         //事件click
         methods: {
-            //点击事件
-            click(param){
-                this.$emit('click',param);
+            onConfirm(value, index) {
+                this.valueBase = value.text;
+                this.$emit("input",value.value);
+                this.$emit("change",value.value);
+                this.pickerShow = false;
             },
-            //获取动态内容
-            getData(){
-                const t = this;
-                if (t.contentDs) {
-                    t.loading = true;
-                    _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
-                        data.forEach((item) => {
-                            t.loading = false;
-                            const {dataKey, value} = item;
-                            t.realContent = value;
-                        });
-                    }, function (code, msg) {
-                        t.loading = false;
-                    });
-                }
+            onCancel() {
+                this.pickerShow = false;
             },
-        }
+            showPopup(){
+                this.pickerShow = true;
+            }
+}
     }
 </script>
 
