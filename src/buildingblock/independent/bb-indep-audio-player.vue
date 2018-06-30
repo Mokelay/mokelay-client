@@ -1,8 +1,8 @@
 <template>
 	<div class="audioPlayer">
-		<i :class="playButtonClass" @click="play"></i>
-		<p class="shiftTime">{{time}}</p>
-		<audio id="audio" :src="valueBase" ></audio>
+<!-- 		<i :class="playButtonClass" @click="play"></i>
+		<p class="shiftTime">{{time}}</p> -->
+		<audio id="audio" :src="valueBase" controls="controls"></audio>
 	</div>
 </template>
 <script>  
