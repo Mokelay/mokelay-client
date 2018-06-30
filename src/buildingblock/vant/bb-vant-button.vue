@@ -93,8 +93,8 @@ import 'vant/lib/button/style';
             click(){
                 const t = this;
                 _TY_Tool.resolveButton(t.buttonAction,_TY_Tool.buildTplParams(this));
-                t.$emit('buttonClick',button,t);
-                t.$emit('click',button,t);
+                t.$emit('buttonClick',t.buttonAction,t);
+                t.$emit('click',t.buttonAction,t);
             },
             //获取弹窗中的子积木
             loadChildBB(){
