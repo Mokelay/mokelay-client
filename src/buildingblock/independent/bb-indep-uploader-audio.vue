@@ -65,8 +65,9 @@ export default {
         const info = createElement('p',{props:{},class:"info"},[`录音时长${maxSize}分钟内,结束前请勿进行其他操作`]);
         const time = createElement('p',{props:{},class:"time"},[t.getTime()]);
         const button = createElement('i',{props:{},class:t.recordButtonClass,on:{
-            touchstart:t.startRecord,
-            touchend:t.endRecord
+            // touchstart:t.startRecord,
+            // touchend:t.endRecord
+            click:t.recordFn
         }},[]);
         const recordRightChild = [];
         recordRightChild.push(time,info);
@@ -92,8 +93,15 @@ export default {
             let t=this;
             return _TY_Tool.loadChildBB(t);                
         },
+        recordFn(){
+            if(this.status != "recording"){
+                this.startRecord();
+            }else{
+                this.endRecord();
+            }
+        },
         startRecord(){
-            if(_TY_Tool.isWX() || 1){
+            if(_TY_Tool.isWX()){
                 this.wxRecord();
             }else{
                 _TY_Toast("请在微信中打开");
@@ -103,11 +111,12 @@ export default {
         endRecord(){
             const t = this;
             t.recordButtonClass = "ty ty-lvyin recordStart";
+            t.status = 'endRecord';
             clearInterval(t.timeInter);
             t.wx.stopRecord({
                 success: function(voice){
                     const localId = voice.localId;
-                    wx.uploadVoice({
+                    t.wx.uploadVoice({
                         localId:localId,
                         isShowProgressTips:1,
                         success:function(res){
@@ -129,6 +138,7 @@ export default {
                 t.wx.startRecord({
                     success: function(res){
                         localStorage.rainAllowRecord = 'true';
+                        t.status = 'recording';
                         t.timeInter = setInterval(()=>{
                             //时长控制
                             if(t.recordTime >= t.maxSize){
