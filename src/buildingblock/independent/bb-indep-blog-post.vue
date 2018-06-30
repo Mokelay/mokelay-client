@@ -8,7 +8,7 @@
                 @change="textareaChange"
  			> 
  			</textarea>
-            <bb-layout-seriation-edit ref="editContent" class="h5configEdit" :horizontal="false" :content="realContent"></bb-layout-seriation-edit>
+            <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent"></bb-layout-seriation-edit>
  			<p class="uploadIcon">
  				<i 
  				v-for="icon in icons" 
@@ -396,8 +396,14 @@ export default {
         },
         textareaChange(val){
             this.valueBase.text = val;
+            this.valueBase.content = this.$refs.postContent.getContents();
             this.$emit("change",this.valueBase);
             this.$emit("input",this.valueBase);
+        },
+        //外部获取最新的content
+        getContents(){
+            this.valueBase.content = this.$refs.postContent.getContents();
+            return this.valueBase;
         }
     }
 }
@@ -439,6 +445,4 @@ export default {
             margin: 1rem 0.2rem;
         }
     }
-
-
 </style>

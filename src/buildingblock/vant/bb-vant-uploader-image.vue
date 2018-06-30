@@ -151,7 +151,7 @@ export default {
             }
             t.uploadUrl = apiUrl;
         };
-        _TY_Tool.wx("http://ty.saiyachina.com",
+        _TY_Tool.wx(
             ["chooseImage","previewImage","uploadImage"]
             ).then((wx)=>{
             t.wx = wx;

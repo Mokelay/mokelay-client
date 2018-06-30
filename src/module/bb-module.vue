@@ -8,7 +8,7 @@
  * 2. 模块支持横排竖排两种排版(1.0版本)
  * 3. 模块的属性来自积木的属性
  * 4. 模块的方法来自积木的方法
- * 5. 模块的时间来自积木的事件
+ * 5. 模块的事件来自积木的事件
  * 6. 偏应用类设计
  * <p/>
  * Author: CarlChen
@@ -20,10 +20,12 @@
     render: function (createElement) {
     },
     props: {
-      alias:{
+      //从后端获取content数据并且渲染
+      moduleAlias:{
         type: String
       },
-      props:{
+      //外部传入content ，用来覆盖内部content
+      content:{
         type:Object
       }
     },

@@ -51,13 +51,13 @@ export default {
             file_url:""
         };
     },
-    created: function () {
+    mounted: function () {
         const t = this;
-        _TY_Tool.wx("http://ty.saiyachina.com",
-            ["startRecord","stopRecord","uploadVoice"]
+        _TY_Tool.wx(
+            ["startRecord","stopRecord","onVoiceRecordEnd","playVoice","pauseVoice","stopVoice","onVoicePlayEnd","uploadVoice"]
             ).then((wx)=>{
                 t.wx = wx;
-        });
+            });
     },
     render: function(createElement){
         const t = this;
@@ -128,7 +128,6 @@ export default {
             const recordTimer = setTimeout(function(){
                 t.wx.startRecord({
                     success: function(res){
-                        debugger
                         localStorage.rainAllowRecord = 'true';
                         t.timeInter = setInterval(()=>{
                             //时长控制
