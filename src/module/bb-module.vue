@@ -36,6 +36,8 @@
     created: function () {
     },
     methods: {
+      //执行module某个积木的某个方法
+      execute:function(ele,method,args...){}
     }
   }
 </script>

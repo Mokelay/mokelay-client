@@ -19,8 +19,7 @@
  				</i>
  			</p>
             <bb-vant-cell-location></bb-vant-cell-location>
- 			<bb-vant-cell :option="privacyOption" v-model="privacy" @click="showPicker"></bb-vant-cell>
-            <bb-vant-picker v-show="privacyPicker" :showToolbar="pickerOption.showToolbar" :staticData="pickerOption.staticData"></bb-vant-picker>
+            <bb-vant-cell-picker :pickerConfig="pickerConfig" :option="privacyOption" v-model="privacy" @change="privacyChange"></bb-vant-cell-picker>
  		</div>
  	</div>
 </template>
@@ -248,11 +247,14 @@ export default {
                 center:false,
                 clickable:true
             },
-            privacy:"公开 其他成员可以见",
+            privacy:this.value.privacy,
+            location:this.value.location,
+            realContent:this.value.content,
             privacyPicker:false,
-            pickerOption:{
+            pickerConfig:{
                 showToolbar:true,
-                staticData:[{
+                title:"隐私设置",
+                columns:[{
                     text:"公开 其他成员可以见",
                     value:"publicity"
                 },{
@@ -260,8 +262,6 @@ export default {
                     value:"secret",
                 }]
             },
-            realContent:this.value.content
-
         }
       },
     computed:{
@@ -387,10 +387,10 @@ export default {
     },
     watch:{},
     methods:{
-    	//按钮点击事件
-    	buttonFinish:function(val){
-    		this.$emit("buttonFinish",val);
-    	},
+        loadChildBB(){
+            let t=this;
+            return _TY_Tool.loadChildBB(t);                
+        },
         showPicker(){
             this.privacyPicker = true;
         },
@@ -407,6 +407,14 @@ export default {
         getContents(){
             this.valueBase.content = this.$refs.postContent.getContents();
             return this.valueBase;
+        },
+        privacyChange(value){
+            debugger
+            this.privacy = value;
+            this.valueBase.privacy = value;
+            this.valueBase.content = this.$refs.postContent.getContents();
+            this.$emit("change",this.valueBase);
+            this.$emit("input",this.valueBase);
         }
     }
 }

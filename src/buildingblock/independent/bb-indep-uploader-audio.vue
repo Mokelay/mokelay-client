@@ -9,8 +9,7 @@ export default {
             ["http://www.baidu.com/1.img","http://www.baidu.com/2.img"]
         */
         value:{
-            type:[Array,String],
-            default:"http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=186cd8cc802a1bcbd9ec7d7bd5e040c2.amr"
+            type:[Array,String]
         },
         //接受的文件类型。默认值image/*
         accept:{

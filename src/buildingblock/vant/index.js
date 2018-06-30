@@ -49,6 +49,7 @@ import bbvantcellswipe from "./bb-vant-cell-swipe";
 import bbvantcellswipelist from "./bb-vant-cell-swipe-list";
 import bbvantcelllocation from "./bb-vant-cell-location";
 import bbvantuploaderimage from "./bb-vant-uploader-image";
+import bbvantcellpicker from "./bb-vant-cell-picker";
 
 export default {
 	install: function(Vue) {
@@ -101,6 +102,7 @@ export default {
 		Vue.component("bb-vant-cell-swipe-list", bbvantcellswipelist);
 		Vue.component("bb-vant-cell-location", bbvantcelllocation);
 		Vue.component("bb-vant-uploader-image", bbvantuploaderimage);
+		Vue.component("bb-vant-cell-picker", bbvantcellpicker);
 
 		console.log("成功加载Vant积木;");
 	}
