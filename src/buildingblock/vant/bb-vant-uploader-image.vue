@@ -231,9 +231,14 @@ export default {
             const t = this;
             //添加请求头 
             t.uploadUrl = "/config/ty_oss_upload";
+            let config = {
+                headers:{
+                    'Content-Type':'application/json;charset=UTF-8'
+                }
+            };
             _TY_Tool.post(t.uploadUrl,{
                 file:file.file
-            })
+            },config)
             .then(response=>{
                 t.$emit("upload-success",response.data);
                 console.log(response.data);
@@ -310,6 +315,8 @@ export default {
             color: #999999;
             display: inline-block;
             margin-bottom: 0.1rem;
+            float: left;
+            margin-right: 0.1rem;
         }
         .uploaded-item{
             display: inline-block;
