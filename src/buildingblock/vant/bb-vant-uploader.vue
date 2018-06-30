@@ -219,22 +219,8 @@ export default {
         //文件上传
         uploadeFile(file){
             debugger
-            const t = this;
-            //创建form对象          
-            // let param = new FormData(); 
-            // //通过append向form对象添加数据
-            // param.append('file',file,file.name);
-            // //添加form表单中其他数据
-            // param.append('chunk','0');
-            // //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-            // console.log(param.get('file')); 
-            //添加请求头
-            let config = {
-                headers:{
-                    'Content-Type':'multipart/form-data'
-                }
-            };  
-            t.uploadUrl = "http://ty.saiyachina.com/config/ty_oss_upload";
+            const t = this; 
+            t.uploadUrl = "/config/ty_oss_upload";
             _TY_Tool.post(t.uploadUrl,{
                 file:file.file
             },config).then(response=>{
