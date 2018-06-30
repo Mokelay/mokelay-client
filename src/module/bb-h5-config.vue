@@ -78,6 +78,7 @@
                 addTextContent:{
                     uuid: _TY_Tool.uuid(),
                     alias: 'bb-indep-textarea', //布局类积木 || 普通积木
+                    showAlias:'bb-words',
                     aliasName: '添加文字', 
                     attributes: {
                         placeholder:"请输入练习活动简介",
@@ -115,6 +116,7 @@
                 addPicContent:{
                     uuid: _TY_Tool.uuid(),
                     alias: 'bb-vant-uploader-image', //布局类积木 || 普通积木
+                    showAlias:'bb-photos',
                     aliasName: '添加图片', 
                     attributes: {
                         accept:"image/*",
@@ -132,6 +134,7 @@
                 addAudioContent:{
                     uuid: _TY_Tool.uuid(),
                     alias: 'bb-vant-uploader-audio', //布局类积木 || 普通积木
+                    showAlias:'bb-indep-audio-player',
                     aliasName: '添加音频', 
                     attributes: {
                         accept:"audio/*",
@@ -149,6 +152,7 @@
                 addVideoContent:{
                     uuid: _TY_Tool.uuid(),
                     alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                    showAlias:'bb-video',
                     aliasName: '添加视频', 
                     attributes: {
                         accept:"video/*",
