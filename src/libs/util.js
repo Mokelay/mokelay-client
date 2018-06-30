@@ -849,11 +849,7 @@ util.bbRender = function(content, createElement, t) {
             let onArr = _setEventMethod(bb, t);
             //渲染积木属性和动画
             const style = util.setStyle(bb, t);
-            let tag = bb['alias'];
-            if (bb['showAlias']) {
-                tag = window._TY_BB_Edit ? bb['alias'] : bb['showAlias']
-            }
-            const bbele = createElement(tag, {
+            const bbele = createElement(bb['alias'], {
                 ref: bb['uuid'] || util.uuid(),
                 props: attributes,
                 attrs: {
