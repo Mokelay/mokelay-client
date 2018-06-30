@@ -20,7 +20,7 @@ export default {
         value:{
             type:[Array,String],
             default:function(){
-                return ["https://longyanpc.mmall.com/image/app_nvwa_manager.png","https://longyanpc.mmall.com/image/app_nvwa_manager.png","http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=379c5e675e2d1f114ad0f8cfda189787.jpg","http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=379c5e675e2d1f114ad0f8cfda189787.jpg"]
+                return []
             }
         },
         //文件读取结果类型，可选值dataUrl，test

@@ -132,7 +132,7 @@
                     "icon":'ty ' + field.icon,
                     "dot":field.dot,
                     "info":field.info,
-                    "url":field.url,
+                    "url":_TY_Tool.tpl(field.url,_TY_Tool.buildTplParams(t)),
                     "to":field.to,
                     "replace":field.replace,
                     "key":key
