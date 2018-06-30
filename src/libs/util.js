@@ -1301,7 +1301,13 @@ util.wx = function(apiArray) {
     });
     return wx_sdk;
 }
-
+//等具体方案出来后 立即替换     转换积木编辑状态的积木editAlias和展示状态的积木showAlias
+util.transferContent = function(contents) {
+    contents.forEach((content, key) => {
+        content.alias = content.showAlias
+    });
+    return contents;
+}
 
 
 window._TY_Tool = util;
