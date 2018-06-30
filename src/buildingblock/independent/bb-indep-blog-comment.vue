@@ -3,20 +3,22 @@
 		<div class="blogReply"> 
 			<i :class="replyIcon" :style="replyIconStyle"></i>
 			<span class="replyContent"> 
-				<div class="replyUserCss" v-for="reply in replys"> 
+				<div class="replyUserCss" v-for="comment in comments"> 
 					<span class="replyUserStyle"> 
-						<img :src="reply.userImg" :style="replyUserImgStyle">
+						<img :src="comment.commentUseImg" :style="replyUserImgStyle">
 					</span>
 					<span class="replyMessagrStyle"> 
-						<p :style="replyMessageUserStyle">{{reply.user}}</p>
-						<p :style="replyMessageDate">{{reply.date}}</p>
-						<h6 :style="replyMessage" @click="replyClick(reply)">{{reply.message}}</h6>
-						<h5 v-for="comment in reply.children" ref="replyRef" class="replycomment">
-							<b :style="replyUserStyle">{{comment.replyUser}}</b>
-							<i :style="replyObjectStyle">{{comment.replyObject}}</i>
-							<i :style="replyUserStyle">{{comment.replyObjectName}}</i>
-							<i :style="replyObjectStyle">{{comment.replyObjectSymbol}}</i>
-							<i :style="replyObjectStyle" @click="replyContentClick(reply)">{{comment.replyContent}}</i>
+						<p :style="replyMessageUserStyle">{{comment.commentUse}}</p>
+						<p :style="replyMessageDate">{{comment.commentDate}}</p>
+						<h6 :style="replyMessage" @click="replyClick(comment)">{{comment.commentContent}}</h6>
+						<p class="display">{{comment.commentUid}}{{comment.id}}</p>
+						<h5 v-for="reply in comment.replyList" ref="replyRef" class="replycomment">
+							<b :style="replyUserStyle">{{reply.replyUse}}</b>
+							<i :style="replyObjectStyle">回复</i>
+							<i :style="replyUserStyle">{{reply.replyToUse}}</i>
+							<i :style="replyObjectStyle">:</i>
+							<i :style="replyObjectStyle" @click="replyContentClick(reply,comment)">{{reply.replyContent}}</i>
+							<p class="display">{{reply.replyUid}}{{reply.replyToUid}}{{reply.id}}</p>
 						</h5>						
 					</span>
 				</div>
@@ -66,12 +68,16 @@ export default {
     					replyContent:"111111111",
     				}]   			
     			}]*/
-    	replysArray:{
+    	commentsArray:{
     		type:Array,
     	},
     	//动态数据
     	commentDs:{
             type:Object,
+        },
+        //回复提交
+        replyDs:{
+        	type:Object,
         },    	
     	//回复内容列表左侧icon样式
     	replyIconStyleConfig:{
@@ -227,15 +233,15 @@ export default {
    	data(){ 
         return{    	
         	replyIcon:"ty-icon_xiaoxi1",
-        	replys:this.replysArray,
+        	comments:this.commentsArray,
         	valueBase:this.model,
         	blogWriteReplyShow:false,
-        	useName:"",
         }
     },
     watch:{}, 
     mounted(){ 
 	   this.getData();
+	   this.replyData();
 	},  
     computed:{
         replyIconStyle:function(){
@@ -374,49 +380,74 @@ export default {
     },
 
     methods:{
-    	//动态数据获取
+    	//评论列表动态数据获取
         getData() {
             const t = this;
             if (t.commentDs) {
                 _TY_Tool.getDSData(t.commentDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.replys = value;
+                        t.comments = value.currentRecords[0].commentList;
                     });
                 }, function (code, msg) {
                 });
             }
-        },  
+        }, 
+        //回复内容动态数据提交
+        replyData() {
+            const t = this;
+            if (t.replyDs) {
+                _TY_Tool.getDSData(t.replyDs, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        t.comments = value.currentRecords[0].commentList;
+                    });
+                }, function (code, msg) {
+                });
+            }
+        }, 
         //一级回复
-        replyClick:function(reply){
+        replyClick:function(comment){
         	this.blogWriteReplyShow = true;
-        	this.useName = reply.user;
-
+        	this.replyUid = comment.commentUid;
+        	this.parent_id = comment.id;
         }, 
         //二级回复
-        replyContentClick:function(reply){
+        replyContentClick:function(reply,comment){
         	this.blogWriteReplyShow = true;
-        	//this.useName = comment.replyUser;
-        	console.log(reply.children);
+        	this.replyUid = reply.replyUid;
+        	this.parent_id = comment.id;
         },
         replySubmit:function(){
         	var t = this;
-        	var val = this.valueBase;
-        	var replyName = this.useName;
+        	var replyContent = this.valueBase;
+        	var replyToUid = this.replyUid;
+        	var practiveId = this.$route.query.param2;
+        	var log_id = this.$route.query.param1;
+        	var parent_id = this.parent_id;
 			var param = {
-				reply_comment:val,
-				to_uid:replyName,
-				parent_id:1,
-				practice_id:1, //主题id
-				clock_in_id:1 , //打卡id
+				comment:replyContent,
+				to_uid:replyToUid,
+				parent_id:parent_id,
+				practive_id:practiveId, //主题id
+				clock_in_id:log_id , //打卡id
 			};
-			//param.append('comment',val);
-			//param.append('to_id',replyName);
-			console.log(param);
-			t.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_comment";
-			_TY_Tool.post(t.uploadUrl,param)
-            .then(response=>{
-                console.log("请求成功");
+			//console.log(param);
+	        if(t.replyDs){
+	            const api = t.replyDs['api'];
+	            const type = t.replyDs['category'];
+	            let apiUrl = api;
+	            if (type == 'config') {
+	                //如果不是自定义接口
+	                apiUrl = window._TY_ContentPath + "/" + api;
+	            }
+	            t.uploadUrl = apiUrl;
+	        };
+			/*t.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_comment";*/
+			_TY_Tool.post(t.uploadUrl,param).then(response=>{
+               this.blogWriteReplyShow = false;
+               t.getData();
+               t.replyData();
             });
         	
         },
@@ -432,7 +463,9 @@ export default {
 		height:auto;
 		display:flex;
 		justify-content:left;
-		margin-top:10px;	
+		margin:10px 0 40px 0;
+		font-size:14px;
+
 	}
 	.replyUserCss{
 		display:flex;
@@ -449,22 +482,30 @@ export default {
 		height:auto;
 		display:flex;
 		justify-content:left;
+		position:fixed;
+		bottom:0;
+		left:0;
+		background:#fff;
 	}
 	.blogWriteReply input{
 		width:75%;
-		height:35px;
+		height:40px;
 		background:none;
 		border:1px solid #eee;
 		border-radius:3px;
 		font-size:14px;
+		padding:0 0 0 10px;
 	}
 	.blogWriteReply button{
 		border:1px solid #33befe;
 		background:#33befe;
-		height:35px;
+		height:40px;
 		width:25%;
 		color:#fff;
 		font-size:14px;
+	}
+	.display{
+		display:none;
 	}
 </style>
 

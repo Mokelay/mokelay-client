@@ -4,7 +4,7 @@
 		<i :class="commetListIcon" :style="commetListIconStyle"></i>
 		<span class="commetListImgCss">
 			<img 
-			:src="img.commetListImg" 
+			:src="img.greatUseImg" 
 			v-for="img in imgs"
 			:style="commetListImgStyle" 
 			> 
@@ -26,7 +26,7 @@ export default {
     		},{
     			commetListImg:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
     		}]*/
-    	imgs:{
+    	imgsList:{
     		type:Array,
     	},
   		//动态数组
@@ -68,6 +68,7 @@ export default {
     data(){ 
         return{    	
         	commetListIcon:"ty-ico-love-off",
+        	imgs:this.imgsList,
         }
     },
     watch:{}, 
@@ -108,10 +109,10 @@ export default {
         getData() {
             const t = this;
             if (t.praiseDs) {
-                Util.getDSData(t.praiseDs, _TY_Tool.buildTplParams(t), function (data) {
+                _TY_Tool.getDSData(t.praiseDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.imgs = value;
+                        t.imgs = value.currentRecords[0].greatList;
                     });
                 }, function (code, msg) {
                 });

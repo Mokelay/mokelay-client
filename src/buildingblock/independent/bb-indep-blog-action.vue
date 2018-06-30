@@ -13,7 +13,7 @@
 				<strong :class="{'color':isColor}"> 
 					<i :class="commetListIcon" class="actionIcon"></i> 
 				</strong>
-				<span :style="shareTextStyle">{{praiseText}}</span> 
+				<span :style="shareTextStyle">{{greatNumber}}</span> 
 			</b>
 		</div>
 		<!--分享点击出现弹框-->
@@ -106,6 +106,9 @@ export default {
     	//动态数据
     	praiseDs:{
     		type:Object,
+    	},
+    	greatNumberShow:{
+    		type:Number,
     	}
     },
    	data(){ 
@@ -116,7 +119,7 @@ export default {
         	isColor:this.praiseColor,
         	praiseText:this.praiseTextShow,
         	blog:this.blogData,
-
+        	greatNumber:this.greatNumberShow,
     		}
       },
     watch:{}, 
@@ -143,13 +146,11 @@ export default {
             }
             return styles;           
         },
-    },
-   	mounted(){ 
-	   this.getData();
-	},   
+    },  
     mounted:function(){
       let t=this;
       _TY_Tool.buildDefaultValTpl(t,"praiseColor");
+      t.getData();
     },
     methods:{
     	//分享点击事件
@@ -173,8 +174,14 @@ export default {
                 _TY_Tool.getDSData(t.praiseDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.blogs = value;
-                        //console.log(value);
+                        t.blogs = value.currentRecords[0].greatState;
+                        t.greatNumber = value.currentRecords[0].greatNumber;
+                        if(t.blogs == 0){
+                        	t.blogs = false;
+                        }else{
+                        	t.blogs = true;
+                        }
+  						t.isColor = t.blogs;
                     });
                 }, function (code, msg) {
                 });
