@@ -20,7 +20,7 @@ export default {
         value:{
             type:[Array,String],
             default:function(){
-                return []
+                return ["https://longyanpc.mmall.com/image/app_nvwa_manager.png","https://longyanpc.mmall.com/image/app_nvwa_manager.png"]
             }
         },
         //文件读取结果类型，可选值dataUrl，test
@@ -191,7 +191,7 @@ export default {
         //渲染已经上传的图片
         const picList = [];
         t.valueBase.forEach((ele,index)=>{
-            const Img = createElement('img',{props:{},attrs:{src:ele},class:"uploaded-child"},[vantUpload]);
+            const Img = createElement('img',{props:{},attrs:{src:ele},class:"uploaded-child"},[]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
             const item = createElement('li',{props:{},class:"uploaded-item"},[Img,del]);
             picList.push(item);
@@ -203,7 +203,13 @@ export default {
     watch:{
         value(val){
             this.valueBase = val;
-        }
+        },
+        valueBase:{
+            handler:(val,oldVal)=>{
+                debugger;
+            },
+            deep:true
+        },
       },    
     methods: {
       //事件submit
@@ -223,22 +229,11 @@ export default {
         //文件上传
         uploadeFile(file){
             const t = this;
-            //创建form对象          
-            let param = new FormData(); 
-            //通过append向form对象添加数据
-            param.append('file',file,file.name);
-            //添加form表单中其他数据
-            param.append('chunk','0');
-            //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-            console.log(param.get('file')); 
-            //添加请求头
-            let config = {
-                headers:{
-                    'Content-Type':'multipart/form-data'
-                }
-            };  
-            t.uploadUrl = "http://ty.saiyachina.com/config/ty_oss_upload";
-            _TY_Tool.post(t.uploadUrl,param,config)
+            //添加请求头 
+            t.uploadUrl = "/config/ty_oss_upload";
+            _TY_Tool.post(t.uploadUrl,{
+                file:file.file
+            })
             .then(response=>{
                 t.$emit("upload-success",response.data);
                 console.log(response.data);
@@ -292,6 +287,7 @@ export default {
                 const file_url = res.data.file_url;
                 //上传的文件名
                 const file_name = res.data.file_serialize_name;
+                t.valueBase.push("https://img1.mklimg.com/g2/M00/2C/26/rBBrCVpqyfOAOfxwAAAwkjl-zw8472.png!");
                 t.valueBase.push(file_url);
                 t.$emit("uploaded",t.valueBase);
             })

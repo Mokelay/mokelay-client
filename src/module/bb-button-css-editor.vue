@@ -549,6 +549,15 @@
                         ]
                     },
                     interactives:[],
+                },{                      
+                    uuid:'layout_11',
+                    alias:'bb-editor-code',                   
+                    aliasName:'自定义css样式',                                  
+                    attributes:{
+                        attributeName:'other',
+                        returnObj:true
+                    },
+                    interactives:[],
                 }]
             }
         }

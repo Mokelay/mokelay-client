@@ -929,6 +929,9 @@ util.setStyle = function(bb, t) {
             'text-decoration': layout.font && layout.font.decoration,
             'line-height': layout.font && layout.font.lineHeight,
         }
+        if (layout.other) {
+            style = Object.assign({}, style, layout.other);
+        }
     }
     const animation = _setAnimation(bb);
     style['animation'] = animation;
