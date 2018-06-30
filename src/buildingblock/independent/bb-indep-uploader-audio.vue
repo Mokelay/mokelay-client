@@ -51,14 +51,12 @@ export default {
             file_url:""
         };
     },
-    created: function () {
+    mounted: function () {
         const t = this;
-        debugger
-        _TY_Tool.wx("http://ty.saiyachina.com",
+        _TY_Tool.wx(
             ["startRecord","stopRecord","onVoiceRecordEnd","playVoice","pauseVoice","stopVoice","onVoicePlayEnd","uploadVoice"]
             ).then((wx)=>{
                 t.wx = wx;
-                debugger
             });
     },
     render: function(createElement){
@@ -130,7 +128,6 @@ export default {
             const recordTimer = setTimeout(function(){
                 t.wx.startRecord({
                     success: function(res){
-                        debugger
                         localStorage.rainAllowRecord = 'true';
                         t.timeInter = setInterval(()=>{
                             //时长控制
