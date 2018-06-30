@@ -13,6 +13,10 @@
     export default {
         name: 'bb-video',
         props: {
+            //音频地址
+            value:{
+                type:String
+            },
             /*
                 transformConfig 样式
                 {
@@ -32,7 +36,7 @@
         },
         data() {
             return {
-                realUrl:null,
+                realUrl:this.value,
                 show:false
             }
         },
