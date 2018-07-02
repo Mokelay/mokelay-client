@@ -206,7 +206,6 @@ export default {
         },
         valueBase:{
             handler:(val,oldVal)=>{
-                debugger;
             },
             deep:true
         },
@@ -229,22 +228,23 @@ export default {
         //文件上传
         uploadeFile(file){
             const t = this;
+            let formdata = new FormData();
+            formdata.append('file',file.file);
+            console.log('正在上传。。。');
             //添加请求头 
             t.uploadUrl = "/config/ty_oss_upload";
-            let config = {
-                headers:{
-                    'Content-Type':'application/json;charset=UTF-8'
-                }
-            };
-            _TY_Tool.post(t.uploadUrl,{
-                file:file
-            },config)
-            .then(response=>{
-                t.$emit("upload-success",response.data);
-                console.log(response.data);
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            });
+            const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
+            xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
+            xhr.onload = (res) => { 
+                    const response = JSON.parse(res.target.response);
+                    const url = response.data.file_url;
+                    t.valueBase.push(url);
+                    t.$emit('input',t.valueBase);
+                    t.$emit('change',t.valueBase);
+                    _TY_Toast({content:"上传成功！"});
+                }; //请求完成
+            xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
+            xhr.send(formdata); //开始上传，发送form数据
         },
         //获取子积木
         loadChildBB(){
