@@ -64,6 +64,7 @@
                 [{
                     title:'属性配置',
                     name:'a',
+                    isShow:true,//默认是否展示
                     content:[{
                         uuid: '234',
                         alias: 'bb-list',
@@ -116,6 +117,10 @@
             templateContent:{
                 type:[Array,String]
             },
+            //右侧html模板
+            itemRightTpl:{
+                type:String
+            },
         },
         data() {
             return {
@@ -128,7 +133,8 @@
         },
         watch: {
             collapseData(val){
-                this.totalData = val?(typeof(val)==='String'?JSON.parse(val):val):[]
+                this.totalData = val?(typeof(val)==='String'?JSON.parse(val):val):[];
+                this.renderData = val?(typeof(val)==='String'?JSON.parse(val):val):[];
             }
         },
         computed:{
@@ -200,13 +206,34 @@
                             }
                         }
                         let collapseItemContent=_TY_Tool.bbRender(data.content, createElement, t);
-                        result.push(createElement('el-collapse-item',{
+                        const collapseItem = createElement('el-collapse-item',{
                             props:{
                                 title:data.title,
                                 name:data.name
                             },
                             style:style
-                        },collapseItemContent));
+                        },collapseItemContent);
+
+                        result.push(createElement('div',{
+                                style:{
+                                    position:'relative'
+                                }
+                            },[collapseItem,createElement('div',{
+                                    domProps:{
+                                        innerHTML:_TY_Tool.tpl(t.itemRightTpl,_TY_Tool.buildTplParams(t,{
+                                            rowData:data
+                                        }))
+                                    },
+                                    style:{
+                                        position:'absolute',
+                                        top: '0',
+                                        right: '1rem',
+                                        'font-size': '0.45rem',
+                                        'line-height': '1.715rem'
+                                    }
+                                },[])
+                            ])
+                        );
                     });
                 }
                 return result;
