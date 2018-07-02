@@ -132,11 +132,14 @@
             save:function(item,index){
                 let t=this;
                 t.$set(t.p_options[index],'editFlag',false);
+                //保存事件
+                t.$emit('save',item,t);
                 if(t.saveDs){
                     _TY_Tool.getDSData(t.saveDs,_TY_Tool.buildTplParams(t,{
                         rowData:item
                     }),function(map){
-
+                        //保存成功事件
+                        t.$emit('save-success',item,t);
                     },function(code,msg){
                         t.$message({
                             type: 'warning',
