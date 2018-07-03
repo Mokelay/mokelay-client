@@ -1,8 +1,16 @@
 <template>
   <div class="bb-indep-blog">
 		<div class="blogCommetHref"> 
-			<b @click="shareClick">
-				<i :class="shareIcon" class="actionIcon"></i>
+			<b>
+				<!-- <i :class="shareIcon" class="actionIcon"></i> -->
+                <bb-indep-share 
+                    :title="shareConfig.title"
+                    :desc="shareConfig.desc"
+                    :link="shareConfig.link"
+                    :imgUrl="shareConfig.imgUrl"
+                    :dataUrl="shareConfig.dataUrl"
+                    :option="shareConfig.option"
+                    ></bb-indep-share>
 				<span :style="shareTextStyle">{{shareText}}</span>
 			</b>
 			<b @click="replyClick">
@@ -41,7 +49,7 @@
 
 
 export default {
-    name:"bb-indep-blog",
+    name:"bb-indep-blog-action",
     props:{
     	
     	blogData:{
@@ -109,7 +117,34 @@ export default {
     	},
     	greatNumberShow:{
     		type:Number,
-    	}
+    	},
+        shareConfig:{
+            type:Object,
+            default:function(){
+                return props:{
+                    title:"分享标题",
+                    desc: "分享描述",
+                    // 分享链接
+                    link: ""
+                    // 分享图标
+                    imgUrl: ""
+                    // 分享类型,music、video或link，不填默认为link
+                    type: ""
+                    // 如果type是music或video，则要提供数据链接，默认为空
+                    dataUrl: ""
+                    /*其他属性设置 
+                        {
+                            icon：""  触发分享的图标
+                            shareArea:"timeline,appMessage,QQ,weibo,qZone"  允许分享范围  默认全部允许
+                        }
+                    */
+                    option:{
+                        icon:"ty-riji-fenxiang",
+                        shareArea:"timeline,appMessage,QQ,weibo,qZone"
+                    }
+                }
+            }
+        }
     },
    	data(){ 
         return{    	
@@ -154,10 +189,10 @@ export default {
     },
     methods:{
     	//分享点击事件
-    	shareClick:function(val){
-    		this.blog.blogActionPopShow = true;
-    		this.$emit("shareClick",val);
-    	},
+    	// shareClick:function(val){
+    	// 	this.blog.blogActionPopShow = true;
+    	// 	this.$emit("shareClick",val);
+    	// },
     	//评论点击事件
     	replyClick:function(val){
     		this.$emit("replyClick",val);
