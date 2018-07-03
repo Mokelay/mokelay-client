@@ -88,6 +88,12 @@ export default {
                 desc:t.realDesc,
                 link:t.realLink,
                 imgUrl:t.realImgUrl,
+                success: function () { 
+                    t.$emit("shareSuccess")
+                },
+                cancel: function () { 
+                    t.$emit("shareFail")
+                } 
             };
             if(t.wx){
                 t.shareArea.forEach((val,key)=>{
