@@ -42,6 +42,7 @@ import bbindepuploaderaudio from './bb-indep-uploader-audio';
 import bbindepaudioplay from './bb-indep-audio-player';
 import bbindepBlogList from './bb-indep-blog-list';
 import bbh5config from './bb-h5-config';
+import bbindepshare from './bb-indep-share';
 import bbindepreportchain from './bb-indep-report-chain';
 
 import helloworld from './bb-hello-world';
@@ -94,6 +95,7 @@ export default {
 		Vue.component('bb-indep-audio-player', bbindepaudioplay);
 		Vue.component('bb-indep-blog-List', bbindepBlogList);
 		Vue.component('bb-h5-config', bbh5config);
+		Vue.component('bb-indep-share', bbindepshare);
 		Vue.component('bb-indep-report-chain', bbindepreportchain);
 
 		Vue.component('bb-hello-world', helloworld);
