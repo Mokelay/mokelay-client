@@ -26,6 +26,7 @@ import 'vant/lib/cell/style';
                     center:Boolean 使内容垂直居中
                     url:""  跳转链接
                     clickable:Boolean 开启点击反馈
+                    valueStyle:{}
                  }
             */
             option:{
@@ -113,13 +114,18 @@ import 'vant/lib/cell/style';
         render: function(createElement){
             const t = this;
             const children = [];
-            t.realContent.forEach((ele,index)=>{
-                const bb = _TY_Tool.bbRender([ele], createElement, t);
-                const child = createElement('div',{slot:ele.group},[bb]);
+            if(t.valueBase){
+                const child = createElement('span',{props:{style:t.option.valueStyle},attrs:{style:t.option.valueStyle}},[t.valueBase]);
                 children.push(child);
-            });
+            }
+            if(t.realContent){
+                t.realContent.forEach((ele,index)=>{
+                    const bb = _TY_Tool.bbRender([ele], createElement, t);
+                    const child = createElement('div',{slot:ele.group},[bb]);
+                    children.push(child);
+                });
+            }
             return createElement('van-cell',{props:{
-                "value":t.valueBase, 
                 "icon":t.option.icon,
                 "label":t.option.label,
                 "required":t.option.required,
