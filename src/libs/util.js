@@ -1362,6 +1362,24 @@ util.transferContent = function(contents) {
     }
 }
 
+//根据时间获取星期几  dateStr 必须是yyyy-MM-dd 或者 yyyy-MM-dd HH:mm:ss 结构
+util.getDayByDate = function(dateStr) {
+    if (!dateStr || dateStr.indexOf("-") < 0) {
+        return null;
+    }
+    var arys1 = new Array();
+    arys1 = dateStr.split(" ")[0].split('-'); //日期为输入日期，格式为 2018-07-02
+    var ssdate = new Date(arys1[0], parseInt(arys1[1] - 1), arys1[2]);
+    var week1 = String(ssdate.getDay()).replace("0", "日").replace("1", "一").replace("2", "二").replace("3", "三").replace("4", "四").replace("5", "五").replace("6", "六");
+    var week = "星期" + week1;
+    return {
+        day: week1,
+        week: week,
+        fullDate: dateStr.split(" ")[0],
+        date: String((ssdate.getMonth() + 1) + "月" + ssdate.getDate() + "日")
+    }
+}
+
 
 window._TY_Tool = util;
 
