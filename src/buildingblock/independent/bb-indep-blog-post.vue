@@ -63,7 +63,7 @@ export default {
                     content:{
                         uuid: _TY_Tool.uuid(),
                         alias: 'bb-vant-uploader-image', //布局类积木 || 普通积木
-                        showAlias:'bb-photos',
+                        transferAlias:'bb-photos',
                         aliasName: '添加图片', 
                         attributes: {
                             accept:"image/*",
@@ -84,7 +84,7 @@ export default {
                     content:{
                         uuid: _TY_Tool.uuid(),
                         alias: 'bb-indep-uploader-audio', //布局类积木 || 普通积木
-                        showAlias:'bb-indep-audio-player',
+                        transferAlias:'bb-indep-audio-player',
                         aliasName: '添加音频', 
                         attributes: {
                             accept:"audio/*",
@@ -105,7 +105,7 @@ export default {
                     content:{
                         uuid: _TY_Tool.uuid(),
                         alias: 'bb-vant-uploader', //布局类积木 || 普通积木
-                        showAlias:'bb-video',
+                        transferAlias:'bb-video',
                         aliasName: '添加视频', 
                         attributes: {
                             accept:"video/*",
