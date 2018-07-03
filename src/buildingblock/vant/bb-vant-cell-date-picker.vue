@@ -70,6 +70,7 @@ import 'vant/lib/cell/style';
                     center:Boolean 使内容垂直居中
                     url:""  跳转链接
                     clickable:Boolean 开启点击反馈
+                    valueStyle:""   右侧内容样式
                  }
             */
             option:{
@@ -77,7 +78,7 @@ import 'vant/lib/cell/style';
                 default:function(){
                     return {
                         icon:"ty-lxrili",
-                        title:"出生日期",
+                        title:"表单项",
                         required:true,
                         isLink:true,
                         center:true,
