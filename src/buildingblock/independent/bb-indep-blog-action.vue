@@ -121,17 +121,17 @@ export default {
         shareConfig:{
             type:Object,
             default:function(){
-                return props:{
+                return {
                     title:"分享标题",
                     desc: "分享描述",
                     // 分享链接
-                    link: ""
+                    link: "",
                     // 分享图标
-                    imgUrl: ""
+                    imgUrl: "",
                     // 分享类型,music、video或link，不填默认为link
-                    type: ""
+                    type: "",
                     // 如果type是music或video，则要提供数据链接，默认为空
-                    dataUrl: ""
+                    dataUrl: "",
                     /*其他属性设置 
                         {
                             icon：""  触发分享的图标
