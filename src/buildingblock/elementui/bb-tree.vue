@@ -1,7 +1,7 @@
 <template>
-    <div class="dib">
+    <div class="bb-tree dib" :id="id">
         <el-tree
-                class="bn"
+                class="bn horizontal"
                 :data="data"
                 :load="loadData"
                 :node-key="nodeValue"
@@ -82,17 +82,30 @@
             lazy:{
                 type:Boolean,
                 default:true
+            },
+            /*其他属性配置
+                {
+                    itemStyle:""  最低级选项样式
+                }
+            */
+            option:{
+                type:Object
             }
         },
         data() {
             const t = this;
             return {
-                data: []
+                data: [],
+                id:"bb-tree_" + _TY_Tool.uuid() 
             }
         },
         created: function () {
             let t=this;
             t.refresh();
+        },
+        mounted:function(){
+            const t = this;
+            t.setHorizontal();
         },
         watch: {
             //value如果为空，取消勾选所有选中节点
@@ -144,8 +157,6 @@
                 }
                 return [];
             }
-        },
-        mounted: function () {
         },
         methods: {
             commit(data) {
@@ -297,12 +308,24 @@
                 }
                 t.$emit('click',data,node,current);
 
+            },
+            //设置水平样式
+            setHorizontal:function(){
+                const t = this;
+                const bbTree = document.getElementById(t.id);
+                const isLeafs = bbTree.getElementsByClassName("is-leaf");
+                if(isLeafs.length){
+                    isLeafs.forEach((isLeaf,key)=>{
+                        const className = isLeaf.parentNode.parentNode.className + " dib";
+                        isLeaf.parentNode.parentNode.setAttribute("style",t.option.itemStyle);
+                    })
+                }
             }
         }
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 
     .bn {
         border: none
@@ -310,5 +333,8 @@
     .dib{
         display: inline-block;
     }
-
+    .bb-tree{
+        .horizontal{
+        }
+    }
 </style>
