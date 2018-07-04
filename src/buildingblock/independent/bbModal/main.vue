@@ -185,16 +185,17 @@
       position: relative;
       margin: auto;
       width: 60%;
-      min-width: 190px;
-      padding: 30px 30px 0;
+      min-width: 5.06666rem;
+      padding: .4rem .4rem 0;
       background-color: #fff;
-      border-radius: 6px;
+      border-radius: .12rem;
     }
 
     .modal-header {
-      margin-bottom: 15px;
+      margin-bottom: .2rem;
       text-align: center;
-      font-size: 34px;
+      font-size: .906666rem;
+      font-size: .45rem;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -204,14 +205,15 @@
     .modal-body {
       max-height: 6rem;
       max-height: 40vh;
-      margin: 15px 0 0;
-      font-size: 24px;
+      margin: .2rem 0 0;
+      font-size: .64rem;
+      font-size: .38rem;
       word-break: break-all;
       overflow: scroll;
     }
 
     .modal-message, .modal-message-html, .modal-inputs {
-      padding-bottom: 15px;
+      padding-bottom: .3rem;
     }
 
     .modal-inputs {
@@ -219,14 +221,14 @@
       li {
 
         &:first-of-type label {
-          border-top-right-radius: 6px;
-          border-top-left-radius: 6px;
+          border-top-right-radius: .12rem;
+          border-top-left-radius: .12rem;
         }
 
         &:last-of-type label {
-          border-bottom: 1px solid rgba(0, 0, 0, .2);
-          border-bottom-right-radius: 6px;
-          border-bottom-left-radius: 6px;
+          border-bottom: .026666rem solid rgba(0, 0, 0, .2);
+          border-bottom-right-radius: .12rem;
+          border-bottom-left-radius: .12rem;
         }
 
         &.error {
@@ -244,11 +246,11 @@
 
       label {
         display: block;
-        padding: 10px;
-        border-left: 1px solid rgba(0, 0, 0, .2);
-        border-right: 1px solid rgba(0, 0, 0, .2);
-        border-top: 1px solid rgba(0, 0, 0, .2);
-        border-width: .5px;
+        padding: .26666rem;
+        border-left: .02666rem solid rgba(0, 0, 0, .2);
+        border-right: .02666rem solid rgba(0, 0, 0, .2);
+        border-top: .02666rem solid rgba(0, 0, 0, .2);
+        border-width: .019rem;
       }
 
       input {
@@ -262,21 +264,22 @@
     .modal-footer {
       display: flex;
       flex-wrap: wrap;
-      margin: 15px -30px 0;
+      margin: 0 -0.4rem 0;
 
       span {
         flex: 1 1 100%;
-        padding: 0 20px;
+        padding: 0 .53333rem;
         text-align: center;
-        font-size: 30px;
-        line-height: 2.7;
+        font-size: .8rem;
+        font-size: .45rem;
+        line-height: 2.4;
         color: rgb(16, 142, 233);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         word-break: break-all;
-        border-top: 1px solid rgba(0, 0, 0, .2);
-        border-width: .5px;
+        border-top: .02666rem solid rgba(0, 0, 0, .2);
+        border-width: .019rem;
 
         //两个button
         &:first-of-type:nth-last-child(2), &:last-of-type:nth-last-child(1) {
@@ -285,8 +288,8 @@
 
         &:first-of-type:nth-last-child(2) {
           color: #000;
-          border-right: 1px solid rgba(0, 0, 0, .2);
-          border-right-width: .5px;
+          border-right: .02666rem solid rgba(0, 0, 0, .2);
+          border-right-width: .019rem;
         }
       }
     }
@@ -298,14 +301,15 @@
         left: 0;
         right: 0;
         width: 100%;
-        padding: 30px 30px 0;
+        padding: .8rem .8rem 0;
+        padding:.4rem .4rem 0;
         background-color: #fff;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
       }
 
       .modal-inputs label {
-        padding: 20px;
+        padding: .53333rem;
       }
     }
   }

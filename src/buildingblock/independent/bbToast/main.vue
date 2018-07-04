@@ -112,12 +112,14 @@
             position: relative;
             margin: auto;
             max-width: 80%;
-            padding: 30px;
+            padding: 0.8rem;
+            padding: .4rem 0.8rem;
             background-color: rgba(0,0,0,.7);
-            border-radius: 6px;
+            border-radius: 0.12rem;
 
             p {
-                font-size: 30px;
+                font-size: 0.8rem;
+                font-size: 0.5rem;
                 color: #fff;
                 text-align: center;
                 overflow: hidden;
@@ -130,10 +132,10 @@
         .success, .fail {
             .icon {
                 display: block;
-                width: 70px;
-                height: 70px;
-                margin: 0 auto 16px;
-                border: 3px solid #fff;
+                width: 1.8666rem;
+                height: 1.8666rem;
+                margin: 0 auto .426666rem;
+                border: 0.08rem solid #fff;
                 border-radius: 50%;
             }
         }
@@ -144,11 +146,11 @@
                 &:before {
                     content: '';
                     display: block;
-                    margin: 10px auto 0;
-                    width: 18px;
-                    height: 32px;
-                    border-bottom: 3px solid #fff;
-                    border-right: 3px solid #fff;
+                    margin: .2666rem auto 0;
+                    width: .48rem;
+                    height: .85333rem;
+                    border-bottom: .08rem solid #fff;
+                    border-right: .08rem solid #fff;
                     transform: rotate(45deg);
                 }
             }
@@ -161,21 +163,21 @@
                 &:before, &:after {
                     content: '';
                     position: absolute;
-                    top: 25px;
+                    top: .66666rem;
 
-                    width: 40px;
-                    height: 40px;
+                    width: 1.0666rem;
+                    height: 1.0666rem;
                 }
 
                 &:before {
-                    left: -2px;
-                    border-right: 3px solid #fff;
+                    left: -0.05333rem;
+                    border-right: 0.08rem solid #fff;
                     transform: rotate(-45deg);
                 }
 
                 &:after {
-                    left: 24px;
-                    border-left: 3px solid #fff;
+                    left: .64rem;
+                    border-left: .08rem solid #fff;
                     transform: rotate(45deg);
                 }
             }
@@ -183,9 +185,9 @@
 
         .circular {
             display: block;
-            margin: 0 auto 16px;
-            width: 30PX;
-            height: 30PX;
+            margin: 0 auto .42666;
+            width: .8rem;
+            height: .8rem;
             animation: loading-rotate 2s linear infinite;
 
             .path {
@@ -209,12 +211,12 @@
 
                 60% {
                   stroke-dasharray: 80,100;
-                  stroke-dashoffset: -30PX;
+                  stroke-dashoffset: -0.8rem;
                 }
 
                 100% {
                     stroke-dasharray: 80,100;
-                    stroke-dashoffset: -74PX;
+                    stroke-dashoffset: -1.97333rem;
                 }
             }
         }
