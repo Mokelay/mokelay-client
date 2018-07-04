@@ -50,7 +50,7 @@
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55">
                 </el-table-column>
-                <el-table-column v-if="true" width="55">
+                <el-table-column v-if="highlightCurrent" width="55">
                     <template slot-scope="scope">
                         <input type="radio" @change="radioChange(scope.row)" :name="radioName">
                     </template>
