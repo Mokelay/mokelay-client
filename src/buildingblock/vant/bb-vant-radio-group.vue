@@ -1,7 +1,7 @@
 <template>
     <vant-radio-group 
         class="bb-vant-raido-group"
-        v-model="valueBase"  
+        v-model="radio"  
         @change="change"
         :disabled="option.disabled">
         <vant-radio
@@ -9,7 +9,11 @@
             :key="key" 
             :name="field.value"
             :disabled="field.disabled"
-            >{{field.text}}<span class="subTitle">{{field.subDescription}}</span></vant-radio>
+            class="radioStyle"
+            >
+            <span>{{field.text}}</span>
+            <span class="subTitle">{{field.subDescription}}</span> 
+        </vant-radio>
     </vant-radio-group>
 </template>
 
@@ -34,7 +38,10 @@ import 'vant/lib/radio/style';
             defaultValTpl:{
                 type:[String,Number,Boolean]
             },
-            
+            radioData:{
+            	type:[String,Number,Boolean],
+            	default:'1',
+            },
             /*选项数据 静态
                 [{
                     text:'选项1'，
@@ -51,12 +58,12 @@ import 'vant/lib/radio/style';
                 default:function(){
                 	return [{
                 		text:'选项1',
-                        value:1,
+                        value:'1',
                         subDescription:"默认值1",
                         disabled:false
                    },{
                         text:'选项2',
-                        value:2,
+                        value:'2',
                         subDescription:"默认值2",
                         disabled:false
                 	}]
@@ -84,7 +91,8 @@ import 'vant/lib/radio/style';
             return {
                 realFields:this.fields,
                 valueBase:this.value,
-                valueBaseString:''
+                valueBaseString:'',
+                radio:this.radioData,
             };
         },
         mounted(){
@@ -119,10 +127,18 @@ import 'vant/lib/radio/style';
 <style lang="less" scoped>
     .bb-vant-raido-group{
         font-size: 0.4rem;
-        .subTitle{
-            color: #999999;
-            font-size: 0.2rem;
-            margin-left:1rem;
-        }
+        
+    }
+    .subTitle{
+        color: #999999;
+        font-size: 0.2rem;
+        margin-left:0.5rem;
+    }
+    .radioStyle{
+    	display:flex;
+    	margin-bottom:10px;
+    }
+    .van-icon-checked{
+    	color:#f00;
     }
 </style>
