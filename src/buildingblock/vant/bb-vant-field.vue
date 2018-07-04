@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div class="bb-vant-field" :class="{
+        'noPadding':option.noPadding,
+        't_right':option.t_right
+    }">
          <van-field 
             v-model="valueBase" 
             :type="option.type"
@@ -15,7 +18,7 @@
             @change="onInput" 
             @click-icon="clickIcon" 
             @keyup="keyup"/>
-         <p class="showText">{{writeText}}/{{messageText}}</p>
+         <p v-if="messageText" class="showText">{{writeText}}/{{messageText}}</p>
      </div>
 
 
@@ -48,6 +51,7 @@ import 'vant/lib/field/style';
                     leftIcon:"",输入框左侧图标
                     required:false,
                     disabled:false,
+                    border:true,
                     error:false,  是否将输入内容标红
                     errorMessage:"错误提示文案", 底部错误提示文案 
                     autosize:true 自适应内容高度，只对 textarea 有效
@@ -67,7 +71,8 @@ import 'vant/lib/field/style';
                         error:false,
                         errorMessage:"",
                         autosize:true,
-                        maxText:100000
+                        maxText:100000,
+                        border:true
                     };
                 }
             }
@@ -116,5 +121,14 @@ import 'vant/lib/field/style';
 </script>
 
 <style scoped>
-.showText{text-align:right; margin-right:5%;font-size: 0.2rem;}
+    .showText{text-align:right; margin-right:5%;font-size: 0.2rem;}
+</style>
+
+<style>
+    .bb-vant-field.noPadding .van-field{
+        padding: 0;
+    }
+    .bb-vant-field.t_right .van-field input{
+        text-align: right
+    }
 </style>
