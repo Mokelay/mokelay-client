@@ -1,26 +1,28 @@
 <template>
 	<div class="tagContent"> 
-		<span class="tagOneLabel" v-for="tag in tags"> 
-			<b 
-			:style="tagOneLabelWrite" 
-			@click="toggleChildren(tag)" 
-			>
-			{{tag.title}}
+		<span class="tagOneLabel" v-for="tag in tags" > 
+			<b :style="tagOneLabelWrite" @click="toggle(tag)" v-bind:class="{checkColor:tag.isCheckColor}">
+				{{tag.title}}
 			</b>
-			<span v-if='tag.expanded == true'>
-				<i v-for="child in tag.children" :style="tagTwoLabelWrite">{{child.text}}</i> 
+			<span v-show="tag.show">
+				<i v-for="child in tag.children" :style="tagTwoLabelWrite" 
+					@click="toggleClass(child)"
+					v-bind:class="{checkColor:child.isCheckColor}">
+					{{child.text}}
+				</i> 
 			</span>
 		</span>
+		<!-- 自定义添加按钮 -->
 		<span> 
 			<b 
 			:style="tagTwoLabelWrite"
 			v-for="(custom,key) in customs" 
 			@click="customPopShow(key)"
+			class="checkColor"
 			>
 			{{custom.writeShow}}
 			</b>
 		</span>
-		<!-- 自定义添加按钮 -->
 		<span> 
 			<b 
 			:style="tagTwoLabelWrite" 
@@ -47,7 +49,9 @@
 	</div>
 </template>
 <script> 
+	import Vue from 'vue'
 	export default {
+
 		name:"tagContent",
 		props:{
 			//自定义数组
@@ -57,7 +61,8 @@
 					return []
 				}
 			},
-			show:{
+			//自定义弹框
+			showData:{
 				type:Boolean,
 				default:false,
 			},
@@ -76,11 +81,11 @@
 				default:function (){
 					return {
 						display:"inline-block",
-						borderColor:"#6298D8",
+						borderColor:"#666",
 						borderWidth:"1px",
 						borderStyle:"solid",
 						borderRadius:"20px",
-						color:"#6298D8",
+						color:"#666",
 						fontSize:"14px",
 						fontFamily:"",
 						fontWeight:"normal",
@@ -149,11 +154,12 @@
             return {
                tags:this.tagsArray,
                valueBase:this.value,
-               showPop:this.show,
+               showPop:this.showData,
                customWriteShow:this.customWrite,
                customEditKey:"add",
-               customButton:true,
-               
+               customButton:true, 
+       		   show:false,
+       		   isCheckColor:false,
             }
         },
 		computed:{
@@ -222,12 +228,15 @@
 	            }
 	        },
 			//点击事件
-			 toggleChildren: function(tag) {
-			 	//debugger
-			 	//debugger
- 				tag.expanded = tag.expanded?false:true;
- 				this.$emit("toggleChildren",tag);
- 			  },
+		 	toggle:function(tag) {
+		 		Vue.set(tag,'show',true);
+		 		Vue.set(tag,'isCheckColor',true);
+				this.$emit("toggle",tag);
+			},
+			toggleClass:function(child){
+				Vue.set(child,'isCheckColor',true);
+				this.$emit("child",child);
+			},
  			//弹框取消点击事件
  			customPopCancel:function(){
  				this.showPop = false;
@@ -267,15 +276,9 @@
  				this.customEditKey = key
  				this.valueBase = key == "add"?"":this.customs[key]['writeShow'];
  			},
- 			/*customStop:function(e){
- 				var z = "自定义";
- 				var v =this.customWriteShow;
- 				if( z != v){
- 					console.log("1");
- 					//this.customs.click().self.prevent;
- 					e.stopPropagation();
- 				}
- 			},*/
+
+
+
 		},
 	}
 </script>
@@ -345,5 +348,11 @@
 	border-bottom:none;
 	background:#fff;
 }
+.checkColor{
+	background:#33befe;
+	color:#fff!important;
+	border-color:#fff!important;
+}
+
 
 </style>

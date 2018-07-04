@@ -179,7 +179,6 @@
                 const reg2 = /&lt;#=.*?#&gt;/ig;
                 const reg3 = /<div style=.*?>/;
                 const reg4 = /width:.*?;/
-                t.renderContent();
                 let stringHasTransfer = false;
                 if(!this.valueBase){
                     return;
@@ -338,40 +337,6 @@
                         t.loading = false;
                     });
                 }
-            },
-            //处理content数据
-            renderContent(){
-                const t = this;
-                let tags = "";
-                t.realContent.forEach((content,key)=>{
-                    switch(content.alias){
-                        case "bb-indep-textarea":
-                            tags = tags + `<p style="font-size:0.4rem;text-align:left">${content.attributes.value}</p>`
-                            break;
-                        case "bb-vant-uploader":
-                            const values = typeof content.attributes.value == "string"?content.attributes.value.split(','):content.attributes.value;
-                            values.forEach((val,index)=>{
-                                switch(content.attributes.accept){
-                                    case "image/*":
-                                        tags = tags + `<img style="max-width:100%" src="${val}" />`
-                                        break;
-                                    case "audio/*":
-                                        tags = tags + `<audio style="height: 54px;" src="${val}" controls="controls">
-                                            您的浏览器不支持 audio 标签。
-                                            </audio>`
-                                        break;
-                                    case "video/*":
-                                        tags = tags + `<video src="${val}" controls="controls">
-                                            您的浏览器不支持 video 标签。
-                                            </video>`
-                                        break;
-                                }
-                            })
-                            break;
-                    }
-                });
-                tags = `<section style="text-align:center">${tags}</section>`
-                t.valueBase = t.realContent?tags:t.valueBase;
             }
         }
     }

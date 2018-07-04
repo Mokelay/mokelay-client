@@ -11,47 +11,36 @@ import 'vant/lib/cell/style';
           "van-cell":Cell,
         },
         props: {
-            //内容
+            /*位置信息 支持v-model
+                {
+                    latitude: 0, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: 0, // 经度，浮点数，范围为180 ~ -180。
+                    name: '', // 位置名
+                    address: '', // 地址详情说明
+                }
+            */
             value:{
                 type:[Object,String],
                 default:"所在位置"
             },
-            /*模板默认值*/
-            defaultValTpl:{
-                type:[String,Number,Boolean]
-            },
             /*其他属性配置
             {
-                icon:String 左侧图标,
-                title:String 左侧标题,
-                label:String 标题下方的描述信息,
-                required:Boolean 是否显示表单必填星号,
-                isLink:Boolean 展示右侧箭头并开启点击反馈
-                center:Boolean 使内容垂直居中
-                url:""  跳转链接
-                clickable:Boolean 开启点击反馈
+                scale: 1, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
             }
             */
             option:{
                 type:Object,
                 default:function(){
                     return {
-                        icon:"ty ty-dlweizhi",
-                        title:String,
-                        label:String,
-                        required:Boolean,
-                        isLink:Boolean,
-                        center:Boolean,
-                        url:"",
-                        clickable:Boolean
+                        scale: 1
                     };
                 }
             }
         },
         data() {
             return {
-                location:this.value,
-                realContent:this.content || []
+                valueBase:this.value,
             };
         },
         mounted(){
@@ -67,15 +56,23 @@ import 'vant/lib/cell/style';
                 const  t = this;
                 if(t.wx){
                     t.wx.getLocation({
-                        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                        type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
                         success: function (res) {
-                            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-                            var speed = res.speed; // 速度，以米/每秒计
-                            var accuracy = res.accuracy; // 位置精度
-                            t.location = res;
-                            t.$emit("change",t.location);
-                            t.$emit("input",t.location);
+                            const latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                            const longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                            const speed = res.speed; // 速度，以米/每秒计
+                            const accuracy = res.accuracy; // 位置精度
+                            t.valueBase = res;
+                            t.$emit("change",t.valueBase);
+                            t.$emit("input",t.valueBase);
+                            t.wx.openLocation({
+                                latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+                                longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+                                name: '', // 位置名
+                                address: '', // 地址详情说明
+                                scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                                infoUrl: t.option.infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
+                            });
                         }
                     });
                 }

@@ -12,7 +12,6 @@
     :confirm-button-text="confirmButtonText"
     :cancel-button-text="option.cancelButtonText"
     :visible-item-count="option.visibleItemCount"
-    @change="onChange"
     @confirm="onConfirm"
     @cancel="onCancel"
   />
@@ -28,7 +27,7 @@ export default {
         "vant-datetime-picker":DatetimePicker
     },
     props:{
-      //类型 可选值date(日期) time(时间） year-month(年月)
+      //类型 可选值date(日期) time(时间） year-month(年月) datetime（默认）
         datetimeType:{
           type:String,
           default:"datetime"
@@ -97,24 +96,18 @@ export default {
       t.valueBase = new Date(t.valueBase);
     },
     methods:{
-    	//改变
-        onChange(val){
-          let t=this;
-          t.$emit('input',val,t);
-          t.$emit('onChange',val,t);
-         },
          //确认  
         onConfirm(val){
           let t=this;
-          t.$emit('input',val,t);
-          t.$emit('onConfirm',val,t);
+          const time = t.datetimeType == "datetime"?val.toLocaleString():val.toLocaleString().split(" ")[0];
+          t.$emit('input',time,t);
+          t.$emit('onConfirm',time,t);
          }, 
          //取消 
         onCancel(val){
-        	console.log(this.value);
           let t=this;
-          t.$emit('input',val,t);
-          t.$emit('onCancel',val,t);
+          const time = t.datetimeType == "datetime"?val.toLocaleString():val.toLocaleString().split(" ")[0];
+          t.$emit('onCancel',time,t);
          },
 
     	//外部设值

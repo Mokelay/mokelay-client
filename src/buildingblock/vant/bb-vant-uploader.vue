@@ -117,19 +117,23 @@ export default {
         uploadDs:{
             type:Object
         },
-        /*其他属性设置
+        /*其他属性设置  "picture" 表示图片view
             {
-                theme:"card" "photograph" "custom"
+                theme:"card" "photograph" "picture" "custom" ,
+                replace:false//超过限制图片替换
+                max:-1//最大上传个数  -1表示不限制
+
             }
         */
         option:{
             type:Object,
             default:function(){
                 return {
-                    theme:"card"
+                    theme:"card",
+                    max:-1,//最大上传个数
+                    replace:false//超过最大上传后，是否替换
                 };
             }
-            
         }
     },
    data(){ 
@@ -171,6 +175,17 @@ export default {
                     className = "";
                 }
                 break;
+            case "picture":
+                children = createElement('img',{
+                    attrs:{
+                        src:(t.valueBase&&t.valueBase.length>0)?t.valueBase[0]:''
+                    },
+                    style:{
+                        width:'100%'
+                    }
+                },[]);
+                className = "";
+                break;
         }
         
         const vantUpload = createElement('vant-uploader',{props:{
@@ -194,11 +209,16 @@ export default {
         }); 
         const ul = createElement('ul',{props:{}},[picList]);
 
-        return createElement('div',{props:{},class:"bb-vant-uploader"},[vantUpload,picList]);
+        let childs = [vantUpload,picList];
+        if(t.option.theme=='picture'){
+            childs = [vantUpload];
+        }
+        return createElement('div',{props:{},class:"bb-vant-uploader"},childs);
     },
     watch:{
         value(val){
-            this.valueBase = val;
+            // this.valueBase = val;
+            this.valueBase = typeof val == "string"?val.split(","):val;
         }
       },    
     methods: {
@@ -218,21 +238,28 @@ export default {
         },
         //文件上传
         uploadeFile(file){
-            debugger
-            const t = this; 
+            const t = this;
+            let formdata = new FormData();
+            formdata.append('file',file.file);
+            console.log('正在上传。。。');
+            //添加请求头 
             t.uploadUrl = "/config/ty_oss_upload";
-            let config = {
-                headers:{
-                    'Content-Type':'application/json;charset=UTF-8'
-                }
-            };
-            _TY_Tool.post(t.uploadUrl,{
-                file:file
-            },config).then(response=>{
-                t.valueBase.push(response.data.file_url);
-                t.$emit('input',t.valueBase);
-                t.$emit('change',t.valueBase);
-            });
+            const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
+            xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
+            xhr.onload = (res) => { 
+                    const response = JSON.parse(res.target.response);
+                    const url = response.data.file_url;
+                    if(t.option.replace&&t.option.max>0&&t.valueBase.length>=t.option.max){//如果是替换的话
+                        t.valueBase.push(0,1,url);//替换第一个位置的文件
+                    }else{
+                        t.valueBase.push(url);
+                    }
+                    t.$emit('input',t.valueBase);
+                    t.$emit('change',t.valueBase);
+                    _TY_Toast({content:"上传成功！"});
+                }; //请求完成
+            xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
+            xhr.send(formdata); //开始上传，发送form数据
         },
         //获取子积木
         loadChildBB(){

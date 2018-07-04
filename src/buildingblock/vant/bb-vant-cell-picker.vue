@@ -3,9 +3,9 @@
         <bb-vant-cell @click="showPopup" :value="valueBase" :option="option" :content="content" :contentDs="contentDs"></bb-vant-cell>
         <van-popup v-model="pickerShow" position="bottom" @click-overlay="onCancel">
             <van-picker
-              :show-toolbar="pickerConfig.showToolbar"
-              :title="pickerConfig.title"
-              :columns="pickerConfig.columns"
+              :show-toolbar="pickerConfig.showToolbar||true"
+              :title="pickerConfig.title||''"
+              :columns="pickerConfig.columns||[]"
               @cancel="onCancel"
               @confirm="onConfirm"
             />
@@ -54,7 +54,10 @@ import 'vant/lib/cell/style';
                 ]
             */
             pickerConfig:{
-                type:Object
+                type:Object,
+                default:function(){
+                    return {};
+                }
             },
             /*其他属性配置
                 {
