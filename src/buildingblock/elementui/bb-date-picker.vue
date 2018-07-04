@@ -116,8 +116,13 @@
                     const endTime = typeof val[1] == "string"?val[1] : val[1].toDateString();
                     newDate.push(startTime);
                     newDate.push(endTime);
-                }else{
-                    newDate = val.toDateString();
+                }else {
+                    try{
+                       newDate = val.toDateString(); 
+                    }
+                    catch(err){
+                        console.log("err:",err);
+                    } 
                 }
                 this.valueBase = newDate;
                 this.$emit('input',newDate);
