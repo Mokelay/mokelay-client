@@ -20,7 +20,7 @@ export default {
         value:{
             type:[Array,String],
             default:function(){
-                return ["http://www.chinaredstar.com/images/logo.jpg"]
+                return []
             }
         },
         //文件读取结果类型，可选值dataUrl，test
