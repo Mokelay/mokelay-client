@@ -8,7 +8,7 @@
 			    	</span>
 			    	<span class="centerStyle">				
 			    		<h1 :style="centerTitle">{{item.title}}</h1>
-			    		<p class="centerContent">
+			    		<p class="centerContent" v-show="centerIcon">
 			    			<b class="centerContentTime">	
 			    				<i :class="contentTimeIcon" :style="contentTimeIconStyle"></i>
 			    				<strong :style="contentTimeStyle">{{item.time}}</strong>
@@ -19,9 +19,10 @@
 			    			</b>	
 			    		</p>
 			    	</span>
-			    	<bb-layout-seriation :content="content"></bb-layout-seriation>	    	
+			    	<bb-layout-seriation :content="content"></bb-layout-seriation>			    	
 			    </div>	    	
 			</bb-vant-cell-swipe>
+			<p>{{item.theme_id}}</p>
 		</li>
 		<p class="itemMore" @click="clickMore">{{seeMore}}</p>
 	</ul>
@@ -42,6 +43,7 @@
                     return {
                         width:"20%",
                         display:"inline-block",
+                        height:"",
                     }
                 }            
             },
@@ -98,7 +100,7 @@
                         display:"inline-block",
                         fontSize:"12px",
                         fontFamily:"",
-                        color:"#666",
+                        color:"#888",
                         fontWeight:"normal",
                         letterSpacing:"",
                         lineHeight:"20px",
@@ -119,7 +121,7 @@
                         display:"inline-block",
                         fontSize:"12px",
                         fontFamily:"",
-                        color:"#666",
+                        color:"#888",
                         fontWeight:"normal",
                         letterSpacing:"",
                         height:"18px",
@@ -212,6 +214,11 @@
             	type:String,
             	default:"查看更多",
             },
+            //中间时间和人数是否需要
+            centerIconData:{
+            	type:Boolean,
+            	default:true,
+            },
         },
         data() {
             return {
@@ -224,8 +231,9 @@
                         aliasName:'删除',               //中文名称
                         group:'right',                   //积木分组 表单项显示的位置
                         attributes:{
-                          selectText:"right",
-                          width:"100%",
+                        	button:{
+                        		selectText:"删除",
+                        	}
                         },             
                         animation:[],
                         interactives:[],
@@ -234,10 +242,11 @@
                         	height:"1rem",
                         	border:{                
                                 color:"#f00",
-                                padding:"0" ,     
+                                padding:"0" , 
+                                radius:"0",    
                             },
                             size:{
-                            	width:"60px",
+                            	width:"68px",
                             	height:"59px",
                             }          
                         }
@@ -246,6 +255,7 @@
                page:this.pageConfig.page,
                pageSize:this.pageConfig.pageSize,
                seeMore:this.seeMoreWrite,
+               centerIcon:this.centerIconData,
             }
         },
         computed:{
@@ -255,6 +265,7 @@
                 const styles = {
                     'width':t.leftStyleConfig.width,
                     "display":t.leftStyleConfig.display,
+                    "height":t.leftStyleConfig.height,
                 }
                 return styles;
             },
@@ -365,6 +376,7 @@
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
+	                        //console.log(value);
 	                        t.items = value.itemList;
 	                        t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
@@ -374,6 +386,12 @@
 	                }, function (code, msg) {
 	                });
 	            }
+	            //如果当前页码等于总页码，修改文字显示内容
+	        	var nowPage = this.page;
+	        	var sumPage = this.totalPage;
+	        	if(nowPage == sumPage){
+	        		this.seeMore = "没有更多内容了";
+	        	}	
 	        },
 
 	        //点击加载更多事件
@@ -396,6 +414,7 @@
 	        		this.seeMore = "没有更多内容了";
 	        	}	            
 	        },
+
         }
     }
 </script>
@@ -405,14 +424,16 @@
         display: flex;
         justify-content:left;
         align-items:center;
-        font-size:0;
+        font-size:14px;
     }
     .leftStyle{
-    	width:15%;
+    	width:40px;
+    	height:40px;
+    	overflow:hidden;
 
     }
     .leftStyle img{
-    	width:100%;
+    	max-width:150%;
     }
     .centerStyle{
     	width:70%;
@@ -452,12 +473,11 @@
     	line-height:30px;
     	text-align:center;
     	font-size:14px;
-    	color:#666;
+    	color:#353535;
     }
     .itemList{
     	width:100%;
     	margin:0;
-    	padding:5px 5%;
     	border-top:1px solid #eee;
 
     }
@@ -467,5 +487,11 @@
     .lxItemBg{
     	background:#fff;
     	margin:10px 0 10px 0;
+    }
+    .itemContent{
+    	padding:10px 5%;
+    }
+    .rightStyle{
+    	font-size:14px;
     }
 </style>
