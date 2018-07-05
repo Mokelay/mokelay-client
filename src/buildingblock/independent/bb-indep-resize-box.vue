@@ -1,21 +1,5 @@
 
   <script>
-  // <div class="activity_instance" style="left: 200px; top: 30px; height: 42px; width: 122px;">
-  //   <div class="activity_content" style="cursor: move;">
-  //     <span class="activity_model_logo activity_logo_Start" title="开始"></span>
-  //     <span class="activity_model_label" style="color: black; font-size: 12px;">开始</span>
-  //   </div>
-
-  //   <div class="resize resize_topleft"></div>
-  //   <div class="resize resize_topright"></div>
-  //   <div class="resize resize_bottomleft">
-  //   </div><div class="resize resize_bottomright"></div>
-  //   <div class="assistline assistline_left" style="display: none;"></div>
-  //   <div class="assistline assistline_right" style="display: none;"></div>
-  //   <div class="assistline assistline_up" style="display: none;"></div>
-  //   <div class="assistline assistline_down" style="display: none;"></div>
-  // </div>
-
 
     //获取页面基准值，有时可能会变
     let REM_BASE = 28;
@@ -31,6 +15,8 @@
         let t=this;
 
         const contentInstance = t.renderContent(createElement);
+        const resizeInstance = t.renderResize(createElement);
+        const assistlineInstance = t.renderAssistline(createElement);
 
         return createElement('div',{
           class:"activity_instance",
@@ -47,6 +33,10 @@
             mousedown:function(e){
               // 鼠标按下，计算当前元素距离可视区的距离
               let oDiv = e.srcElement;
+              //resize按钮不拖动
+              if(oDiv.classList.value.indexOf('resize')>=0 || oDiv.classList.value.indexOf('assistline')>=0){
+                return;
+              }
               while(oDiv.classList.value.indexOf('activity_instance')<0){
                 oDiv = oDiv.offsetParent;
               }
@@ -70,7 +60,7 @@
               };
             }
           }
-        },[contentInstance]);
+        },[contentInstance].concat(resizeInstance,assistlineInstance));
       },
       props: {
         //是否可改变大小
@@ -132,7 +122,29 @@
               cursor:'move'
             }
           },[iconInstance,textInstance]);
+        },
+        //渲染可变大小node
+        renderResize:function(createElement){
+          let t=this;
+          const result = [];
+          ['topleft','topright','bottomleft','bottomright'].forEach((item)=>{
+            result.push(createElement('div',{
+              class:"resize resize_"+item
+            },[]));
+          });
+          return result;
+        },
+        //渲染引线节点
+        renderAssistline:function(createElement){
+           const result = [];
+          ['left','right','up','down'].forEach((item)=>{
+            result.push(createElement('div',{
+              class:"assistline assistline_"+item
+            },[]));
+          });
+          return result;
         }
+
       }
     }
   </script>
@@ -153,7 +165,7 @@
         text-align: center;
         border-radius:.10714rem;
         &:hover{
-          box-shadow:0 0 5px rgba(75,155,237,.5);
+          box-shadow:0 0 .17857rem rgba(75,155,237,.5);
         }
         &.activity_selected{
           z-index:2;
@@ -196,6 +208,71 @@
             text-overflow: ellipsis;
             white-space: nowrap;
           }
+        }
+
+        .resize{
+          z-index: 9999;
+          position: absolute;
+          border: .035714rem solid gray;
+          width: .214285rem;
+          height: .214285rem;
+          background-color: #7fff00;
+          display: none;
+        }
+        .resize_topleft{
+          top: -0.1785714rem;
+          cursor: nw-resize;
+          left: 0;
+          margin-left: -0.10714rem;
+        }
+        .resize_topright{
+          top: -0.1785714rem;
+          cursor: ne-resize;
+          left: 100%;
+          margin-left: -0.10714rem;
+        }
+        .resize_bottomleft{
+          left: -0.1785714rem;
+          cursor: sw-resize;
+          top: 100%;
+          margin-top: -0.10714rem;
+        }
+        .resize_bottomright{
+          right: -0.1785714rem;
+          cursor: se-resize;
+          top: 100%;
+          margin-top: -0.10714rem;
+        }
+        .assistline{
+          z-index: 9999;
+          position: absolute;
+          border: .035714rem solid red;
+          cursor: crosshair;
+          width: .285714rem;
+          height: .285714rem;
+          border-radius: 50%;
+          background-color: #fff;
+          display: none;
+        }
+        .assistline_left{
+          left: -0.1785714rem;
+          top: 50%;
+          margin-top: -0.1428571rem;
+        }
+        .assistline_right{
+          right: -0.1428571rem;
+          top: 50%;
+          margin-top: -0.1428571rem;
+        }
+        .assistline_up{
+          top: -0.1428571rem;
+          left: 50%;
+          margin-left: -0.1428571rem;
+        }
+        .assistline_down{
+          bottom: -0.1428571rem;
+          left: 50%;
+          margin-left: -0.1428571rem;
         }
         
       }
