@@ -236,7 +236,7 @@ export default {
         }
         .recordRight{
             padding-top:0.5rem;
-            font-size:0.4rem;
+            font-size:0.34rem;
             color:#8c8c8c;
             .time{
                 color:#ed2b2c;
