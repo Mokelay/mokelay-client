@@ -14,12 +14,15 @@
       render: function (createElement) {
         let t=this;
 
-        const contentInstance = t.renderContent(createElement);
-        const resizeInstance = t.renderResize(createElement);
-        const assistlineInstance = t.renderAssistline(createElement);
+        const contentInstance = t._renderContent(createElement);
+        const resizeInstance = t._renderResize(createElement);
+        const assistlineInstance = t._renderAssistline(createElement);
 
         return createElement('div',{
-          class:"activity_instance",
+          class:{
+            "activity_instance":true,
+            "active":t.is_active
+          },
           domProps:{
             'data-uuid':t.p_activityData.uuid
           },
@@ -30,6 +33,10 @@
             height:t.p_activityData.size.height
           },
           on:{
+            click:function(e){
+              t.$emit('click',t.is_active,t);
+              t.is_active = true;
+            },
             mousedown:function(e){
               // 鼠标按下，计算当前元素距离可视区的距离
               let oDiv = e.srcElement;
@@ -50,13 +57,14 @@
                   // 通过事件委托，计算移动的距离
                   let left = srcX + (e1.clientX - disX);
                   let top = srcY + (e1.clientY - disY);
-                  t.drag({x: ((left/REM_BASE) + 'rem'), y: ((top/REM_BASE) + 'rem')});
+                  t._drag({x: ((left/REM_BASE) + 'rem'), y: ((top/REM_BASE) + 'rem')});
               };
               oDiv.offsetParent.onmouseup = function (e) {
                   oDiv.offsetParent.onmousemove = null;
                   oDiv.offsetParent.onmouseup = null;
                   //抛出事件
                   t.$emit('change',t.p_activityData);
+                  t.$emit('move',t.p_activityData);
               };
             }
           }
@@ -92,20 +100,30 @@
       },
       data() {
         return {
-          p_activityData:this.activityData
+          p_activityData:this.activityData,
+          is_active:false,//是否选中
         };
       },
       created: function () {
 
       },
       methods: {
-        drag:function(_position){
-          console.log(_position);
+        _drag:function(_position){
           const t = this;
           t.p_activityData.position = {x: _position.x, y: _position.y};
         },
+        //大小改变
+        _boxResize:function(_size){
+          let t=this;
+          t.p_activityData.size = {width:_size.width,height:_size.height};
+        },
+        //影藏外围操作按钮
+        hideOutBtn:function(){
+          let t=this;
+          t.is_active = false;
+        },
         //渲染box 中间的内容
-        renderContent:function(createElement){
+        _renderContent:function(createElement){
           let t=this;
           const iconInstance = createElement('i',{
             class:"activity_item_icon iconfont "+t.p_activityData.icon
@@ -124,26 +142,102 @@
           },[iconInstance,textInstance]);
         },
         //渲染可变大小node
-        renderResize:function(createElement){
+        _renderResize:function(createElement){
           let t=this;
           const result = [];
           ['topleft','topright','bottomleft','bottomright'].forEach((item)=>{
             result.push(createElement('div',{
-              class:"resize resize_"+item
+              class:"resize resize_"+item,
+              on:{
+                mousedown:function(e){
+                  // 鼠标按下，计算当前元素距离可视区的距离
+                  let oDiv = e.srcElement;
+
+                  let srcX = e.clientX;
+                  let srcY = e.clientY;
+                  const srcWidth = t.p_activityData.size.width;
+                  const srcHeight = t.p_activityData.size.height;
+
+                  //计算框dom 的相对x，y值
+                  let srcDomX = oDiv.offsetParent.getBoundingClientRect().left - oDiv.offsetParent.offsetParent.getBoundingClientRect().left;
+                  let srcDomY = oDiv.offsetParent.getBoundingClientRect().top - oDiv.offsetParent.offsetParent.getBoundingClientRect().top;
+
+                  oDiv.offsetParent.offsetParent.onmousemove = function (e1) {
+                      // 通过事件委托，计算移动的距离
+                      let disWidth = e1.clientX - srcX;
+                      let disHeight = e1.clientY - srcY;
+
+                      //设置不动的点   bottomright不用管
+                      if(item == 'topright'){
+                        //固定左下角
+                        t._boxResize({width:(t._buildRem('add',srcWidth,disWidth) + 'rem'),height:(t._buildRem('reduce',srcHeight,disHeight) + 'rem')});
+                        t._drag({x: (t._buildRem('reduce',srcDomX,0) + 'rem'), y: (t._buildRem('add',srcDomY,disHeight) + 'rem')});
+                      }else if(item == 'bottomleft'){
+                        //固定右上角
+                        t._boxResize({width:(t._buildRem('reduce',srcWidth,disWidth) + 'rem'),height:(t._buildRem('add',srcHeight,disHeight) + 'rem')});
+                        t._drag({x: (t._buildRem('add',srcDomX,disWidth) + 'rem'), y: (t._buildRem('reduce',srcDomY,0) + 'rem')});
+                      }else if(item == 'topleft'){
+                        //固定右下角
+                        t._boxResize({width:(t._buildRem('reduce',srcWidth,disWidth) + 'rem'),height:(t._buildRem('reduce',srcHeight,disHeight) + 'rem')});
+                        t._drag({x: (t._buildRem('add',srcDomX,disWidth) + 'rem'), y: (t._buildRem('add',srcDomY,disHeight) + 'rem')});
+                      }else{
+                        t._boxResize({width:(t._buildRem('add',srcWidth,disWidth) + 'rem'),height:(t._buildRem('add',srcHeight,disHeight) + 'rem')});
+                      }
+                  };
+                  oDiv.offsetParent.offsetParent.onmouseup = function (e) {
+                      oDiv.offsetParent.offsetParent.onmousemove = null;
+                      oDiv.offsetParent.offsetParent.onmouseup = null;
+                      //抛出事件
+                      t.$emit('change',t.p_activityData);
+                      t.$emit('resize',t.p_activityData);
+                  };
+                }
+              }
             },[]));
           });
           return result;
         },
         //渲染引线节点
-        renderAssistline:function(createElement){
+        _renderAssistline:function(createElement){
            const result = [];
           ['left','right','up','down'].forEach((item)=>{
             result.push(createElement('div',{
-              class:"assistline assistline_"+item
+              class:"assistline assistline_"+item,
+              on:{
+
+              }
             },[]));
           });
           return result;
-        }
+        },
+        //兼容原始宽高的长度单位 ,转成rem   src:px/rem     dis:计算出来的px长度值
+        _buildRem:function(opt,src,dis){
+          let t =this;
+          if(!src){
+            src = 0;
+          }
+          if(typeof src === 'number'){
+            if(opt == 'add'){
+              return (Number(src) + Number(dis))/REM_BASE;
+            }else{
+              return (Number(src) - Number(dis))/REM_BASE;
+            }
+          }else{
+            if(src.indexOf('px')>=0||src.indexOf('PX')>=0){
+              if(opt == 'add'){
+                return (Number(src.replace('px','')) + dis)/REM_BASE;
+              }else{
+                return (Number(src.replace('px','')) - dis)/REM_BASE;
+              }
+            }else if(src.indexOf('rem')>=0){
+              if(opt == 'add'){
+                return (Number(src.replace('rem','')) + dis/REM_BASE);
+              }else{
+                return (Number(src.replace('rem','')) - dis/REM_BASE);
+              }
+            }
+          }
+        },
 
       }
     }
@@ -169,6 +263,9 @@
         }
         &.activity_selected{
           z-index:2;
+        }
+        &.active .resize,&.active .assistline{
+          display: block;
         }
         .activity_content{
             width: 100%;
