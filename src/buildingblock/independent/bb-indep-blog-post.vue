@@ -8,7 +8,7 @@
                 @change="textareaChange"
  			> 
  			</textarea>
-            <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent"></bb-layout-seriation-edit>
+            <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent" :option="editOption"></bb-layout-seriation-edit>
  			<p class="uploadIcon">
  				<i 
  				v-for="icon in icons" 
@@ -262,6 +262,9 @@ export default {
                     value:"privacy",
                 }]
             },
+            editOption:{
+                styleType:"swpie"
+            }
         }
       },
     computed:{
@@ -454,7 +457,7 @@ export default {
             color: #666;
         }
         .h5configEdit{
-            margin: 1rem 0.2rem;
+            margin: 1rem 0rem;
         }
     }
 </style>
