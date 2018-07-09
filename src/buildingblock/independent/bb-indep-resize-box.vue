@@ -7,7 +7,6 @@
       //取rem 基准值
       REM_BASE = document.documentElement.style['font-size']?Number(document.documentElement.style['font-size'].replace('px','')):28;
     },1000);
-    
 
     export default {
       name: 'bb-indep-resize-box',
@@ -62,6 +61,7 @@
               oDiv.offsetParent.onmouseup = function (e) {
                   oDiv.offsetParent.onmousemove = null;
                   oDiv.offsetParent.onmouseup = null;
+                  //TODO 将当前dom 的起始点和结束点的坐标返回
                   //抛出事件
                   t.$emit('change',t.p_activityData);
                   t.$emit('move',t.p_activityData);
@@ -103,6 +103,11 @@
           p_activityData:this.activityData,
           is_active:false,//是否选中
         };
+      },
+      watch:{
+        activityData(val){
+          this.p_activityData = val;
+        }
       },
       created: function () {
 
@@ -187,6 +192,7 @@
                   oDiv.offsetParent.offsetParent.onmouseup = function (e) {
                       oDiv.offsetParent.offsetParent.onmousemove = null;
                       oDiv.offsetParent.offsetParent.onmouseup = null;
+                      //TODO 将当前dom 的起始点和结束点的坐标返回
                       //抛出事件
                       t.$emit('change',t.p_activityData);
                       t.$emit('resize',t.p_activityData);
@@ -204,7 +210,10 @@
             result.push(createElement('div',{
               class:"assistline assistline_"+item,
               on:{
-
+                mousedown:function(e){
+                  //辅助线抛出鼠标down事件
+                  t.$emit('assistlinemousedown',e,item);
+                }
               }
             },[]));
           });
