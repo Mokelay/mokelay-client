@@ -31,7 +31,7 @@ export default {
         //接受的文件类型。默认值image/*
         accept:{
             type:String,
-            default:"audio/*"
+            default:"image/*"
         },
         //是否禁用图片上传
         disabled:{
