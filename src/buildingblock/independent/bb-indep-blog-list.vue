@@ -371,12 +371,12 @@ export default {
 				clock_in_id:clock_in_id , //打卡id
 			};
         	if(greatState == 0){
-				this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_like";
+				this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
 	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
 	               this.getData();
 	            });        	
         	}else{
-        		this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_cancel_like";
+        		this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_cancel_like`;
 	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
 	               this.getData();
 	            });  
