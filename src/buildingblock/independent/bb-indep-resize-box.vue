@@ -86,8 +86,8 @@
               icon:'ty-sj__tag',
               text:'测试',
               position:{
-                x:0,
-                y:0
+                x:'0rem',
+                y:'0rem'
               },
               size:{
                 width:'3.5rem',
@@ -106,7 +106,9 @@
       },
       watch:{
         activityData(val){
-          this.p_activityData = val;
+          if(val){
+            this.p_activityData = val;
+          }
         }
       },
       created: function () {
@@ -205,6 +207,7 @@
         },
         //渲染引线节点
         _renderAssistline:function(createElement){
+          let t=this;
            const result = [];
           ['left','right','up','down'].forEach((item)=>{
             result.push(createElement('div',{
@@ -212,7 +215,7 @@
               on:{
                 mousedown:function(e){
                   //辅助线抛出鼠标down事件
-                  t.$emit('assistlinemousedown',e,item);
+                  t.$emit('assistlinemousedown',e,item,t.p_activityData);
                 }
               }
             },[]));
@@ -254,6 +257,7 @@
 
   <style lang="less" scoped>
       .activity_instance{
+        z-index:5;
         position: absolute;
         resize: none;
         overflow: visible;

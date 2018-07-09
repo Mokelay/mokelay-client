@@ -24,11 +24,6 @@
         },[lineInstance,polygonInstance]);
       },
       props: {
-        //是否不要外层的svg标签,画图的时候有多条线，外层svg标签在组件中添加
-        removeSvg:{
-          type:Boolean,
-          default:false
-        },
         //节点数据   content表示节点点击后  可以展示的表单；data表示业务数据
         svgData:{
           type:Object,
@@ -46,7 +41,7 @@
                 x:100,
                 y:220
               },
-              fromNodeDirection:'left',// 触发节点的什么方位 画线
+              fromNodeDirection:'down',// 触发节点的什么方位 画线
               toNodeDirection:'up'
             }
           }
@@ -56,13 +51,15 @@
         return {
           p_svgData:this.svgData,
           is_active:false,//是否选中
-          linePath:'',//path 的d参数值  M261,212 L 261 262 
-          polygonPoint:'',//三角箭头的点阵 261,270 257,262 265,262
+          // linePath:'',//path 的d参数值  M261,212 L 261 262 
+          // polygonPoint:'',//三角箭头的点阵 261,270 257,262 265,262
         };
       },
       watch:{
         svgData(val){
-          this.p_svgData = val;
+          if(val){
+            this.p_svgData = val;
+          }
         }
       },
       created: function () {
@@ -157,8 +154,10 @@
           if(t._checkNeedAssist(fromDirection,fromPoint,toPoint)){
             //判断起点是否需要BASE_ASSIST px 长度的延长线，用于隔开box
             startPoint = t._calculateNextPoint(fromDirection,fromPoint,{width:BASE_ASSIST,height:BASE_ASSIST});//计算开始点
-            pointArray.push(startPoint);
-            fromHasAssist = true;
+            if(startPoint){
+              pointArray.push(startPoint);
+              fromHasAssist = true;
+            }
           }
           //计算重点 是否需要延长
           if(t._checkNeedAssist(toDirection,toPoint,fromPoint)){
@@ -198,7 +197,9 @@
             endDirect = toDirection;
           }
           const middlePoint = t._calculateMiddlePoint(startPoint,endPoint,startDirect,endDirect);
-          pointArray = pointArray.concat(middlePoint);
+          if(middlePoint){
+            pointArray = pointArray.concat(middlePoint);
+          }
           if(toHasAssist){
             //如果目标点有延长点
             pointArray.push(endPoint);
