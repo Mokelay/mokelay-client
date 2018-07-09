@@ -133,6 +133,17 @@
             */
             content:{
                 type:[Array,String]
+            },
+            /*其他属性设置
+                styleType:"detail  simple"
+            */
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        styleType:"detail"
+                    }
+                }
             }
         },
         mounted:function(){
@@ -236,7 +247,8 @@
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
                                     buttons:notCanOpt?[]:['up','down','remove'],
-                                    onFocus:notCanOpt?false:bbEle.onFocus
+                                    onFocus:notCanOpt?false:bbEle.onFocus,
+                                    styleType:t.option.styleType
                                 }   
                             },
                             style:{flex:1},
@@ -302,11 +314,26 @@
             remove:function(...params){
                 const t = this;
                 const index = params[0];
-                t.$confirm('确认操作?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
+                if(_TY_Tool.isPC()){
+                    t.$confirm('确认操作?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        t.$emit('remove',t.realContent[index]);
+                        if(index==t.realContent.length-2&&t.realContent[index+1].group&&t.realContent[index+1].group==='notCanOpt'&&t.realContent.length==2){
+                            //倒数第二个item,并且最后一个item是不可编辑的，则倒数第二个和最后一个不可编辑的item一起删除
+                            t.realContent.splice(index+1, 1);
+                        }
+                        t.realContent.splice(index, 1);
+                        t.$emit('change',t.realContent);
+                    }).catch(() => {
+                        t.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });
+                    });
+                }else{
                     t.$emit('remove',t.realContent[index]);
                     if(index==t.realContent.length-2&&t.realContent[index+1].group&&t.realContent[index+1].group==='notCanOpt'&&t.realContent.length==2){
                         //倒数第二个item,并且最后一个item是不可编辑的，则倒数第二个和最后一个不可编辑的item一起删除
@@ -314,12 +341,7 @@
                     }
                     t.realContent.splice(index, 1);
                     t.$emit('change',t.realContent);
-                }).catch(() => {
-                    t.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
+                }
             },
             //积木选中状态
             onFocus:function(...params){

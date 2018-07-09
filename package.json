@@ -1,6 +1,6 @@
 {
   "name": "ty-client-core",
-  "version": "2.2.22",
+  "version": "2.2.24",
   "description": "TY Client Core",
   "main": "./dist/index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     "iview": "^2.0.0-rc.13",
     "jquery": "^3.2.1",
     "js-cookie": "^2.1.3",
+    "jsonp": "^0.2.1",
     "lodash.debounce": "^4.0.8",
     "mavon-editor": "^2.4.16",
     "moment": "^2.18.1",

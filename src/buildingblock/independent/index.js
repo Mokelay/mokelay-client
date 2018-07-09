@@ -44,6 +44,7 @@ import bbindepBlogList from './bb-indep-blog-list';
 import bbh5config from './bb-h5-config';
 import bbindepshare from './bb-indep-share';
 import bbindepreportchain from './bb-indep-report-chain';
+import bbindepresizebox from './bb-indep-resize-box';
 
 import helloworld from './bb-hello-world';
 
@@ -97,6 +98,7 @@ export default {
 		Vue.component('bb-h5-config', bbh5config);
 		Vue.component('bb-indep-share', bbindepshare);
 		Vue.component('bb-indep-report-chain', bbindepreportchain);
+		Vue.component('bb-indep-resize-box', bbindepresizebox);
 
 		Vue.component('bb-hello-world', helloworld);
 

@@ -1,42 +1,45 @@
 <template>
   <div class="bb-indep-blog">
-  	<div class="content" v-for="blog in blogs"> 
+  	<div class="content" v-for="user in blogs">
   		<div class="blogLeft"> 
-  			<img :src="blog.useImg" :style="userImgStyle">
+  			<img :src="user.useImg" :style="userImgStyle">
   		</div>
   		<div class="blogRight">
   			<div class="blogUser"> 
-  				<p :style="userStyle">{{blog.useName}}</p>
+  				<p :style="userStyle">{{user.useName}}</p>
   				<h5 class="userTimeDate"> 
-  					<b :style="userTime">{{blog.blogDate}}</b>
-  					<i :style="userDate">{{blog.continuousDate}}</i>
+  					<b :style="userTime">{{user.blogDate}}</b>
+  					<i :style="userDate">已坚持{{user.continuousDate}}天</i>
   				</h5>
   			</div> 
   			<div class="blogContent"> 
-                <bb-layout-seriation :style="contentWrite" @click="joinBlogDetails(blog)" :content="blog.content"></bb-layout-seriation>
-  				<!--<div :style="contentVoice"></div>
-  				<div :style="contentTheme">
-  					<span><img :src="blog.themeImg"></span>
-  					<span> 
-  						<p>{{blog.themeTitle}}</p>
-  						<p>{{blog.themeNumber}}</p>
-  					</span>
-  					<span :class="blog.themeRightIcon"></span>
-  				</div>-->
-  				<div class="blogJoinPractice"> 
-  					<span class="blogJoinPracticeLeft"><img :src="blog.practiceImg"></span>
-  					<span class="blogJoinPracticeCenter"> 
-  						<p>{{blog.practiceTitle}}</p>
-  						<p>{{blog.practiceNumber}}</p>
-  					</span>
-  					<span class="blogJoinPracticeRight">
-  						<i :class="blogJoinXlxIcon"></i> 
-  					</span>
-  				</div>
-  				<div class="display">{{blog.log_id}}{{blog.practiveId}}</div>
+                <p :style="contentWrite" @click="joinBlogDetails(user)">{{user.text}}</p>
+                <bb-layout-seriation :content="user.content"></bb-layout-seriation>
+            </div>
+
+  			<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
+				<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
+				<span class="blogJoinPracticeCenter"> 
+					<p>{{user.practiceTitle}}</p>
+					<p>{{user.practiceNumber}}</p>
+				</span>
+				<span class="blogJoinPracticeRight">
+					<i :class="blogJoinXlxIcon"></i> 
+				</span>
   			</div>
-  			<bb-indep-blog-action></bb-indep-blog-action>
+  			<bb-indep-blog-action 
+  				@replyClick="replyClick(user)"
+  				@praiseClick="praiseClick(user)"
+  				:greatNumberShow="user.greatNumber"
+  				:praiseColor="user.greatStateNumber"
+  				> 
+  			</bb-indep-blog-action>
   		</div>  	
+		<div class="display">
+			{{user.log_id}}
+			{{user.practiveId}}
+			{{user.greatState}}
+		</div>	
   	</div>
   </div>
 </template>
@@ -46,7 +49,6 @@
 export default {
     name:"bb-indep-blog",
     props:{
-
     	//发表日记用户头像样式
     	userImgStyleConfig:{
     		type:Object,
@@ -165,7 +167,7 @@ export default {
     		default:function(){
     			return {
     				margin:"0",
-    				padding:"0",
+    				padding:"10px 5px 5px 10px",
     				height:"",
     				width:"100%",
     			}
@@ -199,7 +201,7 @@ export default {
         return{    	
         	blogs:this.blogArray,
         	practice:this.practiceData,
-        	blogJoinXlxIcon:"ty-icon_jiantou_right_l",
+        	blogJoinXlxIcon:"ty-icon_jiantou_right_l",       
         }
     },
     watch:{},
@@ -332,32 +334,65 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.blogs = value.currentRecords;
-                        // const newArry = [];
-                        // value.currentRecords.forEach((blog,key)=>{
-                        //     blog.content = _TY_Tool.transferContent(blog.content);
-                        //     newArry.push(blog);
-                        // });
-                        // console.log(newArry);
-                        // t.blogs = newArry;
+                        //t.blogs = value.currentRecords;
+                        console.log(t.blogs);
+
+                        const newArry = [];
+                        value.currentRecords.forEach((blog,key)=>{
+                            blog.content = _TY_Tool.transferContent(blog.content);
+                            newArry.push(blog);
+                        });
+                        console.log("newArry:",newArry);
+                        t.blogs = newArry;
                     });
                 }, function (code, msg) {
                 });
             }
         },
         //点击内容事件
-        joinBlogDetails:function(blog){
-        	var blogId = blog.log_id;
-        	var practiveId =blog.practiveId;
+        joinBlogDetails:function(user){
+        	var blogId = user.log_id;
+        	var practiveId =user.practiveId;
         	this.$emit("joinBlogDetails",blogId,practiveId);
-        },  
+        },
+        //点击回复事件
+        replyClick:function(user){
+        	var blogId = user.log_id;
+        	var practiveId =user.practiveId;
+        	this.$emit("joinBlogDetails",blogId,practiveId);
+        },
+        //点赞事件
+        praiseClick:function(user){
+        	var clock_in_id = user.log_id;
+        	var theme_id =user.practiveId;
+        	var greatState= user.greatState;
+        	var param = {  
+				theme_id:theme_id, //主题id
+				clock_in_id:clock_in_id , //打卡id
+			};
+        	if(greatState == 0){
+				this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_like";
+	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
+	               this.getData();
+	            });        	
+        	}else{
+        		this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_cancel_like";
+	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
+	               this.getData();
+	            });  
+        	}    	
+        },
+        //内容列表中点击进入练习详情
+        joinPractiveDetails:function(user){
+        	var id = user.practiveId;
+        	console.log(id);
+        	this.$emit("joinPractiveDetails",id);
+        },
     }
 }
 </script>
 <style scoped>
-	.content{
-
-		
+	.content{		
 		width:100%;
 		height:100%;
 		display:flex;
@@ -366,10 +401,13 @@ export default {
 		padding:10px 2.5%;
 		background:#fff;
 		border-top:1px solid #eee;
-		font-size:14px;	
-
+		font-size:14px;
+		overflow-x:hidden;
 	}
-	
+	.display{
+		display:none;
+	}
+
 	.blogRight{
 		width:90%;
 	}
@@ -415,16 +453,13 @@ export default {
 		height:auto;
 		display:flex;
 		justify-content:left;
+		margin-top:10px;	
 	}
 	.replyUserCss{
 		display:flex;
 		justify-content:left;	
 	}
-	.userTimeDate{
-		margin:0;
-		line-height:20px;
-	}
-	.blogJoinPractice{
+		.blogJoinPractice{
 		width:100%;
 		height:auto;
 		background:#eee;
@@ -443,9 +478,6 @@ export default {
 		width:10%;
 		padding-top:10px;
 		font-size:18px;
-	}
-	.display{
-		display:none;
 	}
 </style>
 

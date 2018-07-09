@@ -222,7 +222,7 @@
             text-align: center;
         }
         .h5configEdit{
-            margin: 1rem 0.2rem;
+            margin: 1rem 0rem;
         }
     }
     

@@ -27,17 +27,59 @@
       //外部传入content ，用来覆盖内部content
       content:{
         type:Object
+      },
+      /*其他属性设置
+        {
+            horizontal:false 水平排列
+        }
+      */
+      option:{
+        type:Object
       }
     },
     data() {
       return {
+        //每次使用都生成独立uuid
+        realContent:_TY_Tool.copyContent(this.content)
       };
     },
     created: function () {
+      this.getData();
+    },
+    render:function(createElement){
+      const t = this;
+      let module;
+      //支持水平排列控制
+      if(t.option.horizontal){
+        module = createElement("bb-layout-seriation",{props:{contnet:t.realContent,horizontal:true}},[]);
+      }else{
+        module = _TY_Tool.bbRender(t.realContent, createElement, t);
+      }
+      return module;
     },
     methods: {
+      //通过别名获取某块数据
+      getData: function () {
+          const t = this;
+          const dataDs = {
+                api:"/list-data",
+                category:'config',//ds选择器 不是type字段而是category字段
+                method:"get",
+                inputs:[],
+                outputs:[]
+          };
+          if (dataDs) {
+              _TY_Tool.getDSData(dataDs, _TY_Tool.buildTplParams(t), function (map) {
+                  map.forEach((val,key)=>{
+                      const dataKey = val.dataKey;
+                      t.realContent = _TY_Tool.copyContent(val.value);
+                  })
+              }, function (code, msg) {
+              });
+          }
+      },
       //执行module某个积木的某个方法
-      execute:function(ele,method,args...){}
+      //execute:function(ele,method,args...){}
     }
   }
 </script>
