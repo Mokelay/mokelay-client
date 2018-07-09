@@ -109,17 +109,16 @@ export default {
             if(_TY_Tool.isWX()){
                 this.wxRecord();
             }else{
-                _TY_Toast("请在微信中打开");
-                //Toast.fail("请在微信中打开");
+                _TY_Toast({content:"请在微信中打开"});
             }
         },
         endRecord(){
             const t = this;
-            t.recordButtonClass = "ty ty-lvyin recordStart";
             t.status = 'endRecord';
             clearInterval(t.timeInter);
             t.wx.stopRecord({
                 success: function(voice){
+                    t.recordButtonClass = "ty ty-lvyin recordStart";
                     const localId = voice.localId;
                     t.wx.uploadVoice({
                         localId:localId,
@@ -138,10 +137,10 @@ export default {
         },
         wxRecord(){
             const  t = this;
-            t.recordButtonClass = "ty ty-lvyin recordStart recordIng";
             const recordTimer = setTimeout(function(){
                 t.wx.startRecord({
                     success: function(res){
+                        t.recordButtonClass = "ty ty-lvyin recordStart recordIng";
                         localStorage.rainAllowRecord = 'true';
                         t.status = 'recording';
                         t.timeInter = setInterval(()=>{
