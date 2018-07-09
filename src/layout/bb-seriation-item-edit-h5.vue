@@ -33,9 +33,14 @@
             const editorArea = createElement('div',{props:{},attrs:{class:t.realStyle.content.class},on:{click:t.onFocus}},[contentElements]);
             //生成箭头
             const pointer = t.config.pointer?createElement('i',{props:{},attrs:{class:t.realStyle.pointer.class},on:{}},[]):[];
-            t.realContent = t.content;
+            let returnElement;
 
-            return createElement('div',{attrs:{class:'bb-seriation-item-edit-h5'}},[editorArea,pointer]); 
+            if(t.config.styleType == "swpie"){
+                returnElement = createElement('bb-vant-cell-swipe',{props:{leftWidth:0,rightWidth:50,content:t.removeButtonContent},on:{right:t.remove}},[bbItems]);
+            }else{
+                returnElement = createElement('div',{attrs:{class:'bb-seriation-item-edit-h5'}},[editorArea,pointer]);
+            }
+            return returnElement; 
         },
         props: {
             /*config 配置
@@ -43,6 +48,7 @@
                     horizontal:false, //水平排列
                     pointer:false  //展示箭头
                     buttons:['up','down','remove'] //需要展示的按钮
+                    styleType:"detail  swpie"
                 }
             */
             config:{
@@ -52,7 +58,8 @@
                         horizontal:false, //水平排列
                         pointer:false,
                         buttons:['up','down','remove'],
-                        onFocus:false
+                        onFocus:false,
+                        styleType:"detail"
                     }
                 }
             },
@@ -131,7 +138,6 @@
                     content:{
                         class:'content'
                     }
-
                 },
                 //水平样式
                 horizontal:{
@@ -155,7 +161,49 @@
                     }
                 },
                 realStyle:{},
-                borderClass:'item-border'
+                borderClass:'item-border',
+                removeButtonContent:[{
+                    uuid: '123',
+                    alias: 'bb-indep-button',
+                    aliasName: '删除',
+                    group: 'right',
+                    attributes: {
+                        text: "删除",
+                        value: "删除",
+                        tagName: "span",
+                        fontColor: "#ffffff",
+                        button:{
+                            selectText:"删除",
+                            type:"text"
+                        }
+                    },
+                    animation: [],
+                    interactives: [],
+                    layout: {
+                        bgColor: "red",
+                        transparency: 1,
+                        size:{width:"50px"},//大小
+                        border: {
+                            style: "",
+                            color: "",
+                            size: "",
+                            radius: "0",
+                            margin: "25px 0 0 0"
+                        },
+                        shadow: {
+                            color: "",
+                            size: "",
+                            direction: '',
+                            vague: ''
+                        },
+                        font:{             
+                            family:"",
+                            size:"0.4rem",        
+                            color:'#fff',  
+                            align:''  
+                        },
+                    }
+                }]
             }
         },
         watch: {

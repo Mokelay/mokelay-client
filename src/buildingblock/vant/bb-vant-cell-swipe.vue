@@ -89,15 +89,17 @@ import 'vant/lib/cell-swipe/style';
         render: function(createElement){
             const t = this;
             const children = [];
-            t.realContent.forEach((ele,key)=>{
-                const child = _TY_Tool.bbRender([ele], createElement, t);
-                if(ele.group == "left" || ele.group == "right"){
-                    const outside = createElement('div',{slot:ele.group},[child]);
-                    children.push(outside);
-                }else{
-                    children.push(child);
-                }
-            });
+            if(t.realContent){
+                t.realContent.forEach((ele,key)=>{
+                    const child = _TY_Tool.bbRender([ele], createElement, t);
+                    if(ele.group == "left" || ele.group == "right"){
+                        const outside = createElement('template',{slot:ele.group},[child]);
+                        children.push(outside);
+                    }else{
+                        children.push(child);
+                    }
+                });
+            }
             return createElement('van-cell-swipe',{props:{
                 "right-width":t.rightWidth,
                 "left-width":t.leftWidth,

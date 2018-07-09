@@ -13,8 +13,10 @@
   				</h5>
   			</div> 
   			<div class="blogContent"> 
-  				<p :style="contentWrite" @click="joinBlogDetails(user)">{{user.content}}</p>
-  			</div>
+                <p :style="contentWrite" @click="joinBlogDetails(user)">{{user.text}}</p>
+                <bb-layout-seriation :content="user.content"></bb-layout-seriation>
+            </div>
+
   			<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 				<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 				<span class="blogJoinPracticeCenter"> 
@@ -332,16 +334,16 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.blogs = value.currentRecords;
-                        //console.log(t.blogs);
+                        //t.blogs = value.currentRecords;
+                        console.log(t.blogs);
 
-                        // const newArry = [];
-                        // value.currentRecords.forEach((blog,key)=>{
-                        //     blog.content = _TY_Tool.transferContent(blog.content);
-                        //     newArry.push(blog);
-                        // });
-                        // console.log(newArry);
-                        // t.blogs = newArry;
+                        const newArry = [];
+                        value.currentRecords.forEach((blog,key)=>{
+                            blog.content = _TY_Tool.transferContent(blog.content);
+                            newArry.push(blog);
+                        });
+                        console.log("newArry:",newArry);
+                        t.blogs = newArry;
                     });
                 }, function (code, msg) {
                 });

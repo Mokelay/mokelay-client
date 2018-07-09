@@ -1349,11 +1349,15 @@ util.transferContent = function(contents) {
     const newArry = [];
     let realContents;
     if (typeof contents == 'string') {
-        realContents = eval("(" + contents + ")");
+        try {
+            realContents = eval("(" + contents + ")");
+        } catch (error) {
+            console.log("error:", error);
+        }
     }
     if (typeof realContents == "object") {
         realContents.forEach((content, key) => {
-            content.alias = content.transferAlias
+            content.alias = content.transferAlias || content.showAlias
             newArry.push(content);
         });
         return newArry;

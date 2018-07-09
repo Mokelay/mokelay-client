@@ -239,6 +239,7 @@
             _beforeClose:function(action,done){
                 let t=this;
                 t.active = false;
+                t.$emit('update:isShow', false);
                 //关闭弹窗
                 done&&done();
             },

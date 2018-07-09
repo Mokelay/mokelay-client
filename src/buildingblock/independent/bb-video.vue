@@ -9,10 +9,13 @@
             </div>
         </div>
         <div class="local" v-if="value">
-            <i class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
-            <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update="closeDia">
-                <video class="" controls="controls" :src="realUrl"></video>
-            </bb-indep-dialog>
+            <div  v-for="(realUrlItem,key) in realUrl" :key="key">
+                <i class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
+                <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
+                    <video class="" controls="controls" :src="realUrlItem"></video>
+                </bb-indep-dialog>
+            </div>
+
         </div>
     </div>
 </template>
@@ -23,7 +26,7 @@
         props: {
             //音频地址 非iframe嵌入式音频地址
             value:{
-                type:String
+                type:[String,Array]
             },
             /*
                 transformConfig 样式
@@ -44,7 +47,7 @@
         },
         data() {
             return {
-                realUrl:this.value,
+                realUrl:typeof this.value == "object"?this.value:[this.value],
                 show:false
             }
         },
