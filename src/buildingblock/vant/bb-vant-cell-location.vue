@@ -52,7 +52,6 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
-            t.getLocationName(35.658651,139.745415);
             _TY_Tool.wx(["openLocation","getLocation"]).then((wx)=>{
                 t.wx = wx;
             });
