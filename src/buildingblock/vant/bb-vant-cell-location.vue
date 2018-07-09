@@ -1,5 +1,5 @@
 <template>
-    <van-cell title="所在位置" icon="location" @click="wxLocation" is-link />
+    <van-cell title="所在位置" icon="location" @click="wxLocation" :value="valueBase.name" is-link />
 </template>
 <script>
 import Cell from 'vant/lib/cell';
@@ -21,7 +21,14 @@ import 'vant/lib/cell/style';
             */
             value:{
                 type:[Object,String],
-                default:"所在位置"
+                default:function(){
+                    return {
+                        latitude: 0, // 纬度，浮点数，范围为90 ~ -90
+                        longitude: 0, // 经度，浮点数，范围为180 ~ -180。
+                        name: '', // 位置名
+                        address: '', // 地址详情说明
+                    };
+                }
             },
             /*其他属性配置
             {
@@ -45,6 +52,7 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
+            t.getLocationName(35.658651,139.745415);
             _TY_Tool.wx(["openLocation","getLocation"]).then((wx)=>{
                 t.wx = wx;
             });
@@ -65,6 +73,7 @@ import 'vant/lib/cell/style';
                             t.valueBase = res;
                             t.$emit("change",t.valueBase);
                             t.$emit("input",t.valueBase);
+                            t.getLocationName(latitude,longitude);
                             t.wx.openLocation({
                                 latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
                                 longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
@@ -77,6 +86,23 @@ import 'vant/lib/cell/style';
                     });
                 }
             },
+            getLocationName(latitude,longitude){
+                const t = this;
+                const ak = "qioiIjiHhNBq1DvY4ogShy4e";
+                const url = `http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=${latitude},${longitude}&output=json&pois=1&ak=${ak}`;
+                require.ensure(['jsonp'], function (require) {
+                    const jsonp = require('jsonp');
+                    jsonp(url, null, (err, data) => {
+                        t.valueBase.address = data.result.formatted_address;
+                        t.valueBase.name = data.result.addressComponent.street;
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log(data);
+                    }
+                    });
+                });
+            }
         }
     }
 </script>
