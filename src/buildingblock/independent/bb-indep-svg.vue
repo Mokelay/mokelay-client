@@ -266,7 +266,8 @@
                 x:start.x,
                 y:end.y
               }]
-            }else if(startDirect === 'left'){
+            }
+          }else if(startDirect === 'left'){
               if(endDirect === 'right'){
                  //两个中间点
                 result.push({
@@ -285,25 +286,24 @@
                   y:start.y
                 }]
               }
-            }else if(startDirect === 'right'){
-              if(endDirect === 'left'){
-                //两个中间点
-                result.push({
-                  x:start.x+(disW/2),
-                  y:start.y
-                });
-                result.push({
-                  x:end.x-(disW/2),
-                  y:end.y
-                });
-                return result;
-              }else if(endDirect === 'up' || endDirect === 'down'){
-                //一个中间点
-                return [{
-                  x:end.x,
-                  y:start.y
-                }]
-              }
+          }else if(startDirect === 'right'){
+            if(endDirect === 'left'){
+              //两个中间点
+              result.push({
+                x:start.x+(disW/2),
+                y:start.y
+              });
+              result.push({
+                x:end.x-(disW/2),
+                y:end.y
+              });
+              return result;
+            }else if(endDirect === 'up' || endDirect === 'down'){
+              //一个中间点
+              return [{
+                x:end.x,
+                y:start.y
+              }]
             }
           }
         },
@@ -336,13 +336,13 @@
         //判断是否需要折线 ,起始点和目标点都是这个方法校验
         _checkNeedAssist:function(direction,fromPoint,toPoint){
           let t=this;
-          if(direction==='up'&&(toPoint.y-fromPoint.y)>BASE_ASSIST){
+          if(direction==='up'&&(fromPoint.y - toPoint.y)<BASE_ASSIST){
             return true;
-          }else if(direction==='down'&&(fromPoint.y-toPoint.y)>BASE_ASSIST){
+          }else if(direction==='down'&&(toPoint.y - fromPoint.y)<BASE_ASSIST){
             return true;
-          }else if(direction==='right'&&(fromPoint.x-toPoint.x)>BASE_ASSIST){
+          }else if(direction==='right'&&(toPoint.x - fromPoint.x)<BASE_ASSIST){
             return true;
-          }else if(direction==='left'&&(toPoint.x-fromPoint.x)>BASE_ASSIST){
+          }else if(direction==='left'&&(fromPoint.x - toPoint.x)<BASE_ASSIST){
             return true;
           }
           return false;
