@@ -17,6 +17,10 @@
             return dialog;
         },
         props: {
+            //弹框自定义头部
+            titleContent:{
+                type:Array
+            },
             //内容积木列表
             content:{
                 type:[Array,String]
@@ -163,6 +167,11 @@
             //渲染PC的dialog
             _renderPCDialog:function(createElement,childrens){
                 let t=this;
+                if(t.titleContent){
+                    const titleContent = _TY_Tool.bbRender(t.titleContent, createElement, t);
+                    const title = createElement('template',{slot:"title"},[titleContent]);
+                    childrens.push(title);
+                }
                 return createElement('el-dialog',{
                     props:{
                         'visible':t.active,
@@ -240,6 +249,7 @@
                 let t=this;
                 t.active = false;
                 t.$emit('update:isShow', false);
+                t.$emit('beforeClose', t);
                 //关闭弹窗
                 done&&done();
             },
@@ -261,11 +271,13 @@
             openDialog:function(){
                 this.active = true;
                 this.$emit('update:isShow', false);
+                this.$emit('afterOpen', t);
             },
             //对外提供方法 关闭弹窗
             closeDialog:function(){
                 this.active = false;
                 this.$emit('update:isShow', false);
+                this.$emit('beforeClose', t);
             },
             //主要用于积木选择器
             loadChildBB:function(){
