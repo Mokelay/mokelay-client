@@ -11,7 +11,7 @@
   					<b :style="userTime">{{user.blogDate}}</b>
   					<i :style="userDate">已坚持{{user.continuousDate}}天</i>
   				</h5>
-  			</div> 
+  			</div>
   			<div class="blogContent"> 
                 <p :style="contentWrite" @click="joinBlogDetails(user)">{{user.text}}</p>
                 <bb-layout-seriation :content="user.content"></bb-layout-seriation>
@@ -45,7 +45,7 @@
 </template>
 <script>  
 
-
+import Vue from 'vue'
 export default {
     name:"bb-indep-blog",
     props:{
@@ -335,14 +335,11 @@ export default {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
                         //t.blogs = value.currentRecords;
-                        console.log(t.blogs);
-
                         const newArry = [];
                         value.currentRecords.forEach((blog,key)=>{
                             blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                        console.log("newArry:",newArry);
                         t.blogs = newArry;
                     });
                 }, function (code, msg) {
@@ -370,12 +367,14 @@ export default {
 				theme_id:theme_id, //主题id
 				clock_in_id:clock_in_id , //打卡id
 			};
+			debugger
         	if(greatState == 0){
-				this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_like";
+        		this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_like";
 	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
 	               this.getData();
 	            });        	
-        	}else{
+        	}if(greatState == 1){
+        		console.log(1);
         		this.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_cancel_like";
 	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
 	               this.getData();
@@ -385,7 +384,7 @@ export default {
         //内容列表中点击进入练习详情
         joinPractiveDetails:function(user){
         	var id = user.practiveId;
-        	console.log(id);
+        	//console.log(id);
         	this.$emit("joinPractiveDetails",id);
         },
     }
