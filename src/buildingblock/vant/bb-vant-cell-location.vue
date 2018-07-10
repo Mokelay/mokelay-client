@@ -66,12 +66,7 @@ import 'vant/lib/cell/style';
                             const speed = res.speed; // 速度，以米/每秒计
                             const accuracy = res.accuracy; // 位置精度
                             t.valueBase = res;
-<<<<<<< HEAD
-                            t.$emit("change",t.valueBase);
-                            t.$emit("input",t.valueBase);
-=======
                             t.getLocationName(latitude,longitude);
->>>>>>> bd644ed7ed57946aa21b0f1e8c5041bfadde3d11
                             t.wx.openLocation({
                                 latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
                                 longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
@@ -86,8 +81,6 @@ import 'vant/lib/cell/style';
                     });
                 }
             },
-<<<<<<< HEAD
-=======
             getLocationName(latitude,longitude){
                 const t = this;
                 const ak = "qioiIjiHhNBq1DvY4ogShy4e";
@@ -106,7 +99,6 @@ import 'vant/lib/cell/style';
                     });
                 });
             }
->>>>>>> bd644ed7ed57946aa21b0f1e8c5041bfadde3d11
         }
     }
 </script>
