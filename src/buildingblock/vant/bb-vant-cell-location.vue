@@ -1,5 +1,7 @@
 <template>
-    <van-cell title="所在位置" icon="location" @click="wxLocation" is-link />
+
+    <van-cell title="所在位置" icon="location" @click="wxLocation" :value="addressDetail" is-link />
+
 </template>
 <script>
 import Cell from 'vant/lib/cell';
@@ -41,6 +43,7 @@ import 'vant/lib/cell/style';
         data() {
             return {
                 valueBase:this.value,
+                addressDetail:''
             };
         },
         mounted(){
@@ -63,20 +66,47 @@ import 'vant/lib/cell/style';
                             const speed = res.speed; // 速度，以米/每秒计
                             const accuracy = res.accuracy; // 位置精度
                             t.valueBase = res;
+<<<<<<< HEAD
                             t.$emit("change",t.valueBase);
                             t.$emit("input",t.valueBase);
+=======
+                            t.getLocationName(latitude,longitude);
+>>>>>>> bd644ed7ed57946aa21b0f1e8c5041bfadde3d11
                             t.wx.openLocation({
                                 latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
                                 longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-                                name: '', // 位置名
-                                address: '', // 地址详情说明
+                                name: t.valueBase.name, // 位置名
+                                address: t.valueBase.address, // 地址详情说明
                                 scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
                                 infoUrl: t.option.infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
                             });
+                            t.$emit("change",t.valueBase);
+                            t.$emit("input",t.valueBase);
                         }
                     });
                 }
             },
+<<<<<<< HEAD
+=======
+            getLocationName(latitude,longitude){
+                const t = this;
+                const ak = "qioiIjiHhNBq1DvY4ogShy4e";
+                const url = `http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=${latitude},${longitude}&output=json&pois=1&ak=${ak}`;
+                require.ensure(['jsonp'], function (require) {
+                    const jsonp = require('jsonp');
+                    jsonp(url, null, (err, data) => {
+                        t.valueBase.address = data.result.formatted_address;
+                        t.valueBase.name = data.result.sematic_description;
+                        t.addressDetail = data.result.sematic_description;
+                        if (err) {
+                            console.error(err.message);
+                        } else {
+                            console.log(data);
+                        }
+                    });
+                });
+            }
+>>>>>>> bd644ed7ed57946aa21b0f1e8c5041bfadde3d11
         }
     }
 </script>
