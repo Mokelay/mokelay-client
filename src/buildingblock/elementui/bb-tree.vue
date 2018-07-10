@@ -20,6 +20,7 @@
                 :key="randomKey"
                 @check-change="checkChange"
                 @node-click="nodeClick"
+                @node-expand="nodeExpand"
         >
         </el-tree>
     </div>
@@ -343,17 +344,27 @@
                 t.$emit('click',data,node,current);
 
             },
+            //节点展开
+            nodeExpand(){
+                const t = this;
+                t.setHorizontal();
+            },
             //设置水平样式
             setHorizontal:function(){
                 const t = this;
-                const bbTree = document.getElementById(t.id);
-                const isLeafs = bbTree.getElementsByClassName("is-leaf");
-                if(isLeafs.length){
-                    isLeafs.forEach((isLeaf,key)=>{
-                        const className = isLeaf.parentNode.parentNode.className + " dib";
-                        isLeaf.parentNode.parentNode.setAttribute("style",t.option.itemStyle);
-                    })
-                }
+                setTimeout(()=>{
+                    const bbTree = document.getElementById(t.id);
+                    const isLeafs = bbTree.getElementsByClassName("is-leaf");
+                    if(isLeafs.length){
+                        HTMLCollection.prototype.forEach=function(callback){
+                            [].slice.call(this).forEach(callback);
+                        };
+                        isLeafs.forEach((isLeaf,key)=>{
+                            const className = isLeaf.parentNode.parentNode.className + " dib";
+                            isLeaf.parentNode.parentNode.setAttribute("style",t.option.itemStyle);
+                        })
+                    }
+                },10);
             }
         }
     }
