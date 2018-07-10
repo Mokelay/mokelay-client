@@ -13,7 +13,7 @@
                     <span class="audio-length-current" id="audioCurTime">{{time}}</span>
                     <span class="progress-color-bar" :style="{width:playedWidth}" @mousedown="setCurrentTime"><span id="progressDot" class="progress-dot" :style="{left:playedLeft}" @mousedown="setDot"></span></span>
                     <span class="progress-bar" id="progressBar" @mousedown="setCurrentTime"></span>
-                    <span class="audio-length-total">{{recordTime}}</span>
+                    <span class="audio-length-total">{{transferRecordTime}}</span>
                 </span>
             </div>
         </div>
@@ -31,7 +31,7 @@ export default {
         */
         value:{
             type:[Array,String],
-            default:"http://www.w3school.com.cn/i/horse.ogg"
+            default:"http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=569bef9c3e6c5d3542dcf11306dcf8a1.mp3"
         },
         //文件读取结果类型，可选值dataUrl，test
         resultType:{
@@ -54,6 +54,7 @@ export default {
             valueBase:this.value,
             time:"0:00",
             recordTime:"0:00",
+            transferRecordTime:"0:00",
             palyButtonIcon:"ty ty-lvyinpf fcGreen",
             status:"beforeRecord", // playing pause played
             audioId:_TY_Tool.uuid(),
@@ -68,8 +69,9 @@ export default {
         t.audio = document.getElementById(t.audioId);
         t.totalWidth = document.getElementsByClassName("progress-bar")[0].offsetWidth;
         t.audio.oncanplay = function () {
-            t.recordTime = typeof t.audio.duration == 'number'?t.audio.duration : 100;
+            t.recordTime = t.audio.duration != Infinity?t.audio.duration : 100;
             t.canPlay = true;
+            t.transferRecordTime = t.transTime(t.recordTime);
         }
         // 监听音频播放时间并更新进度条
         t.audio.addEventListener('timeupdate', function () {
@@ -309,8 +311,7 @@ export default {
                 background-color: #fff;
                 border: .12rem solid #28aba8;
                 position: absolute; 
-                top: -7px;
-                left: -4px;
+                top: -0.18rem;
             }
             .progress-bar{
                 width: 55%;
@@ -326,11 +327,12 @@ export default {
                 background-color: #fff;
                 border: 1px solid #28aba8;
                 position: absolute;
-                top: 9px; 
+                top: 0.5rem;; 
             }
-            .audio-length-current{
+            .audio-length-current,.audio-length-total{
                 display: inline-block;
                 width: 1rem;
+                font-size:0.4rem;
             }
         }
         .fcGreen{
