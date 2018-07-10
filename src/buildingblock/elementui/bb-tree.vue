@@ -365,6 +365,15 @@
                         })
                     }
                 },10);
+            },
+            //外部设置静态数据
+            setData(...params){
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        t.data = param.arguments;
+                    }
+                })
             }
         }
     }
