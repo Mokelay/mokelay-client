@@ -430,7 +430,6 @@ export default {
     .bb-indep-blog-post{
         .postMessage{
             width:100%;
-            height:400px;
             background:#fff;
         }
         .listStyle{
