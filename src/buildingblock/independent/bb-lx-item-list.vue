@@ -1,25 +1,26 @@
 <template>
 	<ul> 
-		<li class="itemList" v-for="item in items">
-			<bb-vant-cell-swipe :content="rightContent"> 
+		<li class="itemList">
+			<bb-vant-cell-swipe :content="rightContent" @onClose="onClose(itemData)"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
-			    		<img :src="item.leftImgShow">
+			    		<img :src="items.leftImgShow">
 			    	</span>
 			    	<span class="centerStyle">				
-			    		<h1 :style="centerTitle">{{item.title}}</h1>
-			    		<p class="centerContent">
+			    		<h1 :style="centerTitle">{{items.title}}</h1>
+			    		<p class="centerContent" v-show="centerIcon">
 			    			<b class="centerContentTime">	
 			    				<i :class="contentTimeIcon" :style="contentTimeIconStyle"></i>
-			    				<strong :style="contentTimeStyle">{{item.time}}</strong>
+			    				<strong :style="contentTimeStyle">{{items.time}}</strong>
 			    			</b>
 			    			<b class="centerContentTime">	
 			    				<i :class="userNumberIcon"  :style="userNumberIconStyle"></i>
-			    				<strong :style="userNumberStyle">{{item.userNumber}}</strong>
+			    				<strong :style="userNumberStyle"></strong>
 			    			</b>	
 			    		</p>
 			    	</span>
-			    	<bb-layout-seriation :content="content"></bb-layout-seriation>	    	
+			    	<bb-layout-seriation :content="content"></bb-layout-seriation>
+			    	<p>{{items.theme_id}}111</p>	    	
 			    </div>	    	
 			</bb-vant-cell-swipe>
 		</li>
@@ -156,19 +157,14 @@
             },
             //内容
             itemData:{
-            	type:Array,
+            	type:Object,
             	default:function(){
-            		return [{
+            		return {
             			title:"这个是一个标题标题标题标题1111",
             			time:"07:00:00",
             			userNumber:"292人打卡",
             			leftImgShow:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-            		},{
-            			title:"这个是一个标题标题标题标题1111",
-            			time:"07:00:00",
-            			userNumber:"292人打卡",
-            			leftImgShow:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-            		}]
+            		}
             	}
             },
             content:{
@@ -180,7 +176,7 @@
 	                aliasName:'a',               //中文名称
 	                group:'',                   //积木分组 表单项显示的位置
 	                attributes:{
-	                  value:"123123"
+	                  value:"11"
 	                },              //积木属性
 	                animation:[],
 	                interactives:[],
@@ -191,6 +187,11 @@
         	 //初始化动态数据
             itemDs:{
 				type:Object
+            },
+            //中间第二行数据是否显示
+            centerIcon:{
+            	type:Boolean,
+            	default:true,
             },
             
         },
@@ -341,13 +342,22 @@
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        t.items = value;
-	                    
+	                        t.items = value.itemList[0];
+	                        console.log(value.itemList[0]);
+	                        //t.userNumber = value.userNumber;
+	                    	//console.log(value.userNumber);
 	                    });
 	                }, function (code, msg) {
 	                });
 	            }
 	        },
+	        onClose(right,itemData){
+	        	this.$emit("onClose",itemData);
+	        },
+	        click(){
+	        	console.log(1);
+	        },
+
         }
     }
 </script>
@@ -357,7 +367,7 @@
         display: flex;
         justify-content:left;
         align-items:center;
-        font-size:0;
+        font-size:14px;
     }
     .leftStyle{
     	width:15%;
