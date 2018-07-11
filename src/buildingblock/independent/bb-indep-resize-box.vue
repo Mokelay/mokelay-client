@@ -52,11 +52,15 @@
 
               let disX = e.clientX;
               let disY = e.clientY;
+              t.$emit('dragDown',srcX,srcY);
               oDiv.offsetParent.onmousemove = function (e1) {
                   // 通过事件委托，计算移动的距离
                   let left = srcX + (e1.clientX - disX);
                   let top = srcY + (e1.clientY - disY);
                   t._drag({x: ((left/REM_BASE) + 'rem'), y: ((top/REM_BASE) + 'rem')});
+
+                  //拖动move事件，参数1：disW；参数2：disH
+                  t.$emit('dragMove',(e1.clientX - disX),(e1.clientY - disY));
               };
               oDiv.offsetParent.onmouseup = function (e) {
                   oDiv.offsetParent.onmousemove = null;
@@ -64,7 +68,7 @@
                   //TODO 将当前dom 的起始点和结束点的坐标返回
                   //抛出事件
                   t.$emit('change',t.p_activityData);
-                  t.$emit('move',t.p_activityData);
+                  t.$emit('dragUp',t.p_activityData);
               };
             }
           }
@@ -169,7 +173,9 @@
                   let srcDomX = oDiv.offsetParent.getBoundingClientRect().left - oDiv.offsetParent.offsetParent.getBoundingClientRect().left;
                   let srcDomY = oDiv.offsetParent.getBoundingClientRect().top - oDiv.offsetParent.offsetParent.getBoundingClientRect().top;
 
-                  oDiv.offsetParent.offsetParent.onmousemove = function (e1) {
+                  let box = oDiv.offsetParent.offsetParent;
+
+                  box.onmousemove = function (e1) {
                       // 通过事件委托，计算移动的距离
                       let disWidth = e1.clientX - srcX;
                       let disHeight = e1.clientY - srcY;
@@ -191,9 +197,9 @@
                         t._boxResize({width:(t._buildRem('add',srcWidth,disWidth) + 'rem'),height:(t._buildRem('add',srcHeight,disHeight) + 'rem')});
                       }
                   };
-                  oDiv.offsetParent.offsetParent.onmouseup = function (e) {
-                      oDiv.offsetParent.offsetParent.onmousemove = null;
-                      oDiv.offsetParent.offsetParent.onmouseup = null;
+                  box.onmouseup = function (e) {
+                      box.onmousemove = null;
+                      box.onmouseup = null;
                       //TODO 将当前dom 的起始点和结束点的坐标返回
                       //抛出事件
                       t.$emit('change',t.p_activityData);
@@ -277,7 +283,10 @@
         &.activity_selected{
           z-index:2;
         }
-        &.active .resize,&.active .assistline{
+        &.active .resize{
+          display: block;
+        }
+        &:hover .assistline{
           display: block;
         }
         .activity_content{

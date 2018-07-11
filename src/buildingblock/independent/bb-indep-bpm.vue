@@ -4,7 +4,7 @@
       <svg class="ty_bpm_svg_box">
         <bb-indep-svg v-for="(item,index) in p_lines" :svgData="item"></bb-indep-svg>
       </svg>
-    <bb-indep-resize-box v-for="(item,index) in p_nodes" :activityData="item" @assistlinemousedown="assistlinemousedown"></bb-indep-resize-box>
+    <bb-indep-resize-box v-for="(item,index) in p_nodes" :activityData="item" @assistlinemousedown="assistlinemousedown" @dragMove="boxDragMove(arguments,item,index)"></bb-indep-resize-box>
     </div>
 </template>
 
@@ -107,8 +107,8 @@
           return [{
               uuid:'default_line',
               type:'',
-              fromNodeUUID:'',
-              toNodeUUID:'',
+              fromNodeUUID:'bpm_start',
+              toNodeUUID:'bpm_end',
               fromPosition:{
                 x:160,
                 y:62
@@ -195,6 +195,31 @@
         removeLine:function(){
 
         },
+        //节点拖动事件
+        boxDragMove:function(args,item,index){
+          let t=this;
+          const disW = args[0];
+          const disH = args[1];
+          console.log("disW:"+disW+"----disH:"+disH);
+          //查找所有 和该节点相连的线，起点或终点位置变化
+          t.p_lines.forEach((line,key)=>{
+            if(line.fromNodeUUID == item.uuid){
+              //如果是出发点
+              line.fromPosition = {
+                x:line.fromPosition.x+disW,
+                y:line.fromPosition.y+disH
+              }
+            }
+            //可能出发点和终点都是自己 所以不用else if
+            if(line.toNodeUUID == item.uuid){
+              //如果是终点
+              line.toPosition = {
+                x:line.toPosition.x+disW,
+                y:line.toPosition.y+disH
+              }
+            }
+          });
+        },
         //辅助点点击事件，需要迁出连接线
         assistlinemousedown:function(e,direct,data){
           let t=this;
@@ -224,11 +249,14 @@
           //线添加到数组中
           t.p_lines.push(newLine);
           let deleteLine = true;//是否删除线，没有接到节点上就删除。
-          oDiv.offsetParent.offsetParent.onmousemove = function (e1) {
+
+          let box = oDiv.offsetParent.offsetParent;
+
+          box.onmousemove = function (e1) {
             let toX = e1.clientX - srcX;
             let toY = e1.clientY - srcY;
             
-            const info = t._findTargetNode(toX,toY);
+            let info = t._findTargetNode(toX,toY);
             if(!info){
               //如果没有在节点中
               //更新目标点
@@ -249,9 +277,9 @@
               deleteLine =false;
             }
           };
-          oDiv.offsetParent.offsetParent.onmouseup = function (e2) {
-              oDiv.offsetParent.offsetParent.onmousemove = null;
-              oDiv.offsetParent.offsetParent.onmouseup = null;
+          box.onmouseup = function (e2) {
+              box.onmousemove = null;
+              box.onmouseup = null;
               // 计算是否留下这条线 ，判断终点是否在节点上，如果在，保留线，如果不在，删除线
               if(deleteLine){
                 t.p_lines.splice(t.p_lines.length-1,1);
@@ -271,12 +299,13 @@
           let t=this;
           let result  = null;
           t.nodes.forEach((node,index)=>{
-            result = t._checkPointInNode(node,toX,toY);
             if(result){
               //有值，结束循环
               return false;
             }
+            result = t._checkPointInNode(node,toX,toY);
           });
+          console.log('target:',result);
           return result;
         },
         //判断坐标是否在节点中
@@ -287,6 +316,8 @@
           const w = t._transferRemAndPxStringToPxNumber(node.size.width);
           const h = t._transferRemAndPxStringToPxNumber(node.size.height);
           const dis = BASE_ASSIST/2;//距离节点14px距离时，开始吸附
+
+          console.log("x:"+x+"----y:"+y+"----sx:"+sx+"----sy:"+sy+"----w:"+w+"----h:"+h+"----dis:"+dis);
           //判断坐标是否在左边区域
           if(t._checkPointInArea(x,y,sx-dis,sy-dis,sx,sy+h+dis)){
             return {
