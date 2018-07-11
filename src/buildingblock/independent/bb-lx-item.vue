@@ -1,7 +1,7 @@
 <template>
 	<ul class="lxItemBg"> 
 		<li class="itemList" v-for="(item,key) in items" :page="pageData" >
-			<bb-vant-cell-swipe :content="rightContent" :key="key" @onClose="onClose(item)"> 
+			<bb-vant-cell-swipe :content="rightContent" @right="onClose(key)" :ref="key + '_ref'" :key="key"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
 			    		<img :src="item.leftImgShow">
@@ -229,8 +229,9 @@ import Vue from 'vue'
                         aliasName:'删除',               //中文名称
                         group:'right',                   //积木分组 表单项显示的位置
                         attributes:{
+                            text:"删除",
                         	button:{
-                        		selectText:"删除",
+                        		text:"删除",
                         	}
                         },             
                         animation:[],
@@ -245,7 +246,7 @@ import Vue from 'vue'
                             },
                             size:{
                             	width:"68px",
-                            	height:"59px",
+                            	height:"100%",
                             }          
                         }
                     }],
@@ -415,20 +416,21 @@ import Vue from 'vue'
 	        	}	            
 	        },
 	        //右侧滑动点击删除
-	        onClose(right,instance,item){
+	        onClose(key){
+                const t = this;
 				//var id = this.pageSize;
 	        	//console.log(item.theme_id);
 	        	//debugger
 	        	//
 	        	//console.log(id);
+                const item = t.items[key];
 	        	var param = {
-	        		id:11777,
+	        		id:item.theme_id
 	        	};
-	        	this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_delete_member`;
-	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
-	               this.getItem();
-	               //instance.close();
-
+	        	t.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_delete_member`;
+                t.$refs[key + '_ref'][0].instance.close();
+	        	_TY_Tool.post(t.uploadUrl,param).then(response=>{
+	               t.getItem();
 	            }); 
 	        },
 	        clickUrl(item){
