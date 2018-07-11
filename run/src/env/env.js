@@ -4,7 +4,7 @@ if (window) {
 }
 
 var env = {
-	/*local: {
+	local: {
 		name: 'local',
 		apiHost: "http://longyan.dev.rs.com",
 		h5Host: CurrentDomain,
@@ -12,15 +12,6 @@ var env = {
 		hosts: {
 			'default': "http://longyan.dev.rs.com"
 		}
-	},*/
-	local: {
-		name: 'local1',
-		apiHost: "http://ty.saiyachina.com",
-		ssoURL: CurrentDomain + "/#/ty-login",
-		hosts: {
-			'default': "http://ty.saiyachina.com"
-		},
-		home: "/home_ln"
 	},
 	prd: {
 		name: 'prd',
