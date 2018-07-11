@@ -22,7 +22,8 @@
     props: {
       //从后端获取content数据并且渲染
       moduleAlias:{
-        type: String
+        type: String,
+        default:"test"
       },
       //外部传入content ，用来覆盖内部content
       content:{
@@ -34,27 +35,30 @@
         }
       */
       option:{
-        type:Object
+        type:Object,
+        default:function(){
+          return {
+            horizontal:false
+          }
+        }
       }
     },
     data() {
       return {
         //每次使用都生成独立uuid
-        realContent:_TY_Tool.copyContent(this.content)
+        realContent:_TY_Tool.copyContent(this.content),
+        //支持模板 可以 根据不同条件切换不同的模块名称
+        realModuleAlias: _TY_Tool.tpl(this.moduleAlias, _TY_Tool.buildTplParams(this))
       };
     },
     created: function () {
       this.getData();
+
     },
     render:function(createElement){
       const t = this;
-      let module;
       //支持水平排列控制
-      if(t.option.horizontal){
-        module = createElement("bb-layout-seriation",{props:{contnet:t.realContent,horizontal:true}},[]);
-      }else{
-        module = _TY_Tool.bbRender(t.realContent, createElement, t);
-      }
+      const module = createElement("bb-layout-seriation",{props:{content:t.realContent,horizontal:t.option.horizontal}},[]);
       return module;
     },
     methods: {
@@ -62,18 +66,17 @@
       getData: function () {
           const t = this;
           const dataDs = {
-                api:"/list-data",
+                api:"/ty_read_module",
                 category:'config',//ds选择器 不是type字段而是category字段
                 method:"get",
-                inputs:[],
-                outputs:[]
+                inputs:[{paramName:'alias',valueType:"template",variable:t.realModuleAlias}],
+                outputs:[{dataKey:"data",valueKey:"data"}]
           };
           if (dataDs) {
               _TY_Tool.getDSData(dataDs, _TY_Tool.buildTplParams(t), function (map) {
                   map.forEach((val,key)=>{
-                      const dataKey = val.dataKey;
-                      t.realContent = _TY_Tool.copyContent(val.value);
-                  })
+                      t.realContent = val.value.content;
+                  });
               }, function (code, msg) {
               });
           }
