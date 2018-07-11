@@ -69,7 +69,7 @@ export default {
     },
     render: function(createElement){
         const t = this;
-        const shareButton = createElement('i',{class:`ty ${t.option.icon}`,on:{click:t.startShare}},[]);
+        const shareButton = createElement('i',{class:`bb-indep-share ty ${t.option.icon}`,on:{click:t.startShare}},[]);
         return shareButton;
     },
     watch:{
@@ -123,6 +123,8 @@ export default {
 }
 </script>
 <style lang="less">
-
+    .bb-indep-share{
+        font-size:0.5rem;
+    }
 </style>
 
