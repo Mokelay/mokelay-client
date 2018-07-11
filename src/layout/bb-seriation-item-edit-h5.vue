@@ -182,14 +182,13 @@
                     layout: {
                         bgColor: "red",
                         transparency: 1,
-                        display:"inline-block",
-                        size:{width:"50px",height:"100%"},//大小
+                        size:{width:"50px"},//大小
                         border: {
                             style: "",
                             color: "",
                             size: "",
                             radius: "0",
-                            margin: "0"
+                            margin: "25px 0 0 0"
                         },
                         shadow: {
                             color: "",
