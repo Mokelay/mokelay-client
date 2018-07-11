@@ -129,6 +129,7 @@ import 'vant/lib/cell-swipe/style';
             },
             onClose(clickPosition, instance) {
                 // left right cell outside
+                this.instance = instance;
                 this.$emit(clickPosition,instance);
             }
         }

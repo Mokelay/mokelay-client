@@ -30,8 +30,7 @@ export default {
             ["http://www.baidu.com/1.img","http://www.baidu.com/2.img"]
         */
         value:{
-            type:[Array,String],
-            default:"http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=569bef9c3e6c5d3542dcf11306dcf8a1.mp3"
+            type:[Array,String]
         },
         //文件读取结果类型，可选值dataUrl，test
         resultType:{
@@ -292,7 +291,7 @@ export default {
             text-align: center;
             width: 18%;
             height: 100%;
-            color:#28aba8;
+            color:#24C789;
             font-size:1.5rem;
             line-height:1.8rem;
         }
@@ -302,6 +301,8 @@ export default {
             width:82%;
             &>span{
                 position: relative;
+                display: inline-block;
+                width: 100%;
             }
             .progress-dot{
                 width: .4rem;
@@ -309,7 +310,7 @@ export default {
                 display: inline-block;
                 border-radius: 50%;
                 background-color: #fff;
-                border: .12rem solid #28aba8;
+                border: .12rem solid #24C789;
                 position: absolute; 
                 top: -0.18rem;
             }
@@ -318,16 +319,17 @@ export default {
                 border-bottom: 2px solid #ccc;
                 height: 1px;
                 display: inline-block;
-                margin-bottom: 4px;
+                vertical-align: middle;
             }
             .progress-color-bar{
                 width: 0rem;
-                height: 1px;
+                height: 4px;
                 display: inline-block;
                 background-color: #fff;
-                border: 1px solid #28aba8;
+                border: 1px solid #24C789;
+                background-color: #24C789;
                 position: absolute;
-                top: 0.5rem;; 
+                top: 1rem;
             }
             .audio-length-current,.audio-length-total{
                 display: inline-block;
@@ -336,7 +338,7 @@ export default {
             }
         }
         .fcGreen{
-            color:#28aba8;
+            color:#24C789;
         }
         .fcRed{
             color:#EA2E34;
