@@ -92,7 +92,6 @@
         width: 100%;
         height: 100%;
         box-sizing: border-box;
-
         * {
             box-sizing: inherit;
         }
@@ -118,8 +117,7 @@
             border-radius: 0.12rem;
 
             p {
-                font-size: 0.8rem;
-                font-size: 0.5rem;
+                font-size: 0.3rem;
                 color: #fff;
                 text-align: center;
                 overflow: hidden;
