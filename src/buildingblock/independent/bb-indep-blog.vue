@@ -14,6 +14,16 @@
   			</div> 
   			<div class="blogContent"> 
   				<p :style="contentWrite">{{user.content}}</p>
+  				<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
+					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
+					<span class="blogJoinPracticeCenter"> 
+						<p>{{user.practiceTitle}}</p>
+						<p>{{user.practiceNumber}}</p>
+					</span>
+					<span class="blogJoinPracticeRight">
+						<i :class="blogJoinXlxIcon"></i> 
+					</span>
+  			</div>
   			</div>
   		</div>  	
   	</div>
@@ -177,7 +187,7 @@ export default {
     data(){ 
         return{    	
         	user:this.userObject,
-
+        	blogJoinXlxIcon:"ty-icon_jiantou_right_l", 
         }
     },
     watch:{},
@@ -315,6 +325,12 @@ export default {
                 });
             }
         },  
+        //内容列表中点击进入练习详情
+        joinPractiveDetails:function(user){
+        	var id = user.practiveId;
+        	this.$emit("joinPractiveDetails",id);
+        },
+
     }
 }
 </script>
@@ -378,6 +394,26 @@ export default {
 	.replyUserCss{
 		display:flex;
 		justify-content:left;	
+	}
+	.blogJoinPractice{
+		width:100%;
+		height:auto;
+		background:#faf9fa;
+		display:flex;
+		padding:5px 0 3px 5px;
+	}
+	.blogJoinPracticeLeft{
+		width:20%;
+	}
+	.blogJoinPracticeCenter{
+		width:70%;
+		font-size:14px;
+		padding:5px 0 0 10px;
+	}
+	.blogJoinPracticeRight{
+		width:10%;
+		padding-top:10px;
+		font-size:18px;
 	}
 </style>
 
