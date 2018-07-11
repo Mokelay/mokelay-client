@@ -1,41 +1,24 @@
 <template>
-    <div class="bb-photos">
-        <div v-if="transformConfig.transformMode != 'list'" class="bb-photos-swipe" v-swipeleft="swipe" v-swiperight="swipe">
-            <ul>
-                <li v-for="(pic,index) in realFields" :key="index">
-                    <transition 
-                        name="custom-classes-transition"
-                        :enter-active-class="transformAnimate.enter"
-                        :leave-active-class="transformAnimate.leave"
-                        @after-leave="afterLeave"
-                    >
-                        <img v-show="pic.show":src="pic.url" :alt="pic.name">
-                    </transition>
-                </li>
-            </ul>
-        </div>
-        <div v-if="transformConfig.transformMode == 'list'" class="bb-photos-list" v-swipeleft="swipe" v-swiperight="swipe">
-            <span class="photo-item" v-for="(pic,index) in realFields" :key="index" :style="{width:itemWidth}">
-                <img :src="pic" :alt="pic">
-            </span>
-        </div>
+    <div class="bb-photos" v-swipeleft="swipe" v-swiperight="swipe">
+        <ul>
+            <li v-for="(pic,index) in realFields" :key="index">
+                <transition 
+                    name="custom-classes-transition"
+                    :enter-active-class="transformAnimate.enter"
+                    :leave-active-class="transformAnimate.leave"
+                    @after-leave="afterLeave"
+                >
+                    <img v-show="pic.show":src="pic.url" :alt="pic.name">
+                </transition>
+            </li>
+        </ul>
     </div>
-
 </template>
 
 <script>
     export default {
         name: 'bb-photos',
         props: {
-            /*  默认值 
-                [https://a.jpg,https://b.jpg]
-            */
-            value:{
-                type:[Array,String],
-                default:function(){
-                    return ["http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg","http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg","http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg","http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg"]
-                }
-            },
             /*
                 fields 图片地址数组或者','隔开的字符串
                 数组：[{url:'',name:''}]，
@@ -51,7 +34,7 @@
             /*
                 transformConfig 样式
                 {
-                    transformMode:'auto',   auto || manual||list  图片变换方式
+                    transformMode:'auto',   auto || manual  图片变换方式
                     transformTime:2, 图片变换时间间隔
                     transformAnimate:'' 图片变换动画
                 }
@@ -70,7 +53,7 @@
         data() {
             return {
                 show:true,
-                realFields:this.value,
+                realFields:this.fields,
                 transformAnimate:{
                     enter:'',
                     leave:''
@@ -79,7 +62,6 @@
                 lastItem:null,
                 nowItem:0,
                 nextItem:null,
-                itemWidth:"100%"
             }
         },
         computed:{
@@ -89,14 +71,10 @@
         created: function () {
         },
         mounted:function(){
-            if(this.transformConfig.transformMode == "list"){
-                this.setListItemWidth();
-            }else{
-                this.getData();
-                this.setTransformAnimate();
-                if(this.realFields){
-                    this.setShow();
-                }
+            this.getData();
+            this.setTransformAnimate();
+            if(this.realFields){
+                this.setShow();
             }
         },
         methods: {
@@ -108,7 +86,6 @@
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
                             t.realFields = val.value.list;
-                            t.setListItemWidth();
                             //触发积木更新
                             if(t.realFields){
                                 t.setShow();
@@ -212,49 +189,22 @@
                     t.setTransformAnimate();
                     t.autoTransform();
                 }
-            },
-            //根据数量计算图片宽度
-            setListItemWidth(){
-                const t = this;
-                if(t.realFields){
-                    const lg = t.realFields.length;
-                    t.itemWidth = "100%";
-                    switch(lg){
-                        case 1:
-                            t.itemWidth = "calc(100% - 0.2rem)";
-                            break;
-                        case 2:
-                            t.itemWidth = "calc(50% - 0.2rem)";
-                            break;
-                        default:
-                            t.itemWidth = "calc(33.3% - 0.2rem)";
-                            break;
-                    }
-                }
             }
         }
     }
 </script>
 <style lang='less'>
     .bb-photos{
-        .bb-photos-swipe{
-            width: 100%;
-            min-height: 300px;
-            ul{
-                width:100%;
-            }
-            ul li{
-                position: absolute;
-                top: 0;
-                img{
-                    width: 100%;
-                }
-            }
+        width: 100%;
+        min-height: 300px;
+        ul{
+            width:100%;
         }
-        .bb-photos-list{
-            .photo-item{
-                display: inline-block;
-                margin: 0.1rem;
+        ul li{
+            position: absolute;
+            top: 0;
+            img{
+                width: 100%;
             }
         }
     }
