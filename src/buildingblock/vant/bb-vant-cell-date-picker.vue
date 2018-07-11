@@ -121,4 +121,7 @@ import 'vant/lib/cell/style';
 </script>
 
 <style scoped>
+    .bb-vant-cell-picker{
+        font-size: 0.5rem;
+    }
 </style>

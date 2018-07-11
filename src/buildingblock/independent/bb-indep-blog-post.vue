@@ -3,23 +3,22 @@
  		<div class="postMessage"> 
  			<textarea 
                 value="valueBase.text"
- 				:style="realStyle"
  				:placeholder="placeholder"
                 @change="textareaChange"
+                class="words" 
  			> 
  			</textarea>
             <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent" :option="editOption"></bb-layout-seriation-edit>
- 			<p class="uploadIcon">
+ 			<span class="uploadIcon">
  				<i 
  				v-for="icon in icons" 
  				:class="icon.class"
- 				:style="iconStyle"
                 @click="addUpload(icon)"
                 > 
  				</i>
- 			</p>
-            <bb-vant-cell-location></bb-vant-cell-location>
-            <bb-vant-cell-picker :pickerConfig="pickerConfig" :option="privacyOption" v-model="privacy" @change="privacyChange"></bb-vant-cell-picker>
+ 			</span>
+            <bb-vant-cell-location class="loaction" @change="locationChange"></bb-vant-cell-location>
+            <bb-vant-cell-picker class="privacy" :pickerConfig="pickerConfig" :option="privacyOption" v-model="privacy" @change="privacyChange"></bb-vant-cell-picker>
  		</div>
  	</div>
 </template>
@@ -51,7 +50,7 @@ export default {
         //输入框默认值
         placeholder:{
         	type:String,
-        	default:"说点什么~"
+        	default:"说点什么吧"
         },
         //图标数据
         icons:{
@@ -82,6 +81,27 @@ export default {
                         layout: {} //积木布局
                     },
         		},{   
+                    class:"ty ty-fbrj-shipin",
+                    alias:"video",
+                    content:{
+                        uuid: _TY_Tool.uuid(),
+                        alias: 'bb-vant-uploader', //布局类积木 || 普通积木
+                        transferAlias:'bb-video',
+                        aliasName: '添加视频', 
+                        attributes: {
+                            accept:"video/*",
+                        }, //积木属性
+                        animation: [{ //动画
+                        }],
+                        interactives: [{
+                            uuid:_TY_Tool.uuid(),
+                            fromContentEvent:'input',
+                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                            containerMethodName:'defaultVmodel'
+                        }],
+                        layout: {} //积木布局
+                    },
+                },{   
                     class:"ty ty-fbrj-yinpin",
                     alias:"audio",
                     content:{
@@ -102,28 +122,7 @@ export default {
                         }],
                         layout: {} //积木布局
                     },
-                },{	
-        			class:"ty ty-fbrj-shipin",
-                    alias:"video",
-                    content:{
-                        uuid: _TY_Tool.uuid(),
-                        alias: 'bb-vant-uploader', //布局类积木 || 普通积木
-                        transferAlias:'bb-video',
-                        aliasName: '添加视频', 
-                        attributes: {
-                            accept:"video/*",
-                        }, //积木属性
-                        animation: [{ //动画
-                        }],
-                        interactives: [{
-                            uuid:_TY_Tool.uuid(),
-                            fromContentEvent:'input',
-                            executeType:'container_method',         //执行类型(预定义方法 trigger_method,
-                            containerMethodName:'defaultVmodel'
-                        }],
-                        layout: {} //积木布局
-                    },
-        		}]
+                }]
         	}
         },
         //列表数据
@@ -271,32 +270,6 @@ export default {
         }
       },
     computed:{
-	    //处理输入框字体样式配置
-        realStyle:function(){
-            const t = this;
-            const styles = {
-            	"border-radius":t.option.styleConfig.borderRadius,
-            	"padding":t.option.styleConfig.padding,
-            	"margin":t.option.styleConfig.margin,
-            	"height":t.option.styleConfig.height,
-            	"resize":t.option.styleConfig.resize,
-            	"width":t.option.styleConfig.width,
-            	"border-style":t.option.styleConfig.borderStyle,
-            	"border-color":t.option.styleConfig.borderColor,
-            	"border-width":t.option.styleConfig.borderWidth,
-                'font-family':t.option.styleConfig.fontFamily,
-                'font-size':t.option.styleConfig.fontSize,
-                'color':t.option.styleConfig.fontColor,
-                'font-weight':t.option.styleConfig.bold?'bold':'normal',
-                'font-style':t.option.styleConfig.italic?'italic':'normal',
-                'ling-height':t.option.styleConfig.lingHeight,
-                'letter-spacing':t.option.styleConfig.letterSpacing,
-                'text-decoration':t.option.styleConfig.underline?'underline':'none',
-                'text-align':t.option.styleConfig.textAlign,
-                'background-color':t.option.styleConfig.backgroundColor,
-            }
-            return styles;
-        },
         //按钮样式
         canceclStyle:function(){
             const t = this;
@@ -316,17 +289,6 @@ export default {
             	"color":t.option.canceclStyleCongig.color,
             }
             return styles;
-        },
-        //图标样式
-        iconStyle:function(){
-            const t = this;
-            const styles = {
-            	"width":t.option.iconStyleConfig.width,
-            	"height":t.option.iconStyleConfig.height,
-            	"margin":t.option.iconStyleConfig.margin,
-            	"padding":t.option.iconStyleConfig.padding,
-            }
-            return styles;           
         },
         //列表左侧图标样式
         listLeftIconStyle:function(){
@@ -422,11 +384,19 @@ export default {
             this.valueBase.content = this.$refs.postContent.getContents();
             this.$emit("change",this.valueBase);
             this.$emit("input",this.valueBase);
+        },
+        locationChange(value){
+            this.privacy = value;
+            this.valueBase.location = value;
+            this.valueBase.content = this.$refs.postContent.getContents();
+            this.$emit("change",this.valueBase);
+            this.$emit("input",this.valueBase);
         }
+        //1rem = 28.125pt
     }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
     .bb-indep-blog-post{
         .postMessage{
             width:100%;
@@ -456,10 +426,43 @@ export default {
         }
         .uploadIcon{
             font-size: 1rem;
-            color: #666;
+            color: #7C808F;
+            line-height: 1rem;
+            margin-bottom:1.76rem;
+            margin-left:0.3rem;
+            display: inline-block;
+            i{
+                margin:0.3rem .1rem;
+            }
         }
         .h5configEdit{
-            margin: 1rem 0rem;
+        }
+        .words{
+            background-color:#FAF9FA;
+            border:1px solid #EFEFEF;
+            height:3.68rem;
+            width:9.4rem;
+            margin:auto;
+            padding:0.5rem;
+            display:block;
+            font-size:0.37rem;
+            color:#8C8B8B;
+            font-family:PingFang-SC-Medium;
+            font-weight:Medium;
+        }
+        .privacy{
+            i{
+                line-height:0.6rem;
+            }
+            .van-cell__value{
+                color:#888888
+            }
+        }
+        .cellPicker{
+            border:1px solid #F4F4F4;
+            border-left:none;
+            border-right:none;
+            margin:0 0.2rem;
         }
     }
 </style>
