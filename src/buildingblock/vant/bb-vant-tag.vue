@@ -1,11 +1,11 @@
 <template>
-    <span class="bb-vant-tag tagClass" @click="tagClick">
+    <span class="bb-vant-tag tagClass" :class="radius?'bb_radius':''" @click="tagClick">
         <van-tag
             v-for="(tag,key) in valueBase"
             :key="key" 
-            :type="tag.type"
-            :plain="tag.plain"
-            :mark="tag.mark"
+            :type="tag.type||''"
+            :plain="tag.plain||true"
+            :mark="tag.mark||false"
             :data-index = "key"
             :data-tag ="JSON.stringify(tag)"
             :style="tag.selected?Object.assign(cssbuild(cssStyle),cssbuild(activeStyle)):cssbuild(cssStyle)"
@@ -67,6 +67,11 @@ import 'vant/lib/tag/style';
                 default:function(){
                     return {};
                 }
+            },
+            //是否全圆角
+            radius:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -78,6 +83,10 @@ import 'vant/lib/tag/style';
                 selectedVal:'',//选中val值
                 cssbuild:_TY_Tool.setSimpleStyle//模板中需要用到
             };
+        },
+        created:function(){
+            let t=this;
+            t.getData();
         },
         mounted(){
             let t=this;
@@ -91,10 +100,21 @@ import 'vant/lib/tag/style';
             getData() {
                 const t = this;
                 if (t.tagDs) {
-                    Util.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
+                    _TY_Tool.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
-                            const {dataKey, value} = item;
-                            t.realFields = value;
+                            var _list = [];
+                            if(item['valueKey'].split('.').length > 1){//支持定制接口
+                                _list = item['value']
+                            }else{
+                                if(item['value']&&item['value']['currentRecords']){
+                                    _list = item['value']['currentRecords'];
+                                }else if(item['value']&&item['value']['list']){
+                                    _list = item['value']['list'];    
+                                }else{
+                                    _list = item['value'];
+                                }
+                            }
+                            t.valueBase = _list;
                         });
                     }, function (code, msg) {
                     });
@@ -165,4 +185,9 @@ import 'vant/lib/tag/style';
         pointer-events:auto;
         cursor: pointer;
     }
+    .bb-vant-tag.bb_radius .van-tag[class*=van-hairline]:after{
+        border-radius: 1rem;
+        border-color: #E5E5E5;
+    }
+    
 </style>

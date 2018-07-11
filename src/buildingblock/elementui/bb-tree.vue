@@ -20,6 +20,7 @@
                 :key="randomKey"
                 @check-change="checkChange"
                 @node-click="nodeClick"
+                @node-expand="nodeExpand"
         >
         </el-tree>
     </div>
@@ -75,6 +76,40 @@
             staticDs:{
                 type:Object
             },
+            //一次性获取全部静态数据
+            staticData:{
+                type:Array,
+                default:function(){
+                    return [{
+                          id: 1,
+                          label: '一级 2',
+                          children: [{
+                            id: 3,
+                            label: '二级 2-1',
+                            children: [{
+                              id: 4,
+                              label: '三级 3-1-1'
+                            }, {
+                              id: 5,
+                              label: '三级 3-1-2',
+                              disabled: true
+                            }]
+                          }, {
+                            id: 2,
+                            label: '二级 2-2',
+                            disabled: true,
+                            children: [{
+                              id: 6,
+                              label: '三级 3-2-1'
+                            }, {
+                              id: 7,
+                              label: '三级 3-2-2',
+                              disabled: true
+                            }]
+                          }]
+                        }]
+                }
+            },
             external: {
                 type: Object
             },
@@ -95,7 +130,7 @@
         data() {
             const t = this;
             return {
-                data: [],
+                data: t.staticData,
                 id:"bb-tree_" + _TY_Tool.uuid() 
             }
         },
@@ -309,17 +344,36 @@
                 t.$emit('click',data,node,current);
 
             },
+            //节点展开
+            nodeExpand(){
+                const t = this;
+                t.setHorizontal();
+            },
             //设置水平样式
             setHorizontal:function(){
                 const t = this;
-                const bbTree = document.getElementById(t.id);
-                const isLeafs = bbTree.getElementsByClassName("is-leaf");
-                if(isLeafs.length){
-                    isLeafs.forEach((isLeaf,key)=>{
-                        const className = isLeaf.parentNode.parentNode.className + " dib";
-                        isLeaf.parentNode.parentNode.setAttribute("style",t.option.itemStyle);
-                    })
-                }
+                setTimeout(()=>{
+                    const bbTree = document.getElementById(t.id);
+                    const isLeafs = bbTree.getElementsByClassName("is-leaf");
+                    if(isLeafs.length){
+                        HTMLCollection.prototype.forEach=function(callback){
+                            [].slice.call(this).forEach(callback);
+                        };
+                        isLeafs.forEach((isLeaf,key)=>{
+                            const className = isLeaf.parentNode.parentNode.className + " dib";
+                            isLeaf.parentNode.parentNode.setAttribute("style",t.option.itemStyle);
+                        })
+                    }
+                },10);
+            },
+            //外部设置静态数据
+            setData(...params){
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        t.data = param.arguments;
+                    }
+                })
             }
         }
     }

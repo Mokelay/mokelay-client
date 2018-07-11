@@ -199,7 +199,7 @@ export default {
     	},
     	//点赞事件
     	praiseClick:function(val){
-    		this.isColor = this.isColor?false:true;
+    	
     		this.$emit("praiseClick",val);
     	},
     	//点赞动态数据获取

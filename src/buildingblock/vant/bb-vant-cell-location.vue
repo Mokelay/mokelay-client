@@ -1,6 +1,6 @@
 <template>
 
-    <van-cell title="所在位置" icon="location" @click="wxLocation" :value="addressDetail" is-link />
+    <van-cell :title="addressDetail" icon="location" :class="locationClass" @click="wxLocation" is-link />
 
 </template>
 <script>
@@ -43,7 +43,8 @@ import 'vant/lib/cell/style';
         data() {
             return {
                 valueBase:this.value,
-                addressDetail:''
+                addressDetail:'所在位置',
+                locationClass:''
             };
         },
         mounted(){
@@ -77,6 +78,7 @@ import 'vant/lib/cell/style';
                             });
                             t.$emit("change",t.valueBase);
                             t.$emit("input",t.valueBase);
+                            t.locationClass = "locationClass";
                         }
                     });
                 }
@@ -93,6 +95,7 @@ import 'vant/lib/cell/style';
                         t.addressDetail = data.result.sematic_description;
                         if (err) {
                             console.error(err.message);
+                            t.locationClass = "";
                         } else {
                             console.log(data);
                         }
@@ -103,5 +106,10 @@ import 'vant/lib/cell/style';
     }
 </script>
 
-<style scoped>
+<style lang="less">
+    .locationClass{
+        .van-cell__left-icon{
+            color:#24C789
+        }
+    }
 </style>
