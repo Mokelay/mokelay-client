@@ -1,7 +1,7 @@
 <template>
 	<ul class="lxItemBg"> 
-		<li class="itemList" v-for="item in items" :page="pageData">
-			<bb-vant-cell-swipe :content="rightContent"> 
+		<li class="itemList" v-for="(item,key) in items" :page="pageData" >
+			<bb-vant-cell-swipe :content="rightContent" :key="key" @onClose="onClose(item)"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
 			    		<img :src="item.leftImgShow">
@@ -19,22 +19,20 @@
 			    			</b>	
 			    		</p>
 			    	</span>
-			    	<bb-layout-seriation :content="content"></bb-layout-seriation>			    	
+			    	<bb-layout-seriation :content="content" v-show="showRightContent"></bb-layout-seriation>
+			    	<b @click="clickUrl(item)">练习</b>
+			    	<p>{{item.theme_id}}</p>			    	
 			    </div>	    	
 			</bb-vant-cell-swipe>
-			<p>{{item.theme_id}}</p>
 		</li>
 		<p class="itemMore" @click="clickMore">{{seeMore}}</p>
 	</ul>
-
 </template>
 
 <script>
-
-
+import Vue from 'vue'
     export default {
-        name: 'bb-text',
-        
+        name: 'bb-text',        
         props: {
             //左侧样式
             leftStyleConfig:{
@@ -179,7 +177,7 @@
             			time:"07:00:00",
             			userNumber:"292人打卡",
             			leftImgShow:"http://static.facetool.cn/U/32ad5dce7b5850e062d08af4837f4717.jpg",
-            		}]
+            }]
             */
             itemData:{
             	type:Array,
@@ -256,6 +254,8 @@
                pageSize:this.pageConfig.pageSize,
                seeMore:this.seeMoreWrite,
                centerIcon:this.centerIconData,
+               theme_id:"",
+               showRightContent:false,
             }
         },
         computed:{
@@ -382,6 +382,7 @@
 	                        t.page = value.page;  //当前页码
 	                        t.pageSize = value.pageSize; //当前页总条数
 	                        t.totalPage = value.totalPages;  //总页数
+	          
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -393,7 +394,6 @@
 	        		this.seeMore = "没有更多内容了";
 	        	}	
 	        },
-
 	        //点击加载更多事件
 	        clickMore(){
 	        	var t = this;
@@ -414,6 +414,26 @@
 	        		this.seeMore = "没有更多内容了";
 	        	}	            
 	        },
+	        //右侧滑动点击删除
+	        onClose(right,instance,item){
+				//var id = this.pageSize;
+	        	//console.log(item.theme_id);
+	        	//debugger
+	        	//
+	        	//console.log(id);
+	        	var param = {
+	        		id:11777,
+	        	};
+	        	this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_delete_member`;
+	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
+	               this.getItem();
+	               //instance.close();
+
+	            }); 
+	        },
+	        clickUrl(item){
+	        	console.log(item.theme_id);
+	        }
 
         }
     }
@@ -493,5 +513,8 @@
     }
     .rightStyle{
     	font-size:14px;
+    }
+    .display{
+    	display:none;
     }
 </style>
