@@ -62,13 +62,25 @@
             //最后一个item的样式
             lastItemStyle:{
                 type:Object
+            },
+            //当前列表分页参数 page当前页  pageSize每页条数
+            pageConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        page:1,
+                        pageSize:10
+                    };
+                }
             }
 
         },
         data() {
             return {
-               list:typeof(this.staticList)==='string'?eval('('+this.staticList+')'):this.staticList,
-               external:{}
+                list:typeof(this.staticList)==='string'?eval('('+this.staticList+')'):this.staticList,
+                external:{},
+                pageSize:this.pageConfig.pageSize,
+                page: this.pageConfig.page
             }
         },
         computed:{
@@ -222,7 +234,11 @@
                                     _list = item['value'];
                                 }
                             }
-                            t.list = _list;
+                            if(t.page>1){
+                                t.list = t.list.concat(_list);
+                            }else{
+                                t.list = _list;    
+                            }
                         });
                     }, function (code, msg) {
 

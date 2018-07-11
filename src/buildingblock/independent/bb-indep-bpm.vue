@@ -1,10 +1,10 @@
 
 <template>
-    <div class="ty_bpm">
+    <div class="ty_bpm" @click="contentClick">
       <svg class="ty_bpm_svg_box">
-        <bb-indep-svg v-for="(item,index) in p_lines" :svgData="item"></bb-indep-svg>
+        <bb-indep-svg v-for="(item,index) in p_lines" :ref="'line-'+item.uuid" :uuid="item.uuid" @click="svgClick" :svgData="item"></bb-indep-svg>
       </svg>
-    <bb-indep-resize-box v-for="(item,index) in p_nodes" :activityData="item" @assistlinemousedown="assistlinemousedown" @dragMove="boxDragMove(arguments,item,index)"></bb-indep-resize-box>
+      <bb-indep-resize-box v-for="(item,index) in p_nodes" :ref="'node-'+item.uuid" :uuid="item.uuid" :activityData="item" @assistlinemousedown="assistlinemousedown" @dragMove="boxDragMove(arguments,item,index)" @dragDown="boxDragDown(item,index)" @dragUp="boxDragUp(item,index)"></bb-indep-resize-box>
     </div>
 </template>
 
@@ -127,6 +127,7 @@
       return {
         p_nodes:this.nodes,//节点列表
         p_lines:this.lines,//线列表
+        selectedLineUUid:'',//选中的uuid
         // activeLine:{},//当前正在被编辑的线
       };
     },
@@ -158,7 +159,7 @@
                 //如果有巴斯直接返回了数据
                 t.p_nodes.push(val.arguments);
                 buzzAdd = true;
-              }  
+              }
           })
           if(!buzzAdd){
             //不是巴斯添加,添加一个默认的节点
@@ -178,10 +179,29 @@
             });
           }
         },
-        //删除节点
+        //删除节点 交互 参数位置传一个要删除的节点uuid
         removeNode:function(...args){
           let t=this;
-
+          args.forEach((val,key)=>{
+              if(val.type == 'custom' && val.arguments && typeof(val.arguments)==='string'){
+                //y要删除的uuid
+                const uuid = val.arguments; 
+                //删除节点
+                let nodeIndex = t.p_nodes.length;
+                while(nodeIndex--){
+                  if(t.p_nodes[nodeIndex].uuid == uuid){
+                    t.p_nodes.splice(nodeIndex,1);
+                    break;
+                  }
+                }
+                let lineIndex = t.p_lines.length;
+                while(lineIndex--){
+                  if(t.p_lines[lineIndex].fromNodeUUID == uuid || t.p_lines[lineIndex].toNodeUUID == uuid){
+                    t.p_lines.splice(lineIndex,1);
+                  }
+                }
+              }
+          })
         },
         //移动节点
         moveNode:function(){
@@ -192,32 +212,141 @@
 
         },
         //删除线
-        removeLine:function(){
-
+        removeLine:function(...args){
+          let t=this;
+          let uuid = t.selectedLineUUid;
+          //交互参数传过来
+          args.forEach((val,key)=>{
+            if(val.type == 'custom' && val.arguments && typeof(val.arguments)==='string'){
+              uuid = val.arguments;
+            }
+          });
+          //或者直接选中删除
+          if(uuid){
+            t.p_lines.forEach((item,index)=>{
+              if(uuid == item.uuid){
+                t.p_lines.splice(index,1);
+                return false;
+              }
+            });
+          }
+        },
+        //线的点击事件
+        svgClick:function(e,svg){
+          let t=this;
+          const uuid = e.target.getAttribute('uuid');
+          t.selectedLineUUid= uuid;
+          //取消其他选中
+          t._cancelAllLineAndSelectedCurrent(uuid);
+        },
+        //整个编辑区域点击事件
+        contentClick:function(e){
+          let t=this;
+          const classList = e.target.classList.value;
+          if(classList.indexOf('ty_bpm_svg_box')>=0){
+            //取消线选中
+            t.selectedLineUUid = '';
+            t._cancelAllLineSelected();
+            //取消节点选中
+            t._cancelAllNodeSelected();
+          }else if(classList.indexOf('activity_content')>=0){
+            const clickNode = e.target.offsetParent;
+            const uuid = clickNode.getAttribute('uuid');
+            t._cancelAllNodeAndSelectedCurrent(uuid);
+          }else if(classList.indexOf('activity_item_label')>=0 || classList.indexOf('activity_item_icon')>=0){
+            const clickNode = e.target.offsetParent.offsetParent;
+            const uuid = clickNode.getAttribute('uuid');
+            t._cancelAllNodeAndSelectedCurrent(uuid);
+          }
+        },
+        //取消所有选中，仅选中当前 线
+        _cancelAllLineAndSelectedCurrent:function(uuid){
+          let t=this;
+            t._cancelAllLineSelected();
+            let _ref = t.$refs['line-'+uuid];
+            if(_ref&&_ref[0]){
+              _ref[0].is_active = true;
+            }
+        },
+        //取消所有选中，仅选中当前 节点
+        _cancelAllNodeAndSelectedCurrent:function(uuid){
+          let t=this;
+          //取消节点选中
+            t._cancelAllNodeSelected();
+            let _ref = t.$refs['node-'+uuid];
+            if(_ref&&_ref[0]){
+              _ref[0].is_active = true;
+            }
+        },
+        //取消所有线选中
+        _cancelAllLineSelected:function(){
+          const t=this;
+          t.p_lines.forEach((line,index)=>{
+            let _ref = t.$refs['line-'+line.uuid];
+            if(_ref&&_ref[0]){
+              _ref[0].is_active = false;
+            }
+          });
+        },
+        //取消所有节点选中
+        _cancelAllNodeSelected:function(){
+          const t =this;
+          t.p_nodes.forEach((node,index)=>{
+            let _ref = t.$refs['node-'+node.uuid];
+            if(_ref&&_ref[0]){
+              _ref[0].is_active = false;
+            }
+          });
+        },
+        //节点开始拖动的事件 和下面的dragMove 一起用
+        /*
+          需要临时参数
+          tempFromX,
+          tempFromY,
+          tempToX,
+          tempToY
+        */
+        boxDragDown:function(item,index){
+          let t=this;
+          t.p_lines.forEach((line,key)=>{
+            line.tempFromX = line.fromPosition.x,
+            line.tempFromY = line.fromPosition.y,
+            line.tempToX = line.toPosition.x,
+            line.tempToY = line.toPosition.y
+          });
         },
         //节点拖动事件
         boxDragMove:function(args,item,index){
           let t=this;
           const disW = args[0];
           const disH = args[1];
-          console.log("disW:"+disW+"----disH:"+disH);
           //查找所有 和该节点相连的线，起点或终点位置变化
           t.p_lines.forEach((line,key)=>{
             if(line.fromNodeUUID == item.uuid){
               //如果是出发点
               line.fromPosition = {
-                x:line.fromPosition.x+disW,
-                y:line.fromPosition.y+disH
+                x:line.tempFromX+disW,
+                y:line.tempFromY+disH
               }
             }
             //可能出发点和终点都是自己 所以不用else if
             if(line.toNodeUUID == item.uuid){
               //如果是终点
               line.toPosition = {
-                x:line.toPosition.x+disW,
-                y:line.toPosition.y+disH
+                x:line.tempToX+disW,
+                y:line.tempToY+disH
               }
             }
+          });
+        },
+        //节点拖动鼠标up事件
+        boxDragUp:function(item,index){
+          let t=this;
+          t.p_lines.forEach((line,key)=>{
+            delete line.tempFromX;
+            delete line.tempFromY;
+            delete line.tempToX;
+            delete line.tempToY;
           });
         },
         //辅助点点击事件，需要迁出连接线
