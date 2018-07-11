@@ -119,7 +119,7 @@ export default {
                     data.forEach((item) => {
                         t.loading = false;
                         const {dataKey, value} = item;
-                        t.realList = value;
+                        t.realEvents = value;
                     });
                 }, function (code, msg) {
                     t.loading = false;
