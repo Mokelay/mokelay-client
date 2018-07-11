@@ -55,6 +55,24 @@
           // polygonPoint:'',//三角箭头的点阵 261,270 257,262 265,262
         };
       },
+      computed:{
+        stroke:function(){
+          const t=this;
+          if(t.is_active){
+            return 'rgb(237, 125, 49)';
+          }else{
+            return 'rgb(75, 155, 237)';
+          }
+        },
+        strokeWidth:function(){
+          const t=this;
+          if(t.is_active){
+            return '2';
+          }else{
+            return '1';
+          }
+        }
+      },
       watch:{
         svgData(val){
           if(val){
@@ -74,11 +92,18 @@
           let t=this;
           const d = t.buildPath();
           return createElement('path',{
+            on:{
+              click:function(e){
+                t.is_active =true;
+                t.$emit('click',e,t);
+              }
+            },
             attrs:{
+              uuid:t.p_svgData.uuid,
               fill:'white',
               'fill-opacity':'0',
-              stroke:'rgb(75, 155, 237)',
-              'stroke-width':'1',
+              stroke:t.stroke,
+              'stroke-width':t.strokeWidth,
               d:d
             }
           },[]);
@@ -89,9 +114,9 @@
           const polygon = t.buildPolygon();
           return createElement('polygon',{
             attrs:{
-              fill:'rgb(75, 155, 237)',
+              fill:t.stroke,
               'fill-opacity':'1',
-              stroke:'rgb(75, 155, 237)',
+              stroke:t.stroke,
               'stroke-width':'1',
               points:polygon
             }
