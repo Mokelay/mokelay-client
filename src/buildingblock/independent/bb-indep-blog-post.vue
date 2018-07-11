@@ -67,6 +67,9 @@ export default {
                         aliasName: '添加图片', 
                         attributes: {
                             accept:"image/*",
+                            transformConfig:{
+                                transformMode:'list'
+                            }
                         }, //积木属性
                         animation: [{ //动画
                         }],
@@ -427,7 +430,6 @@ export default {
     .bb-indep-blog-post{
         .postMessage{
             width:100%;
-            height:400px;
             background:#fff;
         }
         .listStyle{

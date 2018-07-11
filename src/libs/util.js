@@ -1314,9 +1314,8 @@ util.isWX = function() {
 //appUrl：应用域名   apiArray：需要调用的微信api
 util.wx = function(apiArray) {
     const appUrl = encodeURI(window.location.href);
-    const configUrl = `http://ty.saiyachina.com/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
+    const configUrl = `${_TY_ENV.apiHost}/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
     console.log("configUrl:", configUrl);
-    // const configUrl = `http://ty.saiyachina.com/config/xlx_c_wx_get_config?sign_url=http://ty.saiyachina.com`;
     const wx_sdk = new Promise(function(resolve, reject) {
         util.get(configUrl)
             .then(response => {

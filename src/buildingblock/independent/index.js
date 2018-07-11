@@ -48,7 +48,6 @@ import bbindepresizebox from './bb-indep-resize-box';
 import bbindepsvg from './bb-indep-svg';
 import bbindepbpm from './bb-indep-bpm';
 
-
 import helloworld from './bb-hello-world';
 
 //公用组件
@@ -104,7 +103,6 @@ export default {
 		Vue.component('bb-indep-resize-box', bbindepresizebox);
 		Vue.component('bb-indep-svg', bbindepsvg);
 		Vue.component('bb-indep-bpm', bbindepbpm);
-
 
 		Vue.component('bb-hello-world', helloworld);
 
