@@ -10,6 +10,7 @@
                     :imgUrl="shareConfig.imgUrl"
                     :dataUrl="shareConfig.dataUrl"
                     :option="shareConfig.option"
+                    class="actionIconStyle"
                     ></bb-indep-share>
 				<span :style="shareTextStyle">{{shareText}}</span>
 			</b>
@@ -157,7 +158,17 @@ export default {
         	greatNumber:this.greatNumberShow,
     		}
       },
-    watch:{}, 
+    watch:{
+    	/*greatNumberShow:{
+    		handler:function(){
+    			console.log(greatNumberShow);
+    		},
+    		deep:true,
+    	},*/
+    	greatNumber(curVal,oldVal){
+　　　　　　console.log(curVal,oldVal);
+　　　　},
+    }, 
     computed:{
         shareTextStyle:function(){
             const t = this;
@@ -198,8 +209,7 @@ export default {
     		this.$emit("replyClick",val);
     	},
     	//点赞事件
-    	praiseClick:function(val){
-    	
+    	praiseClick:function(val){    	
     		this.$emit("praiseClick",val);
     	},
     	//点赞动态数据获取
@@ -283,5 +293,8 @@ export default {
 		display:inline-block;
 		text-align:center;
 		line-height:25px;
+	}
+	.actionIconStyle{
+		font-size:24px;
 	}
 </style>

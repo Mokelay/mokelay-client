@@ -9,7 +9,7 @@
   				<p :style="userStyle">{{user.useName}}</p>
   				<h5 class="userTimeDate"> 
   					<b :style="userTime">{{user.blogDate}}</b>
-  					<i :style="userDate">{{user.continuousDate}}</i>
+  					<i :style="userDate">已坚持{{user.continuousDate}}天</i>
   				</h5>
   			</div> 
   			<div class="blogContent"> 
@@ -18,7 +18,7 @@
 					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 					<span class="blogJoinPracticeCenter"> 
 						<p>{{user.practiceTitle}}</p>
-						<p>{{user.practiceNumber}}</p>
+						<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
 					</span>
 					<span class="blogJoinPracticeRight">
 						<i :class="blogJoinXlxIcon"></i> 
@@ -414,6 +414,11 @@ export default {
 		width:10%;
 		padding-top:10px;
 		font-size:18px;
+	}
+	.practiceNumberStyle{
+		color:#888;
+		font-size:12px;
+
 	}
 </style>
 

@@ -21,7 +21,7 @@
 				<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 				<span class="blogJoinPracticeCenter"> 
 					<p>{{user.practiceTitle}}</p>
-					<p>{{user.practiceNumber}}</p>
+					<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
 				</span>
 				<span class="blogJoinPracticeRight">
 					<i :class="blogJoinXlxIcon"></i> 
@@ -29,7 +29,7 @@
   			</div>
   			<bb-indep-blog-action 
   				@replyClick="replyClick(user)"
-  				@praiseClick="praiseClick.bind(null,user)"
+  				@praiseClick="praiseClick(user)"
   				:greatNumberShow="user.greatNumber"
   				:praiseColor="user.greatStateNumber"
   				> 
@@ -334,16 +334,14 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        //t.blogs = value.currentRecords;
-                        console.log(t.blogs);
-
-                        const newArry = [];
-                        value.currentRecords.forEach((blog,key)=>{
-                            blog.content = _TY_Tool.transferContent(blog.content);
-                            newArry.push(blog);
-                        });
-                        console.log("newArry:",newArry);
-                        t.blogs = newArry;
+                        t.blogs = value.currentRecords;
+                        //const newArry = [];
+                        //value.currentRecords.forEach((blog,key)=>{
+                        //blog.content = _TY_Tool.transferContent(blog.content);
+                            //newArry.push(blog);
+                        //});
+                       // console.log("newArry:",newArry);
+                        //t.blogs = newArry;
                     });
                 }, function (code, msg) {
                 });
@@ -363,15 +361,25 @@ export default {
         },
         //点赞事件
         praiseClick:function(user){
-        	console.log(1);
-        	//var clock_in_id = user.log_id;
-        	//var theme_id =user.practiveId;
-        	//var greatState= user.greatState;
-        	//var param = {  
-				//theme_id:theme_id, //主题id
-				//clock_in_id:clock_in_id , //打卡id
-			//};
-  	
+        	var clock_in_id = user.log_id;
+        	var theme_id =user.practiveId;
+        	var greatState= user.greatState;
+        	var param = {  
+				theme_id:theme_id, //主题id
+				clock_in_id:clock_in_id , //打卡id
+			};
+			//console.log(greatState);
+			if(greatState == 0){
+				this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
+				_TY_Tool.post(this.uploadUrl,param).then(response=>{
+	               this.getData();
+	            }); 
+			}if(greatState == 1){
+				this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_cancel_like`;
+				_TY_Tool.post(this.uploadUrl,param).then(response=>{
+	               this.getData();
+	            }); 			
+			}  	
         },
         //内容列表中点击进入练习详情
         joinPractiveDetails:function(user){
@@ -469,6 +477,10 @@ export default {
 		width:10%;
 		padding-top:10px;
 		font-size:18px;
+	}
+	.practiceNumberStyle{
+		color:#888;
+		font-size:12px;
 	}
 </style>
 
