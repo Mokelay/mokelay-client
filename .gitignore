@@ -1,8 +1,0 @@
-/node_modules/
-*.log
-.idea
-*.iml
-*.ipr
-*.iws
-/dist/
-*/.settings/
