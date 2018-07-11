@@ -29,7 +29,7 @@
   			</div>
   			<bb-indep-blog-action 
   				@replyClick="replyClick(user)"
-  				@praiseClick="praiseClick(user)"
+  				@praiseClick="praiseClick.bind(null,user)"
   				:greatNumberShow="user.greatNumber"
   				:praiseColor="user.greatStateNumber"
   				> 
@@ -363,24 +363,15 @@ export default {
         },
         //点赞事件
         praiseClick:function(user){
-        	var clock_in_id = user.log_id;
-        	var theme_id =user.practiveId;
-        	var greatState= user.greatState;
-        	var param = {  
-				theme_id:theme_id, //主题id
-				clock_in_id:clock_in_id , //打卡id
-			};
-        	if(greatState == 0){
-				this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
-	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
-	               this.getData();
-	            });        	
-        	}else{
-        		this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_cancel_like`;
-	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
-	               this.getData();
-	            });  
-        	}    	
+        	console.log(1);
+        	//var clock_in_id = user.log_id;
+        	//var theme_id =user.practiveId;
+        	//var greatState= user.greatState;
+        	//var param = {  
+				//theme_id:theme_id, //主题id
+				//clock_in_id:clock_in_id , //打卡id
+			//};
+  	
         },
         //内容列表中点击进入练习详情
         joinPractiveDetails:function(user){

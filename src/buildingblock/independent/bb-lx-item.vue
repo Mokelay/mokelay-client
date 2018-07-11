@@ -20,8 +20,8 @@
 			    		</p>
 			    	</span>
 			    	<bb-layout-seriation :content="content" v-show="showRightContent"></bb-layout-seriation>
-			    	<b @click="clickUrl(item)">练习</b>
-			    	<p>{{item.theme_id}}</p>			    	
+			    	<b @click="clickUrl(item)" class="rightStyle">练习</b>
+			    	<p class="display">{{item.theme_id}}</p>			    	
 			    </div>	    	
 			</bb-vant-cell-swipe>
 		</li>
@@ -432,7 +432,8 @@ import Vue from 'vue'
 	            }); 
 	        },
 	        clickUrl(item){
-	        	console.log(item.theme_id);
+	        	var id = item.theme_id;
+	        	this.$emit("clickUrl",id);
 	        }
 
         }
@@ -513,6 +514,12 @@ import Vue from 'vue'
     }
     .rightStyle{
     	font-size:14px;
+    	border-radius:0;
+    	border:1px solid #0091ea; 
+    	padding:3px 10px;
+    	font-weight:normal;
+    	color:#0091ea;
+    	text-align:center;
     }
     .display{
     	display:none;

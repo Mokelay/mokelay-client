@@ -451,7 +451,10 @@ export default {
             });
         	
         },
-        //提交信息
+        //外部调用输入框
+        commentClick:function(){
+        	this.blogWriteReplyShow = true;
+        },
 
     }
 }
