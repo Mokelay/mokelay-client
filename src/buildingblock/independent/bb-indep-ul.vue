@@ -296,6 +296,7 @@
                 if(data){
                     this.external['linkage'] = data;
                     //外部参数请求数据，重新恢复到第一页
+                    this.page = 1;
                     this.loadData();
                 }
             },

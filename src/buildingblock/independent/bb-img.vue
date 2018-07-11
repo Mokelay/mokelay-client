@@ -88,9 +88,14 @@
                 type: Object
             }
         },
+        watch:{
+            src(val){
+                this.imgSrc = val;
+            }
+        },
         data() {
             return {
-                imgSrc: "https://pic2.zhimg.com/80/v2-1e02c1531c33f9460ae82eb88a999cdd_hd.jpg"
+                imgSrc: this.src
             }
         },
         mounted:function(){
