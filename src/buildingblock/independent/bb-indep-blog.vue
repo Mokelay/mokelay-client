@@ -400,10 +400,15 @@ export default {
 		height:auto;
 		background:#faf9fa;
 		display:flex;
-		padding:5px 0 3px 5px;
+		padding:5px 0 5px 5px;
 	}
 	.blogJoinPracticeLeft{
-		width:20%;
+		width:45px;
+		height:45px;
+		overflow:hidden;
+	}
+	.blogJoinPracticeLeft img{
+		max-width:150%;
 	}
 	.blogJoinPracticeCenter{
 		width:70%;
@@ -414,6 +419,7 @@ export default {
 		width:10%;
 		padding-top:10px;
 		font-size:18px;
+		color:#888;
 	}
 	.practiceNumberStyle{
 		color:#888;

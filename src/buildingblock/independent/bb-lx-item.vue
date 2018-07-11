@@ -376,7 +376,7 @@ import Vue from 'vue'
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        //console.log(value);
+	                        console.log(value);
 	                        t.items = value.itemList;
 	                        t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
@@ -507,7 +507,7 @@ import Vue from 'vue'
     }
     .lxItemBg{
     	background:#fff;
-    	margin:10px 0 10px 0;
+    	margin:0px 0 10px 0;
     }
     .itemContent{
     	padding:10px 5%;
@@ -515,10 +515,10 @@ import Vue from 'vue'
     .rightStyle{
     	font-size:14px;
     	border-radius:0;
-    	border:1px solid #0091ea; 
+    	border:1px solid #266FB7; 
     	padding:3px 10px;
     	font-weight:normal;
-    	color:#0091ea;
+    	color:#266FB7;
     	text-align:center;
     }
     .display{
