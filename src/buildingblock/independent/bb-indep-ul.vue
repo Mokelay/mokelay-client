@@ -273,7 +273,7 @@
                             }else{
                                 t.list = _list;    
                             }
-                            t.loading = true;
+                            t.loading = false;
                         });
                     }, function (code, msg) {
 
