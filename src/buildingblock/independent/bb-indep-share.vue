@@ -79,38 +79,52 @@ export default {
         },
         startShare(){
             const t = this;
+            alert('startShare');
+            // const shareInfo = {
+            //     title:t.realTitle,
+            //     desc:t.realDesc,
+            //     link:t.realLink,
+            //     imgUrl:t.realImgUrl,
+            //     success: function () { 
+            //         t.$emit("shareSuccess")
+            //     },
+            //     cancel: function () { 
+            //         t.$emit("shareFail")
+            //     } 
+            // };
             const shareInfo = {
-                title:t.realTitle,
-                desc:t.realDesc,
-                link:t.realLink,
-                imgUrl:t.realImgUrl,
-                success: function () { 
-                    t.$emit("shareSuccess")
-                },
-                cancel: function () { 
-                    t.$emit("shareFail")
-                } 
+                title:"分享标题",
+                desc:"这是分享的测试",
+                link:"http://ty.saiyachina.com/#/home_ln",
+                imgUrl:"https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png", 
             };
             if(t.wx){
-                t.shareArea.forEach((val,key)=>{
-                    switch(val){
-                        case "timeline":
-                            t.wx.onMenuShareTimeline(shareInfo);
-                            break;
-                        case "appMessage":
-                            t.wx.onMenuShareAppMessage(shareInfo);
-                            break;
-                        case "QQ":
-                            t.wx.onMenuShareQQ(shareInfo);
-                            break;
-                        case "weibo":
-                            t.wx.onMenuShareWeibo(shareInfo);
-                            break;
-                        case "qZone":
-                            t.wx.onMenuShareQZone(shareInfo);
-                            break;
-                    }
-                })
+                alert('in wx');
+                t.wx.onMenuShareAppMessage(shareInfo);
+                t.wx.onMenuShareAppMessage(shareInfo);
+                t.wx.onMenuShareQQ(shareInfo);
+                t.wx.onMenuShareWeibo(shareInfo);
+                t.wx.onMenuShareQZone(shareInfo);
+                // t.shareArea.forEach((val,key)=>{
+                //     switch(val){
+                //         case "timeline":
+                //             alert('in wx timeline');
+                //             t.wx.onMenuShareTimeline(shareInfo);
+                //             break;
+                //         case "appMessage":
+                //             t.wx.onMenuShareAppMessage(shareInfo);
+                //             break;
+                //         case "QQ":
+                //             t.wx.onMenuShareQQ(shareInfo);
+                //             break;
+                //         case "weibo":
+                //             t.wx.onMenuShareWeibo(shareInfo);
+                //             break;
+                //         case "qZone":
+                //             t.wx.onMenuShareQZone(shareInfo);
+                //             break;
+                //     }
+                // })
             }else{
                 return;
             }
