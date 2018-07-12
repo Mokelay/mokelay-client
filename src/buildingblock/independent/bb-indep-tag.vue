@@ -356,8 +356,8 @@
 }
 .checkColor{
 
-	color:#33befe!important;
-	border-color:#33befe!important;
+	color:#5F9BD5!important;
+	border-color:#5F9BD5!important;
 }
 
 

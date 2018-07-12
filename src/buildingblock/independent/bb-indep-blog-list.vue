@@ -20,7 +20,7 @@
   			<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 				<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 				<span class="blogJoinPracticeCenter"> 
-					<p>{{user.practiceTitle}}</p>
+					<p class="practiceTitleStyle">{{user.practiceTitle}}</p>
 					<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
 				</span>
 				<span class="blogJoinPracticeRight">
@@ -340,7 +340,7 @@ export default {
                         blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                      // console.log("newArry:",newArry);
+                      	console.log("newArry:",newArry);
                         t.blogs = newArry;
                     });
                 }, function (code, msg) {
@@ -485,6 +485,10 @@ export default {
 	.practiceNumberStyle{
 		color:#888;
 		font-size:12px;
+	}
+	.practiceTitleStyle{
+		width:100%;
+		overflow:hidden;
 	}
 </style>
 
