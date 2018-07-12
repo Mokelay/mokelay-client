@@ -64,7 +64,7 @@
                 default: true
             },
             checkedField: {
-                type: Array
+                type: [Array,String]
             },
             opts: {
                 type: Array
@@ -177,7 +177,7 @@
                 return "" + Math.floor(Math.random() * 10000);
             },
             checkedKeys() {
-                let checkedField = this.checkedField;
+                let checkedField = typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField;
                 if (checkedField && checkedField.length) {
                     if (!this.multiple) { //单选默认取最后一个元素
                         checkedField = checkedField.slice(-1);
