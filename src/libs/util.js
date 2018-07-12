@@ -1311,38 +1311,37 @@ util.isWX = function() {
     }
 }
 
-//appUrl：应用域名   apiArray：需要调用的微信api
-util.wx = function(apiArray) {
+util.get_wx = function() {
+    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone']
     const appUrl = encodeURI(window.location.href);
     const configUrl = `${_TY_ENV.apiHost}/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
     console.log("configUrl:", configUrl);
-    const wx_sdk = new Promise(function(resolve, reject) {
-        util.get(configUrl)
-            .then(response => {
-                let wx_config = response.data.data.wx_config;
-                wx_config.jsApiList = apiArray;
-                wx_config.debug = false;
-                require.ensure(['weixin-js-sdk'], function(require) {
-                    var wx = require('weixin-js-sdk');
-                    wx.config(wx_config);
-                    wx.ready(function() {
-                        wx.checkJsApi({
-                            jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
-                            success: function(res) {
-                                console.log("微信可用api检测结果:", res);
-                                resolve(wx);
-                            },
-                        });
-                    })
-                    wx.error(function(res) {
-                        console.log("res:", res);
+    util.get(configUrl)
+        .then(response => {
+            let wx_config = response.data.data.wx_config;
+            wx_config.jsApiList = apiArray;
+            wx_config.debug = false;
+            require.ensure(['weixin-js-sdk'], function(require) {
+                var wx = require('weixin-js-sdk');
+                wx.config(wx_config);
+                wx.ready(function() {
+                    wx.checkJsApi({
+                        jsApiList: apiArray, // 需要检测的JS接口列表，所有JS接口列表见附录2,
+                        success: function(res) {
+                            console.log("微信可用api检测结果:", res);
+                            window._TY_Tool.wx = wx;
+                        },
                     });
+                })
+                wx.error(function(res) {
+                    console.log("res:", res);
+                });
 
-                }, 'weixin-js-sdk');
-            });
-    });
-    return wx_sdk;
+            }, 'weixin-js-sdk');
+        });
 }
+
+
 //等具体方案出来后 立即替换     转换积木编辑状态的积木editAlias和展示状态的积木transferAlias
 util.transferContent = function(contents) {
     const newArry = [];

@@ -151,11 +151,7 @@ export default {
             }
             t.uploadUrl = apiUrl;
         };
-        _TY_Tool.wx(
-            ["chooseImage","previewImage","uploadImage"]
-            ).then((wx)=>{
-            t.wx = wx;
-        });
+        t.wx = _TY_Tool.wx;
     },
     render: function(createElement){
         const t = this;
