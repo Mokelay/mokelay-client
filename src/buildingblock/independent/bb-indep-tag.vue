@@ -150,6 +150,10 @@
 			//动态数据
 			tagDs:{
 				type:Object,
+			},
+			//集合数组
+			arrayData:{
+				type:Array,
 			}
 		},
 		 data() {
@@ -162,6 +166,7 @@
                customButton:true, 
        		   show:false,
        		   isCheckColor:false,
+       		   tagData:[],
             }
         },
 		computed:{
@@ -235,13 +240,17 @@
 		 		Vue.set(tag,'isCheckColor',true);
 		 		//console.log(tag.value);
 		 		var val = tag.value;
-				this.$emit("toggle",tag,val);
+		 		this.tagData.push(val);
+		 		var valData = this.tagData;
+				this.$emit("toggle",tag,valData);
 			},
 			toggleClass:function(child){
 				Vue.set(child,'isCheckColor',true);
 				//console.log(child.value);
 				var val= child.value;
-				this.$emit("child",child,val);
+				this.tagData.push(val);
+				var valData = this.tagData;
+				this.$emit("child",child,valData);
 			},
  			//弹框取消点击事件
  			customPopCancel:function(){
