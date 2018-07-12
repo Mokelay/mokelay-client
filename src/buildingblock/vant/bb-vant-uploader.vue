@@ -278,12 +278,13 @@ export default {
                     const response = JSON.parse(res.target.response);
                     const url = response.data.file_url;
                     if(t.option.replace&&t.option.max>0&&t.valueBase.length>=t.option.max){//如果是替换的话
-                        t.valueBase.push(0,1,url);//替换第一个位置的文件
+                        t.valueBase.splice(0,1,url);//替换第一个位置的文件
                     }else{
                         t.valueBase.push(url);
                     }
                     t.$emit('input',t.valueBase);
                     t.$emit('change',t.valueBase);
+                    t.$emit('upload-success',t.valueBase);
                     _TY_Toast({content:"上传成功！"});
                 }; //请求完成
             xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
