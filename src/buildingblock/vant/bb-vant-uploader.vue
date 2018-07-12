@@ -176,18 +176,44 @@ export default {
                 }
                 break;
             case "picture":
-                children = createElement('img',{
+                children.push(createElement('img',{
                     attrs:{
                         src:(t.valueBase&&t.valueBase.length>0)?t.valueBase[0]:''
                     },
                     style:{
                         width:'100%'
                     }
-                },[]);
+                },[]));
+                if((!t.valueBase||t.valueBase.length<=0)){
+                    //没有值的时候，显示编辑提示
+                    children.push(createElement('span',{
+                        style:{
+                            position:'absolute',
+                            bottom:'0.1rem',
+                            right:'0.5rem',
+                            'font-size': '0.3rem',
+                            'text-align': 'center',
+                            'line-height': '0.5rem',
+                            background: '#999',
+                            color: '#fff',
+                            'border-radius': '.10666rem',
+                            padding: '0.1rem .1rem .1rem .18rem',
+                            'letter-spacing': '0.08rem'
+                        }
+                    },['修改']));
+                }
                 className = "";
                 break;
         }
-        
+        let tmpStyle={};
+        if(t.option.theme==='picture'&&(!t.valueBase||t.valueBase.length<=0)){
+            //上传按钮是图片，并且没有src的时候
+            tmpStyle = {
+                'padding-bottom': '50%',
+                height:'0',
+                width:'100%'
+            }
+        }
         const vantUpload = createElement('vant-uploader',{props:{
             "resultType":t.resultType,
             "accept":t.accept,
@@ -197,7 +223,9 @@ export default {
             "after-read":t.afterRead,
         },on:{
             oversize:t.oversize
-        },class:className},[children,this.$slots.default]);
+        },class:className,
+        style:tmpStyle
+        },[children,this.$slots.default]);
         //渲染已经上传的图片
         const picList = [];
         t.valueBase.forEach((ele,index)=>{
