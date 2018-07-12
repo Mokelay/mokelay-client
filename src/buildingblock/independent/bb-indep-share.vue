@@ -94,6 +94,7 @@ export default {
             };
             if(t.wx){
                 alert('in wx');
+                t.wx.onMenuShareAppMessage(shareInfo);
                 t.shareArea.forEach((val,key)=>{
                     switch(val){
                         case "timeline":
