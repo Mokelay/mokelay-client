@@ -10,10 +10,11 @@
         </div>
         <div class="local" v-if="value">
             <div  v-for="(realUrlItem,key) in realUrl" :key="key">
-                <i class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
-                <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
+                <video class="" controls="controls" :src="realUrlItem"></video>
+                <!-- <i class="ty-icon_qiyong ty-font" v-tap="showDia"></i> -->
+                <!-- <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
                     <video class="" controls="controls" :src="realUrlItem"></video>
-                </bb-indep-dialog>
+                </bb-indep-dialog> -->
             </div>
 
         </div>
