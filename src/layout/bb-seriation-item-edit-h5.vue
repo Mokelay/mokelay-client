@@ -256,6 +256,7 @@
             },
             defaultVmodel(val,...params){
                 const t = this;
+                t.realContent = t.realContent == undefined?t.content:t.realContent;
                 t.realContent.attributes.value = val;
                 this.$emit('input',t.realContent);
                 this.$emit('change',t.realContent);

@@ -68,17 +68,6 @@ import 'vant/lib/cell/style';
                             const accuracy = res.accuracy; // 位置精度
                             t.valueBase = res;
                             t.getLocationName(latitude,longitude);
-                            t.wx.openLocation({
-                                latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
-                                longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-                                name: t.valueBase.name, // 位置名
-                                address: t.valueBase.address, // 地址详情说明
-                                scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
-                                infoUrl: t.option.infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
-                            });
-                            t.$emit("change",t.valueBase);
-                            t.$emit("input",t.valueBase);
-                            t.locationClass = "locationClass";
                         }
                     });
                 }
@@ -93,6 +82,17 @@ import 'vant/lib/cell/style';
                         t.valueBase.address = data.result.formatted_address;
                         t.valueBase.name = data.result.sematic_description;
                         t.addressDetail = data.result.sematic_description;
+                        t.wx.openLocation({
+                            latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+                            longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+                            name: t.valueBase.name, // 位置名
+                            address: t.valueBase.address, // 地址详情说明
+                            scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                            infoUrl: t.option.infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
+                        });
+                        t.$emit("change",t.valueBase);
+                        t.$emit("input",t.valueBase);
+                        t.locationClass = "locationClass";
                         if (err) {
                             console.error(err.message);
                             t.locationClass = "";

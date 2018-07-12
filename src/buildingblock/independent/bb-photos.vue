@@ -16,8 +16,11 @@
         </div>
         <div v-if="transformConfig.transformMode == 'list'" class="bb-photos-list" v-swipeleft="swipe" v-swiperight="swipe">
             <span class="photo-item" v-for="(pic,index) in realFields" :key="index" :style="{width:itemWidth}">
-                <img :src="pic" :alt="pic">
+                <img :src="pic" :alt="pic" @click="showPic(pic)">
             </span>
+            <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="dialogShow" @update:isShow="closeDia">
+                <img :src="nowPic" :alt="nowPic">
+            </bb-indep-dialog>
         </div>
     </div>
 
@@ -79,7 +82,9 @@
                 lastItem:null,
                 nowItem:0,
                 nextItem:null,
-                itemWidth:"100%"
+                itemWidth:"100%",
+                dialogShow:false,
+                nowPic:""
             }
         },
         computed:{
@@ -231,6 +236,14 @@
                             break;
                     }
                 }
+            },
+            closeDia(){
+                this.dialogShow = false;
+            },
+            showPic(pic){
+                this.nowPic = pic;
+                this.dialogShow = true;
+
             }
         }
     }
