@@ -151,11 +151,7 @@ export default {
             }
             t.uploadUrl = apiUrl;
         };
-        _TY_Tool.wx(
-            ["chooseImage","previewImage","uploadImage"]
-            ).then((wx)=>{
-            t.wx = wx;
-        });
+        t.wx = _TY_Tool.wx;
     },
     render: function(createElement){
         const t = this;
@@ -294,6 +290,8 @@ export default {
                 const file_name = res.data.data.file_serialize_name;
                 t.valueBase.push(file_url);
                 t.$emit("uploaded",t.valueBase);
+                t.$emit("input",t.valueBase);
+                t.$emit("change",t.valueBase);
             })
         }
     }
