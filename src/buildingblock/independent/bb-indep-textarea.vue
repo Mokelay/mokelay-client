@@ -139,9 +139,11 @@
     .bb-indep-textarea{
         width: 100%;
         display: inline-block;
-        .limitNumber{
-            text-align: right;
-            color: #999999;
-        }
+    }
+    .limitNumber{
+        text-align: right;
+        font-size: 0.3rem;
+        color: #909090;
+        text-align: right;
     }
 </style>

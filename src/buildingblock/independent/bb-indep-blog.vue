@@ -17,7 +17,7 @@
   				<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 					<span class="blogJoinPracticeCenter"> 
-						<p>{{user.practiceTitle}}</p>
+						<p class="practiceTitleStyle">{{user.practiceTitle}}</p>
 						<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
 					</span>
 					<span class="blogJoinPracticeRight">
@@ -425,6 +425,10 @@ export default {
 		color:#888;
 		font-size:12px;
 
+	}
+	.practiceTitleStyle{
+		width:100%;
+		overflow:hidden;
 	}
 </style>
 

@@ -1,7 +1,18 @@
+<template>
+    <span>
+        <i :class="'bb-indep-share ty ' + option.icon" @click="startShare"></i>
+        <van-actionsheet class="shareDialog" v-model="show">
+            <i class="ty ty-riji-fenxiang" @click="onMenuShareAppMessage"></i>
+        </van-actionsheet>
+    </span>
+</template>
 <script>  
+    import Actionsheet from 'vant/lib/actionsheet';
+    import 'vant/lib/actionsheet/style';
 export default {
     name:"bb-indep-share",
     components:{
+        "van-actionsheet":Actionsheet
     },
     props:{
         //分享标题
@@ -52,7 +63,8 @@ export default {
             realDesc:this.desc,
             realLink:this.link,
             realImgUrl:this.imgUrl,
-            shareArea:this.option.shareArea.split(",")
+            shareArea:this.option.shareArea.split(","),
+            show:false
         };
     },
     mounted: function () {
@@ -79,44 +91,74 @@ export default {
         },
         startShare(){
             const t = this;
+            t.show = true;
             alert('startShare');
+            // const shareInfo = {
+            //     title:t.realTitle,
+            //     desc:t.realDesc,
+            //     link:t.realLink,
+            //     imgUrl:t.realImgUrl,
+            //     success: function () { 
+            //         t.$emit("shareSuccess")
+            //     },
+            //     cancel: function () { 
+            //         t.$emit("shareFail")
+            //     } 
+            // };
             const shareInfo = {
-                title:t.realTitle,
-                desc:t.realDesc,
-                link:t.realLink,
-                imgUrl:t.realImgUrl,
+                title:"分享标题",
+                desc:"这是分享的测试",
+                link:"http://ty.saiyachina.com/#/home_ln",
+                imgUrl:"https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png", 
                 success: function () { 
-                    t.$emit("shareSuccess")
+                        // 用户确认分享后执行的回调函数
                 },
                 cancel: function () { 
-                    t.$emit("shareFail")
-                } 
+                    // 用户取消分享后执行的回调函数
+                }
             };
             if(t.wx){
                 alert('in wx');
                 t.wx.onMenuShareAppMessage(shareInfo);
-                t.shareArea.forEach((val,key)=>{
-                    switch(val){
-                        case "timeline":
-                            alert('in wx timeline');
-                            t.wx.onMenuShareTimeline(shareInfo);
-                            break;
-                        case "appMessage":
-                            t.wx.onMenuShareAppMessage(shareInfo);
-                            break;
-                        case "QQ":
-                            t.wx.onMenuShareQQ(shareInfo);
-                            break;
-                        case "weibo":
-                            t.wx.onMenuShareWeibo(shareInfo);
-                            break;
-                        case "qZone":
-                            t.wx.onMenuShareQZone(shareInfo);
-                            break;
-                    }
-                })
+                t.wx.onMenuShareQQ(shareInfo);
+                t.wx.onMenuShareWeibo(shareInfo);
+                t.wx.onMenuShareQZone(shareInfo);
+                // t.shareArea.forEach((val,key)=>{
+                //     switch(val){
+                //         case "timeline":
+                //             alert('in wx timeline');
+                //             t.wx.onMenuShareTimeline(shareInfo);
+                //             break;
+                //         case "appMessage":
+                //             t.wx.onMenuShareAppMessage(shareInfo);
+                //             break;
+                //         case "QQ":
+                //             t.wx.onMenuShareQQ(shareInfo);
+                //             break;
+                //         case "weibo":
+                //             t.wx.onMenuShareWeibo(shareInfo);
+                //             break;
+                //         case "qZone":
+                //             t.wx.onMenuShareQZone(shareInfo);
+                //             break;
+                //     }
+                // })
             }else{
                 return;
+            }
+        },
+        onMenuShareAppMessage(){
+            if(WeixinJSBridge){
+                WeixinJSBridge.invoke('sendAppMessage',{
+                    "img_url": "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
+                    "img_width": "200",
+                    "img_height": "200",
+                    "link": "http://ty.saiyachina.com/#/home_ln",
+                    "desc": descContent,
+                    "title": "分享标题"
+                }, function(res) {
+                    //_report('send_msg', res.err_msg);  // 这是回调函数，必须注释掉
+                })
             }
         }
     }

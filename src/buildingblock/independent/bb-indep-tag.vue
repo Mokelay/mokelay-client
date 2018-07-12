@@ -1,13 +1,14 @@
 <template>
 	<div class="tagContent"> 
 		<span class="tagOneLabel" v-for="tag in tags" > 
-			<b :style="tagOneLabelWrite" @click="toggle(tag)" v-bind:class="{checkColor:tag.isCheckColor}">
+			<b :style="tagOneLabelWrite" @click="toggle(tag)" v-bind:class="{checkColor:tag.isCheckColor}" >
 				{{tag.title}}
 			</b>
 			<span v-show="tag.show">
-				<i v-for="child in tag.children" :style="tagTwoLabelWrite" 
+				<i v-for="child in tag.children" :style="tagTwoLabelWrite"
 					@click="toggleClass(child)"
-					v-bind:class="{checkColor:child.isCheckColor}">
+					v-bind:class="{checkColor:child.isCheckColor}"
+					>
 					{{child.text}}
 				</i> 
 			</span>
@@ -19,6 +20,7 @@
 			v-for="(custom,key) in customs" 
 			@click="customPopShow(key)"
 			class="checkColor"
+			
 			>
 			{{custom.writeShow}}
 			</b>
@@ -148,6 +150,10 @@
 			//动态数据
 			tagDs:{
 				type:Object,
+			},
+			//集合数组
+			arrayData:{
+				type:Array,
 			}
 		},
 		 data() {
@@ -160,6 +166,7 @@
                customButton:true, 
        		   show:false,
        		   isCheckColor:false,
+       		   tagData:[],
             }
         },
 		computed:{
@@ -231,11 +238,19 @@
 		 	toggle:function(tag) {
 		 		Vue.set(tag,'show',true);
 		 		Vue.set(tag,'isCheckColor',true);
-				this.$emit("toggle",tag);
+		 		//console.log(tag.value);
+		 		var val = tag.value;
+		 		this.tagData.push(val);
+		 		var valData = this.tagData;
+				this.$emit("toggle",tag,valData);
 			},
 			toggleClass:function(child){
 				Vue.set(child,'isCheckColor',true);
-				this.$emit("child",child);
+				//console.log(child.value);
+				var val= child.value;
+				this.tagData.push(val);
+				var valData = this.tagData;
+				this.$emit("child",child,valData);
 			},
  			//弹框取消点击事件
  			customPopCancel:function(){
@@ -349,9 +364,9 @@
 	background:#fff;
 }
 .checkColor{
-	background:#33befe;
-	color:#fff!important;
-	border-color:#fff!important;
+
+	color:#5F9BD5!important;
+	border-color:#5F9BD5!important;
 }
 
 

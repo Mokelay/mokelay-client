@@ -136,7 +136,7 @@
                 },
                 addAudioContent:{
                     uuid: _TY_Tool.uuid(),
-                    alias: 'bb-vant-uploader-audio', //布局类积木 || 普通积木
+                    alias: 'bb-indep-uploader-audio', //布局类积木 || 普通积木
                     transferAlias:'bb-indep-audio-player',
                     aliasName: '添加音频', 
                     attributes: {
