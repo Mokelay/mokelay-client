@@ -79,6 +79,7 @@ export default {
         },
         startShare(){
             const t = this;
+            alert('startShare');
             const shareInfo = {
                 title:t.realTitle,
                 desc:t.realDesc,
@@ -92,9 +93,11 @@ export default {
                 } 
             };
             if(t.wx){
+                alert('in wx');
                 t.shareArea.forEach((val,key)=>{
                     switch(val){
                         case "timeline":
+                            alert('in wx timeline');
                             t.wx.onMenuShareTimeline(shareInfo);
                             break;
                         case "appMessage":
