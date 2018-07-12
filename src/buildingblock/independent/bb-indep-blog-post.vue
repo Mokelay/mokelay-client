@@ -353,6 +353,9 @@ export default {
             return styles;        
         },   
     },
+    created(){
+
+    },
     watch:{},
     methods:{
         loadChildBB(){
@@ -386,7 +389,6 @@ export default {
             this.$emit("input",this.valueBase);
         },
         locationChange(value){
-            this.privacy = value;
             this.valueBase.location = value;
             this.valueBase.content = this.$refs.postContent.getContents();
             this.$emit("change",this.valueBase);
