@@ -1313,7 +1313,7 @@ util.isWX = function() {
 
 //注册微信jssdk
 util.get_wx = function() {
-    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone']
+    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone"]
     const appUrl = encodeURI(window.location.href);
     const configUrl = `${_TY_ENV.apiHost}/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
     console.log("configUrl:", configUrl);
