@@ -13,13 +13,20 @@
         render: function (createElement) {
             let t=this;
             const liInstance = t.renderLi(createElement);
-
-            return createElement('ul',{
+            let loadingInstance = '';
+            if(t.loading){
+                loadingInstance = t.renderLoading(createElement);
+            }
+            const ulInstance = createElement('ul',{
                 class:{
                     indep_ul:true,
                     clearfix:true
                 }
             },liInstance);
+
+            return createElement('div',{
+
+            },[ulInstance,loadingInstance]);
         },
         props: {
             //几列，如果是一列表示纵向展示，多列表示横向
@@ -80,7 +87,9 @@
                 list:typeof(this.staticList)==='string'?eval('('+this.staticList+')'):this.staticList,
                 external:{},
                 pageSize:this.pageConfig.pageSize,
-                page: this.pageConfig.page
+                page: this.pageConfig.page,
+                end:false,//是否加载结束
+                loading:false//是否加载中
             }
         },
         computed:{
@@ -97,7 +106,8 @@
         },
         mounted:function(){
             let t=this;
-            
+            //添加上拉加载事件
+            t.scrollListener();
         },
         methods: {
             //根据主题，修改 内容模板itemContent
@@ -215,6 +225,26 @@
                     }
                 }
             },
+            scrollListener:function(){
+                let t=this;
+                //屏幕高度
+                const screenHeight = window.screen.height;
+                window.onscroll = function(){
+                    const totalHeight = document.activeElement.scrollHeight || document.body.scrollHeight;
+                    const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
+                    if(screenHeight + scrollHeight >= totalHeight){
+                        if(!t.end&&!t.loading){
+                            setTimeout(()=>{
+                                if(!t.end&&!t.loading){
+                                    t.page = t.page+1;
+                                    t.loadData();
+                                    t.loading =true;
+                                }
+                            },500);
+                        }
+                    }
+                }
+            },
             //加载数据
             loadData:function(){
                 let t=this;
@@ -228,6 +258,12 @@
                             }else{
                                 if(item['value']&&item['value']['currentRecords']){
                                     _list = item['value']['currentRecords'];
+                                    const totalPage = item['value']['totalPages'];
+                                    if(t.page>=totalPage){
+                                        t.end=true;
+                                    }else{
+                                        t.end=false;
+                                    }
                                 }else if(item['value']&&item['value']['list']){
                                     _list = item['value']['list'];    
                                 }else{
@@ -239,6 +275,7 @@
                             }else{
                                 t.list = _list;    
                             }
+                            t.loading = false;
                         });
                     }, function (code, msg) {
 
@@ -292,6 +329,17 @@
 
                 return result;
             },
+            //渲染加载框
+            renderLoading:function(createElement){
+                let t=this;
+                return createElement('div',{
+                    class:'bb_loading'
+                },[createElement('span',{},[]),
+                createElement('span',{},[]),
+                createElement('span',{},[]),
+                createElement('span',{},[]),
+                createElement('span',{},[])]);
+            },
             linkage:function(...data){
                 if(data){
                     this.external['linkage'] = data;
@@ -312,6 +360,66 @@
 <style lang='less' scoped>
     .indep_ul{
         font-size:0.5rem;
+    }
+    @keyframes load{
+        0%{
+            opacity: 1;
+            -webkit-transform: scale(1.2);
+        }
+        100%{
+            opacity: .2;
+            -webkit-transform: scale(.2);
+        }
+    }
+    @-webkit-keyframes load{
+        0%{
+            opacity: 1;
+            -webkit-transform: scale(1.2);
+        }
+        100%{
+            opacity: .2;
+            -webkit-transform: scale(.2);
+        }
+    }
+    .bb_loading{
+        width: 150px;
+        height: 5px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .bb_loading span{
+        display: inline-block;
+        width: 15px;
+        height: 100%;
+        margin-right: 5px;
+        background: lightgreen;
+        background:#33BEFE;
+        -webkit-animation: load 1.04s ease infinite;
+        animation: load 1.04s ease infinite;
+    }
+    .bb_loading span:last-child{
+        margin-right: 0px; 
+    }
+    
+    .bb_loading span:nth-child(1){
+        -webkit-animation-delay:0.13s;
+        animation-delay:0.13s;
+    }
+    .bb_loading span:nth-child(2){
+        -webkit-animation-delay:0.26s;
+        animation-delay:0.26s;
+    }
+    .bb_loading span:nth-child(3){
+        -webkit-animation-delay:0.39s;
+        animation-delay:0.39s;
+    }
+    .bb_loading span:nth-child(4){
+        -webkit-animation-delay:0.52s;
+        animation-delay:0.52s;
+    }
+    .bb_loading span:nth-child(5){
+        -webkit-animation-delay:0.65s;
+        animation-delay:0.65s;
     }
 
     
