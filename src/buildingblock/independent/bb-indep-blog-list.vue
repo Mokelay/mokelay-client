@@ -340,7 +340,7 @@ export default {
                         blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                       console.log("newArry:",newArry);
+                      // console.log("newArry:",newArry);
                         t.blogs = newArry;
                     });
                 }, function (code, msg) {
@@ -368,26 +368,14 @@ export default {
 				theme_id:theme_id, //主题id
 				clock_in_id:clock_in_id , //打卡id
 			};
-			debugger
-			//console.log(greatState);
-			if(greatState == 0){
-
-				this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
-				_TY_Tool.post(this.uploadUrl,param).then(response=>{
-	               this.getData();
-	            }); 
-			}if(greatState == 1){
-				debugger
-				this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_cancel_like`;
-				_TY_Tool.post(this.uploadUrl,param).then(response=>{
-	               this.getData();
-	            }); 			
-			}  	
+			this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
+			_TY_Tool.post(this.uploadUrl,param).then(response=>{
+               this.getData();
+            }); 
         },
         //内容列表中点击进入练习详情
         joinPractiveDetails:function(user){
         	var id = user.practiveId;
-        	console.log(id);
         	this.$emit("joinPractiveDetails",id);
         },
     }
