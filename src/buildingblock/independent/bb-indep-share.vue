@@ -154,7 +154,7 @@ export default {
                     "img_width": "200",
                     "img_height": "200",
                     "link": "http://ty.saiyachina.com/#/home_ln",
-                    "desc": descContent,
+                    "desc": "这是测试内容",
                     "title": "分享标题"
                 }, function(res) {
                     //_report('send_msg', res.err_msg);  // 这是回调函数，必须注释掉
