@@ -1311,6 +1311,7 @@ util.isWX = function() {
     }
 }
 
+//注册微信jssdk
 util.get_wx = function() {
     const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone']
     const appUrl = encodeURI(window.location.href);
