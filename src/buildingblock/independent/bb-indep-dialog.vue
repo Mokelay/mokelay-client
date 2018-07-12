@@ -271,13 +271,13 @@
             openDialog:function(){
                 this.active = true;
                 this.$emit('update:isShow', false);
-                this.$emit('afterOpen', t);
+                this.$emit('afterOpen', this);
             },
             //对外提供方法 关闭弹窗
             closeDialog:function(){
                 this.active = false;
                 this.$emit('update:isShow', false);
-                this.$emit('beforeClose', t);
+                this.$emit('beforeClose', this);
             },
             //主要用于积木选择器
             loadChildBB:function(){

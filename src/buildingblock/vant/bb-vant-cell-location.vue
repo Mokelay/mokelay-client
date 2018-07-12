@@ -49,9 +49,7 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
-            _TY_Tool.wx(["openLocation","getLocation"]).then((wx)=>{
-                t.wx = wx;
-            });
+            t.wx = _TY_Tool.wx;
         },
         //事件click
         methods: {
