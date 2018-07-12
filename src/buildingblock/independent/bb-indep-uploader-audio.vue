@@ -53,11 +53,7 @@ export default {
     },
     mounted: function () {
         const t = this;
-        _TY_Tool.wx(
-            ["startRecord","stopRecord","onVoiceRecordEnd","playVoice","pauseVoice","stopVoice","onVoicePlayEnd","uploadVoice"]
-            ).then((wx)=>{
-                t.wx = wx;
-            });
+        t.wx = _TY_Tool.wx;
     },
     render: function(createElement){
         const t = this;

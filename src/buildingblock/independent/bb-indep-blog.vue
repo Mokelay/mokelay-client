@@ -9,11 +9,21 @@
   				<p :style="userStyle">{{user.useName}}</p>
   				<h5 class="userTimeDate"> 
   					<b :style="userTime">{{user.blogDate}}</b>
-  					<i :style="userDate">{{user.continuousDate}}</i>
+  					<i :style="userDate">已坚持{{user.continuousDate}}天</i>
   				</h5>
   			</div> 
   			<div class="blogContent"> 
   				<p :style="contentWrite">{{user.content}}</p>
+  				<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
+					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
+					<span class="blogJoinPracticeCenter"> 
+						<p>{{user.practiceTitle}}</p>
+						<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
+					</span>
+					<span class="blogJoinPracticeRight">
+						<i :class="blogJoinXlxIcon"></i> 
+					</span>
+  			</div>
   			</div>
   		</div>  	
   	</div>
@@ -177,7 +187,7 @@ export default {
     data(){ 
         return{    	
         	user:this.userObject,
-
+        	blogJoinXlxIcon:"ty-icon_jiantou_right_l", 
         }
     },
     watch:{},
@@ -315,6 +325,12 @@ export default {
                 });
             }
         },  
+        //内容列表中点击进入练习详情
+        joinPractiveDetails:function(user){
+        	var id = user.practiveId;
+        	this.$emit("joinPractiveDetails",id);
+        },
+
     }
 }
 </script>
@@ -378,6 +394,37 @@ export default {
 	.replyUserCss{
 		display:flex;
 		justify-content:left;	
+	}
+	.blogJoinPractice{
+		width:100%;
+		height:auto;
+		background:#faf9fa;
+		display:flex;
+		padding:5px 0 5px 5px;
+	}
+	.blogJoinPracticeLeft{
+		width:45px;
+		height:45px;
+		overflow:hidden;
+	}
+	.blogJoinPracticeLeft img{
+		max-width:150%;
+	}
+	.blogJoinPracticeCenter{
+		width:70%;
+		font-size:14px;
+		padding:5px 0 0 10px;
+	}
+	.blogJoinPracticeRight{
+		width:10%;
+		padding-top:10px;
+		font-size:18px;
+		color:#888;
+	}
+	.practiceNumberStyle{
+		color:#888;
+		font-size:12px;
+
 	}
 </style>
 

@@ -21,7 +21,7 @@
 				<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 				<span class="blogJoinPracticeCenter"> 
 					<p>{{user.practiceTitle}}</p>
-					<p>{{user.practiceNumber}}</p>
+					<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
 				</span>
 				<span class="blogJoinPracticeRight">
 					<i :class="blogJoinXlxIcon"></i> 
@@ -29,7 +29,7 @@
   			</div>
   			<bb-indep-blog-action 
   				@replyClick="replyClick(user)"
-  				@praiseClick="praiseClick.bind(null,user)"
+  				@praiseClick="praiseClick(user)"
   				:greatNumberShow="user.greatNumber"
   				:praiseColor="user.greatStateNumber"
   				> 
@@ -71,7 +71,7 @@ export default {
     		default:function(){
     			return {
     				margin:"0",
-    				padding:"5px 10px",
+    				padding:"5px 0px",
     				height:"",
     				width:"100%",
     				borderStyle:"",
@@ -80,7 +80,7 @@ export default {
     				borderRadius:"",
     				fontFamily:'',
                     fontSize:'16px',
-                    fontColor:'#3da8f5',
+                    fontColor:'#266fb7',
                     bold:false ,
                     italic:false ,
                     lingHeight:"15px",
@@ -95,7 +95,7 @@ export default {
     		default:function(){
     			return {
     				margin:"0",
-    				padding:"5px 5px 5px 10px",
+    				padding:"5px 5px 5px 0px",
     				height:"",
     				width:"100%",
     				borderStyle:"",
@@ -104,7 +104,7 @@ export default {
     				borderRadius:"",
     				fontFamily:'',
                     fontSize:'14px',
-                    fontColor:'#666',
+                    fontColor:'#888',
                     bold:false ,
                     italic:false ,
                     lingHeight:"0",
@@ -128,7 +128,7 @@ export default {
     				borderRadius:"",
     				fontFamily:'',
                     fontSize:'14px',
-                    fontColor:'#666',
+                    fontColor:'#888',
                     bold:false ,
                     italic:false ,
                     lingHeight:"0",
@@ -143,7 +143,7 @@ export default {
     		default:function(){
     			return {
     				margin:"0",
-    				padding:"10px 5px 5px 10px",
+    				padding:"10px 5px 5px 0px",
     				height:"",
     				width:"100%",
     				borderStyle:"",
@@ -167,7 +167,7 @@ export default {
     		default:function(){
     			return {
     				margin:"0",
-    				padding:"10px 5px 5px 10px",
+    				padding:"10px 5px 5px 0px",
     				height:"",
     				width:"100%",
     			}
@@ -334,15 +334,13 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        //t.blogs = value.currentRecords;
-                        console.log(t.blogs);
-
+                        t.blogs = value.currentRecords;
                         const newArry = [];
                         value.currentRecords.forEach((blog,key)=>{
-                            blog.content = _TY_Tool.transferContent(blog.content);
+                        blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                        console.log("newArry:",newArry);
+                      // console.log("newArry:",newArry);
                         t.blogs = newArry;
                     });
                 }, function (code, msg) {
@@ -362,21 +360,22 @@ export default {
         	this.$emit("joinBlogDetails",blogId,practiveId);
         },
         //点赞事件
-        praiseClick:function(user){
-        	console.log(1);
-        	//var clock_in_id = user.log_id;
-        	//var theme_id =user.practiveId;
-        	//var greatState= user.greatState;
-        	//var param = {  
-				//theme_id:theme_id, //主题id
-				//clock_in_id:clock_in_id , //打卡id
-			//};
-  	
+        praiseClick:function(user){        	
+        	var clock_in_id = user.log_id;
+        	var theme_id =user.practiveId;
+        	var greatState= user.greatState;
+        	var param = {  
+				theme_id:theme_id, //主题id
+				clock_in_id:clock_in_id , //打卡id
+			};
+			this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
+			_TY_Tool.post(this.uploadUrl,param).then(response=>{
+               this.getData();
+            }); 
         },
         //内容列表中点击进入练习详情
         joinPractiveDetails:function(user){
         	var id = user.practiveId;
-        	console.log(id);
         	this.$emit("joinPractiveDetails",id);
         },
     }
@@ -398,9 +397,14 @@ export default {
 	.display{
 		display:none;
 	}
-
+	.userTimeDate{
+		margin-top:5px;
+		font-size:12px;
+		color:#888;
+	}
 	.blogRight{
 		width:90%;
+		margin-left:10px;
 	}
 	.blogUser{
 		width:100%; 
@@ -453,22 +457,34 @@ export default {
 		.blogJoinPractice{
 		width:100%;
 		height:auto;
-		background:#eee;
+		background:#efefef;
 		display:flex;
-		padding:5px 0 3px 5px;
+		padding:5px 0 5px 5px;
+		margin-bottom:10px;
+		justify-content:left;
+		align-items:center;
 	}
 	.blogJoinPracticeLeft{
-		width:20%;
+		width:45px;
+		height:45px;
+		overflow:hidden;
+	}
+	.blogJoinPracticeLeft img{
+		max-width:150%;
 	}
 	.blogJoinPracticeCenter{
 		width:70%;
 		font-size:14px;
-		padding:5px 0 0 10px;
+		padding:0px 0 0 10px;
 	}
 	.blogJoinPracticeRight{
 		width:10%;
-		padding-top:10px;
 		font-size:18px;
+		color:#888;
+	}
+	.practiceNumberStyle{
+		color:#888;
+		font-size:12px;
 	}
 </style>
 

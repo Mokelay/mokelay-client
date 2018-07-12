@@ -57,11 +57,7 @@ export default {
     },
     mounted: function () {
         const t = this;
-        _TY_Tool.wx(
-            ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone']
-            ).then((wx)=>{
-                t.wx = wx;
-            });
+        t.wx = _TY_Tool.wx;
         t.realTitle = _TY_Tool.tpl(t.title,_TY_Tool.buildTplParams(t));
         t.realDesc = _TY_Tool.tpl(t.desc,_TY_Tool.buildTplParams(t));
         t.realLink = _TY_Tool.tpl(t.link,_TY_Tool.buildTplParams(t));
