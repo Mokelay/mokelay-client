@@ -232,15 +232,13 @@
                 window.onscroll = function(){
                     const totalHeight = document.activeElement.scrollHeight || document.body.scrollHeight;
                     const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
-                    if(screenHeight + scrollHeight >= totalHeight){
+                    if(screenHeight + scrollHeight + 10 >= totalHeight){//接近底部10px的时候就加载
                         if(!t.end&&!t.loading){
+                            t.loading =true;
+                            t.page = t.page+1;
                             setTimeout(()=>{
-                                if(!t.end&&!t.loading){
-                                    t.page = t.page+1;
-                                    t.loadData();
-                                    t.loading =true;
-                                }
-                            },500);
+                                t.loadData();
+                            },1000);
                         }
                     }
                 }
@@ -275,7 +273,7 @@
                             }else{
                                 t.list = _list;    
                             }
-                            t.loading = false;
+                            t.loading = true;
                         });
                     }, function (code, msg) {
 
@@ -386,6 +384,8 @@
         height: 5px;
         margin: 0 auto;
         text-align: center;
+        box-sizing: content-box;
+        padding-bottom: 1rem;
     }
     .bb_loading span{
         display: inline-block;
