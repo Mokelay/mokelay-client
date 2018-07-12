@@ -236,9 +236,7 @@
                         if(!t.end&&!t.loading){
                             t.loading =true;
                             t.page = t.page+1;
-                            setTimeout(()=>{
-                                t.loadData();
-                            },1000);
+                            t.loadData();
                         }
                     }
                 }
