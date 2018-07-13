@@ -1,7 +1,7 @@
 <template>
 	<ul class="lxItemBg"> 
 		<li class="itemList" v-for="(item,key) in items" :page="pageData" >
-			<bb-vant-cell-swipe :content="rightContent" @right="onClose(key)" :ref="key + '_ref'" :key="key"> 
+			<bb-vant-cell-swipe :content="rightContent" @right="onClose(key)" :ref="key + '_ref'" :key="key" :leftWidth="0"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
 			    		<img :src="item.leftImgShow">
