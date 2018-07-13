@@ -314,6 +314,8 @@ export default {
     },
     methods:{
     	//动态数据获取
+
+    	
         getData() {
             const t = this;
             if (t.blogDs) {
