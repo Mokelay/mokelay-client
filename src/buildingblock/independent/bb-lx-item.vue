@@ -497,11 +497,13 @@ import Vue from 'vue'
     	text-align:center;
     	font-size:14px;
     	color:#353535;
+    	background:#fff;
     }
     .itemList{
     	width:100%;
     	margin:0;
     	border-top:1px solid #eee;
+    	background:#fff;
 
     }
     .itemList:nth-child(1){
