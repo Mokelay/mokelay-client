@@ -284,6 +284,7 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
+ 				this.$emit("customPopSubmit",this);
 
  				if(this.customWriteShow){
  					//点击时将增加的数组放置于原数组前

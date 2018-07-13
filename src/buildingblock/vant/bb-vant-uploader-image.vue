@@ -126,10 +126,10 @@ export default {
             type:Object,
             default:function(){
                 return {
-                    theme:"card"
+                    theme:"card",
+                    defaultAdd:false
                 };
             }
-            
         }
     },
    data(){ 
@@ -152,6 +152,9 @@ export default {
             t.uploadUrl = apiUrl;
         };
         t.wx = _TY_Tool.wx;
+        if(t.wx && t.option.defaultAdd){
+            t.wxChooseImage();
+        }
     },
     render: function(createElement){
         const t = this;
@@ -337,9 +340,13 @@ export default {
                 opacity:1;
             }
             .uploaded-child{
-                width: 2rem;
+                width: 100%;
                 text-align: center;
                 line-height: 2rem;
+                position: absolute;
+                margin: auto;
+                top: 0;
+                bottom: 0;
             }
         }
     }
