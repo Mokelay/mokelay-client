@@ -375,7 +375,10 @@ export default {
             this.privacyPicker = true;
         },
         addUpload(icon){
-            this.realContent.push(icon.content);
+            const content = _TY_Tool.deepClone(icon.content);
+            content.uuid = _TY_Tool.uuid();
+            this.realContent.push(content);
+            debugger
         },
         textareaChange(e){
             this.valueBase.text = e.target.value;
