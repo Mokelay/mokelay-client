@@ -10,7 +10,7 @@
         </div>
         <div class="local-video" v-if="value" id="video">
             <div  v-for="(realUrlItem,key) in realUrl" :key="key" class="video-item" :style="{width:itemWidth}">
-                <video v-if="realUrl.length == 1" id="video" class="" controls="controls" :src="realUrlItem"></video>
+                <video v-if="realUrl.length == 1" id="video" class="single-video" controls="controls" :src="realUrlItem"></video>
                 <i v-if="realUrl.length > 1" class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
                 <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
                     <video class="" controls="controls" :src="realUrlItem"></video>
@@ -197,6 +197,10 @@
         }
         .video-item{
             text-align: center;
+        }
+        .single-video{
+            width: 100%;
+            height: 4rem;
         }
     }
 </style>

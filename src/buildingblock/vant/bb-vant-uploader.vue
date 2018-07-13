@@ -119,7 +119,7 @@ export default {
         },
         /*其他属性设置  "picture" 表示图片view
             {
-                theme:"card" "photograph" "picture" "custom" ,
+                theme:"card" "photograph" "picture" "custom" "video",
                 replace:false//超过限制图片替换
                 max:-1//最大上传个数  -1表示不限制
 
@@ -169,6 +169,10 @@ export default {
                 children = createElement('vant-icon',{props:{name:'photograph'}},[]);
                 className = "";
                 break;
+            case "video":
+                children = createElement('i',{props:{},class:'ty ty-fbrj-shipin'},[]);
+                className = "video";
+                break;
             case "custom":
                 if(t.content){
                     children = _TY_Tool.bbRender(t.content, createElement, t);
@@ -214,6 +218,11 @@ export default {
                 width:'100%'
             }
         }
+        var itemClass = "uploaded-item";
+        if(t.valueBase.length >= t.option.max){
+            className = "dsn";
+            itemClass = t.valueBase.length == 1?"uploaded-item-lg":itemClass;
+        }
         const vantUpload = createElement('vant-uploader',{props:{
             "resultType":t.resultType,
             "accept":t.accept,
@@ -232,7 +241,7 @@ export default {
             const tag = t.accept == "video/*"?"bb-video":"img";
             const Img = createElement(tag,{props:{value:ele},attrs:{src:ele,controls:"controls"},class:"uploaded-child"},[vantUpload]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
-            const item = createElement('div',{props:{},class:"uploaded-item"},[Img,del]);
+            const item = createElement('div',{props:{},class:itemClass},[Img,del]);
             picList.push(item);
         }); 
         const ul = createElement('ul',{props:{}},[picList]);
@@ -349,6 +358,42 @@ export default {
                 text-align: center;
                 line-height: 2rem;
             }
+
+        }
+        .uploaded-item-lg{
+            display: inline-block;
+            position: relative;
+            margin-right: 0.1rem;
+            width: 100%;
+            height: 4rem;
+            overflow: hidden;
+            &:hover{
+                &>i{
+                    opacity:1;
+                    transition: opacity .5s;
+                }
+            }
+            &>i{
+                color: #999;
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 0.5rem;
+                opacity:1;
+            }
+            .uploaded-child{
+                width: 100%;
+                text-align: center;
+                line-height: 4rem;
+            }
+        }
+        .video{
+            font-size: 1rem;
+            color: #7c808f;
+            line-height: 1rem;
+            margin-bottom: 1.76rem;
+            margin-left: .3rem;
+            display: inline-block;
         }
     }
     .record{
@@ -366,6 +411,9 @@ export default {
                 color:#ed2b2c;
             }
         }
+    }
+    .dsn{
+        display:none !important;
     }
 </style>
 

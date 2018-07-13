@@ -122,6 +122,10 @@
                         accept:"image/*",
                         transformConfig:{
                             transformMode:'list'
+                        },
+                        option:{
+                            theme:"card",
+                            defaultAdd:true
                         }
                     }, //积木属性
                     animation: [{ //动画
@@ -159,6 +163,11 @@
                     aliasName: '添加视频', 
                     attributes: {
                         accept:"video/*",
+                        option:{
+                            theme:"card",
+                            max:1,//最大上传个数
+                            replace:true//超过最大上传后，是否替换
+                        }
                     }, //积木属性
                     animation: [{ //动画
                     }],
