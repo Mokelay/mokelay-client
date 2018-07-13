@@ -219,7 +219,7 @@ export default {
             }
         }
         var itemClass = "uploaded-item";
-        if(t.valueBase.length >= t.option.max){
+        if(t.valueBase.length >= t.option.max && t.option.theme == "card"){
             className = "dsn";
             itemClass = t.valueBase.length == 1?"uploaded-item-lg":itemClass;
         }

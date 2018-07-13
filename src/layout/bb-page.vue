@@ -192,7 +192,7 @@
           const appName = data['name'];
           const companyName = data['companyName'];
           // pageName + appName + 公司名
-          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+companyName||'';
+          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+(companyName||'');
         });
       },
       refresh:function(){
