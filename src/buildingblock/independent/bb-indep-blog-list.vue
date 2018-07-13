@@ -32,6 +32,7 @@
   				@praiseClick="praiseClick(user)"
   				:greatNumberShow="user.greatNumber"
   				:praiseColor="user.greatStateNumber"
+  				:shareConfig="user.shareConfig"
   				> 
   			</bb-indep-blog-action>
   		</div>  	
