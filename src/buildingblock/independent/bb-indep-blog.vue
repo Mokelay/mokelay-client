@@ -321,6 +321,7 @@ export default {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
                         t.user = value.currentRecords[0];
+                        t.user.content = _TY_Tool.transferContent(value.currentRecords[0].content);
                     });
                 }, function (code, msg) {
                 });
