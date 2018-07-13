@@ -158,6 +158,7 @@ export default {
                     lingHeight:"30px",
                     letterSpacing:0,
                     textAlign:'left',
+                    wordBreak:"break-all",
     			}
     		}    	
     	},
@@ -310,6 +311,7 @@ export default {
                 'line-height':t.contentWriteConfig.lingHeight,
                 'letter-spacing':t.contentWriteConfig.letterSpacing,
                 'text-align':t.contentWriteConfig.textAlign,
+                'word-break':t.contentWriteConfig.wordBreak,
             }
             return styles;        
         },     
