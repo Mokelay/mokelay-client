@@ -280,11 +280,10 @@
  				this.showPop = false;
  			},
  			//弹框确定点击事件
- 			customPopSubmit:function(){
+ 			customPopSubmit:function(){ 				
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
-
  				if(this.customWriteShow){
  					//点击时将增加的数组放置于原数组前
 	 				var c = this.customWriteShow;
@@ -307,6 +306,7 @@
  				};
  				//清空输入框
  				this.valueBase = null;
+ 				this.$emit("customPopSubmit");
  			},
  			//点击自定义的事件
  			customPopShow:function(key){
