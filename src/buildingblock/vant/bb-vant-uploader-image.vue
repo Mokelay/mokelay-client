@@ -152,9 +152,9 @@ export default {
             t.uploadUrl = apiUrl;
         };
         t.wx = _TY_Tool.wx;
-        if(t.wx && t.option.defaultAdd){
-            t.wxChooseImage();
-        }
+        // if(t.wx && t.option.defaultAdd){
+        //     t.wxChooseImage();
+        // }
     },
     render: function(createElement){
         const t = this;
