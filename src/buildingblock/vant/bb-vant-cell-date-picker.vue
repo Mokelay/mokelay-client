@@ -55,8 +55,8 @@ import 'vant/lib/cell/style';
                         type:"date",
                         minDate:"1989/01/01",
                         maxDate:"3000/01/01",
-                        minHour:0,
-                        maxHour:0
+                        minHour:"0",
+                        maxHour:"0"
                     }
                 }
             },
@@ -101,6 +101,7 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
+            _TY_Tool.buildDefaultValTpl(t,"valueBase");
         },
         //事件click
         methods: {

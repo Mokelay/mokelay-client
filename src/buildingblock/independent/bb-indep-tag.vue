@@ -234,21 +234,44 @@
 	                });
 	            }
 	        },
-			//点击事件
+			//父级点击事件
 		 	toggle:function(tag) {
 		 		Vue.set(tag,'show',true);
-		 		Vue.set(tag,'isCheckColor',true);
-		 		//console.log(tag.value);
-		 		var val = tag.value;
-		 		this.tagData.push(val);
+		 		if(tag.isCheckColor == true){
+		 			Vue.set(tag,'isCheckColor',false);
+		 			var val = tag.value;
+		 			var j = 0;
+		 			for(var i = 0;i < this.tagData.length;i++){
+		 				if(this.tagData[i] == val){
+		 					j = i;
+		 				}
+		 			};
+		 			this.tagData.splice(j,1);
+		 		}else{
+		 			Vue.set(tag,'isCheckColor',true);
+		 			var val = tag.value;
+		 		    this.tagData.push(val);	
+		 		};	 		
 		 		var valData = this.tagData;
 				this.$emit("toggle",tag,valData);
 			},
+			//子集点击事件
 			toggleClass:function(child){
-				Vue.set(child,'isCheckColor',true);
-				//console.log(child.value);
-				var val= child.value;
-				this.tagData.push(val);
+				if(child.isCheckColor == true){
+					Vue.set(child,'isCheckColor',false);
+		 			var val = child.value;
+		 			var j = 0;
+		 			for(var i = 0;i < this.tagData.length;i++){
+		 				if(this.tagData[i] == val){
+		 					j = i;
+		 				}
+		 			};
+		 			this.tagData.splice(j,1);
+				}else{
+					Vue.set(child,'isCheckColor',true);
+					var val= child.value;
+				    this.tagData.push(val);
+				};
 				var valData = this.tagData;
 				this.$emit("child",child,valData);
 			},

@@ -72,7 +72,8 @@ import 'vant/lib/cell/style';
             },
             getLocationName(latitude,longitude){
                 const t = this;
-                const ak = "qioiIjiHhNBq1DvY4ogShy4e";
+                //const ak = "qioiIjiHhNBq1DvY4ogShy4e";
+                const ak = "HycR3XEV2OG3zLRM6AF2jo2iBsjgiqVo";  //xlx
                 const url = `http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=${latitude},${longitude}&output=json&pois=1&ak=${ak}`;
                 require.ensure(['jsonp'], function (require) {
                     const jsonp = require('jsonp');
