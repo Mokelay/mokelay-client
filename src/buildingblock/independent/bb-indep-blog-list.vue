@@ -1,6 +1,6 @@
 <template>
   <div class="bb-indep-blog">
-  	<div class="content" v-for="user in blogs">
+  	<div class="content" v-for="(user,key) in blogs" :key="key">
   		<div class="blogLeft"> 
   			<img :src="user.useImg" :style="userImgStyle">
   		</div>
@@ -28,8 +28,10 @@
 				</span>
   			</div>
   			<bb-indep-blog-action 
+                :blogData="user"
+                :greatState="1"
   				@replyClick="replyClick(user)"
-  				@praiseClick="praiseClick(user)"
+  				@praiseClick="praiseClick"
   				:greatNumberShow="user.greatNumber"
   				:praiseColor="user.greatStateNumber"
   				:shareConfig="user.shareConfig"
@@ -363,12 +365,13 @@ export default {
         	this.$emit("joinBlogDetails",blogId,practiveId);
         },
         //点赞事件
-        praiseClick:function(user){        	
+        praiseClick:function(t){  
+            const user = t.blogData;
+            const greatState = t.realGreatState	
         	var clock_in_id = user.log_id;
         	var theme_id =user.practiveId;
-        	var greatState= user.greatState;
         	var param = {  
-				theme_id:theme_id, //主题id
+				theme_id:greatState?theme_id:"", //主题id
 				clock_in_id:clock_in_id , //打卡id
 			};
 			this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
