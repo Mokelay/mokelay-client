@@ -193,7 +193,7 @@ export default {
     				borderRadius:"",
     				fontFamily:'',
                     fontSize:'12px',
-                    fontColor:'rgb(61, 168, 245)',
+                    fontColor:'#576B95',
                     bold:false ,
                     italic:false ,
                     lingHeight:"20px",
@@ -418,6 +418,7 @@ export default {
         	this.replyUid = reply.replyUid;
         	this.parent_id = comment.id;
         },
+        //点击提交
         replySubmit:function(){
         	var t = this;
         	var replyContent = this.valueBase;
@@ -443,16 +444,19 @@ export default {
 	            }
 	            t.uploadUrl = apiUrl;
 	        };
-			/*t.uploadUrl = "http://ty.saiyachina.com/config/xlx_c_comment";*/
 			_TY_Tool.post(t.uploadUrl,param).then(response=>{
                this.blogWriteReplyShow = false;
                t.getData();
                t.replyData();
+               this.valueBase = "";
             });
         	
         },
-        //提交信息
-
+        //外部调用输入框
+        commentClick:function(){
+        	this.blogWriteReplyShow = true; 
+        	this.parent_id = 0;      	
+        },
     }
 }
 </script>
@@ -463,7 +467,7 @@ export default {
 		height:auto;
 		display:flex;
 		justify-content:left;
-		margin:10px 0 40px 0;
+		margin:10px 0 10px 0;
 		font-size:14px;
 
 	}
@@ -476,6 +480,7 @@ export default {
 	}
 	.replycomment{
 		line-height:20px;
+		margin-left:5px;
 	}
 	.blogWriteReply{
 		width:100%;

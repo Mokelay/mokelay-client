@@ -16,8 +16,11 @@
         </div>
         <div v-if="transformConfig.transformMode == 'list'" class="bb-photos-list" v-swipeleft="swipe" v-swiperight="swipe">
             <span class="photo-item" v-for="(pic,index) in realFields" :key="index" :style="{width:itemWidth}">
-                <img :src="pic" :alt="pic">
+                <img :src="pic" :alt="pic" @click="showPic(pic)">
             </span>
+            <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="dialogShow" @update:isShow="closeDia">
+                <img :src="nowPic" :alt="nowPic">
+            </bb-indep-dialog>
         </div>
     </div>
 
@@ -31,10 +34,7 @@
                 [https://a.jpg,https://b.jpg]
             */
             value:{
-                type:[Array,String],
-                default:function(){
-                    return ["http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg","http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg","http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg","http://img1.dev.rs.com/g1/M00/01/43/wKh6ylqTybWAMEy3AADn4F3GBWs590.jpg"]
-                }
+                type:[Array,String]
             },
             /*
                 fields 图片地址数组或者','隔开的字符串
@@ -79,7 +79,9 @@
                 lastItem:null,
                 nowItem:0,
                 nextItem:null,
-                itemWidth:"100%"
+                itemWidth:"100%",
+                dialogShow:false,
+                nowPic:""
             }
         },
         computed:{
@@ -231,6 +233,14 @@
                             break;
                     }
                 }
+            },
+            closeDia(){
+                this.dialogShow = false;
+            },
+            showPic(pic){
+                this.nowPic = pic;
+                this.dialogShow = true;
+
             }
         }
     }
@@ -255,6 +265,7 @@
             .photo-item{
                 display: inline-block;
                 margin: 0.1rem;
+                float: left;
             }
         }
     }

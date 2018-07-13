@@ -54,12 +54,12 @@ export default {
     		type:Object,
     		default:function(){
     			return {
-    				margin:"8px 5px 0 5px",
+    				margin:"8px 15px 0 10px",
     				padding:"0",
     				height:"15px",
     				width:"15px",
     				display:"inline-block",
-    				fontSize:"18px",
+    				fontSize:"21px",
     			}
     		}    	  
     	},

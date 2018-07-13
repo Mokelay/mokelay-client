@@ -73,6 +73,10 @@
             }
         },
         watch: {
+            value(val){
+                this.valueBase = val;
+                this.relValueBase =val;
+            }
         },
         created: function () {
         },

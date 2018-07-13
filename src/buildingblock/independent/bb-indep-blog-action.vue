@@ -10,6 +10,7 @@
                     :imgUrl="shareConfig.imgUrl"
                     :dataUrl="shareConfig.dataUrl"
                     :option="shareConfig.option"
+                    class="actionIconStyle"
                     ></bb-indep-share>
 				<span :style="shareTextStyle">{{shareText}}</span>
 			</b>
@@ -144,6 +145,10 @@ export default {
                     }
                 }
             }
+        },
+        //点赞状态  0未  1已点
+        greatStateNumber:{
+            type:[Boolean,Number]
         }
     },
    	data(){ 
@@ -155,9 +160,25 @@ export default {
         	praiseText:this.praiseTextShow,
         	blog:this.blogData,
         	greatNumber:this.greatNumberShow,
-    		}
+            realGreatState:this.greatStateNumber
+    	}
       },
-    watch:{}, 
+    watch:{
+    	/*greatNumberShow:{
+    		handler:function(){
+    			console.log(greatNumberShow);
+    		},
+    		deep:true,
+    	},*/
+    	greatNumberShow(curVal,oldVal){
+    		debugger
+    		console.log(curVal,oldVal);
+　　　　　　this.greatNumber = curVal;
+　　　　 },
+        greatStateNumber(val){
+            this.realGreatState = val;
+        }
+    }, 
     computed:{
         shareTextStyle:function(){
             const t = this;
@@ -199,8 +220,16 @@ export default {
     	},
     	//点赞事件
     	praiseClick:function(val){
-    		this.isColor = this.isColor?false:true;
-    		this.$emit("praiseClick",val);
+    		var greatState = this.blogData.greatState;
+            debugger
+    		if( greatState == 0){
+    			greatState = 1;
+    		}else{
+    			greatState = 0;
+    		};
+            debugger
+            this.realGreatState = greatState;
+    		this.$emit("praiseClick",this);
     	},
     	//点赞动态数据获取
         getData() {
@@ -209,14 +238,15 @@ export default {
                 _TY_Tool.getDSData(t.praiseDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.blogs = value.currentRecords[0].greatState;
+                       // console.log(value);
+                        /*t.blogs = value.currentRecords[0].greatState;
                         t.greatNumber = value.currentRecords[0].greatNumber;
                         if(t.blogs == 0){
                         	t.blogs = false;
                         }else{
                         	t.blogs = true;
                         }
-  						t.isColor = t.blogs;
+  						t.isColor = t.blogs;*/
                     });
                 }, function (code, msg) {
                 });
@@ -226,6 +256,7 @@ export default {
         blogActionPopHide:function(){
         	this.blog.blogActionPopShow = false;
         },
+        //
 
      }
 }
@@ -283,5 +314,8 @@ export default {
 		display:inline-block;
 		text-align:center;
 		line-height:25px;
+	}
+	.actionIconStyle{
+		font-size:24px;
 	}
 </style>

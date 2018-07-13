@@ -4,6 +4,7 @@
         v-model="valueBase"
         :placeholder="placeholder"
         :show-action="showAction"
+        :background="background"
         @search="onSearch"
         @cancel="onCancel"
       />
@@ -47,6 +48,10 @@ import 'vant/lib/search/style';
             searchBtnText:{
                 type:String,
                 default:"搜索"
+            },
+            //搜索框背景色 默认是#f2f2f2
+            background:{
+                type:String
             }
         },
         data() {

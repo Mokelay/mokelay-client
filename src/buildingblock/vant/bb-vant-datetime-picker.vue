@@ -75,7 +75,7 @@ export default {
     },
    data(){ 
         return{
-          valueBase:typeof this.value == "string"?new Date(this.value):this.value,
+          valueBase:this.value,
           title:this.option.title,
           confirmButtonText:this.option.confirmButtonText,
           realMaxDate:new Date(this.maxDate),
@@ -93,7 +93,6 @@ export default {
     mounted:function(){
       let t=this;
       _TY_Tool.buildDefaultValTpl(t,"valueBase");
-      t.valueBase = new Date(t.valueBase);
     },
     methods:{
          //确认  

@@ -214,6 +214,8 @@
           var interactives = data['interactives']?data['interactives']['list']:[];
           //如果是根页面，修改页面的title
           if(t.root){
+            //统一注册微信
+            _TY_Tool.get_wx();
             t.resetPageTitle(page.name);
           }
           if(page['template']){

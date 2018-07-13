@@ -76,7 +76,7 @@
       },
       props: {
         //是否可改变大小
-        resize:{
+        resizable:{
           type:Boolean,
           default:true
         },
@@ -163,7 +163,10 @@
                 mousedown:function(e){
                   // 鼠标按下，计算当前元素距离可视区的距离
                   let oDiv = e.srcElement;
-
+                  if(!t.resizable){
+                    //不可改变大小
+                    return;
+                  }
                   let srcX = e.clientX;
                   let srcY = e.clientY;
                   const srcWidth = t.p_activityData.size.width;

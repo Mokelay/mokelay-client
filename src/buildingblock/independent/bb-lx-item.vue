@@ -1,7 +1,7 @@
 <template>
 	<ul class="lxItemBg"> 
 		<li class="itemList" v-for="(item,key) in items" :page="pageData" >
-			<bb-vant-cell-swipe :content="rightContent" :key="key" @onClose="onClose(item)"> 
+			<bb-vant-cell-swipe :content="rightContent" @right="onClose(key)" :ref="key + '_ref'" :key="key"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
 			    		<img :src="item.leftImgShow">
@@ -15,13 +15,13 @@
 			    			</b>
 			    			<b class="centerContentTime">	
 			    				<i :class="userNumberIcon"  :style="userNumberIconStyle"></i>
-			    				<strong :style="userNumberStyle">{{userNumber}}</strong>
+			    				<strong :style="userNumberStyle">{{item.userNumber}}</strong>
 			    			</b>	
 			    		</p>
 			    	</span>
 			    	<bb-layout-seriation :content="content" v-show="showRightContent"></bb-layout-seriation>
-			    	<b @click="clickUrl(item)">练习</b>
-			    	<p>{{item.theme_id}}</p>			    	
+			    	<b @click="clickUrl(item)" class="rightStyle">练习</b>
+			    	<p class="display">{{item.theme_id}}</p>			    	
 			    </div>	    	
 			</bb-vant-cell-swipe>
 		</li>
@@ -102,6 +102,7 @@ import Vue from 'vue'
                         fontWeight:"normal",
                         letterSpacing:"",
                         lineHeight:"20px",
+                        height:"20px",
                         //默认换行
                         //wordBreak:"break-word",
                         //超出显示省略号
@@ -229,8 +230,9 @@ import Vue from 'vue'
                         aliasName:'删除',               //中文名称
                         group:'right',                   //积木分组 表单项显示的位置
                         attributes:{
+                            text:"删除",
                         	button:{
-                        		selectText:"删除",
+                        		text:"删除",
                         	}
                         },             
                         animation:[],
@@ -245,7 +247,7 @@ import Vue from 'vue'
                             },
                             size:{
                             	width:"68px",
-                            	height:"59px",
+                            	height:"100%",
                             }          
                         }
                     }],
@@ -322,6 +324,7 @@ import Vue from 'vue'
                     "word-break":t.contentTimeStyleConfig.wordBreak,
                     "overflow":t.contentTimeStyleConfig.overflow,
                     "text-overflow":t.contentTimeStyleConfig.textOverflow,
+                    "height":t.contentTimeStyleConfig.height,
                 }
                 return styles;   
             },
@@ -376,9 +379,9 @@ import Vue from 'vue'
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        //console.log(value);
+	                        console.log(value);
 	                        t.items = value.itemList;
-	                        t.userNumber = value.userNumber;	    
+	                        //t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
 	                        t.pageSize = value.pageSize; //当前页总条数
 	                        t.totalPage = value.totalPages;  //总页数
@@ -415,24 +418,26 @@ import Vue from 'vue'
 	        	}	            
 	        },
 	        //右侧滑动点击删除
-	        onClose(right,instance,item){
+	        onClose(key){
+                const t = this;
 				//var id = this.pageSize;
 	        	//console.log(item.theme_id);
 	        	//debugger
 	        	//
 	        	//console.log(id);
+                const item = t.items[key];
 	        	var param = {
-	        		id:11777,
+	        		id:item.theme_id
 	        	};
-	        	this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_delete_member`;
-	        	_TY_Tool.post(this.uploadUrl,param).then(response=>{
-	               this.getItem();
-	               //instance.close();
-
+	        	t.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_delete_member`;
+                t.$refs[key + '_ref'][0].instance.close();
+	        	_TY_Tool.post(t.uploadUrl,param).then(response=>{
+	               t.getItem();
 	            }); 
 	        },
 	        clickUrl(item){
-	        	console.log(item.theme_id);
+	        	var id = item.theme_id;
+	        	this.$emit("clickUrl",id);
 	        }
 
         }
@@ -494,11 +499,13 @@ import Vue from 'vue'
     	text-align:center;
     	font-size:14px;
     	color:#353535;
+    	background:#fff;
     }
     .itemList{
     	width:100%;
     	margin:0;
     	border-top:1px solid #eee;
+    	background:#fff;
 
     }
     .itemList:nth-child(1){
@@ -506,13 +513,19 @@ import Vue from 'vue'
     }
     .lxItemBg{
     	background:#fff;
-    	margin:10px 0 10px 0;
+    	margin:0px 0 10px 0;
     }
     .itemContent{
     	padding:10px 5%;
     }
     .rightStyle{
     	font-size:14px;
+    	border-radius:0;
+    	border:1px solid #266FB7; 
+    	padding:3px 10px;
+    	font-weight:normal;
+    	color:#266FB7;
+    	text-align:center;
     }
     .display{
     	display:none;
