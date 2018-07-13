@@ -13,7 +13,8 @@
   				</h5>
   			</div> 
   			<div class="blogContent"> 
-  				<p :style="contentWrite">{{user.content}}</p>
+  				<p :style="contentWrite">{{user.text}}</p>
+  				<bb-layout-seriation :content="user.content"></bb-layout-seriation>
   				<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 					<span class="blogJoinPracticeCenter"> 
