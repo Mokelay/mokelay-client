@@ -15,7 +15,7 @@
 			    			</b>
 			    			<b class="centerContentTime">	
 			    				<i :class="userNumberIcon"  :style="userNumberIconStyle"></i>
-			    				<strong :style="userNumberStyle">{{userNumber}}</strong>
+			    				<strong :style="userNumberStyle">{{item.userNumber}}</strong>
 			    			</b>	
 			    		</p>
 			    	</span>
@@ -102,6 +102,7 @@ import Vue from 'vue'
                         fontWeight:"normal",
                         letterSpacing:"",
                         lineHeight:"20px",
+                        height:"20px",
                         //默认换行
                         //wordBreak:"break-word",
                         //超出显示省略号
@@ -323,6 +324,7 @@ import Vue from 'vue'
                     "word-break":t.contentTimeStyleConfig.wordBreak,
                     "overflow":t.contentTimeStyleConfig.overflow,
                     "text-overflow":t.contentTimeStyleConfig.textOverflow,
+                    "height":t.contentTimeStyleConfig.height,
                 }
                 return styles;   
             },
@@ -379,7 +381,7 @@ import Vue from 'vue'
 	                        const {dataKey, value} = item;
 	                        console.log(value);
 	                        t.items = value.itemList;
-	                        t.userNumber = value.userNumber;	    
+	                        //t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
 	                        t.pageSize = value.pageSize; //当前页总条数
 	                        t.totalPage = value.totalPages;  //总页数
