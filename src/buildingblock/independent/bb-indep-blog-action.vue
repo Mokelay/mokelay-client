@@ -145,6 +145,10 @@ export default {
                     }
                 }
             }
+        },
+        //点赞状态  0未  1已点
+        greatStateNumber:{
+            type:[Boolean,Number]
         }
     },
    	data(){ 
@@ -156,7 +160,8 @@ export default {
         	praiseText:this.praiseTextShow,
         	blog:this.blogData,
         	greatNumber:this.greatNumberShow,
-    		}
+            realGreatState:this.greatStateNumber
+    	}
       },
     watch:{
     	/*greatNumberShow:{
@@ -168,8 +173,11 @@ export default {
     	greatNumberShow(curVal,oldVal){
     		debugger
     		console.log(curVal,oldVal);
-　　　　　　this.greatNumber = oldVal;
-　　　　},
+　　　　　　this.greatNumber = curVal;
+　　　　 },
+        greatStateNumber(val){
+            this.realGreatState = val;
+        }
     }, 
     computed:{
         shareTextStyle:function(){
@@ -212,13 +220,16 @@ export default {
     	},
     	//点赞事件
     	praiseClick:function(val){
-    		var greatState = this.blogs;
-    		if( greatState == true){
+    		var greatState = this.blogData.greatState;
+            debugger
+    		if( greatState == 0){
     			greatState = 1;
     		}else{
     			greatState = 0;
     		};
-    		this.$emit("praiseClick",val,greatState);
+            debugger
+            this.realGreatState = greatState;
+    		this.$emit("praiseClick",this);
     	},
     	//点赞动态数据获取
         getData() {
