@@ -14,7 +14,11 @@
   			</div> 
   			<div class="blogContent"> 
   				<p :style="contentWrite">{{user.text}}</p>
+<<<<<<< HEAD
   				<bb-layout-seriation :content="user.content"></bb-layout-seriation>
+=======
+                <bb-layout-seriation :content="user.content"></bb-layout-seriation>
+>>>>>>> TY2.0
   				<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 					<span class="blogJoinPracticeCenter"> 
