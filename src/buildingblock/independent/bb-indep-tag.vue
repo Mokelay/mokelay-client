@@ -1,7 +1,7 @@
 <template>
 	<div class="tagContent"> 
 		<span class="tagOneLabel" v-for="tag in tags" > 
-			<b :style="tagOneLabelWrite" @click="toggle(tag)" v-bind:class="{checkColor:tag.isCheckColor}" >
+			<b :style="tag.style || tagOneLabelWrite" @click="toggle(tag)">
 				{{tag.title}}
 			</b>
 			<span v-show="tag.show">
@@ -19,8 +19,7 @@
 			:style="tagTwoLabelWrite"
 			v-for="(custom,key) in customs" 
 			@click="customPopShow(key)"
-			class="checkColor"
-			
+			class="checkColor"			
 			>
 			{{custom.writeShow}}
 			</b>
@@ -220,6 +219,11 @@
 		mounted:function(){
           	this.getTag();
         },
+        watch:{
+        	tagsArray(val){
+        		this.tags = val
+        	}
+        },
 		methods:{
 			//动态数据
 			getTag() {
@@ -295,8 +299,7 @@
 	 				}
  				}else{
  					const arr = this.customEditKey == "add"?null:this.customs.splice(this.customEditKey,1);
- 				}
- 				
+ 				}; 				
  				//自定义标签不能超过三个
  				var l =this.customs.length;
  				if(l > 3){
@@ -314,6 +317,32 @@
  				this.customEditKey = key
  				this.valueBase = key == "add"?"":this.customs[key]['writeShow'];
  			},
+ 			//外部传值修改tag样式
+ 			setNumber:function(...params){
+ 				const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        this.valData = param.arguments;
+                        var tagData = this.valData;
+                        var tagsArray = this.tagsArray;
+                        tagData.forEach((item,index) =>{
+                        	tagsArray.forEach((tagItem,tagIndex)=>{
+                        		if(tagItem.value == item.value){
+                        			debugger
+                        			tagItem.style = t.tagOneLabelWrite;
+                        			tagItem.style.borderColor = "#5F9BD5";
+                        			tagItem.style.color = "#5F9BD5";
+                        			console.log(tagItem.value);
+                        			t.tags = t.tagsArray;
+                        			//tagItem.value.isCheckColor = true;
+                        		}
+                        	});
+				        }); 
+                        console.log(this.tagsArray);
+                    }
+                })        		
+        	},
+
 
 
 
