@@ -23,6 +23,9 @@ util.invoke = function(options) {
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
                 //TY未登录
                 location.href = document.location.protocol + "//" + document.location.host + "/#/ty-login";
+            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -410) {
+                //TY b端 未登录
+                location.href = document.location.protocol + "//" + document.location.host + "/#/ty_b_login";
             } else {
                 resolve(response);
             }

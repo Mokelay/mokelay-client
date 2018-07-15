@@ -182,15 +182,17 @@
       //修改页面的title属性 metadata
       resetPageTitle:function(pageName){
         let t=this;
-        const appAlias = t.$route.params.appAlias;
+        const appAlias = t.$route.params.appAlias||'';
+        const pageAlias = t.$route.params.pageAlias||'';
         Util.get(window._TY_ContentPath+"/ty_read_app_name_and_company_name",{
-          appAlias:appAlias
+          appAlias:appAlias,
+          pageAlias:pageAlias
         }).then(function(response){
           var data = response['data']['data'];
           const appName = data['name'];
           const companyName = data['companyName'];
           // pageName + appName + 公司名
-          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+companyName;
+          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+(companyName||'');
         });
       },
       refresh:function(){

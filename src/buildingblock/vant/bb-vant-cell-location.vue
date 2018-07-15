@@ -35,7 +35,7 @@ import 'vant/lib/cell/style';
                 type:Object,
                 default:function(){
                     return {
-                        scale: 1
+                        scale: 28
                     };
                 }
             }
@@ -72,7 +72,8 @@ import 'vant/lib/cell/style';
             },
             getLocationName(latitude,longitude){
                 const t = this;
-                const ak = "qioiIjiHhNBq1DvY4ogShy4e";
+                //const ak = "qioiIjiHhNBq1DvY4ogShy4e";
+                const ak = "HycR3XEV2OG3zLRM6AF2jo2iBsjgiqVo";  //xlx
                 const url = `http://api.map.baidu.com/geocoder/v2/?callback=renderReverse&location=${latitude},${longitude}&output=json&pois=1&ak=${ak}`;
                 require.ensure(['jsonp'], function (require) {
                     const jsonp = require('jsonp');
@@ -86,7 +87,6 @@ import 'vant/lib/cell/style';
                             name: t.valueBase.name, // 位置名
                             address: t.valueBase.address, // 地址详情说明
                             scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
-                            infoUrl: t.option.infoUrl // 在查看位置界面底部显示的超链接,可点击跳转
                         });
                         t.$emit("change",t.valueBase);
                         t.$emit("input",t.valueBase);
