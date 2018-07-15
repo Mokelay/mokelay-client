@@ -23,6 +23,9 @@ util.invoke = function(options) {
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
                 //TY未登录
                 location.href = document.location.protocol + "//" + document.location.host + "/#/ty-login";
+            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -410) {
+                //TY b端 未登录
+                location.href = document.location.protocol + "//" + document.location.host + "/#/ty_b_login";
             } else {
                 resolve(response);
             }
@@ -1313,7 +1316,7 @@ util.isWX = function() {
 
 //注册微信jssdk
 util.get_wx = function() {
-    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone']
+    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone"]
     const appUrl = encodeURI(window.location.href);
     const configUrl = `${_TY_ENV.apiHost}/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
     console.log("configUrl:", configUrl);

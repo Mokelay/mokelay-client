@@ -5,13 +5,13 @@ if (window) {
 
 var env = {
 	local: {
-		name: 'local',
-		apiHost: "http://longyan.dev.rs.com",
-		h5Host: CurrentDomain,
-		ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
+		name: 'local1',
+		apiHost: "http://ty.saiyachina.com",
+		ssoURL: CurrentDomain + "/#/ty-login",
 		hosts: {
-			'default': "http://longyan.dev.rs.com"
-		}
+			'default': "http://ty.saiyachina.com"
+		},
+		home: "/home_ln"
 	},
 	prd: {
 		name: 'prd',

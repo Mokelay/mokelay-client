@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-indep-video">
+    <div class="bb-indep-video" :id="id">
         <div class="iframe bb-video" v-if="playConfig">
             <div v-if="!show" class="button-play" v-tap="showDia"><img :src="playConfig.cover" alt=""><i class="ty-icon_qiyong ty-font"></i></div>
             <div v-if="show && playConfig.model == 'static'" class="video" v-html="realUrl"></div>
@@ -8,13 +8,13 @@
                 <div class="video" v-html="realUrl"></div>
             </div>
         </div>
-        <div class="local" v-if="value">
-            <div  v-for="(realUrlItem,key) in realUrl" :key="key">
-                <video class="" controls="controls" :src="realUrlItem"></video>
-                <!-- <i class="ty-icon_qiyong ty-font" v-tap="showDia"></i> -->
-                <!-- <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
+        <div class="local-video" v-if="value" id="video">
+            <div  v-for="(realUrlItem,key) in realUrl" :key="key" class="video-item" :style="{width:itemWidth}">
+                <video v-if="realUrl.length == 1" id="video" class="single-video" controls="controls" :src="realUrlItem"></video>
+                <i v-if="realUrl.length > 1" class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
+                <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
                     <video class="" controls="controls" :src="realUrlItem"></video>
-                </bb-indep-dialog> -->
+                </bb-indep-dialog>
             </div>
 
         </div>
@@ -27,7 +27,8 @@
         props: {
             //音频地址 非iframe嵌入式音频地址
             value:{
-                type:[String,Array]
+                type:[String,Array],
+                default:"http://www.w3school.com.cn/i/movie.ogg"
             },
             /*
                 transformConfig 样式
@@ -49,7 +50,11 @@
         data() {
             return {
                 realUrl:typeof this.value == "object"?this.value:[this.value],
-                show:false
+                show:false,
+                id:_TY_Tool.uuid(),
+                covers:[],
+                itemWidth:"100%",
+
             }
         },
         computed:{
@@ -64,6 +69,8 @@
             t.getData();
         },
         mounted:function(){
+            this.videoCover();
+            this.setListItemWidth();
         },
         methods: {
             //获取视频地址
@@ -74,6 +81,7 @@
                         map.forEach((val,key)=>{
                             const dataKey = val.dataKey
                             t.realUrl = val.value
+                            t.videoCover()
                         })
                     }, function (code, msg) {
                     });
@@ -84,7 +92,41 @@
             },
             closeDia:function(){
                 this.show = false;
-            }
+            },
+            //获取视频封面
+            videoCover(){
+                const t = this;
+                t.realUrl.forEach((url,key)=>{
+                    const video = document.createElement("video");//创建video
+                    video.setAttribute("src",url);
+                    video.setAttribute("controls","controls");
+                    const videocanvas = document.createElement("canvas");//创建video
+                    videocanvas.width = 100 * 0.8;
+                    videocanvas.height = 100 * 0.8;
+                    videocanvas.getContext('2d').drawImage(video, 0, 0, videocanvas.width, videocanvas.height);
+                    const img = videocanvas.toDataURL("image/png");
+                    t.covers.push(img);
+                })
+            },
+            //根据数量计算宽度
+            setListItemWidth(){
+                const t = this;
+                if(t.realFields){
+                    const lg = t.realFields.length;
+                    t.itemWidth = "100%";
+                    switch(lg){
+                        case 1:
+                            t.itemWidth = "calc(100% - 0.2rem)";
+                            break;
+                        case 2:
+                            t.itemWidth = "calc(50% - 0.2rem)";
+                            break;
+                        default:
+                            t.itemWidth = "calc(33.3% - 0.2rem)";
+                            break;
+                    }
+                }
+            },
         }
     }
 </script>
@@ -141,6 +183,24 @@
             img{
                 flex: 1;
             }
+        }
+    }
+    .local-video{
+        font-size: 2rem;
+        text-align: center;
+        video{
+            height: auto;
+            width: 100%;
+            max-height: 4rem;
+            margin: auto;
+            vertical-align: bottom;
+        }
+        .video-item{
+            text-align: center;
+        }
+        .single-video{
+            width: 100%;
+            height: 4rem;
         }
     }
 </style>

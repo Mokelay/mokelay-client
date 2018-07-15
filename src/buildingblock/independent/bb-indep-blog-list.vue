@@ -1,6 +1,6 @@
 <template>
   <div class="bb-indep-blog">
-  	<div class="content" v-for="user in blogs">
+  	<div class="content" v-for="(user,key) in blogs" :key="key">
   		<div class="blogLeft"> 
   			<img :src="user.useImg" :style="userImgStyle">
   		</div>
@@ -20,7 +20,7 @@
   			<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 				<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 				<span class="blogJoinPracticeCenter"> 
-					<p>{{user.practiceTitle}}</p>
+					<p class="practiceTitleStyle">{{user.practiceTitle}}</p>
 					<p class="practiceNumberStyle">{{user.practiceNumber}}人参加</p>
 				</span>
 				<span class="blogJoinPracticeRight">
@@ -28,10 +28,13 @@
 				</span>
   			</div>
   			<bb-indep-blog-action 
+                :blogData="user"
+                :greatState="1"
   				@replyClick="replyClick(user)"
-  				@praiseClick="praiseClick(user)"
+  				@praiseClick="praiseClick"
   				:greatNumberShow="user.greatNumber"
   				:praiseColor="user.greatStateNumber"
+                :shareConfig="user.shareConfig"
   				> 
   			</bb-indep-blog-action>
   		</div>  	
@@ -158,6 +161,7 @@ export default {
                     lingHeight:"30px",
                     letterSpacing:0,
                     textAlign:'left',
+                    wordBreak:"break-all",
     			}
     		}    	
     	},
@@ -310,6 +314,7 @@ export default {
                 'line-height':t.contentWriteConfig.lingHeight,
                 'letter-spacing':t.contentWriteConfig.letterSpacing,
                 'text-align':t.contentWriteConfig.textAlign,
+                'word-break':t.contentWriteConfig.wordBreak,
             }
             return styles;        
         },     
@@ -340,7 +345,7 @@ export default {
                         blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                      // console.log("newArry:",newArry);
+                      	console.log("newArry:",newArry);
                         t.blogs = newArry;
                     });
                 }, function (code, msg) {
@@ -360,12 +365,13 @@ export default {
         	this.$emit("joinBlogDetails",blogId,practiveId);
         },
         //点赞事件
-        praiseClick:function(user){        	
+        praiseClick:function(t){  
+            const user = t.blogData;
+            const greatState = t.realGreatState	
         	var clock_in_id = user.log_id;
         	var theme_id =user.practiveId;
-        	var greatState= user.greatState;
         	var param = {  
-				theme_id:theme_id, //主题id
+				theme_id:greatState?theme_id:"", //主题id
 				clock_in_id:clock_in_id , //打卡id
 			};
 			this.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_like`;
@@ -485,6 +491,10 @@ export default {
 	.practiceNumberStyle{
 		color:#888;
 		font-size:12px;
+	}
+	.practiceTitleStyle{
+		width:100%;
+		overflow:hidden;
 	}
 </style>
 

@@ -11,9 +11,9 @@
             <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent" :option="editOption"></bb-layout-seriation-edit>
  			<span class="uploadIcon">
  				<i 
- 				v-for="icon in icons" 
+ 				v-for="(icon,key) in realIcons" 
  				:class="icon.class"
-                @click="addUpload(icon)"
+                @click="addUpload(icon,key)"
                 > 
  				</i>
  			</span>
@@ -68,6 +68,10 @@ export default {
                             accept:"image/*",
                             transformConfig:{
                                 transformMode:'list'
+                            },
+                            option:{
+                                theme:"card",
+                                defaultAdd:true
                             }
                         }, //积木属性
                         animation: [{ //动画
@@ -90,6 +94,11 @@ export default {
                         aliasName: '添加视频', 
                         attributes: {
                             accept:"video/*",
+                            option:{
+                                theme:"card",
+                                max:1,//最大上传个数
+                                replace:true//超过最大上传后，是否替换
+                            }
                         }, //积木属性
                         animation: [{ //动画
                         }],
@@ -266,7 +275,8 @@ export default {
             },
             editOption:{
                 styleType:"swpie"
-            }
+            },
+            realIcons:this.icons
         }
       },
     computed:{
@@ -365,8 +375,11 @@ export default {
         showPicker(){
             this.privacyPicker = true;
         },
-        addUpload(icon){
-            this.realContent.push(icon.content);
+        addUpload(icon,key){
+            const content = _TY_Tool.deepClone(icon.content);
+            content.uuid = _TY_Tool.uuid();
+            this.realContent.push(content);
+            this.realIcons.splice(key,1);
         },
         textareaChange(e){
             this.valueBase.text = e.target.value;

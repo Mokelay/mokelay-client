@@ -1,7 +1,18 @@
+<template>
+    <span class="bb-indep-share">
+        <i :class="'ty ' + option.icon" @click="startShare"></i>
+        <transition name="fade">
+            <img v-show="show" class="shareBg" src="../../libs/imgs/wx_bg/weixin_bg.png" alt="" @click="closDia">
+        </transition>
+    </span>
+</template>
 <script>  
+    import Actionsheet from 'vant/lib/actionsheet';
+    import 'vant/lib/actionsheet/style';
 export default {
     name:"bb-indep-share",
     components:{
+        "van-actionsheet":Actionsheet
     },
     props:{
         //分享标题
@@ -52,7 +63,8 @@ export default {
             realDesc:this.desc,
             realLink:this.link,
             realImgUrl:this.imgUrl,
-            shareArea:this.option.shareArea.split(",")
+            shareArea:this.option.shareArea.split(","),
+            show:false
         };
     },
     mounted: function () {
@@ -79,28 +91,21 @@ export default {
         },
         startShare(){
             const t = this;
-            alert('startShare');
-            // const shareInfo = {
-            //     title:t.realTitle,
-            //     desc:t.realDesc,
-            //     link:t.realLink,
-            //     imgUrl:t.realImgUrl,
-            //     success: function () { 
-            //         t.$emit("shareSuccess")
-            //     },
-            //     cancel: function () { 
-            //         t.$emit("shareFail")
-            //     } 
-            // };
+            t.show = true;
             const shareInfo = {
-                title:"分享标题",
-                desc:"这是分享的测试",
-                link:"http://ty.saiyachina.com/#/home_ln",
-                imgUrl:"https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png", 
+                title:t.realTitle,
+                desc:t.realDesc,
+                link:t.realLink,
+                imgUrl:t.realImgUrl,
+                success: function () { 
+                    t.$emit("shareSuccess")
+                },
+                cancel: function () { 
+                    t.$emit("shareFail")
+                } 
             };
             if(t.wx){
                 alert('in wx');
-                t.wx.onMenuShareAppMessage(shareInfo);
                 t.wx.onMenuShareAppMessage(shareInfo);
                 t.wx.onMenuShareQQ(shareInfo);
                 t.wx.onMenuShareWeibo(shareInfo);
@@ -128,6 +133,23 @@ export default {
             }else{
                 return;
             }
+        },
+        onMenuShareAppMessage(){
+            if(WeixinJSBridge){
+                WeixinJSBridge.invoke('sendAppMessage',{
+                    "img_url": "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
+                    "img_width": "200",
+                    "img_height": "200",
+                    "link": "http://ty.saiyachina.com/#/home_ln",
+                    "desc": "这是测试内容",
+                    "title": "分享标题"
+                }, function(res) {
+                    //_report('send_msg', res.err_msg);  // 这是回调函数，必须注释掉
+                })
+            }
+        },
+        closDia(){
+            this.show = false;
         }
     }
 }
@@ -135,6 +157,14 @@ export default {
 <style lang="less">
     .bb-indep-share{
         font-size:0.5rem;
+        .shareBg{
+            position:fixed;
+            z-index:999;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+        }
     }
 </style>
 

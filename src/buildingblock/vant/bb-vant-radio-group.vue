@@ -131,7 +131,7 @@ import 'vant/lib/radio/style';
     }
     .subTitle{
         color: #999999;
-        font-size: 0.2rem;
+        font-size: 0.3rem;
         margin-left:0.5rem;
     }
     .radioStyle{
