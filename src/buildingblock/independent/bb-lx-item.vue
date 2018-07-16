@@ -379,23 +379,21 @@ import Vue from 'vue'
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        console.log(value);
+	                        //console.log(value);
 	                        t.items = value.itemList;
 	                        //t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
 	                        t.pageSize = value.pageSize; //当前页总条数
-	                        t.totalPage = value.totalPages;  //总页数
-	          
+	                        t.totalPages = value.totalPages; //总条数
+	                       //如果当前页码等于总页码，修改文字显示内容
+				        	if(t.page == t.totalPages){
+				        		//console.log(t.seeMore);
+				        		t.seeMore = "没有更多内容了";
+				        	}
 	                    });
 	                }, function (code, msg) {
 	                });
 	            }
-	            //如果当前页码等于总页码，修改文字显示内容
-	        	var nowPage = this.page;
-	        	var sumPage = this.totalPage;
-	        	if(nowPage == sumPage){
-	        		this.seeMore = "没有更多内容了";
-	        	}	
 	        },
 	        //点击加载更多事件
 	        clickMore(){
@@ -411,21 +409,15 @@ import Vue from 'vue'
 	                });
 	        	};
 	        	//如果当前页码等于总页码，修改文字显示内容
-	        	var nowPage = this.page;
-	        	var sumPage = this.totalPage;
-	        	if(nowPage == sumPage){
+	        	if(t.page == t.totalPages){
 	        		this.seeMore = "没有更多内容了";
 	        	}	            
 	        },
 	        //右侧滑动点击删除
 	        onClose(key){
                 const t = this;
-				//var id = this.pageSize;
-	        	//console.log(item.theme_id);
-	        	//debugger
-	        	//
-	        	//console.log(id);
                 const item = t.items[key];
+                this.$emit("onClose",item);
 	        	var param = {
 	        		id:item.theme_id
 	        	};
@@ -433,7 +425,7 @@ import Vue from 'vue'
                 t.$refs[key + '_ref'][0].instance.close();
 	        	_TY_Tool.post(t.uploadUrl,param).then(response=>{
 	               t.getItem();
-	            }); 
+	            });
 	        },
 	        clickUrl(item){
 	        	var id = item.theme_id;
