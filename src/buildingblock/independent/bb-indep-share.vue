@@ -75,11 +75,6 @@ export default {
         t.realLink = _TY_Tool.tpl(t.link,_TY_Tool.buildTplParams(t));
         t.realImgUrl = _TY_Tool.tpl(t.imgUrl,_TY_Tool.buildTplParams(t));
     },
-    render: function(createElement){
-        const t = this;
-        const shareButton = createElement('i',{class:`bb-indep-share ty ${t.option.icon}`,on:{click:t.startShare}},[]);
-        return shareButton;
-    },
     watch:{
 
     },  
@@ -98,12 +93,15 @@ export default {
                 link:t.realLink,
                 imgUrl:t.realImgUrl,
                 success: function () { 
-                    t.$emit("shareSuccess")
+                    t.$emit("shareSuccess");
+                    _TY_Toast({content:"分享成功！"});
                 },
                 cancel: function () { 
-                    t.$emit("shareFail")
+                    t.$emit("shareFail");
+                     _TY_Toast({content:"分享失败！"});
                 } 
             };
+            console.log("shareInfo:",shareInfo);
             if(t.wx){
                 alert('in wx');
                 t.wx.onMenuShareAppMessage(shareInfo);
