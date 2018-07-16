@@ -171,7 +171,6 @@ export default {
     		deep:true,
     	},*/
     	greatNumberShow(curVal,oldVal){
-    		debugger
     		console.log(curVal,oldVal);
 　　　　　　this.greatNumber = curVal;
 　　　　 },
@@ -221,13 +220,11 @@ export default {
     	//点赞事件
     	praiseClick:function(val){
     		var greatState = this.blogData.greatState == undefined?this.realGreatState:this.blogData.greatState;
-            debugger
     		if( greatState == 0){
     			greatState = 1;
     		}else{
     			greatState = 0;
     		};
-            debugger
             this.realGreatState = greatState;
     		this.$emit("praiseClick",this);
     	},
