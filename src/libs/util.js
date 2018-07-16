@@ -1313,6 +1313,24 @@ util.isWX = function() {
         return false;
     }
 }
+//判断当前环境是否是ios
+util.isIos = function() {
+    var uaAll = window.navigator.userAgent.toLowerCase();
+    if (uaAll.toLowerCase().indexOf('ios') != -1) {
+        return true;
+    } else {
+        return false;
+    }
+};
+//判断当前环境是否是安卓
+util.isAndroid = function() {
+    var uaAll = window.navigator.userAgent.toLowerCase();
+    if (uaAll.toLowerCase().indexOf('android') != -1) {
+        return true;
+    } else {
+        return false;
+    }
+};
 
 //注册微信jssdk
 util.get_wx = function() {
