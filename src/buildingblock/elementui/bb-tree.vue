@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-tree dib" :id="id">
+    <div class="bb-tree dib" :id="id" :style="option.treeStyle">
         <el-tree
                 class="bn horizontal"
                 :data="data"
@@ -10,7 +10,9 @@
                     label: nodeText,
                     isLeaf: 'leaf'
                 }"
-                :default-checked-keys="checkedKeys"
+                :default-checked-keys="realCheckedField"
+                :default-expanded-keys="expandedKeys"
+                :default-expand-all="expandAll"
                 :show-checkbox="showCheckbox"
                 :check-strictly="checkStrictly"
                 highlight-current
@@ -66,6 +68,15 @@
             checkedField: {
                 type: [Array,String]
             },
+            //默认展开项
+            expandedKeys: {
+                type: [Array,String]
+            },
+            //默认展开所有
+            expandAll:{
+                type:Boolean,
+                default:true
+            },
             opts: {
                 type: Array
             },
@@ -118,20 +129,34 @@
                 type:Boolean,
                 default:true
             },
+            //默认存所有item有三角标
+            allHaveChild:{
+                type:Boolean,
+                default:true
+            },
             /*其他属性配置
                 {
+                    treeStyle:""  整个tree的样式
                     itemStyle:""  最低级选项样式
                 }
             */
             option:{
-                type:Object
+                type:Object,
+                default:function(){
+                    return {
+                        treeStyle:"",
+                        itemStyle:""
+                    }
+                }
             }
         },
         data() {
             const t = this;
             return {
                 data: t.staticData,
-                id:"bb-tree_" + _TY_Tool.uuid() 
+                id:"bb-tree_" + _TY_Tool.uuid(),
+                realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
+                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys
             }
         },
         created: function () {
@@ -177,7 +202,7 @@
                 return "" + Math.floor(Math.random() * 10000);
             },
             checkedKeys() {
-                let checkedField = typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField;
+                let checkedField = this.realCheckedField;
                 if (checkedField && checkedField.length) {
                     if (!this.multiple) { //单选默认取最后一个元素
                         checkedField = checkedField.slice(-1);
@@ -241,8 +266,9 @@
                         }
                     }
                 }
-
-                this.commit(data);
+                if(check){
+                    this.commit(data);
+                }
             },
             //获取根节点数据
             getRootData() {
@@ -261,7 +287,7 @@
                         inputs.forEach(function (item) {
                             if (item.paramName === t.parentKey) {
                                 hasParam = true;
-                                item.constant = _parentId;
+                                item.variable = _parentId;
                             }
                         });
                         if (!hasParam) {
@@ -269,7 +295,7 @@
                             inputs.push({
                                 paramName: t.parentKey,
                                 valueType: "constant",
-                                constant: _parentId
+                                variable: _parentId
                             });
                         }
                         Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
@@ -288,6 +314,10 @@
                                 } else {
                                     item.leaf = true;
                                 }
+                                if(t.allHaveChild){
+                                    item.leaf = false;
+                                }
+
                                 list.push(item);
                             });
 
@@ -355,7 +385,7 @@
                 setTimeout(()=>{
                     const bbTree = document.getElementById(t.id);
                     const isLeafs = bbTree.getElementsByClassName("is-leaf");
-                    if(isLeafs.length){
+                    if(isLeafs.length && t.option.itemStyle){
                         HTMLCollection.prototype.forEach=function(callback){
                             [].slice.call(this).forEach(callback);
                         };

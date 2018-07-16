@@ -10,25 +10,42 @@
         </div>
         <div class="local-video" v-if="value" id="video">
             <div  v-for="(realUrlItem,key) in realUrl" :key="key" class="video-item" :style="{width:itemWidth}">
-                <video v-if="realUrl.length == 1" id="video" class="single-video" controls="controls" :src="realUrlItem"></video>
+                <!-- <i class="video-i" data-src="http://www.w3school.com.cn/i/movie.ogg">
+                    <i class="ty-icon_qiyong ty-font"></i>
+                </i>
+ -->
+                <!-- <video v-if="realUrl.length == 1" id="video" class="single-video" controls="controls" :src="realUrlItem"></video>
                 <i v-if="realUrl.length > 1" class="ty-icon_qiyong ty-font" v-tap="showDia"></i>
                 <bb-indep-dialog width="100%" :closeOnClickOverlay="true" :showClose="false" :isShow="show" @update:isShow="closeDia">
                     <video class="" controls="controls" :src="realUrlItem"></video>
-                </bb-indep-dialog>
-            </div>
+                </bb-indep-dialog> -->
+                <videoPlayer  class="video-player-box"
+                    ref="videoPlayer"
+                    :options="playerOptions"
+                    :playsinline="true"
+                    customEventName="customstatechangedeventname"
+                    >
+                </videoPlayer>
 
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    // require styles
+    import 'video.js/dist/video-js.css';
+    import { videoPlayer } from 'vue-video-player';
     export default {
         name: 'bb-video',
+        components: {
+          videoPlayer
+        },
         props: {
             //音频地址 非iframe嵌入式音频地址
             value:{
                 type:[String,Array],
-                default:"http://www.w3school.com.cn/i/movie.ogg"
+                default:"http://vjs.zencdn.net/v/oceans.mp4"
             },
             /*
                 transformConfig 样式
@@ -54,8 +71,18 @@
                 id:_TY_Tool.uuid(),
                 covers:[],
                 itemWidth:"100%",
+                playerOptions:{
+                    muted: true,
+                    language: 'en',
+                    playbackRates: [0.7, 1.0, 1.5, 2.0],
+                    sources: [{
+                        type: "video/mp4",
+                        src: typeof this.value == "object"?this.value[0]:this.value,
+                    }],
+                    poster: "/static/images/author.jpg",
+                }
 
-            }
+            };
         },
         computed:{
         },
@@ -69,7 +96,6 @@
             t.getData();
         },
         mounted:function(){
-            this.videoCover();
             this.setListItemWidth();
         },
         methods: {
@@ -106,7 +132,7 @@
                     videocanvas.getContext('2d').drawImage(video, 0, 0, videocanvas.width, videocanvas.height);
                     const img = videocanvas.toDataURL("image/png");
                     t.covers.push(img);
-                })
+                });
             },
             //根据数量计算宽度
             setListItemWidth(){
@@ -130,7 +156,7 @@
         }
     }
 </script>
-<style lang='less' scoped>
+<style lang='less'>
     .bb-video{
         height: 150px;
         .dialog{
@@ -201,6 +227,18 @@
         .single-video{
             width: 100%;
             height: 4rem;
+        }
+        .video-player-box{
+            width: 100%;
+            max-width: 100%;
+            padding: 0.1rem;
+            margin: auto;
+            &>div{
+                width: 100%;
+                max-width: 100%;
+                max-height: 4rem;
+                margin: auto;
+            }
         }
     }
 </style>

@@ -12,7 +12,7 @@ var env = {
 		hosts: {
 			'default': "http://longyan.dev.rs.com"
 		},
-		questionnaireHost:"http://ty.saiyachina.com/survey"
+		questionnaireHost: "http://ty.saiyachina.com/survey"
 	},
 	prd: {
 		name: 'prd',
@@ -22,7 +22,7 @@ var env = {
 		hosts: {
 			'default': CurrentDomain
 		},
-		questionnaireHost:"http://ty.saiyachina.com/survey",
+		questionnaireHost: "http://ty.saiyachina.com/survey",
 		home: "/home_ln"
 	},
 	demo: {
