@@ -90,13 +90,17 @@ export default {
             return _TY_Tool.loadChildBB(t);                
         },
         startShare(){
+            const t=this;
+            t.startShareDetail(t.realTitle,t.realDesc,t.realLink,t.realImgUrl);
+        },
+        startShareDetail(title,desc,link,img){
             const t = this;
             t.show = true;
             const shareInfo = {
-                title:t.realTitle,
-                desc:t.realDesc,
-                link:t.realLink,
-                imgUrl:t.realImgUrl,
+                title:title,
+                desc:desc,
+                link:link,
+                imgUrl:img,
                 success: function () { 
                     t.$emit("shareSuccess")
                 },
@@ -105,7 +109,6 @@ export default {
                 } 
             };
             if(t.wx){
-                alert('in wx');
                 t.wx.onMenuShareAppMessage(shareInfo);
                 t.wx.onMenuShareQQ(shareInfo);
                 t.wx.onMenuShareWeibo(shareInfo);
