@@ -266,8 +266,9 @@
                         }
                     }
                 }
-
-                this.commit(data);
+                if(check){
+                    this.commit(data);
+                }
             },
             //获取根节点数据
             getRootData() {
