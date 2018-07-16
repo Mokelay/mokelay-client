@@ -2,7 +2,7 @@
     <span class="bb-indep-share">
         <i :class="'ty ' + option.icon" @click="startShare"></i>
         <transition name="fade">
-            <img v-show="show" class="shareBg" src="../../libs/imgs/wx_bg/weixin_bg.png" alt="" @click="closDia">
+            <span v-show="show" class="shareBg" alt="" @click="closDia"></span>
         </transition>
     </span>
 </template>
@@ -75,11 +75,6 @@ export default {
         t.realLink = _TY_Tool.tpl(t.link,_TY_Tool.buildTplParams(t));
         t.realImgUrl = _TY_Tool.tpl(t.imgUrl,_TY_Tool.buildTplParams(t));
     },
-    render: function(createElement){
-        const t = this;
-        const shareButton = createElement('i',{class:`bb-indep-share ty ${t.option.icon}`,on:{click:t.startShare}},[]);
-        return shareButton;
-    },
     watch:{
 
     },  
@@ -102,12 +97,17 @@ export default {
                 link:link,
                 imgUrl:img,
                 success: function () { 
-                    t.$emit("shareSuccess")
+                    t.show = false;
+                    t.$emit("shareSuccess");
+                    _TY_Toast({content:"分享成功！"});
                 },
                 cancel: function () { 
-                    t.$emit("shareFail")
+                    t.show = false;
+                    t.$emit("shareFail");
+                     _TY_Toast({content:"分享失败！"});
                 } 
             };
+            console.log("shareInfo:",shareInfo);
             if(t.wx){
                 t.wx.onMenuShareAppMessage(shareInfo);
                 t.wx.onMenuShareQQ(shareInfo);
@@ -137,20 +137,20 @@ export default {
                 return;
             }
         },
-        onMenuShareAppMessage(){
-            if(WeixinJSBridge){
-                WeixinJSBridge.invoke('sendAppMessage',{
-                    "img_url": "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
-                    "img_width": "200",
-                    "img_height": "200",
-                    "link": "http://ty.saiyachina.com/#/home_ln",
-                    "desc": "这是测试内容",
-                    "title": "分享标题"
-                }, function(res) {
-                    //_report('send_msg', res.err_msg);  // 这是回调函数，必须注释掉
-                })
-            }
-        },
+        // onMenuShareAppMessage(){
+        //     if(WeixinJSBridge){
+        //         WeixinJSBridge.invoke('sendAppMessage',{
+        //             "img_url": "https://img3.mklimg.com/g2/M00/2D/0E/rBBrCVqWaDyAKLowAAAKmJyWFcY209.png",
+        //             "img_width": "200",
+        //             "img_height": "200",
+        //             "link": "http://ty.saiyachina.com/#/home_ln",
+        //             "desc": "这是测试内容",
+        //             "title": "分享标题"
+        //         }, function(res) {
+        //             //_report('send_msg', res.err_msg);  // 这是回调函数，必须注释掉
+        //         })
+        //     }
+        // },
         closDia(){
             this.show = false;
         }
@@ -161,12 +161,15 @@ export default {
     .bb-indep-share{
         font-size:0.5rem;
         .shareBg{
+            display:inline-block;
             position:fixed;
             z-index:999;
             width:100%;
             height:100%;
             top:0;
             left:0;
+            background-image:url(../../libs/imgs/wx_bg/weixin_bg.png);
+            background-size:cover
         }
     }
 </style>
