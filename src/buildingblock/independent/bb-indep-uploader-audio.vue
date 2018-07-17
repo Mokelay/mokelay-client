@@ -10,6 +10,7 @@ export default {
         */
         value:{
             type:[Array,String],
+            default:"http://pby43nuzd.bkt.clouddn.com/a539cce8e3dd45020e1989ed58a74a07.mp3"
         },
         //接受的文件类型。默认值image/*
         accept:{
