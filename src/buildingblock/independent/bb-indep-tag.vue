@@ -288,11 +288,7 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
-<<<<<<< HEAD
-=======
  				this.$emit("customPopSubmit",this);
-
->>>>>>> TY2.0
  				if(this.customWriteShow){
  					//点击时将增加的数组放置于原数组前
 	 				var c = this.customWriteShow;
