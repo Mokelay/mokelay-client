@@ -1,13 +1,14 @@
 <template>
 	<div class="tagContent"> 
 		<span class="tagOneLabel" v-for="tag in tags" > 
-			<b :style="tag.style || tagOneLabelWrite" @click="toggle(tag)">
+			<b :style="tag.style || tagOneLabelWrite" @click="toggle(tag)"
+			:class="{checkColor:tag.isCheckColor}">
 				{{tag.title}}
 			</b>
 			<span v-show="tag.show">
 				<i v-for="child in tag.children" :style="tagTwoLabelWrite"
 					@click="toggleClass(child)"
-					v-bind:class="{checkColor:child.isCheckColor}"
+					:class="{checkColor:child.isCheckColor}"
 					>
 					{{child.text}}
 				</i> 
@@ -233,6 +234,7 @@
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
 	                        t.tags = value;
+	                        console.log(t.tags);
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -258,6 +260,7 @@
 		 		};	 		
 		 		var valData = this.tagData;
 				this.$emit("toggle",tag,valData);
+				//console.log(valData);
 			},
 			//子集点击事件
 			toggleClass:function(child){
@@ -278,6 +281,7 @@
 				};
 				var valData = this.tagData;
 				this.$emit("child",child,valData);
+				//console.log(valData);
 			},
  			//弹框取消点击事件
  			customPopCancel:function(){
@@ -288,11 +292,10 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
-<<<<<<< HEAD
-=======
+
  				this.$emit("customPopSubmit",this);
 
->>>>>>> TY2.0
+
  				if(this.customWriteShow){
  					//点击时将增加的数组放置于原数组前
 	 				var c = this.customWriteShow;
@@ -366,9 +369,10 @@
  .customPop{
  	width:100%;
  	height:100%;
- 	position:absolute;
+ 	position:fixed;
  	top:0;
- 	left:0; 
+ 	left:0;
+ 	z-index:2; 
  }
 .customPopBg{
 	width:100%;
