@@ -4,7 +4,7 @@
                                             您的浏览器不支持 audio 标签。
                                             </audio> -->
     
-        <div class="audio-wrapper" v-if="!isIos">
+        <!-- <div class="audio-wrapper" v-if="!isIos">
             <audio :id="audioId" :src="valueBase" type="audio/mpeg">
             </audio>
             <div class="audio-left" @click="togglePlay"><i :class="palyButtonIcon"></i></div>
@@ -16,8 +16,8 @@
                     <span class="audio-length-total">{{transferRecordTime}}</span>
                 </span>
             </div>
-        </div>
-        <bb-video v-if="isIos" :value="valueBase"></bb-video>
+        </div> -->
+        <bb-video :value="valueBase"></bb-video>
 	</div>
 </template>
 <script>  
