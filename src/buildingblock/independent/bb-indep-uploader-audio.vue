@@ -48,7 +48,8 @@ export default {
             recordTime:0,
             recordButtonClass:"ty ty-lvyin recordStart",
             status:"beforeRecord", //beforeRecord recordIng recordEnd
-            file_url:""
+            file_url:"",
+            uploadSuccess:false
         };
     },
     mounted: function () {
@@ -168,17 +169,36 @@ export default {
         //上传到oss  tx_id腾讯服务器上文件的id
         uploadOss(tx_id){
             const t = this;
+            _TY_Toast({content:"上传中！",$type:"loading",duration:900000});
             _TY_Tool.post('/config/xlx_c_upload_amr_to_mp3',{
                 media_id:tx_id
             }).then((res)=>{
-                //上传的文件路径
-                t.valueBase = res.data.data.file_url;
-                //上传的文件名
-                t.file_name = res.data.data.file_serialize_name;
-                t.$emit("uploaded",t.valueBase);
-                t.$emit("change",t.valueBase)
-                t.$emit("input",t.valueBase)
+                const check = setInterval(()=>{
+                    if(t.uploadSuccess){
+                        clearinterval(check);
+                        t.valueBase = res.data.data.file_url;
+                        //上传的文件名
+                        t.file_name = res.data.data.file_serialize_name;
+                        t.$emit("uploaded",t.valueBase);
+                        t.$emit("change",t.valueBase);
+                        t.$emit("input",t.valueBase);
+                        _TY_Toast.closeAll();
+                        _TY_Toast({content:"上传成功！",$type:"success"});
+                    }else{
+                        t.checkSuccess(res.data.data.file_url);
+                    }
+                },2000);
             })
+        },
+        //轮询检查格式转换是否结束
+        checkSuccess(src){
+            const t = this;
+            t.audio = document.createElement("audio");
+            t.audio.setAttribute('src', src);
+            t.audio.setAttribute('controls', 'controls');
+            t.audio.oncanplay = function () {
+                t.uploadSuccess = true;
+            }
         }
     }
   }

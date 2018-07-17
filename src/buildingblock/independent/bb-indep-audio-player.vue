@@ -5,7 +5,7 @@
                                             </audio> -->
 
         <div class="audio-wrapper">
-            <audio :id="audioId" :src="valueBase">
+            <audio :id="audioId" :src="valueBase" type="audio/mpeg">
             </audio>
             <div class="audio-left" @click="togglePlay"><i :class="palyButtonIcon"></i></div>
             <div class="audio-right">
@@ -66,7 +66,7 @@ export default {
     mounted: function () {
         const  t = this;
         t.audio = document.getElementById(t.audioId);
-        t.totalWidth = document.getElementsByClassName("progress-bar")[0].offsetWidth;
+        t.totalWidth = document.getElementsByClassName("progress-bar")[0].offsetWidth + 5;
         t.audio.oncanplay = function () {
             t.recordTime = t.audio.duration != Infinity?t.audio.duration : 100;
             t.canPlay = true;
@@ -150,7 +150,8 @@ export default {
             const t = this;
             let value = (t.audio.currentTime / t.recordTime) * 0.90;
             t.playedWidth = value * t.totalWidth + 'px';
-            t.playedLeft = value * t.totalWidth + 'px';
+            let left = (value * t.totalWidth) - 1;
+            t.playedLeft = left + 'px';
             t.time = t.transTime(t.audio.currentTime);
         },
         /**
@@ -195,6 +196,7 @@ export default {
         audioEnded() {
             const t = this;
             t.playedWidth = 0;
+            t.playedLeft = 0;
             t.palyButtonIcon = "ty ty-lvyinpf fcGreen";
         },
         setCurrentTime(e) {
@@ -305,14 +307,14 @@ export default {
                 width: 100%;
             }
             .progress-dot{
-                width: .4rem;
-                height: .4rem;
+                width: .5rem;
+                height: .5rem;
                 display: inline-block;
                 border-radius: 50%;
                 background-color: #fff;
                 border: .12rem solid #24C789;
                 position: absolute; 
-                top: -0.18rem;
+                top: -0.17rem;
             }
             .progress-bar{
                 width: 55%;
@@ -325,8 +327,6 @@ export default {
                 width: 0rem;
                 height: 4px;
                 display: inline-block;
-                background-color: #fff;
-                border: 1px solid #24C789;
                 background-color: #24C789;
                 position: absolute;
                 top: 1rem;
