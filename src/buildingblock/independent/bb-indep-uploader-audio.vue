@@ -168,7 +168,7 @@ export default {
         //上传到oss  tx_id腾讯服务器上文件的id
         uploadOss(tx_id){
             const t = this;
-            _TY_Tool.get('/config/xlx_c_upload_amr_to_mp3',{
+            _TY_Tool.post('/config/xlx_c_upload_amr_to_mp3',{
                 media_id:tx_id
             }).then((res)=>{
                 //上传的文件路径
