@@ -344,7 +344,7 @@ export default {
                         blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                      	console.log("newArry:",newArry);
+                      	//console.log("newArry:",newArry);
                         t.blogs = newArry;
                     });
                 }, function (code, msg) {
