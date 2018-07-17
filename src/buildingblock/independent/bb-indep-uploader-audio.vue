@@ -173,9 +173,9 @@ export default {
             _TY_Tool.post('/config/xlx_c_upload_amr_to_mp3',{
                 media_id:tx_id
             }).then((res)=>{
-                const check = setInterval(()=>{
+                let check = setInterval(()=>{
                     if(t.uploadSuccess){
-                        clearinterval(check);
+                        clearInterval(check);
                         t.valueBase = res.data.data.file_url;
                         //上传的文件名
                         t.file_name = res.data.data.file_serialize_name;

@@ -292,8 +292,9 @@ export default {
             const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
             xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
             xhr.onload = (res) => { 
-                    const check = setInterval(()=>{
+                    let check = setInterval(()=>{
                         if(t.uploadSuccess){
+                            clearInterval(check);
                             const response = JSON.parse(res.target.response);
                             const url = response.data.file_url;
                             if(t.option.replace&&t.option.max>0&&t.valueBase.length>=t.option.max){//如果是替换的话
