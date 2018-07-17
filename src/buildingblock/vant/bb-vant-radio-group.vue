@@ -136,7 +136,6 @@ import 'vant/lib/radio/style';
     }
     .radioStyle{
     	display:flex;
-    	margin-bottom:10px;
     }
     .van-icon-checked{
     	color:#f00;

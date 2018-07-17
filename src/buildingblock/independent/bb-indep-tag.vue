@@ -295,7 +295,6 @@
 
  				this.$emit("customPopSubmit",this);
 
-
  				if(this.customWriteShow){
  					//点击时将增加的数组放置于原数组前
 	 				var c = this.customWriteShow;
