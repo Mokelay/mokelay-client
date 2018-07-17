@@ -9,8 +9,7 @@ export default {
             ["http://www.baidu.com/1.img","http://www.baidu.com/2.img"]
         */
         value:{
-            type:[Array,String],
-            default:"http://pby43nuzd.bkt.clouddn.com/a539cce8e3dd45020e1989ed58a74a07.mp3"
+            type:[Array,String]
         },
         //接受的文件类型。默认值image/*
         accept:{
