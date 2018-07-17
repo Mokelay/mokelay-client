@@ -171,6 +171,10 @@
       window._TY_Page_Data[this.realPageAlias] = this;
       if(this.root){
         window._TY_Root = this;
+        //统一注册微信
+        if(_TY_Tool.isWX()){
+          _TY_Tool.get_wx();
+        }
       }
       this.loadData();
     },
@@ -196,8 +200,6 @@
         Util.post(window._TY_ContentPath+"/load-page-data",{
           alias:pageAlias
         }).then(function(response){
-          //统一注册微信接口
-          _TY_Tool.get_wx();
           var data = response['data']['data'];
           var page = data['page'];
           var pbbList = data['pbb_list']['list'];

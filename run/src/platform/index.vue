@@ -180,6 +180,8 @@
                     ("/ty/resources/"+t.$route.params.appAlias)
                     :(_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias);
 
+                    //TODO load_bapp_resources b端资源获取
+
                 _TY_Tool.get(url).then(function (response) {
                     // console.log(response);
                     // return;

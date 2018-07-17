@@ -29,7 +29,6 @@
   			</div>
   			<bb-indep-blog-action 
                 :blogData="user"
-                :greatState="1"
   				@replyClick="replyClick(user)"
   				@praiseClick="praiseClick"
   				:greatNumberShow="user.greatNumber"

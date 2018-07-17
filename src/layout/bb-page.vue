@@ -148,7 +148,10 @@
       window._TY_Page_Data[this.p_pageAlias] = this;
       if(this.root){
         window._TY_Root = this;
-
+        //统一注册微信
+        if(_TY_Tool.isWX()){
+          _TY_Tool.get_wx();
+        }
         if(_TY_Tool.isPC()){
           // 针对PC端  基准值更正
           document.body.style.fontSize = "18px";
@@ -180,7 +183,7 @@
     },
     methods: {
       //修改页面的title属性 metadata
-      resetPageTitle:function(pageName){
+      resetPageTitle:function(pageName,layoutObject){
         let t=this;
         const appAlias = t.$route.params.appAlias||'';
         const pageAlias = t.$route.params.pageAlias||'';
@@ -191,8 +194,28 @@
           var data = response['data']['data'];
           const appName = data['name'];
           const companyName = data['companyName'];
-          // pageName + appName + 公司名
-          document.title = (pageName||"首页")+"-"+(appName||'')+"-"+(companyName||'');
+          let pageTitle = '';
+          //从全局变量中获取到页面title
+          if(layoutObject){
+            const _obj = JSON.parse(layoutObject);
+            if(_obj&&_obj['pageTitle']){
+              pageTitle = _obj['pageTitle'];
+            }
+          }
+          if(pageTitle){
+              document.title = _TY_Tool.tpl(pageTitle,_TY_Tool.buildTplParams(t,{
+                pageName:pageName,
+                appName:appName,
+                companyName:companyName
+              }));
+          }else{
+            if(companyName){
+              // pageName + appName + 公司名
+              document.title = (pageName||"首页")+"-"+(appName||'')+"-"+(companyName||'');  
+            }else{
+              document.title = pageName||"首页";
+            }
+          }
         });
       },
       refresh:function(){
@@ -216,9 +239,7 @@
           var interactives = data['interactives']?data['interactives']['list']:[];
           //如果是根页面，修改页面的title
           if(t.root){
-            //统一注册微信
-            _TY_Tool.get_wx();
-            t.resetPageTitle(page.name);
+            t.resetPageTitle(page.name,page.layoutObject);
           }
           if(page['template']){
             //模板文件
