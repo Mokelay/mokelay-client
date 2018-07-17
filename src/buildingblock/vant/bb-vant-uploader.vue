@@ -140,7 +140,8 @@ export default {
         return{
             valueBase:typeof this.value == "string"?this.value.split(","):this.value,
             uploadUrl:"",
-            recordTime:0
+            recordTime:0,
+            uploadSuccess:false
         };
     },
     created: function () {
@@ -291,23 +292,28 @@ export default {
             const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
             xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
             xhr.onload = (res) => { 
-                    _TY_Toast({content:"上传中！",duration:4500});
-                    setTimeout(()=>{
-                        const response = JSON.parse(res.target.response);
-                        const url = response.data.file_url;
-                        if(t.option.replace&&t.option.max>0&&t.valueBase.length>=t.option.max){//如果是替换的话
-                            t.valueBase.splice(0,1,url);//替换第一个位置的文件
+                    const check = setInterval(()=>{
+                        if(t.uploadSuccess){
+                            const response = JSON.parse(res.target.response);
+                            const url = response.data.file_url;
+                            if(t.option.replace&&t.option.max>0&&t.valueBase.length>=t.option.max){//如果是替换的话
+                                t.valueBase.splice(0,1,url);//替换第一个位置的文件
+                            }else{
+                                t.valueBase.push(url);
+                            }
+                            t.$emit('input',t.valueBase);
+                            t.$emit('change',t.valueBase);
+                            t.$emit('upload-success',t.valueBase);
+                            _TY_Toast.closeAll();
+                            _TY_Toast({content:"上传成功！"});
                         }else{
-                            t.valueBase.push(url);
+                            t.checkSuccess(res.target.response.data.file_url);
                         }
-                        t.$emit('input',t.valueBase);
-                        t.$emit('change',t.valueBase);
-                        t.$emit('upload-success',t.valueBase);
-                        _TY_Toast({content:"上传成功！"});
-                    },5000);
+                    },2000);
                 }; //请求完成
             xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
             xhr.send(formdata); //开始上传，发送form数据
+            _TY_Toast({content:"上传中！",$type:"loading",duration:900000});
         },
         //获取子积木
         loadChildBB(){
@@ -320,6 +326,20 @@ export default {
             t.valueBase.splice(index,1);
             t.$emit('input',t.valueBase);
             t.$emit('change',t.valueBase);
+        },
+        //轮询检查格式转换是否结束
+        checkSuccess(src){
+            const t = this;
+            //非视频不用检查转换进度
+            if(!t.accept.indexOf("video")>-1){
+                t.uploadSuccess = true;
+            }
+            t.video = document.createElement("video");
+            t.video.setAttribute('src', src);
+            t.video.setAttribute('controls', 'controls');
+            t.video.oncanplay = function () {
+                t.uploadSuccess = true;
+            }
         }
     }
   }
