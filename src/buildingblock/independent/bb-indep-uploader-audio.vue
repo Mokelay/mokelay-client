@@ -9,7 +9,7 @@ export default {
             ["http://www.baidu.com/1.img","http://www.baidu.com/2.img"]
         */
         value:{
-            type:[Array,String]
+            type:[Array,String],
         },
         //接受的文件类型。默认值image/*
         accept:{
@@ -168,7 +168,7 @@ export default {
         //上传到oss  tx_id腾讯服务器上文件的id
         uploadOss(tx_id){
             const t = this;
-            _TY_Tool.get('/config/ty_wx_media_to_oss',{
+            _TY_Tool.get('/config/xlx_c_upload_amr_to_mp3',{
                 media_id:tx_id
             }).then((res)=>{
                 //上传的文件路径
