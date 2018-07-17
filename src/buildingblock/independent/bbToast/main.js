@@ -37,16 +37,16 @@ const Toast = function(options) {
     showNext();
 };
 
-const showNext = ()=>{
+const showNext = () => {
     if (!instance) {
         initInstance();
     }
 
-    if ( !instance.visible ) {
+    if (!instance.visible) {
         currentToast = toastQueue.shift();
         let options = currentToast.options;
 
-        if ( !document.querySelector('#bb-toast-wrapper') ) {
+        if (!document.querySelector('#bb-toast-wrapper')) {
             document.body.appendChild(instance.$el);
         }
 
@@ -60,7 +60,7 @@ const showNext = ()=>{
 
     } else {
         let temp = instance.close;
-        instance.close = ()=>{
+        instance.close = () => {
             temp.apply(instance);
             showNext();
         }
@@ -72,11 +72,11 @@ Toast.setDefaults = defaults => {
 };
 
 Toast.closeAll = (closeAll) => {
-    instance.doClose();
+    instance.doclose();
     instance.visible = false;
     msgQueue = [];
     currentToast = null;
-    if ( closeAll && typeof closeAll == 'function') {
+    if (closeAll && typeof closeAll == 'function') {
         closeAll.apply(this);
     }
 };
