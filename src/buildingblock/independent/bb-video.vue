@@ -79,7 +79,6 @@
                         type: "video/mp4",
                         src: typeof this.value == "object"?this.value[0]:this.value,
                     }],
-                    poster: "/static/images/author.jpg",
                 }
 
             };
