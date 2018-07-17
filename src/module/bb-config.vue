@@ -846,7 +846,7 @@
                                     props: {
                                         fields: [{
                                             text: "整数",
-                                            value: "int"
+                                            value: "number"
                                         }, {
                                             text: "浮点数",
                                             value: "double"
@@ -868,9 +868,6 @@
                                         }, {
                                             text: "数组",
                                             value: "array"
-                                        }, {
-                                            text: "文件",
-                                            value: "multipart"
                                         }]
                                     }
                                 }, {
