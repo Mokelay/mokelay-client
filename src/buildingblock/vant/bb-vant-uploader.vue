@@ -308,13 +308,9 @@ export default {
                             _TY_Toast.closeAll();
                             _TY_Toast({content:"上传成功！"});
                         }else{
-                            if(_TY_Tool.isIos()){
-                                setTimeout(()=>{
-                                   t.uploadSuccess = true; 
-                                },5000)
-                            }else{
-                                t.checkSuccess(response.data.file_url);
-                            }
+                            setTimeout(()=>{
+                               t.uploadSuccess = true; 
+                            },5000)
                         }
                     },2000);
                 }; //请求完成
