@@ -99,12 +99,10 @@ export default {
                 success: function () { 
                     t.show = false;
                     t.$emit("shareSuccess");
-                    _TY_Toast({content:"分享成功！"});
                 },
                 cancel: function () { 
                     t.show = false;
                     t.$emit("shareFail");
-                     _TY_Toast({content:"分享失败！"});
                 } 
             };
             console.log("shareInfo:",shareInfo);

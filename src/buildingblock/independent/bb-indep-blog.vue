@@ -14,7 +14,7 @@
   			</div> 
   			<div class="blogContent"> 
   				<p :style="contentWrite">{{user.text}}</p>
-                <bb-layout-seriation :content="user.content"></bb-layout-seriation>
+  				<bb-layout-seriation :content="user.content"></bb-layout-seriation>
   				<div class="blogJoinPractice" @click="joinPractiveDetails(user)"> 
 					<span class="blogJoinPracticeLeft"><img :src="user.practiceImg"></span>
 					<span class="blogJoinPracticeCenter"> 
@@ -314,6 +314,8 @@ export default {
     },
     methods:{
     	//动态数据获取
+
+    	
         getData() {
             const t = this;
             if (t.blogDs) {
