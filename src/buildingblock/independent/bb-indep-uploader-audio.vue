@@ -171,13 +171,17 @@ export default {
             _TY_Tool.post('/config/xlx_c_upload_amr_to_mp3',{
                 media_id:tx_id
             }).then((res)=>{
-                //上传的文件路径
-                t.valueBase = res.data.data.file_url;
-                //上传的文件名
-                t.file_name = res.data.data.file_serialize_name;
-                t.$emit("uploaded",t.valueBase);
-                t.$emit("change",t.valueBase)
-                t.$emit("input",t.valueBase)
+                _TY_Toast({content:"上传中！",duration:4500});
+                setTimeout(()=>{
+                    //上传的文件路径
+                    t.valueBase = res.data.data.file_url;
+                    //上传的文件名
+                    t.file_name = res.data.data.file_serialize_name;
+                    t.$emit("uploaded",t.valueBase);
+                    t.$emit("change",t.valueBase)
+                    t.$emit("input",t.valueBase)
+                    _TY_Toast({content:"上传成功！"});
+                },5000);
             })
         }
     }
