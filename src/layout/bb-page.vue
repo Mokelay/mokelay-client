@@ -148,7 +148,10 @@
       window._TY_Page_Data[this.p_pageAlias] = this;
       if(this.root){
         window._TY_Root = this;
-
+        //统一注册微信
+        if(_TY_Tool.isWX()){
+          _TY_Tool.get_wx();
+        }
         if(_TY_Tool.isPC()){
           // 针对PC端  基准值更正
           document.body.style.fontSize = "18px";
@@ -236,8 +239,6 @@
           var interactives = data['interactives']?data['interactives']['list']:[];
           //如果是根页面，修改页面的title
           if(t.root){
-            //统一注册微信
-            _TY_Tool.get_wx();
             t.resetPageTitle(page.name,page.layoutObject);
           }
           if(page['template']){

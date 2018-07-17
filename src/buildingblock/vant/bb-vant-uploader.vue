@@ -223,6 +223,10 @@ export default {
             className = "dsn";
             itemClass = t.valueBase.length == 1?"uploaded-item-lg":itemClass;
         }
+        var uploaderClass = "bb-vant-uploader";
+        if(t.accept.indexOf("video")>-1 && t.valueBase.length == 1){
+            uploaderClass = "bb-vant-uploader bb-vant-uploader-single";
+        }
         const vantUpload = createElement('vant-uploader',{props:{
             "resultType":t.resultType,
             "accept":t.accept,
@@ -250,7 +254,7 @@ export default {
         if(t.option.theme=='picture'){
             childs = [vantUpload];
         }
-        return createElement('div',{props:{},class:"bb-vant-uploader"},childs);
+        return createElement('div',{props:{},class:uploaderClass},childs);
     },
     watch:{
         value(val){
@@ -280,7 +284,10 @@ export default {
             formdata.append('file',file.file);
             console.log('正在上传。。。');
             //添加请求头 
-            t.uploadUrl = "/config/ty_oss_upload";
+            t.uploadUrl = "/config/ty_oss_upload";//统一文件上传地址
+            if(t.accept.indexOf("video")>-1){
+                t.uploadUrl = "/config/xlx_c_upload_mov_to_mp4"; //统一视频上传地址
+            }
             const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
             xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
             xhr.onload = (res) => { 
@@ -414,6 +421,10 @@ export default {
     }
     .dsn{
         display:none !important;
+    }
+    .bb-vant-uploader-single{
+        width:100% !important;
+        margin:0.5rem auto !important;
     }
 </style>
 

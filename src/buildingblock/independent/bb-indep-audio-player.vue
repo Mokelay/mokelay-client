@@ -78,7 +78,7 @@ export default {
         }, false);
         // 监听播放完成事件
         t.audio.addEventListener('ended', function () {
-            audioEnded();
+            t.audioEnded();
         }, false);
     },
     watch:{

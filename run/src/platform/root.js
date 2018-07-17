@@ -35,7 +35,7 @@ export default {
 				},
 				component: (resolve) => require(['./index.vue'], resolve),
 				children: [{
-					path: '/:appAlias/index/:pageAlias',
+					path: '/:appAlias/b_index/:pageAlias',
 					meta: {},
 					component: (resolve) => require(['./ty.vue'], resolve)
 				}]
