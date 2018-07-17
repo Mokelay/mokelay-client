@@ -179,8 +179,10 @@
                 var url = _TY_ENV.name=='local'?
                     ("/ty/resources/"+t.$route.params.appAlias)
                     :(_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias);
-
-                    //TODO load_bapp_resources b端资源获取
+                //b端登录
+                if(t.$route.path.indexOf('b_index')>=0 && _TY_ENV.name!='local'){
+                    url = _TY_ContentPath+"/load_bapp_resources?appAlias="+t.$route.params.appAlias
+                }
 
                 _TY_Tool.get(url).then(function (response) {
                     // console.log(response);
