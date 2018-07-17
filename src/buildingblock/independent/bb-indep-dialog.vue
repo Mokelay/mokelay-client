@@ -102,6 +102,7 @@
                 canRender:false,//标记是否可以渲染
                 realContent: this.content,
                 active:this.isShow,//是否显示弹窗
+                linkage:null
             }
         },
         computed:{
@@ -268,16 +269,17 @@
                 t.$emit('update:isShow', false);
             },
             //对外提供方法 打开弹窗
-            openDialog:function(){
+            openDialog:function(linkage){
                 this.active = true;
+                this.linkage = linkage;
                 this.$emit('update:isShow', false);
-                this.$emit('afterOpen', this);
+                this.$emit('afterOpen',linkage,this);
             },
             //对外提供方法 关闭弹窗
             closeDialog:function(){
                 this.active = false;
                 this.$emit('update:isShow', false);
-                this.$emit('beforeClose', this);
+                this.$emit('beforeClose',this.linkage,this);
             },
             //主要用于积木选择器
             loadChildBB:function(){
