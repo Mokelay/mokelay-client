@@ -75,7 +75,7 @@
             //默认展开所有
             expandAll:{
                 type:Boolean,
-                default:true
+                default:false
             },
             opts: {
                 type: Array
@@ -132,7 +132,7 @@
             //默认存所有item有三角标
             allHaveChild:{
                 type:Boolean,
-                default:true
+                default:false
             },
             /*其他属性配置
                 {
