@@ -242,7 +242,11 @@
 	        },
 			//父级点击事件
 		 	toggle:function(tag) {
-		 		Vue.set(tag,'show',true);
+		 		if(tag.show == true){
+		 			Vue.set(tag,'show',false);
+		 		}else{
+		 			Vue.set(tag,'show',true);
+		 		};		 		
 		 		if(tag.isCheckColor == true){
 		 			Vue.set(tag,'isCheckColor',false);
 		 			var val = tag.value;
