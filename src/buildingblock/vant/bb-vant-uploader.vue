@@ -292,9 +292,10 @@ export default {
             const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
             xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
             xhr.onload = (res) => { 
-                    const check = setInterval(()=>{
+                    const response = JSON.parse(res.target.response);
+                    let check = setInterval(()=>{
                         if(t.uploadSuccess){
-                            const response = JSON.parse(res.target.response);
+                            clearInterval(check);
                             const url = response.data.file_url;
                             if(t.option.replace&&t.option.max>0&&t.valueBase.length>=t.option.max){//如果是替换的话
                                 t.valueBase.splice(0,1,url);//替换第一个位置的文件
@@ -307,7 +308,9 @@ export default {
                             _TY_Toast.closeAll();
                             _TY_Toast({content:"上传成功！"});
                         }else{
-                            t.checkSuccess(res.target.response.data.file_url);
+                            setTimeout(()=>{
+                               t.uploadSuccess = true; 
+                            },5000)
                         }
                     },2000);
                 }; //请求完成

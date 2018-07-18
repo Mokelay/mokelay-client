@@ -3,8 +3,8 @@
        <!--  <audio style="height:2rem;" src="http://ty.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=569bef9c3e6c5d3542dcf11306dcf8a1.mp3" controls="controls">
                                             您的浏览器不支持 audio 标签。
                                             </audio> -->
-
-        <div class="audio-wrapper">
+    
+        <!-- <div class="audio-wrapper" v-if="!isIos">
             <audio :id="audioId" :src="valueBase" type="audio/mpeg">
             </audio>
             <div class="audio-left" @click="togglePlay"><i :class="palyButtonIcon"></i></div>
@@ -16,7 +16,8 @@
                     <span class="audio-length-total">{{transferRecordTime}}</span>
                 </span>
             </div>
-        </div>
+        </div> -->
+        <bb-video :value="valueBase"></bb-video>
 	</div>
 </template>
 <script>  
@@ -61,6 +62,7 @@ export default {
             playedLeft:"-1px",
             canPlay:false,
             totalWidth:0,
+            isIos:_TY_Tool.isIos()
         };
     },
     mounted: function () {
