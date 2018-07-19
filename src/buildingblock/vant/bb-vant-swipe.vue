@@ -69,7 +69,7 @@ import 'vant/lib/swipe/style';
         },
         data() {
             return {
-                valueBase:typeof this.images == 'string'?this.images.split(','):this.images,
+                valueBase:typeof this.images == 'string'?JSON.parse(this.images):this.images,
             };
         },
         mounted(){
