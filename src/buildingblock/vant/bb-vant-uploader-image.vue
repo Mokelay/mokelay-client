@@ -231,7 +231,7 @@ export default {
             formdata.append('file',file.file);
             console.log('正在上传。。。');
             //添加请求头 
-            t.uploadUrl = "/config/ty_oss_upload";
+            t.uploadUrl = "/config/xlx_c_upload_img_compress";
             const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
             xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
             xhr.onload = (res) => { 

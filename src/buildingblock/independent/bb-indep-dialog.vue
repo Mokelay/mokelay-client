@@ -203,7 +203,10 @@
             //el dialog 打开的回调
             _afterOpen:function(){
                 let t=this;
-                t.$emit('afterOpen',t);
+                setTimeout(()=>{
+                    t.$emit('afterOpen',t);
+                },500)
+                
             },
             _initH5Dialog:function(){
                 let t=this;
@@ -273,7 +276,7 @@
                 this.active = true;
                 this.linkage = linkage;
                 this.$emit('update:isShow', false);
-                this.$emit('afterOpen',linkage,this);
+                this.$emit('open',linkage,this);
             },
             //对外提供方法 关闭弹窗
             closeDialog:function(){
