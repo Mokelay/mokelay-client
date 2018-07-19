@@ -135,7 +135,7 @@ export default {
             }*/
             if (t.audio.paused) {
                 t.status = "playing"
-                t.palyButtonIcon = "ty ty-lvyin fcRed";
+                t.palyButtonIcon = "ty ty-lvyin fcGreen";
                 // 开始播放当前点击的音频
                 t.audio.play(); 
             } else {
