@@ -7,7 +7,10 @@
 			    		<img :src="item.leftImgShow">
 			    	</span>
 			    	<span class="centerStyle">				
-			    		<h1 :style="centerTitle">{{item.title}}</h1>
+			    		<h1 :style="centerTitle">
+			    			{{item.title}}
+			    			<b class="itemTeacher" v-show="item.isTeacher">老师</b> 
+			    		</h1>
 			    		<p class="centerContent" v-show="centerIcon">
 			    			<b class="centerContentTime">	
 			    				<i :class="contentTimeIcon" :style="contentTimeIconStyle"></i>
@@ -27,6 +30,7 @@
 		</li>
 		<p class="itemMore" @click="clickMore">{{seeMore}}</p>
 	</ul>
+
 </template>
 
 <script>
@@ -258,6 +262,7 @@ import Vue from 'vue'
                centerIcon:this.centerIconData,
                theme_id:"",
                showRightContent:false,
+               itemCustomShow:false,
             }
         },
         computed:{
@@ -379,17 +384,20 @@ import Vue from 'vue'
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        //console.log(value);
+	                        console.log(value);
 	                        t.items = value.itemList;
 	                        //t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
 	                        t.pageSize = value.pageSize; //当前页总条数
 	                        t.totalPages = value.totalPages; //总条数
+	                        //t.isFalse = value.isFalse.list; //判断是否为圈主
 	                       //如果当前页码等于总页码，修改文字显示内容
 				        	if(t.page == t.totalPages){
 				        		//console.log(t.seeMore);
 				        		t.seeMore = "没有更多内容了";
-				        	}
+				        	};
+				        	
+				        	
 	                    });
 	                }, function (code, msg) {
 	                });
@@ -418,6 +426,7 @@ import Vue from 'vue'
                 const t = this;
                 const item = t.items[key];
                 this.$emit("onClose",item);
+                this.itemCustomShow = true;
 	        	var param = {
 	        		id:item.theme_id
 	        	};
@@ -521,5 +530,13 @@ import Vue from 'vue'
     }
     .display{
     	display:none;
+    }
+    .itemTeacher{
+    	background:rgba(36, 199, 137, 1);
+    	font-size:0.3rem;
+    	color:#fff;
+    	padding:2px 3px;
+    	border-radius:2px;
+    	margin-left:5px;
     }
 </style>
