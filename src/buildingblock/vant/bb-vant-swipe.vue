@@ -9,7 +9,7 @@
         :initial-swipe="option.initialSwipe" 
         @change="change">
         <van-swipe-item v-for="(image, index) in valueBase" :key="index">
-            <img :src="image" />
+            <img :src="image.src" @click="click(image.href)"/>
         </van-swipe-item>
     </van-swipe>
 </template>
@@ -27,7 +27,13 @@ import 'vant/lib/swipe/style';
           "van-swipe":Swipe,
         },
         props: {
-            //静态图组
+            /*静态图组
+                [{
+                    src:""  图片地址
+                    href:"" 跳转地址
+                    
+                }]
+            */
             images:{
                 type:[Array,String]
             },
@@ -88,6 +94,11 @@ import 'vant/lib/swipe/style';
                     });
                 }
             },
+            //点击图片
+            click(href){
+                const t = this;
+                window.location.href = href;
+            }
         }
     }
 </script>
