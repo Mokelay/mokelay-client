@@ -53,7 +53,6 @@
 <script> 
 	import Vue from 'vue'
 	export default {
-
 		name:"tagContent",
 		props:{
 			//自定义数组
@@ -264,7 +263,7 @@
 		 		};	 		
 		 		var valData = this.tagData;
 				this.$emit("toggle",tag,valData);
-				//console.log(valData);
+				console.log(valData);
 			},
 			//子集点击事件
 			toggleClass:function(child){
@@ -285,7 +284,7 @@
 				};
 				var valData = this.tagData;
 				this.$emit("child",child,valData);
-				//console.log(valData);
+				console.log(valData);
 			},
  			//弹框取消点击事件
  			customPopCancel:function(){
@@ -296,9 +295,6 @@
  				var val = this.valueBase;
  				this.showPop = false;
  				this.customWriteShow = this.valueBase;
-
- 				this.$emit("customPopSubmit",this);
-
  				if(this.customWriteShow){
  					//点击时将增加的数组放置于原数组前
 	 				var c = this.customWriteShow;
@@ -310,6 +306,7 @@
 	 				}
  				}else{
  					const arr = this.customEditKey == "add"?null:this.customs.splice(this.customEditKey,1);
+ 					console.log(this.customEditKey.value);
  				}; 				
  				//自定义标签不能超过三个
  				var l =this.customs.length;
@@ -320,7 +317,9 @@
  				};
  				//清空输入框
  				this.valueBase = null;
- 				this.$emit("customPopSubmit");
+ 				this.$emit("customPopSubmit",val);
+ 				//this.tagData.push(val);
+ 				//console.log(this.tagData);
  			},
  			//点击自定义的事件
  			customPopShow:function(key){
