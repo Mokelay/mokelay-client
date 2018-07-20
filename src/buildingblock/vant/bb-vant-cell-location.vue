@@ -49,15 +49,14 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
-            t.wx = _TY_Tool.wx;
         },
         //事件click
         methods: {
             //微信定位
             wxLocation(){
                 const  t = this;
-                if(t.wx){
-                    t.wx.getLocation({
+                if(_TY_Tool.wx){
+                    _TY_Tool.wx.getLocation({
                         type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
                         success: function (res) {
                             const latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
@@ -66,6 +65,13 @@ import 'vant/lib/cell/style';
                             const accuracy = res.accuracy; // 位置精度
                             t.valueBase = res;
                             t.getLocationName(latitude,longitude);
+                             _TY_Tool.wx.openLocation({
+                                latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+                                longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+                                name: t.valueBase.name, // 位置名
+                                address: t.valueBase.address, // 地址详情说明
+                                scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                            })
                         }
                     });
                 }
@@ -81,7 +87,7 @@ import 'vant/lib/cell/style';
                         t.valueBase.address = data.result.formatted_address;
                         t.valueBase.name = data.result.sematic_description;
                         t.addressDetail = data.result.sematic_description;
-                        t.wx.openLocation({
+                        _TY_Tool.wx.openLocation({
                             latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
                             longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
                             name: t.valueBase.name, // 位置名
