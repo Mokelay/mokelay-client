@@ -384,7 +384,7 @@ import Vue from 'vue'
 	                 _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (data) {
 	                    data.forEach((item) => {
 	                        const {dataKey, value} = item;
-	                        console.log(value);
+	                        //console.log(value);
 	                        t.items = value.itemList;
 	                        //t.userNumber = value.userNumber;	    
 	                        t.page = value.page;  //当前页码
@@ -428,14 +428,15 @@ import Vue from 'vue'
                 const item = t.items[key];
                 this.$emit("onClose",item);
                 this.itemCustomShow = true;
-	        	var param = {
+                t.$refs[key + '_ref'][0].instance.close();
+	        	/*var param = {
 	        		id:item.theme_id
 	        	};
 	        	t.uploadUrl = `${_TY_ENV.apiHost}/config/xlx_c_delete_member`;
-                t.$refs[key + '_ref'][0].instance.close();
+                
 	        	_TY_Tool.post(t.uploadUrl,param).then(response=>{
 	               t.getItem();
-	            });
+	            });*/
 	        },
 	        clickUrl(item){
 	        	var id = item.theme_id;
