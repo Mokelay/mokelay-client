@@ -72,7 +72,7 @@
                 covers:[],
                 itemWidth:"100%",
                 playerOptions:{
-                    muted: true,
+                    muted: false,
                     language: 'en',
                     playbackRates: [0.7, 1.0, 1.5, 2.0],
                     sources: [{
@@ -216,7 +216,7 @@
         video{
             height: auto;
             width: 100%;
-            max-height: 4rem;
+            /*max-height: 4rem;*/
             margin: auto;
             vertical-align: bottom;
         }
@@ -225,17 +225,13 @@
         }
         .single-video{
             width: 100%;
-            height: 4rem;
+            /*height: 4rem;*/
         }
         .video-player-box{
-            width: 100%;
-            max-width: 100%;
-            padding: 0.1rem;
-            margin: auto;
             &>div{
                 width: 100%;
                 max-width: 100%;
-                max-height: 4rem;
+                height: 4rem;
                 margin: auto;
             }
         }
