@@ -1,6 +1,6 @@
 <template>
 	<ul class="lxItemBg"> 
-		<li class="itemList" v-for="(item,key) in items" :page="pageData" >
+		<li class="itemList" v-for="(item,key) in items" :page="pageData"  @click="clickUrl(item)">
 			<bb-vant-cell-swipe :content="rightContent" @right="onClose(key)" :ref="key + '_ref'" :key="key" :leftWidth="0"> 
 			    <div class="itemContent">
 			    	<span class="leftStyle"> 
@@ -412,6 +412,7 @@ import Vue from 'vue'
                     data.forEach((item) => {
 	                        const {dataKey, value} = item;
 	                        t.items = t.items.concat(value.itemList);
+	                        console.log(t.items);
 	                    });
 	                }, function (code, msg) {
 	                });
