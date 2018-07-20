@@ -69,6 +69,7 @@
                 canRender:false,//标记是否可以渲染
                 realContent: this.content,
                 active:this.isShow,//是否显示弹窗
+                external:{} //哇外部参数
             }
         },
         computed:{
@@ -154,7 +155,10 @@
                 t.$emit("cancel",t);//弹窗取消事件
             },
             //对外提供方法 打开弹窗
-            openDialog:function(){
+            openDialog:function(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                }
                 this.active = true;
             },
             //对外提供方法 关闭弹窗

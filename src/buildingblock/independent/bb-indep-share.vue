@@ -69,7 +69,6 @@ export default {
     },
     mounted: function () {
         const t = this;
-        t.wx = _TY_Tool.wx;
         t.realTitle = _TY_Tool.tpl(t.title,_TY_Tool.buildTplParams(t));
         t.realDesc = _TY_Tool.tpl(t.desc,_TY_Tool.buildTplParams(t));
         t.realLink = _TY_Tool.tpl(t.link,_TY_Tool.buildTplParams(t));
@@ -106,28 +105,28 @@ export default {
                 } 
             };
             console.log("shareInfo:",shareInfo);
-            if(t.wx){
-                t.wx.onMenuShareAppMessage(shareInfo);
-                t.wx.onMenuShareQQ(shareInfo);
-                t.wx.onMenuShareWeibo(shareInfo);
-                t.wx.onMenuShareQZone(shareInfo);
+            if(_TY_Tool.wx){
+                _TY_Tool.wx.onMenuShareAppMessage(shareInfo);
+                _TY_Tool.wx.onMenuShareQQ(shareInfo);
+                _TY_Tool.wx.onMenuShareWeibo(shareInfo);
+                _TY_Tool.wx.onMenuShareQZone(shareInfo);
                 // t.shareArea.forEach((val,key)=>{
                 //     switch(val){
                 //         case "timeline":
                 //             alert('in wx timeline');
-                //             t.wx.onMenuShareTimeline(shareInfo);
+                //             _TY_Tool.wx.onMenuShareTimeline(shareInfo);
                 //             break;
                 //         case "appMessage":
-                //             t.wx.onMenuShareAppMessage(shareInfo);
+                //             _TY_Tool.wx.onMenuShareAppMessage(shareInfo);
                 //             break;
                 //         case "QQ":
-                //             t.wx.onMenuShareQQ(shareInfo);
+                //             _TY_Tool.wx.onMenuShareQQ(shareInfo);
                 //             break;
                 //         case "weibo":
-                //             t.wx.onMenuShareWeibo(shareInfo);
+                //             _TY_Tool.wx.onMenuShareWeibo(shareInfo);
                 //             break;
                 //         case "qZone":
-                //             t.wx.onMenuShareQZone(shareInfo);
+                //             _TY_Tool.wx.onMenuShareQZone(shareInfo);
                 //             break;
                 //     }
                 // })
