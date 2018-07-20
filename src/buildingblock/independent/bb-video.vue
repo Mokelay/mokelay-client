@@ -236,4 +236,14 @@
             }
         }
     }
+    .vjs-big-play-button{
+    	left:50%!important;
+    	top:50%!important;
+    	margin:-0.75rem!important;
+    	width:1.5rem!important;
+    	height:1.5rem!important;
+    	line-height:1.5rem!important;
+    	border-radius:50%!important;
+    }
+
 </style>
