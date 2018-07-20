@@ -13,23 +13,6 @@
  * <p/>
  * Author: CarlChen
  * Date: 2018/1/25
- * 方法配置
-        [{
-          methodName:"",        //方法名称
-          code:code,              //方法对应function
-        }]
-      // methods:{
-      //   type:Array
-      // },
-      事件配置
-        [{
-          targetBBuuid:"",       //目标积木
-          targetEvent:"",        //目标事件
-          eventName:""           //输出事件名称
-        }]
-      // events:{
-      //   type:Array
-      // },
  */
  
   export default {
@@ -88,7 +71,19 @@
       return module;
     },
     methods: {
-      //通过别名获取某块数据
+      /*通过别名获取某块数据
+        methods 方法配置
+          [{
+            methodName:"",        //方法名称
+            code:code,              //方法对应function
+          }]
+        events 事件配置
+          [{
+            targetBBuuid:"",       //目标积木
+            targetEvent:"",        //目标事件
+            eventName:""           //输出事件名称
+          }]
+      */
       getData: function () {
           const t = this;
           const dataDs = {
@@ -101,6 +96,7 @@
           if (dataDs) {
               _TY_Tool.getDSData(dataDs, _TY_Tool.buildTplParams(t), function (map) {
                   map.forEach((val,key)=>{
+                      debugger
                       t.realContent = val.value.content;
                       t.realAttributes = val.value.attributes;
                       t.renderAttributes();
