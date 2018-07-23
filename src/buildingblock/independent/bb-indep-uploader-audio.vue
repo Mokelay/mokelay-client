@@ -38,7 +38,7 @@ export default {
         //文件大小限制，单位为秒
         maxSize:{
             type:Number,
-            default:600
+            default:60
         }
     },
    data(){ 
