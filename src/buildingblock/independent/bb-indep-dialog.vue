@@ -205,7 +205,7 @@
                 let t=this;
                 setTimeout(()=>{
                     t.$emit('afterOpen',t);
-                },500)
+                },0);
                 
             },
             _initH5Dialog:function(){

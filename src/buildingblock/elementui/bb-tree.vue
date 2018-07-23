@@ -266,9 +266,7 @@
                         }
                     }
                 }
-                if(check){
-                    this.commit(data);
-                }
+                this.commit(data);
             },
             //获取根节点数据
             getRootData() {
@@ -404,6 +402,19 @@
                         t.data = param.arguments;
                     }
                 })
+            },
+            //外部设置值
+            setValue(...params){
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        t.realCheckedField = param.arguments;
+                    }
+                })
+            },
+            //外部获取值
+            getValue(){
+                return this.realCheckedField;
             }
         }
     }
