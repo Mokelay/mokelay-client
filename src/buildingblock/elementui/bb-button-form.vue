@@ -75,6 +75,11 @@ import Util from '../../libs/util';
                 type:Boolean,
                 default:false
             },
+            //开启 则会自动flex排列  不开启默认从上往下排列
+            grid:{
+                type:Boolean,
+                default:false
+            }
         },
 
         data() {
@@ -128,7 +133,8 @@ import Util from '../../libs/util';
                         labelWidth:t.labelWidth,
                         labelInline:t.labelInline,
                         content:t.content,
-                        size:'mini'
+                        size:'mini',
+                        grid:t.grid
                     },
                     on:{
                         "button-finish-success":function(button, valueobj,map){

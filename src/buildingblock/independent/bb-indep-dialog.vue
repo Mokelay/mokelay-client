@@ -205,7 +205,7 @@
                 let t=this;
                 setTimeout(()=>{
                     t.$emit('afterOpen',t);
-                },500)
+                },0);
                 
             },
             _initH5Dialog:function(){
@@ -282,7 +282,7 @@
             closeDialog:function(){
                 this.active = false;
                 this.$emit('update:isShow', false);
-                this.$emit('beforeClose',this.linkage,this);
+                this.$emit('close',this.linkage,this);
             },
             //主要用于积木选择器
             loadChildBB:function(){

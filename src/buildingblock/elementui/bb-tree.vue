@@ -266,9 +266,7 @@
                         }
                     }
                 }
-                if(check){
-                    this.commit(data);
-                }
+                this.commit(data);
             },
             //获取根节点数据
             getRootData() {
@@ -371,7 +369,12 @@
                     //如果是叶子节点
                     t.$emit('leafClick',data,node,current);
                 }
-                t.$emit('click',data,node,current);
+                let result = data[t.nodeValue];
+                t.$emit('click',result,data,node,current);
+                t.$emit('input', result,data,node,current);
+
+                //往上级传送选择的字段
+                t.$emit("change", result,data,node,current);
 
             },
             //节点展开
@@ -404,6 +407,19 @@
                         t.data = param.arguments;
                     }
                 })
+            },
+            //外部设置值
+            setValue(...params){
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        t.realCheckedField = param.arguments;
+                    }
+                })
+            },
+            //外部获取值
+            getValue(){
+                return this.realCheckedField;
             }
         }
     }
