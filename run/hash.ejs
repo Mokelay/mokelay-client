@@ -7,6 +7,9 @@
 </body>
 </html>
 <% var hash = htmlWebpackPlugin.files.js[0].split(".")[htmlWebpackPlugin.files.js[0].split(".").length-2]%>
+<% var pc = htmlWebpackPlugin.files.js[1].split(".")[htmlWebpackPlugin.files.js[0].split(".").length-2]%>
+<% var h5 = htmlWebpackPlugin.files.js[2].split(".")[htmlWebpackPlugin.files.js[0].split(".").length-2]%>
+
 <script type="text/javascript">
     //通过种Cookie方式，同域下可行
     function getRootDomain(){
