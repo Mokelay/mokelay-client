@@ -95,7 +95,7 @@
         data() {
             return {
                 realFields:this.fields,
-                p_value:this.value
+                p_value:this.value,
             }
         },
         watch: {
@@ -237,6 +237,7 @@
                     height: 100%;
                     border-radius: 6px;
                     box-shadow: 0 4px 8px 0 rgba(0,0,0,.06);
+                    display: inline-block;
                 }
                 i{  
                     font-size: 80px;
