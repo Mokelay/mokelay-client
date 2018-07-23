@@ -369,7 +369,12 @@
                     //如果是叶子节点
                     t.$emit('leafClick',data,node,current);
                 }
-                t.$emit('click',data,node,current);
+                let result = data[t.nodeValue];
+                t.$emit('click',result,data,node,current);
+                t.$emit('input', result,data,node,current);
+
+                //往上级传送选择的字段
+                t.$emit("change", result,data,node,current);
 
             },
             //节点展开
