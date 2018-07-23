@@ -142,7 +142,7 @@ export default {
                         t.status = 'recording';
                         t.timeInter = setInterval(()=>{
                             //时长控制
-                            if(t.recordTime >= t.maxSize){
+                            if(t.recordTime >= t.maxSize - 1){
                                 t.endRecord();
                                 clearinterval(t.timeInter);
                             }else{
