@@ -43,8 +43,7 @@
         props: {
             //音频地址 非iframe嵌入式音频地址
             value:{
-                type:[String,Array],
-                default:"https://yongling8808.github.io/test/video_demo/movie/movie1.mp4"
+                type:[String,Array]
             },
             /*
                 transformConfig 样式
