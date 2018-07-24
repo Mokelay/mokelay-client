@@ -461,7 +461,8 @@ import Vue from 'vue'
 
     }
     .leftStyle img{
-    	max-width:150%;
+    	max-width:200%;
+		margin-left:-50%;
     }
     .centerStyle{
     	width:70%;

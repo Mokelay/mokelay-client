@@ -313,9 +313,7 @@ export default {
 
     },
     methods:{
-    	//动态数据获取
-
-    	
+    	//动态数据获取    	
         getData() {
             const t = this;
             if (t.blogDs) {
@@ -412,7 +410,8 @@ export default {
 		overflow:hidden;
 	}
 	.blogJoinPracticeLeft img{
-		max-width:150%;
+		max-width:200%;
+		margin-left:-50%;		
 	}
 	.blogJoinPracticeCenter{
 		width:70%;
