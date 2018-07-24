@@ -127,11 +127,11 @@
                 let t=this;
                 const apiAlias = this.$route.query.param;
                 var ds = {
-                    api:"load-api",
+                    api:"ty_list_api_request",
                     category:'config',//ds选择器 不是type字段而是category字段
                     method:"get",
                     inputs:[
-                        {paramName:'apiAlias',valueType:"constant",constant:apiAlias},
+                        {paramName:'alias',valueType:"constant",constant:apiAlias},
                     ],
                     outputs:[
                         {dataKey:"data",valueKey:"data"},
@@ -147,7 +147,7 @@
                               t.apiInfo.url = apiData.alias
                             }
                         }else if(data.dataKey == 'req_list'){
-                            const reqs = data.value.list;
+                            const reqs = data.value;
                             t.req = [];
                             for (let i in reqs) {
                                 t.req.push({
