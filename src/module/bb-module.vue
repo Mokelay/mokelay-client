@@ -58,6 +58,7 @@
         realAttributes:this.attributes,
         realMethods:this.methods,
         realEvents:this.events,
+        on:{}
       };
     },
     created: function () {
@@ -66,8 +67,10 @@
     },
     render:function(createElement){
       const t = this;
+      const children = _TY_Tool.bbRender(t.realContent,createElement,t)
       //支持水平排列控制
-      const module = createElement("bb-layout-seriation",{props:{content:t.realContent,horizontal:t.option.horizontal}},[]);
+      // const module = createElement("bb-layout-seriation",{props:{content:t.realContent,horizontal:t.option.horizontal},on:t.on},[]);
+      const module = createElement("div",{props:{content:t.realContent,horizontal:t.option.horizontal},on:t.on},[children]);
       return module;
     },
     methods: {
@@ -96,7 +99,6 @@
           if (dataDs) {
               _TY_Tool.getDSData(dataDs, _TY_Tool.buildTplParams(t), function (map) {
                   map.forEach((val,key)=>{
-                      debugger
                       t.realContent = val.value.content;
                       t.realAttributes = val.value.attributes;
                       t.renderAttributes();
@@ -115,7 +117,8 @@
         t.realAttributes.forEach((attribute,key)=>{
           t.realContent.forEach((content,index)=>{
             if(content.uuid == attribute.targetBBuuid){
-              content.attributes[attribute.attributeName] = attribute.attributeValue;
+              const value = typeof attribute.attributeValue == "string"?JSON.parse(attribute.attributeValue):attribute.attributeValue;
+              content.attributes[attribute.attributeName] = value;
             }
           })
         });
@@ -125,9 +128,7 @@
         const t = this;
         t.realMethods.forEach((method,key)=>{
           t[method.methodName] = function(){
-            _TY_Tool.loadBuzz(method.buzz, function(code) {
-                eval(code);
-            });
+            eval(method.code);
           }
         })
       },
@@ -137,26 +138,24 @@
         t.realEvents.forEach((event,key)=>{
           t.realContent.forEach((content,index)=>{
             if(content.uuid == event.targetBBuuid){
+              t.on[event.eventName] = (...params)=>{
+                t.$emit(event.eventName,params);
+              };
+              // t.on[event.targetEvent] = (...params)=>{
+
+              //   t.$emit(event.eventName,params);
+              // };
               content.interactives.push({             //触发交互
                 uuid:_TY_Tool.uuid(),
-                fromContentEvent:'',    //触发积木的事件,fromContentUUID为当前content的UUID
-                executeType:'',         //执行类型(预定义方法 trigger_method,
-                                        //自定义方法 custom_script,
-                                        //容器类方法 container_method)
-                executeScript:'',       //执行脚本 executeType = custom_script
-                executeContentUUID:'',  //执行积木的UUID executeType = trigger_method
-                executeContentMethodName:'',
-                                        //执行积木的方法
-                containerMethodName:''  //容器方法 executeType = container_method
+                fromContentEvent:event.targetEvent,
+                executeType:'custom_script',
+                executeArgument:{eventName:event.eventName},
+                executeScript:'bb-moudle-event'
               })
             }
           });
         })
-      },
-      emitEvent(eventName,params){
-        this.$event(eventName,params)
       }
-
       //执行module某个积木的某个方法
       //execute:function(ele,method,args...){}
     }
