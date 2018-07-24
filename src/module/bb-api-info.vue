@@ -176,7 +176,10 @@
                     return '';
                 }
                 let result = '';
-                let validateJson = JSON.parse(validate);
+                let validateJson = validate;
+                if(typeof validate === 'string'){
+                    validateJson=JSON.parse(validate);
+                }
                 for (let i = 0; i < validateJson.length; i++) {
                     let item = validateJson[i];
                     for (let j = 0; j < validateDict.length; j++) {
