@@ -24,8 +24,8 @@
 				</div>
 			</span>
 		</div>
-		<div class="blogWriteReply" v-show="blogWriteReplyShow"> 
-			<input v-model="valueBase">
+		<div class="blogWriteReply" v-bind:class="{ 'inputShow': isWrite, 'inputHide': noWrite }"> 
+			<input v-model="valueBase" ref="blogContent">
 			<button @click="replySubmit">发表</button>
 		</div>
   </div>
@@ -236,6 +236,8 @@ export default {
         	comments:this.commentsArray,
         	valueBase:this.model,
         	blogWriteReplyShow:false,
+        	isWrite:false,
+        	noWrite:true,
         }
     },
     watch:{}, 
@@ -445,7 +447,8 @@ export default {
 	            t.uploadUrl = apiUrl;
 	        };
 			_TY_Tool.post(t.uploadUrl,param).then(response=>{
-               this.blogWriteReplyShow = false;
+               this.isWrite = false;
+        	   this.noWrite = true;
                t.getData();
                t.replyData();
                this.valueBase = "";
@@ -454,8 +457,10 @@ export default {
         },
         //外部调用输入框
         commentClick:function(){
-        	this.blogWriteReplyShow = true; 
-        	this.parent_id = 0;      	
+        	this.isWrite = true;
+        	this.noWrite = false;
+        	this.$refs.blogContent.focus(); 
+        	this.parent_id = 0;        	     	
         },
     }
 }
@@ -511,6 +516,12 @@ export default {
 	}
 	.display{
 		display:none;
+	}
+	.inputShow{
+		opacity:1;
+	}
+	.inputHide{
+		opacity:0;
 	}
 </style>
 
