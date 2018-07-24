@@ -22,8 +22,7 @@
                 <videoPlayer  class="video-player-box"
                     ref="videoPlayer"
                     :options="playerOptions"
-                    :playsinline="true"
-                    customEventName="customstatechangedeventname"
+                    :playsinline="false"
                     >
                 </videoPlayer>
 
@@ -45,7 +44,7 @@
             //音频地址 非iframe嵌入式音频地址
             value:{
                 type:[String,Array],
-                default:"http://vjs.zencdn.net/v/oceans.mp4"
+                default:"https://yongling8808.github.io/test/video_demo/movie/movie1.mp4"
             },
             /*
                 transformConfig 样式
@@ -96,6 +95,7 @@
         },
         mounted:function(){
             this.setListItemWidth();
+            this.setX5Core();
         },
         methods: {
             //获取视频地址
@@ -152,12 +152,22 @@
                     }
                 }
             },
+            setX5Core(){
+                const t = this;
+                // let videoContent = document.getElementById(t.id);
+                // let video = videoContent.getElementsByTagName("video")[0];
+                // video.setAttribute("x5-video-player-type","pc");
+                // video.setAttribute("x5-video-player-fullscreen","true");
+                // video.setAttribute('playsinline', 'true');
+                // video.setAttribute('preload', 'auto');
+                // video.setAttribute('x5-playsinline', 'true');
+            }
         }
     }
 </script>
 <style lang='less'>
     .bb-video{
-        height: 150px;
+        /*height: 150px;*/
         .dialog{
             animation: zoomIn 0.2s;
             position: fixed;
@@ -215,7 +225,7 @@
         text-align: center;
         video{
             height: auto;
-            width: 100%;
+            /*width: 100%;*/
             /*max-height: 4rem;*/
             margin: auto;
             vertical-align: bottom;
@@ -230,7 +240,7 @@
         .video-player-box{
             &>div{
                 width: 100%;
-                max-width: 100%;
+                /*max-width: 100%;*/
                 height: 4rem;
                 margin: auto;
             }
