@@ -10,6 +10,7 @@
   				<h5 class="userTimeDate"> 
   					<b :style="userTime">{{user.blogDate}}</b>
   					<i :style="userDate">已坚持{{user.continuousDate}}天</i>
+  					<b class="blogDelete" v-show="user.blogDelete"  @click="blogListDelete(user)">删除</b>
   				</h5>
   			</div> 
   			<div class="blogContent"> 
@@ -204,7 +205,7 @@ export default {
         return{    	
         	blogs:this.blogArray,
         	practice:this.practiceData,
-        	blogJoinXlxIcon:"ty-icon_jiantou_right_l",       
+        	blogJoinXlxIcon:"ty-icon_jiantou_right_l",      
         }
     },
     watch:{},
@@ -329,7 +330,6 @@ export default {
         },
 
     },
-
     methods:{
     	//动态数据获取
         getData() {
@@ -346,6 +346,7 @@ export default {
                         });
                       	//console.log("newArry:",newArry);
                         t.blogs = newArry;
+                        console.log(t.blogs);
                     });
                 }, function (code, msg) {
                 });
@@ -382,6 +383,13 @@ export default {
         joinPractiveDetails:function(user){
         	var id = user.practiveId;
         	this.$emit("joinPractiveDetails",id);
+        },
+        //日记删除
+        blogListDelete(user){
+        	var practiveId = user.practiveId; //练习id
+        	var log_id = user.log_id; //日记id
+        	this.$emit("blogListDelete",log_id,practiveId);
+        	//console.log(user.practiveId,user.log_id);
         },
     }
 }
@@ -475,7 +483,8 @@ export default {
 		overflow:hidden;
 	}
 	.blogJoinPracticeLeft img{
-		max-width:150%;
+		max-width:200%;
+		margin-left:-50%;
 	}
 	.blogJoinPracticeCenter{
 		width:70%;
@@ -494,6 +503,10 @@ export default {
 	.practiceTitleStyle{
 		width:100%;
 		overflow:hidden;
+	}
+	.blogDelete{
+		font-size:0.3rem;
+		color:#266fb7;
 	}
 </style>
 
