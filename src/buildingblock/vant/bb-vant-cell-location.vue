@@ -1,6 +1,6 @@
 <template>
 
-    <van-cell :title="addressDetail" icon="location" :class="locationClass" @click="wxLocation" is-link />
+    <van-cell :title="addressDetail" icon="location" :class="locationClass" @click="openMap" is-link />
 
 </template>
 <script>
@@ -35,7 +35,7 @@ import 'vant/lib/cell/style';
                 type:Object,
                 default:function(){
                     return {
-                        scale: 28
+                        scale: 22
                     };
                 }
             }
@@ -49,6 +49,7 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
+            t.wxLocation();
         },
         //事件click
         methods: {
@@ -59,19 +60,12 @@ import 'vant/lib/cell/style';
                     _TY_Tool.wx.getLocation({
                         type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
                         success: function (res) {
-                            const latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-                            const longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                            t.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                            t.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
                             const speed = res.speed; // 速度，以米/每秒计
                             const accuracy = res.accuracy; // 位置精度
                             t.valueBase = res;
-                            t.getLocationName(latitude,longitude);
-                             _TY_Tool.wx.openLocation({
-                                latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
-                                longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-                                name: t.valueBase.name, // 位置名
-                                address: t.valueBase.address, // 地址详情说明
-                                scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
-                            })
+                            t.getLocationName(t.latitude,t.longitude);
                         }
                     });
                 }
@@ -87,13 +81,6 @@ import 'vant/lib/cell/style';
                         t.valueBase.address = data.result.formatted_address;
                         t.valueBase.name = data.result.sematic_description;
                         t.addressDetail = data.result.sematic_description;
-                        _TY_Tool.wx.openLocation({
-                            latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
-                            longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
-                            name: t.valueBase.name, // 位置名
-                            address: t.valueBase.address, // 地址详情说明
-                            scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
-                        });
                         t.$emit("change",t.valueBase);
                         t.$emit("input",t.valueBase);
                         t.locationClass = "locationClass";
@@ -105,6 +92,16 @@ import 'vant/lib/cell/style';
                         }
                     });
                 });
+            },
+            openMap(){
+                const t= this;
+                _TY_Tool.wx.openLocation({
+                    latitude: t.latitude, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: t.longitude, // 经度，浮点数，范围为180 ~ -180。
+                    name: t.valueBase.name, // 位置名
+                    address: t.valueBase.address, // 地址详情说明
+                    scale: t.option.scale, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                })
             }
         }
     }
