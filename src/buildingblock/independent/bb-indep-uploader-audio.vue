@@ -38,7 +38,7 @@ export default {
         //文件大小限制，单位为秒
         maxSize:{
             type:Number,
-            default:600
+            default:60
         }
     },
    data(){ 
@@ -142,7 +142,7 @@ export default {
                         t.status = 'recording';
                         t.timeInter = setInterval(()=>{
                             //时长控制
-                            if(t.recordTime >= t.maxSize){
+                            if(t.recordTime >= t.maxSize - 1){
                                 t.endRecord();
                                 clearinterval(t.timeInter);
                             }else{
