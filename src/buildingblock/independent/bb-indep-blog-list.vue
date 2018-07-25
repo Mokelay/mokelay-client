@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="bb-indep-blog">
   	<div class="content" v-for="(user,key) in blogs" :key="key">
   		<div class="blogLeft"> 
@@ -42,7 +42,14 @@
 			{{user.log_id}}
 			{{user.practiveId}}
 			{{user.greatState}}
-		</div>	
+		</div>
+  	</div>
+  	<div class="bb_loading" v-show="loading"> 
+  		<span></span>
+  		<span></span>
+  		<span></span>
+  		<span></span>
+  		<span></span>
   	</div>
   </div>
 </template>
@@ -181,6 +188,10 @@ export default {
     	blogDs:{
     		type:Object,
     	},
+    	//加载更多数据
+    	blogMore:{
+    		type:Object,
+    	},
     	//静态数据
     	 /*[{
 	    			user_portrait:"",
@@ -200,17 +211,25 @@ export default {
     	blogArray:{
     		type:Array,
     	},
+    	seeMore:{
+    		type:String,
+    		default:"查看更多",
+    	},
     },
     data(){ 
         return{    	
         	blogs:this.blogArray,
         	practice:this.practiceData,
-        	blogJoinXlxIcon:"ty-icon_jiantou_right_l",      
+        	blogJoinXlxIcon:"ty-icon_jiantou_right_l",
+        	seeWrite:this.seeMore,
+        	end:false,//是否加载结束
+        	loading:false//是否加载中 
         }
     },
     watch:{},
     mounted(){ 
 	   this.getData();
+	   this.scrollListener();
 	},  
     computed:{
     	//处理输入框字体样式配置
@@ -338,7 +357,6 @@ export default {
                 _TY_Tool.getDSData(t.blogDs, _TY_Tool.buildTplParams(t), function (data) {
                     data.forEach((item) => {
                         const {dataKey, value} = item;
-                        t.blogs = value.currentRecords;
                         const newArry = [];
                         value.currentRecords.forEach((blog,key)=>{
                         blog.content = _TY_Tool.transferContent(blog.content);
@@ -346,11 +364,41 @@ export default {
                         });
                       	//console.log("newArry:",newArry);
                         t.blogs = newArry;
-                        console.log(t.blogs);
+                        t.page = value.currentPage; //当前页码
+                        t.pageSize = value.pageSize; //当前页总条数
+                        t.totalPages = value.totalPages; //总条数
                     });
                 }, function (code, msg) {
                 });
             }
+        },
+        //加载更多数据
+        blogMoreClick(){
+            const t = this;
+            //t.page = t.page + 1;
+            if (t.blogMore) {
+                _TY_Tool.getDSData(t.blogMore, _TY_Tool.buildTplParams(t), function (data) {
+                    data.forEach((item) => {
+                        const {dataKey, value} = item;
+                        const newArry = [];
+                        value.currentRecords.forEach((blog,key)=>{
+                        blog.content = _TY_Tool.transferContent(blog.content);
+                            newArry.push(blog);
+                        });
+                        t.blogs = t.blogs.concat(newArry);
+                        if(t.page >= t.totalPages){
+                           t.end = true;
+                        }else{
+                           t.end = false;
+                        }
+                        t.loading = false;
+                    });
+                }, function (code, msg) {
+                });
+            };
+            if(t.page == t.totalPages){
+	        	this.seeWrite = "没有更多内容了";
+	        }	      
         },
         //点击内容事件
         joinBlogDetails:function(user){
@@ -389,8 +437,26 @@ export default {
         	var practiveId = user.practiveId; //练习id
         	var log_id = user.log_id; //日记id
         	this.$emit("blogListDelete",log_id,practiveId);
-        	//console.log(user.practiveId,user.log_id);
         },
+        //监听滚动条事件
+        scrollListener:function(){
+            let t=this;
+            //屏幕高度
+            const screenHeight = window.screen.height;
+            window.addEventListener('scroll',function(){
+            	const totalHeight = document.activeElement.scrollHeight || document.body.scrollHeight;
+                const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
+                if(screenHeight + scrollHeight + 10 >= totalHeight){
+                	if(!t.end && !t.loading){
+                        t.loading =true;
+                        t.page = t.page+1;
+                        t.blogMoreClick();
+                    }
+                }
+            });
+        },
+
+        
     }
 }
 </script>
@@ -508,5 +574,68 @@ export default {
 		font-size:0.3rem;
 		color:#266fb7;
 	}
+
+	    @keyframes load{
+        0%{
+            opacity: 1;
+            -webkit-transform: scale(1.2);
+        }
+        100%{
+            opacity: .2;
+            -webkit-transform: scale(.2);
+        }
+    }
+    @-webkit-keyframes load{
+        0%{
+            opacity: 1;
+            -webkit-transform: scale(1.2);
+        }
+        100%{
+            opacity: .2;
+            -webkit-transform: scale(.2);
+        }
+    }
+    .bb_loading{
+        width: 150px;
+        height: 5px;
+        margin: 0 auto;
+        text-align: center;
+        box-sizing: content-box;
+        padding-bottom: 1rem;
+    }
+    .bb_loading span{
+        display: inline-block;
+        width: 15px;
+        height: 100%;
+        margin-right: 5px;
+        background: lightgreen;
+        background:#33BEFE;
+        -webkit-animation: load 1.04s ease infinite;
+        animation: load 1.04s ease infinite;
+    }
+    .bb_loading span:last-child{
+        margin-right: 0px; 
+    }
+    
+    .bb_loading span:nth-child(1){
+        -webkit-animation-delay:0.13s;
+        animation-delay:0.13s;
+    }
+    .bb_loading span:nth-child(2){
+        -webkit-animation-delay:0.26s;
+        animation-delay:0.26s;
+    }
+    .bb_loading span:nth-child(3){
+        -webkit-animation-delay:0.39s;
+        animation-delay:0.39s;
+    }
+    .bb_loading span:nth-child(4){
+        -webkit-animation-delay:0.52s;
+        animation-delay:0.52s;
+    }
+    .bb_loading span:nth-child(5){
+        -webkit-animation-delay:0.65s;
+        animation-delay:0.65s;
+    }
 </style>
 
