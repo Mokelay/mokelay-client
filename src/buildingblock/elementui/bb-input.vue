@@ -1,6 +1,6 @@
 <template>
     <el-input
-      :placeholder="option.placeholder"
+      :placeholder="option.disabled?'':option.placeholder"
       v-model="valueBase"
       @change="change"
       :disabled="disabled||option.disabled"

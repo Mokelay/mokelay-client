@@ -47,6 +47,7 @@ import bbviewgroup from './bb-view-group.vue';
 import bbview from './bb-view.vue';
 import bbmedia from './bb-media.vue';
 import bbbuttonmedia from './bb-button-media.vue';
+import bbcarousel from './bb-carousel.vue';
 
 import ElTreeGrid from 'element-tree-grid';
 
@@ -100,6 +101,7 @@ export default {
 		Vue.component('bb-media', bbmedia);
 		Vue.component('bb-button-media', bbbuttonmedia);
 		Vue.component('bb-view-group', bbviewgroup);
+		Vue.component('bb-carousel', bbcarousel);
 
 		Vue.component(ElTreeGrid.name, ElTreeGrid);
 
