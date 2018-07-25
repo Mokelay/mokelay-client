@@ -210,6 +210,9 @@
             let t=this;
             //将content属性转换成可以识别的tab组件
             t.key = ""+ +new Date();
+            setTimeout(()=>{
+                t.$emit("mounted",t);
+            },0);
         },
         methods: {
             //刷新tab方法 

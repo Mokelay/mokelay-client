@@ -148,7 +148,7 @@
             },
             getUserInfo:function(){
                 const t = this;
-                let userInfo = localStorage.getItem("userInfo");
+                let userInfo = sessionStorage.getItem("userInfo");
                 if(userInfo){
                     let data =JSON.parse(userInfo);
                     t.userInfo = data;
@@ -158,17 +158,22 @@
                     },1000);
                 }else{
                     var sessionAPI = _TY_ENV.name=='local'?"/read-session-user-info":"/ty-read-session-user-info";
+                    if(t.$route.fullPath.indexOf('b_index')>=0){
+                        //b端登录进来的 获取b端登录session
+                        sessionAPI = "/ty-read-session-b-user-info"
+                    }
                     _TY_Tool.get(_TY_ContentPath+sessionAPI).then(function (response) {
                         let data = response['data']['data'];
                         t.userInfo={};
                         t.userInfo['user_id']=data.id;
-                        t.userInfo['user_name']=data.name;
-                        t.userInfo['market_id']=data.marketId;
-                        t.userInfo['market_name']=data.marketDesc;
-                        t.userInfo['logo']=data.logo;
-                        t.userInfo['tenantSerialNumber']=data.tenantSerialNumber;
+                        t.userInfo['user_name']=data.name||data.xingMing||'';
+                        t.userInfo['market_id']=data.marketId||'';
+                        t.userInfo['market_name']=data.marketDesc||'';
+                        t.userInfo['logo']=data.logo||'';
+                        t.userInfo['tenantSerialNumber']=data.tenantSerialNumber||'';
+                        t.userInfo['supplierCommpanySerialNumber'] = data.supplierCommpanySerialNumber||'';
                         t.userName = data.name
-                        localStorage.setItem('userInfo', JSON.stringify(t.userInfo));
+                        sessionStorage.setItem('userInfo', JSON.stringify(t.userInfo));
                         t.updateMenu(true);
                     }).catch(function (error) {
                     });
@@ -176,11 +181,12 @@
             },
             getResources(){
                 const t=this;
-                var url = _TY_ENV.name=='local'?
-                    ("/ty/resources/"+t.$route.params.appAlias)
-                    :(_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias);
+                // var url = _TY_ENV.name=='local'?
+                //     ("/ty/resources/"+t.$route.params.appAlias)
+                //     :(_TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias);
+                var url = _TY_ContentPath+"/load_app_resources?appAlias="+t.$route.params.appAlias;
                 //b端登录
-                if(t.$route.path.indexOf('b_index')>=0 && _TY_ENV.name!='local'){
+                if(t.$route.fullPath.indexOf('b_index')>=0 && _TY_ENV.name!='local'){
                     url = _TY_ContentPath+"/load_bapp_resources?appAlias="+t.$route.params.appAlias
                 }
 
@@ -256,7 +262,7 @@
             logout:function() {
                 _TY_Tool.post("/config/logout").then(function (response) {
                     //清除cookie
-                    localStorage.removeItem('userInfo');
+                    sessionStorage.removeItem('userInfo');
                     window.location.reload()
                 },function(err){
                     window.location.reload()
