@@ -313,7 +313,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         callBackStaticWords:'' //请求接口成功提示语
         dialogPage:'pageAlias',//弹窗中的页面名称   action:'dialog-page’时有效
         method:fn , //需要执行的方法 action:'code’时有效
-        buzz:'buzzName'  //巴斯方法名称  action:'buzz’时有效
+        buzz:'buzzName', //巴斯方法名称  action:'buzz’时有效
+        noConfirm:true //是否去除确认框
     }
     @valueobj :参数来源 t, bb, row-data ,route
 */
@@ -347,11 +348,7 @@ util.resolveButton = function(button, valueobj) {
             button['callBackStaticWords'] = button['callBackStaticWords'] ? button['callBackStaticWords'] : ''
             var messageInfo = button['callBackStaticWords'] ? util.tpl(button['callBackStaticWords'], _TY_Tool.buildTplParams(t, valueobj[valueKey])) : "操作成功";
             if (util.isPC()) {
-                t.$confirm(confirmText, confirmTitle, {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
+                var postFun = function() {
                     util.getDSData(ds, valueobj, function(map) {
                         //TODO
                         t.$message({
@@ -374,51 +371,68 @@ util.resolveButton = function(button, valueobj) {
                         t.$emit("button-finish", button, valueobj, err);
                         t.$emit("button-finish-error", button, valueobj, err);
                     });
-                }).catch(() => {
-                    t.$message({
-                        type: 'info',
-                        message: '操作未完成'
+                }
+                if (button['noConfirm']) {
+                    postFun();
+                } else {
+                    t.$confirm(confirmText, confirmTitle, {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        postFun();
+                    }).catch(() => {
+                        t.$message({
+                            type: 'info',
+                            message: '操作未完成'
+                        });
+                        reject();
                     });
-                    reject();
-                });
+                }
             } else {
-                _TY_Modal({
-                    title: confirmTitle,
-                    message: confirmText,
-                    btns: [{
-                        text: '取消',
-                        $action: (modal) => {
-                            modal.doclose();
-                            reject();
-                        }
-                    }, {
-                        text: '确认',
-                        $action: (modal) => {
-                            util.getDSData(ds, valueobj, function(map) {
-                                //TODO
-                                _TY_Toast({
-                                    content: messageInfo
-                                });
-                                resolve();
-                                // util.buttonCallback(button, valueobj, callback, map);
-                                //触发按钮执行完成事件
-                                t.$emit("button-finish", button, valueobj, map);
-                                t.$emit("button-finish-success", button, valueobj, map);
-                            }, function(err, msg) {
-                                _TY_Toast({
-                                    content: msg || messageInfo
-                                });
+                var postFun = function() {
+                    util.getDSData(ds, valueobj, function(map) {
+                        //TODO
+                        _TY_Toast({
+                            content: messageInfo
+                        });
+                        resolve();
+                        // util.buttonCallback(button, valueobj, callback, map);
+                        //触发按钮执行完成事件
+                        t.$emit("button-finish", button, valueobj, map);
+                        t.$emit("button-finish-success", button, valueobj, map);
+                    }, function(err, msg) {
+                        _TY_Toast({
+                            content: msg || messageInfo
+                        });
+                        reject();
+                        // util.buttonCallback(button, valueobj, callback, err);
+                        //触发按钮执行完成事件
+                        t.$emit("button-finish", button, valueobj, err);
+                        t.$emit("button-finish-error", button, valueobj, err);
+                    });
+                }
+                if (button['noConfirm']) {
+                    postFun();
+                } else {
+                    _TY_Modal({
+                        title: confirmTitle,
+                        message: confirmText,
+                        btns: [{
+                            text: '取消',
+                            $action: (modal) => {
+                                modal.doclose();
                                 reject();
-                                // util.buttonCallback(button, valueobj, callback, err);
-                                //触发按钮执行完成事件
-                                t.$emit("button-finish", button, valueobj, err);
-                                t.$emit("button-finish-error", button, valueobj, err);
-                            });
-                            modal.doclose();
-                        }
-                    }]
-                });
-
+                            }
+                        }, {
+                            text: '确认',
+                            $action: (modal) => {
+                                postFun();
+                                modal.doclose();
+                            }
+                        }]
+                    });
+                }
             }
         } else if (button['action'] == 'dialog-page') {
             //TODO 弹出一个页面对话框
