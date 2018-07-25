@@ -8,7 +8,7 @@
                 class="words" 
  			> 
  			</textarea>
-            <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent" :option="editOption"></bb-layout-seriation-edit>
+            <bb-layout-seriation-edit ref="postContent" class="h5configEdit" :horizontal="false" :content="realContent" :option="editOption" @remove="remove"></bb-layout-seriation-edit>
  			<span class="uploadIcon">
  				<i 
  				v-for="(icon,key) in realIcons" 
@@ -276,7 +276,7 @@ export default {
             editOption:{
                 styleType:"swpie"
             },
-            realIcons:this.icons
+            realIcons:_TY_Tool.deepClone(this.icons)
         }
       },
     computed:{
@@ -406,8 +406,17 @@ export default {
             this.valueBase.content = this.$refs.postContent.getContents();
             this.$emit("change",this.valueBase);
             this.$emit("input",this.valueBase);
+        },
+        //删除处理
+        remove(param){
+            const t = this;
+            const alias = param.alias;
+            t.icons.forEach((item,key)=>{
+                if(item.content.alias == alias){
+                    t.realIcons.splice(key,0,item);
+                }
+            })
         }
-        //1rem = 28.125pt
     }
 }
 </script>
@@ -458,6 +467,7 @@ export default {
             height:3.68rem;
             width:9.4rem;
             margin:auto;
+            margin-bottom: 0.1rem;
             padding:0.5rem;
             display:block;
             font-size:0.37rem;
