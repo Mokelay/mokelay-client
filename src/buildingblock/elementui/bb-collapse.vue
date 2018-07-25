@@ -121,6 +121,11 @@
             itemRightTpl:{
                 type:String
             },
+            //是否显示左侧checkbox
+            showLeftCheckbox:{
+                type:Boolean,
+                default:false
+            }
         },
         data() {
             return {
@@ -128,7 +133,8 @@
                 //collapseData 数据
                 renderData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[],
                 external:{},//外部参数
-                totalData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[]
+                totalData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[],
+                selectedDatas:[]//checkbox勾选数据存储
             }
         },
         watch: {
@@ -169,12 +175,13 @@
                 if(data){
                     this.external['linkage'] = data;
                     this.buildTitle();
+                    this.getCollapseItem();
                 }
             },
             //动态获取item值  renderData的name属性来分组
             buildTitle:function(){
                 let t=this;
-                 if(t.itemDs){
+                if(t.itemDs){
                     _TY_Tool.getDSData(t.itemDs, _TY_Tool.buildTplParams(t), function (map) {
                         let showItems=[];
                         t.totalData.forEach(function(itemData){
@@ -205,14 +212,41 @@
                                 "display":"none"
                             }
                         }
+                        const checkboxInstance = createElement('el-checkbox',{
+                            style:{
+                                'margin': '0 10px',
+                                'display':(t.showLeftCheckbox?'inline':'none')
+                            },
+                            on:{
+                                change:function(val){
+                                    //checkbox 改变后
+                                    if(val){
+                                        //勾选
+                                        if(t.selectedDatas.indexOf(data.name)<0){
+                                            t.selectedDatas.push(data.name);
+                                        }
+                                    }else{
+                                        //取消勾选
+                                        if(t.selectedDatas.indexOf(data.name)>=0){
+                                            t.selectedDatas.splice(t.selectedDatas.indexOf(data.name),1);
+                                        }
+                                    }
+                                    //勾选改变事件
+                                    t.$emit('checkedChange',data.name,val,t.selectedDatas,t);
+                                }
+                            }
+                        },[]);
+                        const customTitle = createElement('template',{
+                            slot:'title'
+                        },[checkboxInstance,data.title]);
+
                         let collapseItemContent=_TY_Tool.bbRender(data.content, createElement, t);
                         const collapseItem = createElement('el-collapse-item',{
                             props:{
-                                title:data.title,
                                 name:data.name
                             },
                             style:style
-                        },collapseItemContent);
+                        },[customTitle].concat(collapseItemContent));
 
                         result.push(createElement('div',{
                                 style:{
@@ -249,13 +283,32 @@
                             content:[],
                             isShow:true
                         }]
+                分页数据：
+                    {
+                        totalRecords:100,
+                        currentRecords:[{
+                            title:'',
+                            name:'',
+                            content:[],
+                            isShow:true
+                        }]
+                    }
             */
 
             getCollapseItem:function(){
                 const t = this;
                 if (t.collapseDs) {
                     _TY_Tool.getDSData(t.collapseDs, _TY_Tool.buildTplParams(t), function (map) {
-                        const itemList = map[0].value;
+                        const datas = map[0].value;
+                        let itemList;
+                        let totalItems=0;
+                        if(datas['currentRecords']&&datas['totalRecords']>=0){
+                            //分页数据
+                            totalItems = datas['totalRecords'];
+                            itemList = datas['currentRecords'];
+                        }else{
+                            itemList = datas;
+                        }
                         let templateContent = t.templateContent;
                         templateContent = templateContent?(typeof(templateContent)==='string'?eval(templateContent):templateContent):[];
                         itemList.forEach((val,key)=>{
@@ -273,6 +326,13 @@
                                     }
                                 });
                                 contentItem['attributes']['parantData'] = val['name'];
+
+                                //解析模板 ===start=== 需要将当前content需要的参数模板解析 成对应的值
+                                let itemAttrStr = JSON.stringify(contentItem['attributes']);
+                                let newItemAttrStr = itemAttrStr.replace(new RegExp('<%=collapse.name%>','g'),data.name).replace(new RegExp('<%=collapse.label%>','g'),data.title);
+                                contentItem['attributes'] = JSON.parse(newItemAttrStr);
+                                //解析模板 ===end===
+
                                 if(contentItem['group'] && contentItem['group'] == val['name']){
                                     //如果有分组则按分组放置
                                     val['content'].push(contentItem);
@@ -282,6 +342,8 @@
                             })
                         })
                         t.renderData = itemList;
+
+                        t.$emit('afterLoadData',itemList,totalItems,t);//加载完数据之后触发 主要是用于分页事件
                     }, function (code, msg) {
                     });
                 }
