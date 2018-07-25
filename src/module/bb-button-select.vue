@@ -127,6 +127,11 @@
                     et: 'bb-ds-select',
                     props: {}
                 }, {
+                    name: '去除接口确认框',
+                    attributeName: 'noConfirm',
+                    et: 'bb-editor-switch',
+                    props: {}
+                }, {
                     name: '设置巴斯',
                     attributeName: 'buzz',
                     et: 'bb-select',
