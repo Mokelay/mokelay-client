@@ -8,7 +8,7 @@
         :initial-index="realOption.initialIndex"
         :indicator-position="realOption.indicatorPosition" 
         @change="change">
-        <el-carousel-item v-for="(item,key) in realItems" :key="key" :name="key" :label="item.text">
+        <el-carousel-item v-for="(item,key) in realItems" :key="key" :name="item.text" :label="item.text">
             <img :src="item.src" alt="item.text" @click="itemClick">
         </el-carousel-item>
     </el-carousel>
