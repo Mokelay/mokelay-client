@@ -190,6 +190,7 @@
     }
     .grid-item{
         display: inline-block;
+        float: left;
     }
     .bb-portal-item-list-inner{
         box-sizing: border-box;
