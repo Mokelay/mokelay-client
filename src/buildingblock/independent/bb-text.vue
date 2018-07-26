@@ -45,6 +45,11 @@
                         letterSpacing:0
                     }
                 }
+            },
+            //不要转换空格和换行
+            noTransfer:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -85,8 +90,10 @@
             //渲染默认值模板
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
             //处理字符串中的空格和换行
-            if(t.valueBase){
+            if(t.valueBase&&!t.noTransfer){
                 t.relValueBase = t.valueBase.replace(/\r{0,}\n/g,"<br/>").replace(/\s/g,"&nbsp;");
+            }else{
+                t.relValueBase = t.valueBase;
             }
         },
         methods: {
