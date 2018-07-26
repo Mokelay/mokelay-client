@@ -425,8 +425,7 @@
     }
 </script>
 
-<style lang="less" scoped>
-
+<style lang="less">
     .bn {
         border: none
     }
@@ -435,6 +434,9 @@
     }
     .bb-tree{
         .horizontal{
+        }
+        .el-tree-node{
+            white-space: pre-wrap !important;
         }
     }
 </style>
