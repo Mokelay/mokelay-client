@@ -22,8 +22,7 @@
     props: {
       //从后端获取content数据并且渲染
       moduleAlias:{
-        type: String,
-        default:"test"
+        type: String
       },
       /*module属性配置
         [{
@@ -96,7 +95,7 @@
                 inputs:[{paramName:'alias',valueType:"template",variable:t.realModuleAlias}],
                 outputs:[{dataKey:"data",valueKey:"data"}]
           };
-          if (dataDs) {
+          if (t.moduleAlias) {
               _TY_Tool.getDSData(dataDs, _TY_Tool.buildTplParams(t), function (map) {
                   map.forEach((val,key)=>{
                       t.realContent = val.value.content;
@@ -114,47 +113,53 @@
       //渲染属性
       renderAttributes(){
         const t = this;
-        t.realAttributes.forEach((attribute,key)=>{
-          t.realContent.forEach((content,index)=>{
-            if(content.uuid == attribute.targetBBuuid){
-              const value = typeof attribute.attributeValue == "string"?JSON.parse(attribute.attributeValue):attribute.attributeValue;
-              content.attributes[attribute.attributeName] = value;
-            }
-          })
-        });
+        if(t.realAttributes){
+          t.realAttributes.forEach((attribute,key)=>{
+            t.realContent.forEach((content,index)=>{
+              if(content.uuid == attribute.targetBBuuid){
+                const value = typeof attribute.attributeValue == "string"?JSON.parse(attribute.attributeValue):attribute.attributeValue;
+                content.attributes[attribute.attributeName] = value;
+              }
+            })
+          });
+        }
       },
       //渲染方法
       renderMethods(){
         const t = this;
-        t.realMethods.forEach((method,key)=>{
-          t[method.methodName] = function(){
-            eval(method.code);
-          }
-        })
+        if(t.realMethods){
+          t.realMethods.forEach((method,key)=>{
+            t[method.methodName] = function(){
+              eval(method.code);
+            }
+          })
+        }
       },
       //渲染事件
       renderEvents(){
         const t = this;
-        t.realEvents.forEach((event,key)=>{
-          t.realContent.forEach((content,index)=>{
-            if(content.uuid == event.targetBBuuid){
-              t.on[event.eventName] = (...params)=>{
-                t.$emit(event.eventName,params);
-              };
-              // t.on[event.targetEvent] = (...params)=>{
+        if(t.realEvents){
+          t.realEvents.forEach((event,key)=>{
+            t.realContent.forEach((content,index)=>{
+              if(content.uuid == event.targetBBuuid){
+                t.on[event.eventName] = (...params)=>{
+                  t.$emit(event.eventName,params);
+                };
+                // t.on[event.targetEvent] = (...params)=>{
 
-              //   t.$emit(event.eventName,params);
-              // };
-              content.interactives.push({             //触发交互
-                uuid:_TY_Tool.uuid(),
-                fromContentEvent:event.targetEvent,
-                executeType:'custom_script',
-                executeArgument:{eventName:event.eventName},
-                executeScript:'bb-moudle-event'
-              })
-            }
-          });
-        })
+                //   t.$emit(event.eventName,params);
+                // };
+                content.interactives.push({             //触发交互
+                  uuid:_TY_Tool.uuid(),
+                  fromContentEvent:event.targetEvent,
+                  executeType:'custom_script',
+                  executeArgument:{eventName:event.eventName},
+                  executeScript:'bb-moudle-event'
+                })
+              }
+            });
+          })
+        }
       }
       //执行module某个积木的某个方法
       //execute:function(ele,method,args...){}
