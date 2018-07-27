@@ -125,6 +125,10 @@
             defaultHide:{
                 type:Boolean,
                 default:false
+            },
+            //分配比例  eg:none ; 1-2 (第一个组件和第二个组件宽度比是1比2) ; 不传表示均分  55开
+            distributeBlock:{
+                type:String
             }
         },
         watch:{
@@ -212,9 +216,23 @@
             renderBB:function(createElement){
                 const t = this;
                 const bbList = _TY_Tool.bbRender(t.realContent, createElement, t);
+                
                 //水平排列垂直排列控制
                 bbList.forEach((bbEle,index)=>{
-                    const bbItem = createElement('div', {style:{flex:1}},[bbEle]);
+                    let _style = {};
+                    if(!t.distributeBlock){
+                        _style = {flex:1};
+                    }else if(t.distributeBlock == 'none'){
+                        _style = {};
+                    }else if(t.distributeBlock.indexOf("-")>=0){
+                        _style = {
+                            flex:(t.distributeBlock.split("-")[index]||1)
+                        }
+                    }
+                    if(!t.horizontal){
+                        _style = {};
+                    }
+                    const bbItem = createElement('div', {style:_style},[bbEle]);
                     bbList.splice(index,1,bbItem);
                     //控制排序 TODO
                     //bbList.splice(bb.layout.sort - 1,1,bbItem);
@@ -223,7 +241,7 @@
             },
             loadChildBB(){
                 let t=this;
-                return _TY_Tool.loadChildBB(t);                
+                return _TY_Tool.loadChildBB(t);
             },
             //根据  事件的 executeArgument  来判断是否该隐藏或是显示
             itemShowOrHide(..._data){
