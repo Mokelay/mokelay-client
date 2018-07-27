@@ -188,14 +188,15 @@
                 **/
                 tabsData:[],//最终转换成tab识别的data数据
                 key:'',//当前组件标识，针对同一个页面由多个相同的组件
-                hasTransfer:false//表示t.contentToTabData(); 方法是否已经执行了，这个方法只能执行一次
+                hasTransfer:false,//表示t.contentToTabData(); 方法是否已经执行了，这个方法只能执行一次
+                p_activeName:_TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this))
                 
             }
         },
         computed: {
-            p_activeName(){
-                return _TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this));
-            }
+            // p_activeName(){
+            //     return _TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this));
+            // }
         },
         created: function () {
             const t=this;
@@ -475,6 +476,15 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //外部设置当前激活标签
+            setActiveName(...params){
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        t.p_activeName = param.arguments;                  
+                    }
+                })
             }
         }
     }
