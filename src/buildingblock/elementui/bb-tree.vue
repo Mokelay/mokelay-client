@@ -248,7 +248,6 @@
             },
             uncheckedKeys(keys) {
                 const treeInstance = this.$refs.tree;
-                debugger
                 keys.forEach((key) => {
                     treeInstance.setChecked(key, false, true);
                 })
@@ -284,7 +283,6 @@
                 return new Promise((resolve) => {
                     if (t.ds) {
                         const _parentId = node.level === 0 ? 0 : node['data'][t.nodeValue];//默认是0 ，查询根列表
-                        debugger
                         let inputs = t.ds.inputs || [];
                         let hasParam = false;
                         inputs.forEach(function (item) {
