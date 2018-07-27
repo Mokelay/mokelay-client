@@ -237,6 +237,7 @@
                 let t = this;
                 if(val&&val instanceof Object){
                     t.external.linkage[0].data.oiAlias = val.alias;
+                    t.external.linkage[0].data.oiName = val.name;
                     t.external.linkage[0].data.dsAlias = val.dsAlias;
                 }else{
                     t.external.linkage[0].data.oiAlias = val;
