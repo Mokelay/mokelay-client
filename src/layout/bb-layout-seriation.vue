@@ -126,9 +126,17 @@
                 type:Boolean,
                 default:false
             },
-            //分配比例  eg:none ; 1-2 (第一个组件和第二个组件宽度比是1比2) ; 不传表示均分  55开
+            //排版  下拉：均分(average),按比例分配(proportion),紧凑(compact)
+            layoutType:{
+                type:String,
+                default:"average"
+            },
+            //用bb-tag标签配置。结构是数组["1","2"]
             distributeBlock:{
-                type:String
+                type:Array,
+                default:function(){
+                    return [];
+                }
             }
         },
         watch:{
@@ -220,13 +228,19 @@
                 //水平排列垂直排列控制
                 bbList.forEach((bbEle,index)=>{
                     let _style = {};
-                    if(!t.distributeBlock){
+                    if(!t.layoutType || t.layoutType==='average'){
                         _style = {flex:1};
-                    }else if(t.distributeBlock == 'none'){
+                    }else if(t.layoutType === 'compact'){
                         _style = {};
-                    }else if(t.distributeBlock.indexOf("-")>=0){
+                    }else if(t.layoutType === 'proportion'){
+                        let _flex = 1;
+                        if(typeof(t.distributeBlock[index])==='string'){
+                            _flex = Number(t.distributeBlock[index]||1);
+                        }else if(typeof(t.distributeBlock[index])==='object'){
+                            _flex = Number(t.distributeBlock[index].alias||1);
+                        }
                         _style = {
-                            flex:(t.distributeBlock.split("-")[index]||1)
+                            flex:_flex
                         }
                     }
                     if(!t.horizontal){
