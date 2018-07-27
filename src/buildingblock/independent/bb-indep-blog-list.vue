@@ -150,6 +150,7 @@ export default {
     	//发表日记文字样式
     	contentWriteConfig:{
     		type:Object,
+
     		default:function(){
     			return {
     				margin:"0",
@@ -362,7 +363,7 @@ export default {
                         blog.content = _TY_Tool.transferContent(blog.content);
                             newArry.push(blog);
                         });
-                      	//console.log("newArry:",newArry);
+                      	console.log("newArry:",newArry);
                         t.blogs = newArry;
                         t.page = value.currentPage; //当前页码
                         t.pageSize = value.pageSize; //当前页总条数
