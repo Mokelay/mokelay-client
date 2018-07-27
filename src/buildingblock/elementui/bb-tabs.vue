@@ -213,7 +213,7 @@
             t.key = ""+ +new Date();
             setTimeout(()=>{
                 t.$emit("mounted",t);
-            },0);
+            },500);
         },
         methods: {
             //刷新tab方法 
