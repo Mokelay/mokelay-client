@@ -90,7 +90,7 @@
                 this.$emit("change",params,this);
             },
             //图片点击
-            itemClick(...param){
+            itemClick(...params){
                 this.$emit("click",params,this);
             }
         }

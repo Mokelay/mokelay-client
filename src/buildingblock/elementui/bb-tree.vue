@@ -10,7 +10,7 @@
                     label: nodeText,
                     isLeaf: 'leaf'
                 }"
-                :default-checked-keys="realCheckedField"
+                :default-checked-keys="valueBase"
                 :default-expanded-keys="expandedKeys"
                 :default-expand-all="expandAll"
                 :show-checkbox="showCheckbox"
@@ -155,8 +155,9 @@
             return {
                 data: t.staticData,
                 id:"bb-tree_" + _TY_Tool.uuid(),
+                valueBase:this.value,
                 realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
-                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys
+                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys,
             }
         },
         created: function () {
@@ -168,9 +169,9 @@
             t.setHorizontal();
         },
         watch: {
-            //value如果为空，取消勾选所有选中节点
-            value(val) {
-                if (!val) {
+            //valueBase如果为空，取消勾选所有选中节点
+            valueBase(val) {
+                if (!val || !val.length) {
                     const treeInstance = this.$refs.tree;
                     const checkedKeys = treeInstance.getCheckedKeys();
                     this.uncheckedKeys(checkedKeys);
@@ -238,6 +239,8 @@
                 } else {
                     result = checkedNodeVal.join(",");
                 }
+
+                this.valueBase = checkedNodeVal;
                 this.$emit('input', result,data);
 
                 //往上级传送选择的字段
@@ -413,20 +416,19 @@
                 const t = this;
                 params.forEach((param,key)=>{
                     if(param.type == "custom"){
-                        t.realCheckedField = param.arguments;
+                        t.valueBase = typeof param.arguments == 'string'?eval(param.arguments):param.arguments;
                     }
                 })
             },
             //外部获取值
             getValue(){
-                return this.realCheckedField;
+                return this.valueBase;
             }
         }
     }
 </script>
 
-<style lang="less" scoped>
-
+<style lang="less">
     .bn {
         border: none
     }
@@ -435,6 +437,9 @@
     }
     .bb-tree{
         .horizontal{
+        }
+        .el-tree-node{
+            white-space: pre-wrap !important;
         }
     }
 </style>

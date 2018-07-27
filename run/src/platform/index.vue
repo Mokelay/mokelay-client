@@ -24,8 +24,8 @@
                                 <div id="ty-content" class="wy-content">
                                     <router-view :key="key" :class="wyPageContainer"></router-view>
                                     <div class="wy-bottom">
-                                        <p>如果您在使用系统过程中有任何帮助需要，请联系IT服务台  热线电话: 400-9200-555  服务邮箱: helpdesk@chinaredstar.com</p>
-                                        <p>© Copyright 2017 by China Redstar Co, Ltd . All right reserved</p>
+                                        <p>如果您在使用系统过程中有任何帮助需要，请联系服务邮箱: service@mokelay.com</p>
+                                        <p>© Copyright 2018 by Mokelay Co, Ltd . All right reserved</p>
                                     </div>
                                 </div>
                                 

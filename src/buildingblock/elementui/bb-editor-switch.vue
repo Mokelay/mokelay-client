@@ -7,8 +7,7 @@
         name : 'bb-editor-switch',
         props:{
             value:{
-                type:[Boolean,String],
-                default:false
+                type:[Boolean,String]
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
@@ -29,17 +28,23 @@
         },
         data() {
             return {
-                p_value:(typeof this.value==='boolean')?this.value:(this.value==true)
+                p_value:(typeof this.value==='boolean')?this.value:(this.value == 'true'),
+                tpl_value:''
             };
         },
         watch:{
             value(val){
-                this.p_value = (typeof val==='boolean')?val:(val==true)
+                this.p_value = (typeof val==='boolean')?val:(val == 'true');
             }
         },
         mounted:function(){
-            let t=this;
-            _TY_Tool.buildDefaultValTpl(t,"p_value");
+            let t=this; 
+            if(this.value != undefined){
+                t.p_value = this.value;
+            }else{
+                _TY_Tool.buildDefaultValTpl(t,"tpl_value");
+                t.p_value = (typeof t.tpl_value==='boolean')?t.tpl_value:(t.tpl_value == 'true');
+            }
         },
         methods: {
            switchChange(val){
