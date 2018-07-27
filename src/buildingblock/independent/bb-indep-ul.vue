@@ -79,8 +79,11 @@
                         pageSize:10
                     };
                 }
+            },
+            //关闭上拉加载
+            closePullLoading:{
+                type:Boolean
             }
-
         },
         data() {
             return {
@@ -229,14 +232,16 @@
                 let t=this;
                 //屏幕高度
                 const screenHeight = window.screen.height;
-                window.onscroll = function(){
-                    const totalHeight = document.activeElement.scrollHeight || document.body.scrollHeight;
-                    const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
-                    if(screenHeight + scrollHeight + 10 >= totalHeight){//接近底部10px的时候就加载
-                        if(!t.end&&!t.loading){
-                            t.loading =true;
-                            t.page = t.page+1;
-                            t.loadData();
+                if(!t.closePullLoading){
+                    window.onscroll = function(){
+                        const totalHeight = document.activeElement.scrollHeight || document.body.scrollHeight;
+                        const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
+                        if(screenHeight + scrollHeight + 10 >= totalHeight){//接近底部10px的时候就加载
+                            if(!t.end&&!t.loading){
+                                t.loading =true;
+                                t.page = t.page+1;
+                                t.loadData();
+                            }
                         }
                     }
                 }
