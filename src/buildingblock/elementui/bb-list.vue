@@ -989,18 +989,19 @@
                         }
                     });
                     const lastRow = t.realColumns[t.realColumns.length-1];
-                    if(lastRow && lastRow.type == "button-group"){
-                        //清除按钮数组中已经存在的bbListeditorData
-                        // lastRow.buttons.forEach((val,key)=>{
-                        //     if(val.prop == "bbListeditorData"){
-                        //         lastRow.buttons.splice(key,1);
-                        //     }
-                        // })
-                        // lastRow.buttons = editor.buttons.concat(lastRow.buttons);
-                        // t.realColumns.push(editor);
-                    }else{
+                    //为了button-group  和editConfig能同时用
+                    // if(lastRow && lastRow.type == "button-group"){
+                    //     //清除按钮数组中已经存在的bbListeditorData
+                    //     // lastRow.buttons.forEach((val,key)=>{
+                    //     //     if(val.prop == "bbListeditorData"){
+                    //     //         lastRow.buttons.splice(key,1);
+                    //     //     }
+                    //     // })
+                    //     // lastRow.buttons = editor.buttons.concat(lastRow.buttons);
+                    //     // t.realColumns.push(editor);
+                    // }else{
                         t.realColumns.push(editor);
-                    }
+                    // }
                 }
             },
             //编辑状态，更新数据
