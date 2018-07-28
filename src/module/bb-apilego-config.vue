@@ -78,7 +78,7 @@
                         "index": 1,
                         "isleaf": false,
                         "ds": {
-                            "api": (t.$route.params.pageAlias==='ty-lego-config-self'?"config-list-ds-by-lego-alias":"ty-list-ds-by-lego-alias"),
+                            "api": (t.$route.params.pageAlias==='ty-lego-config-self-v3'?"config-list-ds-by-lego-alias":"ty-list-ds-by-lego-alias"),
                             "category": "config",
                             "method": "get",
                             "inputs": [
@@ -237,6 +237,7 @@
                 let t = this;
                 if(val&&val instanceof Object){
                     t.external.linkage[0].data.oiAlias = val.alias;
+                    t.external.linkage[0].data.oiName = val.name;
                     t.external.linkage[0].data.dsAlias = val.dsAlias;
                 }else{
                     t.external.linkage[0].data.oiAlias = val;
