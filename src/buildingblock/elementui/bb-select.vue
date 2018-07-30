@@ -178,7 +178,12 @@
                     t.loading = true;
                     Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach(function (item) {
-                                var list = item['value']['list'];
+                                var list;
+                                if(item['value']&&item['value']['list']){
+                                  list = item['value']['list'];
+                                }else{
+                                  list = item['value'];
+                                }
                                 t.items = [];
                                 for (var i in list) {
                                     var ele = list[i][t.valueField];
