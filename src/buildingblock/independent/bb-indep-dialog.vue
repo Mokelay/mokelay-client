@@ -203,9 +203,9 @@
             //el dialog 打开的回调
             _afterOpen:function(){
                 let t=this;
-                setTimeout(()=>{
-                    t.$emit('afterOpen',t);
-                },0);
+                // setTimeout(()=>{
+                //     t.$emit('afterOpen',t);
+                // },0);
                 
             },
             _initH5Dialog:function(){
@@ -277,15 +277,20 @@
             },
             //对外提供方法 打开弹窗
             openDialog:function(linkage){
-                this.active = true;
-                this.linkage = linkage;
-                this.canRender = true;
-                this.$emit('update:isShow', false);
-                this.$emit('open',linkage,this);
+                const t = this;
+                t.active = true;
+                t.linkage = linkage;
+                t.canRender = true;
+                t.$emit('update:isShow', false);
+                t.$emit('open',linkage,t);
+                setTimeout(()=>{
+                    t.$emit('afterOpen',t);
+                },500);
             },
             //对外提供方法 关闭弹窗
             closeDialog:function(){
                 this.active = false;
+                this.dialog = null;
                 this.$emit('update:isShow', false);
                 this.$emit('close',this.linkage,this);
             },
