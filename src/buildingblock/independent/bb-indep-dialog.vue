@@ -4,17 +4,17 @@
         name: 'bb-indep-dialog',
         render: function (createElement) {
             const t = this;
-            let dialog;
             if(t.canRender){
                 //当可以渲染的时候才能渲染
                 const bbItems = _TY_Tool.bbRender(t.realContent, createElement, t);
                 if(window._TY_Platform=='PC'){
-                    dialog = t._renderPCDialog(createElement,bbItems);
+                    t.dialog = t._renderPCDialog(createElement,bbItems);
                 }else{
-                    dialog = t._renderH5Dialog(createElement,bbItems);
+                    t.dialog = t._renderH5Dialog(createElement,bbItems);
                 }
             }
-            return dialog;
+            let dialog = t.dialog;
+            return t.dialog;
         },
         props: {
             //弹框自定义头部
@@ -256,6 +256,8 @@
                 t.$emit('beforeClose', t);
                 //关闭弹窗
                 done&&done();
+                t.canRender = false;
+                t.dialog = null;
             },
             //点击确认按钮触发事件
             _confirm:function(){
@@ -268,6 +270,8 @@
             _cancel:function(){
                 let t=this;
                 t.active = false;
+                t.canRender = false;
+                t.dialog = null;
                 t.$emit("cancel",t);//弹窗取消事件
                 t.$emit('update:isShow', false);
             },
@@ -275,6 +279,7 @@
             openDialog:function(linkage){
                 this.active = true;
                 this.linkage = linkage;
+                this.canRender = true;
                 this.$emit('update:isShow', false);
                 this.$emit('open',linkage,this);
             },

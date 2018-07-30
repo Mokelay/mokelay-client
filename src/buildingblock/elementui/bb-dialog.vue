@@ -16,11 +16,11 @@
                     'fullscreen':t.fullscreen,
                     'modal':true,
                     'lock-scroll':true,
-                    'top':'15vh'
+                    'top':'0.5vh'
                 },
                 style:{
                     'border-radius':"5px",
-                    'heigt':'100vh'
+                    'height':'99vh'
                 },
                 key:t.key,
                 on:{
@@ -192,6 +192,12 @@
 </script>
 <style lang="less">
     .bb-dialog{
+        .el-dialog{
+            margin:auto;
+            margin-top: 0.5vh;
+            max-height: 99vh;
+            overflow: auto;
+        }
         .el-dialog__body{
             max-height: 100vh;
             overflow-y: auto;
