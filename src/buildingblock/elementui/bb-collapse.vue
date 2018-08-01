@@ -40,7 +40,10 @@
             return createElement('el-collapse', {
                 ref:'bb-collapse',
                 props:{
-                    value:this.p_activeNames
+                    value:t.real_p_activeNames
+                },
+                on:{
+                     change:t.collapseChange
                 }
             }, [renderArray]);
         },
@@ -134,7 +137,9 @@
                 renderData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[],
                 external:{},//外部参数
                 totalData:this.collapseData?(typeof(this.collapseData)==='string'?JSON.parse(this.collapseData):this.collapseData):[],
-                selectedDatas:[]//checkbox勾选数据存储
+                selectedDatas:[],//checkbox勾选数据存储
+                real_p_activeNames:[]
+
             }
         },
         watch: {
@@ -157,6 +162,7 @@
                         return this.activeNames.split(",");
                     }
                 }
+                this.real_p_activeNames = this.activeNames;
                 return this.activeNames;
             }
         },
@@ -239,13 +245,13 @@
                         const customTitle = createElement('template',{
                             slot:'title'
                         },[checkboxInstance,data.title]);
-
                         let collapseItemContent=_TY_Tool.bbRender(data.content, createElement, t);
                         const collapseItem = createElement('el-collapse-item',{
                             props:{
                                 name:data.name
                             },
-                            style:style
+                            style:style,
+                            ref:data.name
                         },[customTitle].concat(collapseItemContent));
 
                         result.push(createElement('div',{
@@ -328,11 +334,15 @@
                                 contentItem['attributes']['parantData'] = val['name'];
 
                                 //解析模板 ===start=== 需要将当前content需要的参数模板解析 成对应的值
-                                let itemAttrStr = JSON.stringify(contentItem['attributes']);
-                                let newItemAttrStr = itemAttrStr.replace(new RegExp('<%=collapse.name%>','g'),data.name).replace(new RegExp('<%=collapse.label%>','g'),data.title);
-                                contentItem['attributes'] = JSON.parse(newItemAttrStr);
+                                // let itemAttrStr = JSON.stringify(contentItem['attributes']);
+                                let itemAttrStr = JSON.stringify(contentItem);
+                                const newItemAttrStr = t.transferAttributesTpl(itemAttrStr,val);
+                                // let newItemAttrStr = itemAttrStr.replace(new RegExp('<%=collapse.name%>','g'),val.name).replace(new RegExp('<%=collapse.label%>','g'),val.title);
+                                contentItem = JSON.parse(newItemAttrStr);
                                 //解析模板 ===end===
-
+                                if(!val['content']){
+                                    val['content'] = [];
+                                }
                                 if(contentItem['group'] && contentItem['group'] == val['name']){
                                     //如果有分组则按分组放置
                                     val['content'].push(contentItem);
@@ -358,6 +368,26 @@
                     t.collapseItem[contentItem['uuid']] = newUUID;
                     contentItem['uuid'] = newUUID;
                 })
+            },
+            //模板转换成属性  itemAttrStr 属性的string  val 当前content的数据
+            transferAttributesTpl(itemAttrStr,val){
+                const t = this;
+                const items = itemAttrStr.match(/<%=(collapse+).*?%>/g);
+                let newItemAttrStr = itemAttrStr;
+                if(items){
+                    items.forEach((item,key)=>{
+                        let attrName = item.split('.')[1].split("%>")[0]
+                        newItemAttrStr = newItemAttrStr.replace(new RegExp(item,'g'),val[attrName])
+                    })
+                }
+                return newItemAttrStr;
+            },
+            collapseChange(val){
+                this.$emit("collapseChange",val);
+            },
+            //关闭全部
+            closeAll(){
+                this.real_p_activeNames = [];
             }
         }
     }
