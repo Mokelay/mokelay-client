@@ -25,7 +25,7 @@ console.log('TY CLIENT HOST=======' + h5Host);
 
 var wc = null;
 
-if(env == "local"){
+if (env == "local") {
     wc = merge(webpackBaseConfig, {
         devtool: '#source-map',
         output: {
@@ -37,11 +37,14 @@ if(env == "local"){
             historyApiFallback: true,
             contentBase: '.',
             inline: true,
-            port: 8080,
+            port: 8081,
             host: '0.0.0.0',
             disableHostCheck: true,
             compress: true,
-            headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Credentials": true }
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": true
+            }
         },
         plugins: [
             // new webpack.HotModuleReplacementPlugin(),
@@ -54,7 +57,7 @@ if(env == "local"){
             }),
         ]
     });
-}else if(env == "prd"){
+} else if (env == "prd") {
     wc = merge(webpackBaseConfig, {
         output: {
             publicPath: h5Host,

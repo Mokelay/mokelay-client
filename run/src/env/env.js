@@ -14,6 +14,16 @@ var env = {
 		},
 		questionnaireHost: "http://ty.saiyachina.com/survey"
 	},
+	local1: {
+		name: 'local',
+		apiHost: "http://xlx.saiyachina.com",
+		h5Host: CurrentDomain,
+		ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
+		hosts: {
+			'default': "http://xlx.saiyachina.com"
+		},
+		questionnaireHost: "http://xlx.saiyachina.com/survey"
+	},
 	prd: {
 		name: 'prd',
 		apiHost: CurrentDomain,
