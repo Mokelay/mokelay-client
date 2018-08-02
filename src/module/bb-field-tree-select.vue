@@ -41,6 +41,10 @@
             },
             ioft:{
                 type:String
+            },
+            //是否反向展示，主表先展示。从toOIAlias查询
+            opposite:{
+                type:Boolean
             }
         },
         created:function(){
@@ -78,6 +82,7 @@
                     fieldName: '',
                     oiAlias: '',
                     toOIAlias: '',//目标oi别名
+                    fromOIAlias:'',//源oid别名   反向展示用
                     dt: '',
                     children: []
                 }],
@@ -101,84 +106,178 @@
         },
         methods: {
             openNode(node){
-                if (node.toOIAlias) {
-                    this.p_oiAlias = node.toOIAlias;
-                    this.loadData(node);
+                if(this.opposite){
+                    if (node.fromOIAlias) {
+                        this.p_oiAlias = node.fromOIAlias;
+                        this.loadData(node);
+                    }
+                }else{
+                    if (node.toOIAlias) {
+                        this.p_oiAlias = node.toOIAlias;
+                        this.loadData(node);
+                    }
                 }
             },
             loadData(node){
                 let t = this;
                 if (this.p_oiAlias) {
-
-                    _TY_Tool.post(_TY_ContentPath + "/list-field-tree", {
-                        oiAlias: this.p_oiAlias,
-                        fromOIAlias: this.p_oiAlias
-                    }).then(function (response) {
-                        let data = response['data'];
-                        if (data['ok']) {
-                            let fieldList = data['data']['field_list']['list'];
-                            let connectorList = data['data']['connector_list']['list'];
-                            if (t.p_oiAlias == t.first_oiAlias) {
-                                //说明是第一级
-                                t.data = [];
-                            } else {
-                                if (node) {
-                                    node.children = [];
-                                }
-                            }
-                            for (let i in fieldList) {
-                                let row = {
-                                    id: fieldList[i].id,
-                                    label: fieldList[i].name,
-                                    fieldName: fieldList[i].fieldName,
-                                    oiAlias: fieldList[i].oiAlias,
-                                    toOIAlias: '',
-                                    dt: fieldList[i].dt,
-                                    connectorAlias: '',//真正值
-                                    connTmpAlias: '',//临时变量
-                                    children: []
-                                };
-                                if (node) {
-                                    //如果是外键字段，label显示格式 父label-子label
-                                    row.label = node.label + "-" + row.label;
-                                    row.connectorAlias = node.connTmpAlias;
-                                }
-                                for (let m = 0; m < connectorList.length; m++) {
-                                    let item = connectorList[m];
-                                    if (item.fromFieldName == fieldList[i].fieldName) {
-                                        //有子节点的情况oiAlias  赋给  toOiAlias
-                                        row.toOIAlias = item.toOIAlias;
-                                        //临时变量，存储connector路径别名 alias1,alias2,alias3    connTmpAlias是父节点存储的临时connectorAlias, connectorAlias是子节点存储的正式connectorAlias
-                                        row.connTmpAlias = row.connectorAlias ? (row.connectorAlias + ',' + item.alias) : item.alias;
-                                        //初始化子节点
-                                        row.children = [{
-                                            id: '',
-                                            label: '',
-                                            fieldName: '',
-                                            oiAlias: '',
-                                            toOIAlias: '',
-                                            dt: '',
-                                            connectorAlias: '',
-                                            connTmpAlias: '',//临时变量
-                                            children: []
-                                        }];
-                                        break;
-                                    }
-                                }
-
+                    if(t.opposite){
+                        //反向树形展示  主表在第一层展示
+                        _TY_Tool.get(_TY_ContentPath + "/list-field-tree-opposite", {
+                            oiAlias: this.p_oiAlias,
+                        }).then(function (response) {
+                            let data = response['data'];
+                            if (data['ok']) {
+                                let fieldList = data['data']['field_list']['list'];
+                                let connectorList = data['data']['connector_list']['list'];
                                 if (t.p_oiAlias == t.first_oiAlias) {
                                     //说明是第一级
-                                    t.data.push(row);
+                                    t.data = [];
                                 } else {
-                                    //不是第一级
                                     if (node) {
-                                        node.children.push(row);
+                                        node.children = [];
+                                    }
+                                }
+                                for (let i in fieldList) {
+                                    let row = {
+                                        id: fieldList[i].id,
+                                        label: fieldList[i].name,
+                                        fieldName: fieldList[i].fieldName,
+                                        oiAlias: fieldList[i].oiAlias,
+                                        fromOIAlias: '',
+                                        dt: fieldList[i].dt,
+                                        connectorAlias: '',//真正值
+                                        connTmpAlias: '',//临时变量
+                                        children: []
+                                    };
+                                    if (node) {
+                                        //如果是外键字段，label显示格式 父label-子label
+                                        row.label = node.label + "-" + row.label+"("+node.fromOIAlias+")";
+                                        row.connectorAlias = node.connTmpAlias;
+                                    }
+                                    //是否走了连接器
+                                    let goConnected = false;
+                                    for (let m = 0; m < connectorList.length; m++) {
+                                        let item = connectorList[m];
+                                        if (item.toFieldName == fieldList[i].fieldName) {
+                                            goConnected =true;
+
+                                            let newRow = _TY_Tool.deepClone(row);
+                                            //有子节点的情况oiAlias  赋给  toOiAlias
+                                            newRow.fromOIAlias = item.fromOIAlias;
+                                            //临时变量，存储connector路径别名 alias1,alias2,alias3    connTmpAlias是父节点存储的临时connectorAlias, connectorAlias是子节点存储的正式connectorAlias
+                                            newRow.connTmpAlias = newRow.connectorAlias ? (newRow.connectorAlias + ',' + item.alias) : item.alias;
+                                            //初始化子节点
+                                            newRow.children = [{
+                                                id: '',
+                                                label: '',
+                                                fieldName: '',
+                                                oiAlias: '',
+                                                fromOIAlias: '',
+                                                dt: '',
+                                                connectorAlias: '',
+                                                connTmpAlias: '',//临时变量
+                                                children: []
+                                            }];
+                                            // break;
+                                            if (t.p_oiAlias == t.first_oiAlias) {
+                                              //说明是第一级
+                                                t.data.push(newRow);
+                                            } else {
+                                                //不是第一级
+                                                if (node) {
+                                                    node.children.push(newRow);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if(!goConnected){
+                                        if (t.p_oiAlias == t.first_oiAlias) {
+                                          //说明是第一级
+                                            t.data.push(row);
+                                        } else {
+                                            //不是第一级
+                                            if (node) {
+                                                node.children.push(row);
+                                            }
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }).catch(function (error) {
-                    });
+                        }).catch(function (error) {
+                        });
+                    }else{
+                        //正向树形展示
+                        _TY_Tool.post(_TY_ContentPath + "/list-field-tree", {
+                            oiAlias: this.p_oiAlias,
+                            fromOIAlias: this.p_oiAlias
+                        }).then(function (response) {
+                            let data = response['data'];
+                            if (data['ok']) {
+                                let fieldList = data['data']['field_list']['list'];
+                                let connectorList = data['data']['connector_list']['list'];
+                                if (t.p_oiAlias == t.first_oiAlias) {
+                                    //说明是第一级
+                                    t.data = [];
+                                } else {
+                                    if (node) {
+                                        node.children = [];
+                                    }
+                                }
+                                for (let i in fieldList) {
+                                    let row = {
+                                        id: fieldList[i].id,
+                                        label: fieldList[i].name,
+                                        fieldName: fieldList[i].fieldName,
+                                        oiAlias: fieldList[i].oiAlias,
+                                        toOIAlias: '',
+                                        dt: fieldList[i].dt,
+                                        connectorAlias: '',//真正值
+                                        connTmpAlias: '',//临时变量
+                                        children: []
+                                    };
+                                    if (node) {
+                                        //如果是外键字段，label显示格式 父label-子label
+                                        row.label = node.label + "-" + row.label;
+                                        row.connectorAlias = node.connTmpAlias;
+                                    }
+                                    for (let m = 0; m < connectorList.length; m++) {
+                                        let item = connectorList[m];
+                                        if (item.fromFieldName == fieldList[i].fieldName) {
+                                            //有子节点的情况oiAlias  赋给  toOiAlias
+                                            row.toOIAlias = item.toOIAlias;
+                                            //临时变量，存储connector路径别名 alias1,alias2,alias3    connTmpAlias是父节点存储的临时connectorAlias, connectorAlias是子节点存储的正式connectorAlias
+                                            row.connTmpAlias = row.connectorAlias ? (row.connectorAlias + ',' + item.alias) : item.alias;
+                                            //初始化子节点
+                                            row.children = [{
+                                                id: '',
+                                                label: '',
+                                                fieldName: '',
+                                                oiAlias: '',
+                                                toOIAlias: '',
+                                                dt: '',
+                                                connectorAlias: '',
+                                                connTmpAlias: '',//临时变量
+                                                children: []
+                                            }];
+                                            break;
+                                        }
+                                    }
+
+                                    if (t.p_oiAlias == t.first_oiAlias) {
+                                        //说明是第一级
+                                        t.data.push(row);
+                                    } else {
+                                        //不是第一级
+                                        if (node) {
+                                            node.children.push(row);
+                                        }
+                                    }
+                                }
+                            }
+                        }).catch(function (error) {
+                        });
+                    }
                 }
             },
             addField(){

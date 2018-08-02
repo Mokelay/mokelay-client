@@ -128,6 +128,9 @@
                             <div v-if="column['template'] == 'file'">
                                 <bb-custom :customFile="column['file']" :parentData="{row:scope['row'],column:column}"></bb-custom>
                             </div>
+                            <div v-else v-html="scope['row'][column.prop]">
+                            </div>
+
                         </div>
                         <div v-else>
                             <!-- 只读状态 -->
@@ -474,7 +477,7 @@
             },
             validateMessageObj(val){
 
-            },
+            }
         },
         created: function () {
             const t = this;

@@ -307,10 +307,12 @@
             opacity:1;
             transition: opacity .1s;
             position: absolute;
-            right: 5px;
+            padding-right: 5px;
             z-index: 1;
             border:1px solid #cccccc;
             border:none;
+            width: 100%;
+            height: 100%;
             /*top: -10px;*/
         }
         .bb-seriation-item-title{
