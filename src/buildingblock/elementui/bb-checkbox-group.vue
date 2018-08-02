@@ -1,7 +1,7 @@
 <template>
     <el-checkbox-group v-model="p_value" :size="option.size" :disabled="option.disabled" @change="checkboxChange">
-        <el-checkbox v-if="type == 'checkbox'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-checkbox>
-        <el-checkbox-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-checkbox-button>
+        <el-checkbox v-if="type == 'checkbox'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" @change="itemClick(item)">{{item.text}}</el-checkbox>
+        <el-checkbox-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection" @change="itemClick(item)">{{item.text}}</el-checkbox-button>
     </el-checkbox-group>
 </template>
 
@@ -70,6 +70,9 @@ import Util from '../../libs/util';
         watch:{
             value(val){
                 this.p_value = this._changeToArray(val)
+            },
+            options(val){
+                this.p_options = val;
             }
         },
         mounted(){
@@ -150,7 +153,10 @@ import Util from '../../libs/util';
                 //设置p_value
                 this.p_value = this._changeToArray(result);
                 return result;
-           } 
+           },
+           itemClick(item){
+                this.$emit("itemClick",item);
+           }
         }
     }
 </script>

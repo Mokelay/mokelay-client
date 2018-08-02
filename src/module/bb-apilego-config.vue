@@ -1181,6 +1181,71 @@
                                 }]
                     }
 
+                    //反向输入字段字段选择
+                    const oppositeTreeAdd ={
+                                "uuid": t.external.linkage[0].data.uuid + "-if-opposite-tree-add-" + _ioft,
+                                "alias": "bb-button",
+                                "aliasName": "添加" + t._buildTitle(_ioft),
+                                "group": "",
+                                "attributes": {
+                                    "button": {
+                                        "icon": "ty-icon_tianjia",
+                                        "size": "small",
+                                        "style": {}
+                                    }
+                                },
+                                "animation": [],
+                                "interactives": [{
+                                    "uuid": "",
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-if-opposite-tree-add-" + _ioft,
+                                    "executeType": "trigger_method",
+                                    "fromContentEvent": "click",
+                                    "executeContentUUID": "Page_Ref_Root",
+                                    "executeContentMethodName": "openDialog",
+                                    "executeArgument": [
+                                        {
+                                            "uuid": t.external.linkage[0].data.uuid + "-if-opposite-tree-add-form-"+_ioft,
+                                            "alias": "bb-field-tree-select",
+                                            "aliasName": "选择属性",
+                                            "attributes": {
+                                                "multiple":true,
+                                                "ioftType":'ift',
+                                                "ioft":_ioft,
+                                                "opposite":true,
+                                                "checkedField":"<%var vals = _TY_Root._TY_Current_Edit_Item.data.ifList;var result=[];for(var i=0;i<vals.length;i++){(vals[i].ift=='"+_ioft+"')&&result.push(vals[i].fieldName);}print(JSON.stringify(result));%>"
+                                                // "value":{
+                                                //     "ct":"eq",
+                                                //     "ift":_ioft,
+                                                //     "apiLegoUuid":t.external.linkage[0].data.uuid
+                                                // },
+                                            },
+                                            "animation": [
+                                                {}
+                                            ],
+                                            "interactives": [
+                                                {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-opposite-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveTreeIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-if-opposite-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
+                                            ],
+                                            "layout": {}
+                                        }
+                                    ]
+                                }]
+                    }
+
                     const funAdd = {
                                 "uuid": t.external.linkage[0].data.uuid + "-if-fun-add-" + _ioft,
                                 "alias": "bb-button",
@@ -1823,6 +1888,8 @@
                     };
                     if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'||_ioft=='unstructured'){
                         item.content.push(formAdd);
+                    }else if(_ioft=='create'){
+                        item.content.push(oppositeTreeAdd);
                     }else{
                         item.content.push(treeAdd);
                     }
@@ -2147,7 +2214,72 @@
                                         }
                                     ]
                                 }]
+                    };
+
+                    //输出字段字段选择 反向
+                    const oppositeTreeAddOf ={
+                        "uuid": t.external.linkage[0].data.uuid + "-of-opposite-tree-add-" + _ioft,
+                                "alias": "bb-button",
+                                "aliasName": "添加" + t._buildTitle(_ioft),
+                                "group": "",
+                                "attributes": {
+                                    "button": {
+                                        "icon": "ty-icon_tianjia",
+                                        "size": "small",
+                                        "style": {}
+                                    }
+                                },
+                                "animation": [],
+                                "interactives": [{
+                                    "uuid": "",
+                                    "fromContentUUID": t.external.linkage[0].data.uuid + "-of-opposite-tree-add-" + _ioft,
+                                    "executeType": "trigger_method",
+                                    "fromContentEvent": "click",
+                                    "executeContentUUID": "Page_Ref_Root",
+                                    "executeContentMethodName": "openDialog",
+                                    "executeArgument": [
+                                        {
+                                            "uuid": t.external.linkage[0].data.uuid + "-of-opposite-tree-add-form-"+_ioft,
+                                            "alias": "bb-field-tree-select",
+                                            "aliasName": "选择属性",
+                                            "attributes": {
+                                                "multiple":true,
+                                                "ioftType":'oft',
+                                                "ioft":_ioft,
+                                                "opposite":true
+                                                // "value":{
+                                                //     "ct":"eq",
+                                                //     "ift":_ioft,
+                                                //     "apiLegoUuid":t.external.linkage[0].data.uuid
+                                                // },
+                                            },
+                                            "animation": [
+                                                {}
+                                            ],
+                                            "interactives": [
+                                                {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-opposite-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "r-00001-config",
+                                                        "executeContentMethodName": "saveTreeIOF"
+                                                    },
+                                                    {
+                                                        "uuid": "",
+                                                        "fromContentUUID": t.external.linkage[0].data.uuid + "-of-opposite-tree-add-form-"+_ioft,
+                                                        "executeType": "trigger_method",
+                                                        "fromContentEvent": "tree-commit",
+                                                        "executeContentUUID": "Page_Ref_Root",
+                                                        "executeContentMethodName": "closeDialog"
+                                                    }
+                                            ],
+                                            "layout": {}
+                                        }
+                                    ]
+                                }]
                     }
+
                     let item = {
                         title: t._buildTitle(_ioft),
                         name: _ioft,
@@ -2402,6 +2534,8 @@
 
                     if(_ioft=='common'||_ioft=='cache'||_ioft=='memory'||_ioft=='unstructured'){
                         item.content.push(formAddOf);
+                    }else if(_ioft=='create'){
+                        item.content.push(oppositeTreeAddOf);
                     }else{
                         item.content.push(treeAddOf);
                     }
