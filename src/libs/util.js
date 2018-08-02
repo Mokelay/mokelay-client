@@ -14,11 +14,11 @@ util.invoke = function(options) {
             });
         }
         util.ajax(options).then(function(response) {
-            if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401 && util.isWX() && response['data']['message']) {
+            if (response && response['data'] && response['data']['code'] && response['data']['code'] == -420 && util.isWX()) {
                 //微信端没有登录，跳转微信授权
                 location.href = response['data']['message'] || window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401) {
-                //未登录
+                //龙眼专用 未登录
                 location.href = window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
                 //TY E端未登录
