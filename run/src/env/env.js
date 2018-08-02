@@ -24,15 +24,6 @@ var env = {
 		},
 		questionnaireHost: "http://ty.saiyachina.com/survey",
 		home: "/home_ln"
-	},
-	demo: {
-		name: 'demo',
-		apiHost: "http://demo.greatbee.com",
-		ssoURL: CurrentDomain + "/#/ty-login",
-		hosts: {
-			'default': "http://demo.greatbee.com"
-		},
-		home: "/home_ln"
 	}
 };
 // export default env;
