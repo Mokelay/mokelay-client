@@ -21,10 +21,10 @@ util.invoke = function(options) {
                 //未登录
                 location.href = window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -400) {
-                //TY未登录
+                //TY E端未登录
                 location.href = document.location.protocol + "//" + document.location.host + "/#/ty-login";
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -410) {
-                //TY b端 未登录
+                //TY B端未登录
                 location.href = document.location.protocol + "//" + document.location.host + "/#/ty_b_login";
             } else {
                 resolve(response);
