@@ -148,7 +148,7 @@
             },
             getUserInfo:function(){
                 const t = this;
-                let userInfo = sessionStorage.getItem("userInfo");
+                let userInfo = localStorage.getItem("userInfo");
                 if(userInfo){
                     let data =JSON.parse(userInfo);
                     t.userInfo = data;
@@ -173,7 +173,7 @@
                         t.userInfo['tenantSerialNumber']=data.tenantSerialNumber||'';
                         t.userInfo['supplierCommpanySerialNumber'] = data.supplierCommpanySerialNumber||'';
                         t.userName = data.name
-                        sessionStorage.setItem('userInfo', JSON.stringify(t.userInfo));
+                        localStorage.setItem('userInfo', JSON.stringify(t.userInfo));
                         t.updateMenu(true);
                     }).catch(function (error) {
                     });
