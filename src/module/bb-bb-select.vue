@@ -53,9 +53,9 @@
             loadFirstData(){
                 let t=this;
                 t.firstOpts = [{
-                    value:"Page_Ref_Root",
+                    value:"main",
                     label:"Root",
-                    bbAlias:'bb-page',
+                    bbAlias:'bb-layout-seriation',
                     children:[]
                 }];
                 //获取根数据
