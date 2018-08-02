@@ -2,6 +2,7 @@
     <div>
         <el-upload
             :action="uploadUrl"
+            :before-upload="beforeUpload"
             :on-success="onSuccess"
             :on-error="onError"
             :on-preview="picturePreview"
@@ -78,6 +79,10 @@
                         }
                     };
                 }
+            },
+            //上传前的逻辑处理，return false表示不自动上传
+            beforeUpload:{
+                type:Function
             }
         },
         data() {
