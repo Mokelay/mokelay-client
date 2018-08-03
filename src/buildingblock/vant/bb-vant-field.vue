@@ -15,6 +15,7 @@
             :errorMessage="option.errorMessage" 
             :autosize="option.autosize"
             :maxText="maxTextShow"
+            :placeholder="option.placeholder"
             @change="onInput" 
             @click-icon="clickIcon" 
             @keyup="keyup"/>
