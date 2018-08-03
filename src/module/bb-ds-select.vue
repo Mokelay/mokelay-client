@@ -67,8 +67,8 @@
                                 valueField:"alias"
                             }},
                             {prop:'valueKey',label:'响应变量',type:"defalut",et:"bb-select",etProp:{
-                                ds:{api: "/ty-list-api-res",method: "get",
-                                    inputs: [{paramName: 'apiAlias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
+                                ds:{api: "/ty_list_api_response",method: "get",
+                                    inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
                                     outputs: [{dataKey: "fields", valueKey: "data_list"}]
                                 },
                                 textField:'alias',
