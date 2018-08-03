@@ -3,12 +3,15 @@
         <bb-vant-cell @click="showPopup" :value="valueBase" :option="option" :content="content" :contentDs="contentDs"></bb-vant-cell>
         <van-popup v-model="pickerShow" position="bottom" @click-overlay="onCancel">
             <van-picker
-              :show-toolbar="pickerConfig.showToolbar||true"
-              :title="pickerConfig.title||''"
-              :columns="pickerConfig.columns||[]"
-              @cancel="onCancel"
-              @confirm="onConfirm"
+                v-if="pickerConfig.type != 'area'"
+                :show-toolbar="pickerConfig.showToolbar||true"
+                :title="pickerConfig.title||''"
+                :columns="realColumns||[]"
+                @cancel="onCancel"
+                @confirm="onConfirm"
+                @change="onChange"
             />
+            <bb-vant-area v-if="pickerConfig.type == 'area'" :value="valueBase" @change="onConfirm"></bb-vant-area>
         </van-popup>
     </div>
 </template>
@@ -19,7 +22,6 @@ import Picker from 'vant/lib/picker';
 import 'vant/lib/picker/style';
 import Cell from 'vant/lib/cell';
 import 'vant/lib/cell/style';
-
     export default {
         name: 'bb-vant-cell-picker',
         components: {
@@ -36,10 +38,20 @@ import 'vant/lib/cell/style';
             defaultValTpl:{
                 type:[String,Number,Boolean]
             },
-            /*选择器属性
-                showToolbar:true //显示头部
-              title:"标题"
-              columns:
+            /*columns 选择器静态数据
+                [{text:"浙江",value:0001,children:[
+                    { text: '杭州',value:'1'},
+                    { text: '宁波',value:'2'},
+                    { text: '温州',value:'3'},
+                    { text: '湖州',value:'4'}
+                    ]},
+                {text:"福建",value:0001,children:[
+                    { text: '杭州',value:'1'},
+                    { text: '宁波',value:'2'},
+                    { text: '温州',value:'3'},
+                    { text: '湖州',value:'4'}
+                    ]}]
+                
                 单级['杭州', '宁波', '温州', '嘉兴', '湖州']
                 多级[
                     {
@@ -53,10 +65,38 @@ import 'vant/lib/cell/style';
                     }
                 ]
             */
+            columns:{
+                type:Array,
+                default:function(){
+                    return [{text:"浙江",value:1,children:[
+                            { text: '杭州',value:'1'},
+                            { text: '宁波',value:'2'},
+                            { text: '温州',value:'3'},
+                            { text: '湖州',value:'4'}
+                            ]},
+                        {text:"福建",value:2,children:[
+                            { text: '杭州2',value:'5'},
+                            { text: '宁波2',value:'6'},
+                            { text: '温州2',value:'7'},
+                            { text: '湖州2',value:'8'}
+                        ]}]
+                }
+            },
+            /*选择器动态数据*/
+            columnsDs:{
+                type:Object
+            },
+            /*选择器属性
+                type:"area"  area地址选择器  default默认值
+                showToolbar:true //显示头部
+                title:"标题"
+            */
             pickerConfig:{
                 type:Object,
                 default:function(){
-                    return {};
+                    return {
+                        type:"default"
+                    };
                 }
             },
             /*其他属性配置
@@ -74,7 +114,9 @@ import 'vant/lib/cell/style';
             option:{
                 type:Object,
                 default:function(){
-                    return {}
+                    return {
+
+                    }
                 }
 
             },
@@ -145,8 +187,17 @@ import 'vant/lib/cell/style';
         data() {
             return {
                 valueBase:this.value,
-                pickerShow:false
+                pickerShow:false,
+                columnsData:this.pickerConfig.columns || this.columns,
+                external:{}
             };
+        },
+        computed:{
+            realColumns(){
+                const columns = [];
+                this.setColumn(this.columnsData,columns);
+                return columns;
+            }
         },
         watch:{
             value(val){
@@ -160,6 +211,7 @@ import 'vant/lib/cell/style';
         },
         mounted(){
             const t = this;
+            t.getData();
             if(t.pickerConfig.columns){
                t.pickerConfig.columns.forEach((ele,key)=>{
                     t.valueBase = ele.value == t.value?ele.text:t.valueBase;
@@ -169,18 +221,68 @@ import 'vant/lib/cell/style';
         //事件click
         methods: {
             onConfirm(value, index) {
-                this.valueBase = value.text;
-                this.$emit("input",value.value);
-                this.$emit("change",value.value);
-                this.pickerShow = false;
+                if(Array.isArray(value)){
+                    let text = [];
+                    let emitValue = [];
+                    value.forEach((val,key)=>{
+                        if(this.pickerConfig.type == 'area'){
+                            val.text = val.name;
+                            val.value = val.code;
+                        }
+                        text.push(val.text);
+                        emitValue.push(val.value);
+                    })
+                    this.valueBase = text.join(" ");
+                    emitValue = emitValue.join(",")
+                    this.$emit("input",emitValue,value);
+                    this.$emit("change",emitValue,value);
+                }else{
+                    this.valueBase = value.text;
+                    this.$emit("input",value.value,value);
+                    this.$emit("change",value.value,value);
+                }
+                this.pickerShow = false;                
             },
             onCancel() {
                 this.pickerShow = false;
             },
             showPopup(){
                 this.pickerShow = true;
-            }
-}
+            },
+            onChange(picker, values,level) {
+                picker.setColumnValues(level + 1, values[level]["children"]);
+                this.$emit("scroll",values);
+            },
+            //设置表头
+            setColumn(data,columns){
+                const t = this;
+                columns.push({
+                    values:data
+                });
+                if(data[0] && data[0].children){
+                    t.setColumn(data[0].children,columns)
+                }
+            },
+            //获取选择器选项数据
+            getData(){
+                let t=this;
+                if(t.columnsDs){
+                    _TY_Tool.getDSData(t.columnsDs, _TY_Tool.buildTplParams(t), function (map) {
+                         map.forEach((val,key)=>{
+                            t.columnsData = val.value;
+                        })
+                    }, function (code, msg) {
+                    });
+                }
+            },
+            //外部联动更新数据
+            linkage(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.getData();
+                }
+            },
+        }
     }
 </script>
 
