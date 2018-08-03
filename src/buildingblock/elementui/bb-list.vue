@@ -459,8 +459,8 @@
                 validateMessage: '',
                 validateDisabled: false,
                 validateMessageObj:{},
-                realCellStyleFn:eval("("+this.cellStyleFn+")"),
-                realHeaderCellStyleFn:eval("("+this.headerCellStyleFn+")"),
+                realCellStyleFn:this.cellStyleFn != ""?eval("("+this.cellStyleFn+")"):{},
+                realHeaderCellStyleFn:this.cellStyleFn != ""?eval("("+this.headerCellStyleFn+")"):{},
                 radioName:_TY_Tool.uuid()
             }
         },
