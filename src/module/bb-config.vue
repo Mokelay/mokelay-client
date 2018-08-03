@@ -86,14 +86,28 @@
                 show:false,
                 _TY_Current_Edit_Item:null,
                 showBBSelect:true,
-                bbFieldsDs: {
-                     "api": "list-bb",
-                     "category": "config",
-                     "method": "post",
-                     "inputs": [],
-                     "outputs": [{
-                         "dataKey": "fields",
-                         "valueKey": "data_list"
+                // bbFieldsDs: {
+                //      "api": "list-bb",
+                //      "category": "config",
+                //      "method": "post",
+                //      "inputs": [],
+                //      "outputs": [{
+                //          "dataKey": "fields",
+                //          "valueKey": "data_list"
+                //     }]
+                // },
+                bbFieldsDs:{
+                    "api": "list-bb-by-pageAlias",
+                    "category": "config",
+                    "method": "get",
+                    "inputs": [{
+                        "paramName":'pageAlias',
+                        "valueType":"template",
+                        "variable":_TY_Root.$route.query.pageAlias
+                    }],
+                    "outputs": [{
+                        "dataKey": "fields",
+                        "valueKey": "data_list"
                     }]
                 },
                 formItemFieldsBase:null,
