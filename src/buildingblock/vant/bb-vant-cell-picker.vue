@@ -66,21 +66,7 @@ import 'vant/lib/cell/style';
                 ]
             */
             columns:{
-                type:Array,
-                default:function(){
-                    return [{text:"浙江",value:1,children:[
-                            { text: '杭州',value:'1'},
-                            { text: '宁波',value:'2'},
-                            { text: '温州',value:'3'},
-                            { text: '湖州',value:'4'}
-                            ]},
-                        {text:"福建",value:2,children:[
-                            { text: '杭州2',value:'5'},
-                            { text: '宁波2',value:'6'},
-                            { text: '温州2',value:'7'},
-                            { text: '湖州2',value:'8'}
-                        ]}]
-                }
+                type:Array
             },
             /*选择器动态数据*/
             columnsDs:{
