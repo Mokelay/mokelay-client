@@ -17,11 +17,13 @@ util.invoke = function(options) {
             if (response && response['data'] && response['data']['code'] && response['data']['code'] == -420 && util.isWX()) {
                 //微信端没有登录，跳转微信授权
                 location.href = response['data']['message'] || window._TY_SSOURL;
-            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] == -401) {
-                location.href = window._RS_SSOURL;
-            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] <= -410) {
+            } else if (response && response['data'] && response['data']['code'] && response['data']['code'] <= -400) {
                 //所有Code小于等于-400都是属于没有登录授权的，统一走SSOURL配置路径
-                location.href = window._TY_SSOURL;
+                if (response['data']['code'] == -401) {
+                    location.href = window._RS_SSOURL;
+                } else {
+                    location.href = window._TY_SSOURL;
+                }
             } else {
                 resolve(response);
             }
