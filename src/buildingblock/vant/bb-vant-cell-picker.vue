@@ -36,7 +36,8 @@ import 'vant/lib/cell/style';
             },
             /*模板默认值*/
             defaultValTpl:{
-                type:[String,Number,Boolean]
+                type:[String,Number,Boolean],
+                default:""
             },
             /*columns 选择器静态数据
                 [{text:"浙江",value:0001,children:[
@@ -205,6 +206,12 @@ import 'vant/lib/cell/style';
                    });
                 }
             }
+        },
+        created(){
+            const t = this;
+            t.defaultValTpl
+            const valueBaseString = _TY_Tool.tpl(t.defaultValTpl, _TY_Tool.buildTplParams(t));
+            t.valueBase = eval(valueBaseString);
         },
         mounted(){
             const t = this;
