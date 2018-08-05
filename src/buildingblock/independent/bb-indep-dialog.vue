@@ -14,6 +14,11 @@
                 }
             }
             let dialog = t.dialog;
+            if(t.active){
+                setTimeout(()=>{
+                    t.openSide();
+                },100);
+            }
             return t.dialog;
         },
         props: {
@@ -82,6 +87,11 @@
             width:{
                 type:String
             },
+            //dialog高度 针对pc
+            height:{
+                type:String,
+                default:"100vh"
+            },
             size:{
                 type:String,
                 default:'small'
@@ -95,14 +105,21 @@
             top:{
                 type:String,
                 default:"15vh"
+            },
+            //弹出从哪里打开 default  left top right bottom
+            openForm:{
+                type:String,
+                default:"default"
             }
+
         },
         data() {
             return {
                 canRender:false,//标记是否可以渲染
                 realContent: this.content,
                 active:this.isShow,//是否显示弹窗
-                linkage:null
+                linkage:null,
+                id:_TY_Tool.uuid()
             }
         },
         computed:{
@@ -173,6 +190,36 @@
                     const title = createElement('template',{slot:"title"},[titleContent]);
                     childrens.push(title);
                 }
+                let dialogWidth = t.realWidth||t.width;
+                let realTop = t.top;
+                let customClass = "";
+                switch(t.openForm){
+                    case "left":
+                        dialogWidth = "0";
+                        realTop = "0";
+                        customClass="side-dialog-left";
+                        break;
+                    case "right":
+                        dialogWidth = "0";
+                        realTop = "0";
+                        customClass="side-dialog-right";
+                        break;
+                    case "top":
+                        dialogWidth = "0";
+                        realTop = "0";
+                        customClass="side-dialog-top";
+                        break;
+                    case "bottom":
+                        dialogWidth = "0";
+                        realTop = "0";
+                        customClass="side-dialog-bottom";
+                        break;
+                    default:
+                        customClass="";
+                        break;
+
+
+                }
                 return createElement('el-dialog',{
                     props:{
                         'visible':t.active,
@@ -183,9 +230,10 @@
                         'show-close':t.showClose,//是否显示关闭按钮 右上角
                         'modal-append-to-body':true,//遮罩层插入到body元素上
                         'append-to-body':true,//弹窗自身插入到body元素上
-                        'width':t.realWidth||t.width,
-                        'top':t.top,
-                        "fullscreen":t.fullscreen
+                        'width':dialogWidth,
+                        'top':realTop,
+                        "fullscreen":t.fullscreen,
+                        "custom-class":customClass
                     },
                     style:{
                     },
@@ -197,15 +245,15 @@
                         'close':t._beforeClose,
                         'open':t._afterOpen
                     },
+                    attrs:{
+                        id:t.id
+                    },
                     class:'bb-indep-dialog'
                 },[childrens,this.$slots.default]);//this.$slots.default 使bb-indep-dialog支持van-dailog的slots
             },
             //el dialog 打开的回调
             _afterOpen:function(){
                 let t=this;
-                // setTimeout(()=>{
-                //     t.$emit('afterOpen',t);
-                // },0);
                 
             },
             _initH5Dialog:function(){
@@ -221,7 +269,11 @@
             //渲染h5的dialog
             _renderH5Dialog:function(createElement,childrens){
                 let t=this;
-                return createElement('van-dialog',{
+                let tag = "van-dialog";
+                if(t.openForm != "default"){
+                    tag = "van-popup"
+                }
+                return createElement(tag,{
                     props:{
                         'value':t.active,
                         'title':t.title,
@@ -232,7 +284,8 @@
                         'cancel-button-text':t.cancelButtonText,
                         'overlay':t.overlay,
                         'close-on-click-overlay':t.closeOnClickOverlay,
-                        'lock-scroll':t.lockScroll
+                        'lock-scroll':t.lockScroll,
+                        'position':t.openForm
                     },
                     style:{
                     },
@@ -285,6 +338,7 @@
                 t.$emit('open',linkage,t);
                 setTimeout(()=>{
                     t.$emit('afterOpen',t);
+                    t.openSide()
                 },500);
             },
             //对外提供方法 关闭弹窗
@@ -298,11 +352,86 @@
             loadChildBB:function(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            openSide(){
+                const t = this;
+                const dialogContent = document.getElementById(t.id);
+                const dialog = dialogContent.getElementsByClassName("el-dialog")[0];
+                dialog.style.width = t.realWidth||t.width
+                dialog.style.height = t.height;
             }
             
         }
     }
 </script>
-<style scoped>
+<style lang="less">
+    .bb-indep-dialog{
+        max-height: 100vh;
+        overflow: hidden !important;
+        .el-dialog__body{
+            max-height:calc(~"100vh - 25px");
+            overflow: auto;
+        }
+        .side-dialog-top{
+            position: absolute !important;
+            left:0;
+            right:0;
+            top:0;
+            margin: 0 auto;
+            max-height:100vh;
+            overflow:auto;
+            height:0;
+            transition: height 0.1s;
+            -moz-transition: height 0.1s; /* Firefox 4 */
+            -webkit-transition: height 0.1s; /* Safari 和 Chrome */
+            -o-transition: height 0.1s; /* Opera */
+        }
+        .side-dialog-bottom{
+            position: absolute !important;
+            bottom:0;
+            left:0;
+            right:0;
+            margin: 0 auto;
+            max-height:100vh;
+            overflow:auto;
+            height:0;
+            transition: height 0.1s;
+            -moz-transition: height 0.1s; /* Firefox 4 */
+            -webkit-transition: height 0.1s; /* Safari 和 Chrome */
+            -o-transition: height 0.1s; /* Opera */
+        }
+        .height-100vh{
+            height:100vh;
+        }
+        .side-dialog-left{
+            position: absolute !important;
+            top:0;
+            left:0;
+            max-width:100vh;
+            overflow:auto;
+            width:0;
+            height:100vh;
+            transition: width 0.1s;
+            -moz-transition: width 0.1s; /* Firefox 4 */
+            -webkit-transition: width 0.1s; /* Safari 和 Chrome */
+            -o-transition: width 0.1s; /* Opera */
+        }
+        .side-dialog-right{
+            position: absolute !important;
+            top:0;
+            right:0;
+            max-width:100vh;
+            overflow:auto;
+            width:0;
+            height:100vh;
+            transition: width 0.1s;
+            -moz-transition: width 0.1s; /* Firefox 4 */
+            -webkit-transition: width 0.1s; /* Safari 和 Chrome */
+            -o-transition: width 0.1s; /* Opera */
+        }
+        .width-100vw{
+            width:100vw;
+        }
+    }
     
 </style>
