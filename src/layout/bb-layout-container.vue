@@ -11,7 +11,7 @@
         </el-container>
         <!-- 上中下布局 -->
         <el-container v-if="realLayout == 'h-m-f'">
-            <el-header :style="{background:realBgColor.header}">
+            <el-header :style="p_layoutObject.headerStyle">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-main :style="{background:realBgColor.main}">
@@ -69,7 +69,7 @@
                 <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-container>
-                <el-header :style="{background:realBgColor.header}">
+                <el-header :style="p_layoutObject.headerStyle">
                     <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
                 </el-header>
                 <el-main :style="{background:realBgColor.main}">
@@ -83,7 +83,7 @@
                 <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
             </el-aside>
             <el-container>
-                <el-header :style="{background:realBgColor.header}">
+                <el-header :style="p_layoutObject.headerStyle">
                     <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
                 </el-header>
                 <el-main :style="{background:realBgColor.main}">
@@ -96,7 +96,7 @@
         </el-container>
         <!-- 上下左中右布局 -->
         <el-container v-if="realLayout == 'h-l-m-r'">
-            <el-header :style="{background:realBgColor.header}">
+            <el-header :style="p_layoutObject.headerStyle">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
@@ -113,7 +113,7 @@
         </el-container>
         <!-- 上左中右下布局 -->
         <el-container v-if="realLayout == 'h-l-m-r-f'" :style="p_layoutObject.containerStyle">
-            <el-header :style="{background:realBgColor.header}">
+            <el-header :style="p_layoutObject.headerStyle">
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
@@ -344,11 +344,11 @@
 <style lang='less'>
     .bb-layout-container{
         .el-header{
-            height: 56px;
+            height: 50px !important;
             /*overflow-y: auto;*/
         }
         .el-container{
-            height: calc(~'100vh - 56px');
+            height: calc(~'100vh - 50px');
             /*overflow-y: auto;*/
         }
         .el-footer{

@@ -622,8 +622,8 @@
 
 
 </style>
-<style>
-    .pc_platform{
+<style lang="less">
+    .pc_platform,.h5_platform{
         &>div{
             transform: scale(1);
         }
