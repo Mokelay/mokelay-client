@@ -46,7 +46,7 @@
                                     inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
                                     outputs: [{dataKey: "fields", valueKey: "req_list"}]
                                 },
-                                textField:'requestParamName',
+                                textField:'name',
                                 valueField:"requestParamName"
                             }},
                             {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
@@ -71,7 +71,7 @@
                                     inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
                                     outputs: [{dataKey: "fields", valueKey: "data_list"}]
                                 },
-                                textField:'alias',
+                                textField:'name',
                                 valueField:"alias"
                             }}
                         ]
