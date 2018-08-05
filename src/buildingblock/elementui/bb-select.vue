@@ -222,21 +222,21 @@
               if(Array.isArray(val)){
                 if(this.resultString){
                   this.$emit('input',val.join(","));
-                  this.$emit('change',val.join(","));
+                  this.$emit('change',val.join(","),this);
                 }else{
                   this.$emit('input',JSON.stringify(val));
-                  this.$emit('change',JSON.stringify(val));
+                  this.$emit('change',JSON.stringify(val),this);
                 }
               }else{
                 this.$emit('input',val);
-                this.$emit('change',val);
+                this.$emit('change',val,this);
               }
              
             },
             //清空方法
             clear:function(){
                 this.$emit('input',"");
-                this.$emit('change',"");
+                this.$emit('change',"",this);
                 this.$emit('clear',this);
             },
             clean:function(val){

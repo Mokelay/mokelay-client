@@ -148,7 +148,7 @@ import Util from '../../libs/util';
                         commit: function(formData){
                             //解决form表单h输出值后不能关闭弹窗
                             setTimeout(()=>{t.$emit('input', formData)},0);
-                            t.$emit('commit', formData);
+                            t.$emit('commit', formData,t);
                             if(!t.buttonConfig||!t.buttonConfig.ds){
                                 t.formVisible = false;
                                 t.dialogKey = _TY_Tool.uuid();
