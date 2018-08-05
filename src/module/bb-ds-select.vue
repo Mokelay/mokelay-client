@@ -1,6 +1,7 @@
 <template>
     <div>
-        <bb-button-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn" formDescTpl="API:<%api%>" @commit="commit"></bb-button-form>
+        <span v-html="selectedHtml"></span>
+        <bb-button-form :fields="fields" settingText="设置数据源" v-model="ds" :on="interactiveOn"  @commit="commit"></bb-button-form>
     </div>
 </template>
 
@@ -46,7 +47,7 @@
                                     inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
                                     outputs: [{dataKey: "fields", valueKey: "req_list"}]
                                 },
-                                textField:'requestParamName',
+                                textField:'name',
                                 valueField:"requestParamName"
                             }},
                             {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
@@ -71,7 +72,7 @@
                                     inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
                                     outputs: [{dataKey: "fields", valueKey: "data_list"}]
                                 },
-                                textField:'alias',
+                                textField:'name',
                                 valueField:"alias"
                             }}
                         ]
@@ -82,7 +83,18 @@
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
-                    {pbbId:'api',triggerEventName:'mounted',executePbbId:'outputs',executeBBMethodName:'linkage'}
+                    {pbbId:'api',triggerEventName:'mounted',executePbbId:'outputs',executeBBMethodName:'linkage'},
+                    {pbbId:'api',triggerEventName:'change',executeArgument:`
+                        var currentApiAlias = params[0];
+                        var apis = params[1].items;
+                        var bbDsSelectInstance = t.$parent.$parent.$parent.$parent.$parent.$parent;
+                        apis.forEach((item)=>{
+                            if(item.value == currentApiAlias){
+                                bbDsSelectInstance.selectedHtml = item.text+'('+currentApiAlias+'<a target="_bank" href="/#/ty-lego-config-v3?param='+currentApiAlias+'">配置</a>)';
+                                return false;
+                            }
+                        });
+                    `},
                 ],
                 ds:this.value,
                 api:'',
@@ -92,7 +104,8 @@
                     inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.api%>"}],
                     outputs:[{dataKey: 'tableData', valueKey: 'data'}]
                 },
-                type:'normal'
+                type:'normal',
+                selectedHtml:''
             }
         },
         watch: {
