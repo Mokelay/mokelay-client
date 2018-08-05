@@ -253,11 +253,13 @@ import 'vant/lib/cell/style';
             //设置表头
             setColumn(data,columns){
                 const t = this;
-                columns.push({
-                    values:data
-                });
-                if(data[0] && data[0].children){
-                    t.setColumn(data[0].children,columns)
+                if(data){
+                    columns.push({
+                        values:data
+                    });
+                    if(data[0] && data[0].children){
+                        t.setColumn(data[0].children,columns)
+                    }
                 }
             },
             //获取选择器选项数据
