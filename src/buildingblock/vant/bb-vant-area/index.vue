@@ -72,7 +72,7 @@ import 'vant/lib/area/style';
         data() {
             return {
                 valueBase:this.value,
-                realAreaList:null,
+                realAreaList:{},
                 loading:this.option['loading']
             };
         },
@@ -121,16 +121,16 @@ import 'vant/lib/area/style';
                     });
                 }
             },
-            confirm(val){
-                this.$emit('input',val);
-                this.$emit('change',val);
+            confirm(val,index){
+                this.$emit('input',val,index);
+                this.$emit('change',val,index);
             },
-            cancel(val){
+            cancel(val,index){
                 this.$emit('cancel',val);
             },
-            change(val){
-                this.$emit('input',val);
-                this.$emit('change',val);
+            change(picker, values,level){
+                this.$emit('input',picker, values,level);
+                this.$emit('scroll',picker, values,level);
             }
         }
     }

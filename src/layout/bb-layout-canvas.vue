@@ -69,6 +69,7 @@
                 size:"",            //阴影大小
                 color:'',       //阴影方向
                 align:''            //阴影模糊
+                lineHeight:""
             },
             
         }

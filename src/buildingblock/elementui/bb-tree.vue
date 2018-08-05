@@ -155,7 +155,7 @@
             return {
                 data: t.staticData,
                 id:"bb-tree_" + _TY_Tool.uuid(),
-                valueBase:this.value,
+                valueBase:this.value || typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
                 realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
                 realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys,
             }
