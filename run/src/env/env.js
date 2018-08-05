@@ -8,7 +8,8 @@ var env = {
 		name: 'local',
 		apiHost: "http://longyan.dev.rs.com",
 		h5Host: CurrentDomain,
-		ssoURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
+		rsURL: "http://urms.dev.rs.com/passport/login?service=http://longyan.dev.rs.com/urmscallback",
+		ssoURL: CurrentDomain + "/#/ty-login",
 		hosts: {
 			'default': "http://longyan.dev.rs.com"
 		},
