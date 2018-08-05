@@ -72,6 +72,17 @@ import 'vant/lib/cell/style';
             columnsDs:{
                 type:Object
             },
+            /*选项名关键字 配合DS接口使用，从返回数据中获取需要的值*/
+            valueKey:{
+                type:Object,
+                default:function(){
+                    return {
+                        value:"value",
+                        text:"text",
+                        children:"children"
+                    }
+                }
+            },
             /*选择器属性
                 type:"area"  area地址选择器  default默认值
                 showToolbar:true //显示头部
@@ -255,11 +266,24 @@ import 'vant/lib/cell/style';
                 if(t.columnsDs){
                     _TY_Tool.getDSData(t.columnsDs, _TY_Tool.buildTplParams(t), function (map) {
                          map.forEach((val,key)=>{
-                            t.columnsData = val.value;
+                            t.columnsData = t.transferData(val.value);
                         })
                     }, function (code, msg) {
                     });
                 }
+            },
+            //转换DS返回的数据
+            transferData(data){
+                const t = this;
+                const valueKey = t.valueKey["value"];
+                const textKey = t.valueKey["text"];
+                const childrenKey = t.valueKey["children"];
+                const dataString = JSON.stringify(data);
+                let newString = valueKey?dataString.replace(new RegExp(valueKey,'g'),"value"):dataString;
+                newString = textKey?newString.replace(new RegExp(textKey,'g'),"text"):newString;
+                newString = childrenKey?newString.replace(new RegExp(childrenKey,'g'),"children"):newString;
+                const newData = JSON.parse(newString);
+                return newData;
             },
             //外部联动更新数据
             linkage(...data){
