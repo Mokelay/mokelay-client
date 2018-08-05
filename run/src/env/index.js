@@ -9,12 +9,13 @@ export default {
 		window._TY_ContentPath = "/config";
 		window._TY_APIHost = _env.apiHost;
 		window._TY_H5Host = _env.h5Host || '';
+		window._RS_SSOURL = _env.rsURL || ''; //仅本地调试用
 		window._TY_Page_Data = {};
 		window._TY_HOSTS = _env.hosts || {};
 		if (!window._TY_Home) {
 			window._TY_Home = _env['home'] || "/home";
 		}
-		if (!window._TY_SSOURL){
+		if (!window._TY_SSOURL) {
 			window._TY_SSOURL = _env.ssoURL;
 		}
 		window._TY_Platform = platform;
