@@ -131,8 +131,11 @@
                         }
                     }];
                 }
-
-            }
+            },
+            //提交ds
+            commitDs:{
+                type:Object
+            },
         },
         data() {
             return {
@@ -224,7 +227,28 @@
             //外部获取表单值
             getFormData(){
                 return this.formData;
-            }
+            },
+            //提交表单
+            commit(){
+                const t = this;
+                if (t.commitDs) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.commitDs, _TY_Tool.buildTplParams(t), function (data) {
+                        t.$emit("commitSuccess",data);
+                    }, function (code, msg) {
+                        t.loading = false;
+                        t.$emit("commitFail");
+                    });
+                }
+            },
+            //外部联动刷新表单
+            linkage(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                    this.getData();
+                }
+            },
+
         }
     }
 </script>
