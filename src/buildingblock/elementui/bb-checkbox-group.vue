@@ -174,7 +174,17 @@ import Util from '../../libs/util';
             //启用积木
             enabledFn(){
                 this.realOption.disabled = false;
-            } 
+            },
+            //外部取值
+            getValue:function(){
+                return this.p_value;
+            },
+            //外部设值
+            setValue:function(val){
+                this.p_value = val;
+                this.$emit('input',val);
+                this.$emit('change',val);
+            }
         }
     }
 </script>
