@@ -225,22 +225,22 @@
               if(Array.isArray(val)){
                 if(this.resultString){
                   this.$emit('input',val.join(","));
-                  this.$emit('change',val.join(","),this);
+                  this.$emit('change',val.join(","));
                 }else{
                   this.$emit('input',JSON.stringify(val));
-                  this.$emit('change',JSON.stringify(val),this);
+                  this.$emit('change',JSON.stringify(val));
                 }
               }else{
                 this.$emit('input',val);
-                this.$emit('change',val,this);
+                this.$emit('change',val);
               }
              
             },
             //清空方法
             clear:function(){
                 this.$emit('input',"");
-                this.$emit('change',"",this);
-                this.$emit('clear',this);
+                this.$emit('change',"");
+                this.$emit('clear');
             },
             clean:function(val){
               this.valueBase = null;
@@ -275,8 +275,17 @@
             //启用积木
             enabledFn(){
                 this.realOption.disabled = false;
+            },
+            //外部取值
+            getValue:function(){
+                return this.valueBase;
+            },
+            //外部设值
+            setValue:function(val){
+                this.valueBase = val;
+                this.$emit('input',val);
+                this.$emit('change',val);
             }
-
         }
     }
 </script>
