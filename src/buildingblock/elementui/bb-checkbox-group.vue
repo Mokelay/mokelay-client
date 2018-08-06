@@ -1,5 +1,5 @@
 <template>
-    <el-checkbox-group v-model="p_value" :size="option.size" :disabled="option.disabled" @change="checkboxChange">
+    <el-checkbox-group v-if="isShow" v-model="p_value" :size="realOption.size" :disabled="realOption.disabled" @change="checkboxChange">
         <el-checkbox v-if="type == 'checkbox'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" @change="itemClick(item)">{{item.text}}</el-checkbox>
         <el-checkbox-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection" @change="itemClick(item)">{{item.text}}</el-checkbox-button>
     </el-checkbox-group>
@@ -65,6 +65,8 @@ import Util from '../../libs/util';
             return {
                 p_value:this._changeToArray(this.value),
                 p_options:this.options,
+                isShow:true,
+                realOption:this.option
             };
         },
         watch:{
@@ -96,10 +98,10 @@ import Util from '../../libs/util';
             _TY_Tool.buildDefaultValTpl(t,"p_value");
         },
         methods: {
-           checkboxChange(val){
+            checkboxChange(val){
                 this.$emit("input",this._changeToStr(val));
-           },
-           _changeToArray(str){
+            },
+            _changeToArray(str){
                 let t =this;
                 let result = [];
                 if(typeof(str)==="number"&&str>=0){
@@ -122,8 +124,8 @@ import Util from '../../libs/util';
                     }
                 }
                 return result;
-           },
-           _changeToStr(array){
+            },
+            _changeToStr(array){
                 let t =this;
                 let result = '';
                 if(array.length>1&&t.firstIsAll){
@@ -153,10 +155,26 @@ import Util from '../../libs/util';
                 //设置p_value
                 this.p_value = this._changeToArray(result);
                 return result;
-           },
-           itemClick(item){
+            },
+            itemClick(item){
                 this.$emit("itemClick",item);
-           }
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
+            } 
         }
     }
 </script>

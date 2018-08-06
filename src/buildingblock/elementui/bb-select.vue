@@ -1,6 +1,7 @@
 <template>
     <el-select 
-      :placeholder="option.placeholder" 
+      v-if="isShow"
+      :placeholder="realOption.placeholder" 
       v-model="valueBase" 
       clearable
       :remote="remote"
@@ -9,9 +10,9 @@
       :allow-create="filterable"
       :multiple="multiple"
       :filterable="filterable"
-      :disabled="option.disabled"
-      :default-first-option="option.defaultFirstOption"
-      :size="option.size"
+      :disabled="realOption.disabled"
+      :default-first-option="realOption.defaultFirstOption"
+      :size="realOption.size"
       @change='change'
       @clear='clear'
       >
@@ -120,6 +121,8 @@
               valueBase: this.multipleValTransfer(this.value),
               external:{},
               keyword:null,
+              isShow:true,
+              realOption:this.option
             }
         },
         watch:{
@@ -256,6 +259,22 @@
               }else{
                 t.items = [];
               }
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
             }
 
         }

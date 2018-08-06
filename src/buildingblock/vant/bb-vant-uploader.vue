@@ -222,11 +222,11 @@ export default {
         var itemClass = "uploaded-item";
         if(t.valueBase.length >= t.option.max && t.option.theme == "card"){
             className = "dsn";
-            itemClass = t.valueBase.length == 1?"uploaded-item-lg":itemClass;
         }
         var uploaderClass = "bb-vant-uploader";
         if(t.accept.indexOf("video")>-1 && t.valueBase.length == 1){
             uploaderClass = "bb-vant-uploader bb-vant-uploader-single";
+            itemClass = "uploaded-item-lg";
         }
         const vantUpload = createElement('vant-uploader',{props:{
             "resultType":t.resultType,
@@ -293,6 +293,8 @@ export default {
             xhr.open("post", t.uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
             xhr.onload = (res) => { 
                     const response = JSON.parse(res.target.response);
+                    const intervalTime = t.accept.indexOf("video")>-1?2000:0;
+                    const timeoutTime = t.accept.indexOf("video")>-1?5000:0;
                     let check = setInterval(()=>{
                         if(t.uploadSuccess){
                             clearInterval(check);
@@ -310,9 +312,9 @@ export default {
                         }else{
                             setTimeout(()=>{
                                t.uploadSuccess = true; 
-                            },5000)
+                            },timeoutTime)
                         }
-                    },2000);
+                    },intervalTime);
                 }; //请求完成
             xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
             xhr.send(formdata); //开始上传，发送form数据
