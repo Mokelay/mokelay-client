@@ -1,13 +1,13 @@
 <template>
-    <div class="textarea_box">
+    <div class="textarea_box" v-if="isShow">
           <el-input
             type="textarea"
             :rows="rows"
             placeholder="请输入内容"
             v-model="valueBase"
             @change="change"
-            :disabled="option.disabled"
-            :size="option.size"
+            :disabled="realOption.disabled"
+            :size="realOption.size"
             :style="p_style"
             :resize="p_resize"
             :autosize="p_autosize"
@@ -76,7 +76,9 @@
                 p_style:typeof(this.bbStyle)==='string'?eval(this.bbStyle):this.bbStyle,
                 p_autosize:this.autosize,
                 p_resize:this.resize,
-                external:{}//外部参数
+                external:{},//外部参数
+                isShow:true,
+                realOption:this.option
             }
         },
         watch: {
@@ -117,6 +119,22 @@
             change:function(val){
                 this.$emit('input',val,this)
                 this.$emit('change',val,this)//把当前对象传过去，因为会需要linkage参数
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
             }
         }
     }
