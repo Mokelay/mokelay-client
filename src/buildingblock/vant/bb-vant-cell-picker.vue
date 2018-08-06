@@ -315,6 +315,12 @@ import 'vant/lib/cell/style';
                     this.getData();
                 }
             },
+            //清除全部
+            cleanAll(){
+                const t = this;
+                t.columnsData = [];
+                t.valueBase = null
+            }
         }
     }
 </script>
