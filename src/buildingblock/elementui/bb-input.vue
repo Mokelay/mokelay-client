@@ -1,13 +1,14 @@
 <template>
     <el-input
-      :placeholder="option.disabled?'':option.placeholder"
-      v-model="valueBase"
-      @change="change"
-      :disabled="disabled||option.disabled"
-      :readonly="option.readonly"
-      :size="option.size"
-      :prefix-icon="option.prefixIcon"
-      :suffix-icon="option.suffixIcon"
+        v-if="isShow"
+        :placeholder="realOption.disabled?'':realOption.placeholder"
+        v-model="valueBase"
+        @change="change"
+        :disabled="disabled||realOption.disabled"
+        :readonly="realOption.readonly"
+        :size="realOption.size"
+        :prefix-icon="realOption.prefixIcon"
+        :suffix-icon="realOption.suffixIcon"
       >
     </el-input>
 </template>
@@ -45,6 +46,8 @@
         data() {
             return {
                 valueBase: this.value,
+                isShow:true,
+                realOption:this.option
             }
         },
         watch: {
@@ -72,6 +75,22 @@
                     t.change(data);
                 }
             },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
+            }
         }
     }
 </script>

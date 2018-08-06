@@ -14,7 +14,7 @@
                 }
             }
             let dialog = t.dialog;
-            if(t.active){
+            if(t.active && t.isOpenSide){
                 setTimeout(()=>{
                     t.openSide();
                 },100);
@@ -104,7 +104,7 @@
             //dialog margin-top长度 针对pc
             top:{
                 type:String,
-                default:"15vh"
+                default:"1vh"
             },
             //弹出从哪里打开 default  left top right bottom
             openForm:{
@@ -119,7 +119,8 @@
                 realContent: this.content,
                 active:this.isShow,//是否显示弹窗
                 linkage:null,
-                id:_TY_Tool.uuid()
+                id:_TY_Tool.uuid(),
+                isOpenSide:false
             }
         },
         computed:{
@@ -198,24 +199,29 @@
                         dialogWidth = "0";
                         realTop = "0";
                         customClass="side-dialog-left";
+                        t.isOpenSide = true;
                         break;
                     case "right":
                         dialogWidth = "0";
                         realTop = "0";
                         customClass="side-dialog-right";
+                        t.isOpenSide = true;
                         break;
                     case "top":
                         dialogWidth = "0";
                         realTop = "0";
                         customClass="side-dialog-top";
+                        t.isOpenSide = true;
                         break;
                     case "bottom":
                         dialogWidth = "0";
                         realTop = "0";
                         customClass="side-dialog-bottom";
+                        t.isOpenSide = true;
                         break;
                     default:
                         customClass="";
+                        t.isOpenSide = false;
                         break;
 
 
@@ -338,7 +344,6 @@
                 t.$emit('open',linkage,t);
                 setTimeout(()=>{
                     t.$emit('afterOpen',t);
-                    t.openSide()
                 },500);
             },
             //对外提供方法 关闭弹窗
@@ -369,7 +374,7 @@
         max-height: 100vh;
         overflow: hidden !important;
         .el-dialog__body{
-            max-height:calc(~"100vh - 25px");
+            max-height:calc(~"99vh - 25px");
             overflow: auto;
         }
         .side-dialog-top{

@@ -1,5 +1,5 @@
 <template>
-    <el-radio-group :value="p_value" @input="radioChange" :size="option.size" :disabled="option.disabled" @change="radioChange">
+    <el-radio-group v-if="isShow" :value="p_value" @input="radioChange" :size="realOption.size" :disabled="realOption.disabled" @change="radioChange">
         <el-radio v-if="type == 'radio'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-radio>
         <el-radio-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-radio-button>
     </el-radio-group>
@@ -60,7 +60,11 @@ import Util from '../../libs/util';
         data() {
             return {
                 p_value:this.value,
-                p_options:this.options
+                //选项
+                p_options:this.options,
+                //配置
+                realOption:this.option,
+                isShow:true
             };
         },
         watch:{
@@ -92,7 +96,7 @@ import Util from '../../libs/util';
             _TY_Tool.buildDefaultValTpl(t,"p_value");
         },
         methods: {
-           radioChange(val){
+            radioChange(val){
                 this.p_value = val;
                 let tempVal = val;
                 if(typeof(this.value)==='number'){
@@ -100,7 +104,23 @@ import Util from '../../libs/util';
                 }
                 this.$emit("input",tempVal);
                 this.$emit("change",tempVal);
-           }    
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
+            }   
         }
     }
 </script>
