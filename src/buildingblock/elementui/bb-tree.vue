@@ -381,8 +381,9 @@
 
             },
             //节点展开
-            nodeExpand(){
+            nodeExpand(...params){
                 const t = this;
+                t.$emit('nodeExpand',params);
                 t.setHorizontal();
             },
             //设置水平样式
