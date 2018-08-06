@@ -1,5 +1,5 @@
 <template>
-    <el-button :style="relButton.style" class="bb-button" :type="relButton.type" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
+    <el-button v-if="isShow" :style="relButton.style" class="bb-button" :type="relButton.type" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click.native.prevent="click(relButton)">{{relButton.selectText || relButton.text}}<slot></slot></el-button>
 </template>
 
 <script>
@@ -52,7 +52,9 @@
         },
         data() {
             return {
-                external:{}//外部参数
+                external:{},//外部参数
+                isShow:true,
+                realOptions:this.options
             }
         },
         computed: {
@@ -90,6 +92,22 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOptions.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOptions.disabled = false;
             }
         }
     }

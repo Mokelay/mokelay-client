@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div v-if="isShow">
     	<textarea 
 		    class="bb-indep-textrea" 
 		    :style="realStyle"
 		    v-model="valueBase"
 		    :placeholder="placeholder"
 		    :showText="onShowText"
+            :disabled="realOption.disabled"
 		    @keyup="onKeyup"
 		    @change="change"
 		></textarea>
@@ -67,6 +68,15 @@
                     }
                 }
             },
+            //基础配置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false
+                    };
+                }
+            }
             
         },
         data() {
@@ -75,6 +85,8 @@
                 writeNumber:"0",
                 onShowText:this.showText,
                 limitNumber:this.showText,
+                isShow:true,
+                realOption:this.option
             }
         },
         computed:{
@@ -130,7 +142,23 @@
                         this.valueBase = param.arguments
                     }
                 })        		
-        	}
+        	},
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
+            } 
             
         }
     }
