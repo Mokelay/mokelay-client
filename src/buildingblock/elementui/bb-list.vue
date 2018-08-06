@@ -1348,6 +1348,23 @@
                 if (promise) {
                     return promise;
                 }
+            },
+            //切换列表 状态 编辑状态
+            setEditStatus(){
+                const t = this;
+                t.editAll = true;
+                t.realColumns.forEach((column,key)=>{
+                    column.et = column.oldEt
+                })
+            },
+            //切换列表非编辑状态
+            setReadonlyStatus(){
+                const t = this;
+                t.editAll = false;
+                t.realColumns.forEach((column,key)=>{
+                    column.oldEt = column.et;
+                    column.et = null;
+                })
             }
         }
     }
