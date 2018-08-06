@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div v-if="isShow">
         <el-button-group v-if="groupConfig.type == 'group'">
-            <bb-button v-for="(button,index) in realButtons" @button-finish="buttonFinsih" :key="index" :button="button" @click="click"></bb-button>
+            <bb-button v-for="(button,index) in realButtons" @button-finish="buttonFinsih" :key="index" :button="button" @click="click" :options="realOption"></bb-button>
         </el-button-group>
         <div v-if="groupConfig.type == 'normal' || !groupConfig.type">
             <span v-for="(button,index) in realButtons" :key="index" class="button" :style="groupConfig.customStyle">
-                <bb-button :key="index" :button="button" @button-finish="buttonFinsih" @click="click"></bb-button>
+                <bb-button :key="index" :options="realOption" :button="button" @button-finish="buttonFinsih" @click="click"></bb-button>
                 <i v-if="button.iconName" :class="button.iconName" @click='remove(button,index)'></i>
                 <bb-badge v-if="button.badgeDs" :textDs="button.badgeDs" class="icon"  @click='iconClick(button,index)'></bb-badge>
             </span>
@@ -67,13 +67,24 @@
                 default:function(){
                     return null;
                 }
+            },
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        disabled:false,
+                        readonly:false
+                    };
+                }
             }
         },
         data() {
             return {
                 realButtons:this.buttons,
                 realButtonDs:this.buttonDs,
-                external:{}
+                external:{},
+                realOption:this.option,
+                isShow:true
             }
         },
         watch: {
@@ -146,7 +157,23 @@
             },
             buttonFinsih:function(...params){
                 this.$emit("button-finish",params);
-            }
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
+            },
         }
     }
 </script>
