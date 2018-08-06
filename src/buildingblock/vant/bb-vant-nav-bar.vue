@@ -1,5 +1,6 @@
 <template>
   <vant-nav-bar 
+    :id="id"
     :title="showTitle"
     :leftText="showLeftText"
     :rightText="showRightText"
@@ -49,17 +50,33 @@ export default {
           zIndex:{
             type:Number,
             default:1
+          },
+          /*各部分的颜色
+            {
+              leftIcon:"",
+              leftText:""
+              title:""
+              rightIcon:""
+              rightText:""
+            }
+          */
+          color:{
+            type:Object
           }
     },
    data(){ 
         return{
              showTitle:this.title,
              showLeftText:this.leftText,
-             showRightText:this.rightText, 
+             showRightText:this.rightText,
+             id:_TY_Tool.uuid()
         }
       },
     computed:{
         
+    },
+    mounted(){
+      this.setColor()
     },
     //事件click
     methods: {
@@ -74,7 +91,26 @@ export default {
         //外部传入标题
         setTitle(val){
         	this.title = val;
-        }     
+        },
+        //设置各部分颜色
+        setColor(){
+          const t = this;
+          if(t.color){
+            const navBar = document.getElementById(t.id);
+            const bar__left = navBar.getElementsByClassName("van-nav-bar__left")[0];
+            const bar__left_icon = bar__left.getElementsByTagName("i")[0];
+            const bar__left_text = bar__left.getElementsByTagName("span")[0];
+            const bar__title = navBar.getElementsByClassName("van-ellipsis van-nav-bar__title")[0];
+            const bar_right = navBar.getElementsByClassName("van-nav-bar__right")[0];
+            const bar__right_icon = bar_right.getElementsByTagName("i")[0];
+            const bar__right_text = bar_right.getElementsByTagName("span")[0];
+            bar__left_icon.style.color = t.color.leftIcon;
+            bar__left_text.style.color = t.color.leftText;
+            bar__title.style.color = t.color.title;
+            right_icon.style.color = t.color.rightIcon;
+            bar__right_text.color = t.color.rightText;
+          }
+        }    
     }
 }
 </script>
