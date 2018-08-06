@@ -274,8 +274,22 @@ import 'vant/lib/cell/style';
                 let t=this;
                 if(t.columnsDs){
                     _TY_Tool.getDSData(t.columnsDs, _TY_Tool.buildTplParams(t), function (map) {
-                         map.forEach((val,key)=>{
-                            t.columnsData = t.transferData(val.value);
+                         map.forEach((item,key)=>{
+                            let _list = [];
+                            if(item['value']&&item['value']['currentRecords']){
+                                _list = item['value']['currentRecords'];
+                                const totalPage = item['value']['totalPages'];
+                                if(t.page>=totalPage){
+                                    t.end=true;
+                                }else{
+                                    t.end=false;
+                                }
+                            }else if(item['value']&&item['value']['list']){
+                                _list = item['value']['list'];    
+                            }else{
+                                _list = item['value'];
+                            }
+                            t.columnsData = t.transferData(_list);
                         })
                     }, function (code, msg) {
                     });
