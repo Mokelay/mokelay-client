@@ -1,6 +1,6 @@
 <template>
     <el-card :class="panelClass" :style="fullScreenStyle" :ref="realuuid">
-        <div slot="header">
+        <div slot="header" :style="p_headerStyle">
             <span>{{layoutObject.title}}</span>
             <el-button style="float: right; padding: 3px 0" type="text" :icon="fullScreenIcon" @click="toggleScreen"></el-button>
         </div>
@@ -32,6 +32,12 @@
                         transparency:1, //透明度
                         zoomType:'fullScreen'
                     }
+                }
+            },
+            headerStyle:{
+                type:Object,
+                default:function(){
+                    return {};
                 }
             },
             /*
@@ -102,7 +108,8 @@
                 //面板当前的是否是全屏
                 fullScreen:false,
                 fullScreenStyle:'',
-                fullScreenIcon:'ty-bd__transfer'
+                fullScreenIcon:'ty-bd__transfer',
+                p_headerStyle:_TY_Tool.setSimpleStyle(this.headerStyle)
             }
         },
         watch: {
