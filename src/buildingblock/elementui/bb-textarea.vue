@@ -135,6 +135,16 @@
             //启用积木
             enabledFn(){
                 this.realOption.disabled = false;
+            },
+            //外部取值
+            getValue:function(){
+                return this.valueBase;
+            },
+            //外部设值
+            setValue:function(val){
+                this.valueBase = val;
+                this.$emit('input',val);
+                this.$emit('change',val);
             }
         }
     }
