@@ -153,6 +153,28 @@
                 let t=this;
 
             },
+            //影藏某个tab
+            hideTab:function(tabName){
+                let t=this;
+                if(t.tabsData){
+                    t.tabsData.forEach((tab,index)=>{
+                        if(tab.name == tabName){
+                            tab.show = false;
+                        }
+                    });
+                }
+            },
+            //显示某个tab
+            showTab:function(tabName){
+                let t=this;
+                if(t.tabsData){
+                    t.tabsData.forEach((tab,index)=>{
+                        if(tab.name == tabName){
+                            tab.show = true;
+                        }
+                    });
+                }
+            },
             //根据tabs 获取所有的
             getTabHeaders:function(){
                 let t=this;
