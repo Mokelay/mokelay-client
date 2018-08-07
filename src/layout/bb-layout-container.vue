@@ -117,7 +117,7 @@
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside  width="20%" :style="p_layoutObject.leftStyle">
+                <el-aside  :width="p_layoutObject.leftAuto?'':'20%'" :style="p_layoutObject.leftStyle">
                     <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-main :style="p_layoutObject.mainStyle">
@@ -158,7 +158,7 @@
                     rightStyle:{},
                     footerStyle:{},
                     bgColor:{}//布局背景色
-                }               
+                }
             */
             layoutObject:{
                 type:Object,
