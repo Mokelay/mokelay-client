@@ -24,6 +24,9 @@
                     url:"String" 跳转链接
                     to:"String || Object"   路由跳转对象，同 vue-router 的 to
                     replace:false  跳转时是否替换当前history
+                    iconStyle:{},  图标样式
+                    textStyle:{}   字体样式
+
                 }]
             */
             fields:{
@@ -32,12 +35,18 @@
                     return [{
                         text:'标签1',
                         icon:'ty-yy_ty',
+                        iconStyle:{},
+                        textStyle:{}
                     },{
                         text:'标签2',
                         icon:'ty-yy_ty',
+                        iconStyle:{},
+                        textStyle:{}
                     },{
                         text:'标签3',
                         icon:'ty-yy_ty',
+                        iconStyle:{},
+                        textStyle:{}
                     }];
                 }
             },
@@ -104,6 +113,21 @@
             /*动态自定义图标*/
             contentDs:{
                 type:Object
+            },
+            /*激活的样式
+                {
+                    iconStyle:{},
+                    textStyle:{}
+                }
+            */
+            activeStyle:{
+                type:Object,
+                default:function(){
+                    return {
+                        iconStyle:{},
+                        textStyle:{}
+                    }
+                }
             }
         },
         data() {
@@ -117,6 +141,16 @@
             const t = this;
             const tabbars = [];
             t.realFields.forEach((field,key)=>{
+                field.iconStyle = field.iconStyle?field.iconStyle:{}
+                field.textStyle = field.textStyle?field.textStyle:{}
+                const fieldIcon = {
+                    layout:key == t.active?t.activeStyle.iconStyle : field.iconStyle
+                }
+                const iconStyle = _TY_Tool.setStyle(fieldIcon);
+                const fieldText = {
+                    layout:t.active?t.activeStyle.textStyle : field.textStyle
+                }
+                const textStyle = _TY_Tool.setStyle(fieldText);
                 //自定义图标
                 const icons = [];
                 t.realContent.forEach((item,index)=>{
@@ -128,15 +162,18 @@
                         icons.push(bbTpl);
                     }
                 });
+                const text = createElement('span',{props:{},style:textStyle},[field.text]);
                 const tabbar = createElement('van-tabbar-item',{props:{
-                    "icon":'ty ' + field.icon,
-                    "dot":field.dot,
-                    "info":field.info,
-                    "url":_TY_Tool.tpl(field.url,_TY_Tool.buildTplParams(t)),
-                    "to":field.to,
-                    "replace":field.replace,
-                    "key":key
-                }},[icons,field.text]);
+                        "icon":'ty ' + field.icon,
+                        "dot":field.dot,
+                        "info":field.info,
+                        "url":_TY_Tool.tpl(field.url,_TY_Tool.buildTplParams(t)),
+                        "to":field.to,
+                        "replace":field.replace,
+                        "key":key
+                    },
+                    style:iconStyle
+                },[icons,text]);
                 tabbars.push(tabbar);
             });
 
