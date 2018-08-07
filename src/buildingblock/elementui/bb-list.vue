@@ -603,7 +603,7 @@
                 let columnVal = scope['row'][column.prop];
                 if(columnVal!=null && columnVal!=''&&columnVal!='[]'){
                     let result = [];//多选返回字符串
-                    if(multiple){
+                    if(multiple && typeof columnVal == 'string'){
                         //如果是多选，转换成数组
                         // columnVal = JSON.parse(columnVal);
                         try{
@@ -1353,6 +1353,8 @@
             setEditStatus(){
                 const t = this;
                 t.editAll = true;
+                t.oldEditButtons = t.editButtons;
+                t.editButtons = [];
                 t.realColumns.forEach((column,key)=>{
                     column.et = column.oldEt
                 })
@@ -1361,9 +1363,46 @@
             setReadonlyStatus(){
                 const t = this;
                 t.editAll = false;
+                t.oldEditButtons = t.editButtons;
+                t.editButtons = [];
                 t.realColumns.forEach((column,key)=>{
                     column.oldEt = column.et;
                     column.et = null;
+                })
+            },
+            //切换列表非编辑状态
+            disabledFn(){
+                const t = this;
+                //t.editAll = false;
+                t.oldEditButtons = t.editButtons;
+                t.editButtons = [];
+                t.realColumns.forEach((column,key)=>{
+                    let etProp = {}
+                    if(!column.etProp){
+                        etProp = {}
+                    }else{
+                        etProp = JSON.parse(column.etProp);
+                    }
+                    etProp.option = etProp.option?etProp.option:{};
+                    etProp.option.disabled = true;
+                    column.etProp = JSON.stringify(etProp);
+                })
+            },
+            //切换列表非编辑状态
+            enabledFn(){
+                const t = this;
+                //t.editAll = false;
+                t.editButtons = t.oldEditButtons
+                t.realColumns.forEach((column,key)=>{
+                    let etProp = {}
+                    if(!column.etProp){
+                        etProp = {}
+                    }else{
+                        etProp = JSON.parse(column.etProp);
+                    }
+                    etProp.option = etProp.option?etProp.option:{};
+                    etProp.option.disabled = false;
+                    column.etProp = JSON.stringify(etProp);
                 })
             }
         }
