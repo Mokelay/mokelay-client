@@ -1,5 +1,9 @@
 <template>
-    <bb-form size="mini" v-model="valueBase" ref="layoutContent" :content="layoutContent" @commit="change"></bb-form>
+    <div class="bb-css-editor">
+        <bb-form v-if="!isButton" size="mini" v-model="valueBase" ref="layoutContent" :content="layoutContent" @commit="change"></bb-form>
+        <bb-button-form v-if="isButton" size="mini" v-model="valueBase" ref="layoutContent" :content="layoutContent" @commit="change"></bb-button-form>
+    </div>
+    
 </template>
 
 <script>
@@ -44,6 +48,10 @@
                     return { 
                     }
                 }
+            },
+            isButton:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
