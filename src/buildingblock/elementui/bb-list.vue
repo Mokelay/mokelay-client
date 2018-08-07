@@ -363,7 +363,8 @@
                             update:null,
                             sort:null,
                             updateAll:null
-                        }
+                        },
+                        defaultShow:true
                     }
                 }
             },
@@ -486,7 +487,7 @@
             //可编辑状态下对表头拓展
             if(t.canPre){
                 t.canPre = false;
-                t.preColumns();
+                t.preColumns(t.editConfig.defaultShow);
             }
             if(!t.lazy){
                 t.startIntervalFresh();
@@ -906,8 +907,11 @@
                 clearInterval(t.interval);
             },
             //对表头进行预处理
-            preColumns(){
+            preColumns(defaultShow){
                 const t = this;
+                if(defaultShow == false){
+                    return
+                }
                 //控制当前行能否进入编辑状态
                 t.realColumns.forEach((col,key)=>{
                     col.on = {
@@ -1373,9 +1377,8 @@
             //切换列表非编辑状态
             disabledFn(){
                 const t = this;
-                //t.editAll = false;
-                t.oldEditButtons = t.editButtons;
-                t.editButtons = [];
+                t.preColumns(false);
+                t.realColumns.splice(t.realColumns.length - 1,1);
                 t.realColumns.forEach((column,key)=>{
                     let etProp = {}
                     if(!column.etProp){
@@ -1391,8 +1394,7 @@
             //切换列表非编辑状态
             enabledFn(){
                 const t = this;
-                //t.editAll = false;
-                t.editButtons = t.oldEditButtons
+                t.preColumns(true);
                 t.realColumns.forEach((column,key)=>{
                     let etProp = {}
                     if(!column.etProp){

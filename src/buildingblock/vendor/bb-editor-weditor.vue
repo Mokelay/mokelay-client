@@ -1,5 +1,5 @@
 <template>
-    <div class="lh100">
+    <div class="lhp100">
         <div :index="randomId" :key='randomId' type="text/plain" ref="weditor"></div>
     </div>
 </template>
@@ -104,7 +104,7 @@
 </script>
 
 <style scoped>
-    .lh100 {
+    .lhp100 {
         line-height: 100%;
     }
     #weditor {
