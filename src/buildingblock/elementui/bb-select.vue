@@ -137,6 +137,9 @@
             },
             ds(val){
                 this.getData();
+            },
+            option(val){
+              this.realOption = val;
             }
         },
         created: function () {
