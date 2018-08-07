@@ -222,7 +222,6 @@
             },
             //tab点击事件
             tabClick:function(tab,t){
-                debugger;
                 if(t.hidePanel&&t.p_activeName ==tab.name){
                     //再次点击，取消选中
                     t.p_activeName = "";
@@ -303,11 +302,12 @@
                         },headerArr)]
                     )
                 ]);
+
                 const panelBox = createElement('div',{
                     class:['bb-tab-panel-box'],
-                    style:Object.assign({
+                    style:Object.assign({},_TY_Tool.setSimpleStyle(t.panelStyle),{
                         display:(t.p_activeName?'block':'none')
-                    },_TY_Tool.setSimpleStyle(t.panelStyle))
+                    })
                 },paneArr);
                 const tabBox = t.tabPosition!=='bottom' ? [headerBox,panelBox] : [panelBox,headerBox];
 
