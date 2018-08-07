@@ -67,6 +67,10 @@
                 type: String,
                 default: 'top'
             },
+            //tab的icon样式
+            tabIconStyle:{
+                type:Object
+            },
             /**
                 记录所有的tab  static和 dynamic区分
                 tabs:[{
@@ -109,6 +113,11 @@
             //content的样式设置
             panelStyle:{
                 type:Object
+            },
+            //是否可以影藏panel
+            hidePanel:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -213,7 +222,13 @@
             },
             //tab点击事件
             tabClick:function(tab,t){
-                t.p_activeName = tab.name;
+                debugger;
+                if(t.hidePanel&&t.p_activeName ==tab.name){
+                    //再次点击，取消选中
+                    t.p_activeName = "";
+                }else{
+                    t.p_activeName = tab.name;
+                }
                 //分发tab点击事件
                 t.$emit('tab-click',tab,t);
             },
@@ -228,6 +243,23 @@
                         }
                         const _itemStyle = _TY_Tool.setSimpleStyle(t.itemStyle);
                         const _activeItemStyle = _TY_Tool.setSimpleStyle(t.activeItemStyle);
+
+                        let iconDom = '';
+                        if(tabData.icon){
+                            //如果有icon
+                            let iconStyle={}
+                            if(t.tabIconStyle){
+                                //如果有css样式配置
+                                iconStyle = _TY_Tool.setSimpleStyle(t.tabIconStyle);
+                            }
+                            iconDom = createElement('i',{
+                                attrs:{
+                                    class:tabData.icon
+                                },
+                                style:iconStyle
+                            },[]);
+                        }
+
                         const label = createElement('div', {
                             class:"bb-tab-header-item "+(t.p_activeName==tabData.name?'is-active':''),
                             attrs:{
@@ -240,12 +272,13 @@
                                 }
                             },
                             ref:"tab_header_"+tabData.name
-                        }, [createElement('span',{
+                        }, [iconDom,createElement('span',{
                                 attrs:{
                                     'tab-name':tabData.name
                                 }
                             },tabData.label)
                         ]);
+
                         headerArr.push(label);
 
                         const tabPaneItem = createElement('div', {
@@ -273,7 +306,7 @@
                 const panelBox = createElement('div',{
                     class:['bb-tab-panel-box'],
                     style:Object.assign({
-                        
+                        display:(t.p_activeName?'block':'none')
                     },_TY_Tool.setSimpleStyle(t.panelStyle))
                 },paneArr);
                 const tabBox = t.tabPosition!=='bottom' ? [headerBox,panelBox] : [panelBox,headerBox];
@@ -303,7 +336,7 @@
         position: relative;
     }
     .bb-tab-header-scroll{
-        overflow: scroll;
+        overflow: auto;
         font-weight: 500;
         position: relative;
     }
