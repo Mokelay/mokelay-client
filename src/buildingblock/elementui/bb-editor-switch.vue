@@ -1,5 +1,5 @@
 <template>
-    <el-switch :active-text="option.activeText" :inactive-text="option.inactiveText" :disabled="option.disabled" :size="option.size" v-model="p_value" @change="switchChange"></el-switch>
+    <el-switch v-if="isShow" :active-text="option.activeText" :inactive-text="option.inactiveText" :disabled="option.disabled" :size="option.size" v-model="p_value" @change="switchChange"></el-switch>
 </template>
 
 <script>
@@ -29,12 +29,17 @@
         data() {
             return {
                 p_value:(typeof this.value==='boolean')?this.value:(this.value == 'true'),
-                tpl_value:''
+                tpl_value:'',
+                isShow:true,
+                realOption:this.option
             };
         },
         watch:{
             value(val){
                 this.p_value = (typeof val==='boolean')?val:(val == 'true');
+            },
+            option(val){
+                this.realOption = val;
             }
         },
         mounted:function(){
@@ -47,10 +52,26 @@
             }
         },
         methods: {
-           switchChange(val){
+            switchChange(val){
                 this.$emit("input",val);
                 this.$emit("change",val);
-           }    
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOption.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOption.disabled = false;
+            },   
         }
     }
 </script>

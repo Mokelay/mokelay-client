@@ -116,7 +116,11 @@
                 return styles;
             }  
         },
-        watch: {},
+        watch: {
+            option(val){
+                this.realOption = val;
+            }
+        },
         methods: {
         	//获取输入的字符串长度,超出设置的长度截取
         	onKeyup:function(){
