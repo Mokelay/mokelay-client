@@ -160,6 +160,7 @@
                     t.tabsData.forEach((tab,index)=>{
                         if(tab.name == tabName){
                             tab.show = false;
+                            return false;
                         }
                     });
                 }
@@ -171,6 +172,7 @@
                     t.tabsData.forEach((tab,index)=>{
                         if(tab.name == tabName){
                             tab.show = true;
+                            return false;
                         }
                     });
                 }
