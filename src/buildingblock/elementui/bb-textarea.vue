@@ -84,6 +84,9 @@
         watch: {
             value(val){
                 this.valueBase=(this.isJson&&val)?_TY_Tool.jsonFormat(val):val;
+            },
+            option(val){
+                this.realOption = val;
             }
         },
         computed:{

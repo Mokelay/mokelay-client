@@ -70,6 +70,9 @@ import Util from '../../libs/util';
         watch:{
             value(val){
                this.p_value = val;
+            },
+            option(val){
+                this.realOption = val;
             }
         },
         mounted(){

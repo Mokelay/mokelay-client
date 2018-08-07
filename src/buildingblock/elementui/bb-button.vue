@@ -71,6 +71,11 @@
                 return this.button;
             }
         },
+        watch: {
+            options(val){
+                this.realOption = val;
+            }
+        },
         created: function () {
         },
         mounted:function(){

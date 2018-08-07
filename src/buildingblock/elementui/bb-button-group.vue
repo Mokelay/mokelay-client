@@ -94,6 +94,9 @@
             buttonDs(val){
                 this.realButtonDs = val;
                 this.loadData();
+            },
+            option(val){
+                this.realOption = val;
             }
         },
         created: function () {

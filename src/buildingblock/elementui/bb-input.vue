@@ -53,6 +53,9 @@
         watch: {
             value(val){
                 this.valueBase=val;
+            },
+            option(val){
+                this.realOption = val;
             }
         },
         created: function () {

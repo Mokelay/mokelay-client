@@ -75,6 +75,9 @@ import Util from '../../libs/util';
             },
             options(val){
                 this.p_options = val;
+            },
+            option(val){
+                this.realOption = val;
             }
         },
         mounted(){
