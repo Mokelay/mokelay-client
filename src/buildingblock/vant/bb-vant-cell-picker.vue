@@ -1,6 +1,6 @@
 <template>
     <div class="bb-vant-cell-picker">
-        <bb-vant-cell @click="showPopup" :value="valueBase" :option="option" :content="content" :contentDs="contentDs"></bb-vant-cell>
+        <bb-vant-cell @click="showPopup" :value="valueText" :option="option" :content="content" :contentDs="contentDs"></bb-vant-cell>
         <van-popup v-model="pickerShow" position="bottom" @click-overlay="onCancel">
             <van-picker
                 v-if="pickerConfig.type != 'area'"
@@ -185,6 +185,7 @@ import 'vant/lib/cell/style';
         data() {
             return {
                 valueBase:this.value,
+                valueText:this.value,
                 pickerShow:false,
                 columnsData:this.pickerConfig.columns || this.columns,
                 external:{}
@@ -236,8 +237,9 @@ import 'vant/lib/cell/style';
                         text.push(val.text);
                         emitValue.push(val.value);
                     })
-                    this.valueBase = text.join(" ");
-                    emitValue = emitValue.join(",")
+                    this.valueText = text.join(" ");
+                    emitValue = emitValue.join(",");
+                    this.valueBase = emitValue;
                     this.$emit("input",emitValue,value);
                     this.$emit("change",emitValue,value);
                 }else{

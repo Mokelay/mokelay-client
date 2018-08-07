@@ -104,11 +104,21 @@ export default {
             const bar_right = navBar.getElementsByClassName("van-nav-bar__right")[0];
             const bar__right_icon = bar_right.getElementsByTagName("i")[0];
             const bar__right_text = bar_right.getElementsByTagName("span")[0];
-            bar__left_icon.style.color = t.color.leftIcon;
-            bar__left_text.style.color = t.color.leftText;
-            bar__title.style.color = t.color.title;
-            right_icon.style.color = t.color.rightIcon;
-            bar__right_text.color = t.color.rightText;
+            if(bar__left_icon){
+              bar__left_icon.style.color = t.color.leftIcon;
+            }
+            if(bar__left_text){
+              bar__left_text.style.color = t.color.leftText;
+            }
+            if(bar__title){
+              bar__title.style.color = t.color.title;
+            }
+            if(bar__right_icon){
+              bar__right_icon.style.color = t.color.rightIcon;
+            }
+            if(bar__right_text){
+              bar__right_text.color = t.color.rightText;
+            }
           }
         }    
     }
