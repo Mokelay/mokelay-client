@@ -194,6 +194,10 @@
                                         });
                                     content.push(ele);
                                     break;
+                                default:
+                                    content.push(createElement('span',{style:{'word-break': 'break-word'}
+                                    },t.formData[attributeName]));
+                                    break;
                             };
                         };
                         const bb_children = _TY_Tool.bbRender(realContent, createElement, t);
