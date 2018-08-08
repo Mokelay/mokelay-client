@@ -46,7 +46,7 @@
             <!-- 列表新增按钮 -->
             <el-button v-if="editConfig && addButton && !editAll" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click="rowClick" v-loading="loading" :element-loading-text="customLoading.text" :element-loading-spinner="customLoading.spinner" :element-loading-background="customLoading.background" @selection-change="selectionChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click.self="rowClick" v-loading="loading" :element-loading-text="customLoading.text" :element-loading-spinner="customLoading.spinner" :element-loading-background="customLoading.background" @selection-change="selectionChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55">
                 </el-table-column>
@@ -95,7 +95,7 @@
                                     v-if="hideBtn(button,scope) && button['buttonType'] != 'popup' && button['buttonType'] != 'dialog'"
                                    :type="button.type" :key="index"
                                    :style="{'color':button.wordColor,'user-select':'all'}"
-                                   :icon="button.icon" @click.native.prevent="btnClick(button,scope)">
+                                   :icon="button.icon" @click.native.stop.prevent="btnClick(button,scope)">
                                     {{button.text?button.text:scope['row'][column.prop]}}
                                 </el-button>
                                 <!-- 后续业务禁止应用 -->
@@ -799,7 +799,12 @@
             },
             rowClick(row){
                 //触发父组件的选择
-                this.$emit("rowClick", row);
+                let tagName = event.target.tagName;//当前的触发的dom标签名
+                if(tagName!='TD' && tagName !='DIV'){
+                    event.stopPropagation();//阻止继续向上冒泡
+                }else{
+                    this.$emit("rowClick", row);
+                }
                 //this.$emit("list-select", row);
             },
             globalSearch(){
