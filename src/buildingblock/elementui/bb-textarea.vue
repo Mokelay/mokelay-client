@@ -3,7 +3,7 @@
           <el-input
             type="textarea"
             :rows="rows"
-            placeholder="请输入内容"
+            :placeholder="realOption.placeholder"
             v-model="valueBase"
             @change="change"
             :disabled="realOption.disabled"
@@ -65,7 +65,8 @@
                 default:function(){
                     return {
                         disabled:false,
-                        size:""
+                        size:"",
+                        placeholder:"请输入内容"
                     };
                 }
             }

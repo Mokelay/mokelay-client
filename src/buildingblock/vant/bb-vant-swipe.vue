@@ -9,7 +9,7 @@
         :initial-swipe="option.initialSwipe" 
         @change="change">
         <van-swipe-item v-for="(image, index) in valueBase" :key="index">
-            <img :src="image.src" @click="click(image.href)"/>
+            <img :src="image[props.src]" @click="click(image[props.href])"/>
         </van-swipe-item>
     </van-swipe>
 </template>
@@ -40,6 +40,16 @@ import 'vant/lib/swipe/style';
             //动态图组
             imageDs:{
                 type:Object
+            },
+            // 配置选项  动态接口返回属性对应
+            props:{
+                type:Object,
+                default:function(){
+                    return {
+                        src:'src',
+                        href:'href'
+                    }
+                }
             },
             /*其他属性配置
                 {
