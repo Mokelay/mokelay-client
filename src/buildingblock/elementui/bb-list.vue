@@ -813,10 +813,13 @@
                 index = index||0;
                 //还没有请求到数据
                 t.activeSelectedIndex = index; 
+                if(index>=t.pageSize){
+                    t.activeSelectedIndex = 0;
+                }
                 //初始选中的值
                 t.selectArr=[];
                 t.tableData.forEach((item,key)=>{
-                    if(key==index){
+                    if(key==t.activeSelectedIndex){
                         t.rowClick(item);
                         return false;
                     }
