@@ -9,7 +9,7 @@
         :initial-swipe="option.initialSwipe" 
         @change="change">
         <van-swipe-item v-for="(image, index) in valueBase" :key="index">
-            <img :src="image[props.src]" @click="click(image[props.href])"/>
+            <img :src="image.src" @click="click(image.href)"/>
         </van-swipe-item>
     </van-swipe>
 </template>
@@ -40,11 +40,6 @@ import 'vant/lib/swipe/style';
             //动态图组
             imageDs:{
                 type:Object
-            },
-            //数据对应字段
-            valueKey:{
-                src:"src",
-                href:"href",
             },
             // 配置选项  动态接口返回属性对应
             props:{
@@ -117,7 +112,8 @@ import 'vant/lib/swipe/style';
                                 _list = item['value'];
                             }
                             let newValue = t.transferData(_list);
-                            t.valueBase = value;
+                            t.valueBase = newValue;
+                            debugger
                         });
                     }, function (code, msg) {
                     });
@@ -131,11 +127,11 @@ import 'vant/lib/swipe/style';
             //转换DS返回的数据
             transferData(data){
                 const t = this;
-                const valueKey = t.valueKey["src"];
-                const textKey = t.valueKey["href"];
+                const valueKey = t.props["src"];
+                const textKey = t.props["href"];
                 const dataString = JSON.stringify(data);
-                let newString = valueKey?dataString.replace(new RegExp(valueKey,'g'),"value"):dataString;
-                newString = textKey?newString.replace(new RegExp(textKey,'g'),"text"):newString;
+                let newString = valueKey?dataString.replace(new RegExp(valueKey,'g'),"src"):dataString;
+                newString = textKey?newString.replace(new RegExp(textKey,'g'),"href"):newString;
                 const newData = JSON.parse(newString);
                 return newData;
             },
