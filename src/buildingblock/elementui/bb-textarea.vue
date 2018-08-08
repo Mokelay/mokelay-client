@@ -27,7 +27,8 @@
                 type:Boolean
             },
             value:{
-                type:[String,Number]
+                type:[String,Number],
+                default:""
             },
             defaultValTpl:{
                 type:[String,Number,Boolean]
@@ -96,7 +97,7 @@
                 return this.valueBase?this.valueBase.length:0
             },
             lengthCheck:function(){
-                if(this.maxLen&&this.valueBase.length>this.maxLen){
+                if(this.valueBase&&this.maxLen&&this.valueBase.length>this.maxLen){
                     //超过最大长度
                     return "color_red";
                 }else{
