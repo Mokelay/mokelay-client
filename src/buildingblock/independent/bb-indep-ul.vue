@@ -23,9 +23,10 @@
                     clearfix:true
                 }
             },liInstance);
-
             return createElement('div',{
-
+                class:{
+                    "bb_indep_ul_fixed_height":t.fixedHeight
+                }
             },[ulInstance,loadingInstance]);
         },
         props: {
@@ -83,6 +84,11 @@
             //关闭上拉加载
             closePullLoading:{
                 type:Boolean
+            },
+            //是否固定高度
+            fixedHeight:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -232,11 +238,27 @@
                 let t=this;
                 //屏幕高度
                 const screenHeight = window.screen.height;
-                if(!t.closePullLoading){
+                if(!t.closePullLoading && !t.fixedHeight){
                     window.onscroll = function(){
                         const totalHeight = document.activeElement.scrollHeight || document.body.scrollHeight;
                         const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop;
                         if(screenHeight + scrollHeight + 10 >= totalHeight){//接近底部10px的时候就加载
+                            if(!t.end&&!t.loading){
+                                t.loading =true;
+                                t.page = t.page+1;
+                                t.loadData();
+                            }
+                        }
+                    }
+                }
+                if(t.fixedHeight){
+                    //固定高度的上拉加载
+                    t.$el.onscroll=function(){
+                        const _screenHeight = event.target.offsetHeight;
+                        const totalHeight = event.target.scrollHeight;
+                        const scrollHeight = event.target.scrollTop;
+                        console.log("scrollHeight:",scrollHeight);
+                        if(_screenHeight + scrollHeight + 10 >= totalHeight){//接近底部10px的时候就加载
                             if(!t.end&&!t.loading){
                                 t.loading =true;
                                 t.page = t.page+1;
@@ -423,6 +445,10 @@
     .bb_loading span:nth-child(5){
         -webkit-animation-delay:0.65s;
         animation-delay:0.65s;
+    }
+
+    .bb_indep_ul_fixed_height{
+        overflow-y:auto;
     }
 
     
