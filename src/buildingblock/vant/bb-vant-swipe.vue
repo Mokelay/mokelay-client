@@ -41,6 +41,11 @@ import 'vant/lib/swipe/style';
             imageDs:{
                 type:Object
             },
+            //数据对应字段
+            valueKey:{
+                src:"src",
+                href:"href",
+            },
             // 配置选项  动态接口返回属性对应
             props:{
                 type:Object,
@@ -95,9 +100,23 @@ import 'vant/lib/swipe/style';
             getData(){
                 const t = this;
                 if (t.imageDs) {
-                    Util.getDSData(t.imageDs, _TY_Tool.buildTplParams(t), function (data) {
+                    _TY_Tool.getDSData(t.imageDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
-                            const {dataKey, value} = item;
+                            let _list = [];
+                            if(item['value']&&item['value']['currentRecords']){
+                                _list = item['value']['currentRecords'];
+                                const totalPage = item['value']['totalPages'];
+                                if(t.page>=totalPage){
+                                    t.end=true;
+                                }else{
+                                    t.end=false;
+                                }
+                            }else if(item['value']&&item['value']['list']){
+                                _list = item['value']['list'];    
+                            }else{
+                                _list = item['value'];
+                            }
+                            let newValue = t.transferData(_list);
                             t.valueBase = value;
                         });
                     }, function (code, msg) {
@@ -108,7 +127,18 @@ import 'vant/lib/swipe/style';
             click(href){
                 const t = this;
                 window.location.href = href;
-            }
+            },
+            //转换DS返回的数据
+            transferData(data){
+                const t = this;
+                const valueKey = t.valueKey["src"];
+                const textKey = t.valueKey["href"];
+                const dataString = JSON.stringify(data);
+                let newString = valueKey?dataString.replace(new RegExp(valueKey,'g'),"value"):dataString;
+                newString = textKey?newString.replace(new RegExp(textKey,'g'),"text"):newString;
+                const newData = JSON.parse(newString);
+                return newData;
+            },
         }
     }
 </script>
