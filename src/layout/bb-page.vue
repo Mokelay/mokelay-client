@@ -156,6 +156,11 @@
           // 针对PC端  基准值更正
           document.body.style.fontSize = "18px";
           document.documentElement.style.fontSize = '28px';
+          //针对部分显示有问题需要加一个延迟设置
+          setTimeout(()=>{
+            document.body.style.fontSize = "18px";
+            document.documentElement.style.fontSize = '28px';
+          },500);
         }
       }
       this.loadData();
