@@ -312,6 +312,9 @@
                     return;
                 }
                 t.list.forEach((item,index)=>{
+                    if(item['hide']){
+                        return true;
+                    }
                     //数据解析到模板中去
                     const _content = _TY_Tool.tpl(JSON.stringify(t.itemContent),_TY_Tool.buildTplParams(t,{
                         rowData:item
