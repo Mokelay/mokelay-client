@@ -3,7 +3,7 @@
         'noPadding':option.noPadding,
         't_right':option.t_right
     }">
-         <van-field 
+        <van-field 
             v-model="valueBase" 
             :type="option.type"
             :label="option.label"
@@ -19,8 +19,8 @@
             @change="onInput" 
             @click-icon="clickIcon" 
             @keyup="keyup"/>
-         <p v-if="messageText" class="showText">{{writeText}}/{{messageText}}</p>
-     </div>
+        <p v-if="messageText && option.showMessageText" class="showText">{{writeText}}/{{messageText}}</p>
+    </div>
 
 
 </template>
@@ -73,7 +73,8 @@ import 'vant/lib/field/style';
                         errorMessage:"",
                         autosize:true,
                         maxText:100000,
-                        border:true
+                        border:true,
+                        showMessageText:true
                     };
                 }
             }
