@@ -113,7 +113,6 @@ import 'vant/lib/swipe/style';
                             }
                             let newValue = t.transferData(_list);
                             t.valueBase = newValue;
-                            debugger
                         });
                     }, function (code, msg) {
                     });
