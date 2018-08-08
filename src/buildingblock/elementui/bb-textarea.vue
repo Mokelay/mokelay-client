@@ -11,6 +11,7 @@
             :style="p_style"
             :resize="p_resize"
             :autosize="p_autosize"
+            :maxlength="maxLen"
             >
           </el-input>
           <span v-if="maxLen" class="textarea_buttom" :class="lengthCheck">{{len}}/{{maxLen}}</span>
