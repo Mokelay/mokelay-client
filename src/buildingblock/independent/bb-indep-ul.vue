@@ -257,7 +257,6 @@
                         const _screenHeight = event.target.offsetHeight;
                         const totalHeight = event.target.scrollHeight;
                         const scrollHeight = event.target.scrollTop;
-                        console.log("scrollHeight:",scrollHeight);
                         if(_screenHeight + scrollHeight + 10 >= totalHeight){//接近底部10px的时候就加载
                             if(!t.end&&!t.loading){
                                 t.loading =true;
