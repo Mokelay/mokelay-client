@@ -1,5 +1,5 @@
 <template>
-    <button :class="['indep_btn',relButton.type]" :style="relButton.style" class="bb-indep-button" type="button" :disabled="relButton.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':relButton.selectText}}<slot></slot></button>
+    <button v-if="isShow"  :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':relButton.selectText}}<slot></slot></button>
 </template>
 
 <script>
@@ -53,7 +53,9 @@
         },
         data() {
             return {
-                external:{}//外部参数
+                external:{},//外部参数
+                isShow:true,
+                realOptions:this.options
             }
         },
         computed: {
@@ -94,6 +96,22 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
+            },
+            //禁用积木
+            disabledFn(){
+                this.realOptions.disabled = true;
+            },
+            //启用积木
+            enabledFn(){
+                this.realOptions.disabled = false;
             }
         }
     }
@@ -142,10 +160,10 @@
         color: #fff; 
     }
     .indep_btn.is-disabled, .indep_btn.is-disabled:hover, .indep_btn.is-disabled:focus, .indep_btn.is-disabled:active {
-        color: #b4bccc;
-        cursor: not-allowed;
-        background-image: none;
-        background-color: #fff;
+        color: #b4bccc !important;
+        cursor: not-allowed !important;
+        background-image: none !important;
+        background-color: #fff !important;
         border-color: #efefef;
     }
     .indep_btn.success{
