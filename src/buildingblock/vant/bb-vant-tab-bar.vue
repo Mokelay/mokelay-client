@@ -50,6 +50,15 @@
                     }];
                 }
             },
+            valueKey:{
+                text:"text",
+                icon:"icon",
+                dot:"dot",
+                info:"info",
+                url:"url",
+                iconStyle:"iconStyle",
+                textStyle:"textStyle",
+            },
             //动态标签数据
             fieldsDs:{
                 type:Object
@@ -144,11 +153,11 @@
                 field.iconStyle = field.iconStyle?field.iconStyle:{}
                 field.textStyle = field.textStyle?field.textStyle:{}
                 const fieldIcon = {
-                    layout:key == t.active?t.activeStyle.iconStyle : field.iconStyle
+                    layout:t.active == key?t.activeStyle.iconStyle : field.iconStyle
                 }
                 const iconStyle = _TY_Tool.setStyle(fieldIcon);
                 const fieldText = {
-                    layout:t.active?t.activeStyle.textStyle : field.textStyle
+                    layout:t.active == key?t.activeStyle.textStyle : field.textStyle
                 }
                 const textStyle = _TY_Tool.setStyle(fieldText);
                 //自定义图标
@@ -196,25 +205,60 @@
                 if (t.fieldsDs) {
                     Util.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
-                            const {dataKey, value} = item;
-                            t.realFields = value;
+                            let _list = [];
+                            if(item['value']&&item['value']['currentRecords']){
+                                _list = item['value']['currentRecords'];
+                                const totalPage = item['value']['totalPages'];
+                                if(t.page>=totalPage){
+                                    t.end=true;
+                                }else{
+                                    t.end=false;
+                                }
+                            }else if(item['value']&&item['value']['list']){
+                                _list = item['value']['list'];    
+                            }else{
+                                _list = item['value'];
+                            }
+                            let newValue = t.transferData(_list);
+                            t.realFields = newValue;
                         });
                     }, function (code, msg) {
                     });
                 }
             },
-            //获取数据
+            //获取content数据
             getIcon() {
                 const t = this;
                 if (t.contentDs) {
                     Util.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
                             const {dataKey, value} = item;
-                            t.realFields = value;
+                            t.realContent = value;
                         });
                     }, function (code, msg) {
                     });
                 }
+            },
+            //转换DS返回的数据
+            transferData(data){
+                const t = this;
+                const textKey = t.valueKey["text"];
+                const iconKey = t.valueKey["icon"];
+                const dotKey = t.valueKey["dot"];
+                const infoKey = t.valueKey["info"];
+                const urlKey = t.valueKey["url"];
+                const iconStyleKey = t.valueKey["iconStyle"];
+                const textStyleKey = t.valueKey["textStyle"];
+                const dataString = JSON.stringify(data);
+                let newString = textKey?dataString.replace(new RegExp(textKey,'g'),"text"):dataString;
+                newString = iconKey?newString.replace(new RegExp(iconKey,'g'),"icon"):newString;
+                newString = dotKey?newString.replace(new RegExp(dotKey,'g'),"dot"):newString;
+                newString = infoKey?newString.replace(new RegExp(infoKey,'g'),"info"):newString;
+                newString = urlKey?newString.replace(new RegExp(urlKey,'g'),"url"):newString;
+                newString = iconStyleKey?newString.replace(new RegExp(iconStyleKey,'g'),"iconStyle"):newString;
+                newString = textStyleKey?newString.replace(new RegExp(textStyleKey,'g'),"textStyle"):newString;
+                const newData = JSON.parse(newString);
+                return newData;
             },
         }
     }

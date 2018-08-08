@@ -9,7 +9,7 @@
         :initial-swipe="option.initialSwipe" 
         @change="change">
         <van-swipe-item v-for="(image, index) in valueBase" :key="index">
-            <img :src="image[props.src]" @click="click(image[props.href])"/>
+            <img :src="image.src" @click="click(image.href)"/>
         </van-swipe-item>
     </van-swipe>
 </template>
@@ -95,10 +95,24 @@ import 'vant/lib/swipe/style';
             getData(){
                 const t = this;
                 if (t.imageDs) {
-                    Util.getDSData(t.imageDs, _TY_Tool.buildTplParams(t), function (data) {
+                    _TY_Tool.getDSData(t.imageDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
-                            const {dataKey, value} = item;
-                            t.valueBase = value;
+                            let _list = [];
+                            if(item['value']&&item['value']['currentRecords']){
+                                _list = item['value']['currentRecords'];
+                                const totalPage = item['value']['totalPages'];
+                                if(t.page>=totalPage){
+                                    t.end=true;
+                                }else{
+                                    t.end=false;
+                                }
+                            }else if(item['value']&&item['value']['list']){
+                                _list = item['value']['list'];    
+                            }else{
+                                _list = item['value'];
+                            }
+                            let newValue = t.transferData(_list);
+                            t.valueBase = newValue;
                         });
                     }, function (code, msg) {
                     });
@@ -108,7 +122,18 @@ import 'vant/lib/swipe/style';
             click(href){
                 const t = this;
                 window.location.href = href;
-            }
+            },
+            //转换DS返回的数据
+            transferData(data){
+                const t = this;
+                const valueKey = t.props["src"];
+                const textKey = t.props["href"];
+                const dataString = JSON.stringify(data);
+                let newString = valueKey?dataString.replace(new RegExp(valueKey,'g'),"src"):dataString;
+                newString = textKey?newString.replace(new RegExp(textKey,'g'),"href"):newString;
+                const newData = JSON.parse(newString);
+                return newData;
+            },
         }
     }
 </script>
