@@ -53,7 +53,7 @@
                 <el-table-column v-if="highlightCurrent" width="55">
                     <template slot-scope="scope">
                         <!-- :selected="selectArr.index" -->
-                        <input type="radio" :checked="selectArr&&selectArr.id&&selectArr.id==scope.row.id"  @change="radioChange(scope.row)" :name="radioName">
+                        <input type="radio" :checked="(selectArr&&selectArr==scope.row)||activeSelectedIndex==scope['$index']"  @change="radioChange(scope.row)" :name="radioName">
                     </template>
                 </el-table-column>
 
@@ -464,7 +464,8 @@
                 validateMessageObj:{},
                 realCellStyleFn:this.cellStyleFn != ""?eval("("+this.cellStyleFn+")"):{},
                 realHeaderCellStyleFn:this.cellStyleFn != ""?eval("("+this.headerCellStyleFn+")"):{},
-                radioName:_TY_Tool.uuid()
+                radioName:_TY_Tool.uuid(),
+                activeSelectedIndex:-1//默认选中的值
             }
         },
         watch: {
@@ -802,12 +803,17 @@
             activeRow:function(index){
                 let t=this;
                 index = index||0;
-                t.tableData.forEach((item,key)=>{
-                    if(key==index){
-                        t.rowClick(item);
-                        return false;
-                    }
-                });
+                if(!t.tableData||t.tableData.length<=0){
+                    //还没有请求到数据
+                   t.activeSelectedIndex = index; 
+                }else{
+                    t.tableData.forEach((item,key)=>{
+                        if(key==index){
+                            t.rowClick(item);
+                            return false;
+                        }
+                    });
+                }
             },
             //行click事件
             rowClick(row){
