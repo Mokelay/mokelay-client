@@ -31,6 +31,16 @@
             fieldsDs:{
                 type:Object
             },
+            /*数据关键字 配合DS接口使用，从返回数据中获取需要的值*/
+            valueKey:{
+                type:Object,
+                default:function(){
+                    return {
+                        src:"src",
+                        text:"text",
+                    }
+                }
+            },
             /*基础配置
                 {
                     type:"",  card  走马灯的类型
@@ -79,7 +89,21 @@
                 if (t.fieldsDs) {
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
                         map.forEach((val,key)=>{
-                            t.realItems = val.value
+                            let _list = [];
+                            if(item['value']&&item['value']['currentRecords']){
+                                _list = item['value']['currentRecords'];
+                                const totalPage = item['value']['totalPages'];
+                                if(t.page>=totalPage){
+                                    t.end=true;
+                                }else{
+                                    t.end=false;
+                                }
+                            }else if(item['value']&&item['value']['list']){
+                                _list = item['value']['list'];    
+                            }else{
+                                _list = item['value'];
+                            }
+                            t.realItems = t.transferData(_list);
                         })
                     }, function (code, msg) {
                     });
@@ -92,7 +116,18 @@
             //图片点击
             itemClick(...params){
                 this.$emit("click",params,this);
-            }
+            },
+            //转换DS返回的数据
+            transferData(data){
+                const t = this;
+                const srcKey = t.valueKey["src"];
+                const textKey = t.valueKey["text"];
+                const dataString = JSON.stringify(data);
+                let newString = srcKey?dataString.replace(new RegExp(srcKey,'g'),"src"):dataString;
+                newString = textKey?newString.replace(new RegExp(textKey,'g'),"text"):newString;
+                const newData = JSON.parse(newString);
+                return newData;
+            },
         }
     }
 </script>

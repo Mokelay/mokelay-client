@@ -46,12 +46,16 @@
             horizontal:false
           }
         }
+      },
+      //module完成线上存储后删除
+      content:{
+        type:Array
       }
     },
     data() {
       return {
         //每次使用都生成独立uuid
-        realContent:_TY_Tool.copyContent(this.content),
+        realContent:this.content,
         //支持模板 可以 根据不同条件切换不同的模块名称
         realModuleAlias: _TY_Tool.tpl(this.moduleAlias, _TY_Tool.buildTplParams(this)),
         realAttributes:this.attributes,
