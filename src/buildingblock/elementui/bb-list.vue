@@ -128,7 +128,7 @@
                             <div v-if="column['template'] == 'file'">
                                 <bb-custom :customFile="column['file']" :parentData="{row:scope['row'],column:column}"></bb-custom>
                             </div>
-                            <div v-else v-html="scope['row'][column.prop]">
+                            <div v-if="column['template'] == 'html'" v-html="scope['row'][column.prop]">
                             </div>
 
                         </div>
@@ -349,7 +349,8 @@
                         remove:{},
                         update:{},
                         sort:{},
-                   }
+                   },
+                   defaultShow  默认出现编辑栏
                 }
             */
             editConfig:{
@@ -507,6 +508,7 @@
                     t.tableData.push({});
                 }
             }
+            console.log("t.realColumns:",t.realColumns);
         },
         mounted:function(){
             this.$emit('bb-mounted');
