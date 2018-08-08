@@ -728,6 +728,14 @@
                                     }
                                     t.tableData = [];
                                     for (var i in list) {
+                                        //默认勾选的行
+                                        if(t.activeSelectedIndex>=0 && t.activeSelectedIndex == i){
+                                            let _row = list[i];
+                                            t.selectArr = _row;
+                                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(_row));
+                                            t.$emit("list-select", t.selectArr);
+                                            t.$emit("rowClick", row);
+                                        }
                                         if(t.hiddenValueKey){
                                             t.hiddenItems.forEach((ele)=>{//前端支持列表筛选
                                                 if(list[i][t.hiddenValueKey] != ele ){
@@ -803,17 +811,17 @@
             activeRow:function(index){
                 let t=this;
                 index = index||0;
-                if(!t.tableData||t.tableData.length<=0){
-                    //还没有请求到数据
-                   t.activeSelectedIndex = index; 
-                }else{
-                    t.tableData.forEach((item,key)=>{
-                        if(key==index){
-                            t.rowClick(item);
-                            return false;
-                        }
-                    });
-                }
+                //还没有请求到数据
+                t.activeSelectedIndex = index; 
+                //初始选中的值
+                t.selectArr=[];
+                t.tableData.forEach((item,key)=>{
+                    if(key==index){
+                        t.rowClick(item);
+                        return false;
+                    }
+                });
+                
             },
             //行click事件
             rowClick(row){
