@@ -52,7 +52,8 @@
                 </el-table-column>
                 <el-table-column v-if="highlightCurrent" width="55">
                     <template slot-scope="scope">
-                        <input type="radio" @change="radioChange(scope.row)" :name="radioName">
+                        <!-- :selected="selectArr.index" -->
+                        <input type="radio" :checked="selectArr&&selectArr.id&&selectArr.id==scope.row.id"  @change="radioChange(scope.row)" :name="radioName">
                     </template>
                 </el-table-column>
 
@@ -797,11 +798,29 @@
                 }
                 return true;
             },
+            //默认选中list哪一行数据
+            activeRow:function(index){
+                let t=this;
+                index = index||0;
+                t.tableData.forEach((item,key)=>{
+                    if(key==index){
+                        t.rowClick(item);
+                        return false;
+                    }
+                });
+            },
+            //行click事件
             rowClick(row){
                 //触发父组件的选择
-                let tagName = event.target.tagName;//当前的触发的dom标签名
+                let tagName = event&&event.target.tagName||'';//当前的触发的dom标签名
+                if(!this.selection){
+                    this.selectArr = row;
+                    sessionStorage.setItem(this.alias+'_selection',JSON.stringify(row));
+                    this.$emit("list-select", this.selectArr);
+                }
+
                 if(tagName!='TD' && tagName !='DIV'){
-                    event.stopPropagation();//阻止继续向上冒泡
+                    event&&event.stopPropagation();//阻止继续向上冒泡
                 }else{
                     this.$emit("rowClick", row);
                 }
@@ -853,6 +872,7 @@
             },
             radioChange:function(val){
                 if(!this.selection){
+                    debugger;
                     this.selectArr = val;
                 }
                 sessionStorage.setItem(this.alias+'_selection',JSON.stringify(val));
