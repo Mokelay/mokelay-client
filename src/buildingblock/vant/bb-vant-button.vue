@@ -1,5 +1,6 @@
 <template>
     <van-button
+        v-if="isShow"
         :type="type" 
         :size="option.size"
         :tag="option.tag"
@@ -75,10 +76,16 @@ import 'vant/lib/button/style';
                         size:"normal"
                     };
                 }
+            },
+            //影藏积木  ul里面需要根据rowData的值，来判断是否显示按钮
+            hide:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
             return {
+                isShow:!this.hideBtn
             };
         },
         methods: {
@@ -100,6 +107,14 @@ import 'vant/lib/button/style';
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
+            },
+            //隐藏积木
+            hideFn(){
+                this.isShow = false;
+            },
+            //展示积木
+            showFn(){
+                this.isShow = true;
             }
         }
     }
