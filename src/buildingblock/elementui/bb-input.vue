@@ -9,6 +9,8 @@
         :size="realOption.size"
         :prefix-icon="realOption.prefixIcon"
         :suffix-icon="realOption.suffixIcon"
+        :maxlength="realOption.maxLen != undefined?realOption.maxLen:100000000000"
+        :minlength="realOption.minLen"
       >
     </el-input>
 </template>
@@ -38,7 +40,9 @@
                         size:"",
                         prefixIcon:null,
                         suffixIcon:null,
-                        placeholder:"请输入内容"
+                        placeholder:"请输入内容",
+                        minLen:0,
+                        maxLen:1000000000
                     };
                 }
             }

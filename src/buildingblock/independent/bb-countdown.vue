@@ -9,8 +9,9 @@
             /*
                 countdownConfig 计时器设置
                 {
-                    type:'reverse' 倒计时|| 'order' 正计时
-                    time:'', 开始时间 //正计时有效 || 结束时间 //倒计时
+                    type:'reverse' 倒计时|| 'order' 正计时 || "reverseLength"
+                    time:'', 开始时间 //正计时有效 || 结束时间 //倒计时  事件区间计时
+                    countTime: 时间长度计时
                     words:'开始啦！', //截止后显示 倒计时有效
                     integral:'chinese',//分割样式
                     showOrder:'order' || reverse //显示顺序
@@ -22,6 +23,7 @@
                     return {
                         type:'reverse',
                         time:null,
+                        countTime:60,
                         words:'即将开始！',
                         integral:'chinese',
                         showOrder:'order'
@@ -59,7 +61,11 @@
         mounted:function(){
             const t = this;
             t.setStyle();
-            t.getCountDown();
+            if(t.countdownConfig.type == "reverseLength" || 1){
+                t.CountTimeDown();
+            }else{
+                t.getCountDown();
+            }
         },
         methods: {
             //bengin 触发倒计时
@@ -75,7 +81,7 @@
                 };
                 t.style = style;
             },
-            //倒计时
+            //事件区间倒计时
             getCountDown:function(){
                 const t = this;
                 //获取时间节点
@@ -155,7 +161,26 @@
                     }
                 };
                 t.countDownTime = countDownTime;
-            }
+            },
+            //时间长度计时
+            CountTimeDown:function(){
+                const t = this;
+                //获取时间节点
+                let countTime = t.countdownConfig.countTime || 60;
+                t.setInterval = setInterval(function(){
+                    countTime = countTime - 1;
+                    if(countTime > 0){
+                        //时间差于0 继续计时
+                        t.countDownTime = countTime + "s";
+                    }else{
+                        //时间差小于等于0 计时结束 显示文字
+                        clearInterval(t.setInterval);
+                        t.countDownTime = t.countdownConfig.words;
+                        //计时结束 事件 countdown-finish
+                        t.$emit('countdown-finish');
+                    }
+                },1000);
+            },
         }
     }
 </script>

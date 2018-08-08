@@ -159,6 +159,7 @@
         },
         mounted:function(){
             let t=this;
+            t.$emit("mounted",t);
         },
         methods: {
             onSearch(){
@@ -197,8 +198,22 @@
                     _TY_Tool.getDSData(t.formDataDs, _TY_Tool.buildTplParams(t), function (data) {
                         data.forEach((item) => {
                             t.loading = false;
-                            const {dataKey, value} = item;
-                            t.formData = value;
+                            let _value = {};
+                            if(item['value']&&item['value']['currentRecords']){
+                                _value = item['value']['currentRecords'];
+                                const totalPage = item['value']['totalPages'];
+                                if(t.page>=totalPage){
+                                    t.end=true;
+                                }else{
+                                    t.end=false;
+                                }
+                            }else if(item['value']&&item['value']['list']){
+                                _value = item['value']['list'];    
+                            }else{
+                                _value = item['value'];
+                            }
+                            t.formData = _value;
+                            t.$emit("afterLoadData",t);
                         });
                     }, function (code, msg) {
                         t.loading = false;
