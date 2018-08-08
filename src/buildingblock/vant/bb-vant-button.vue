@@ -79,16 +79,25 @@ import 'vant/lib/button/style';
             },
             //影藏积木  ul里面需要根据rowData的值，来判断是否显示按钮
             hide:{
-                type:Boolean,
+                type:[Boolean,String],
                 default:false
             }
         },
         data() {
             return {
-                isShow:!this.hideBtn
-            };
+                isShow:typeof(this.hide)==='string'?!this.transferBoolean(this.hide):!this.hide
+            }
         },
         methods: {
+            //boolean 转换
+            transferBoolean:function(str){
+                let t=this;
+                if(str=='true'||str ==1||str=='1'||str=='TRUE'){
+                    return true;
+                }else{
+                    return false;
+                }
+            },
             //外部参数，在button中存储
             linkage(...data){
               let t=this;
