@@ -17,6 +17,7 @@ import bbiconselect from './bb-icon-select.vue';
 import bbicon from './bb-icon.vue';
 import bbcsseditor from './bb-css-editor.vue';
 import bbbuttoncsseditor from './bb-button-css-editor.vue';
+import bbsmsverification from './bb-sms-verification.vue';
 import bbmodule from './bb-module.vue';
 
 export default {
@@ -39,6 +40,7 @@ export default {
 		Vue.component('bb-icon', bbicon);
 		Vue.component('bb-css-editor', bbcsseditor);
 		Vue.component('bb-button-css-editor', bbbuttoncsseditor);
+		Vue.component('bb-sms-verification', bbsmsverification);
 		Vue.component('bb-module', bbmodule);
 
 		console.log("成功加载模块积木;");
