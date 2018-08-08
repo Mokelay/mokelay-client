@@ -456,6 +456,9 @@
                         }, {
                             value: 'file',
                             text: '自定义模板'
+                        }, {
+                            value: 'html',
+                            text: 'html模板'
                         }]
                     }
                 }, {
