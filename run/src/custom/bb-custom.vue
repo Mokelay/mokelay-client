@@ -6,8 +6,6 @@
       if(this.cf){
         return createElement(this.cf,{
           props:{parentData:this.parentData}},[]);
-      }else{
-        return createElement("h1","请设置定制化文件路径");
       }
     },
     props: {
