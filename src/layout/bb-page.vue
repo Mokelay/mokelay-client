@@ -34,7 +34,6 @@
           {props:{pageAlias:this.templatePageAlias}}
         ));
       }
-
       //处理定制化文件
       if(this.customFile){
         pbbElementList.push(createElement('bb-custom',{props:{customFile:this.customFile}}));
@@ -152,16 +151,7 @@
         if(_TY_Tool.isWX()){
           _TY_Tool.get_wx();
         }
-        if(_TY_Tool.isPC()){
-          // 针对PC端  基准值更正
-          document.body.style.fontSize = "18px";
-          document.documentElement.style.fontSize = '28px';
-          //针对部分显示有问题需要加一个延迟设置
-          setTimeout(()=>{
-            document.body.style.fontSize = "18px";
-            document.documentElement.style.fontSize = '28px';
-          },500);
-        }
+        this.refreshRem();
       }
       this.loadData();
     },
@@ -170,20 +160,9 @@
       setTimeout(function(){
         t.$emit('mounted',t);
       },0);
-      window.onresize = () => {
-            return (() => {
-              if(_TY_Tool.isPC()){
-                // 针对PC端  基准值更正
-                document.body.style.fontSize = "18px";
-                document.documentElement.style.fontSize = '28px';
-                //针对部分显示有问题需要加一个延迟设置
-                setTimeout(()=>{
-                  document.body.style.fontSize = "18px";
-                  document.documentElement.style.fontSize = '28px';
-                },500);
-              }
-            })()
-        }
+      window.addEventListener('resize', function() {
+        t.refreshRem(300);
+      }, false);
     },
     beforeDestroy:function(){
       let t=this;
@@ -192,6 +171,16 @@
       }
     },
     methods: {
+      //pc rem基准值更新
+      refreshRem:function(time){
+        if(_TY_Tool.isPC()){
+          // 针对PC端  基准值更正 
+          setTimeout(()=>{
+            document.body.style.fontSize = "18px";
+            document.documentElement.style.fontSize = '28px';
+          },time||500);
+        }
+      },
       //修改页面的title属性 metadata
       resetPageTitle:function(pageName,layoutObject){
         let t=this;
