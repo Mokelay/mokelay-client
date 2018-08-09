@@ -9,7 +9,7 @@
         :initial-swipe="option.initialSwipe" 
         @change="change">
         <van-swipe-item v-for="(image, index) in valueBase" :key="index">
-            <img :src="image.src" @click="click(image.href)"/>
+            <img :src="image.src" @click="click(image)"/>
         </van-swipe-item>
     </van-swipe>
 </template>
@@ -119,9 +119,13 @@ import 'vant/lib/swipe/style';
                 }
             },
             //点击图片
-            click(href){
+            click(image){
                 const t = this;
-                window.location.href = href;
+                t.$emit("click",image);
+                if(image.href){
+                    window.location.href = href;
+                }
+                
             },
             //转换DS返回的数据
             transferData(data){
