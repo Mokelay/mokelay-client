@@ -89,6 +89,11 @@
             fixedHeight:{
                 type:Boolean,
                 default:false
+            },
+            //懒加载 默认不加载数据
+            lazy:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -110,13 +115,17 @@
             let t=this;
             //根据主题修改content
             t.changeContentByTheme();
-            //加载数据
-            t.loadData();
+            if(!t.lazy){
+                //加载数据
+                t.loadData();
+            }
         },
         mounted:function(){
             let t=this;
             //添加上拉加载事件
             t.scrollListener();
+            //渲染完成事件
+            t.$emit("mounted",t);
         },
         methods: {
             //根据主题，修改 内容模板itemContent
@@ -298,6 +307,8 @@
                                 t.list = _list;    
                             }
                             t.loading = false;
+                            //加载完数据
+                            t.$emit("loaded",t);
                         });
                     }, function (code, msg) {
 
