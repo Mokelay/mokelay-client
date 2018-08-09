@@ -713,6 +713,17 @@
                                         t.tableData.push(list[i]);
                                     }
                                     t.totalItems = item['value']['totalRecords'];
+                                    for (var i in list) {
+                                    //默认勾选的行
+                                        if(t.activeSelectedIndex>=0 && t.activeSelectedIndex == i){
+                                            let _row = list[i];
+                                            t.selectArr = _row;
+                                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(_row));
+                                            t.$emit("list-select", t.selectArr);
+                                            t.$emit("rowClick", row);
+                                            break;
+                                        }
+                                    }
                                 });
                             } else {
                                 map.forEach(function (item) {
