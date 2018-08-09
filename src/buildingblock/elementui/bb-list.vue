@@ -821,10 +821,15 @@
                 t.tableData.forEach((item,key)=>{
                     if(key==t.activeSelectedIndex){
                         t.rowClick(item);
+                        if(!this.selection){
+                            t.selectArr = row;
+                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(row));
+                            this.$emit("list-select", t.selectArr);
+                        }
+                        this.$emit("rowClick", item);
                         return false;
                     }
                 });
-                
             },
             //行click事件
             rowClick(row){
