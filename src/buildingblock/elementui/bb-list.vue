@@ -713,6 +713,17 @@
                                         t.tableData.push(list[i]);
                                     }
                                     t.totalItems = item['value']['totalRecords'];
+                                    for (var i in list) {
+                                    //默认勾选的行
+                                        if(t.activeSelectedIndex>=0 && t.activeSelectedIndex == i){
+                                            let _row = list[i];
+                                            t.selectArr = _row;
+                                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(_row));
+                                            t.$emit("list-select", t.selectArr);
+                                            t.$emit("rowClick", _row);
+                                            break;
+                                        }
+                                    }
                                 });
                             } else {
                                 map.forEach(function (item) {
@@ -734,7 +745,7 @@
                                             t.selectArr = _row;
                                             sessionStorage.setItem(t.alias+'_selection',JSON.stringify(_row));
                                             t.$emit("list-select", t.selectArr);
-                                            t.$emit("rowClick", row);
+                                            t.$emit("rowClick", _row);
                                         }
                                         if(t.hiddenValueKey){
                                             t.hiddenItems.forEach((ele)=>{//前端支持列表筛选
@@ -821,10 +832,15 @@
                 t.tableData.forEach((item,key)=>{
                     if(key==t.activeSelectedIndex){
                         t.rowClick(item);
+                        if(!this.selection){
+                            t.selectArr = row;
+                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(row));
+                            this.$emit("list-select", t.selectArr);
+                        }
+                        this.$emit("rowClick", item);
                         return false;
                     }
                 });
-                
             },
             //行click事件
             rowClick(row){
