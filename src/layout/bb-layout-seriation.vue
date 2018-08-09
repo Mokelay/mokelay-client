@@ -126,7 +126,7 @@
                 type:Boolean,
                 default:false
             },
-            //排版  下拉：均分(average),按比例分配(proportion),紧凑(compact)
+            //排版  下拉：均分(average),按比例分配(proportion),紧凑(compact),右侧自动填充(rightauto)，左侧自动填充(leftauto)
             layoutType:{
                 type:String,
                 default:"average"
@@ -241,6 +241,40 @@
                         }
                         _style = {
                             flex:_flex
+                        }
+                    }else if(t.layoutType === 'rightauto'){
+                        //左边固定宽度，右边自动填充
+                        if(index==0){
+                            _style={
+                                '-webkit-box-flex': 'initial',
+                                '-webkit-flex': 'initial',
+                                'flex': 'initial',
+                                'display': 'block'
+                            }
+                        }else{
+                            _style = {
+                                '-webkit-box-flex': 1,
+                                '-webkit-flex': 1,
+                                'flex': 1,
+                                'display': 'block'
+                            }
+                        }
+                    }else if(t.layoutType === 'leftauto'){
+                        //左侧自动填充，右侧固定
+                         if(index==bbList.length-1){
+                            _style={
+                                '-webkit-box-flex': 'initial',
+                                '-webkit-flex': 'initial',
+                                'flex': 'initial',
+                                'display': 'block'
+                            }
+                        }else{
+                            _style = {
+                                '-webkit-box-flex': 1,
+                                '-webkit-flex': 1,
+                                'flex': 1,
+                                'display': 'block'
+                            }
                         }
                     }
                     if(!t.horizontal){
