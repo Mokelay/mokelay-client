@@ -720,7 +720,7 @@
                                             t.selectArr = _row;
                                             sessionStorage.setItem(t.alias+'_selection',JSON.stringify(_row));
                                             t.$emit("list-select", t.selectArr);
-                                            t.$emit("rowClick", row);
+                                            t.$emit("rowClick", _row);
                                             break;
                                         }
                                     }
@@ -745,7 +745,7 @@
                                             t.selectArr = _row;
                                             sessionStorage.setItem(t.alias+'_selection',JSON.stringify(_row));
                                             t.$emit("list-select", t.selectArr);
-                                            t.$emit("rowClick", row);
+                                            t.$emit("rowClick", _row);
                                         }
                                         if(t.hiddenValueKey){
                                             t.hiddenItems.forEach((ele)=>{//前端支持列表筛选
