@@ -410,24 +410,35 @@
               //     vague: ''            //阴影模糊
               // }
           };
-          //初始化新增加的积木
-          const newBB = {
-              uuid:_TY_Tool.uuid(),
-              alias:bbAlias,
-              aliasName:bbName,
-              attributes:{},
-              animation:[],
-              interactives:[],
-              layout:{}
-          }
-          if(t.layoutType == 'canvas'){
-            newBB.layout = layout;
-          }
-          t.content = t.content?t.content:[];
-          t.content.push(newBB);
-          //返回新的积木数组
-          t.$emit('add',t.content);
-          t.$emit('change',t.content);
+          _TY_Tool.post(_TY_ContentPath+"/read-bb",{
+              bbAlias:bbAlias
+          }).then(function(response){
+            if(response.data.ok){
+                //初始化新增加的积木
+                const newBB = {
+                    uuid:_TY_Tool.uuid(),
+                    alias:bbAlias,
+                    aliasName:bbName,
+                    attributes:{},
+                    animation:[],
+                    interactives:[],
+                    layout:{}
+                }
+                if(response.data.data.data.defaultProps){
+                  newBB.attributes = JSON.parse(response.data.data.data.defaultProps);
+                }
+                if(t.layoutType == 'canvas'){
+                  newBB.layout = layout;
+                }
+                t.content = t.content?t.content:[];
+                t.content.push(newBB);
+                //返回新的积木数组
+                t.$emit('add',t.content);
+                t.$emit('change',t.content);
+            }else{
+              t.$message.error(response.data.message);
+            }
+          });
       },
       /*积木选中状态 
         @contentItem选中的积木对象{uuid:'',alias:'',aliasName:'',animation:[],interactive:[],layout:{}}
