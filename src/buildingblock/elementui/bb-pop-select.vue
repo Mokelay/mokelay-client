@@ -8,6 +8,7 @@
         <bb-dialog
             class="bbPopSelectDia"
             :isShow.sync="popupVisible" 
+            :autoMaxHeight="true"
             :size="selectionDialogConfig.size"
             :appendToBody="selectionDialogConfig.appendToBody"
             :modalAppendToBody="selectionDialogConfig.modalAppendToBody"

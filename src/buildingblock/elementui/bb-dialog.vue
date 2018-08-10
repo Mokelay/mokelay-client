@@ -26,7 +26,7 @@
                 on:{
                     close:t.closeFn
                 },
-                class:'bb-dialog'
+                class:'bb-dialog '+(t.autoMaxHeight?'':'max')
             },[bbItems,this.$slots.default]); //支持插槽
         },
         props: {
@@ -121,6 +121,11 @@
             */
             content:{
                 type:[Array,String]
+            },
+            //不限最大高度
+            autoMaxHeight:{
+                type:Boolean,
+                default:false
             }
         },
 
@@ -195,8 +200,11 @@
         .el-dialog{
             margin:auto;
             margin-top: 0.5vh;
-            max-height: 99vh;
+            
             overflow: auto;
+        }
+        &.max .el-dialog{
+            max-height: 99vh;
         }
         .el-dialog__body{
             max-height: 100vh;

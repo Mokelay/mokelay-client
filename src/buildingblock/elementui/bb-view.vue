@@ -7,7 +7,7 @@
             return createElement('el-form',{
                     props:{
                         key:t.formKey,
-                        model:t.formData,
+                        model:(typeof(t.formData)==='object'?t.formData:{}),
                         inline:true,
                         'label-position':t.labelPosition,
                         labelWidth:t.labelWidth || "100px",
