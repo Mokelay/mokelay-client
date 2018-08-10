@@ -344,7 +344,6 @@
 <style lang='less'>
     .bb-layout-container{
         .el-header{
-            height: 50px !important;
             /*overflow-y: auto;*/
         }
         .el-container{
