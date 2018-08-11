@@ -103,7 +103,7 @@
                     "inputs": [{
                         "paramName":'pageAlias',
                         "valueType":"template",
-                        "variable":_TY_Root.$route.query.pageAlias
+                        "variable":_TY_Root.$route.query.pageAlias||_TY_Root.$route.query.param
                     }],
                     "outputs": [{
                         "dataKey": "fields",
