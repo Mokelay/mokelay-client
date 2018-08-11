@@ -19,6 +19,7 @@ import bbcsseditor from './bb-css-editor.vue';
 import bbbuttoncsseditor from './bb-button-css-editor.vue';
 import bbsmsverification from './bb-sms-verification.vue';
 import bbmodule from './bb-module.vue';
+import bbbuttonattributeconfig from './bb-button-attribute-config.vue';
 
 export default {
 	install: function(Vue) {
@@ -42,6 +43,7 @@ export default {
 		Vue.component('bb-button-css-editor', bbbuttoncsseditor);
 		Vue.component('bb-sms-verification', bbsmsverification);
 		Vue.component('bb-module', bbmodule);
+		Vue.component('bb-button-attribute-config', bbbuttonattributeconfig);
 
 		console.log("成功加载模块积木;");
 	}
