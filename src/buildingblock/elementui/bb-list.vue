@@ -846,13 +846,13 @@
             rowClick(row){
                 //触发父组件的选择
                 let tagName = event&&event.target.tagName||'';//当前的触发的dom标签名
+                let parentTagName = event && event.target.parentElement.tagName||''
                 if(!this.selection){
                     this.selectArr = row;
                     sessionStorage.setItem(this.alias+'_selection',JSON.stringify(row));
                     this.$emit("list-select", this.selectArr);
                 }
-
-                if(tagName!='TD' && tagName !='DIV'){
+                if(tagName=='INPUT' || tagName == 'SELECT'|| parentTagName =='BUTTON'){
                     event&&event.stopPropagation();//阻止继续向上冒泡
                 }else{
                     this.$emit("rowClick", row);

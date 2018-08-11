@@ -344,7 +344,6 @@
 <style lang='less'>
     .bb-layout-container{
         .el-header{
-            height: 50px !important;
             /*overflow-y: auto;*/
         }
         .el-container{
@@ -357,9 +356,6 @@
         }
         .el-main{
              overflow-y: scroll;
-        }
-        .el-main::-webkit-scrollbar {
-             display: none;
         }
     }
     .bb-layout-container>.el-container{
