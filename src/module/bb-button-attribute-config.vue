@@ -37,12 +37,13 @@
                 //积木详情
                 bbInfo:null,
                 alias:this.bbAlias||'',//积木别名
-                p_value:''
+                p_value:(this.returnString?this.transferVal(this.value):'')
             }
         },
         watch: {
             value(val){
                 this.valueBase = this.transferVal(val);
+                this.p_value = this.returnString?this.transferVal(val):'';
             },
             bbAlias(val){
                 this.alias = val;
