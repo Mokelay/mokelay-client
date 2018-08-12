@@ -327,9 +327,25 @@
                         return true;
                     }
                     //数据解析到模板中去
-                    const _content = _TY_Tool.tpl(JSON.stringify(t.itemContent),_TY_Tool.buildTplParams(t,{
+                    let _content = _TY_Tool.tpl(JSON.stringify(t.itemContent),_TY_Tool.buildTplParams(t,{
                         rowData:item
                     }));
+                    if(!_content){
+                        console.error("错误提示:","列表组件没有配置模板或者没有匹配到参数");
+                        return true;
+                    }
+                    /*
+                        兼容 ul包含ul的情况
+                        子的ul中模板用<#= ... #>代替，否则第一层就会被模板参数替换
+                    */
+                    const reg = /<#=(.*?)#>/g;
+                    if(_content.match(reg)){
+                        //如果字符串中含有<#=...#> 这样的标识，转换成 <%=...%>
+                        _content = _content.replace(reg,function(){
+                            return "<%="+arguments[1]+"%>"
+                        })
+                    }
+
                     let clazz=  [];
                     let _style={}
                     if(t.theme==='line'){
