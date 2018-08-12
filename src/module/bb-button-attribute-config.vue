@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        name: 'bb-button-config',
+        name: 'bb-button-attribute-config',
         props: {
             value:{
                 type:[Object,String],
@@ -43,7 +43,7 @@
         watch: {
             value(val){
                 this.valueBase = this.transferVal(val);
-                this.p_value = this.returnString?this.transferVal(val):'';
+                this.p_value = this.returnString?val:'';
             },
             bbAlias(val){
                 this.alias = val;
@@ -130,7 +130,11 @@
                 }
                 let param = val;
                 if(typeof(val) ==='string'){
-                    param = JSON.parse(val);
+                    try{
+                        param = JSON.parse(val);    
+                    }catch(e){
+                        param = eval("("+val+")");
+                    }
                 }
                 return param;
             },
