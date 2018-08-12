@@ -26,7 +26,7 @@
                 type:Object
             },
             dataStatic:{
-                type:[Object,String]
+                type:[String,Array]
             },
             lazy:{//初始不加载数据
                 type:Boolean,
