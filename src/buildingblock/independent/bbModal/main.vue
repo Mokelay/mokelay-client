@@ -1,6 +1,7 @@
 <template>
   <div v-show="visible" class="bb-modal-container" :class="[customClass, popup ? 'bb-modal-bottom' : '']">
     <div class="mask" v-show="mask" @click="maskAction"></div>
+    <div v-if="showCloseBtn" class="close-btn" @click="closeBtnClick"><i class="iconfont ty-icon_tuichu"></i></div>
     <div class="modal-document">
       <div class="modal-header" v-show="title != ''">
         {{title}}
@@ -78,6 +79,10 @@
       lockScroll: {
         type: Boolean,
         default: true
+      },
+      showCloseBtn:{
+        type:Boolean,
+        default:true
       }
     },
 
@@ -112,6 +117,10 @@
     methods: {
       maskAction() {
         if ( this.maskClose ) this.doclose(true);
+      },
+      //关闭按钮点击事件
+      closeBtnClick(){
+        this.doclose(true);
       },
 
       btnAction(idx) {
@@ -168,6 +177,23 @@
     * {
       box-sizing: inherit;
       line-height: inherit;
+    }
+    .close-btn{
+      position: absolute;
+      width: .77333rem;
+      height: .77333rem;
+      right: .30666rem;
+      top: .773333rem;
+      color: #fff;
+      border: .0266rem solid #fff;
+      border-radius: 50%;
+      i{
+        position: absolute;
+        left: 0.2rem;
+        top: .15rem;
+        font-weight: 900;
+        font-size: .35rem;
+      }
     }
 
     .mask {
@@ -313,4 +339,63 @@
       }
     }
   }
+
+  //主题1
+  .ty_modal{
+    .modal-document{
+      width:80%;
+      border-radius:.08rem;
+      padding:.5rem .74666rem 0;
+    }
+    .modal-header{
+      font-size: .37333rem;
+      margin-bottom:.4rem;
+    }
+    .modal-body{
+      margin-top:.4rem;
+      font-size: .37333rem;
+      color:#353535;
+      a{
+        color:#266FB7;
+      }
+    }
+    .modal-footer{
+      margin: 0 -.74666rem;
+      span{
+        color:#266FB7;
+        font-size: .37333rem;
+        line-height: 1.2rem;
+      }
+    }
+  }
+
+  //主题2
+  .ty_dialog{
+    .modal-document{
+      width:80%;
+      border-radius:.08rem;
+      padding:1.1333rem .74666rem;
+    }
+    .modal-header{
+      font-size: .37333rem;
+      margin-bottom:.4rem;
+    }
+    .modal-body{
+      margin-top:.4rem;
+      font-size: .32;
+      color:#333;
+      a{
+        color:#266FB7;
+      }
+    }
+    .modal-footer{
+      margin: 0 -.74666rem;
+      span{
+        color:#266FB7;
+        font-size: .37333rem;
+        line-height: 1.2rem;
+      }
+    }
+  }
+
 </style>
