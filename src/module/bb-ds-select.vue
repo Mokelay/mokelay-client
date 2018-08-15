@@ -11,6 +11,12 @@
         props: {
             value:{
                 type:[String,Object]
+            },
+            staticBB:{
+                type:String
+            },
+            staticBBProps:{
+                type:[String,Object]
             }
         },
 

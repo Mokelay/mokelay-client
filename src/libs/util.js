@@ -180,6 +180,12 @@ util.buildTplParams = function(t, obj) {
 /**
 DS配置案例
 {
+    type:"dynamic", //dynamic,static ，ds表示是后端动态数据，static表示静态数据
+
+    //以下为type=static属性
+    data:null, //静态数据，可以为任意数据类型
+
+    //以下为type=dynamic的属性
     host:"", //如果为空，默认是window._TY_APIHost
     api:"/list-data",
     category:'config',//ds选择器 不是type字段而是category字段
@@ -207,6 +213,12 @@ bb-list中的table data获取数据的调用方式 , util.getDSData(ds, {"bb":th
 bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds, {"bb":this ,"router":this.$router.param , "row-data":row} , function(){} );
 **/
 util.getDSData = function(ds, inputValueObj, success, error) {
+    var type = ds['type'] || "dynamic";
+    if(type == "static"){
+        success(ds['data']);
+        return;
+    }
+
     var api = ds['api'];
     var host = window._TY_HOSTS[ds['host'] || ""] || window._TY_APIHost;
     var type = ds['category'] || 'config'; //默认是配置接口

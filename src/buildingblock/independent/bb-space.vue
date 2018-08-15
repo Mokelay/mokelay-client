@@ -3,7 +3,7 @@
         <div class="_line clearfix">
             <span v-if="bbType=='title'" class="_title">
                 <span v-if="!removeIcon" class="_title_icon"></span>
-                <h3 :style="p_titleStyle">{{title}}</h3>
+                <h3 :style="p_titleStyle">{{p_title}}</h3>
             </span>
             <span v-if="p_require && bbType=='title'" class="c_3f3f3f f_right"><span class="c_red">*</span> 为必填项</span>
         </div>
@@ -54,7 +54,7 @@
         },
         data() {
             return {
-                
+                p_title:this.title
             }
         },
         computed:{
@@ -75,15 +75,26 @@
                 };
                return _TY_Tool.setStyle(_css,this);
             }
+
         },
         watch: {
-           
+            title(val){
+                this.p_title = val;
+            }
         },
         created: function () {
         },
         mounted:function(){
         },
         methods: {
+            changeTitle:function(val){
+                let t=this;
+                if(val){
+                    t.p_title = val;
+                    t.$emit('input',val);
+                    t.$emit('change',val);
+                }
+            }
            
         }
     }

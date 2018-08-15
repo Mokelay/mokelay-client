@@ -132,6 +132,13 @@
             pageSize:{
                 type:[Number,String],
                 default:15
+            },
+            //默认选中 的图片
+            defaultSelected:{
+                type:[Array,String],
+                default:function(){
+                    return [];
+                }
             }
         },
         data() {
@@ -152,7 +159,7 @@
                         size:'1920 x 1109'
                     }]
                 */
-                selecteds:[],
+                selecteds:this.buildSelected(this.defaultSelected),
                 uploadUrl:'',//上传接口地址
                 fileList:[]
             }
@@ -188,6 +195,22 @@
             t.listenScroll();
         },
         methods: {
+            //构建默认选中值
+            buildSelected:function(val){
+                let t=this;
+                if(!val){
+                    return [];
+                }
+                if(typeof(val)==='string'){
+                    try{
+                        return JSON.parse(val);
+                    }catch(e){
+                        return val.split(",");
+                    }
+                }else {
+                    return val;
+                }
+            },
             //监听滚动事件
             listenScroll:function(){
                 let t=this;
@@ -284,14 +307,18 @@
             fileItemClick:function(file,index){
                 let t=this;
                 let clearFlag = false;
-                t.selecteds.forEach((item)=>{
+                t.selecteds.forEach((item,key)=>{
                     if(item.index == index){
                         //选中文件 已经存在，则取消选中
                         clearFlag = true;
+                        t.selecteds.splice(key,1);//删除
                         return false;
                     }
                 });
-                t.selecteds = [];
+                //如果是多选  就清空选中项
+                if(!t.multiple){
+                    t.selecteds = [];
+                }
                 if(!clearFlag){
                     t.selecteds.push(Object.assign({},file,{
                         index:index
@@ -461,6 +488,7 @@
         -ms-user-select: none;
         user-select: none;
         box-sizing: border-box;
+        float: left;
     }
     .media_thumbnail_right{
         overflow: hidden;

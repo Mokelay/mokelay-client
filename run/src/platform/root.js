@@ -45,6 +45,13 @@ export default {
 				component: (resolve) => require(['./ty.vue'], resolve)
 			}]
 		});
+		router.beforeEach((to, from, next) => {
+			// to 和 from 都是 路由信息对象
+			// 这里的from.path就是上一步的url的hash值
+			//上一页的router对象放到全局变量中
+			window._TY_Prev_Router = from;
+			next();
+		});
 		router.afterEach(() => {
 			window.scrollTo(0, 0);
 		});
