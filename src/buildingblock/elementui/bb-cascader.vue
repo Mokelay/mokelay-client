@@ -144,6 +144,7 @@
                 optionData:(typeof(this.staticOptions)==='string'?JSON.parse(this.staticOptions):this.staticOptions||[]),
                 selectedOptions:[],
                 itemVal:'',//当前点击的记录    用于接口配置
+                selectedVal:[],//选中的值数组
                 external:{},//外部参数
                 p_placeholder:this.placeholder,
                 cascaderTitle:""//需要title显示的内容，针对长度过程隐藏后需要能全部显示
@@ -306,6 +307,7 @@
             getNextData:function(index,lastSelectedVal,selectedValArray){
                let t=this;
                t.itemVal = lastSelectedVal;
+               t.selectedVal = selectedValArray;
                if(t.dsList&&t.dsList.length>0){
                   for(let i=0;i<t.dsList.length;i++){
                     let item = t.dsList[i];

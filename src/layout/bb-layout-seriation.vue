@@ -259,7 +259,8 @@
                                 '-webkit-box-flex': 1,
                                 '-webkit-flex': 1,
                                 'flex': 1,
-                                'display': 'block'
+                                'display': 'block',
+                                'width':"1%"//解决flex1 不均分的bug
                             }
                         }
                     }else if(t.layoutType === 'leftauto'){
@@ -276,7 +277,8 @@
                                 '-webkit-box-flex': 1,
                                 '-webkit-flex': 1,
                                 'flex': 1,
-                                'display': 'block'
+                                'display': 'block',
+                                'width':"1%"//解决flex1 不均分的bug
                             }
                         }
                     }
