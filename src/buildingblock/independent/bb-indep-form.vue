@@ -146,7 +146,7 @@
         render: function(createElement){
             const t = this;
             const bbList = t.renderContent(createElement);
-            return createElement('form',{props:{},attrs:{action:'/'}},bbList);
+            return createElement('form',{props:{},attrs:{action:''}},bbList);
         },
         computed:{
         },

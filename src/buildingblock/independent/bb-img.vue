@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <img :src="imgSrc" @click="imgClick" v-bind:style="cssStyle"/>
-    </div>
+    <img :src="imgSrc" @click="imgClick" v-bind:style="cssStyle"/>
 </template>
 
 <script>
