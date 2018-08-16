@@ -108,6 +108,7 @@ import 'vant/lib/field/style';
             //显示字符，超出限制字符截取
             keyup(){
                 this.writeText = this.valueBase.length;
+                this.$emit('onFocus',this.valueBase); 
                 var t = this.valueBase;
         		var w = this.writeText;
         		var s = this.option.maxText;
@@ -115,7 +116,7 @@ import 'vant/lib/field/style';
         			var a = this.valueBase.substring(0,s);
         			this.valueBase = a;
         			this.writeText = this.valueBase.length;
-        		}                
+        		}
             }
 
         }

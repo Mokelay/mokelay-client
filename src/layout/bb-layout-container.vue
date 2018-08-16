@@ -357,6 +357,10 @@
         .el-main{
              overflow-y: scroll;
         }
+        .el-main::-webkit-scrollbar {
+             display: none;
+        }
+
     }
     .bb-layout-container>.el-container{
         height:calc(~'100vh');

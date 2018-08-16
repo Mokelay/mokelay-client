@@ -1,5 +1,6 @@
 <template>
     <el-select 
+      class="bb-select"
       v-if="isShow"
       :placeholder="realOption.placeholder" 
       v-model="valueBase" 
@@ -292,3 +293,15 @@
         }
     }
 </script>
+<style lang="less">
+  .bb-select{
+    .el-select__tags-text{
+      max-width:100px;
+      display:inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      float: left;
+    }
+  }
+</style>

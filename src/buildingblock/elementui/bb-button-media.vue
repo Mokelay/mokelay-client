@@ -2,12 +2,12 @@
     <div class="bb_button_media">
         <bb-dialog title="积木设置" size="middle" :isShow.sync="showDialog">
             <bb-media :multiple="multiple" :uploadDs="uploadDs" :mediaDs="mediaDs" :pageSize="pageSize"
-                @commit="commit"
+                @commit="commit" :defaultSelected="p_value"
             ></bb-media>
         </bb-dialog>
         
         <el-input v-if="!p_value" class="wa" placeholder="请选择" disabled v-model="p_value"></el-input>
-        <div v-if="p_value&&isImg(p_value)" class="bb-media-img-box"><img style="width:100%;" :src="p_value"/></div>
+        <div v-if="p_value&&isImg(p_value)" v-for="img in selectArray" class="bb-media-img-box"><img style="width:100%;" :src="img"/></div>
 
         <el-button @click="openDialog"><i class="el-icon-search"></i></el-button>
         <el-button class="ml0" @click="clear"><i class="el-icon-delete"></i></el-button>
@@ -59,7 +59,13 @@
             }
         },
         computed:{
-            
+            selectArray(){
+                if(this.p_value){
+                    return this.p_value.split(",");
+                }else{
+                    return [];
+                }
+            }
         },
         created: function () {
             let t=this;
@@ -92,11 +98,17 @@
                 let t=this;
                 t.showDialog = false;
                 if(selecteds){
-                    t.p_value = selecteds[0].src;
-                    t.$emit('input',t.p_value);
-                    t.$emit('change',t.p_value);
-                    t.$emit("commit",selecteds,t);                    
+                    let result =[];
+                    selecteds.forEach((item)=>{
+                        result.push(item.src);
+                    });
+                    t.p_value =result.join(",");
+                }else{
+                    t.p_value = "";
                 }
+                t.$emit('input',t.p_value);
+                t.$emit('change',t.p_value);
+                t.$emit("commit",selecteds,t); 
             }
         }
     }
@@ -110,6 +122,7 @@
         overflow: hidden;
         display: inline-block;
         vertical-align: bottom;
+        margin: 0 3px;
     }
     .el-input.wa{
         width: auto;   
