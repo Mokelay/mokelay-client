@@ -177,6 +177,32 @@
                     });
                 }
             },
+            //选中某个tab
+            activeTab:function(tabName){
+                let t=this;
+                if(t.tabsData){
+                    t.tabsData.forEach((tab,index)=>{
+                        if(tab.name == tabName){
+                            tab.show = true;
+                            t.p_activeName = tab.name;
+                            return false;
+                        }
+                    });
+                }
+            },
+            //根据index 选中某个tab
+            activeTabIndex:function(index){
+                let t=this;
+                if(t.tabsData){
+                    t.tabsData.forEach((tab,key)=>{
+                        if(index == key){
+                            tab.show = true;
+                            t.p_activeName = tab.name;
+                            return false;
+                        }
+                    });
+                }
+            },
             //根据tabs 获取所有的
             getTabHeaders:function(){
                 let t=this;

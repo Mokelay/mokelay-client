@@ -87,18 +87,22 @@
                   index:3,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
                   isleaf:true,                       //是否叶子节点
                   ds:{                                //ds配置
-                    "api": "ty-list-apiLego-field",
+                    "api": "ty_list_api_response_field_by_uuid",
                     "category": "config",
                     "method": "get",
                     "inputs": [{
-                        "paramName": "apiLegoId",
+                        "paramName": "apilegoUuid",
                         "valueType": "inputValueObj",
                         "valueKey": "bb",
                         "variable": "itemVal"
+                    },{
+                        "paramName": "apiAlias",
+                        "valueType": "template",
+                        "variable": "<%=bb.selectedVal[0]%>"
                     }],
                     "outputs": [{
                         "dataKey": "data",
-                        "valueKey": "data_list.list"
+                        "valueKey": "data_list"
                     }]
                   },
                   props:{                               //接口返回字段和级联选择器的字段对应（字段名转换）
@@ -115,8 +119,8 @@
                     t.$emit('change',_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,value)));
                     t.$emit('input',_TY_Tool.tpl(t.valueTpl,_TY_Tool.buildTplParams(t,value)));
                 }else{
-                    t.$emit('change',value);
-                    t.$emit('input',value);
+                    t.$emit('change',value.fieldName,value);
+                    t.$emit('input',value.fieldName);
                 }
             }
            

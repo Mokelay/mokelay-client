@@ -221,6 +221,8 @@
             linkageAndClearValue:function(data){
               if(data){
                 this.valueBase = null;
+                this.$emit('input',"");
+                this.$emit('change',"");
                 this.external['linkage'] = data;
                 this.getData();
               }
@@ -253,6 +255,8 @@
             cleanAll:function(){
               this.valueBase = null;
               this.items = null;
+              this.$emit('input',"");
+              this.$emit('change',"");
             },
             //关键字远程搜索
             remoteFn:function(query){
