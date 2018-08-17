@@ -90,7 +90,7 @@
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'outputs',executeBBMethodName:'linkage'},
-                    {pbbId:'api',triggerEventName:'change',executeArgument:`
+                    {pbbId:'api',triggerEventName:'selected',executeArgument:`
                         var currentApiAlias = params[0];
                         var apis = params[1].items;
                         var bbDsSelectInstance = t.$parent.$parent.$parent.$parent.$parent.$parent;
@@ -121,6 +121,8 @@
                 } else if (typeof val === 'string') {
                     this.ds = this.transferOldData(val ? JSON.parse(val) : {});
                 }
+                //全局ds缓存更新
+                this.cacheDS();
             },
             ds(val){
                 //TODO 通过ds的api去获取input fields list，并且fire出事件
@@ -130,10 +132,32 @@
             const t = this;
             // t.setSelectType();
             t.ds = t.transferOldData(t.value);
+            //全局ds缓存更新
+            t.cacheDS();
         },
         mounted:function(){
         },
         methods: {
+            //缓存ds
+            cacheDS:function(api){
+                let t=this;
+                // 数组格式 ['alias1','alias2']
+                if(!_TY_DS_Cache){
+                    _TY_DS_Cache = [];
+                }
+                if(t.ds&&t.ds.api){
+                    if(_TY_DS_Cache.indexOf(t.ds.api)<0){
+                        //_TY_DS_Cache 缓存中不存在这个api
+                        _TY_DS_Cache.push(t.ds.api);                   
+                    }
+                }
+                if(api){
+                    if(_TY_DS_Cache.indexOf(api)<0){
+                        //_TY_DS_Cache 缓存中不存在这个api
+                        _TY_DS_Cache.push(api);                   
+                    }
+                }
+            },
             //获取category 和 method
             //获取动态数据
             getData:function (val) {
@@ -160,6 +184,9 @@
             commit:function(val){
                 this.api = val.api;
                 this.getData(val);
+
+                //全局ds缓存更新
+                this.cacheDS(this.api);
             },
             //维护页面DSC数据中心
             setDs:function(api){

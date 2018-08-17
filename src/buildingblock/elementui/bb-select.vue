@@ -240,7 +240,7 @@
                 this.$emit('input',val);
                 this.$emit('change',val);
               }
-             
+              this.$emit('selected',val,this);
             },
             //清空方法
             clear:function(){
