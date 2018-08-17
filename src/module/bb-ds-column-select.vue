@@ -40,6 +40,10 @@
         mounted:function(){
         },
         methods: {
+            getValue:function(){
+                let t=this;
+                return t.valueBase;
+            },
             //构建ds list
             buildDsList:function(){
                 let t=this;
