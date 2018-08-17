@@ -145,7 +145,8 @@
                 default:function(){
                     return {
                         treeStyle:"",
-                        itemStyle:""
+                        itemStyle:"",
+                        rootParentId:0
                     }
                 }
             }
@@ -282,7 +283,9 @@
                 const t = this;
                 return new Promise((resolve) => {
                     if (t.ds) {
-                        const _parentId = node.level === 0 ? 0 : node['data'][t.nodeValue];//默认是0 ，查询根列表
+                        const rootParentId = _TY_Tool.tpl(t.option.rootParentId,t);
+                        const _parentId = node.level === 0 ? rootParentId : node['data'][t.nodeValue];//默认是0 ，查询根列表
+                        t.nowParentId = _parentId;
                         let inputs = t.ds.inputs || [];
                         let hasParam = false;
                         inputs.forEach(function (item) {
