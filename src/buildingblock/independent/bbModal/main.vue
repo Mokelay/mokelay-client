@@ -105,7 +105,7 @@
     mounted() {
       if (this.lockScroll) {
         this.bodyOverflow = document.querySelector('body').style.overflow;
-        document.querySelector('body').style = 'hidden';
+        document.querySelector('body').style.overflow = 'hidden';
       }
       window.addEventListener('hashchange', this.doclose);
     },
