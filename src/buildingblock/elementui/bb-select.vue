@@ -299,13 +299,12 @@
 </script>
 <style lang="less">
   .bb-select{
-    .el-select__tags-text{
-      max-width:100px;
-      display:inline-block;
+    .el-tag--info{
+      max-width:150px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      float: left;
+      display: flow-root;
     }
   }
 </style>
