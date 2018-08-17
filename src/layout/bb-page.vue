@@ -152,6 +152,8 @@
           _TY_Tool.get_wx();
         }
         this.refreshRem();
+        //清空页面ds 缓存
+        _TY_DS_Cache = null;
       }
       this.loadData();
     },
