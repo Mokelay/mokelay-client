@@ -552,6 +552,22 @@
             })
           }
         })
+      },
+      /*回退
+        url 跳转地址  不传则回退
+      */
+      goBack(...args){
+        let url;
+        args.forEach((val,key)=>{
+          if(val.type == 'custom'){
+            url = val.arguments;
+          }
+        });
+        if(url){
+          history.go(url);
+        }else{
+          history.back(-1);
+        }
       }
     }
   }
