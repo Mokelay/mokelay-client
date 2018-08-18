@@ -16,7 +16,7 @@
                     'fullscreen':t.fullscreen,
                     'modal':true,
                     'lock-scroll':true,
-                    'top':'0.5vh'
+                    'top':t.top||'0.5vh'
                 },
                 style:{
                     'border-radius':"5px",
@@ -126,6 +126,10 @@
             autoMaxHeight:{
                 type:Boolean,
                 default:false
+            },
+            //弹窗距离顶部高度
+            top:{
+                type:String
             }
         },
 

@@ -285,7 +285,7 @@ export default {
             formdata.append('file',file.file);
             console.log('正在上传。。。');
             //添加请求头 
-            t.uploadUrl = "/config/ty_oss_upload";//统一文件上传地址
+            t.uploadUrl = t.uploadUrl?t.uploadUrl:"/config/ty_oss_upload";//统一文件上传地址
             if(t.accept.indexOf("video")>-1){
                 t.uploadUrl = "/config/xlx_c_upload_mov_to_mp4"; //统一视频上传地址
             }

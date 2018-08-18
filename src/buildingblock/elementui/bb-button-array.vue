@@ -17,6 +17,10 @@ import Util from '../../libs/util';
             fields:{
                 type:[String,Array]
             },
+            //自定义顶部按钮
+            customTopBtns:{
+                type:[String,Array]
+            },
             settingText:{
                 type:String,
                 default:"设置"
@@ -75,7 +79,8 @@ import Util from '../../libs/util';
                     props:{
                         fields:t.fields,
                         showCommit:true,
-                        value: t.arrayData
+                        value: t.arrayData,
+                        customTopBtns:t.customTopBtns
                     },
                     on:{
                         commit: function(arrayData){

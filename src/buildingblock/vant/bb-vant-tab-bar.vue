@@ -171,6 +171,7 @@
                         icons.push(bbTpl);
                     }
                 });
+                const iconEle = createElement('i',{props:{"slot-scope":"props"},slot:'icon',class:'ty ' + field.icon,style:iconStyle},[]);
                 const text = createElement('span',{props:{},style:textStyle},[field.text]);
                 const tabbar = createElement('van-tabbar-item',{props:{
                         "icon":'ty ' + field.icon,
@@ -181,8 +182,7 @@
                         "replace":field.replace,
                         "key":key
                     },
-                    style:iconStyle
-                },[icons,text]);
+                },[icons,iconEle,text]);
                 tabbars.push(tabbar);
             });
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-cascader :ref="uuid" placeholder="请选择字段" @change="change" :dsList="dsList" :staticOptions="firstOpts" v-model="valueBase"></bb-cascader>
+        <bb-cascader :ref="uuid" placeholder="请选择字段" @change="change" :dsList="dsList" v-model="valueBase"></bb-cascader>
     </div>
 </template>
 
@@ -21,8 +21,7 @@
             return {
                 valueBase:this.value,
                 uuid:_TY_Tool.uuid(),//生成uuid
-                dsList:[],
-                firstOpts:[]//第一层下拉数据
+                dsList:[]
             }
         },
         watch: {
@@ -36,12 +35,15 @@
         },
         created: function () {
             let t=this;
-            debugger;
             t.buildDsList();
         },
         mounted:function(){
         },
         methods: {
+            getValue:function(){
+                let t=this;
+                return t.valueBase;
+            },
             //构建ds list
             buildDsList:function(){
                 let t=this;
@@ -49,17 +51,37 @@
                 if(!dss || !(dss instanceof Array)){
                     return;
                 }
-                let _opts = [];
-                dss.forEach((item)=>{
-                    _opts.push({
-                        value: item.alias,
-                        label: item.name+"("+item.alias+")",
-                        children:[]
-                    });
-                });
-                t.firstOpts = _opts;
+                if(typeof(dss)==='string'){
+                    try{
+                        dss = JSON.parse(dss);
+                    }catch(e){
+                        dss = dss.split(",");
+                    }
+                }
 
                 t.dsList = [{
+                  type:'ds',                            //级联数据获取方式  接口获取
+                  index:1,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
+                  isleaf:false,                       //是否叶子节点
+                  ds:{                                //ds配置
+                    "api": "ty-list-api-by-alias",
+                    "category": "config",
+                    "method": "get",
+                    "inputs": [{
+                        "paramName": "aliass",
+                        "valueType": "template",
+                        "variable": dss.join(",")
+                    }],
+                    "outputs": [{
+                        "dataKey": "data",
+                        "valueKey": "data_list.list"
+                    }]
+                  },
+                  props:{                               //接口返回字段和级联选择器的字段对应（字段名转换）
+                    value:'alias',
+                    label:'name'
+                  }
+                },{
                   type:'ds',                            //级联数据获取方式  接口获取
                   index:2,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
                   isleaf:false,                       //是否叶子节点

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-array :fields="fields" settingText="设置按钮" v-model="table" @commit="commit" arrayDescTpl="按钮:<%text%>"></bb-button-array>
+        <bb-button-array :fields="fields" :customTopBtns="customTopBtns" settingText="设置按钮" v-model="table" @commit="commit" arrayDescTpl="按钮:<%text%>"></bb-button-array>
     </div>
 </template>
 
@@ -14,6 +14,17 @@
         },
         data() {
             return {
+                //bb-array 顶部自定义按钮
+                customTopBtns:[{
+                    style:{},//css样式
+                    type:'text',//按钮样式
+                    disabled:false,//按钮是否可编辑
+                    size:'small',//按钮大小
+                    icon:'ty-icon_jzds',//按钮图标
+                    text:'快速添加',//
+                    action:'buzz',
+                    buzz:'ty_ds_column_quick_select'
+                }],
                 fields: [{
                     name: '名称',
                     attributeName: 'label',
