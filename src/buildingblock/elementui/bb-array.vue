@@ -2,7 +2,9 @@
     <div>
         <div style="margin-bottom:10px;">
             <bb-button-form ref="object_form" :fields="fields" startButtonIcon="el-icon-plus" startButtonType="text" settingText="添加" @commit="setArray"></bb-button-form>
-            
+            <span v-if="customTopBtns" v-for="(button,index) in customTopBtns">
+                <bb-button :button="button"></bb-button>
+            </span>
         </div>
         <el-table :data="array" border style="width: 100%" :height="height" stripe>
             <el-table-column v-for="field in fields" v-if="!field.hide" :prop="field.attributeName" :label="field.name"
@@ -41,6 +43,10 @@ import Vue from 'vue';
             },
             fields: {
                 type: Array
+            },
+            //自定义顶部按钮
+            customTopBtns:{
+                type:Array
             },
             showCommit: {
                 type: Boolean,
