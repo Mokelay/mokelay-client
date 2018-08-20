@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="bb-vant-field" :class="{
         'noPadding':option.noPadding,
         't_right':option.t_right
@@ -21,10 +21,8 @@
             @keyup="keyup"/>
         <p v-if="messageText && option.showMessageText" class="showText">{{writeText}}/{{messageText}}</p>
     </div>
-
-
 </template>
-
+ -->
 <script>
 import Field from 'vant/lib/field';
 import 'vant/lib/field/style';
@@ -56,6 +54,7 @@ import 'vant/lib/field/style';
                     error:false,  是否将输入内容标红
                     errorMessage:"错误提示文案", 底部错误提示文案 
                     autosize:true 自适应内容高度，只对 textarea 有效
+                    valueStyle:{} 
                 }
             */
             option:{
@@ -74,10 +73,132 @@ import 'vant/lib/field/style';
                         autosize:true,
                         maxText:100000,
                         border:true,
-                        showMessageText:true
+                        showMessageText:true,
+                        valueStyle:{}
                     };
                 }
+            },
+            /*
+            content:积木数据,
+                content:[{                      //页面内容
+                        uuid:'',
+                        alias:'',                   //积木别名
+                        aliasName:'',               //中文名称
+                        group:'',                   //对应slot  空 对应 内容 icon  自定义icon  title   自定义title  right-icon  自定义右侧按钮，默认是arrow
+
+                        attributes:{
+                            attributeName:''    //表单项键值别名
+                            rules:[]            //验证规则
+                            width:''            //表单项宽度
+                            ........            //其他积木属性
+                        },              //积木属性
+                        animation:[{                //动画
+                            style:"",               //方式
+                            time:0,                 //时间
+                            delay:0,                //延迟时间
+                            playNum:1               //播放次数
+                            loop:true|false,        //循环
+                            direction:""            //方向
+                        }],
+                        interactives:[{             //触发交互
+                            uuid:'',
+                            fromContentEvent:'',    //触发积木的事件,fromContentUUID为当前content的UUID
+                            executeType:'',         //执行类型(预定义方法 trigger_method,
+                                                    //自定义方法 custom_script,
+                                                    //容器类方法 container_method)
+                            executeScript:'',       //执行脚本 executeType = custom_script
+                            executeContentUUID:'',  //执行积木的UUID executeType = trigger_method
+                            executeContentMethodName:'',
+                                                    //执行积木的方法
+                            containerMethodName:''  //容器方法 executeType = container_method
+                        }],
+                        layout:{                    //积木布局
+                            sort:0,                 //排序 顺序排列布局下有效
+                            bgColor:"",             //背景颜色
+                            rotate:0,               //旋转
+                            transparency:0,         //透明度
+                            border:{                //边框
+                                style:"",           //边框样式
+                                color:"",           //边框颜色
+                                size:"",            //边框尺寸
+                                radius:"",          //边框弧度
+                                margin:""           //边距
+                            },
+                            shadow:{                //阴影
+                                color:"",           //阴影颜色
+                                size:"",            //阴影大小
+                                direction:'',       //阴影方向
+                                vague:''            //阴影模糊
+                            }
+                        }
+                    }]
+            */
+            content:{
+                type:Array,
+
+            },
+            //动态内容
+            contentDs:{
+                type:Object
             }
+        },
+        render: function (createElement) {
+            const t = this;
+            //单元格
+            const children = [];
+            if(t.valueBase){
+                const valueStyle = _TY_Tool.setStyle({layout:t.option.valueStyle},t);
+                const child = createElement('span',{props:{style:valueStyle},style:valueStyle},[t.valueBase]);
+                children.push(child);
+            }
+            if(t.realContent){
+                t.realContent.forEach((ele,index)=>{
+                    const bb = _TY_Tool.bbRender([ele], createElement, t);
+                    const child = createElement('div',{slot:ele.group},[bb]);
+                    children.push(child);
+                });
+            }
+            const field = createElement('van-field ',{
+                props:{
+                    value:t.valueBase,
+                    type:t.option.type,
+                    label:t.option.label,
+                    icon:t.option.icon,
+                    leftIcon:t.option.leftIcon,
+                    required:t.option.required,
+                    disabled:t.option.disabled,
+                    error:t.option.error, 
+                    errorMessage:t.option.errorMessage, 
+                    autosize:t.option.autosize,
+                    maxText:t.maxTextShow,
+                    placeholder:t.option.placeholder
+                },
+                on:{
+                    "change":t.onInput,
+                    "click-icon":t.clickIcon, 
+                    "keyup":t.keyup
+                }
+            },[children]);
+            //实时长度提示
+            const messageWords = `${t.writeText}/${t.messageText}`;
+            const message = createElement('p',{
+                props:{},
+                class:"showText",
+            },[messageWords]);
+            //最外层div
+            let bbVantFieldClass = "bb-vant-field";
+            if(t.option.noPadding){
+                bbVantFieldClass = bbVantFieldClass + " noPadding";
+            }
+            if(t.option.t_right){
+                bbVantFieldClass = bbVantFieldClass + " t_right";
+            }
+            return createElement('div',{
+                props:{
+                },
+                class:bbVantFieldClass,
+                on:{}
+            },[field,message]);
         },
         data() {
             return {
@@ -85,7 +206,8 @@ import 'vant/lib/field/style';
                 writeText:"0",
                 maxTextShow:this.option.maxText,
                 messageText:this.option.maxText,
-                isShowText:true
+                isShowText:true,
+                realContent:this.content
             };
         },
         mounted(){
