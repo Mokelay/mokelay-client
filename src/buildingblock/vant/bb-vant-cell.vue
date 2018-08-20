@@ -115,7 +115,8 @@ import 'vant/lib/cell/style';
             const t = this;
             const children = [];
             if(t.valueBase){
-                const child = createElement('span',{props:{style:t.option.valueStyle},attrs:{style:t.option.valueStyle}},[t.valueBase]);
+                const valueStyle = _TY_Tool.setStyle({layout:t.option.valueStyle},t);
+                const child = createElement('span',{props:{style:valueStyle},attrs:{style:valueStyle}},[t.valueBase]);
                 children.push(child);
             }
             if(t.realContent){

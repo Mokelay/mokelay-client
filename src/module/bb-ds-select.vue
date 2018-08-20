@@ -64,15 +64,15 @@
                             editable:['add','edit','remove'],
                         },
                         columns:[
-                            {prop:'dataKey',label:'数据变量',type:"defalut",et:"bb-select",etProp:{
-                                fields:[{text:'tableData',value:'tableData'},{text:'value',value:'value'}]
-                            }},
-                            {prop:'handle',label:'数据处理中间件',type:"defalut",et:"bb-select",etProp:{
-                                ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [
-                                        {dataKey: "fields", valueKey: "data_list"}]},
-                                textField:'name',
-                                valueField:"alias"
-                            }},
+                            // {prop:'dataKey',label:'数据变量',type:"defalut",et:"bb-select",etProp:{
+                            //     fields:[{text:'tableData',value:'tableData'},{text:'value',value:'value'}]
+                            // }},
+                            // {prop:'handle',label:'数据处理中间件',type:"defalut",et:"bb-select",etProp:{
+                            //     ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [
+                            //             {dataKey: "fields", valueKey: "data_list"}]},
+                            //     textField:'name',
+                            //     valueField:"alias"
+                            // }},
                             {prop:'valueKey',label:'响应变量',type:"defalut",et:"bb-select",etProp:{
                                 ds:{api: "/ty_list_api_response",method: "get",
                                     inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
@@ -80,7 +80,14 @@
                                 },
                                 textField:'name',
                                 valueField:"alias"
-                            }}
+                            }},
+                            {
+                                prop:'handle',
+                                width:'350px',
+                                label:'数据处理中间件',
+                                type:"defalut",
+                                et:"bb-buzz-select"
+                            }
                         ]
                     }},
                     // {pbbId:'host',name:'接口主域名',attributeName:'host',et:'bb-input',props:{defaultValTpl:"<%=window._TY_APIHost%>"}},

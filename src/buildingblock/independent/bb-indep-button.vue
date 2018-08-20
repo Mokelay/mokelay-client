@@ -1,5 +1,5 @@
 <template>
-    <button v-if="isShow"  :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':relButton.selectText}}<slot></slot></button>
+    <button v-if="isShow" :id="id" :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="realOptions.disabled?disabledStyle:relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':relButton.selectText}}<slot></slot></button>
 </template>
 
 <script>
@@ -41,12 +41,18 @@
                     };
                 }
             },
+            /*其他属性
+                disabled:false, //禁用
+                readonly:false,  //只读
+                disabledStyle:{}  //禁用状态样式
+            */
             options:{
                 type:Object,
                 default:function(){
                     return {
                         disabled:false,
-                        readonly:false
+                        readonly:false,
+                        disabledStyle:{}
                     };
                 }
             }
@@ -55,7 +61,8 @@
             return {
                 external:{},//外部参数
                 isShow:true,
-                realOptions:this.options
+                realOptions:this.options,
+                id:_TY_Tool.uuid()
             }
         },
         computed: {
@@ -73,6 +80,13 @@
                         type:'primary',
                         selectText:'设置按钮'
                     },this.button);
+            },
+            disabledStyle:function(){
+                const bb = {
+                    layout:this.realOptions.disabledStyle
+                }
+                const style = _TY_Tool.setStyle(bb,this);
+                return style;
             }
         },
         created: function () {
@@ -160,10 +174,10 @@
         color: #fff; 
     }
     .indep_btn.is-disabled, .indep_btn.is-disabled:hover, .indep_btn.is-disabled:focus, .indep_btn.is-disabled:active {
-        color: #b4bccc !important;
-        cursor: not-allowed !important;
-        background-image: none !important;
-        background-color: #fff !important;
+        color: #b4bccc;
+        cursor: not-allowed;
+        background-image: none;
+        background-color: #fff;
         border-color: #efefef;
     }
     .indep_btn.success{
