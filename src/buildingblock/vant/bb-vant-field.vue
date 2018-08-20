@@ -147,7 +147,8 @@ import 'vant/lib/field/style';
             //单元格
             const children = [];
             if(t.valueBase){
-                const child = createElement('span',{props:{style:t.option.valueStyle},style:t.option.valueStyle},[t.valueBase]);
+                const valueStyle = _TY_Tool.setStyle({layout:t.option.valueStyle},t);
+                const child = createElement('span',{props:{style:valueStyle},style:valueStyle},[t.valueBase]);
                 children.push(child);
             }
             if(t.realContent){
