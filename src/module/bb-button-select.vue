@@ -20,19 +20,6 @@
                     et: 'bb-input',
                     props: {}
                 }, {
-                    name: '按钮类型',
-                    attributeName: 'buttonType',
-                    et: 'bb-select',
-                    props: {
-                        options: [{
-                            text: '默认',
-                            value: 'default'
-                        }, {
-                            text: '弹窗选择器',
-                            value: 'popup'
-                        }]
-                    }
-                }, {
                     name: '按钮样式',
                     attributeName: 'type',
                     et: 'bb-select',
@@ -87,7 +74,7 @@
                 }, {
                     name: '字体颜色',
                     attributeName: 'color',
-                    et: 'bb-input',
+                    et: 'bb-color-picker',
                     props: {}
                 }, {
                     name: '字体大小',
@@ -139,24 +126,6 @@
                         ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [{dataKey: "fields", valueKey: "data_list"}]},
                         textField:'name',
                         valueField:"alias"
-                    }
-                }, {
-                    name: '执行动作后刷新父列表',
-                    attributeName: 'refreshParent',
-                    et: 'bb-editor-switch',
-                    props: {}
-                },{
-                    name: '执行回调',
-                    attributeName: 'callback',
-                    et: 'bb-select',
-                    props: {
-                        fields: [{
-                            value: 'reflash',
-                            text: '刷新'
-                        }, {
-                            value: 'custom',
-                            text: '自定义'
-                        }]
                     }
                 }, {
                     name: '提交成功后跳转地址',
