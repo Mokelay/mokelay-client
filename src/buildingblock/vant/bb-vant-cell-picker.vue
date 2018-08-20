@@ -106,17 +106,15 @@ import 'vant/lib/cell/style';
                     isLink:Boolean 展示右侧箭头并开启点击反馈
                     center:Boolean 使内容垂直居中
                     url:""  跳转链接
-                    clickable:Boolean 开启点击反馈
+                    clickable:Boolean 开启点击反馈,
+                    valueStyle:{}  //内容样式
                  }
             */
             option:{
                 type:Object,
                 default:function(){
-                    return {
-
-                    }
+                    return {}
                 }
-
             },
             /*
             content:积木数据,
