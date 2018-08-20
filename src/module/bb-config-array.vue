@@ -4,6 +4,7 @@
             <bb-config v-if="showDialog" @change="commit" v-model="itemValue"></bb-config>
         </bb-dialog>
         <bb-button @click="edit" :button="addButton"></bb-button>
+        <bb-button :button="quickAddButton"></bb-button>
         <bb-list :columns="columns" :value="valueBase" @edit="edit" @change="change" :editConfig="editConfig"></bb-list>
     </div>
 </template>
@@ -45,7 +46,17 @@
                     icon:'ty-icon_faqi1'
                 },
                 itemValue:null,
-                key:'add'
+                key:'add',
+                quickAddButton:{
+                    style:{},//css样式
+                    type:'text',//按钮样式
+                    disabled:false,//按钮是否可编辑
+                    size:'small',//按钮大小
+                    icon:'ty-icon_jzds',//按钮图标
+                    text:'快速添加',//
+                    action:'buzz',
+                    buzz:'ty_ds_form_field_quick_select'
+                }
             }
         },
         watch: {
