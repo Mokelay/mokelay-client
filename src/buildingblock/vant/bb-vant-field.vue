@@ -158,7 +158,7 @@ import 'vant/lib/field/style';
                     children.push(child);
                 });
             }
-            const field = createElement('van-field ',{
+            const field = createElement('van-field',{
                 props:{
                     value:t.valueBase,
                     type:t.option.type,
