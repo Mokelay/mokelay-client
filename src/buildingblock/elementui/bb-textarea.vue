@@ -111,7 +111,7 @@
                 if(typeof this.bbStyle == "string"){
                     style = eval(this.bbStyle);
                 }else{
-                    style = _TY_Tool.setStype({layout:this.p_style},this);
+                    style = _TY_Tool.setStyle({layout:this.p_style},this);
                 }
                 return style;
             }
