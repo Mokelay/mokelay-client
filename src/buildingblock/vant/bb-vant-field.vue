@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <div class="bb-vant-field" :class="{
         'noPadding':option.noPadding,
         't_right':option.t_right
@@ -22,7 +22,7 @@
         <p v-if="messageText && option.showMessageText" class="showText">{{writeText}}/{{messageText}}</p>
     </div>
 </template>
- -->
+
 <script>
 import Field from 'vant/lib/field';
 import 'vant/lib/field/style';
@@ -142,64 +142,64 @@ import 'vant/lib/field/style';
                 type:Object
             }
         },
-        render: function (createElement) {
-            const t = this;
-            //单元格
-            const children = [];
-            if(t.valueBase){
-                const valueStyle = _TY_Tool.setStyle({layout:t.option.valueStyle},t);
-                const child = createElement('span',{props:{style:valueStyle},style:valueStyle},[t.valueBase]);
-                children.push(child);
-            }
-            if(t.realContent){
-                t.realContent.forEach((ele,index)=>{
-                    const bb = _TY_Tool.bbRender([ele], createElement, t);
-                    const child = createElement('div',{slot:ele.group},[bb]);
-                    children.push(child);
-                });
-            }
-            const field = createElement('van-field ',{
-                props:{
-                    value:t.valueBase,
-                    type:t.option.type,
-                    label:t.option.label,
-                    icon:t.option.icon,
-                    leftIcon:t.option.leftIcon,
-                    required:t.option.required,
-                    disabled:t.option.disabled,
-                    error:t.option.error, 
-                    errorMessage:t.option.errorMessage, 
-                    autosize:t.option.autosize,
-                    maxText:t.maxTextShow,
-                    placeholder:t.option.placeholder
-                },
-                on:{
-                    "change":t.onInput,
-                    "click-icon":t.clickIcon, 
-                    "keyup":t.keyup
-                }
-            },[children]);
-            //实时长度提示
-            const messageWords = `${t.writeText}/${t.messageText}`;
-            const message = createElement('p',{
-                props:{},
-                class:"showText",
-            },[messageWords]);
-            //最外层div
-            let bbVantFieldClass = "bb-vant-field";
-            if(t.option.noPadding){
-                bbVantFieldClass = bbVantFieldClass + " noPadding";
-            }
-            if(t.option.t_right){
-                bbVantFieldClass = bbVantFieldClass + " t_right";
-            }
-            return createElement('div',{
-                props:{
-                },
-                class:bbVantFieldClass,
-                on:{}
-            },[field,message]);
-        },
+        // render: function (createElement) {
+        //     const t = this;
+        //     //单元格
+        //     const children = [];
+        //     if(t.valueBase){
+        //         const valueStyle = _TY_Tool.setStyle({layout:t.option.valueStyle},t);
+        //         const child = createElement('span',{props:{style:valueStyle},style:valueStyle},[t.valueBase]);
+        //         children.push(child);
+        //     }
+        //     if(t.realContent){
+        //         t.realContent.forEach((ele,index)=>{
+        //             const bb = _TY_Tool.bbRender([ele], createElement, t);
+        //             const child = createElement('div',{slot:ele.group},[bb]);
+        //             children.push(child);
+        //         });
+        //     }
+        //     const field = createElement('van-field',{
+        //         props:{
+        //             value:t.valueBase,
+        //             type:t.option.type,
+        //             label:t.option.label,
+        //             icon:t.option.icon,
+        //             leftIcon:t.option.leftIcon,
+        //             required:t.option.required,
+        //             disabled:t.option.disabled,
+        //             error:t.option.error, 
+        //             errorMessage:t.option.errorMessage, 
+        //             autosize:t.option.autosize,
+        //             maxText:t.maxTextShow,
+        //             placeholder:t.option.placeholder
+        //         },
+        //         on:{
+        //             "change":t.onInput,
+        //             "click-icon":t.clickIcon, 
+        //             "keyup":t.keyup
+        //         }
+        //     },[children]);
+        //     //实时长度提示
+        //     const messageWords = `${t.writeText}/${t.messageText}`;
+        //     const message = createElement('p',{
+        //         props:{},
+        //         class:"showText",
+        //     },[messageWords]);
+        //     //最外层div
+        //     let bbVantFieldClass = "bb-vant-field";
+        //     if(t.option.noPadding){
+        //         bbVantFieldClass = bbVantFieldClass + " noPadding";
+        //     }
+        //     if(t.option.t_right){
+        //         bbVantFieldClass = bbVantFieldClass + " t_right";
+        //     }
+        //     return createElement('div',{
+        //         props:{
+        //         },
+        //         class:bbVantFieldClass,
+        //         on:{}
+        //     },[field,message]);
+        // },
         data() {
             return {
                 valueBase:this.value,
@@ -228,7 +228,8 @@ import 'vant/lib/field/style';
                 this.$emit('change',this.valueBase);
             },
             //显示字符，超出限制字符截取
-            keyup(){
+            keyup(key){
+                // this.valueBase = this.valueBase + key.key;
                 this.writeText = this.valueBase.length;
                 this.$emit('onFocus',this.valueBase); 
                 var t = this.valueBase;
