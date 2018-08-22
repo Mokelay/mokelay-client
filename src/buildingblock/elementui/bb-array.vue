@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="margin-bottom:10px;">
-            <bb-button-form ref="object_form" :fields="fields" startButtonIcon="el-icon-plus" startButtonType="text" settingText="添加" @commit="setArray"></bb-button-form>
+            <bb-button-form ref="object_form" :fields="fields" startButtonIcon="el-icon-plus" startButtonType="text" :on="on" settingText="添加" @commit="setArray"></bb-button-form>
             <span v-if="customTopBtns" v-for="(button,index) in customTopBtns">
                 <bb-button :button="button"></bb-button>
             </span>
@@ -15,7 +15,7 @@
             </el-table-column>
             <el-table-column label="操作" width="250" key="operation">
                 <template slot-scope="scope">
-                    <bb-button-form v-model="array[scope.$index]" :fields="fields" startButtonIcon="el-icon-edit" startButtonType="text" settingText="修改" @commit="edit(scope,arguments)"></bb-button-form>
+                    <bb-button-form v-model="array[scope.$index]" :fields="fields" :on="on" startButtonIcon="el-icon-edit" startButtonType="text" settingText="修改" @commit="edit(scope,arguments)"></bb-button-form>
                     <el-button type="text" icon="el-icon-delete"
                                @click.native.prevent="deleteData(scope.$index)">删除</el-button>
                     <el-button type="text" icon="el-icon-caret-top"
@@ -58,6 +58,10 @@ import Vue from 'vue';
             },
             defaultFormData:{
                 type:Object
+            },
+            /*添加表单的交互*/
+            on:{
+                type:Array
             }
         },
         data() {

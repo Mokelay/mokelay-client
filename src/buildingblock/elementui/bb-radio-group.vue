@@ -79,18 +79,23 @@ import Util from '../../libs/util';
             let t=this;
             if(this.ds){
                 Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
-                    map.forEach(function (item) {
-                        var list = item['value']['list'];
-                        t.p_options = [];
-                        for (var i in list) {
-                            t.p_options.push({
-                                text:list[i][t.optionText],
-                                value:list[i][t.optionValue]
-                            });
-                        }
-                    });
+                    t.ds.type = t.ds.type?t.ds.type:"dynamic";
+                    if(t.ds.type == "dynamic"){
+                        map.forEach(function (item) {
+                            var list = item['value']['list'];
+                            t.p_options = [];
+                            for (var i in list) {
+                                t.p_options.push({
+                                    text:list[i][t.optionText],
+                                    value:list[i][t.optionValue]
+                                });
+                            }
+                        }); 
+                    }else{
+                      t.p_options = map;
+                    }
                     if(t.type == 'button'){
-                        t.p_options.splice(0,0,{value:'',text:'全部'})
+                        t.p_options.splice(0,0,{value:'',text:'全部'});
                     }
                 }, function (code, msg) {
                 });
