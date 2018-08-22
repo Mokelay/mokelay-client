@@ -184,27 +184,31 @@
                 if (this.ds) {
                     t.loading = true;
                     Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach(function (item) {
-                                var list;
-                                if(item['value']&&item['value']['list']){
-                                  list = item['value']['list'];
-                                }else{
-                                  list = item['value'];
+                        if(t.ds.type == "dynamic"){
+                          map.forEach(function (item) {
+                            var list;
+                            if(item['value']&&item['value']['list']){
+                              list = item['value']['list'];
+                            }else{
+                              list = item['value'];
+                            }
+                            t.items = [];
+                            for (var i in list) {
+                                var ele = list[i][t.valueField];
+                                if(typeof(list[i][t.valueField]) != 'string'){
+                                  ele = JSON.stringify(list[i][t.valueField])
                                 }
-                                t.items = [];
-                                for (var i in list) {
-                                    var ele = list[i][t.valueField];
-                                    if(typeof(list[i][t.valueField]) != 'string'){
-                                      ele = JSON.stringify(list[i][t.valueField])
-                                    }
-                                    let option = {
-                                      value:ele,
-                                      text:list[i][t.textField]+(t.showValue?"("+ele+")":"")
-                                    }
-                                    t.items.push(option);
+                                let option = {
+                                  value:ele,
+                                  text:list[i][t.textField]+(t.showValue?"("+ele+")":"")
                                 }
-                                t.totalItems = item['value']['totalRecords'];
-                            });
+                                t.items.push(option);
+                            }
+                            t.totalItems = item['value']['totalRecords'];
+                          });
+                        }else{
+                          t.items = map;
+                        }
                         t.loading = false;
                     }, function (code, msg) {
                         t.loading = false;
