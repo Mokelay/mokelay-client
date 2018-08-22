@@ -1,11 +1,11 @@
 <script>
-import CellSwipe from 'vant/lib/cell-swipe';
-import 'vant/lib/cell-swipe/style';
+import SwipeCell from 'vant/lib/swipe-cell';
+import 'vant/lib/swipe-cell/style';
 
     export default {
         name: 'bb-vant-cell-swipe',
         components: {
-          "van-cell-swipe":CellSwipe,
+          "van-cell-swipe":SwipeCell,
         },
         props: {
             //左侧滑动区域宽度
@@ -100,7 +100,7 @@ import 'vant/lib/cell-swipe/style';
                     }
                 });
             }
-            return createElement('van-cell-swipe',{props:{
+            return createElement('van-swipe-cell',{props:{
                 "right-width":t.rightWidth,
                 "left-width":t.leftWidth,
                 "on-close":t.onClose
