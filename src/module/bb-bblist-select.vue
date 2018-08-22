@@ -40,11 +40,12 @@
         created: function () {
         },
         mounted:function(){
+            this.$emit("mounted",this.value);
         },
         methods: {
             change:function(val){
-              this.$emit('input',val)
-              this.$emit('change',val)
+                this.$emit('input',val)
+                this.$emit('change',val)
             }
         }
     }
