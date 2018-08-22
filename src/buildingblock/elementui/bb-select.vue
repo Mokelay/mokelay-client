@@ -184,6 +184,7 @@
                 if (this.ds) {
                     t.loading = true;
                     Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
+                        t.ds.type = t.ds.type?t.ds.type:"dynamic";
                         if(t.ds.type == "dynamic"){
                           map.forEach(function (item) {
                             var list;
