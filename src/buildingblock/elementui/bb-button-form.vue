@@ -79,6 +79,11 @@ import Util from '../../libs/util';
             grid:{
                 type:Boolean,
                 default:false
+            },
+            //弹窗大小
+            dialogSize:{
+                type:String,
+                default:'middle'
             }
         },
 
@@ -169,7 +174,7 @@ import Util from '../../libs/util';
                         modalAppendToBody:true,
                         appendToBody:true,
                         isShow:t.formVisible,
-                        size:"middle"
+                        size:t.dialogSize||"middle"
                     },on:{
                         'update:isShow':(isShow)=>{
                             t.formVisible = isShow;
