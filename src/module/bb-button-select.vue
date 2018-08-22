@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-form :fields="fields" @commit="commit" settingText="设置按钮" v-model="btn" formDescTpl="按钮:<%=text%>"></bb-button-form>
+        <bb-button-form :fields="fields" @commit="commit" settingText="设置按钮" v-model="btn" formDescTpl="按钮:<%=text%>" :on="on" size="mini" labelWidth="80px"></bb-button-form>
     </div>
 </template>
 
@@ -15,13 +15,57 @@
         data() {
             return {
                 fields: [{
+                    pbbId:"text",
                     name: '按钮文字',
-                    attributeName: 'selectText',
+                    attributeName: 'text',
                     et: 'bb-input',
                     props: {}
                 }, {
-                    name: '按钮样式',
+                    pbbId:"size",
+                    name: '大小',
+                    attributeName: 'size',
+                    show:false,
+                    hide:true,
+                    et: 'bb-select',
+                    props: {
+                        fields:[
+                            {text:"大",value:"medium"},
+                            {text:"中",value:"small"},
+                            {text:"小",value:"mini"},
+                        ]
+                    }
+                }, {
+                    pbbId:"wordColor",
+                    name: '文字颜色',
+                    attributeName: 'wordColor',
+                    show:false,
+                    hide:true,
+                    et: 'bb-input',
+                    props: {}
+                }, {
+                    pbbId:"buttonType",
+                    name: '按钮类型',
+                    attributeName: 'buttonType',
+                    hide:true,
+                    show:false,
+                    et: 'bb-select',
+                    props: {
+                        options: [{
+                            text: '默认',
+                            value: 'default'
+                        }, {
+                            text: '弹窗',
+                            value: 'dialog'
+                        }, {
+                            text: '弹窗选择器',
+                            value: 'popup'
+                        }]
+                    }
+                }, {
+                    pbbId:"type",
+                    name: '主题',
                     attributeName: 'type',
+                    hide:true,
                     et: 'bb-select',
                     props: {
                         options: [{
@@ -47,80 +91,119 @@
                             value: 'text'
                         }]
                     }
-                },{
-                    name: '按钮大小',
-                    attributeName: 'size',
-                    et: 'bb-select',
-                    props: {
-                        options: [{
-                            text: '默认',
-                            value: 'default'
-                        }, {
-                            text: '一般',
-                            value: 'medium'
-                        }, {
-                            text: '小',
-                            value: 'small'
-                        }, {
-                            text: '微型',
-                            value: 'mini'
-                        }]
-                    }
                 }, {
+                    pbbId:"icon",
                     name: '图标',
                     attributeName: 'icon',
+                    hide:true,
                     et: 'bb-icon-select',
                     props: {}
                 }, {
-                    name: '字体颜色',
-                    attributeName: 'color',
-                    et: 'bb-color-picker',
-                    props: {}
-                }, {
-                    name: '字体大小',
-                    attributeName: 'fontSize',
+                    pbbId:"showValue",
+                    name: '隐藏控制',
+                    show:true,
+                    description:"返回true显示 返回false隐藏 <%=bb.key == 1?true:false%>",
+                    attributeName: 'showValue',
+                    hide:true,
                     et: 'bb-input',
-                    props: {}
                 }, {
+                    pbbId:"action",
                     name: '执行动作',
                     attributeName: 'action',
+                    description:"按钮类型选择默认时需要配置此项",
                     et: 'bb-select',
                     props: {
                         options: [{
-                            text: '调接口',
-                            value: 'execute-ds'
-                        }, {
-                            text: '地址跳转',
+                            text: 'URL跳转',
                             value: 'url'
                         }, {
-                            text: '弹窗',
-                            value: 'dialog-page'
-                        }, {
-                            text: '执行代码',
-                            value: 'code'
+                            text: '执行接口',
+                            value: 'execute-ds'
                         }, {
                             text: '执行巴斯',
                             value: 'buzz'
+                        }, {
+                            text: '页面对话框',
+                            value: 'dialog-page'
                         }]
                     }
                 }, {
-                    name: '跳转URL',
+                    pbbId:"dialogTitle",
+                    name: '弹窗标题',
+                    show:false,
+                    attributeName: 'dialogTitle',
+                    description:"点击类型为‘页面对话框’时有效",
+                    et: 'bb-input',
+                    props: {}
+                },{
+                    pbbId:"url",
+                    name: '跳转页面',
+                    show:false,
                     attributeName: 'url',
+                    description:"点击类型选择URL跳转时需要填写",
+                    hide:true,
                     et: 'bb-input',
                     props: {}
                 }, {
-                    name: '调用接口',
+                    pbbId:"urlType",
+                    name: '跳转方式',
+                    show:false,
+                    attributeName: 'urlType',
+                    description:"点击类型选择URL跳转时需要填写",
+                    hide:true,
+                    et: 'bb-select',
+                    props: {
+                        options: [{
+                            text: '在本页面中打开',
+                            value: 'default'
+                        }, {
+                            text: '在新标签中打开',
+                            value: 'openWindow'
+                        }]
+                    }
+                }, {
+                    pbbId:"ds",
+                    name: '执行接口',
+                    show:false,
                     attributeName: 'ds',
+                    description:"点击类型选择执行接口时需要填写",
+                    hide:true,
                     et: 'bb-ds-select',
                     props: {}
                 }, {
-                    name: '去除接口确认框',
-                    attributeName: 'noConfirm',
-                    et: 'bb-editor-switch',
+                    pbbId:"callBackStaticWords",
+                    name: '成功提示',
+                    show:false,
+                    description:"点击类型选择执行接口时需要填写",
+                    attributeName: 'callBackStaticWords',
+                    hide:true,
+                    et: 'bb-input',
                     props: {}
                 }, {
+                    pbbId:"confirmTitle",
+                    name: '提示标题',
+                    show:false,
+                    description:"点击类型选择执行接口时需要填写",
+                    attributeName: 'confirmTitle',
+                    hide:true,
+                    et: 'bb-input',
+                    props: {}
+                }, {
+                    pbbId:"confirmText",
+                    name: '提示文本',
+                    show:false,
+                    description:"点击类型选择执行接口时需要填写",
+                    attributeName: 'confirmText',
+                    hide:true,
+                    et: 'bb-input',
+                    props: {}
+                }, {
+                    pbbId:"buzz",
                     name: '设置巴斯',
+                    show:false,
+                    description:"点击类型选择执行巴斯时需要填写",
                     attributeName: 'buzz',
+                    hide:true,
                     et: 'bb-select',
                     props: {
                         ds:{api: "/list-buzz",method: "get",inputs: [],outputs: [{dataKey: "fields", valueKey: "data_list"}]},
@@ -128,53 +211,36 @@
                         valueField:"alias"
                     }
                 }, {
-                    name: '提交成功后跳转地址',
-                    attributeName: 'goUrl',
-                    et: 'bb-input',
-                    props: {}
-                }, {
-                    name: '弹窗页面地址',
+                    pbbId:"dialogPage",
+                    name: '页面别名',
+                    show:false,
+                    description:"点击类型选择页面对话框时需要填写",
                     attributeName: 'dialogPage',
-                    et: 'bb-input',
-                    props: {}
-                },  {
-                    name: '确认弹窗标题',
-                    attributeName: 'confirmTitle',
+                    hide:true,
                     et: 'bb-input',
                     props: {}
                 }, {
-                    name: '确认弹窗内容',
-                    attributeName: 'confirmText',
+                    pbbId:"showKey",
+                    name: '状态变量',
+                    show:false,
+                    description:"根据接口中某个关键字控制按钮展示",
+                    attributeName: 'showKey',
+                    hide:true,
                     et: 'bb-input',
-                    props: {}
                 }, {
-                    name: '操作成功后系统提示信息',
-                    attributeName: 'callBackStaticWords',
+                    pbbId:"showValue",
+                    name: '显示值',
+                    show:false,
+                    description:"按钮展示的值",
+                    attributeName: 'showValue',
+                    hide:true,
                     et: 'bb-input',
-                    props: {}
-                }, {
-                    name: '是否显示选择结果',
-                    attributeName: 'showResult',
-                    et: 'bb-editor-switch',
-                    props: {}
-                }, {
-                    name: '值对象来源',
-                    attributeName: 'valueKey',
-                    et: 'bb-select',
-                    props: {
-                        fields: [{
-                            text: '组件对象',
-                            value: 'bb'
-                        }, {
-                            text: '路由数据',
-                            value: 'router'
-                        }, {
-                            text: '列数据',
-                            value: 'row-data'
-                        }]
-                    }
                 }],
-                btn:this.value
+                btn:this.value,
+                on:[
+                    {pbbId:'action',triggerEventName:'change',executeArgument:`debugger;var type = params[0];if(type == "url"){t.$parent.$parent.hideAndShowFormItem(["form-item_url","form-item_urlType"],["form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz","form-item_dialogPage"]);}else if(type == "execute-ds"){t.$parent.$parent.hideAndShowFormItem(["form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_buzz","form-item_dialogPage"]);}else if(type == "buzz"){t.$parent.$parent.hideAndShowFormItem(["form-item_buzz"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_dialogPage"]);}else if(type == "dialog-page"){t.$parent.$parent.hideAndShowFormItem(["form-item_dialogTitle","form-item_dialogPage"],["form-item_url","form-item_urlType","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz"]);}`},
+                    {pbbId:'action',triggerEventName:'mounted',executeArgument:`debugger;var type = params[0];if(type == "url"){t.$parent.$parent.hideAndShowFormItem(["form-item_url","form-item_urlType"],["form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz","form-item_dialogPage"]);}else if(type == "execute-ds"){t.$parent.$parent.hideAndShowFormItem(["form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_buzz","form-item_dialogPage"]);}else if(type == "buzz"){t.$parent.$parent.hideAndShowFormItem(["form-item_buzz"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_dialogPage"]);}else if(type == "dialog-page"){t.$parent.$parent.hideAndShowFormItem(["form-item_dialogTitle","form-item_dialogPage"],["form-item_url","form-item_urlType","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz"]);}`}
+                ]
             }
         },
         watch: {
