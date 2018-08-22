@@ -77,6 +77,13 @@
             }
         },
         created: function () {
+            const t = this;
+            const show = _TY_Tool.tpl(t.relButton.showValue, _TY_Tool.buildTplParams(t));
+            if(show == "false"){
+               t.isShow = false;
+            }else{
+                t.isShow = true;
+            }
         },
         mounted:function(){
         },
