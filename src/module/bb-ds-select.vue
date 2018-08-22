@@ -13,29 +13,10 @@
                 type:[String,Object]
             },
             staticBB:{
-                type:String,
-                default:"bb-list"
+                type:String
             },
             staticBBProps:{
-                type:[String,Object],
-                default:function(){
-                    return {
-                        editConfig:{
-                            editable:['add','edit','remove']
-                        },
-                        columns:[
-                            {prop:'paramName',label:'参数名',type:"defalut",et:"bb-select",etProp:{
-                                ds:{api: "/ty_list_api_request",method: "get",
-                                    inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.$parent.$parent.$parent.$parent.$parent.external.linkage[0]%>"}],
-                                    outputs: [{dataKey: "fields", valueKey: "req_list"}]
-                                },
-                                textField:'name',
-                                valueField:"requestParamName"
-                            }},
-                            {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
-                        ]
-                    }
-                }
+                type:[String,Object]
             }
         },
 
