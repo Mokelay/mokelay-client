@@ -8,7 +8,7 @@
             @change="change"
             :disabled="realOption.disabled"
             :size="realOption.size"
-            :style="p_style"
+            :style="words_style"
             :resize="p_resize"
             :autosize="p_autosize"
             :maxlength="maxLen"
@@ -104,6 +104,16 @@
                 }else{
                     return "";
                 }
+            },
+            words_style:function(){
+                let style = {};
+                //兼容老数据
+                if(typeof this.bbStyle == "string"){
+                    style = eval(this.bbStyle);
+                }else{
+                    style = _TY_Tool.setStyle({layout:this.p_style},this);
+                }
+                return style;
             }
         },
         created: function () {

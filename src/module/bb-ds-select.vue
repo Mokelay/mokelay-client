@@ -22,6 +22,44 @@
 
         data() {
             return {
+                ds:this.value,
+                api:'',
+                apiInfo:{
+                    api:'/read-api-info',
+                    method:'post',
+                    inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.api%>"}],
+                    outputs:[{dataKey: 'tableData', valueKey: 'data'}]
+                },
+                type:'normal',
+                selectedHtml:'',
+                dynamicShow:true
+            }
+        },
+        watch: {
+            value(val){
+                if (typeof val === 'object') {
+                    this.ds = this.transferOldData(val);
+                } else if (typeof val === 'string') {
+                    this.ds = this.transferOldData(val ? JSON.parse(val) : {});
+                }
+                //全局ds缓存更新
+                this.cacheDS();
+            },
+            ds(val){
+                //TODO 通过ds的api去获取input fields list，并且fire出事件
+            },
+            dynamicShow(val){
+                debugger
+            }
+        },
+        computed:{
+            fields(){
+                //type:"dynamic", //dynamic,static
+
+                //以下为type=static属性 
+                // data:null, //静态数据，可以为任意数据类型
+
+                //以下为type=dynamic的属性
                 //API : bb-select => 获得接口别名   支持中文名 和 接口别名搜索，单选
                 //接口分类 : bb-words =>（linakge交互） 通过DS查询到当前接口分类并展示 
                 //方法 : bb-words =>（linakge交互） 通过DS查询到当前接口方法并展示
@@ -37,13 +75,18 @@
                         数据处理中间件:bb-select
                         响应变量:bb-field-select,// 联动获取接口别名
                 }*/
-                fields:[
-                    {pbbId:'api',name:'API',attributeName:'api',et:'bb-select',props:{
+                const realFields = [
+                    {pbbId:'type',name:'数据类型',attributeName:'type',et:'bb-select',props:{
+                        fields:[{text:"动态数据",value:"dynamic"},{text:"静态数据",value:"static"}],
+                        defaultValTpl:"dynamic"
+                    }},
+                    {pbbId:'data',name:'添加数据',attributeName:'data',show:!this.dynamicShow,et:this.staticBB,props:typeof this.staticBBProps == 'string'?eval("("+this.staticBBProps+")"):this.staticBBProps},
+                    {pbbId:'api',name:'API',attributeName:'api',show:this.dynamicShow,et:'bb-select',props:{
                         ds:{api:'/list-api',method:'post',inputs: [{paramName: 'keywords', valueType: "inputValueObj", valueKey: "bb", variable: "keywords"},{paramName: 'type', valueType: "template",variable: "<%=window._TY_Page_Data[route.query.pageAlias]['appAlias']%>"}],outputs:[{dataKey: 'tableData', valueKey: 'data_list'}]},
                         textField:'name',
                         valueField:'alias'
                     }},
-                    {pbbId:'inputs',name:'请求参数',attributeName:'inputs',et:'bb-list',props:{
+                    {pbbId:'inputs',name:'请求参数',attributeName:'inputs',show:this.dynamicShow,et:'bb-list',props:{
                         editConfig:{
                             editable:['add','edit','remove']
                         },
@@ -59,7 +102,7 @@
                             {prop:'variable',label:'变量',type:"defalut",et:"bb-input",etProp:{}}
                         ]
                     }},
-                    {pbbId:'outputs',name:'响应数据',attributeName:'outputs',et:'bb-list',props:{
+                    {pbbId:'outputs',name:'响应数据',attributeName:'outputs',show:this.dynamicShow,et:'bb-list',props:{
                         editConfig:{
                             editable:['add','edit','remove'],
                         },
@@ -91,8 +134,27 @@
                         ]
                     }},
                     // {pbbId:'host',name:'接口主域名',attributeName:'host',et:'bb-input',props:{defaultValTpl:"<%=window._TY_APIHost%>"}},
-                ],
-                interactiveOn:[
+                ]
+                return realFields;
+            },
+            interactiveOn(){
+                const actinveOn = [
+                    {pbbId:'type',triggerEventName:'mounted',executeArgument:`
+                        var type = params[0];
+                        if(type == "static"){
+                            t.$parent.$parent.hideAndShowFormItem(["form-item_data"],["form-item_api","form-item_inputs","form-item_outputs"]);
+                        }else{
+                            t.$parent.$parent.hideAndShowFormItem(["form-item_api","form-item_inputs","form-item_outputs"],["form-item_data"]);
+                        }
+                    `},
+                    {pbbId:'type',triggerEventName:'selected',executeArgument:`
+                        var type = params[0];
+                        if(type == "static"){
+                            t.$parent.$parent.hideAndShowFormItem(["form-item_data"],["form-item_api","form-item_inputs","form-item_outputs"]);
+                        }else{
+                            t.$parent.$parent.hideAndShowFormItem(["form-item_api","form-item_inputs","form-item_outputs"],["form-item_data"]);
+                        }
+                    `},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'mounted',executePbbId:'inputs',executeBBMethodName:'linkage'},
                     {pbbId:'api',triggerEventName:'change',executePbbId:'outputs',executeBBMethodName:'linkage'},
@@ -108,31 +170,8 @@
                             }
                         });
                     `},
-                ],
-                ds:this.value,
-                api:'',
-                apiInfo:{
-                    api:'/read-api-info',
-                    method:'post',
-                    inputs: [{paramName: 'alias', valueType: "template", variable: "<%=bb.api%>"}],
-                    outputs:[{dataKey: 'tableData', valueKey: 'data'}]
-                },
-                type:'normal',
-                selectedHtml:''
-            }
-        },
-        watch: {
-            value(val){
-                if (typeof val === 'object') {
-                    this.ds = this.transferOldData(val);
-                } else if (typeof val === 'string') {
-                    this.ds = this.transferOldData(val ? JSON.parse(val) : {});
-                }
-                //全局ds缓存更新
-                this.cacheDS();
-            },
-            ds(val){
-                //TODO 通过ds的api去获取input fields list，并且fire出事件
+                ];
+                return actinveOn;
             }
         },
         created: function () {

@@ -95,21 +95,44 @@
                     et: 'bb-array',
                     rules: [],
                     props: {
+                        on:[
+                            {pbbId:'action',triggerEventName:'change',executeArgument:`debugger;var type = params[0];if(type == "url"){t.$parent.$parent.hideAndShowFormItem(["form-item_url","form-item_urlType"],["form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz","form-item_dialogPage"]);}else if(type == "execute-ds"){t.$parent.$parent.hideAndShowFormItem(["form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_buzz","form-item_dialogPage"]);}else if(type == "buzz"){t.$parent.$parent.hideAndShowFormItem(["form-item_buzz"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_dialogPage"]);}else if(type == "dialog-page"){t.$parent.$parent.hideAndShowFormItem(["form-item_dialogTitle","form-item_dialogPage"],["form-item_url","form-item_urlType","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz"]);}`},
+                            {pbbId:'action',triggerEventName:'mounted',executeArgument:`debugger;var type = params[0];if(type == "url"){t.$parent.$parent.hideAndShowFormItem(["form-item_url","form-item_urlType"],["form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz","form-item_dialogPage"]);}else if(type == "execute-ds"){t.$parent.$parent.hideAndShowFormItem(["form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_buzz","form-item_dialogPage"]);}else if(type == "buzz"){t.$parent.$parent.hideAndShowFormItem(["form-item_buzz"],["form-item_url","form-item_urlType","form-item_dialogTitle","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_dialogPage"]);}else if(type == "dialog-page"){t.$parent.$parent.hideAndShowFormItem(["form-item_dialogTitle","form-item_dialogPage"],["form-item_url","form-item_urlType","form-item_ds","form-item_callBackStaticWords","form-item_confirmTitle","form-item_confirmText","form-item_buzz"]);}`}
+                        ],
                         fields: [{
+                            pbbId:"text",
                             name: '按钮文字',
                             attributeName: 'text',
                             et: 'bb-input',
                             props: {}
+                        },{
+                            pbbId:"size",
+                            name: '大小',
+                            attributeName: 'size',
+                            show:false,
+                            hide:true,
+                            et: 'bb-select',
+                            props: {
+                                fields:[
+                                    {text:"大",value:"medium"},
+                                    {text:"中",value:"small"},
+                                    {text:"小",value:"mini"},
+                                ]
+                            }
                         }, {
+                            pbbId:"wordColor",
                             name: '文字颜色',
                             attributeName: 'wordColor',
+                            show:false,
                             hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
+                            pbbId:"buttonType",
                             name: '按钮类型',
                             attributeName: 'buttonType',
                             hide:true,
+                            show:false,
                             et: 'bb-select',
                             props: {
                                 options: [{
@@ -124,7 +147,8 @@
                                 }]
                             }
                         }, {
-                            name: '按钮样式',
+                            pbbId:"type",
+                            name: '主题',
                             attributeName: 'type',
                             hide:true,
                             et: 'bb-select',
@@ -153,13 +177,31 @@
                                 }]
                             }
                         }, {
+                            pbbId:"icon",
                             name: '图标',
                             attributeName: 'icon',
                             hide:true,
                             et: 'bb-icon-select',
                             props: {}
                         }, {
-                            name: '点击类型',
+                            pbbId:"showKey",
+                            name: '状态变量',
+                            show:true,
+                            description:"根据接口中某个关键字控制按钮展示",
+                            attributeName: 'showKey',
+                            hide:true,
+                            et: 'bb-input',
+                        }, {
+                            pbbId:"showValue",
+                            name: '显示值',
+                            show:true,
+                            description:"按钮展示的值",
+                            attributeName: 'showValue',
+                            hide:true,
+                            et: 'bb-input',
+                        }, {
+                            pbbId:"action",
+                            name: '执行动作',
                             attributeName: 'action',
                             description:"按钮类型选择默认时需要配置此项",
                             et: 'bb-select',
@@ -179,20 +221,26 @@
                                 }]
                             }
                         }, {
-                            name: '弹窗页面标题',
+                            pbbId:"dialogTitle",
+                            name: '弹窗标题',
+                            show:false,
                             attributeName: 'dialogTitle',
                             description:"点击类型为‘页面对话框’时有效",
                             et: 'bb-input',
                             props: {}
                         },{
+                            pbbId:"url",
                             name: '跳转页面',
+                            show:false,
                             attributeName: 'url',
                             description:"点击类型选择URL跳转时需要填写",
                             hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
+                            pbbId:"urlType",
                             name: '跳转方式',
+                            show:false,
                             attributeName: 'urlType',
                             description:"点击类型选择URL跳转时需要填写",
                             hide:true,
@@ -207,35 +255,45 @@
                                 }]
                             }
                         }, {
+                            pbbId:"ds",
                             name: '执行接口',
+                            show:false,
                             attributeName: 'ds',
                             description:"点击类型选择执行接口时需要填写",
                             hide:true,
                             et: 'bb-ds-select',
                             props: {}
                         }, {
-                            name: '接口执行成功系统提示静态文字',
+                            pbbId:"callBackStaticWords",
+                            name: '成功提示',
+                            show:false,
                             description:"点击类型选择执行接口时需要填写",
                             attributeName: 'callBackStaticWords',
                             hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
+                            pbbId:"confirmTitle",
                             name: '提示标题',
+                            show:false,
                             description:"点击类型选择执行接口时需要填写",
                             attributeName: 'confirmTitle',
                             hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
+                            pbbId:"confirmText",
                             name: '提示文本',
+                            show:false,
                             description:"点击类型选择执行接口时需要填写",
                             attributeName: 'confirmText',
                             hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
+                            pbbId:"buzz",
                             name: '设置巴斯',
+                            show:false,
                             description:"点击类型选择执行巴斯时需要填写",
                             attributeName: 'buzz',
                             hide:true,
@@ -246,26 +304,18 @@
                                 valueField:"alias"
                             }
                         }, {
-                            name: '页面对话框页面别名',
+                            pbbId:"dialogPage",
+                            name: '页面别名',
+                            show:false,
                             description:"点击类型选择页面对话框时需要填写",
                             attributeName: 'dialogPage',
                             hide:true,
                             et: 'bb-input',
                             props: {}
                         }, {
-                            name: '按钮显示状态控制变量',
-                            description:"根据接口中某个关键字控制按钮展示",
-                            attributeName: 'showKey',
-                            hide:true,
-                            et: 'bb-input',
-                        }, {
-                            name: '按钮显示变量值',
-                            description:"按钮展示的值",
-                            attributeName: 'showValue',
-                            hide:true,
-                            et: 'bb-input',
-                        }, {
+                            pbbId:"dialog",
                             name: '弹窗配置',
+                            show:false,
                             attributeName: 'dialog',
                             description:"按钮类型选择弹窗时需要配置此项",
                             hide:true,
@@ -283,7 +333,9 @@
                             }
 
                         }, {
+                            pbbId:"popupConfig",
                             name: '弹窗选择器配置',
+                            show:false,
                             attributeName: 'popupConfig',
                             description:"按钮类型选择弹窗选择器时需要配置此项",
                             hide:true,
@@ -443,7 +495,7 @@
                                     }
                                 }]
                             }
-                        }],
+                        }]
                     }
                 }, {
                     name: '表头模板类型',

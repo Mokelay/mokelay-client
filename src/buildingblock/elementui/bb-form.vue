@@ -278,7 +278,12 @@
                             }
                         }
                         var pbbId = field['pbbId'];
-                        var on = t.p_on;
+                        var on = [];
+                        if(t.p_on == ""){
+                           on = []; 
+                        }else{
+                           on = typeof t.p_on == "string"?eval("("+t.p_on+")"):t.p_on;
+                        }
                         var interactives = [];
                         if(on){
                             on.forEach(function(_on,index){

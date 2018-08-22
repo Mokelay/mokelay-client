@@ -852,8 +852,16 @@
                 let parentTagName = event && event.target.parentElement.tagName||'';
                 let tagType = event&&event.target.getAttribute('type')||'';
                 if(!this.selection){
+                    //单选
                     this.selectArr = row;
                     sessionStorage.setItem(this.alias+'_selection',JSON.stringify(row));
+                    this.$emit("list-select", this.selectArr);
+                }else{
+                    //多选
+                    Object.keys(this.$refs).forEach((val,key)=>{
+                        this.$refs[val].toggleRowSelection(row);
+                    });
+                    sessionStorage.setItem(this.alias+'_selection',JSON.stringify(this.selectArr));
                     this.$emit("list-select", this.selectArr);
                 }
                 if((tagName=='INPUT'&&tagType!='radio'&&tagType!='checkbox') || tagName == 'SELECT'|| parentTagName =='BUTTON'){
