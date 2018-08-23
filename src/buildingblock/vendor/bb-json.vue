@@ -26,7 +26,7 @@
             }, []);
         },
         props: {
-            //json展示data
+            //json展示data  已被下面的ds取代（因为老数据还在，所以不能删）
             data:{
                 type:[Array,Object,String],
                 default:function(){
@@ -60,6 +60,9 @@
         watch: {
             data(val){
                 this.jsonSource = typeof(val)==='string'?JSON.parse(val):val
+            },
+            ds(){
+                this.getJson();
             }
         },
         computed:{
@@ -90,7 +93,12 @@
                 const t = this;
                 if(t.ds){
                     _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
-                        t.jsonSource = typeof map[0].value == 'string'?JSON.parse(map[0].value):map[0].value;
+                        t.ds.type = t.ds.type?t.ds.type:"dynamic";
+                        if(t.ds.type == "dynamic"){
+                            t.jsonSource = typeof map[0].value == 'string'?JSON.parse(map[0].value):map[0].value;
+                        }else{
+                            t.jsonSource = typeof(map)==='string'?JSON.parse(map):map;
+                        }
                     }, function (code, msg) {
                     });
                 } 
