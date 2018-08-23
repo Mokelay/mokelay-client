@@ -31,11 +31,11 @@ export default {
         const t = this;
         t.valueBase = _TY_Tool.tpl(t.valueBase, _TY_Tool.buildTplParams(t));
         if(!t.lazy){
-            t.getPdf();
+            t.getPdf(url);
         }
     },
     methods: {
-        getPdf(){
+        getPdf(url){
             let t=this;
             //引入第三方vant 的dialog组件
             t.showDialog = true;
@@ -45,7 +45,7 @@ export default {
                 var vm = new Vue({
                     render:function (createElement) {
                         const t = this;
-                        return createElement("pdf",{props:{src:t.valueBase}});
+                        return createElement("pdf",{props:{src:url}});
                     },
                     components: {
                         pdf
