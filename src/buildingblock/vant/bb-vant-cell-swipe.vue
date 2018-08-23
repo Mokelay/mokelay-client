@@ -5,7 +5,7 @@ import 'vant/lib/swipe-cell/style';
     export default {
         name: 'bb-vant-cell-swipe',
         components: {
-          "van-cell-swipe":SwipeCell,
+          "van-swipe-cell":SwipeCell,
         },
         props: {
             //左侧滑动区域宽度
