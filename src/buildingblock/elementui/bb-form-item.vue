@@ -31,16 +31,24 @@
                 let mark = t.contentItem['attributes']['mark'];
                 let tipEle = "";
                 let markEle = "";
+                let tipContent="";
                 if(mark){
                     itemClass = itemClass + ' childW80';
                     markEle = createElement('i',{props:{},class:'ty-icon_shuomin mark'});
+                    tipContent = createElement('div',{
+                        slot:'content',
+                        domProps:{
+                            innerHTML:mark
+                        }
+                    },[]);
                 }
                 if(tip){
                     tipEle = createElement('span',{props:{},class:'tip colorCCC f12',attrs:{title:tip}},tip);
                     itemClass = itemClass + ' childW60';
                     markEle = null;
+                    tipContent = null;
                 }
-                const label = createElement('el-tooltip',{props:{content:mark,placement:"top-start"}},[markEle]);
+                const label = createElement('el-tooltip',{props:{placement:"top-start"}},[tipContent,markEle]);
                 formItem = createElement('el-form-item',{
                     class:itemClass,
                     props:{
