@@ -7,8 +7,12 @@
         <bb-dialog :isShow.sync="editVisible" size="large">
             <!-- 添加和编辑弹窗 -->
             <div>
-                <label>模板: </label>
+                <label style="width: 60px;display: inline-block;">模板: </label>
                 <bb-select :fields="templates" @change="templateChange"></bb-select>
+            </div>
+            <div style="margin: 10px 0;">
+                <label style="width: 60px;display: inline-block;">巴斯名称: </label>
+                <bb-input style="width:240px" ref="buzzName"></bb-input>
             </div>
             <div ref="frameBox"></div>
             <span class="bbBottomButtons">
@@ -240,9 +244,10 @@ fun();`
                     //新增
                     const pageAlias = _TY_Root.$route.query.pageAlias||'auto_generate';
                     const buzzAlias = "generate_"+pageAlias+"_"+_TY_Tool.uuid(8);
+                    const buzzName = t.$refs['buzzName'].valueBase||pageAlias+'页巴斯';
                     _TY_Tool.post(_TY_ContentPath+"/add-buzz",{
                         alias:buzzAlias,
-                        name:pageAlias+'页巴斯',
+                        name:buzzName,
                         code:code,
                         description:"生成巴斯",
                         type:'javascript'

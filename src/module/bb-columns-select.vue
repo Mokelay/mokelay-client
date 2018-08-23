@@ -131,8 +131,8 @@
                             pbbId:"buttonType",
                             name: '按钮类型',
                             attributeName: 'buttonType',
-                            hide:true,
-                            show:false,
+                            hide:false,
+                            show:true,
                             et: 'bb-select',
                             props: {
                                 options: [{
@@ -315,7 +315,7 @@
                         }, {
                             pbbId:"dialog",
                             name: '弹窗配置',
-                            show:false,
+                            show:true,
                             attributeName: 'dialog',
                             description:"按钮类型选择弹窗时需要配置此项",
                             hide:true,

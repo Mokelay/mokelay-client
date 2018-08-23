@@ -85,6 +85,12 @@
             value(val){
                 this.formData = val;
             },
+            fieldsDs(val){
+                this.getFields();
+            },
+            dataDS(val){
+                this.getData();
+            }
         },
         created: function () {
             const t = this;
@@ -99,10 +105,15 @@
                 const t = this;
                 if (t.fieldsDs) {
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            const dataKey = val.dataKey
-                            t.realFields = val.value;
-                        })
+                        t.fieldsDs.type = t.fieldsDs.type?t.fieldsDs.type:"dynamic";
+                        if(t.fieldsDs.type==='dynamic'){
+                            map.forEach((val,key)=>{
+                                const dataKey = val.dataKey
+                                t.realFields = val.value;
+                            })
+                        }else{
+                            t.realFields = map;
+                        }
                     }, function (code, msg) {
                     });
                 }
@@ -112,11 +123,18 @@
                 const t = this;
                 if (t.dataDS) {
                     _TY_Tool.getDSData(t.dataDS, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            const dataKey = val.dataKey;
-                            t.formData = val.value;
+                        t.dataDS.type = t.dataDS.type?t.dataDS.type:"dynamic";
+                        if(t.dataDS.type==='dynamic'){
+                            map.forEach((val,key)=>{
+                                const dataKey = val.dataKey;
+                                t.formData = val.value;
+                                t.$emit("afterLoadData",t.formData,t);
+                            })
+                        }else{
+
+                            t.formData = (typeof(map)==='string'?JSON.parse(map):map);
                             t.$emit("afterLoadData",t.formData,t);
-                        })
+                        }
                     }, function (code, msg) {
                     });
                 }
