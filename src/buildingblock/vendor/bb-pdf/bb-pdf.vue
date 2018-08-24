@@ -31,7 +31,7 @@ export default {
         const t = this;
         t.valueBase = _TY_Tool.tpl(t.valueBase, _TY_Tool.buildTplParams(t));
         if(!t.lazy){
-            t.getPdf(url);
+            t.getPdf(t.valueBase);
         }
     },
     methods: {
