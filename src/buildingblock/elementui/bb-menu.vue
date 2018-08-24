@@ -171,22 +171,27 @@
             },
             getData: function () {
                 var t = this;
-                if (this.ds && this.ds.api) {
+                if (this.ds) {
                     Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                         var newArr = [];
-                        map.forEach(function (item) {
-                            var list = item['value']['list'];
-                            for (var i in list) {
-                                var ele = list[i];
-                                let button = {
-                                    title: ele[t.titleField],
-                                    url: ele[t.urlField],
-                                    icon:ele['icon'],
-                                    children:ele['children']
+                        t.ds.type = t.ds.type?t.ds.type:"dynamic";
+                        if(t.ds.type == "dynamic"){
+                            map.forEach(function (item) {
+                                var list = item['value']['list'];
+                                for (var i in list) {
+                                    var ele = list[i];
+                                    let button = {
+                                        title: ele[t.titleField],
+                                        url: ele[t.urlField],
+                                        icon:ele['icon'],
+                                        children:ele['children']
+                                    }
+                                    newArr.push(button);
                                 }
-                                newArr.push(button);
-                            }
-                        });
+                            });
+                        }else{
+                            newArr = map;
+                        }
                         t.shouldUpdate = true;
                         t.items = newArr;
                         //展开父级菜单
