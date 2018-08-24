@@ -69,10 +69,15 @@
                 const t = this;
                 if (t.dataDs) {
                     _TY_Tool.getDSData(t.dataDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            const dataKey = val.dataKey
-                            t[dataKey] = val.value.list;
-                        })
+                        t.dataDs.type = t.dataDs.type?t.dataDs.type:"dynamic";
+                        if(t.dataDs.type == "dynamic"){
+                            map.forEach((val,key)=>{
+                                const dataKey = val.dataKey
+                                t.realData = val.value.list;
+                            });
+                        }else{
+                            t.realData = map;
+                        }
                     }, function (code, msg) {
                     });
                 }
