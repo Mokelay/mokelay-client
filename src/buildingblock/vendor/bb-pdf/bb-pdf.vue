@@ -1,5 +1,5 @@
 <template>
-    <bb-indep-dialog class="bb-pdf" :isShow="showDialog" :closeOnClickOverlay="true" :showConfirmButton="false">
+    <bb-indep-dialog class="bb-pdf" :isShow="showDialog" :closeOnClickOverlay="true" :showConfirmButton="false" :show-cancel-button="false" cancel-button-text="关闭">
         <div v-if="loading" class="spinner">
             <div class="rect1"></div>
             <div class="rect2"></div>
@@ -22,7 +22,7 @@ export default {
         },
         lazy: {
             type: Boolean,
-            default: false
+            default: true
         }
     },
     data () {
@@ -100,6 +100,10 @@ export default {
 </script>
  
 <style lang="less">
+    .bb-pdf-full-screen{
+        width:100vw;
+        height:100vh;
+    }
     .bb-pdf{
         .pdf{
             max-height:90vh;
