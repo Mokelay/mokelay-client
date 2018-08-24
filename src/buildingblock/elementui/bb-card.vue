@@ -63,7 +63,9 @@
                   if (this.ds) {
                       Util.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
                           var newArr = [];
-                          map.forEach(function (item) {
+                          t.ds.type = t.ds.type?t.ds.type:"dynamic";
+                          if(t.ds.type == "dynamic"){
+                              map.forEach(function (item) {
                                   var list = item['value']['list'];
                                   for (var i in list) {
                                       var ele = list[i];
@@ -76,7 +78,10 @@
                                       newArr.push(card);
                                   }
                               });
-                            t.cardFields = newArr;
+                          }else{
+                              newArr = map;
+                          }
+                          t.cardFields = newArr;
                       }, function (code, msg) {
                       });
                   }
