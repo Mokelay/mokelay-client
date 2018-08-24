@@ -249,6 +249,9 @@
           //设置平台
           if(page['platform']){
             t.platform = page['platform'];
+            window._TY_Platform = page['platform'];
+          }else{
+            window._TY_Platform = "PC";
           }
 
           //获取页面信息
