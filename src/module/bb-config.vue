@@ -6,7 +6,7 @@
             <!-- 表单属性 -->
             <bb-form ref="bb-config-form-ad-form" v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <!-- 积木属性 -->
-            <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
+            <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :lazy="false" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form ref="interactive_add_button_form" :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
@@ -86,16 +86,6 @@
                 show:false,
                 _TY_Current_Edit_Item:null,
                 showBBSelect:true,
-                // bbFieldsDs: {
-                //      "api": "list-bb",
-                //      "category": "config",
-                //      "method": "post",
-                //      "inputs": [],
-                //      "outputs": [{
-                //          "dataKey": "fields",
-                //          "valueKey": "data_list"
-                //     }]
-                // },
                 bbFieldsDs:{
                     "api": "list-bb-by-pageAlias",
                     "category": "config",
@@ -112,7 +102,7 @@
                 },
                 formItemFieldsBase:null,
                 formItemFields:null,
-                layoutContent:null
+                layoutContent:null,
             }
         },
         watch: {
@@ -121,9 +111,6 @@
             let t=this;
             this.getConfigEnv();
             this.key = _TY_Tool.uuid();
-            this.getBBInfo().then(()=>{
-                t.setEditor();
-            })
         },
         mounted:function(){
 
@@ -136,42 +123,32 @@
                     if(!t.alias){
                         resolve();
                     }
-                    if(_TY_Root._TY_BBInfo&&_TY_Root._TY_BBInfo[t.alias]){
-                         t.bbInfo = _TY_Root._TY_BBInfo[t.alias];
-                         resolve();
-                    }else{
-                        _TY_Tool.post(_TY_ContentPath+"/read-bb",{
+                    _TY_Tool.post(_TY_ContentPath+"/read-bb",{
                             bbAlias:t.alias
                         }).then(function (response) {
-                                let data = response['data'];
-                                if(data.ok){
-                                    t.bbInfo = data.data.data;
-                                    if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
-                                        let tempOn = t.bbInfo.on;
-                                        const _arg = tempOn.match(/`[^]*?`/gi)
-                                        if(_arg&&_arg.length>0){
-                                            tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
-                                        }
-                                        t.bbInfo.on = JSON.parse(tempOn);
-                                        if(_arg&&_arg.length>0){
-                                            t.bbInfo.on.forEach((item,index)=>{
-                                                item['executeArgument'] = eval(_arg[index]);
-                                            });
-                                        }
+                            let data = response['data'];
+                            if(data.ok){
+                                t.bbInfo = data.data.data;
+                                if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
+                                    let tempOn = t.bbInfo.on;
+                                    const _arg = tempOn.match(/`[^]*?`/gi)
+                                    if(_arg&&_arg.length>0){
+                                        tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
                                     }
-                                    if(!_TY_Root._TY_BBInfo){
-                                        _TY_Root._TY_BBInfo = {};
+                                    t.bbInfo.on = JSON.parse(tempOn);
+                                    if(_arg&&_arg.length>0){
+                                        t.bbInfo.on.forEach((item,index)=>{
+                                            item['executeArgument'] = eval(_arg[index]);
+                                        });
                                     }
-                                    //放到全局变量里面去
-                                    _TY_Root._TY_BBInfo[t.alias] = _TY_Tool.deepClone(t.bbInfo);
-                                    resolve();
-                                }else{
-                                    reject()
                                 }
+                                resolve(data);
+                            }else{
+                                reject()
+                            }
                         }).catch(function (error) {
                             reject()
                         });
-                    }
                 });
             },
             //载入当前积木的编辑内容
@@ -182,13 +159,16 @@
                     return;
                 }
                 t.show = true;
+                t.showAttributes = false;
                 t.valueBase = content;
                 t.alias = content.alias;
                 t.key = _TY_Tool.uuid();
+                t.setEditor();
                 //选获取积木详情，获取交互
-                t.getBBInfo().then(()=>{
-                    t.setEditor();
-                })
+                
+                // t.getBBInfo().then(()=>{
+                //     t.setEditor();
+                // })
             },
             //添加交互
             interactiveAdd:function(row){
@@ -278,6 +258,9 @@
             },
             setEditor:function(){
                 const t = this;
+                setTimeout(()=>{
+                    t.getBBInfo()
+                },0);
                 t.tabs = [{
                     type:'static',
                     label:'属性',
@@ -294,6 +277,7 @@
                 t.activeName = 'attributes';
                 //属性配置
                 t.attributesDs = {
+                    uuid:_TY_Tool.uuid(),
                     api:'list-adByBbAlias-online',method:'get',category:'config',inputs: [{paramName: 'bbAlias', valueType: "template", variable: t.alias}],outputs:[{dataKey: 'tableData', valueKey: 'data_list.list',handle:'bb-config-ad-fill-uuid'}]
                 };
                 t.$set(t.attributesDs,'inputs',[{paramName: 'bbAlias', valueType: "template", variable: t.alias}])
@@ -936,6 +920,7 @@
                             }
                         }];
             }
+            
         }
     }
 </script>
