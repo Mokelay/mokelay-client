@@ -72,7 +72,9 @@
             }
         },
         watch: {
-            
+            ds(val){
+                this.loadData();
+            }
         },
         created: function () {
             let t=this;
@@ -90,11 +92,16 @@
                 let t=this;
                 if(t.ds){
                     _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
-                        if(map&&map.length>0&&map[0]&&map[0].value){
-                            t.p_options = map[0].value;
-                            if(t.p_options.hasOwnProperty("list")){
-                                t.p_options = t.p_options.list;
+                        t.ds.type = t.ds.type?t.ds.type:"dynamic";
+                        if(t.ds.type == "dynamic"){
+                            if(map&&map.length>0&&map[0]&&map[0].value){
+                                t.p_options = map[0].value;
+                                if(t.p_options.hasOwnProperty("list")){
+                                    t.p_options = t.p_options.list;
+                                }
                             }
+                        }else{
+                            t.p_options = map;
                         }
                     }, function (code, msg) {
                         t.$message({
