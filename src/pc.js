@@ -36,6 +36,9 @@ import 'animate.css/animate.min.css'
 //引入移动端手势组件
 import './libs/touch.js'
 
+//引入移动端 rem组件
+import './libs/flexble.js'
+
 
 let ty = {
 	install: function(Vue) {
