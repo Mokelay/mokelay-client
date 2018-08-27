@@ -84,6 +84,11 @@ import 'vant/lib/tag/style';
                 cssbuild:_TY_Tool.setSimpleStyle//模板中需要用到
             };
         },
+        watch:{
+            tagDs(val){
+                this.getData();
+            }
+        },
         created:function(){
             let t=this;
             t.getData();
@@ -101,21 +106,26 @@ import 'vant/lib/tag/style';
                 const t = this;
                 if (t.tagDs) {
                     _TY_Tool.getDSData(t.tagDs, _TY_Tool.buildTplParams(t), function (data) {
-                        data.forEach((item) => {
-                            var _list = [];
-                            if(item['valueKey'].split('.').length > 1){//支持定制接口
-                                _list = item['value']
-                            }else{
-                                if(item['value']&&item['value']['currentRecords']){
-                                    _list = item['value']['currentRecords'];
-                                }else if(item['value']&&item['value']['list']){
-                                    _list = item['value']['list'];    
+                         t.tagDs.type = t.tagDs.type?t.tagDs.type:"dynamic";
+                        if(t.tagDs.type == "dynamic"){
+                            data.forEach((item) => {
+                                var _list = [];
+                                if(item['valueKey'].split('.').length > 1){//支持定制接口
+                                    _list = item['value']
                                 }else{
-                                    _list = item['value'];
+                                    if(item['value']&&item['value']['currentRecords']){
+                                        _list = item['value']['currentRecords'];
+                                    }else if(item['value']&&item['value']['list']){
+                                        _list = item['value']['list'];    
+                                    }else{
+                                        _list = item['value'];
+                                    }
                                 }
-                            }
-                            t.valueBase = _list;
-                        });
+                                t.valueBase = _list;
+                            });
+                        }else{
+                            t.valueBase = data;
+                        }
                     }, function (code, msg) {
                     });
                 }

@@ -165,7 +165,7 @@ import 'vant/lib/cell/style';
                                 t.realContent = value;
                             });
                         }else{
-                            t.realContent = map;
+                            t.realContent = data;
                         }
                     }, function (code, msg) {
                         t.loading = false;
