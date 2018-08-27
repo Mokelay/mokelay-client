@@ -92,10 +92,16 @@
                 const t = this;
                 if (t.suggestionsDs) {
                     _TY_Tool.getDSData(t.suggestionsDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            t.suggestionsBase = val.value.list;
+                        t.suggestionsDs.type = t.suggestionsDs.type?t.suggestionsDs.type:"dynamic";
+                        if(t.suggestionsDs.type == "dynamic"){
+                            map.forEach((val,key)=>{
+                                t.suggestionsBase = val.value.list;
+                                t.getResults(queryString,cb);
+                            })
+                        }else{
+                            t.suggestionsBase = map;
                             t.getResults(queryString,cb);
-                        })
+                        }
                     }, function (code, msg) {
                     });
                 }
