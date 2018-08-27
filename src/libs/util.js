@@ -214,7 +214,7 @@ bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds,
 **/
 util.getDSData = function(ds, inputValueObj, success, error) {
     var type = ds['type'] || "dynamic";
-    if(type == "static"){
+    if (type == "static") {
         success(ds['data']);
         return;
     }
@@ -1328,9 +1328,10 @@ util.reloadJS = function(url) {
 //判断当前环境是否是 pc 环境,区分移动端还是pc端
 util.isPC = function() {
     var userAgentInfo = navigator.userAgent;
+    //"iPad", 去除ipad ,ipad 用pc显示
     var Agents = ["Android", "iPhone",
         "SymbianOS", "Windows Phone",
-        "iPad", "iPod"
+        "iPod"
     ];
     var flag = true;
     for (var v = 0; v < Agents.length; v++) {
