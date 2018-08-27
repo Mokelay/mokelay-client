@@ -185,14 +185,23 @@
                 if (t.fieldsDs) {
                     _TY_Tool.getDSData(t.fieldsDs, {"bb": t, "router": t.$route.params}, 
                         function (map) {
-                            map.forEach((val,key)=>{
-                                const dataKey = val.dataKey
-                                t.realFields = val.value.list;
+                            t.fieldsDs.type = t.fieldsDs.type?t.fieldsDs.type:"dynamic";
+                            if(t.fieldsDs.type == "dynamic"){
+                                map.forEach((val,key)=>{
+                                    const dataKey = val.dataKey
+                                    t.realFields = val.value.list;
+                                    //触发积木更新
+                                    if(t.realFields){
+                                        t.setRealFields();
+                                    }
+                                });
+                            }else{
+                                t.realFields = map;
                                 //触发积木更新
                                 if(t.realFields){
                                     t.setRealFields();
                                 }
-                            })
+                            }
                         }, function (code, msg) {
                     });
                 }

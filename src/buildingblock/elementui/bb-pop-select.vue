@@ -185,10 +185,11 @@
             },
             //清空
             clean:function(){
-                this.showText = null;
-                this.$emit('input',null);
-                this.$emit('change',null);
-                this.$emit('clean',null);
+                this.showText = "";
+                this.selectRow = null;
+                this.$emit('input',"");
+                this.$emit('change',"");
+                this.$emit('clean',"");
             },
             //选择取消
             cancel:function(){

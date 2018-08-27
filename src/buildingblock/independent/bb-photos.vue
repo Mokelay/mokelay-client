@@ -107,15 +107,30 @@
                 const t = this;
                 if (t.fieldsDs) {
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            const dataKey = val.dataKey
-                            t.realFields = val.value.list;
+                        t.fieldsDs.type = t.fieldsDs.type?t.fieldsDs.type:"dynamic";
+                        if(t.fieldsDs.type == "dynamic"){
+                            map.forEach((val,key)=>{
+                                const dataKey = val.dataKey
+                                t.realFields = val.value.list;
+                                t.setListItemWidth();
+                                //触发积木更新
+                                if(t.realFields){
+                                    t.setShow();
+                                }
+                            })
+                        }else{
+                            t.realFields = map;
                             t.setListItemWidth();
                             //触发积木更新
                             if(t.realFields){
                                 t.setShow();
                             }
-                        })
+                        }
+
+
+
+
+
                     }, function (code, msg) {
                     });
                 }

@@ -105,10 +105,15 @@
                 if (t.readDs) {
                     _TY_Tool.getDSData(t.readDs, _TY_Tool.buildTplParams(t), 
                         function (map) {
-                            map.forEach((val,key)=>{
-                                const dataKey = val.dataKey
-                                t[dataKey] = val.value;
-                            })
+                            t.readDs.type = t.readDs.type?t.readDs.type:"dynamic";
+                            if(t.readDs.type == "dynamic"){
+                                map.forEach((val,key)=>{
+                                    const dataKey = val.dataKey
+                                    t.valueBase = val.value;
+                                })
+                            }else{
+                                t.valueBase = _TY_Tool.tpl(map,t);
+                            }
                         }, function (code, msg) {
                     });
                 }
