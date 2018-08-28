@@ -157,11 +157,17 @@
                 const t = this;
                 if (t.fieldsDs) {
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            const dataKey = val.dataKey
-                            t.realFields = t.realFields.concat(val.value);
+                        t.fieldsDs.type = t.fieldsDs.type?t.fieldsDs.type:"dynamic";
+                        if(t.fieldsDs.type == "dynamic"){
+                            map.forEach((val,key)=>{
+                                const dataKey = val.dataKey
+                                t.realFields = t.realFields.concat(val.value);
+                                t.setRealFields();
+                            })
+                        }else{
+                            t.realFields = map;
                             t.setRealFields();
-                        })
+                        }
                     }, function (code, msg) {
                     });
                 }
