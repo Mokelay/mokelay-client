@@ -118,6 +118,14 @@
             hidePanel:{
                 type:Boolean,
                 default:false
+            },
+            //文本对应的接口变量名
+            textProp:{
+                type:String
+            },
+            //值对应的接口变量名
+            valueProp:{
+                type:String
             }
         },
         data() {
@@ -218,12 +226,14 @@
                                 icon:tab.icon
                             });
                         }else if(tab.type==='dynamic'){
+                            const textKey = t.textProp||'text';
+                            const valueKey = t.valueProp||'value';
                             const item = new Promise((resolve, reject) => {
                                 _TY_Tool.getDSData(tab.ds, _TY_Tool.buildTplParams(t), function (map) {
                                     map[0].value.forEach((item, key)=> {
                                         t.realTabs.push({
-                                            label: item.text,
-                                            name: item.value,
+                                            label: item[textKey],
+                                            name: item[valueKey],
                                             group: tab.name,
                                             icon: item.icon
                                         })
