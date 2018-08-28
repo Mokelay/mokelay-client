@@ -82,6 +82,11 @@ import 'vant/lib/swipe/style';
                 valueBase:typeof this.images == 'string'?JSON.parse(this.images):this.images,
             };
         },
+        watch:{
+            imageDs(val){
+                this.getData();
+            }
+        },
         mounted(){
             this.getData();
         },
@@ -96,24 +101,29 @@ import 'vant/lib/swipe/style';
                 const t = this;
                 if (t.imageDs) {
                     _TY_Tool.getDSData(t.imageDs, _TY_Tool.buildTplParams(t), function (data) {
-                        data.forEach((item) => {
-                            let _list = [];
-                            if(item['value']&&item['value']['currentRecords']){
-                                _list = item['value']['currentRecords'];
-                                const totalPage = item['value']['totalPages'];
-                                if(t.page>=totalPage){
-                                    t.end=true;
+                        t.imageDs.type = t.imageDs.type?t.imageDs.type:"dynamic";
+                        if(t.imageDs.type == "dynamic"){
+                            data.forEach((item) => {
+                                let _list = [];
+                                if(item['value']&&item['value']['currentRecords']){
+                                    _list = item['value']['currentRecords'];
+                                    const totalPage = item['value']['totalPages'];
+                                    if(t.page>=totalPage){
+                                        t.end=true;
+                                    }else{
+                                        t.end=false;
+                                    }
+                                }else if(item['value']&&item['value']['list']){
+                                    _list = item['value']['list'];    
                                 }else{
-                                    t.end=false;
+                                    _list = item['value'];
                                 }
-                            }else if(item['value']&&item['value']['list']){
-                                _list = item['value']['list'];    
-                            }else{
-                                _list = item['value'];
-                            }
-                            let newValue = t.transferData(_list);
-                            t.valueBase = newValue;
-                        });
+                                let newValue = t.transferData(_list);
+                                t.valueBase = newValue;
+                            });
+                        }else{
+                            t.valueBase=data;
+                        }
                     }, function (code, msg) {
                     });
                 }

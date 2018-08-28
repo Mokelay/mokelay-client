@@ -1,7 +1,5 @@
 <template>
-    <div class="bb-hyperlink">
         <a :href="hrefV" :title="hoverContent" :style="styleObject" >{{contentV}}</a>
-    </div>
 </template>
 
 <script>
@@ -19,10 +17,6 @@
             // 鼠标移入展示内容
             hoverContent:{
                 type: String
-            },
-            // 超链接颜色
-            hyperlinkColor:{
-                type: String
             }
         },
         data() {
@@ -30,7 +24,6 @@
                 contentV: this.contentValue || '请输入内容',
                 hrefV: this.hrefValue,
                 styleObject: {
-                    'color': this.hyperlinkColor || '',
                     'text-decoration': 'none'
                 }
             }

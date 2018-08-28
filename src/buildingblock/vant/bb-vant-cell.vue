@@ -109,6 +109,9 @@ import 'vant/lib/cell/style';
         watch:{
             value(val){
                 this.valueBase = val;
+            },
+            contentDs(val){
+                this.getData();
             }
         },
         render: function(createElement){
@@ -154,11 +157,16 @@ import 'vant/lib/cell/style';
                 if (t.contentDs) {
                     t.loading = true;
                     _TY_Tool.getDSData(t.contentDs, _TY_Tool.buildTplParams(t), function (data) {
-                        data.forEach((item) => {
-                            t.loading = false;
-                            const {dataKey, value} = item;
-                            t.realContent = value;
-                        });
+                        t.contentDs.type = t.contentDs.type?t.contentDs.type:"dynamic";
+                        if(t.contentDs.type == "dynamic"){
+                            data.forEach((item) => {
+                                t.loading = false;
+                                const {dataKey, value} = item;
+                                t.realContent = value;
+                            });
+                        }else{
+                            t.realContent = data;
+                        }
                     }, function (code, msg) {
                         t.loading = false;
                     });

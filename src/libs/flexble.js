@@ -17,6 +17,8 @@
     var rem = docEl.clientWidth / 10
     if (window._TY_Platform && window._TY_Platform == 'PC') {
       docEl.style.fontSize = '28px'
+    } else if (_TY_Tool && _TY_Tool.isPC()) {
+      docEl.style.fontSize = '28px'
     } else {
       docEl.style.fontSize = rem + 'px'
     }

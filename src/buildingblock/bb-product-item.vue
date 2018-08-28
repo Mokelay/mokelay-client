@@ -1,6 +1,6 @@
 <template>
     <div :class="group?'bb-product-item-group':''" id="bb-product-item-group" ref="bb-product-item-group">
-        <div class="bb-product-item" v-for="(ele,key) in valueBase" v-if="ele" :key="key" @click="goUrl.bind(null,ele)()" ref="key">
+        <div class="bb-product-item clearfix" v-for="(ele,key) in valueBase" v-if="ele" :key="key" @click="goUrl.bind(null,ele)()" ref="key">
             <el-button icon="ty-icon_tuichu" class="delete" type="text" @click="removeItem.bind(null,{type:'custom',arguments:key})()"></el-button>
             <img :src="ele.img" :class="styleType == 'horizontal'?'horizontal':'vertical'">
             <span class="title">{{ele.title}}</span>
@@ -51,6 +51,9 @@
             }
         },
         watch: {
+            ds(val){
+                this.getData();
+            }
         },
         created: function () {
             this.getData();
@@ -61,11 +64,16 @@
             //动态获取数据
             getData: function () {
                 const t = this;
-                if (t.dataDs) {
-                    _TY_Tool.getDSData(t.dataDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
-                            t.valueBase = val.value;
-                        })
+                if (t.ds) {
+                    _TY_Tool.getDSData(t.ds, _TY_Tool.buildTplParams(t), function (map) {
+                        t.ds.type = t.ds.type?t.ds.type:"dynamic";
+                        if(t.ds.type == "dynamic"){
+                            map.forEach((val,key)=>{
+                                t.valueBase = val.value;
+                            })
+                        }else{
+                            t.valueBase = map;
+                        }
                     }, function (code, msg) {
                     });
                 }
