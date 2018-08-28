@@ -98,7 +98,7 @@
         },
         data() {
             return {
-                list:typeof(this.staticList)==='string'?eval('('+this.staticList+')'):this.staticList,
+                list:this.transferList(this.staticList),
                 external:{},
                 pageSize:this.pageConfig.pageSize,
                 page: this.pageConfig.page,
@@ -128,6 +128,24 @@
             t.$emit("mounted",t);
         },
         methods: {
+            transferList:function(val){
+                let t=this;
+                let result = [];
+                if(val){
+                    if(typeof(val)==='string'){
+                        try{
+                            result = JSON.parse(val);
+                        }catch(e){
+                            try{
+                                result = eval('('+this.staticList+')');
+                            }catch(e2){
+
+                            }
+                        }
+                    }
+                }
+                return result;
+            },
             //根据主题，修改 内容模板itemContent
             changeContentByTheme:function(){
                 let t=this;
