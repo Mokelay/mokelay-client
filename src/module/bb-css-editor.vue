@@ -82,11 +82,51 @@
                 //样式表单设置
                 t.layoutContent = [{                      
                     uuid:'layout_14',
-                    alias:'bb-input',                   
+                    alias:'bb-button-media',                   
                     aliasName:'背景图地址',                                 
                     attributes:{
                         attributeName:'bgUrl',
                         show:true,
+                        mediaDs: {
+                            api: "ty_page_file_storage",
+                            outputs: [
+                                {
+                                    dataKey: "tableData",
+                                    handle: "ty_oss_storage_transfer_to_media_list",
+                                    valueKey: "page_data"
+                                }
+                            ],
+                            inputs: [
+                                {
+                                    paramName: "pageSize",
+                                    variable: "<%=bb.pageSize%>",
+                                    valueType: "template"
+                                },
+                                {
+                                    paramName: "page",
+                                    variable: "<%=bb.page%>",
+                                    valueType: "template"
+                                },
+                                {
+                                    paramName: "oiAlias",
+                                    variable: "ty-storage",
+                                    valueType: "template"
+                                }
+                            ],
+                            category: "config",
+                            method: "GET",
+                            url: null
+                        },
+                        pageSize: 20,
+                        uploadDs: {
+                            api: "ty_oss_upload",
+                            inputs: [
+                                
+                            ],
+                            category: "config",
+                            method: "POST",
+                            url: null
+                        }
                     },
                     interactives:[],
                 },{                      
@@ -136,7 +176,7 @@
                     interactives:[],
                 },{                      
                     uuid:'layout_17',
-                    alias:'bb-input',                   
+                    alias:'bb-input-unit',                   
                     aliasName:'背景图起始位置',                                 
                     attributes:{
                         attributeName:'bgPosition',
@@ -145,7 +185,7 @@
                     interactives:[],
                 },{                      
                     uuid:'layout_18',
-                    alias:'bb-input',                   
+                    alias:'bb-input-unit',                   
                     aliasName:'背景图尺寸',                                 
                     attributes:{
                         attributeName:'bgSize',
@@ -154,8 +194,8 @@
                     interactives:[],
                 },{                      
                     uuid:'layout_19',
-                    alias:'bb-input',                   
-                    aliasName:'背景图固定或者随着页面的其余部分滚动',                                 
+                    alias:'bb-select',                   
+                    aliasName:'背景图滚动',                                 
                     attributes:{
                         attributeName:'bgAttachment',
                         show:true,
@@ -261,7 +301,7 @@
                         size:"mini",
                         content:[{                      
                             uuid:'layout_04_01',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'宽度',                                  
                             attributes:{
                                 width:"95%",
@@ -270,7 +310,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_04_02',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'高度',                                  
                             attributes:{
                                 width:"95%",
@@ -291,7 +331,7 @@
                         size:"mini",
                         content:[{                      
                             uuid:'layout_05_01',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'横坐标',                                  
                             attributes:{
                                 width:"95%",
@@ -300,7 +340,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_05_02',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'纵坐标',                                  
                             attributes:{
                                 width:"95%",
@@ -345,7 +385,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_03',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'圆角',                                  
                             attributes:{
                                 width:"95%",
@@ -354,7 +394,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_04',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'内边距',                                  
                             attributes:{
                                 width:"95%",
@@ -363,7 +403,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_05',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'外边距',                                  
                             attributes:{
                                 width:"95%",
@@ -372,7 +412,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_06',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'粗细',                                  
                             attributes:{
                                 width:"95%",
@@ -402,7 +442,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_07_02',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'阴影大小',                                  
                             attributes:{
                                 width:"95%",
@@ -411,7 +451,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_07_03',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'阴影方向',                                  
                             attributes:{
                                 width:"95%",
@@ -420,7 +460,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_07_04',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'阴影模糊',                                  
                             attributes:{
                                 width:"95%",
@@ -475,7 +515,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_08_03',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'字体大小',                                  
                             attributes:{
                                 width:"95%",
@@ -484,7 +524,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_08_06',
-                            alias:'bb-input',                   
+                            alias:'bb-input-unit',                   
                             aliasName:'字体行高',                                  
                             attributes:{
                                 width:"95%",

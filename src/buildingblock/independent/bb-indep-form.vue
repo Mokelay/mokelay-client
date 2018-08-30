@@ -136,6 +136,23 @@
             commitDs:{
                 type:Object
             },
+            //其他属性设置
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        itemStyle:{
+                            display:"block"
+                        },
+                        labelStyle:{
+                            size:{
+                                width:"80px"
+                            }
+                            
+                        }
+                    }
+                }
+            }
         },
         data() {
             return {
@@ -171,6 +188,12 @@
             renderContent(createElement){
                 const t = this;
                 let newContent = [];
+                //不分组的表单项
+                let normalItems = [];
+                //分组的表单项
+                let groups = {};
+                //最终返回的实例化对象数组
+                let bbList = [];
                 t.realContent.forEach((ele,key)=>{
                     const content = _TY_Tool.deepClone(ele);
                     //每个formItem 都有一个 input事件，实现v-model
@@ -185,9 +208,43 @@
                     const attributeName = content["attributes"]["attributeName"];
                     //给表单项赋值
                     content["attributes"]["value"] = t.formData[attributeName];
-                    newContent.push(content);
+                    const itemStyle = _TY_Tool.setStyle({layout:t.option.itemStyle},t)
+                    const labelStyle = _TY_Tool.setStyle({layout:t.option.labelStyle},t)
+
+                    const label = createElement("span",{style:labelStyle},[content.aliasName]);
+                    const formEditor = _TY_Tool.bbRender([content], createElement, t);
+                    const formItem = createElement("span",{style:itemStyle},[label,formEditor]);
+                    if(content['group']){
+                        const groupName = content['group'];
+                        if(groups[groupName]){
+                            groups[groupName].push(formItem);
+                        }else{
+                            groups[groupName] = [];
+                            groups[groupName].push(formItem);
+                        }
+                    }else{
+                        normalItems.push(formItem);
+                    }
+                    //newContent.push(content);
                 });
-                const bbList = _TY_Tool.bbRender(newContent, createElement, t);
+                bbList.concat(normalItems);
+                Object.keys(groups).forEach((key,index)=>{
+                    debugger
+                    var key_contents = createElement('el-collapse-item',{
+                        props:{
+                            title:key,
+                            name:index
+                        },
+                    },groups[key]);
+                    var group_content = createElement('el-collapse',{
+                        props:{
+                            title:key,
+                            name:index
+                        },
+                    },[key_contents]);
+                    bbList.push(group_content);
+                })
+                // const normalEles = _TY_Tool.bbRender(normalItems, createElement, t);
                 return bbList
             },
             //动态获取卡片内容
