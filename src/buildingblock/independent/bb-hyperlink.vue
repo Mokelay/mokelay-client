@@ -1,5 +1,5 @@
 <template>
-        <a :href="hrefV" :title="hoverContent" :style="styleObject" >{{contentV}}</a>
+        <a :href="hrefV" @click="aClick" :title="hoverContent" :style="styleObject" >{{contentV}}</a>
 </template>
 
 <script>
@@ -49,8 +49,12 @@
                     if(val.type == 'custom' && val.arguments){
                         t.contentV = val.arguments.text;
                         t.hrefV = val.arguments.href;
-                    }  
+                    }
                 })
+            },
+            aClick:function(){
+                let t=this;
+                t.$emit("click",t);
             }
         }
     }

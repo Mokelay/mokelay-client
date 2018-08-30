@@ -416,7 +416,8 @@
             if(response.data.ok){
                 //初始化新增加的积木
                 const newBB = {
-                    uuid:_TY_Tool.uuid(),
+                    uuid:_TY_Tool.uuid(16),
+                    type:response.data.data.data.type,
                     alias:bbAlias,
                     aliasName:bbName,
                     attributes:{},
@@ -456,7 +457,7 @@
       //完成编辑的积木数据回填
       afterEdit:function(contentItem){
           const t = this;
-          t.key = _TY_Tool.uuid();
+          t.key = _TY_Tool.uuid(16);
           const newContent = t.content;
           contentItem.onFocus = true;
           t.$set(newContent,t.nowEdit,contentItem);
@@ -482,7 +483,7 @@
       //积木数据发生变动
       change:function(content){
         const t = this;
-        t.key = _TY_Tool.uuid();
+        t.key = _TY_Tool.uuid(16);
         t.content = content;
         t.$emit('change',t.content);
       },

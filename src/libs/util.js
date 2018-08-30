@@ -843,7 +843,7 @@ util.loadBuzz = function(buzz, handle) {
         }
     }).catch(function(err) {
         console.log(err);
-    });;
+    });
 }
 
 /**
