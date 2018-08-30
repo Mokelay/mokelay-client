@@ -836,8 +836,8 @@
                     if(key==t.activeSelectedIndex){
                         t.rowClick(item);
                         if(!this.selection){
-                            t.selectArr = row;
-                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(row));
+                            t.selectArr = item;
+                            sessionStorage.setItem(t.alias+'_selection',JSON.stringify(item));
                             this.$emit("list-select", t.selectArr);
                         }
                         this.$emit("rowClick", item);
