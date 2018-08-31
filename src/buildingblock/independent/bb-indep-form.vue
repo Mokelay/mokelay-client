@@ -1,4 +1,5 @@
 <script>
+    import AsyncValidator from 'async-validator';
     export default {
         name: 'bb-indep-form',
         components: {
@@ -142,40 +143,56 @@
                 default:function(){
                     return {
                         itemStyle:{
-                            display:"block"
+                            display:"block",
+                            border:{                //边框
+                                margin:"5px 0"           //外边距
+                            },
                         },
                         labelStyle:{
+                            display: "inline-block",
                             size:{
                                 width:"80px"
+                            } 
+                        },
+                        messageStyle:{
+                            border:{
+                                margin:"0 5px"
+                            },
+                            font:{
+                                size:"12px",
+                                color:"#f56c6c",
                             }
-                            
                         }
-                    }
+                    };
                 }
             }
         },
         data() {
             return {
                 formData:this.value || {},
-                realContent:this.content
+                realContent:this.content,
+                //验证信息
+                validateMessageObj:{},
+                shouldRender:true
             };
         },
         render: function(createElement){
             const t = this;
             const bbList = t.renderContent(createElement);
-            return createElement('form',{props:{},attrs:{action:''}},bbList);
+            return createElement('form',{props:{},attrs:{action:''},class:"bb-indep-form"},bbList);
         },
         computed:{
         },
         watch: {
-           
+            validateMessageObj(){
+            },
         },
         created: function () {
-            let t=this;
+            let t = this;
             t.getData();
         },
         mounted:function(){
-            let t=this;
+            let t = this;
             t.$emit("mounted",t);
         },
         methods: {
@@ -187,6 +204,7 @@
             },
             renderContent(createElement){
                 const t = this;
+                t.shouldRender = false;
                 let newContent = [];
                 //不分组的表单项
                 let normalItems = [];
@@ -196,6 +214,9 @@
                 let bbList = [];
                 t.realContent.forEach((ele,key)=>{
                     const content = _TY_Tool.deepClone(ele);
+                    if(!content.attributes.show){
+                        return true;
+                    }
                     //每个formItem 都有一个 input事件，实现v-model
                     const FormItemInteractive = {
                         uuid:_TY_Tool.uuid(),
@@ -203,17 +224,43 @@
                         executeType:'container_method',         //执行类型(预定义方法 trigger_method,
                         containerMethodName:'defaultVmodel'
                     };
+                    //onBlur表单验证
+                    const blurValidate = {
+                        uuid:_TY_Tool.uuid(),
+                        fromContentEvent:'blur',
+                        executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                        containerMethodName:'blurValidate'
+                    };
+                    //onchange表单验证
+                    const changeValidate = {
+                        uuid:_TY_Tool.uuid(),
+                        fromContentEvent:'change',
+                        executeType:'container_method',         //执行类型(预定义方法 trigger_method,
+                        containerMethodName:'changeValidate'
+                    };
                     content["interactives"] = content["interactives"]?content["interactives"].concat([FormItemInteractive]):[FormItemInteractive];
+                    content["interactives"].push(blurValidate);
+                    content["interactives"].push(changeValidate);
                     //对应字段名称
                     const attributeName = content["attributes"]["attributeName"];
                     //给表单项赋值
                     content["attributes"]["value"] = t.formData[attributeName];
-                    const itemStyle = _TY_Tool.setStyle({layout:t.option.itemStyle},t)
-                    const labelStyle = _TY_Tool.setStyle({layout:t.option.labelStyle},t)
+                    const itemStyle = _TY_Tool.setStyle({layout:t.option.itemStyle},t);
+                    const labelStyle = _TY_Tool.setStyle({layout:t.option.labelStyle},t);
+                    const messageStyle = _TY_Tool.setStyle({layout:t.option.messageStyle},t);
 
-                    const label = createElement("span",{style:labelStyle},[content.aliasName]);
+                    const rules = content.attributes.rules;
+                    let required = false;
+                    if(rules && rules.length){
+                        rules.forEach((rule,index)=>{
+                            required = rule.required
+                        })
+                    }
+                    const label = createElement("span",{style:labelStyle,class:required?"form-item__label":""},[content.aliasName]);
+                    const validateMessage = createElement("span",{style:messageStyle},[t.validateMessageObj[content.attributes.attributeName]]);
+
                     const formEditor = _TY_Tool.bbRender([content], createElement, t);
-                    const formItem = createElement("span",{style:itemStyle},[label,formEditor]);
+                    const formItem = createElement("span",{style:itemStyle},[label,formEditor,validateMessage]);
                     if(content['group']){
                         const groupName = content['group'];
                         if(groups[groupName]){
@@ -229,7 +276,6 @@
                 });
                 bbList.concat(normalItems);
                 Object.keys(groups).forEach((key,index)=>{
-                    debugger
                     var key_contents = createElement('el-collapse-item',{
                         props:{
                             title:key,
@@ -243,9 +289,9 @@
                         },
                     },[key_contents]);
                     bbList.push(group_content);
-                })
+                });
                 // const normalEles = _TY_Tool.bbRender(normalItems, createElement, t);
-                return bbList
+                return bbList;
             },
             //动态获取卡片内容
             getData(){
@@ -291,6 +337,7 @@
                     if(param.alias){
                         const attributeName = param.attributes.attributeName;
                         t.formData[attributeName] = val
+                        t.validate("input",attributeName)
                     }
                 })
                 this.$emit('input',t.formData);
@@ -320,11 +367,141 @@
                     this.getData();
                 }
             },
-
+            //表单验证
+            validate(trigger,attributeName,callback = function(){}) {
+                const t = this;
+                this.validateDisabled = false;
+                var rules = this.getFilteredRule(trigger,attributeName);
+                if ((!rules || rules.length === 0) && this.required === undefined) {
+                    callback();
+                    return true;
+                }
+                this.validateState = 'validating';
+                var descriptor = {};
+                if (rules && rules.length > 0) {
+                    rules.forEach(rule => {
+                        delete rule.trigger;
+                    });
+                }
+                descriptor[attributeName] = rules;
+                var validator = new AsyncValidator(descriptor);
+                var model = {};
+                model[attributeName] = t.formData[attributeName] || null;
+                validator.validate(model, { firstFields: true }, (errors, fields) => {
+                    var itemName = attributeName
+                    t.validateMessageObj[itemName] = errors ? errors[0].message : '';
+                    t.validateMessageObj = Object.assign({},t.validateMessageObj);
+                    callback(t.validateMessageObj[itemName]);
+                });
+              },
+            clearValidate() {
+                this.validateState = '';
+                this.validateMessage = '';
+                this.validateDisabled = false;
+            },
+            getRules(attributeName) {
+                var selfRules = [];
+                this.realContent.forEach((content,key)=>{
+                    if(content.attributes.attributeName == attributeName){
+                        selfRules = content.attributes.rules || [];
+                    }
+                });
+                return [].concat(selfRules);
+            },
+            getFilteredRule(trigger,attributeName) {
+                var rules = this.getRules(attributeName);
+                return rules.filter(rule => {
+                    return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
+                });
+            },
+            blurValidate(val,...params) {
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.alias){
+                        const attributeName = param.attributes.attributeName;
+                        t.formData[attributeName] = val
+                        t.validate("blur",attributeName)
+                    }
+                })
+            },
+            changeValidate(val,...params) {
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.alias){
+                        const attributeName = param.attributes.attributeName;
+                        t.formData[attributeName] = val;
+                        t.validate("change",attributeName)
+                    }
+                })
+            },
+            //整个表单校验
+            validateAllForm(scope,callback) {
+                const t = this;
+                const rowKey = Object.keys(scope.row);
+                if (!rowKey.length) {
+                    console.warn('请按先填写当前行');
+                    //return;
+                }
+                let promise;
+                let valid = true;
+                let count = 0;
+                const columns = scope.store.states.columns;
+                columns.forEach((column,index)=>{
+                    const newScope = {
+                        $index:scope.$index,
+                        column:column,
+                        row:scope.row,
+                        Store:scope.store,
+                        _self:scope._self
+                    };
+                    t.validate('blur',newScope,errors => {
+                        console.log('errors:',errors);
+                        if (errors) {
+                            valid = false;
+                        }
+                    });
+                });
+                if (typeof callback === 'function') {
+                    callback(valid);
+                }
+                if (promise) {
+                    return promise;
+                }
+            },
+            //显示和隐藏的表单字段
+            hideAndShowFormItem:function(showArray,hideArray){
+                let t=this;
+                if(showArray instanceof Array && hideArray instanceof Array){
+                    showArray.forEach(function(attributeName){
+                        t.realContent.forEach((ele,key)=>{
+                            if(attributeName == ele.attributes.attributeName){
+                                ele.attributes.show = true;
+                            }
+                        })
+                    });
+                    hideArray.forEach(function(attributeName){
+                        t.realContent.forEach((ele,key)=>{
+                            if(attributeName == ele.attributes.attributeName){
+                                ele.attributes.show = false;
+                            }
+                        })
+                    });
+                }
+            },
+            loadChildBB(){
+                let t=this;
+                return _TY_Tool.loadChildBB(t);                
+            },
         }
     }
 </script>
 
 <style lang='less' scoped>
-
+    .bb-indep-form{
+        .form-item__label:before{
+            content: "*";
+            color: #f56c6c;
+            margin-right: 4px;
+        }
+    }
 </style>

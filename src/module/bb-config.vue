@@ -4,9 +4,9 @@
             <!-- 基础属性 -->
             <bb-form ref="bb-config-form-base" size="mini" labelWidth="80px" :hideSubmitButton="true" :content="formItemFieldsBase" v-model="valueBase"></bb-form>
             <!-- 表单属性 -->
-            <bb-form ref="bb-config-form-ad-form" v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
+            <bb-form ref="bb-config-form-ad-form" v-if="valueBase.type == 'Form' && showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <!-- 积木属性 -->
-            <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :alias="alias" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
+            <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :lazy="false" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
         <el-tab-pane label="交互">
             <bb-button-form ref="interactive_add_button_form" :content="interactiveFormContent" startButtonType="text" startButtonIcon="ty-icon_faqi" formButtonName="添加交互"  settingText ="添加交互" v-model="interactiveForm" @commit="interactiveAdd"></bb-button-form>
@@ -68,6 +68,7 @@
                 alias:this.value.alias,
                 //积木详情
                 bbInfo:null,
+                bbType:this.value.type,
                 animationForm:{},
                 tabs:null,
                 activeName:'attributes',
@@ -86,16 +87,6 @@
                 show:false,
                 _TY_Current_Edit_Item:null,
                 showBBSelect:true,
-                // bbFieldsDs: {
-                //      "api": "list-bb",
-                //      "category": "config",
-                //      "method": "post",
-                //      "inputs": [],
-                //      "outputs": [{
-                //          "dataKey": "fields",
-                //          "valueKey": "data_list"
-                //     }]
-                // },
                 bbFieldsDs:{
                     "api": "list-bb-by-pageAlias",
                     "category": "config",
@@ -121,9 +112,7 @@
             let t=this;
             this.getConfigEnv();
             this.key = _TY_Tool.uuid();
-            this.getBBInfo().then(()=>{
-                t.setEditor();
-            })
+            this.setEditor();
         },
         mounted:function(){
 
@@ -136,42 +125,32 @@
                     if(!t.alias){
                         resolve();
                     }
-                    if(_TY_Root._TY_BBInfo&&_TY_Root._TY_BBInfo[t.alias]){
-                         t.bbInfo = _TY_Root._TY_BBInfo[t.alias];
-                         resolve();
-                    }else{
-                        _TY_Tool.post(_TY_ContentPath+"/read-bb",{
+                    _TY_Tool.post(_TY_ContentPath+"/read-bb",{
                             bbAlias:t.alias
                         }).then(function (response) {
-                                let data = response['data'];
-                                if(data.ok){
-                                    t.bbInfo = data.data.data;
-                                    if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
-                                        let tempOn = t.bbInfo.on;
-                                        const _arg = tempOn.match(/`[^]*?`/gi)
-                                        if(_arg&&_arg.length>0){
-                                            tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
-                                        }
-                                        t.bbInfo.on = JSON.parse(tempOn);
-                                        if(_arg&&_arg.length>0){
-                                            t.bbInfo.on.forEach((item,index)=>{
-                                                item['executeArgument'] = eval(_arg[index]);
-                                            });
-                                        }
+                            let data = response['data'];
+                            if(data.ok){
+                                t.bbInfo = data.data.data;
+                                if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
+                                    let tempOn = t.bbInfo.on;
+                                    const _arg = tempOn.match(/`[^]*?`/gi)
+                                    if(_arg&&_arg.length>0){
+                                        tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
                                     }
-                                    if(!_TY_Root._TY_BBInfo){
-                                        _TY_Root._TY_BBInfo = {};
+                                    t.bbInfo.on = JSON.parse(tempOn);
+                                    if(_arg&&_arg.length>0){
+                                        t.bbInfo.on.forEach((item,index)=>{
+                                            item['executeArgument'] = eval(_arg[index]);
+                                        });
                                     }
-                                    //放到全局变量里面去
-                                    _TY_Root._TY_BBInfo[t.alias] = _TY_Tool.deepClone(t.bbInfo);
-                                    resolve();
-                                }else{
-                                    reject()
                                 }
+                                resolve(data);
+                            }else{
+                                reject()
+                            }
                         }).catch(function (error) {
                             reject()
                         });
-                    }
                 });
             },
             //载入当前积木的编辑内容
@@ -183,12 +162,14 @@
                 }
                 t.show = true;
                 t.valueBase = content;
-                t.alias = content.alias;
-                t.key = _TY_Tool.uuid();
+                // t.alias = content.alias;
+                // t.key = _TY_Tool.uuid();
+                t.bbChange(content.alias);
                 //选获取积木详情，获取交互
-                t.getBBInfo().then(()=>{
-                    t.setEditor();
-                })
+                
+                // t.getBBInfo().then(()=>{
+                //     t.setEditor();
+                // })
             },
             //添加交互
             interactiveAdd:function(row){
@@ -273,8 +254,32 @@
             bbChange:function(val){
                 const t = this;
                 t.alias = val;
-                t.valueBase = Object.assign(t.valueBase,{alias:val});
-                t.setEditor();
+                _TY_Tool.post(_TY_ContentPath+"/read-bb",{
+                    bbAlias:val
+                }).then(function(response){
+                    let data = response['data'];
+                    if(data.ok){
+                        t.bbInfo = data.data.data;
+                        if(t.bbInfo.on&&typeof(t.bbInfo.on)==='string'){
+                            let tempOn = t.bbInfo.on;
+                            const _arg = tempOn.match(/`[^]*?`/gi)
+                            if(_arg&&_arg.length>0){
+                                tempOn = tempOn.replace(/`[^]*?`/gi,"\"\"");
+                            }
+                            t.bbInfo.on = JSON.parse(tempOn);
+                            if(_arg&&_arg.length>0){
+                                t.bbInfo.on.forEach((item,index)=>{
+                                    item['executeArgument'] = eval(_arg[index]);
+                                });
+                            }
+                        }
+                        t.bbType = data.data.data.type;
+                        t.valueBase = Object.assign(t.valueBase,{alias:val,type:data.data.data.type});
+                        t.setEditor(); 
+                    }else{
+                        t.$message.error(response.data.message);
+                    }
+                });
             },
             setEditor:function(){
                 const t = this;
@@ -726,6 +731,7 @@
                             alias: 'bb-select', //布局类积木 || 普通积木
                             aliasName: '选择积木', 
                             attributes: {
+                                show:t.showBBSelect,
                                 attributeName:'alias',
                                 textField:"name",
                                 valueField:"alias",
@@ -737,6 +743,11 @@
                             interactives: [{
                                 uuid:_TY_Tool.uuid(),
                                 fromContentEvent:'change',
+                                executeType:'trigger_method',
+                                executeArgument:'t.$parent.$parent.$parent.$parent.$parent.bbChange(params[0])',
+                            },{
+                                uuid:_TY_Tool.uuid(),
+                                fromContentEvent:'mounted',
                                 executeType:'trigger_method',
                                 executeArgument:'t.$parent.$parent.$parent.$parent.$parent.bbChange(params[0])',
                             }],
@@ -763,7 +774,9 @@
                             }],
                             interactives: [],
                             layout: {} //积木布局,
-                        },{                       
+                        }]
+                if(t.bbType == "Container" || t.valueBase.type == 'Form' && t.showBBSelect){
+                    t.formItemFieldsBase.push({                       
                             uuid: _TY_Tool.uuid(),
                             alias: 'bb-input', //布局类积木 || 普通积木
                             aliasName: '积木分组', 
@@ -774,7 +787,14 @@
                             }],
                             interactives: [],
                             layout: {} //积木布局,
-                        }]
+                        });
+                }else{
+                    t.formItemFieldsBase.forEach((ele,index)=>{
+                        if(ele.attributes.attributeName == "bb-input"){
+                            t.formItemFieldsBase.splice(index,1);
+                        }
+                    })
+                }
                 //设置表单项积木时需要额外增的字段
                 t.formItemFields = [{                      
                             attributeName:'attributeName',
