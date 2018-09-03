@@ -57,7 +57,7 @@ if (env == "local") {
             }),
         ]
     });
-} else if (env == "prd") {
+} else if (env == "prd" || env == "chisong") {
     wc = merge(webpackBaseConfig, {
         output: {
             publicPath: h5Host,
@@ -75,7 +75,7 @@ if (env == "local") {
             // }),
             new webpack.DefinePlugin({
                 'process.env': {
-                    NODE_ENV: '"prd"'
+                    NODE_ENV: '"' + env + '"'
                 }
             }),
             // new webpack.optimize.UglifyJsPlugin({
