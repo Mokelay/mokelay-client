@@ -1,5 +1,5 @@
 <template>
-    <button v-if="isShow" :id="id" :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="realOptions.disabled?disabledStyle:relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':relButton.selectText}}<slot></slot></button>
+    <button v-if="isShow" :id="id" :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="realOptions.disabled?disabledStyle:relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':(relButton.text?relButton.text:relButton.selectText)}}<slot></slot></button>
 </template>
 
 <script>
