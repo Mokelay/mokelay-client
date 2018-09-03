@@ -19,6 +19,8 @@
       docEl.style.fontSize = '28px'
     } else if (_TY_Tool && _TY_Tool.isPC()) {
       docEl.style.fontSize = '28px'
+    } else if (_TY_Root.$route.params && _TY_Root.$route.params.pageAlias == 'ty-bb-config') {
+      docEl.style.fontSize = '28px'
     } else {
       docEl.style.fontSize = rem + 'px'
     }
