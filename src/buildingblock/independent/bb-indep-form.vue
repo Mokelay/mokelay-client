@@ -212,9 +212,14 @@
                 let groups = {};
                 //最终返回的实例化对象数组
                 let bbList = [];
+                if(t.realContent[0].alias == "bb-layout-seriation"){
+                    const _form = _TY_Tool.bbRender(t.realContent, createElement, t);
+                    bbList.push(_form);
+                    return bbList;
+                }
                 t.realContent.forEach((ele,key)=>{
-                    const content = _TY_Tool.deepClone(ele);
-                    if(!content.attributes.show){
+                    let content = _TY_Tool.deepClone(ele);
+                    if(!content || !content.attributes.show){
                         return true;
                     }
                     //每个formItem 都有一个 input事件，实现v-model
@@ -290,7 +295,6 @@
                     },[key_contents]);
                     bbList.push(group_content);
                 });
-                // const normalEles = _TY_Tool.bbRender(normalItems, createElement, t);
                 return bbList;
             },
             //动态获取卡片内容

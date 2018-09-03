@@ -244,7 +244,7 @@ export default {
         const picList = [];
         t.valueBase.forEach((ele,index)=>{
             const tag = t.accept == "video/*"?"bb-video":"img";
-            const Img = createElement(tag,{props:{value:ele},attrs:{src:ele,controls:"controls"},class:"uploaded-child"},[vantUpload]);
+            const Img = createElement(tag,{props:{value:ele},attrs:{src:ele,controls:"controls"},class:"uploaded-child",on:{click:t.showDialog.bind(null,ele)}},[vantUpload]);
             const del = createElement('i',{props:{},on:{click:t.remove.bind(null,index)},class:"ty ty-icon_cuowu"},[]);
             const item = createElement('div',{props:{},class:itemClass},[Img,del]);
             picList.push(item);
@@ -345,6 +345,35 @@ export default {
             t.video.oncanplay = function () {
                 t.uploadSuccess = true;
             }
+        },
+        //点击查看大图
+        showDialog(src){
+            const img = [{                      //页面内容
+                    uuid:_TY_Tool.uuid(),
+                    alias:'bb-img',                   //积木别名
+                    aliasName:'',               //中文名称
+                    group:'',                   //对应slot
+                    attributes:{
+                        src:src
+                    },              //积木属性
+                    animation:[{                //动画
+                    }],
+                    interactives:[{             //触发交互
+                    }],
+                    layout:{                    //积木布局
+                        display:"block",
+                        positionType:"relative",  //展示类型
+                        size:{width:"auto",height:"auto"},//大小
+                        position:{x:0,y:0},     //位置
+                        border:{                //边框
+                            radian:"0",          //边框弧度
+                            margin:"auto",          //外边距
+                            padding:"0.2rem"
+                        },
+                    }
+                }];
+            _TY_Root.openDialog({type:"custom",arguments:{content:img,showConfirmButton:false,
+confirmButtonText:"",closeOnClickOverlay:true}});
         }
     }
   }
