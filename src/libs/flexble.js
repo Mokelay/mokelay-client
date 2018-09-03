@@ -17,7 +17,9 @@
     var rem = docEl.clientWidth / 10
     if (window._TY_Platform && window._TY_Platform == 'PC') {
       docEl.style.fontSize = '28px'
-    } else if (_TY_Tool && _TY_Tool.isPC()) {
+    } else if (window._TY_Tool && window._TY_Tool.isPC()) {
+      docEl.style.fontSize = '28px'
+    } else if (window._TY_Root && window._TY_Root.$route.params && window._TY_Root.$route.params.pageAlias == 'ty-bb-config') {
       docEl.style.fontSize = '28px'
     } else {
       docEl.style.fontSize = rem + 'px'
