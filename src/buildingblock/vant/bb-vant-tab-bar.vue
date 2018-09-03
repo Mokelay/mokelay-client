@@ -51,13 +51,18 @@
                 }
             },
             valueKey:{
-                text:"text",
-                icon:"icon",
-                dot:"dot",
-                info:"info",
-                url:"url",
-                iconStyle:"iconStyle",
-                textStyle:"textStyle",
+                type:Object,
+                default:function () {
+                    return {
+                        text:"text",
+                        icon:"icon",
+                        dot:"dot",
+                        info:"info",
+                        url:"url",
+                        iconStyle:"iconStyle",
+                        textStyle:"textStyle",
+                    };
+                }
             },
             //动态标签数据
             fieldsDs:{

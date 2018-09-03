@@ -1,10 +1,10 @@
 <template>
-    <img :src="imgSrc" @click="imgClick" v-bind:style="cssStyle"/>
+    <img :src="imgSrc" @click="imgClick" onerror="javascript:this.src='';" v-bind:style="cssStyle"/>
 </template>
 
 <script>
     import Vue from 'vue';
-    import Util from '../../libs/util.js'
+    import Util from '../../libs/util.js';
 
     export default {
         name: 'bb-img',
