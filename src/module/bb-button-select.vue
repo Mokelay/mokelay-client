@@ -17,7 +17,7 @@
                 fields: [{
                     pbbId:"text",
                     name: '按钮文字',
-                    attributeName: 'text',
+                    attributeName: 'selectText',
                     et: 'bb-input',
                     props: {}
                 }, {
