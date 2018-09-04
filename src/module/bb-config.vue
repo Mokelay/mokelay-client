@@ -830,6 +830,14 @@
                                 }]
                             }
                         },{                      
+                            attributeName:'hideLabel',
+                            et:'bb-editor-switch',
+                            group:'表单选项',                 
+                            name:'隐藏标题',
+                            description:"不显示表单项标题",                               
+                            props:{
+                            }
+                        },{                      
                             attributeName:'width',
                             et:'bb-input',
                             group:'表单选项',                 
