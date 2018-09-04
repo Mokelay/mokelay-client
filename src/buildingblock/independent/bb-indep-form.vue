@@ -152,9 +152,13 @@
                             display: "inline-block",
                             size:{
                                 width:"80px"
-                            } 
+                            },
+                            font:{
+                                size:"12px",
+                            }
                         },
                         messageStyle:{
+                            display:"flex",
                             border:{
                                 margin:"0 5px"
                             },
@@ -219,6 +223,9 @@
                 }
                 t.realContent.forEach((ele,key)=>{
                     let content = _TY_Tool.deepClone(ele);
+                    if(content.attributes.show == undefined){
+                        content.attributes.show = true;
+                    }
                     if(!content || !content.attributes.show){
                         return true;
                     }
@@ -261,9 +268,11 @@
                             required = rule.required
                         })
                     }
-                    const label = createElement("span",{style:labelStyle,class:required?"form-item__label":""},[content.aliasName]);
+                    let label = createElement("span",{style:labelStyle,class:required?"form-item__label":""},[content.aliasName]);
                     const validateMessage = createElement("span",{style:messageStyle},[t.validateMessageObj[content.attributes.attributeName]]);
-
+                    if(content.attributes.hideLabel){
+                        label = ""
+                    }
                     const formEditor = _TY_Tool.bbRender([content], createElement, t);
                     const formItem = createElement("span",{style:itemStyle},[label,formEditor,validateMessage]);
                     if(content['group']){
@@ -279,7 +288,7 @@
                     }
                     //newContent.push(content);
                 });
-                bbList.concat(normalItems);
+                bbList = bbList.concat(normalItems);
                 Object.keys(groups).forEach((key,index)=>{
                     var key_contents = createElement('el-collapse-item',{
                         props:{

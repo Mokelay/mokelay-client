@@ -107,12 +107,6 @@ import 'vant/lib/swipe/style';
                                 let _list = [];
                                 if(item['value']&&item['value']['currentRecords']){
                                     _list = item['value']['currentRecords'];
-                                    const totalPage = item['value']['totalPages'];
-                                    if(t.page>=totalPage){
-                                        t.end=true;
-                                    }else{
-                                        t.end=false;
-                                    }
                                 }else if(item['value']&&item['value']['list']){
                                     _list = item['value']['list'];    
                                 }else{

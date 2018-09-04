@@ -72,6 +72,7 @@ import 'vant/lib/checkbox-group/style';
             };
         },
         mounted(){
+            let t=this;
             //获取数据
             this.getData();
             _TY_Tool.buildDefaultValTpl(t, "valueBaseString");
