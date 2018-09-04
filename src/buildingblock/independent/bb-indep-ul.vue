@@ -12,7 +12,7 @@
         name: 'bb-indep-ul',
         render: function (createElement) {
             let t=this;
-            const liInstance = t.renderLi(createElement);
+            const liInstance = t.theme=='swipe'?t.renderSwipeLi(createElement):t.renderLi(createElement);
             let loadingInstance = '';
             if(t.loading){
                 loadingInstance = t.renderLoading(createElement);
@@ -25,7 +25,7 @@
             },liInstance);
             return createElement('div',{
                 class:{
-                    "bb_indep_ul_fixed_height":t.fixedHeight
+                    "bb-swipe-ul bb_indep_ul_fixed_height":t.fixedHeight
                 }
             },[ulInstance,loadingInstance]);
         },
@@ -35,7 +35,7 @@
                 type:[Number,String],
                 default:1
             },
-            //主题 主要通过主题改变itemContent模板，来方便配置item ['line','card'] line表示一行一个文字，后面跟日期；card表示卡片，样式可以通过css编辑器控制
+            //主题 主要通过主题改变itemContent模板，来方便配置item ['line','card',swipe] line表示一行一个文字，后面跟日期；card表示卡片，样式可以通过css编辑器控制
             theme:{
                 type:String,
                 default:'line'
@@ -94,6 +94,10 @@
             lazy:{
                 type:Boolean,
                 default:false
+            },
+            //右侧滑动样式,swipe 主题时有效
+            rightItemStyle:{
+                type:Object
             }
         },
         data() {
@@ -124,6 +128,10 @@
             let t=this;
             //添加上拉加载事件
             t.scrollListener();
+            if( t.theme=='swipe'){
+                t.renderSwipeListener();    
+            }
+
             //渲染完成事件
             t.$emit("mounted",t);
         },
@@ -399,6 +407,193 @@
 
                 return result;
             },
+            //渲染li  item 主题为swipe的时候渲染
+            renderSwipeLi:function(createElement){
+                let t=this;
+                let result = [];
+                if(!t.list||t.list.length<=0||!t.itemContent||t.itemContent.length<=0){
+                    return;
+                }
+                t.list.forEach((item,index)=>{
+                    if(item['hide']){
+                        return true;
+                    }
+                    //数据解析到模板中去
+                    let _content = _TY_Tool.tpl(JSON.stringify(t.itemContent),_TY_Tool.buildTplParams(t,{
+                        rowData:item
+                    }));
+                    if(!_content){
+                        console.error("错误提示:","列表组件没有配置模板或者没有匹配到参数");
+                        return true;
+                    }
+                    /*
+                        兼容 ul包含ul的情况
+                        子的ul中模板用<#= ... #>代替，否则第一层就会被模板参数替换
+                    */
+                    const reg = /<#=(.*?)#>/g;
+                    if(_content.match(reg)){
+                        //如果字符串中含有<#=...#> 这样的标识，转换成 <%=...%>
+                        _content = _content.replace(reg,function(){
+                            return "<%="+arguments[1]+"%>"
+                        })
+                    }
+
+                    let _style={
+                        "display":"block"
+                    }
+                    let _cssStyle = Object.assign({},_TY_Tool.setSimpleStyle(t.itemStyle),_style);
+                    if(index==0&&t.firstItemStyle){
+                        //第一个的样式
+                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setSimpleStyle(t.firstItemStyle),_style);
+                    }else if(index==t.list.length-1 &&t.lastItemStyle){
+                        //最后一个的样式
+                        _cssStyle = Object.assign(_cssStyle,_TY_Tool.setSimpleStyle(t.lastItemStyle),_style);
+                    }
+                    const liItem = createElement('div',{
+                        class:"bb-swipe-content",
+                        style:_cssStyle,
+                        on:{
+                            click:function(){
+                                t.$emit('itemClick',item,t);
+                            }
+                        }
+                    },[_TY_Tool.bbRender(JSON.parse(_content),createElement,t)]);
+
+                    const liRight = createElement("div",{
+                        style:Object.assign({},_TY_Tool.setSimpleStyle(t.rightItemStyle),{
+                            "position": "absolute",
+                            "right":"0",
+                            "top": "0",
+                            "height": "100%",
+                            "transform": "translate3d(100%,0,0)"
+                        })
+                    },[createElement('a',{
+                            style:{
+                                "display": "flex",
+                                "align-items": "center",
+                                "background-color": "#ef473a",
+                                "color": "white",
+                                "width":"2.4rem",
+                                "height":"100%"
+                            },
+                            on:{
+                                click:function(){
+                                    t.$emit('deleteClick',item,t);
+                                }
+                            }
+                        },[createElement('span',{
+                                style:{
+                                    "flex":"1",
+                                    "text-align": "center"
+                                }
+                            },["删除"])
+                        ])
+                    ]);
+
+                    let liBox = createElement('li',{
+                        class:"bb-swipe-li",
+                        style:{
+                            "overflow": "hidden",
+                            "position": "relative"
+                        }
+                    },[createElement('div',{
+                           style:{
+                            "height": "100%",
+                            "background-color": "white",
+                            "width": "100%",
+                            "z-index": "100",
+                            "transform": "translate3d(0px,0px,0px)",
+                            /*规定应用过渡的CSS属性*/
+                            "transition-property":"transform",
+                            /*规定应用过渡所花费的时间*/
+                            "transition-duration": "0s",
+                            /*规定过渡效果从何开始，默认是0*/
+                            "transition-delay": 0,
+                            /*规定过渡的时间曲线*/ 
+                            "transition-timing-function": "linear"
+                           } 
+                        },[liItem,liRight])
+                    ]);
+
+                    result.push(liBox);
+                });
+
+                return result;
+            },
+            //监听滑动事件
+            renderSwipeListener:function(){
+                let t=this;
+                var subWidth,marginRight,$startX,touchesX,$moveX;
+                function touch(event) {
+                    //获取触发滑动事件的Dom元素
+                    var listDome = event.currentTarget.childNodes[0];
+                    //侧滑菜单
+                    var subCountWidth =  event.currentTarget.childNodes[0].childNodes[1].children;
+                    switch(event.type){
+                        case "touchstart" :
+                            //计算侧滑菜单宽度
+                            subWidth = 0;
+                            for(var i = 0;i<subCountWidth.length;i++) {
+                                subWidth = subWidth + subCountWidth[i].clientWidth;
+                            }
+
+                            listDome.style.transitionDuration = "0.3s";
+                            marginRight = window.getComputedStyle(listDome,"").transform;
+                            marginRight = Math.abs(Number(marginRight.substring(7,marginRight.length-1).split(",")[4]));
+                            //触摸点x轴距离
+                            $startX = event.touches[0].clientX;
+                            //触摸点至移动之后得到的x轴距离
+                            touchesX = 0;
+                            break;
+                        case "touchmove" :
+                            listDome.style.transitionDuration = "0s";
+                            $moveX = event.touches[0].clientX;
+                            touchesX = $startX - $moveX;
+                            console.log("移动X距离----"+touchesX);
+                            //滑块距离右边实际距离 >= 0时
+                            if(marginRight >= 0) {
+                                if(marginRight+touchesX < 0 ) {
+                                    listDome.style.transform = 'translate3d(0px,0px, 0px)';
+                                }else if(marginRight+touchesX <= 500) {
+                                    listDome.style.transform = 'translate3d(-'+(marginRight+touchesX)+'px,0px, 0px)';
+                                }else {
+                                    listDome.style.transform = 'translate3d(-'+subWidth+'px,0px, 0px)';
+                                }
+                            }else if(marginRight < 0) {
+                                    listDome.style.transform = 'translate3d(0px,0px, 0px)';
+                            }
+                            break;
+                        case "touchend" :
+                            listDome.style.transitionDuration = "0.3s";
+                            marginRight = window.getComputedStyle(listDome,"").transform;
+                            marginRight = Math.abs(Number(marginRight.substring(7,marginRight.length-1).split(",")[4]));
+                            if(marginRight <= 58 || touchesX <= -58) {
+                                listDome.style.transform = 'translate3d(0px,0px, 0px)';
+                            }else {
+                                listDome.style.transform = 'translate3d(-'+subWidth+'px,0px, 0px)';
+                            }
+                            break;
+                    }
+                }
+
+                var listContext = document.getElementsByClassName("bb-swipe-ul");
+                for(var i = 0;i<listContext.length;i++) {
+                    var listDOM = listContext[i].outerHTML;
+                    listDOM = listDOM.replace(/[\r\n\t]/g,'');
+                    listContext[i].outerHTML = listDOM;
+                }
+
+                /**
+                 * 移动端侧滑菜单开始逻辑控制
+                 */
+                var list = document.getElementsByClassName("bb-swipe-li");
+                for(var i = 0;i<list.length;i++) {
+                    list[i].addEventListener("touchstart",touch,false);
+                    list[i].addEventListener("touchmove",touch,false);
+                    list[i].addEventListener("touchend",touch,false);
+                }
+            },
+
             //渲染加载框
             renderLoading:function(createElement){
                 let t=this;
