@@ -176,7 +176,7 @@
                     interactives:[],
                 },{                      
                     uuid:'layout_17',
-                    alias:'bb-input-unit',                   
+                    alias:'bb-input',                   
                     aliasName:'背景图起始位置',                                 
                     attributes:{
                         attributeName:'bgPosition',
@@ -185,7 +185,7 @@
                     interactives:[],
                 },{                      
                     uuid:'layout_18',
-                    alias:'bb-input-unit',                   
+                    alias:'bb-input',                   
                     aliasName:'背景图尺寸',                                 
                     attributes:{
                         attributeName:'bgSize',
@@ -301,7 +301,7 @@
                         size:"mini",
                         content:[{                      
                             uuid:'layout_04_01',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'宽度',                                  
                             attributes:{
                                 width:"95%",
@@ -310,7 +310,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_04_02',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'高度',                                  
                             attributes:{
                                 width:"95%",
@@ -331,7 +331,7 @@
                         size:"mini",
                         content:[{                      
                             uuid:'layout_05_01',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'横坐标',                                  
                             attributes:{
                                 width:"95%",
@@ -340,7 +340,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_05_02',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'纵坐标',                                  
                             attributes:{
                                 width:"95%",
@@ -385,7 +385,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_03',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'圆角',                                  
                             attributes:{
                                 width:"95%",
@@ -394,7 +394,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_04',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'内边距',                                  
                             attributes:{
                                 width:"95%",
@@ -403,7 +403,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_05',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'外边距',                                  
                             attributes:{
                                 width:"95%",
@@ -412,7 +412,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_06_06',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'粗细',                                  
                             attributes:{
                                 width:"95%",
@@ -442,7 +442,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_07_02',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'阴影大小',                                  
                             attributes:{
                                 width:"95%",
@@ -451,7 +451,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_07_03',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'阴影方向',                                  
                             attributes:{
                                 width:"95%",
@@ -460,7 +460,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_07_04',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'阴影模糊',                                  
                             attributes:{
                                 width:"95%",
@@ -515,7 +515,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_08_03',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'字体大小',                                  
                             attributes:{
                                 width:"95%",
@@ -524,7 +524,7 @@
                             interactives:[],
                         },{                      
                             uuid:'layout_08_06',
-                            alias:'bb-input-unit',                   
+                            alias:'bb-input',                   
                             aliasName:'字体行高',                                  
                             attributes:{
                                 width:"95%",
