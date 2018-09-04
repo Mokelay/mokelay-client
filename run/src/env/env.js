@@ -29,7 +29,19 @@ var env = {
 		},
 		questionnaireHost: "http://ty.saiyachina.com/survey",
 		home: "/home_ln"
+	},
+	chisong: {
+		name: 'chisong',
+		apiHost: CurrentDomain,
+		h5Host: CurrentDomain,
+		ssoURL: CurrentDomain + "/#/ty-login",
+		hosts: {
+			'default': CurrentDomain
+		},
+		questionnaireHost: "http://www.mokelay.com/survey",
+		home: "/home_ln"
 	}
+
 };
 // export default env;
 module.exports = env;
