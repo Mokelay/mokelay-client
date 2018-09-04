@@ -473,7 +473,7 @@
                                 "align-items": "center",
                                 "background-color": "#ef473a",
                                 "color": "white",
-                                "width":"2rem",
+                                "width":"2.4rem",
                                 "height":"100%"
                             },
                             on:{
