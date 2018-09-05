@@ -100,7 +100,7 @@
             _split:function(val){
                 let t=this;
                 if(val){
-                    const _num = val.replace(/[^0-9]/ig,"");
+                    const _num = val.replace(/[^0-9\.]/ig,"");
                     const _unit = val.replace(/[^a-z]+/ig,"");
                     t.numberValue = _num;
                     t.unitValue = _unit;

@@ -148,7 +148,7 @@
       if(this.root){
         window._TY_Root = this;
         //统一注册微信
-        if(_TY_Tool.isWX()){
+        if(_TY_Tool.isWX() && !_TY_Tool.wx){
           _TY_Tool.get_wx();
         }
         this.refreshRem();
