@@ -109,7 +109,8 @@
                                         modal.doclose();
                                         if(t.successUrl){
                                             //跳转到支付成功页！
-                                            t.$router.push(t.successUrl);
+                                            const url = _TY_Tool.tpl(t.successUrl,_TY_Tool.buildTplParams(t));
+                                            t.$router.push(url);
                                         }
                                     }
                                 }]
