@@ -159,6 +159,9 @@
         watch: {
             contentItem(val){
                 this.realContentCopyItem = val;
+            },
+            label(val){
+                this.realLabel = val;
             }
         },
         created: function () {

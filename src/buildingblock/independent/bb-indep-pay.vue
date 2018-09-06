@@ -47,6 +47,10 @@
             /**
             *   微信支付,
                 payDs,必须返回支付所需的对象信息，
+                公众号支付，需要传用户的openId，
+                1、可以openId存用户表里；
+                2、可以在进入页面前微信授权获取openId;
+                3、也可以进入公众号之前，将openID存入localStorage中，然后调接口时从localStorage中获取
                 eg:
                     {
                         "appId":"wx2421b1c4370ec43b",     //公众号名称，由商户传入     
