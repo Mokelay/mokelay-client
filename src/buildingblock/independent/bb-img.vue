@@ -84,6 +84,10 @@
             },
             ds: {
                 type: Object
+            },
+            //图片点击的按钮属性
+            button:{
+                type:Object
             }
         },
         watch:{
@@ -120,6 +124,9 @@
             //img点击事件
             imgClick:function(){
                 let t=this;
+                if(t.button){
+                    _TY_Tool.resolveButton(t.button,_TY_Tool.buildTplParams(t));
+                }
                 t.$emit("click",t);
             }
         }
