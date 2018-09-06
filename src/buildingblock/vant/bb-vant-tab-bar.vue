@@ -192,9 +192,10 @@
             });
 
 
-            return createElement('van-tabbar',{props:{value:t.active},on:{change:t.onChange}},[tabbars]);
+            return createElement('van-tabbar',{class:"donwload-btn_fix",props:{value:t.active},on:{change:t.onChange}},[tabbars]);
         },
         mounted(){ 
+            this.fixedKeyboard();
             this.getData();
             this.getIcon();
         },
@@ -265,6 +266,30 @@
                 const newData = JSON.parse(newString);
                 return newData;
             },
+            /**
+             * 键盘高度适配
+             */
+            fixedKeyboard:function() {
+                let client_h = document.documentElement.clientHeight;
+                    window.onresize = () => {
+                        if (/iphone|ipad/i.test(navigator.userAgent.toLowerCase())) {
+                            //ios这块什么都不用做
+                        } else {
+                            //安卓触发window.resize
+                            let body_h =  document.documentElement.clientHeight;
+                            let btn = document.getElementsByClassName("donwload-btn_fix")[0];
+                            if(client_h > body_h){
+                                btn.style.display = "none";
+                                console.log("ad小了");
+                            }else{
+                                btn.style.display = "flex";
+                                //btn.css('position','fixed')
+                                console.log("ad正常")
+                            }
+                        }
+
+                    }
+            }
         }
     }
 </script>
