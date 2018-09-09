@@ -213,6 +213,10 @@ bb-list中的table data获取数据的调用方式 , util.getDSData(ds, {"bb":th
 bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds, {"bb":this ,"router":this.$router.param , "row-data":row} , function(){} );
 **/
 util.getDSData = function(ds, inputValueObj, success, error) {
+    const toast1 = inputValueObj.bb.$toast({
+        type: 'loading',
+        duration: 30000
+    });
     var type = ds['type'] || "dynamic";
     if (type == "static") {
         success(ds['data']);
@@ -273,6 +277,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         baseURL: util.tpl(host, Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj)))
     }
     util[method](apiUrl, requestParam, options).then(function(response) {
+        toast1.clear();
         var data = response['data'];
         if (data['ok']) {
             var realDataMap = data['data'] || {};
@@ -321,6 +326,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             error(data['code'], data['message']);
         }
     }).catch(function(err) {
+        toast1.clear();
         error(err);
     });
 }
