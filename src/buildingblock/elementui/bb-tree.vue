@@ -23,6 +23,10 @@
                 @check-change="checkChange"
                 @node-click="nodeClick"
                 @node-expand="nodeExpand"
+                :draggable="option.draggable"
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag"
+                @node-drop="handleDrop"
         >
         </el-tree>
     </div>
@@ -103,19 +107,19 @@
                             }, {
                               id: 5,
                               label: '三级 3-1-2',
-                              disabled: true
+                              disabled: false
                             }]
                           }, {
                             id: 2,
                             label: '二级 2-2',
-                            disabled: true,
+                            disabled: false,
                             children: [{
                               id: 6,
                               label: '三级 3-2-1'
                             }, {
                               id: 7,
                               label: '三级 3-2-2',
-                              disabled: true
+                              disabled: false
                             }]
                           }]
                         }]
@@ -146,8 +150,9 @@
                     return {
                         treeStyle:"",
                         itemStyle:"",
-                        rootParentId:0
-                    }
+                        rootParentId:0,
+                        draggable:true
+                    };
                 }
             }
         },
@@ -427,7 +432,27 @@
             //外部获取值
             getValue(){
                 return this.valueBase;
-            }
+            },
+            allowDrop(draggingNode, dropNode, type) {
+                if (dropNode.data.label === '二级 3-1') {
+                    return type !== 'inner';
+                } else {
+                    return true;
+                }
+            },
+            allowDrag(draggingNode) {
+                return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+            },
+            handleDrop(draggingNode, dropNode, dropType, ev) {
+                const t = this;
+                const newEle = {
+                    id:draggingNode.key,
+                    oldParantId:draggingNode.parent.id,
+                    parentId:dropNode.parent.key,
+                }
+                t.$emit("drag",newEle);
+                console.log('tree drop: ', dropNode.label, dropType);
+            },
         }
     }
 </script>
