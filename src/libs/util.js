@@ -22,7 +22,9 @@ util.invoke = function(options) {
                 if (response['data']['code'] == -401) {
                     location.href = window._RS_SSOURL;
                 } else {
-                    location.href = window._TY_SSOURL;
+                    if (location.href.indexOf("?redirect") < 0) {
+                        location.href = window._TY_SSOURL + "?redirect=" + encodeURIComponent(location.href);;
+                    }
                 }
             } else {
                 resolve(response);
@@ -219,6 +221,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     });
     var type = ds['type'] || "dynamic";
     if (type == "static") {
+        toast1.clear();
         success(ds['data']);
         return;
     }
@@ -228,6 +231,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     var type = ds['category'] || 'config'; //默认是配置接口
     if (!api) {
         error(500, "请求参数无效");
+        toast1.clear();
         return;
     }
     var method = ds['method'] || 'post';
