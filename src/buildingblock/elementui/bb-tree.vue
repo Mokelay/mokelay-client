@@ -28,6 +28,23 @@
                 :allow-drag="allowDrag"
                 @node-drop="handleDrop"
         >
+            <span v-if="option.add" class="custom-tree-node" slot-scope="{ node, data }">
+                <span contenteditable="true" @oninput="addNode">{{ node.label }}</span>
+                <span>
+                    <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => append(data)">
+                    新增
+                    </el-button>
+                    <el-button
+                    type="text"
+                    size="mini"
+                    @click="() => remove(node, data)">
+                    删除
+                    </el-button>
+                </span>
+            </span>
         </el-tree>
     </div>
 </template>
@@ -151,7 +168,8 @@
                         treeStyle:"",
                         itemStyle:"",
                         rootParentId:0,
-                        draggable:true
+                        draggable:true,
+                        add:true
                     };
                 }
             }
@@ -434,14 +452,10 @@
                 return this.valueBase;
             },
             allowDrop(draggingNode, dropNode, type) {
-                if (dropNode.data.label === '二级 3-1') {
-                    return type !== 'inner';
-                } else {
-                    return true;
-                }
+                return true;
             },
             allowDrag(draggingNode) {
-                return draggingNode.data.label.indexOf('三级 3-2-2') === -1;
+                return true;
             },
             handleDrop(draggingNode, dropNode, dropType, ev) {
                 const t = this;
@@ -453,6 +467,9 @@
                 t.$emit("drag",newEle);
                 console.log('tree drop: ', dropNode.label, dropType);
             },
+            addNode(...args){
+                debugger
+            }
         }
     }
 </script>
