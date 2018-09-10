@@ -116,7 +116,7 @@
                     const endTime = typeof val[1] == "string"?val[1] : val[1].toDateString();
                     newDate.push(startTime);
                     newDate.push(endTime);
-                }else {
+                }else if(typeof val != "string"){
                     try{
                        newDate = val.toDateString(); 
                     }
