@@ -50,6 +50,7 @@ export default {
             default:function(){
                 return {
                     icon:"ty-riji-fenxiang",
+                    text:"",//分享文案
                     shareArea:"timeline,appMessage,QQ,weibo,qZone"
                 }
             }
