@@ -4,6 +4,15 @@ import Qs from 'qs';
 
 let util = {};
 
+
+//清除loading
+var _clearLoading = function() {
+    _TY_Root.$toast({
+        type: "loading",
+        duration: 1
+    })
+}
+
 util.invoke = function(options) {
     return new Promise((resolve, reject) => {
         if (!util.ajax) {
@@ -16,14 +25,17 @@ util.invoke = function(options) {
         util.ajax(options).then(function(response) {
             if (response && response['data'] && response['data']['code'] && response['data']['code'] == -420 && util.isWX()) {
                 //微信端没有登录，跳转微信授权
+                _clearLoading();
                 location.href = response['data']['message'] || window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] <= -400) {
                 //所有Code小于等于-400都是属于没有登录授权的，统一走SSOURL配置路径
                 if (response['data']['code'] == -401) {
+                    _clearLoading();
                     location.href = window._RS_SSOURL;
                 } else {
                     if (location.href.indexOf("?redirect") < 0) {
-                        location.href = window._TY_SSOURL + "?redirect=" + encodeURIComponent(location.href);;
+                        _clearLoading();
+                        location.href = window._TY_SSOURL + "?redirect=" + encodeURIComponent(location.href);
                     }
                 }
             } else {
@@ -217,7 +229,7 @@ bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds,
 util.getDSData = function(ds, inputValueObj, success, error) {
     const toast1 = inputValueObj.bb.$toast({
         type: 'loading',
-        duration: 30000
+        duration: 10000
     });
     var type = ds['type'] || "dynamic";
     if (type == "static") {
@@ -329,6 +341,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         } else {
             error(data['code'], data['message']);
         }
+    }, function() {
+        toast1.clear();
     }).catch(function(err) {
         toast1.clear();
         error(err);
