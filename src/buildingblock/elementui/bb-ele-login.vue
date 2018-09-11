@@ -62,7 +62,12 @@
                 }).then(function (response) {
                     let dataMap = response['data'];
                     if (dataMap['ok']) {
-                        t.$router.push(window._TY_Home);
+                        const redirect = t.$route.query.redirect;
+                        if(redirect){
+                            location.href=redirect;
+                        }else{
+                            t.$router.push(window._TY_Home);    
+                        }
                     }else{
                         t.$message.error(dataMap['message']);
                     }

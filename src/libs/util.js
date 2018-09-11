@@ -22,7 +22,9 @@ util.invoke = function(options) {
                 if (response['data']['code'] == -401) {
                     location.href = window._RS_SSOURL;
                 } else {
-                    location.href = window._TY_SSOURL;
+                    if (location.href.indexOf("?redirect") < 0) {
+                        location.href = window._TY_SSOURL + "?redirect=" + encodeURIComponent(location.href);;
+                    }
                 }
             } else {
                 resolve(response);
@@ -213,8 +215,13 @@ bb-list中的table data获取数据的调用方式 , util.getDSData(ds, {"bb":th
 bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds, {"bb":this ,"router":this.$router.param , "row-data":row} , function(){} );
 **/
 util.getDSData = function(ds, inputValueObj, success, error) {
+    const toast1 = inputValueObj.bb.$toast({
+        type: 'loading',
+        duration: 30000
+    });
     var type = ds['type'] || "dynamic";
     if (type == "static") {
+        toast1.clear();
         success(ds['data']);
         return;
     }
@@ -224,6 +231,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     var type = ds['category'] || 'config'; //默认是配置接口
     if (!api) {
         error(500, "请求参数无效");
+        toast1.clear();
         return;
     }
     var method = ds['method'] || 'post';
@@ -273,6 +281,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         baseURL: util.tpl(host, Object.assign(util.buildTplParams(inputValueObj['bb'], inputValueObj)))
     }
     util[method](apiUrl, requestParam, options).then(function(response) {
+        toast1.clear();
         var data = response['data'];
         if (data['ok']) {
             var realDataMap = data['data'] || {};
@@ -321,6 +330,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
             error(data['code'], data['message']);
         }
     }).catch(function(err) {
+        toast1.clear();
         error(err);
     });
 }
