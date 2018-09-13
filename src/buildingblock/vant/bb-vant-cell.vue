@@ -19,6 +19,7 @@ import 'vant/lib/cell/style';
             /*其他属性配置
                 {
                     icon:String 左侧图标,
+                    rightIcon:String 右侧图标
                     title:String 左侧标题,
                     label:String 标题下方的描述信息,
                     required:Boolean 是否显示表单必填星号,
@@ -32,7 +33,9 @@ import 'vant/lib/cell/style';
             option:{
                 type:Object,
                 default:function(){
-                    return {}
+                    return {
+
+                    }
                 }
 
             },
@@ -143,6 +146,34 @@ import 'vant/lib/cell/style';
             }},[children]);
         },
         mounted(){
+            if(this.option.rightIcon){
+                this.realContent.push({
+                    "uuid": _TY_Tool.uuid(),
+                    "alias": "bb-indep-button",
+                    "aliasName": "右侧图标",
+                    "group": "right-icon",
+                    "attributes": {
+                        "button": {
+                            "text":" ",
+                            "icon": this.option.rightIcon,
+                            "type": "text",
+                            "style": {
+                                
+                            }
+                        }
+                    },
+                    "animation": [
+                        
+                    ],
+                    "interactives": [
+                        
+                    ],
+                    "layout": {
+                        
+                    },
+                    "type": "Basic"
+                });
+            }
             this.getData();
         },
         //事件click
@@ -162,10 +193,10 @@ import 'vant/lib/cell/style';
                             data.forEach((item) => {
                                 t.loading = false;
                                 const {dataKey, value} = item;
-                                t.realContent = value;
+                                t.realContent = t.realContent.concat(value);
                             });
                         }else{
-                            t.realContent = data;
+                            t.realContent = t.realContent.concat(data);
                         }
                     }, function (code, msg) {
                         t.loading = false;
