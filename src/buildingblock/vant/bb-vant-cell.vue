@@ -27,7 +27,9 @@ import 'vant/lib/cell/style';
                     center:Boolean 使内容垂直居中
                     url:""  跳转链接
                     clickable:Boolean 开启点击反馈
-                    valueStyle:{}
+                    valueStyle:{},
+                    isScanCode:false,
+                    scanBuzz:""
                  }
             */
             option:{
@@ -181,6 +183,9 @@ import 'vant/lib/cell/style';
             //点击事件
             click(param){
                 this.$emit('click',param);
+                if(this.option.isScanCode){
+                    this.scanQRCode();
+                }
             },
             //获取动态内容
             getData(){
@@ -203,6 +208,20 @@ import 'vant/lib/cell/style';
                     });
                 }
             },
+            scanQRCode(successFn){
+                const t = this;
+                _TY_Tool.scanQRCode((res)=>{
+                    if(t.option.scanBuzz){
+                        _TY_Tool.loadBuzz(t.option.scanBuzz, function(code) {
+                            t.util = util;
+                            eval(code);
+                        });
+                    }else if(successFn){
+                        successFn(res);
+                    }
+                });
+            }
+
         }
     }
 </script>
