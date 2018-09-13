@@ -21,7 +21,7 @@ import 'vant/lib/checkbox-group/style';
         name: 'bb-vant-checkbox',
         components: {
           "van-checkbox":Checkbox,
-          "van-check-group":CheckboxGroup,
+          "van-checkbox-group":CheckboxGroup,
         },
         props: {
             //默认值  支持v-model
