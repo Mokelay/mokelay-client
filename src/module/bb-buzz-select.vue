@@ -58,7 +58,7 @@ var fun = function() {
         item.text = item.label_Type;
         item.value = item.id;
     });
-    return realDataMap.dataList;
+    return realDataMap.data_list;
 }
 fun();`
     };
