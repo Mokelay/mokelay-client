@@ -1398,7 +1398,7 @@ util.isAndroid = function() {
 
 //注册微信jssdk
 util.get_wx = function() {
-    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "openLocation"]
+    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "openLocation", "scanQRCode"]
     const appUrl = encodeURI(window.location.href);
     const configUrl = `${_TY_ENV.apiHost}/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
     console.log("configUrl:", configUrl);
@@ -1425,6 +1425,16 @@ util.get_wx = function() {
 
             }, 'weixin-js-sdk');
         });
+}
+
+util.scanQRCode = function(successFn) {
+    window._TY_Tool.wx.scanQRCode({
+        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+        success: function(res) {
+            successFn(res);
+        }
+    })
 }
 
 

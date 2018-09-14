@@ -1,5 +1,5 @@
 <template>
-    <el-input-number v-model="valueBase" @change="change" :min="min" :controls="option.controls" :controls-position="option.controlsPosition" :max="max" :size="option.size" :disabled="option.disabled"></el-input-number>
+    <el-input-number v-model="valueBase" @change="change" :min="min" :controls="option.controls" :controls-position="option.controlsPosition" :max="max" :size="option.size" :disabled="option.disabled" :precision="option.precision" :step="option.step"></el-input-number>
 </template>
 
 <script>
@@ -32,7 +32,9 @@
                         disabled:false,
                         size:"",
                         controls:true,//是否显示控制器
-                        controlsPosition:""//默认控制器在两边 ，可选right
+                        controlsPosition:"",//默认控制器在两边 ，可选right
+                        precision:0,
+                        step:1
                     }
                 }
             }

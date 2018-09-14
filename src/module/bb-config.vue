@@ -887,29 +887,35 @@
                                     rules: [],
                                     props: {
                                         fields: [{
-                                            text: "整数",
+                                            text: "字符串",
+                                            value: "string"
+                                        },{
+                                            text: "数字",
                                             value: "number"
                                         }, {
+                                            text: "整数",
+                                            value: "integer"
+                                        }, {
                                             text: "浮点数",
-                                            value: "double"
+                                            value: "float"
                                         }, {
                                             text: "布尔值",
                                             value: "boolean"
                                         }, {
-                                            text: "字符串",
-                                            value: "string"
-                                        }, {
                                             text: "日期",
-                                            value: "date"
-                                        }, {
-                                            text: "日期时间",
-                                            value: "time"
+                                            value: "string"
                                         }, {
                                             text: "对象",
                                             value: "object"
                                         }, {
                                             text: "数组",
                                             value: "array"
+                                        }, {
+                                            text: "电子邮件",
+                                            value: "email"
+                                        }, {
+                                            text: "页面地址",
+                                            value: "url"
                                         }]
                                     }
                                 }, {

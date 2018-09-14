@@ -98,6 +98,25 @@
             //右侧滑动样式,swipe 主题时有效
             rightItemStyle:{
                 type:Object
+            },
+            /**
+                按钮解析
+                {
+                    disabled:false,//按钮是否可编辑
+                    action:'url 地址跳转|| execute-ds执行接口 || dialog-page弹窗 || code自定义代码 || buzz 巴斯代码',
+                    url:''跳转地址 action:'url’时有效
+                    urlType:'openWindow 在新标签中打开 
+                    ds:{} //按钮请求的接口配置 action:'execute-ds’时有效
+                    confirmTitle:'', //请求接口前的提示语标题   action:'execute-ds’时有效
+                    confirmText:'', //请求接口前的提示语内容   action:'execute-ds’时有效
+                    callBackStaticWords:'' //请求接口成功提示语
+                    dialogPage:'pageAlias',//弹窗中的页面名称   action:'dialog-page’时有效
+                    method:fn , //需要执行的方法 action:'code’时有效
+                    buzz:'buzzName'  //巴斯方法名称  action:'buzz’时有效
+                }
+             */
+            itemClickConfig:{
+                type:Object
             }
         },
         data() {
@@ -398,6 +417,12 @@
                         style:_cssStyle,
                         on:{
                             click:function(){
+                                if(t.itemClickConfig){
+                                    //如果配置了item的点击配置
+                                    _TY_Tool.resolveButton(t.itemClickConfig,_TY_Tool.buildTplParams(t,{
+                                        rowData:item
+                                    }));
+                                }
                                 t.$emit('itemClick',item,t);
                             }
                         }
