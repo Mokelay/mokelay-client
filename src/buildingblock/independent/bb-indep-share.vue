@@ -131,6 +131,24 @@ export default {
                 //             break;
                 //     }
                 // })
+            }else if(api && api.require){
+                //如果是 apiCloud 环境
+                var wx = api.require('wx');
+                wx.shareWebpage({
+                    apiKey: '',
+                    scene: 'session',
+                    title: shareInfo.title,
+                    description: shareInfo.desc,
+                    thumb: shareInfo.imgUrl,
+                    contentUrl: shareInfo.link
+                }, function(ret, err) {
+                    if (ret.status) {
+                        console.log("分享成功")
+                    } else {
+                        alert(err.code);
+                        console.log("分享失败",err.code);
+                    }
+                });
             }else{
                 return;
             }
