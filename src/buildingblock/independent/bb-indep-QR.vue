@@ -4,19 +4,43 @@
         components: {
         },
         props: {
+            /*二维码类型
+                default 默认 wx微信小程序二维码
+            */
+            qrType:{
+                type:String,
+                default:"default"
+            },
             url:{
-                type:Boolean,
-                default:false
+                type:String
             },
             //大小
             size:{
                 type:Number,
                 default:200
+            },
+            wxOptions:{
+                type:Object,
+                default:function(){
+                    return {
+                        //参数
+                        scene:"pageAlias",
+                        //页面
+                        page:"pages/index/index",
+                        //自动配置线条颜色
+                        auto_color:false,
+                        //auto_color 为 false 时生效，使用 rgb 设置颜色 例如 {"r":"xxx","g":"xxx","b":"xxx"} 十进制表示
+                        line_color:{"r":"0","g":"0","b":"0"},
+                        //透明底色
+                        is_hyaline:false
+                    }
+                }
             }
         },
         data() {
             return {
                 realUrl:_TY_Tool.tpl(this.url,this),
+                realWxOptions:Object.assign({width:this.size},this.wxOptions)
             }
         },
         render:function(createElement){
