@@ -134,13 +134,14 @@ import 'vant/lib/cell/style';
                     children.push(child);
                 });
             }
+            const url = _TY_Tool.tpl(t.option.url,t);
             return createElement('van-cell',{props:{
                 "icon":t.option.icon,
                 "label":t.option.label,
                 "required":t.option.required,
                 "is-link":t.option.isLink,
                 "center":t.option.center,
-                "url":t.option.url,
+                "url":url,
                 "clickable":t.option.clickable,
                 "title":t.option.title
             },on:{
