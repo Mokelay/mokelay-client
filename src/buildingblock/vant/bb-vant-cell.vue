@@ -134,14 +134,13 @@ import 'vant/lib/cell/style';
                     children.push(child);
                 });
             }
-            const url = _TY_Tool.tpl(t.option.url,t);
             return createElement('van-cell',{props:{
                 "icon":t.option.icon,
                 "label":t.option.label,
                 "required":t.option.required,
                 "is-link":t.option.isLink,
                 "center":t.option.center,
-                "url":url,
+                "url":_TY_Tool.tpl(this.option.url,_TY_Tool.buildTplParams(this)),
                 "clickable":t.option.clickable,
                 "title":t.option.title
             },on:{
@@ -149,6 +148,7 @@ import 'vant/lib/cell/style';
             }},[children]);
         },
         mounted(){
+            const t = this;
             if(this.option.rightIcon){
                 this.realContent.push({
                     "uuid": _TY_Tool.uuid(),
