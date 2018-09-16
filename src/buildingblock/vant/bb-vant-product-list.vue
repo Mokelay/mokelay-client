@@ -359,6 +359,10 @@ import 'vant/lib/submit-bar/style';
         }
         .submit-bar{
             height:1.333333rem;
+            .van-checkbox__label{
+                display:inline-block;
+                width:auto;
+            }
         }
     }
 </style>
