@@ -27,7 +27,7 @@
         <div class="submit-bar">
             <van-submit-bar
             :price="totalPrice"
-            button-text="提交订单"
+            :button-text="submitButton.selectText"
             @submit="onSubmit"
             >
                 <van-checkbox v-model="allChecked" @change="selectAllGroup">全选</van-checkbox>
@@ -129,7 +129,12 @@ import 'vant/lib/submit-bar/style';
                 default:"price"
             },
             submitButton:{
-                type:Object
+                type:Object,
+                default:function(){
+                    return {
+                        selectText:"提现"
+                    }
+                }
             },
             /*其他属性扩展 disabled 等
                 disabled: 禁用
