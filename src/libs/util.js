@@ -28,6 +28,10 @@ util.invoke = function(options) {
                 _clearLoading();
                 location.href = response['data']['message'] || window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] <= -400) {
+                if(window._TY_BB_Edit){
+                    window._TY_Toast({content:"提示：该页面需要有登陆态情况下才会展示正确数据"});
+                    return;
+                }
                 //所有Code小于等于-400都是属于没有登录授权的，统一走SSOURL配置路径
                 if (response['data']['code'] == -401) {
                     _clearLoading();
