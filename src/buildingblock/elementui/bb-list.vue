@@ -808,18 +808,22 @@
             },
             hideBtn(button, scope){
                 const row = scope.row;
+                let show = false;
                 if (button['hideCheck']) {
                     return button['hideCheck'].call(this, row, scope);
                 }
                 if(button['showKey']){
                     var showKey = button['showKey'];
-                    if(row[showKey] == button['showValue'] || button['showValue'].indexOf(row[showKey]) >= 0){//兼容多个状态
-                        return true
-                    }else{
-                        return false
-                    }
+                    var value = row[showKey];
+                    value = value.toString();
+                    var showArr = button['showValue'].split(",");
+                    showArr.forEach((val,index)=>{
+                        if(!show && value == val){
+                            show = true;
+                        }
+                    })
                 }
-                return true;
+                return show;
             },
             //默认选中list哪一行数据
             activeRow:function(index){
