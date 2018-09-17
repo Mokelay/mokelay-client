@@ -103,6 +103,9 @@
                                 <bb v-if="hideBtn(button,scope) && button['buttonType'] == 'dialog'" :alias="button['dialog']['alias']" :config="button['dialog']['config']" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb>
                             </span>
                         </div>
+                        <div v-else-if="column['type'] == 'bb' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
+                            <bb-layout-seriation :content="transferContent(column,scope['row'])" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb-layout-seriation>
+                        </div>
                         <div v-else-if="column['type'] == 'edit' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
                             <el-input :value="scope['row'][column.prop]"
                                       @blur="cellSubmit($event,column,scope['row'])"></el-input>
@@ -1481,6 +1484,33 @@
                     etProp.option.disabled = false;
                     column.etProp = JSON.stringify(etProp);
                 })
+            },
+            //转换content中的模板
+            transferContent(button,rowData){
+                debugger
+                const t = this;
+                const content = button["content"]
+                //数据解析到模板中去
+                let _content = _TY_Tool.tpl(JSON.stringify(content),_TY_Tool.buildTplParams(t,{
+                    rowData:rowData
+                }));
+                if(!_content){
+                    console.error("错误提示:","列表组件没有配置模板或者没有匹配到参数");
+                    return true;
+                }
+                /*
+                    兼容 ul包含ul的情况
+                    子的ul中模板用<#= ... #>代替，否则第一层就会被模板参数替换
+                */
+                const reg = /<#=(.*?)#>/g;
+                if(_content.match(reg)){
+                    //如果字符串中含有<#=...#> 这样的标识，转换成 <%=...%>
+                    _content = _content.replace(reg,function(){
+                        return "<%="+arguments[1]+"%>";
+                    });
+                }
+                let realContent = JSON.parse(_content);
+                return realContent;
             }
         }
     }
