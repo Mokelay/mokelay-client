@@ -104,7 +104,7 @@
                             </span>
                         </div>
                         <div v-else-if="column['type'] == 'bb' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
-                            <bb-layout-seriation :content="transferContent(column,scope['row'])" :parentData="{'row-data':scope['row'],'rowData':scope['row']}" :on="bbButtonFinishOnObj"></bb-layout-seriation>
+                            <bb-layout-seriation :content="transferContent(column,scope['row'])"></bb-layout-seriation>
                         </div>
                         <div v-else-if="column['type'] == 'edit' && (scope['$index'] != canEditRow || !column['et'] || onlyAddEditShow(scope,column))">
                             <el-input :value="scope['row'][column.prop]"
@@ -825,6 +825,8 @@
                             show = true;
                         }
                     })
+                }else{
+                    show = true;
                 }
                 return show;
             },
@@ -1487,7 +1489,6 @@
             },
             //转换content中的模板
             transferContent(button,rowData){
-                debugger
                 const t = this;
                 const content = button["content"]
                 //数据解析到模板中去
