@@ -817,7 +817,7 @@
                 }
                 if(button['showKey']){
                     var showKey = button['showKey'];
-                    var value = row[showKey];
+                    var value = row[showKey] == undefined?"":row[showKey];
                     value = value.toString();
                     var showArr = button['showValue'].split(",");
                     showArr.forEach((val,index)=>{
