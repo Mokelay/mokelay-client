@@ -126,7 +126,7 @@
                 const t=this;
                 if(files&&files.length>0){
                     files.forEach((item)=>{
-                        t.uploadeFile(item);
+                        t.uploadeFile(item,insert);
                     });
                 }
             },
@@ -142,7 +142,10 @@
                 xhr.open("post", uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
                 xhr.onload = (res) => { 
                         const response = JSON.parse(res.target.response);
-                        const url = response.data.file_url;
+                        let url = response.data.file_url;
+                        if(!url.startsWith("http")){
+                            url = _TY_APIHost + url;
+                        }
                         insert(url);//插入到文本中
                         _TY_Toast.closeAll();
                         _TY_Toast({content:"上传成功！"});
