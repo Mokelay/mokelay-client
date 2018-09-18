@@ -93,7 +93,10 @@
             initEditorConfig(){  // 初始化编辑器配置
                 let t=this;
                 //所有配置参数请参考：https://www.kancloud.cn/wangfupeng/wangeditor3/335782
-                this.editor.customConfig.uploadImgServer = this.dataInterface.uploadImgServer;  // 图片上传地址
+                // this.editor.customConfig.uploadImgServer = this.dataInterface.uploadImgServer;  // 图片上传地址
+                //自定义上传文件
+                this.editor.customConfig.customUploadImg = t.uploadFiles;
+
                 // 将图片大小限制为 3M
                 this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
                 // 限制一次最多上传 5 张图片
@@ -117,8 +120,37 @@
                 this.editorContent = this.editor.txt.html();  // 获取 html 格式
                 // this.editor.txt.text();  // 获取纯文本
                 // this.editor.txt.formatText();  // 获取格式化后的纯文本
+            },
+            //上传文件
+            uploadFiles(files,insert){
+                const t=this;
+                if(files&&files.length>0){
+                    files.forEach((item)=>{
+                        t.uploadeFile(item);
+                    });
+                }
+            },
+            //文件上传
+            uploadeFile(file,insert){
+                const t = this;
+                let formdata = new FormData();
+                formdata.append('file',file);
+                console.log('正在上传。。。');
+                //添加请求头 
+                let uploadUrl = t.getUploadApi()?t.getUploadApi():"/config/ty_oss_upload";//统一文件上传地址
+                const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
+                xhr.open("post", uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
+                xhr.onload = (res) => { 
+                        const response = JSON.parse(res.target.response);
+                        const url = response.data.file_url;
+                        insert(url);//插入到文本中
+                        _TY_Toast.closeAll();
+                        _TY_Toast({content:"上传成功！"});
+                    }; //请求完成
+                xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
+                xhr.send(formdata); //开始上传，发送form数据
+                _TY_Toast({content:"上传中！",$type:"loading",duration:900000});
             }
-
         }
     }
 </script>
