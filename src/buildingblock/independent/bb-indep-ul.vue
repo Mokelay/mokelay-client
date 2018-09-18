@@ -117,6 +117,10 @@
              */
             itemClickConfig:{
                 type:Object
+            },
+            //为空时显示的内容
+            emptyContent:{
+                type:Array
             }
         },
         data() {
@@ -364,9 +368,13 @@
             renderLi:function(createElement){
                 let t=this;
                 let result = [];
-                if(!t.list||t.list.length<=0||!t.itemContent||t.itemContent.length<=0){
+                if(((!t.list||t.list.length<=0)&&!t.emptyContent)||!t.itemContent||t.itemContent.length<=0){
                     return;
                 }
+                if((!t.list||t.list.length<=0)&&t.emptyContent){
+                    result.push(_TY_Tool.bbRender(t.emptyContent,createElement,t));
+                }
+
                 t.list.forEach((item,index)=>{
                     if(item['hide']){
                         return true;

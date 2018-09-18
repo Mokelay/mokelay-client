@@ -15,12 +15,16 @@
             value: {
                 type: String,
                 default: ''
+            },
+            //上传ds
+            uploadDs:{
+                type:Object
             }
         },
         data() {
             return {
                 dataInterface: {
-                    uploadImgServer: _TY_APIHost+'/wy/upload/file'  // 编辑器插入的图片上传地址
+                    uploadImgServer: this.getUploadApi()  // 编辑器插入的图片上传地址
                 },
                 editor: '',  // 存放实例化的wangEditor对象，在多个方法中使用
                 // 为了避免麻烦，每个编辑器实例都用不同的 id
@@ -53,6 +57,21 @@
             this.destroyEditor();
         },
         methods: {
+            getUploadApi:function(){
+                const t=this;
+                let apiUrl = "";
+                if(t.uploadDs){
+                    const api = t.uploadDs['api'];
+                    const type = t.uploadDs['category'];
+                    apiUrl = api;
+                    if (type == 'config') {
+                        //如果不是自定义接口
+                        apiUrl = window._TY_ContentPath + "/" + api;
+                    }
+                    apiUrl = _TY_APIHost + apiUrl;
+                }
+                return apiUrl;
+            },
             createEditor(JQUERY){  // 创建编辑器
                 let t=this;
                 this.initEditorConfig();  // 初始化编辑器配置，在create之前
