@@ -132,6 +132,7 @@ export default {
                 //     }
                 // })
             }else if(api && api.require){
+                t.show = false;
                 //如果是 apiCloud 环境
                 var wx = api.require('wx');
                 wx.shareWebpage({
