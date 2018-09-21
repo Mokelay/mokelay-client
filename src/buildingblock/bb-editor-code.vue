@@ -34,6 +34,35 @@
             returnObj:{
                 type:Boolean,
                 default:false
+            },
+             /**
+             *  编辑代码确认按钮触发事件
+                @button:当前点击的按钮配置
+                {
+                    style:{},//css样式
+                    type:'primary',//按钮样式
+                    disabled:false,//按钮是否可编辑
+                    size:'small',//按钮大小
+                    icon:'icon',//按钮图标
+                    text:'按钮文字',//
+                    selectText:'按钮文字',
+                    action:'url 地址跳转|| execute-ds执行接口 || dialog-page弹窗 || code自定义代码 || buzz 巴斯代码',
+                    url:''跳转地址 action:'url’时有效
+                    urlType:'openWindow 在新标签中打开 
+                    ds:{} //按钮请求的接口配置 action:'execute-ds’时有效
+                    confirmTitle:'', //请求接口前的提示语标题   action:'execute-ds’时有效
+                    confirmText:'', //请求接口前的提示语内容   action:'execute-ds’时有效
+                    callBackStaticWords:'' //请求接口成功提示语
+                    dialogPage:'pageAlias',//弹窗中的页面名称   action:'dialog-page’时有效
+                    method:fn , //需要执行的方法 action:'code’时有效
+                    buzz:'buzzName'  //巴斯方法名称  action:'buzz’时有效
+                }
+            */
+            button:{
+                type:Object,
+                default: function(){
+                    return null;
+                }
             }
         },
         data() {
@@ -42,7 +71,8 @@
                 dialogVisible:false,
                 dialogWidth:'100%',
                 fullscreen:true,
-                codeObj : null
+                codeObj : null,
+                external:{}//支持外部参数
             }
         },
         watch: {
@@ -67,6 +97,17 @@
             var t =this;
         },
         methods: {
+            linkage:function(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                }
+            },
+            //设置值
+            setValue:function(val){
+                const t=this;
+                t.p_value = val;
+                t.setIframeValue(val);
+            },
             //json格式化
             jsonFormat:function(showMessage){
                 let t=this;
@@ -235,7 +276,35 @@
                     }
                 }
                 t.$emit("input",result);
-                t.dialogVisible =false;
+                //如果有确认按钮配置
+                if(t.button){
+                     _TY_Tool.resolveButton(t.button,_TY_Tool.buildTplParams(t,{
+                        value:result
+                     })).then(()=>{
+                        t.dialogVisible =false;
+                     });
+                }else{
+                    t.dialogVisible =false;
+                }
+            },
+            //获取iframe的值
+            getIframeValue:function(){
+                let t=this;
+                let frame = document.getElementById('childFrame_'+t.key);
+                var childWindow = frame.contentWindow;
+                let editor = childWindow.editor;
+                let result = editor.getValue();
+                return result;
+            },
+            //设置iframe value值
+            setIframeValue:function(val){
+                let t=this;
+                let frame = document.getElementById('childFrame_'+t.key);
+                if(frame){
+                    var childWindow = frame.contentWindow;
+                    let editor = childWindow.editor;
+                    editor.setValue(val);
+                }
             }
         }
     }
