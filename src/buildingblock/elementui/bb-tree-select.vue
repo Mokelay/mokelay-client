@@ -20,9 +20,10 @@
                     @tree-commit="treeCommit"
                     @change="treeChange"
                     :check-strictly="checkStrictly"
+                    class="bb-tree-pop"
                     ref="bbtree">
             </bb-tree>
-            <el-button class="fr mt20" type="primary" @click="commit">确定</el-button>
+            <el-button class="mt20" type="primary" @click="commit">确定</el-button>
         </el-popover>
         <div>
             <el-input type="hidden"  v-model="bb_input_value"></el-input>
@@ -148,6 +149,7 @@
             clear() {
                 this.bb_value = '';
                 this.bb_input_value = '';
+                this.bb_input_text = '';
                 this.$emit('change', '');
                 this.$emit('input', '');
             },
@@ -179,6 +181,11 @@
 
     .mt20 {
         margin-top: 20px;
+    }
+
+    .bb-tree-pop{
+        max-height: 500px;
+        overflow-y: auto; 
     }
 
 </style>

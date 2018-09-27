@@ -11,6 +11,8 @@
         :suffix-icon="realOption.suffixIcon"
         :maxlength="realOption.maxLen != undefined?realOption.maxLen:100000000000"
         :minlength="realOption.minLen"
+        :type="realOption.type"
+        :class="realOption.type"
       >
     </el-input>
 </template>
@@ -42,7 +44,8 @@
                         suffixIcon:null,
                         placeholder:"请输入内容",
                         minLen:0,
-                        maxLen:1000000000
+                        maxLen:1000000000,
+                        type:"text"//text、textarea、原生type
                     };
                 }
             }
@@ -111,3 +114,8 @@
         }
     }
 </script>
+<style scoped>
+    .password{
+        -webkit-text-security: disc;
+    }
+</style>

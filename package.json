@@ -9,6 +9,7 @@
         "local": "webpack-dev-server --content-base ./run/ --hot --config run/webpack.config.js",
         "prd": "rm -rf ./dist && rm -rf ./run/run_dist && ENV=prd webpack --progress --hide-modules --config run/webpack.config.js",
         "chisong": "rm -rf ./dist && rm -rf ./run/run_dist && ENV=chisong webpack --progress --hide-modules --config run/webpack.config.js",
+        "ty-client-xiaoyi": "rm -rf ./dist && rm -rf ./run/run_dist && ENV=ty-client-xiaoyi webpack --progress --hide-modules --config run/webpack.config.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "files": [
