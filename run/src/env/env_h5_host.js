@@ -11,6 +11,10 @@ var env = {
 	chisong: {
 		name: 'chisong',
 		h5Host: 'http://ty-cdn.greatbee.com/ty-client-core-chisong/'
+	},
+	"ty-client-xiaoyi": {
+		name: 'ty-client-xiaoyi',
+		h5Host: 'http://ty-cdn.greatbee.com/ty-client-core-xiaoyi/'
 	}
 };
 // export default env;
