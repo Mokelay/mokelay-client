@@ -19,6 +19,23 @@
             //上传ds
             uploadDs:{
                 type:Object
+            },
+            //用户设置
+            customConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        pasteFilterStyle:false,
+                        // 将图片大小限制为 3M
+                        uploadImgMaxSize:3 * 1024 * 1024,
+                        // 限制一次最多上传 5 张图片
+                        uploadImgMaxLength:5,
+                        //自定义 fileName
+                        uploadFileName:'file',
+                        onchangeTimeout:1000, // 单位 ms
+                        zInde:1
+                    }
+                }
             }
         },
         data() {
@@ -115,6 +132,8 @@
                     t.$emit("input",html);
                 };
                 this.editor.customConfig.zIndex=1;
+                const customConfig = this.editor.customConfig;
+                this.editor.customConfig = Object.assign(customConfig,t.customConfig);
             },
             getEditorContent(){  // 获取编辑器 内容区内容
                 this.editorContent = this.editor.txt.html();  // 获取 html 格式
