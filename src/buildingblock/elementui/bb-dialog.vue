@@ -26,7 +26,8 @@
                 on:{
                     close:t.closeFn
                 },
-                class:'bb-dialog '+(t.autoMaxHeight?'':'max')
+                class:'bb-dialog '+(t.autoMaxHeight?'':'max'),
+                ref:"bb-dialog"
             },[bbItems,this.$slots.default]); //支持插槽
         },
         props: {
@@ -189,7 +190,21 @@
             },
             loadChildBB:function(){
                 let t=this;
-                return _TY_Tool.loadChildBB(t);                
+                const childBB = [];
+                if(t.content){
+                    t.content.forEach((content,index)=>{
+                        const bb = {
+                            bbAlias: content.alias,
+                            children: null,
+                            name: content.aliasName,
+                            uuid: content.uuid
+                        }
+                        childBB.push(childrenBB);
+                    });
+                    return childBB;
+                }else{
+                    return _TY_Tool.loadChildBB(t);
+                }     
             },
             show:function(){
                 this.active = true;
