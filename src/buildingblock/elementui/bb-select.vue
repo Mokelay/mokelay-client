@@ -260,6 +260,7 @@
             cleanAll:function(){
               this.valueBase = null;
               this.items = null;
+              this.external['linkage'] = "";
               this.$emit('input',"");
               this.$emit('change',"");
             },
