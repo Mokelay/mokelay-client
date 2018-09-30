@@ -48,7 +48,7 @@
                 fields:[],
                 fieldsBanner:{
                     title:'',
-                    url:"http://" + document.location.host + "/#" + window._TY_Home,
+                    url:window.location.protocol + "//" + document.location.host + "/#" + window._TY_Home,
                     // icon:'ty-icon_M_b ty-font',
                     img:"",
                     class:'wy-banner-left wy-banner-lg'
