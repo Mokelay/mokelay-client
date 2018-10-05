@@ -134,6 +134,8 @@
                             </div>
                             <div v-if="column['template'] == 'html'" v-html="scope['row'][column.prop]">
                             </div>
+                            <div v-if="column['template'] == 'tpl'" v-html="tpl(column.tpl,scope['row'])">
+                            </div>
 
                         </div>
                         <div v-else>
@@ -522,6 +524,14 @@
             this.$emit('bb-mounted');
         },
         methods: {
+            //tpl 方法
+            tpl:function(tpl,params){
+                let t=this;
+                if(!tpl){
+                    return "";
+                }
+                return _TY_Tool.tpl(tpl,_TY_Tool.buildTplParams(t,params));
+            },
             //检查ds的输入是否是否有参数   只填充不带参数的下拉
             checkDsInput:function(etProp){
                 let t=this;

@@ -556,6 +556,9 @@
                         }, {
                             value: 'html',
                             text: 'html模板'
+                        }, {
+                            value: 'tpl',
+                            text: '模板'
                         }]
                     }
                 }, {
@@ -580,6 +583,16 @@
                             rules: [],
                             props: {}
                         }]
+                    }
+                }, {
+                    pbbId:'tpl',
+                    name: '模板',
+                    attributeName: 'tpl',
+                    et: 'bb-input',
+                    hide:true,
+                    show:false,
+                    rules: [],
+                    props: {
                     }
                 }, {
                     pbbId:'file',
@@ -741,8 +754,8 @@
                 on:[
                     {pbbId:'type',triggerEventName:'change',executeArgument:`var type = params[0];if(type == "bb"){t.$parent.$parent.hideAndShowFormItem(["form-item_content"],["form-item_buttons","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "button-group"){t.$parent.$parent.hideAndShowFormItem(["form-item_buttons"],["form-item_content","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "template"){t.$parent.$parent.hideAndShowFormItem(["form-item_template"],["form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "edit"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "picture"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "default"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}`},
                     {pbbId:'type',triggerEventName:'mounted',executeArgument:`var type = params[0];if(type == "bb"){t.$parent.$parent.hideAndShowFormItem(["form-item_content"],["form-item_buttons","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "button-group"){t.$parent.$parent.hideAndShowFormItem(["form-item_buttons"],["form-item_content","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "template"){t.$parent.$parent.hideAndShowFormItem(["form-item_template"],["form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "edit"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "picture"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "default"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}`},
-                    {pbbId:'template',triggerEventName:'change',executeArgument:`var type = params[0];if(type == "custom"){t.$parent.$parent.hideAndShowFormItem(["form-item_templateProp","form-item_valueKey"],["form-item_file","form-item_staticWords"]);}else if(type == "staticWords"){t.$parent.$parent.hideAndShowFormItem(["form-item_staticWords"],["form-item_templateProp","form-item_valueKey","form-item_file"]);}else if(type == "file"){t.$parent.$parent.hideAndShowFormItem(["form-item_file"],["form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}`},
-                    {pbbId:'template',triggerEventName:'mounted',executeArgument:`var type = params[0];if(type == "custom"){t.$parent.$parent.hideAndShowFormItem(["form-item_templateProp","form-item_valueKey"],["form-item_file","form-item_staticWords"]);}else if(type == "staticWords"){t.$parent.$parent.hideAndShowFormItem(["form-item_staticWords"],["form-item_templateProp","form-item_valueKey","form-item_file"]);}else if(type == "file"){t.$parent.$parent.hideAndShowFormItem(["form-item_file"],["form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}`}
+                    {pbbId:'template',triggerEventName:'change',executeArgument:`var type = params[0];if(type == "custom"){t.$parent.$parent.hideAndShowFormItem(["form-item_templateProp","form-item_valueKey"],["form-item_tpl","form-item_file","form-item_staticWords"]);}else if(type == "staticWords"){t.$parent.$parent.hideAndShowFormItem(["form-item_staticWords"],["form-item_templateProp","form-item_valueKey","form-item_file","form-item_tpl"]);}else if(type == "file"){t.$parent.$parent.hideAndShowFormItem(["form-item_file"],["form-item_templateProp","form-item_tpl","form-item_valueKey","form-item_staticWords"]);}else if(type == "tpl"){t.$parent.$parent.hideAndShowFormItem(["form-item_tpl"],["form-item_templateProp","form-item_valueKey","form-item_staticWords","form-item_file"]);}`},
+                    {pbbId:'template',triggerEventName:'mounted',executeArgument:`var type = params[0];if(type == "custom"){t.$parent.$parent.hideAndShowFormItem(["form-item_templateProp","form-item_tpl","form-item_valueKey"],["form-item_file","form-item_staticWords"]);}else if(type == "staticWords"){t.$parent.$parent.hideAndShowFormItem(["form-item_staticWords"],["form-item_tpl","form-item_templateProp","form-item_valueKey","form-item_file"]);}else if(type == "file"){t.$parent.$parent.hideAndShowFormItem(["form-item_file"],["form-item_templateProp","form-item_tpl","form-item_valueKey","form-item_staticWords"]);}else if(type == "tpl"){t.$parent.$parent.hideAndShowFormItem(["form-item_tpl"],["form-item_templateProp","form-item_valueKey","form-item_staticWords","form-item_file"]);}`}
                 ],
                 table:this.value,
             }
