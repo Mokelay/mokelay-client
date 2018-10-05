@@ -140,7 +140,7 @@ fun();`
                 cmOptions:{
                     tabSize: 4,//缩进
                     mode: 'text/javascript',
-                    theme: 'base16-dark',
+                    // theme: 'base16-dark',
                     lineNumbers: true,
                     line: true,
                     matchBrackets:true
@@ -157,7 +157,6 @@ fun();`
         },
         mounted:function(){
              let t=this;
-             
         },
         methods: {
             //选择按钮点击

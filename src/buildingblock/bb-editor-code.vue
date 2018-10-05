@@ -128,6 +128,17 @@
                 t.cmOptions.mode = "application/ld+json";
                 t.cmOptions.lineWrapping = true;
                 t.cmOptions.autoCloseBrackets = true;
+                try{
+                    JSON.parse(t.p_value);
+                }catch(e){
+                    if(showMessage){
+                        t.$message({
+                            type: 'info',
+                            message: "数据非JSON格式或者JSON有错!"
+                        });
+                    }
+                    return;
+                }
                 t.p_value = _TY_Tool.jsonFormat(t.p_value);
             },
             
