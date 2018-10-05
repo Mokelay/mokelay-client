@@ -142,7 +142,8 @@ fun();`
                     mode: 'text/javascript',
                     theme: 'base16-dark',
                     lineNumbers: true,
-                    line: true
+                    line: true,
+                    matchBrackets:true
                 },
                 editorCode:""//代码编辑器内容
             }
