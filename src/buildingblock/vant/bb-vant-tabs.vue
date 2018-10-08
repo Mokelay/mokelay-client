@@ -171,7 +171,7 @@ import 'vant/lib/tab/style';
                 return tabArr;
             },
             //外部设置当前激活标签
-            setActive(params){
+            activeTab(params){
                 this.set({
                     valueBase:params
                 })

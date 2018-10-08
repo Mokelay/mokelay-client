@@ -376,12 +376,6 @@
             loadChildBB(){
                 let t=this;
                 return _TY_Tool.loadChildBB(t);                
-            },
-            //外部设置当前激活标签
-            setActive(params){
-                this.set({
-                    p_activeName:params
-                })
             }
         }
     }
