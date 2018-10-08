@@ -169,6 +169,12 @@ import 'vant/lib/tab/style';
                     tabArr.push(item);
                 });
                 return tabArr;
+            },
+            //外部设置当前激活标签
+            setActive(params){
+                this.set({
+                    valueBase:params
+                })
             }
         }
     }
