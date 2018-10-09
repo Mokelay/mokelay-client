@@ -479,7 +479,7 @@
                 return _TY_Tool.loadChildBB(t);                
             },
             //外部设置当前激活标签
-            setActiveName(...params){
+            activeTab(...params){
                 const t = this;
                 params.forEach((param,key)=>{
                     if(param.type == "custom"){
