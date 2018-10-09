@@ -368,6 +368,7 @@
             },
             tabClick: function (tab, event) {
                 const t = this;
+                t.p_activeName = tab.name; 
                 if(t.$refs['badge_'+tab.name]){
                     t.$refs['badge_'+tab.name].hide();
                 }
