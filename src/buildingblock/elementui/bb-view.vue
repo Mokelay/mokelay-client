@@ -198,13 +198,17 @@
                                     })
                                     break;
                                 case 'Image':
-                                    const images = [];
+                                    let images = [];
                                     if(!t.formData[attributeName]){
                                         t.formData[attributeName] = []
                                     }
-                                    t.formData[attributeName].forEach((val,index)=>{
-                                        images.push(val.href);
-                                    });
+                                    if(typeof t.formData[attributeName] == "string"){
+                                        images = t.formData[attributeName];
+                                    }else{
+                                        t.formData[attributeName].forEach((val,index)=>{
+                                            images.push(val.href);
+                                        });
+                                    }
                                     const ele = createElement('bb-picture-preview',{
                                             props:{
                                                 imgList:images
