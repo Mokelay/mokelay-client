@@ -4,7 +4,7 @@
             <!-- 基础属性 -->
             <bb-form ref="bb-config-form-base" size="mini" labelWidth="80px" :hideSubmitButton="true" :content="formItemFieldsBase" v-model="valueBase"></bb-form>
             <!-- 表单属性 -->
-            <bb-form ref="bb-config-form-ad-form" v-if="valueBase.type == 'Form' && showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
+            <bb-form ref="bb-config-form-ad-form" v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <!-- 积木属性 -->
             <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :lazy="false" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
@@ -775,7 +775,7 @@
                             interactives: [],
                             layout: {} //积木布局,
                         }]
-                if(t.bbType == "Container" || t.valueBase.type == 'Form' && t.showBBSelect){
+                if(t.bbType == "Container" || t.showBBSelect){
                     t.formItemFieldsBase.push({                       
                             uuid: _TY_Tool.uuid(),
                             alias: 'bb-input', //布局类积木 || 普通积木
@@ -805,6 +805,30 @@
                             props:{
                             },
                             rules:[{ required: true, message: '请输入字段别名', trigger: 'blur' }]
+                        },{                      
+                            attributeName:'dt',
+                            et:'bb-select',
+                            group:'表单选项',                   
+                            name:'内容类型',
+                            description:"",                               
+                            props:{
+                                fields:[{
+                                    value:"String",
+                                    text:"字符串"
+                                },{
+                                    value:"Number",
+                                    text:"数字"
+                                },{
+                                    value:"File",
+                                    text:"文件"
+                                },{
+                                    value:"Image",
+                                    text:"图片"
+                                },{
+                                    value:"default",
+                                    text:"其他"
+                                }]
+                            }
                         },{                      
                             attributeName:'display',
                             et:'bb-select',
