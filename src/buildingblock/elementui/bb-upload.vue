@@ -173,13 +173,36 @@
                         t.$emit('input',resultFileList);
                     });
                 }else{
+                    resultFileList = t.defaultBuzzHandle(fileList);
                     if(fileList instanceof Array && fileList.length<=0){
                         resultFileList='';
                     }
-                    resultFileList = _TY_Tool.deepClone(fileList);
                     t.$emit(emit,resultFileList);
                     t.$emit('input',resultFileList);
                 }
+            },
+            //默认处理文件回调
+            defaultBuzzHandle:function(fileList){
+                let t=this;
+                var newArr = '';
+                const fileKey = (t.uploadDs.outputs[0]&&t.uploadDs.outputs[0]['valueKey'])||'file_url';
+                fileList.forEach((val, key) => {
+                    if (val.fullName && !val.response && val.url) {
+                        if (newArr.length > 0) {
+                            newArr = newArr + ',' + val.url
+                        } else {
+                            newArr = val.url
+                        }
+                    } else if (val.response && val.response.data && val.response.data[fileKey]) {
+                      if (newArr.length > 0) {
+                                newArr = newArr + ',' + val.response.data[fileKey];
+                            } else {
+                                newArr = val.response.data[fileKey];
+                            }
+                    }
+                });
+                newArr = newArr.length == 0 ? "" : newArr
+                return newArr;
             },
             //回填图片
             setFileList:function(val,t){
