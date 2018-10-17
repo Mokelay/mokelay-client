@@ -20,7 +20,7 @@
             <el-footer>
                 <bb-layout-seriation ref="footer" aliasName="footer" :content="realFooter" :horizontal="true"></bb-layout-seriation>
             </el-footer>
-        </el-container> -->
+        </el-container>
         <!-- 左右布局 -->
         <el-container v-if="realLayout == 'r-m'">
             <el-aside width="20%" :style="{background:realBgColor.leftAside}">
