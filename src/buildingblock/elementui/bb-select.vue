@@ -152,6 +152,7 @@
             if(t.valueBase){
               setTimeout(function(){t.$emit('mounted',t.valueBase)},0);
             }
+            setTimeout(function(){t.$emit('ready',t.valueBase)},0);
         },
         methods: {
           //多选值 转换，string 数组转换成  多选逗号隔开

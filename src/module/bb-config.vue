@@ -317,12 +317,18 @@
                     uuid:'interactive-fromContentUUID'+t.key,
                     alias:'bb-select',                   
                     aliasName:'事件积木',              
-                    //group:'交互事件',                   
+                    //group:'交互事件',        
                     attributes:{
                         attributeName:'fromContentUUID',
-                        fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}]
+                        fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}],
+                        value:t.alias
                     },
                     interactives:[{
+                        uuid:_TY_Tool.uuid(),
+                        fromContentEvent:'ready',
+                        executeType:'trigger_method',
+                        executeArgument:`t.$children[0].$children[1].setValue("${t.alias}")`,
+                    },{
                         uuid:'interactive-fromContentUUID_01',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
