@@ -246,7 +246,7 @@
                                 config:{
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
-                                    buttons:notCanOpt?[]:['up','down','remove'],
+                                    buttons:notCanOpt?[]:['copy','up','down','remove'],
                                     onFocus:notCanOpt?false:bbEle.onFocus,
                                     styleType:t.option.styleType
                                 }   
@@ -256,6 +256,7 @@
                                 up:t.up.bind(null,index),
                                 down:t.down.bind(null,index),
                                 remove:t.remove.bind(null,index),
+                                copy:t.copy.bind(null,index),
                                 onFocus:notCanOpt?false:t.onFocus.bind(null,index),
                                 onBlur:t.onBlur.bind(null,index)
                             },
@@ -309,6 +310,15 @@
                 const item = t.realContent[index]
                 t.realContent.splice(index,1);
                 t.realContent.splice(index+1,0,item);
+            },
+            copy:function(...params){
+                const t=this;
+                const index = params[0];
+                t.$emit('copy',t.realContent[index]);
+                const contentItem = t.realContent[index];
+                const newContent = _TY_Tool.copyContent([contentItem]);
+                t.realContent.splice(index+1, 0,newContent[0]);
+                t.$emit('change',t.realContent);
             },
             //删除返回当前的积木数据
             remove:function(...params){

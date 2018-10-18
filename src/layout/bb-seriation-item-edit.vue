@@ -9,6 +9,7 @@
             const bbItems = _TY_Tool.bbRender(realContent, createElement, t);
             const contentElements = createElement('div',{props:{},attrs:{class:t.borderClass}},[bbItems,t.$slots.default]);
             //生成按钮
+            const copyButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.copy.icon},class:t.realStyle.copy.class},on:{click:t.copy}},[]);
             const upButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.up.icon},class:t.realStyle.up.class},on:{click:t.up}},[]);
             const downButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.down.icon},class:t.realStyle.down.class},on:{click:t.down}},[]);
             const removeButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.remove.icon},class:t.realStyle.remove.class},on:{click:t.remove}},[]);
@@ -23,6 +24,9 @@
                         break;
                     case 'remove':
                         buttons.push(removeButton);
+                        break;
+                    case 'copy':
+                        buttons.push(copyButton);
                         break;
                 }
             })
@@ -39,7 +43,7 @@
                 {
                     horizontal:false, //水平排列
                     pointer:false  //展示箭头
-                    buttons:['up','down','remove'] //需要展示的按钮
+                    buttons:['copy','up','down','remove'] //需要展示的按钮
                 }
             */
             config:{
@@ -48,7 +52,7 @@
                     return {
                         horizontal:false, //水平排列
                         pointer:false,
-                        buttons:['up','down','remove'],
+                        buttons:['copy','up','down','remove'],
                         onFocus:false
                     }
                 }
@@ -122,6 +126,10 @@
                         class:'ma fs16',
                         icon:'ty-icon_lajitong'
                     },
+                    copy:{
+                        class:'ma fs16',
+                        icon:'ty-wenjuan_fuzhi'
+                    },
                     pointer:{
                         class:'ty-jiantou lh100'
                     },
@@ -143,6 +151,10 @@
                     remove:{
                         class:'ma fs16',
                         icon:'ty-icon_lajitong'
+                    },
+                    copy:{
+                        class:'ma fs16',
+                        icon:'ty-wenjuan_fuzhi'
                     },
                     pointer:{
                         class:'ty-jiantou rotate90 w15 vat lh200 dib'
@@ -197,6 +209,10 @@
             //删除返回当前的积木数据
             remove:function(){
                 this.$emit('remove',this);
+            },
+            //复制节点
+            copy:function(){
+                this.$emit('copy',this);
             },
             loadChildBB(){
                 let t=this;
