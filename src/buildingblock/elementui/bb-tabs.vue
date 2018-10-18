@@ -210,6 +210,7 @@
         mounted:function(){
             let t=this;
             //将content属性转换成可以识别的tab组件
+            t.readActiveTab();
             t.key = ""+ +new Date();
             setTimeout(()=>{
                 t.$emit("mounted",t);
@@ -368,7 +369,8 @@
             },
             tabClick: function (tab, event) {
                 const t = this;
-                t.p_activeName = tab.name; 
+                t.p_activeName = tab.name;
+                t.storageActiveTab(); 
                 if(t.$refs['badge_'+tab.name]){
                     t.$refs['badge_'+tab.name].hide();
                 }
@@ -483,9 +485,18 @@
                 const t = this;
                 params.forEach((param,key)=>{
                     if(param.type == "custom"){
-                        t.p_activeName = param.arguments;                  
+                        t.p_activeName = param.arguments;
+                        t.storageActiveTab();                  
                     }
                 })
+            },
+            //将当前激活标签记录到sessionstorage
+            storageActiveTab:function(){
+                sessionStorage.setItem("bb-tabs",this.p_activeName);
+            },
+            //将当前激活标签记录到sessionstorage
+            readActiveTab:function(){
+                this.p_activeName = sessionStorage.getItem("bb-tabs") || this.p_activeName;
             }
         }
     }
