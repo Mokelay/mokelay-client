@@ -204,7 +204,7 @@
                     }
                 });
                 this.p_activeName = tempTab;
-            }
+            },
             //外部设置当前激活标签
             activeTabFromOn(...params){
                 const t = this;
