@@ -149,6 +149,10 @@
             if(!t.p_activeName&&t.tabs&&t.tabs.length>0){
                 t.p_activeName = t.tabs[0].name;
             }
+            t.readActiveTab();
+            setTimeout(()=>{
+                t.$emit("mounted",t);
+            },500);
         },
         methods: {
             //渲染头部
@@ -185,6 +189,32 @@
                     });
                 }
             },
+            //将当前激活标签记录到sessionstorage
+            storageActiveTab:function(){
+                sessionStorage.setItem("bb-indep-tabs",this.p_activeName);
+            },
+            //将当前激活标签记录到sessionstorage
+            readActiveTab:function(){
+                const storageTab = sessionStorage.getItem("bb-indep-tabs")||'';
+                let tempTab = this.p_activeName;
+                t.realTabs.forEach((item,index)=>{
+                    if(storageTab==item.name){
+                        tempTab = storageTab;
+                        return false;
+                    }
+                });
+                this.p_activeName = tempTab;
+            }
+            //外部设置当前激活标签
+            activeTabFromOn(...params){
+                const t = this;
+                params.forEach((param,key)=>{
+                    if(param.type == "custom"){
+                        t.p_activeName = _TY_Tool.tpl(param.arguments,_TY_Tool.buildTplParams(t));
+                        t.storageActiveTab();                  
+                    }
+                })
+            },
             //选中某个tab
             activeTab:function(tabName){
                 let t=this;
@@ -193,6 +223,7 @@
                         if(tab.name == tabName){
                             tab.show = true;
                             t.p_activeName = tab.name;
+                            t.storageActiveTab(); 
                             return false;
                         }
                     });
@@ -206,6 +237,7 @@
                         if(index == key){
                             tab.show = true;
                             t.p_activeName = tab.name;
+                            t.storageActiveTab(); 
                             return false;
                         }
                     });
@@ -288,6 +320,7 @@
                 }else{
                     t.p_activeName = tab.name;
                 }
+                t.storageActiveTab(); 
                 //分发tab点击事件
                 t.$emit('tab-click',tab,t);
             },
