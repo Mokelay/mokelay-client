@@ -195,6 +195,7 @@
             },
             //将当前激活标签记录到sessionstorage
             readActiveTab:function(){
+                const t=this;
                 const storageTab = sessionStorage.getItem("bb-indep-tabs")||'';
                 let tempTab = this.p_activeName;
                 t.realTabs.forEach((item,index)=>{

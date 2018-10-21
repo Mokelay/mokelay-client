@@ -543,6 +543,9 @@
     .h5_platform::-webkit-scrollbar {
          display: none;
     }
+    img.h5_bg{
+        z-index: 0;
+    }
     .h5_bg{
         position:absolute;
         z-index: 100;
