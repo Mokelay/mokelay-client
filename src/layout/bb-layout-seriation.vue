@@ -330,78 +330,93 @@
     }
 </script>
 <style scoped>
-    .h5_platform{
+
+.h5_platform{
         overflow-y: scroll;
-        padding: calc(5% + 105px) 0;
+        padding: calc(3% + 56px) 0;
         height: 100%;
-        width: 75%;
-        margin-left: 50px;
+        width: 80%;
+        margin-left:40px;
     }
     .h5_platform::-webkit-scrollbar {
          display: none;
+    }
+    img.h5_bg_l,img.h5_bg_r{
+        z-index: 0;
     }
     .h5_bg{
         position:absolute;
         z-index: 100;
     }
     .h5_bg_lt{
-        left: 5%;
-        top:5%;
+        width: 60px;
+        height: 60px;
+        left: 0;
+        top:3%;
     }
     .h5_bg_t{
-        left: calc(5% + 51px);
-        top:5%;
-        width: calc(90% - 103px);
-        height: 85px;
+        left: 60px;
+        top:3%;
+        width: calc(100% - 120px);
+        height: 60px;
     }
     .h5_bg_rt{
-        right: 5%;
-        top:5%;
+        width: 60px;
+        height: 60px;
+        right: 0;
+        top:3%;
     }
     .h5_bg_l{
-        left: 5%;
-        top:calc(5% + 85px);
-        height: calc(90% - 170px);
-        width: 25px;
+        left: 0;
+        top:calc(3% + 60px);
+        height: calc(94% - 120px);
+        width: 60px;
     }
     .h5_bg_r{
-        right: 5%;
-        top:calc(5% + 85px);
-        height: calc(90% - 170px);
-        width: 25px;
+        right: 0;
+        top:calc(3% + 60px);
+        height: calc(94% - 120px);
+        width: 60px;
     }
     .h5_bg_lb{
-        left: 5%;
-        bottom:5%;
+        left: 0;
+        bottom:3%;
+        width: 60px;
+        height: 60px;
     }
     .h5_bg_b{
-        left: calc(5% + 51px);
-        bottom:5%;
-        width: calc(90% - 103px);
-        height: 86px;
+        left: 60px;
+        bottom:3%;
+        width: calc(100% - 120px);
+        height: 60px;
     }
     .h5_bg_rb{
-        right: 5%;
-        bottom:5%;
+        right: 0;
+        bottom:3%;
+        width: 60px;
+        height: 60px;
     }
     .blockUp{
-        width: 90%;
-        padding-top: calc(5% + 85px);
+        width: 80%;
+        padding-top: calc(3% + 48px);
         position: absolute;
         z-index: 90;
         background: #fff;
-        left: 5%;
+        left: 0;
         top:0;
     }
     .blockDown{
-        width: 90%;
-        padding-top: calc(5% + 85px);
+        width: 80%;
+        padding-top: calc(3% + 40px);
         position: absolute;
         z-index: 90;
         background: #fff;
-        left: 5%;
+        left: 0;
         bottom:0;
     }
+
+
+
 </style>
 <style lang="less">
     .dn{
