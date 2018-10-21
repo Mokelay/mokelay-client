@@ -246,7 +246,7 @@
                                 config:{
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
-                                    buttons:notCanOpt?[]:['up','down','remove'],
+                                    buttons:notCanOpt?[]:['copy','up','down','remove'],
                                     onFocus:notCanOpt?false:bbEle.onFocus,
                                     styleType:t.option.styleType
                                 }   
@@ -256,6 +256,7 @@
                                 up:t.up.bind(null,index),
                                 down:t.down.bind(null,index),
                                 remove:t.remove.bind(null,index),
+                                copy:t.copy.bind(null,index),
                                 onFocus:notCanOpt?false:t.onFocus.bind(null,index),
                                 onBlur:t.onBlur.bind(null,index)
                             },
@@ -309,6 +310,15 @@
                 const item = t.realContent[index]
                 t.realContent.splice(index,1);
                 t.realContent.splice(index+1,0,item);
+            },
+            copy:function(...params){
+                const t=this;
+                const index = params[0];
+                t.$emit('copy',t.realContent[index]);
+                const contentItem = t.realContent[index];
+                const newContent = _TY_Tool.copyContent([contentItem]);
+                t.realContent.splice(index+1, 0,newContent[0]);
+                t.$emit('change',t.realContent);
             },
             //删除返回当前的积木数据
             remove:function(...params){
@@ -522,13 +532,13 @@
         right: 0;
         bottom:0;
     }
-
+   
     .h5_platform{
         overflow-y: scroll;
-        padding: calc(5% + 85px) 0;
+        padding: calc(3% + 48px) 0;
         height: 100%;
-        width: calc(50% - 50px);
-        margin-left: calc(25% + 25px);
+        width: calc(60% - 66px);
+        margin-left: calc(20% + 35px);
     }
     .h5_platform::-webkit-scrollbar {
          display: none;
@@ -538,63 +548,73 @@
         z-index: 100;
     }
     .h5_bg_lt{
-        left: 25%;
-        top:5%;
+        width: 60px;
+        height: 60px;
+        left: 20%;
+        top:3%;
     }
     .h5_bg_t{
-        left: calc(25% + 51px);
-        top:5%;
-        width: calc(50% - 103px);
-        height: 85px;
+        left: calc(20% + 60px);
+        top:3%;
+        width: calc(60% - 120px);
+        height: 60px;
     }
     .h5_bg_rt{
-        right: 25%;
-        top:5%;
+        width: 60px;
+        height: 60px;
+        right: 20%;
+        top:3%;
     }
     .h5_bg_l{
-        left: 25%;
-        top:calc(5% + 85px);
-        height: calc(90% - 170px);
-        width: 25px;
+        left: 20%;
+        top:calc(3% + 60px);
+        height: calc(94% - 120px);
+        width: 60px;
     }
     .h5_bg_r{
-        right: 25%;
-        top:calc(5% + 85px);
-        height: calc(90% - 170px);
-        width: 25px;
+        right: 20%;
+        top:calc(3% + 60px);
+        height: calc(94% - 120px);
+        width: 60px;
     }
     .h5_bg_lb{
-        left: 25%;
-        bottom:5%;
+        left: 20%;
+        bottom:3%;
+        width: 60px;
+        height: 60px;
     }
     .h5_bg_b{
-        left: calc(25% + 51px);
-        bottom:5%;
-        width: calc(50% - 103px);
-        height: 86px;
+        left: calc(20% + 60px);
+        bottom:3%;
+        width: calc(60% - 120px);
+        height: 60px;
     }
     .h5_bg_rb{
-        right: 25%;
-        bottom:5%;
+        right: 20%;
+        bottom:3%;
+        width: 60px;
+        height: 60px;
     }
     .blockUp{
-        width: 50%;
-        padding-top: calc(5% + 85px);
+        width: 60%;
+        padding-top: calc(3% + 48px);
         position: absolute;
         z-index: 90;
         background: #fff;
-        left: 25%;
+        left: 20%;
         top:0;
     }
     .blockDown{
-        width: 50%;
-        padding-top: calc(5% + 85px);
+        width: 60%;
+        padding-top: calc(3% + 40px);
         position: absolute;
         z-index: 90;
         background: #fff;
-        left: 25%;
+        left: 20%;
         bottom:0;
     }
+
+
 
     .wx_platform{
         overflow-y: scroll;

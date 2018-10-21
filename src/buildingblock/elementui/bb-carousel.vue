@@ -88,7 +88,7 @@
                 const t = this;
                 if (t.fieldsDs) {
                     _TY_Tool.getDSData(t.fieldsDs, _TY_Tool.buildTplParams(t), function (map) {
-                        map.forEach((val,key)=>{
+                        map.forEach((item,key)=>{
                             let _list = [];
                             if(item['value']&&item['value']['currentRecords']){
                                 _list = item['value']['currentRecords'];
