@@ -191,7 +191,7 @@
                                         files = t.formData[attributeName].split(",");
                                     }
                                     files.forEach((val,index)=>{
-                                        let name = val['name'] || val;
+                                        let name = val['name'] || (val.split("=")[val.split('=').length-1]);
                                         const ele = createElement('a',{
                                             style:{color:'#0091ea',margin:'0 20px 0 0'},
                                             attrs:{

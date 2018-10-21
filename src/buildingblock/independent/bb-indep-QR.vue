@@ -39,7 +39,7 @@
         },
         data() {
             return {
-                realUrl:_TY_Tool.tpl(this.url,this),
+                realUrl:_TY_Tool.tpl(this.url,_TY_Tool.buildTplParams(this)),
                 realWxOptions:Object.assign({width:this.size},this.wxOptions)
             }
         },
@@ -51,7 +51,7 @@
         watch: {
             url(val){
                 var t = this;
-                t.realUrl = _TY_Tool.tpl(val,t)
+                t.realUrl = _TY_Tool.tpl(val,_TY_Tool.buildTplParams(t));
             }
         },
         created: function () {
@@ -75,7 +75,9 @@
                 const t = this;
                 args.forEach((val,key)=>{
                   if(val.type == 'custom'){
-                    t.realUrl = val.arguments;
+                    t.realUrl = _TY_Tool.tpl(val.arguments,_TY_Tool.buildTplParams(t,{
+                        args:args
+                    }));
                   }
                 });
             }
