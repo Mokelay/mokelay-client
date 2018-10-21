@@ -496,7 +496,15 @@
             },
             //将当前激活标签记录到sessionstorage
             readActiveTab:function(){
-                this.p_activeName = sessionStorage.getItem("bb-tabs") || this.p_activeName;
+                const storageTab = sessionStorage.getItem("bb-tabs")||'';
+                let tempTab = this.p_activeName;
+                t.realTabs.forEach((item,index)=>{
+                    if(storageTab==item.name){
+                        tempTab = storageTab;
+                        return false;
+                    }
+                });
+                this.p_activeName = tempTab;
             }
         }
     }
