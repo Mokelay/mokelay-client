@@ -543,7 +543,7 @@
     .h5_platform::-webkit-scrollbar {
          display: none;
     }
-    img.h5_bg{
+    img.h5_bg_l,img.h5_bg_r{
         z-index: 0;
     }
     .h5_bg{
