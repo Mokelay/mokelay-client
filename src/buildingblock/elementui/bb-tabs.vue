@@ -485,7 +485,7 @@
                 const t = this;
                 params.forEach((param,key)=>{
                     if(param.type == "custom"){
-                        t.p_activeName = param.arguments;
+                        t.p_activeName = _TY_Tool.tpl(param.arguments,_TY_Tool.buildTplParams(t));
                         t.storageActiveTab();                  
                     }
                 })
