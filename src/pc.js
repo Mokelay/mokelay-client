@@ -25,7 +25,7 @@ import layoutBB from './layout/';
 import './css/minireset.css';
 
 //引入Element UI的css库
-import './css/theme-MOF/index.css';
+import './css/theme-default/index.css';
 
 //引入TYiconfont
 import './css/iconfont/ty.css';
