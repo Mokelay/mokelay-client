@@ -339,6 +339,7 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        align-items: stretch;/*保持每项的高度一致*/
     }
     .bb-view-item{
         display: flex !important;
