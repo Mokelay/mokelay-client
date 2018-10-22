@@ -30,7 +30,7 @@
         >
             <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
-                <span>
+                <span v-if="option.editable">
                     <el-button
                         type="text"
                         size="mini"
@@ -167,8 +167,8 @@
                     return {
                         itemStyle:"",
                         rootParentId:0,
-                        draggable:true,
-                        editable:true,
+                        draggable:false,
+                        editable:false,
                         editableTitle:"请添加标题"
                     }
                 }
