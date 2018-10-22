@@ -23,25 +23,25 @@
                 @check-change="checkChange"
                 @node-click="nodeClick"
                 @node-expand="nodeExpand"
+                @node-drop="nodeDrop"
                 :draggable="option.draggable"
-                :allow-drop="allowDrop"
-                :allow-drag="allowDrag"
-                @node-drop="handleDrop"
+                :allow-drop="option.draggable"
+                :allow-drag="option.draggable"
         >
-            <span v-if="option.add" class="custom-tree-node" slot-scope="{ node, data }">
-                <span contenteditable="true" @oninput="addNode">{{ node.label }}</span>
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ node.label }}</span>
                 <span>
                     <el-button
-                    type="text"
-                    size="mini"
+                        type="text"
+                        size="mini"
                     @click="() => append(data)">
-                    新增
+                        添加
                     </el-button>
                     <el-button
-                    type="text"
-                    size="mini"
-                    @click="() => remove(node, data)">
-                    删除
+                        type="text"
+                        size="mini"
+                        @click="() => remove(node, data)">
+                        删除
                     </el-button>
                 </span>
             </span>
@@ -124,19 +124,19 @@
                             }, {
                               id: 5,
                               label: '三级 3-1-2',
-                              disabled: false
+                              disabled: true
                             }]
                           }, {
                             id: 2,
                             label: '二级 2-2',
-                            disabled: false,
+                            disabled: true,
                             children: [{
                               id: 6,
                               label: '三级 3-2-1'
                             }, {
                               id: 7,
                               label: '三级 3-2-2',
-                              disabled: false
+                              disabled: true
                             }]
                           }]
                         }]
@@ -168,8 +168,9 @@
                         itemStyle:"",
                         rootParentId:0,
                         draggable:true,
-                        add:true
-                    };
+                        editable:true,
+                        editableTitle:"请添加标题"
+                    }
                 }
             }
         },
@@ -180,7 +181,8 @@
                 id:"bb-tree_" + _TY_Tool.uuid(),
                 valueBase:this.value || typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
                 realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
-                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys
+                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys,
+                defaultId:1000
             }
         },
         created: function () {
@@ -461,24 +463,49 @@
             getValue(){
                 return this.valueBase;
             },
-            allowDrop(draggingNode, dropNode, type) {
-                return true;
-            },
-            allowDrag(draggingNode) {
-                return true;
-            },
-            handleDrop(draggingNode, dropNode, dropType, ev) {
+            //新增几点
+            append(data) {
                 const t = this;
-                const newEle = {
-                    id:draggingNode.key,
-                    oldParantId:draggingNode.parent.id,
-                    parentId:dropNode.parent.key,
-                }
-                t.$emit("drag",newEle);
-                console.log('tree drop: ', dropNode.label, dropType);
+                t.openDiaForm((val)=>{
+                    const newChild = { id: t.defaultId++, label: val, children: [] };
+                    if (!data.children) {
+                        t.$set(data, 'children', []);
+                    }
+                    data.children.push(newChild);
+                    t.$emit("add",data);
+                });
             },
-            addNode(...args){
-                debugger
+            //删除节点
+            remove(node, data) {
+                const parent = node.parent;
+                const children = parent.data.children || parent.data;
+                const index = children.findIndex(d => d.id === data.id);
+                children.splice(index, 1);
+                t.$emit("remove",data);
+            },
+            //新增节点弹窗
+            openDiaForm(fn) {
+                const t = this;
+                t.$prompt(t.option.editableTitle, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    fn(value)
+                }).catch(() => {
+                    t.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });       
+                });
+            },
+            //拖拽节点
+            nodeDrop(draggingNode, dropNode, dropType, ev){
+                this.$emit("nodeDrop",{
+                    draggingNode:draggingNode,
+                    dropNode:dropNode,
+                    dropType:dropType,
+                    ev:ev
+                })
             }
         }
     }
