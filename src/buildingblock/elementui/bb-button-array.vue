@@ -27,6 +27,9 @@ import Util from '../../libs/util';
             },
             arrayDescTpl:{
                 type:String
+            },
+            on:{
+                type:Array
             }
         },
 
@@ -80,7 +83,8 @@ import Util from '../../libs/util';
                         fields:t.fields,
                         showCommit:true,
                         value: t.arrayData,
-                        customTopBtns:t.customTopBtns
+                        customTopBtns:t.customTopBtns,
+                        on:t.on
                     },
                     on:{
                         commit: function(arrayData){

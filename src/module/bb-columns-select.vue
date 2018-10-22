@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bb-button-array :fields="fields" :customTopBtns="customTopBtns" settingText="设置按钮" v-model="table" @commit="commit" arrayDescTpl="按钮:<%text%>"></bb-button-array>
+        <bb-button-array :fields="fields" :customTopBtns="customTopBtns" settingText="设置按钮" v-model="table" :on="on" @commit="commit" arrayDescTpl="按钮:<%text%>"></bb-button-array>
     </div>
 </template>
 
@@ -64,6 +64,7 @@
                     rules: [],
                     props: {}
                 }, {
+                    pbbId:'type',
                     name: '表头类型',
                     attributeName: 'type',
                     description:'默认：直接显示接口字段数据;按钮组：可以添加操作当前列表的按钮，如删除，编辑等;自定义模板:通过映射转换需要展示的数据;显示图片:传入逗号隔开的图片地址数组',
@@ -75,6 +76,9 @@
                             text: '默认',
                             value: 'default'
                         }, {
+                            text: '积木',
+                            value: 'bb'
+                        },{
                             text: '按钮组',
                             value: 'button-group'
                         }, {
@@ -89,9 +93,11 @@
                         }]
                     }
                 }, {
+                    pbbId:'buttons',
                     name: '按钮组',
                     attributeName: 'buttons',
                     hide:true,
+                    show:false,
                     et: 'bb-array',
                     rules: [],
                     props: {
@@ -191,6 +197,23 @@
                             attributeName: 'showKey',
                             hide:true,
                             et: 'bb-input',
+                        }, {
+                            pbbId:"keyType",
+                            name: '变量类型',
+                            show:true,
+                            description:"改变量的数据类型",
+                            attributeName: 'keyType',
+                            hide:true,
+                            et: 'bb-select',
+                            props:{
+                                fields: [{
+                                    text: "字符串",
+                                    value: "string"
+                                },{
+                                    text: "数字",
+                                    value: "number"
+                                }]
+                            }
                         }, {
                             pbbId:"showValue",
                             name: '显示值',
@@ -498,10 +521,21 @@
                         }]
                     }
                 }, {
+                    pbbId:'content',
+                    name: '积木内容',
+                    attributeName: 'content',
+                    et: 'bb-config-array',
+                    hide:true,
+                    show:false,
+                    rules: [],
+                    props: {}
+                }, {
+                    pbbId:'template',
                     name: '表头模板类型',
                     attributeName: 'template',
                     et: 'bb-select',
                     hide:true,
+                    show:false,
                     rules: [],
                     props: {
                         fields: [{
@@ -522,13 +556,18 @@
                         }, {
                             value: 'html',
                             text: 'html模板'
+                        }, {
+                            value: 'tpl',
+                            text: '模板'
                         }]
                     }
                 }, {
+                    pbbId:'templateProp',
                     name: '自定义模板参数',
                     attributeName: 'templateProp',
                     et: 'bb-array',
                     hide:true,
+                    show:false,
                     rules: [],
                     props: {
                         fields: [{
@@ -546,21 +585,37 @@
                         }]
                     }
                 }, {
+                    pbbId:'tpl',
+                    name: '模板',
+                    attributeName: 'tpl',
+                    et: 'bb-input',
+                    hide:true,
+                    show:false,
+                    rules: [],
+                    props: {
+                    }
+                }, {
+                    pbbId:'file',
                     name: '自定义模板路径',
                     attributeName: 'file',
                     et: 'bb-input',
                     hide:true,
+                    show:false,
                     rules: [],
                     props: {}
                 }, {
+                    pbbId:'staticWords',
                     name: '静态字段填写',
                     attributeName: 'staticWords',
                     hide:true,
+                    show:false,
                     et: 'bb-input'
                 }, {
+                    pbbId:'valueKey',
                     name: '值对象来源',
                     attributeName: 'valueKey',
                     hide:true,
+                    show:false,
                     et: 'bb-select',
                     props: {
                         fields: [{
@@ -696,6 +751,12 @@
                     attributeName: 'onlyAddEditShow',
                     et: 'bb-editor-switch'
                 }],
+                on:[
+                    {pbbId:'type',triggerEventName:'change',executeArgument:`var type = params[0];if(type == "bb"){t.$parent.$parent.hideAndShowFormItem(["form-item_content"],["form-item_buttons","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "button-group"){t.$parent.$parent.hideAndShowFormItem(["form-item_buttons"],["form-item_content","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "template"){t.$parent.$parent.hideAndShowFormItem(["form-item_template"],["form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "edit"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "picture"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "default"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}`},
+                    {pbbId:'type',triggerEventName:'mounted',executeArgument:`var type = params[0];if(type == "bb"){t.$parent.$parent.hideAndShowFormItem(["form-item_content"],["form-item_buttons","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "button-group"){t.$parent.$parent.hideAndShowFormItem(["form-item_buttons"],["form-item_content","form-item_template","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "template"){t.$parent.$parent.hideAndShowFormItem(["form-item_template"],["form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "edit"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "picture"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}else if(type == "default"){t.$parent.$parent.hideAndShowFormItem([],["form-item_template","form-item_content","form-item_buttons","form-item_file","form-item_templateProp","form-item_valueKey","form-item_staticWords"]);}`},
+                    {pbbId:'template',triggerEventName:'change',executeArgument:`var type = params[0];if(type == "custom"){t.$parent.$parent.hideAndShowFormItem(["form-item_templateProp","form-item_valueKey"],["form-item_tpl","form-item_file","form-item_staticWords"]);}else if(type == "staticWords"){t.$parent.$parent.hideAndShowFormItem(["form-item_staticWords"],["form-item_templateProp","form-item_valueKey","form-item_file","form-item_tpl"]);}else if(type == "file"){t.$parent.$parent.hideAndShowFormItem(["form-item_file"],["form-item_templateProp","form-item_tpl","form-item_valueKey","form-item_staticWords"]);}else if(type == "tpl"){t.$parent.$parent.hideAndShowFormItem(["form-item_tpl"],["form-item_templateProp","form-item_valueKey","form-item_staticWords","form-item_file"]);}`},
+                    {pbbId:'template',triggerEventName:'mounted',executeArgument:`var type = params[0];if(type == "custom"){t.$parent.$parent.hideAndShowFormItem(["form-item_templateProp","form-item_tpl","form-item_valueKey"],["form-item_file","form-item_staticWords"]);}else if(type == "staticWords"){t.$parent.$parent.hideAndShowFormItem(["form-item_staticWords"],["form-item_tpl","form-item_templateProp","form-item_valueKey","form-item_file"]);}else if(type == "file"){t.$parent.$parent.hideAndShowFormItem(["form-item_file"],["form-item_templateProp","form-item_tpl","form-item_valueKey","form-item_staticWords"]);}else if(type == "tpl"){t.$parent.$parent.hideAndShowFormItem(["form-item_tpl"],["form-item_templateProp","form-item_valueKey","form-item_staticWords","form-item_file"]);}`}
+                ],
                 table:this.value,
             }
         },

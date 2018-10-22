@@ -19,6 +19,7 @@ import 'vant/lib/cell/style';
             /*其他属性配置
                 {
                     icon:String 左侧图标,
+                    rightIcon:String 右侧图标
                     title:String 左侧标题,
                     label:String 标题下方的描述信息,
                     required:Boolean 是否显示表单必填星号,
@@ -26,13 +27,17 @@ import 'vant/lib/cell/style';
                     center:Boolean 使内容垂直居中
                     url:""  跳转链接
                     clickable:Boolean 开启点击反馈
-                    valueStyle:{}
+                    valueStyle:{},
+                    isScanCode:false,
+                    scanBuzz:""
                  }
             */
             option:{
                 type:Object,
                 default:function(){
-                    return {}
+                    return {
+
+                    }
                 }
 
             },
@@ -135,7 +140,7 @@ import 'vant/lib/cell/style';
                 "required":t.option.required,
                 "is-link":t.option.isLink,
                 "center":t.option.center,
-                "url":t.option.url,
+                "url":_TY_Tool.tpl(this.option.url,_TY_Tool.buildTplParams(this)),
                 "clickable":t.option.clickable,
                 "title":t.option.title
             },on:{
@@ -143,6 +148,35 @@ import 'vant/lib/cell/style';
             }},[children]);
         },
         mounted(){
+            const t = this;
+            if(this.option.rightIcon){
+                this.realContent.push({
+                    "uuid": _TY_Tool.uuid(),
+                    "alias": "bb-indep-button",
+                    "aliasName": "右侧图标",
+                    "group": "right-icon",
+                    "attributes": {
+                        "button": {
+                            "text":" ",
+                            "icon": this.option.rightIcon,
+                            "type": "text",
+                            "style": {
+                                
+                            }
+                        }
+                    },
+                    "animation": [
+                        
+                    ],
+                    "interactives": [
+                        
+                    ],
+                    "layout": {
+                        
+                    },
+                    "type": "Basic"
+                });
+            }
             this.getData();
         },
         //事件click
@@ -150,6 +184,9 @@ import 'vant/lib/cell/style';
             //点击事件
             click(param){
                 this.$emit('click',param);
+                if(this.option.isScanCode){
+                    this.scanQRCode();
+                }
             },
             //获取动态内容
             getData(){
@@ -162,16 +199,30 @@ import 'vant/lib/cell/style';
                             data.forEach((item) => {
                                 t.loading = false;
                                 const {dataKey, value} = item;
-                                t.realContent = value;
+                                t.realContent = t.realContent.concat(value);
                             });
                         }else{
-                            t.realContent = data;
+                            t.realContent = t.realContent.concat(data);
                         }
                     }, function (code, msg) {
                         t.loading = false;
                     });
                 }
             },
+            scanQRCode(successFn){
+                const t = this;
+                _TY_Tool.scanQRCode((res)=>{
+                    if(t.option.scanBuzz){
+                        _TY_Tool.loadBuzz(t.option.scanBuzz, function(code) {
+                            t.util = util;
+                            eval(code);
+                        });
+                    }else if(successFn){
+                        successFn(res);
+                    }
+                });
+            }
+
         }
     }
 </script>

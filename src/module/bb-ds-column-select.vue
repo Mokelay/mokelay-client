@@ -97,7 +97,8 @@
                     }],
                     "outputs": [{
                         "dataKey": "data",
-                        "valueKey": "data_list"
+                        "valueKey": "data_list",
+                        "handle":"ty_module_ds_column_select"
                     }]
                   },
                   props:{                               //接口返回字段和级联选择器的字段对应（字段名转换）
@@ -109,7 +110,7 @@
                   index:3,                              //级联第几层接口，比如第一层数据的获取接口   换用数组长度来表示
                   isleaf:true,                       //是否叶子节点
                   ds:{                                //ds配置
-                    "api": "ty_list_api_response_field_by_uuid",
+                    "api": "ty_list_api_request_or_response_field",
                     "category": "config",
                     "method": "get",
                     "inputs": [{

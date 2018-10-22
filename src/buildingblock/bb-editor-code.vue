@@ -12,6 +12,7 @@
               <div ref="frameBox">
                     <el-button type="primary" @click="jsonFormat(true)">JSON格式化</el-button>
               </div>
+              <codemirror class="bb_codemirror" v-model="p_value" :options="cmOptions"></codemirror>
               <!--   <iframe ref="childFrame" id="childFrame" width="100%" height="100%">
                 </iframe> -->
               <span slot="footer" class="dialog-footer">
@@ -23,6 +24,15 @@
 </template>
 
 <script>
+
+    // require component
+    import { codemirror } from 'vue-codemirror'
+    // require styles
+    import 'codemirror/lib/codemirror.css'
+
+    require('codemirror/mode/javascript/javascript')
+    require('codemirror/mode/vue/vue')
+
     export default {
         name: 'bb-editor-code',
         components: {
@@ -34,7 +44,39 @@
             returnObj:{
                 type:Boolean,
                 default:false
+            },
+             /**
+             *  编辑代码确认按钮触发事件
+                @button:当前点击的按钮配置
+                {
+                    style:{},//css样式
+                    type:'primary',//按钮样式
+                    disabled:false,//按钮是否可编辑
+                    size:'small',//按钮大小
+                    icon:'icon',//按钮图标
+                    text:'按钮文字',//
+                    selectText:'按钮文字',
+                    action:'url 地址跳转|| execute-ds执行接口 || dialog-page弹窗 || code自定义代码 || buzz 巴斯代码',
+                    url:''跳转地址 action:'url’时有效
+                    urlType:'openWindow 在新标签中打开 
+                    ds:{} //按钮请求的接口配置 action:'execute-ds’时有效
+                    confirmTitle:'', //请求接口前的提示语标题   action:'execute-ds’时有效
+                    confirmText:'', //请求接口前的提示语内容   action:'execute-ds’时有效
+                    callBackStaticWords:'' //请求接口成功提示语
+                    dialogPage:'pageAlias',//弹窗中的页面名称   action:'dialog-page’时有效
+                    method:fn , //需要执行的方法 action:'code’时有效
+                    buzz:'buzzName'  //巴斯方法名称  action:'buzz’时有效
+                }
+            */
+            button:{
+                type:Object,
+                default: function(){
+                    return null;
+                }
             }
+        },
+        components:{
+            "codemirror":codemirror
         },
         data() {
             return {
@@ -42,7 +84,16 @@
                 dialogVisible:false,
                 dialogWidth:'100%',
                 fullscreen:true,
-                codeObj : null
+                codeObj : null,
+                external:{},//支持外部参数
+                cmOptions:{
+                    tabSize: 4,//缩进
+                    mode: 'text/javascript',
+                    // theme: 'base16-dark',
+                    lineNumbers: true,
+                    line: true,
+                    matchBrackets:true
+                }//编辑器选项
             }
         },
         watch: {
@@ -53,12 +104,6 @@
                     temp = JSON.stringify(val);
                 }
                 t.p_value = temp;
-                let frame = document.getElementById('childFrame_'+t.key);
-                if(frame){
-                    var childWindow = frame.contentWindow;
-                    let editor = childWindow.editor;
-                    editor.setValue(temp);
-                }
             }
         },
         created: function () {
@@ -67,149 +112,40 @@
             var t =this;
         },
         methods: {
+            linkage:function(...data){
+                if(data){
+                    this.external['linkage'] = data;
+                }
+            },
+            //设置值
+            setValue:function(val){
+                const t=this;
+                t.p_value = val;
+            },
             //json格式化
             jsonFormat:function(showMessage){
                 let t=this;
-                let frame = document.getElementById('childFrame_'+t.key);
-                if(frame.contentWindow.editor){
-                    let editor = frame.contentWindow.editor;
-                    //编辑器的值
-                    let data = editor.getValue();
-                    try{
-                        //如果不能json转换，说明不是json格式
-                        JSON.parse(data);
-                    }catch(e){
-                        if(showMessage){
-                            t.$message({
-                                type: 'info',
-                                message: "数据非JSON格式或者JSON有错!"
-                            });
-                        }
-                        return;
+                t.cmOptions.mode = "application/ld+json";
+                t.cmOptions.lineWrapping = true;
+                t.cmOptions.autoCloseBrackets = true;
+                try{
+                    JSON.parse(t.p_value);
+                }catch(e){
+                    if(showMessage){
+                        t.$message({
+                            type: 'info',
+                            message: "数据非JSON格式或者JSON有错!"
+                        });
                     }
-                    editor.setValue(_TY_Tool.jsonFormat(data));
-                    const mode = 'application/ld+json';
-                    editor.setOption("mode", mode);
-                    editor.setOption("lineWrapping", true);
-                    editor.setOption("autoCloseBrackets", true);
+                    return;
                 }
+                t.p_value = _TY_Tool.jsonFormat(t.p_value);
             },
-            //iframe添加css外链
-            _addLink:function(doc,url) {
-                var link = doc.createElement("link");
-                link.type = "text/css";
-                link.rel = "stylesheet";
-                link.href = url;
-                var head = doc.getElementsByTagName("head")[0];
-                head.appendChild(link);
-            },
-            //添加css 样式
-            _addCss:function(doc) {
-                let t=this;
-                var style = doc.createElement("style");
-                style.type = "text/css";
-                var code =".CodeMirror {"+
-                            "   border: 1px solid #eee;"+
-                            "   height: 98%;"+
-                            "   min-height: 360px;"+
-                            "}"+
-                            ".CodeMirror-scroll {"+
-                            "   min-height: 360px;"+
-                            "    height:100%;"+
-                            "    overflow-y: hidden;"+
-                            "    overflow-x: auto;"+
-                            "}";
-                try {
-                    style.appendChild(doc.createTextNode(code));
-                } catch (ex) {
-                    style.text = code;
-                }
-                var head = doc.getElementsByTagName("head")[0];
-                head.appendChild(style);
-            },
-            //添加js
-            _addScript:function(doc,url) {
-                var script = doc.createElement("script");
-                script.type = "text/javascript";
-                script.src = url;
-                var head = doc.getElementsByTagName("head")[0];
-                head.appendChild(script);
-            },
-            //添加iframe内容
-            _addContent:function(doc,key){
-                let t=this;
-                var _div = doc.createElement("textarea");
-                _div.id = "codeContent_"+key;
-                doc.body.appendChild(_div);
-                var script = doc.createElement("script");
-                script.type = "text/javascript";
-                var code ="window.editor = CodeMirror.fromTextArea(document.getElementById('codeContent_"+key+"'), {"+
-                            "matchBrackets:true,"+
-                            "mode: 'text/typescript',"+
-                            "lineNumbers: true"+
-                          "});\n"+
-                            "function setEditorVal(data){window.editor.setValue(data);}";
-                try {
-                    script.appendChild(doc.createTextNode(code));
-                } catch (ex) {
-                    script.text = code;
-                }
-                doc.body.appendChild(script);
-                setTimeout(function(){
-                    let frame = document.getElementById('childFrame_'+t.key);
-                    frame.contentWindow.setEditorVal(t.p_value);
-
-                },300);
-                setTimeout(()=>{
-                    //如果能json格式化就显示格式化后的数据
-                     t.jsonFormat();
-                },600);
-            },
+            
             //打开弹窗
             openDialog:function(){
                 let t=this;
-                let opened = false;
-                if(t.key){
-                	opened = true;
-                }else{
-                	t.key = _TY_Tool.uuid(8);
-                }
                 t.dialogVisible = true;
-                let _height="";
-                if(t.fullscreen){
-                    _height = "calc(100vh - 205px)";
-                }
-                setTimeout(function(){
-                	if(!opened){
-	                	let iframe = document.createElement("iframe");
-		                iframe.id = "childFrame_"+t.key;
-		                iframe.width="100%";
-		                iframe.style['min-height']="380px";
-                        iframe.style['height']=_height;
-		                t.$refs['frameBox'].appendChild(iframe);
-					}
-                    let frame = document.getElementById('childFrame_'+t.key);
-                    var childWindow = frame.contentWindow;
-                    var childDoc = childWindow.document;
-                    childDoc.body.innerHTML = '';
-                 //    t._addLink(childDoc,"./../../node_modules/codemirror/lib/codemirror.css");
-	                // t._addLink(childDoc,"./../../node_modules/codemirror/theme/eclipse.css");
-	                // t._addScript(childDoc,"./../../node_modules/codemirror/lib/codemirror.js");
-
-	                t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.min.css");
-                    t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.min.js");
-                    //主codemirror.js要先加载完成
-                    setTimeout(function(){
-                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/edit/matchbrackets.min.js");
-                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/comment/continuecomment.min.js");
-                         t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/comment/comment.min.js");
-                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/mode/javascript/javascript.min.js");
-                        t._addCss(childDoc);
-                    },200);
-                    setTimeout(function(){
-                        t._addContent(childDoc,t.key);
-                    },1000);
-                },0);
             },
             //关闭前的操作
             handleClose:function(){
@@ -218,11 +154,7 @@
             },
             formCommit:function(){
                 let t=this;
-                let frame = document.getElementById('childFrame_'+t.key);
-                var childWindow = frame.contentWindow;
-                let editor = childWindow.editor;
-                let result = editor.getValue();
-                t.p_value= result;
+                let result = t.p_value;
                 if(t.returnObj && result){
                     try{
                     　　result = JSON.parse(result);
@@ -235,7 +167,26 @@
                     }
                 }
                 t.$emit("input",result);
-                t.dialogVisible =false;
+                //如果有确认按钮配置
+                if(t.button){
+                     _TY_Tool.resolveButton(t.button,_TY_Tool.buildTplParams(t,{
+                        value:result
+                     })).then(()=>{
+                        t.dialogVisible =false;
+                     });
+                }else{
+                    t.dialogVisible =false;
+                }
+            },
+            //获取iframe的值
+            getIframeValue:function(){
+                let t=this;
+                return t.p_value;
+            },
+            //设置iframe value值
+            setIframeValue:function(val){
+                let t=this;
+                t.p_value = val;
             }
         }
     }
@@ -252,5 +203,22 @@
         max-width: 100px;
         display: inline-block;
         vertical-align: middle;
+    }
+
+    .bb_codemirror{
+        height: calc(100vh - 205px);
+    }
+</style>
+
+
+<style>
+    .vue-codemirror .CodeMirror {
+            border: 1px solid #eee;
+            height: 100%;
+        }
+    .CodeMirror .CodeMirror-scroll {
+        height: 100%;
+        overflow-y: hidden;
+        overflow-x: auto;
     }
 </style>

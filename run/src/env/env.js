@@ -40,6 +40,17 @@ var env = {
 		},
 		questionnaireHost: "http://www.mokelay.com/survey",
 		home: "/home_ln"
+	},
+	"ty-client-xiaoyi": {
+		name: 'ty-client-xiaoyi',
+		apiHost: CurrentDomain,
+		h5Host: CurrentDomain,
+		ssoURL: CurrentDomain + "/#/ty-login",
+		hosts: {
+			'default': CurrentDomain
+		},
+		questionnaireHost: "http://www.mokelay.com/survey",
+		home: "/home_ln"
 	}
 };
 // export default env;

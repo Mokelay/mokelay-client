@@ -51,6 +51,7 @@ import bbvantcelllocation from "./bb-vant-cell-location";
 import bbvantuploaderimage from "./bb-vant-uploader-image";
 import bbvantcellpicker from "./bb-vant-cell-picker";
 import bbvantcelldatepicker from "./bb-vant-cell-date-picker";
+import bbvantproductlist from "./bb-vant-product-list";
 
 export default {
 	install: function(Vue) {
@@ -105,6 +106,7 @@ export default {
 		Vue.component("bb-vant-uploader-image", bbvantuploaderimage);
 		Vue.component("bb-vant-cell-picker", bbvantcellpicker);
 		Vue.component("bb-vant-cell-date-picker", bbvantcelldatepicker);
+		Vue.component("bb-vant-product-list", bbvantproductlist);
 
 		console.log("成功加载Vant积木;");
 	}

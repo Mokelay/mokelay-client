@@ -54,7 +54,7 @@
         },
         data() {
             return {
-                valueBase: this.value,
+                valueBase: this.valueTpl(this.value),
                 contenteditable:false,
                 relValueBase:null
             }
@@ -79,8 +79,8 @@
         },
         watch: {
             value(val){
-                this.valueBase = val;
-                this.relValueBase =val;
+                this.valueBase = this.valueTpl(val);
+                this.relValueBase =this.valueTpl(val);
             }
         },
         created: function () {
@@ -91,12 +91,16 @@
             _TY_Tool.buildDefaultValTpl(t,"valueBase");
             //处理字符串中的空格和换行
             if(t.valueBase&&!t.noTransfer){
-                t.relValueBase = t.valueBase.replace(/\r{0,}\n/g,"<br/>").replace(/\s/g,"&nbsp;");
+                t.relValueBase = t.valueTpl(t.valueBase.replace(/\r{0,}\n/g,"<br/>").replace(/\s/g,"&nbsp;"));
             }else{
-                t.relValueBase = t.valueBase;
+                t.relValueBase = t.valueTpl(t.valueBase);
             }
         },
         methods: {
+            valueTpl:function(val){
+                const t=this;
+                return _TY_Tool.tpl(val,_TY_Tool.buildTplParams(t));
+            },
             dblclick:function(params){
                 this.$emit('bb-dblclick');
             },

@@ -127,7 +127,7 @@ import 'vant/lib/swipe/style';
                 const t = this;
                 t.$emit("click",image);
                 if(image.href){
-                    window.location.href = href;
+                    window.location.href = image.href;
                 }
                 
             },

@@ -15,12 +15,31 @@
             value: {
                 type: String,
                 default: ''
+            },
+            //上传ds
+            uploadDs:{
+                type:Object
+            },
+            //用户设置
+            customConfig:{
+                type:Object,
+                default:function(){
+                    return {
+                        pasteFilterStyle:false,
+                        // 将图片大小限制为 3M
+                        // uploadImgMaxSize:3 * 1024 * 1024,
+                        // // 限制一次最多上传 5 张图片
+                        // uploadImgMaxLength:5,
+                        // onchangeTimeout:1000, // 单位 ms
+                        // zInde:1
+                    }
+                }
             }
         },
         data() {
             return {
                 dataInterface: {
-                    uploadImgServer: _TY_APIHost+'/wy/upload/file'  // 编辑器插入的图片上传地址
+                    uploadImgServer: this.getUploadApi()  // 编辑器插入的图片上传地址
                 },
                 editor: '',  // 存放实例化的wangEditor对象，在多个方法中使用
                 // 为了避免麻烦，每个编辑器实例都用不同的 id
@@ -53,6 +72,21 @@
             this.destroyEditor();
         },
         methods: {
+            getUploadApi:function(){
+                const t=this;
+                let apiUrl = "";
+                if(t.uploadDs){
+                    const api = t.uploadDs['api'];
+                    const type = t.uploadDs['category'];
+                    apiUrl = api;
+                    if (type == 'config') {
+                        //如果不是自定义接口
+                        apiUrl = window._TY_ContentPath + "/" + api;
+                    }
+                    apiUrl = _TY_APIHost + apiUrl;
+                }
+                return apiUrl;
+            },
             createEditor(JQUERY){  // 创建编辑器
                 let t=this;
                 this.initEditorConfig();  // 初始化编辑器配置，在create之前
@@ -74,13 +108,17 @@
             initEditorConfig(){  // 初始化编辑器配置
                 let t=this;
                 //所有配置参数请参考：https://www.kancloud.cn/wangfupeng/wangeditor3/335782
-                this.editor.customConfig.uploadImgServer = this.dataInterface.uploadImgServer;  // 图片上传地址
+                // this.editor.customConfig.uploadImgServer = this.dataInterface.uploadImgServer;  // 图片上传地址
+                //自定义上传文件
+                this.editor.customConfig.customUploadImg = t.uploadFiles;
+
                 // 将图片大小限制为 3M
                 this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
                 // 限制一次最多上传 5 张图片
                 this.editor.customConfig.uploadImgMaxLength = 5;
                 //自定义 fileName
                 this.editor.customConfig.uploadFileName = 'file';
+                this.editor.customConfig.pasteFilterStyle = t.customConfig.pasteFilterStyle;
                 this.editor.customConfig.uploadImgParams = {  // 自定义上传参数配置
 //                    usersecret: usersecret
                 };
@@ -98,13 +136,45 @@
                 this.editorContent = this.editor.txt.html();  // 获取 html 格式
                 // this.editor.txt.text();  // 获取纯文本
                 // this.editor.txt.formatText();  // 获取格式化后的纯文本
+            },
+            //上传文件
+            uploadFiles(files,insert){
+                const t=this;
+                if(files&&files.length>0){
+                    files.forEach((item)=>{
+                        t.uploadeFile(item,insert);
+                    });
+                }
+            },
+            //文件上传
+            uploadeFile(file,insert){
+                const t = this;
+                let formdata = new FormData();
+                formdata.append('file',file);
+                console.log('正在上传。。。');
+                //添加请求头 
+                let uploadUrl = t.getUploadApi()?t.getUploadApi():"/config/ty_oss_upload";//统一文件上传地址
+                const xhr = new XMLHttpRequest();  // XMLHttpRequest 对象
+                xhr.open("post", uploadUrl, true); //post方式，url为服务器请求地址，true 该参数规定请求是否异步处理。
+                xhr.onload = (res) => { 
+                        const response = JSON.parse(res.target.response);
+                        let url = response.data.file_url;
+                        if(!url.startsWith("http")){
+                            url = _TY_APIHost + url;
+                        }
+                        insert(url);//插入到文本中
+                        _TY_Toast.closeAll();
+                        _TY_Toast({content:"上传成功！"});
+                    }; //请求完成
+                xhr.onerror =  (res) => { _TY_Toast({content:"上传失败！"})}; //请求失败
+                xhr.send(formdata); //开始上传，发送form数据
+                _TY_Toast({content:"上传中！",$type:"loading",duration:900000});
             }
-
         }
     }
 </script>
 
-<style scoped>
+<style>
     .lhp100 {
         line-height: 100%;
     }
@@ -112,5 +182,8 @@
         width: 100%;
         min-height: 330px;
         height: auto;
+    }
+    .w-e-menu:hover{
+        z-index: 10 !important;
     }
 </style>

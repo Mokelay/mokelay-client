@@ -57,7 +57,7 @@ if (env == "local") {
             }),
         ]
     });
-} else if (env == "prd" || env == "chisong") {
+} else if (env == "prd" || env == "chisong" || env == "ty-client-xiaoyi") {
     wc = merge(webpackBaseConfig, {
         output: {
             publicPath: h5Host,

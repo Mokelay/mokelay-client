@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-tree dib" :id="id" :style="option.treeStyle">
+    <div class="bb-tree dib" :id="id">
         <el-tree
                 class="bn horizontal"
                 :data="data"
@@ -165,7 +165,6 @@
                 type:Object,
                 default:function(){
                     return {
-                        treeStyle:"",
                         itemStyle:"",
                         rootParentId:0,
                         draggable:true,
@@ -181,7 +180,7 @@
                 id:"bb-tree_" + _TY_Tool.uuid(),
                 valueBase:this.value || typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
                 realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
-                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys,
+                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys
             }
         },
         created: function () {
@@ -419,12 +418,23 @@
                     const bbTree = document.getElementById(t.id);
                     const isLeafs = bbTree.getElementsByClassName("is-leaf");
                     if(isLeafs.length && t.option.itemStyle){
+                        //最小一级的样式
+                        const itemStyle = _TY_Tool.setStyle({layout:t.option.itemStyle});
+                        let itemStyleString = "";
+                        Object.keys(itemStyle).forEach((name,index)=>{
+                            if(index == 0){
+                                itemStyleString = name + ":" + itemStyle[name] + ";";
+                            }else{
+                                itemStyleString = itemStyleString + name + ":" + itemStyle[name] + ";";
+                            }
+                        })
+
                         HTMLCollection.prototype.forEach=function(callback){
                             [].slice.call(this).forEach(callback);
                         };
                         isLeafs.forEach((isLeaf,key)=>{
                             const className = isLeaf.parentNode.parentNode.className + " dib";
-                            isLeaf.parentNode.parentNode.setAttribute("style",t.option.itemStyle);
+                            isLeaf.parentNode.parentNode.setAttribute("style",itemStyleString);
                         })
                     }
                 },10);

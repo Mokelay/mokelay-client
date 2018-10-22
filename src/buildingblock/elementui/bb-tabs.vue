@@ -210,6 +210,7 @@
         mounted:function(){
             let t=this;
             //将content属性转换成可以识别的tab组件
+            t.readActiveTab();
             t.key = ""+ +new Date();
             setTimeout(()=>{
                 t.$emit("mounted",t);
@@ -368,6 +369,8 @@
             },
             tabClick: function (tab, event) {
                 const t = this;
+                t.p_activeName = tab.name;
+                t.storageActiveTab(); 
                 if(t.$refs['badge_'+tab.name]){
                     t.$refs['badge_'+tab.name].hide();
                 }
@@ -478,13 +481,31 @@
                 return _TY_Tool.loadChildBB(t);                
             },
             //外部设置当前激活标签
-            setActiveName(...params){
+            activeTab(...params){
                 const t = this;
                 params.forEach((param,key)=>{
                     if(param.type == "custom"){
-                        t.p_activeName = param.arguments;                  
+                        t.p_activeName = _TY_Tool.tpl(param.arguments,_TY_Tool.buildTplParams(t));
+                        t.storageActiveTab();                  
                     }
                 })
+            },
+            //将当前激活标签记录到sessionstorage
+            storageActiveTab:function(){
+                sessionStorage.setItem("bb-tabs",this.p_activeName);
+            },
+            //将当前激活标签记录到sessionstorage
+            readActiveTab:function(){
+                const t=this;
+                const storageTab = sessionStorage.getItem("bb-tabs")||'';
+                let tempTab = this.p_activeName;
+                t.realTabs.forEach((item,index)=>{
+                    if(storageTab==item.name){
+                        tempTab = storageTab;
+                        return false;
+                    }
+                });
+                this.p_activeName = tempTab;
             }
         }
     }

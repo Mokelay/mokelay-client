@@ -4,6 +4,15 @@ import Qs from 'qs';
 
 let util = {};
 
+
+//清除loading
+var _clearLoading = function() {
+    _TY_Root.$toast({
+        type: "loading",
+        duration: 1
+    })
+}
+
 util.invoke = function(options) {
     return new Promise((resolve, reject) => {
         if (!util.ajax) {
@@ -16,13 +25,22 @@ util.invoke = function(options) {
         util.ajax(options).then(function(response) {
             if (response && response['data'] && response['data']['code'] && response['data']['code'] == -420 && util.isWX()) {
                 //微信端没有登录，跳转微信授权
+                _clearLoading();
                 location.href = response['data']['message'] || window._TY_SSOURL;
             } else if (response && response['data'] && response['data']['code'] && response['data']['code'] <= -400) {
+                if(window._TY_BB_Edit){
+                    window._TY_Toast({content:"提示：该页面需要有登陆态情况下才会展示正确数据"});
+                    return;
+                }
                 //所有Code小于等于-400都是属于没有登录授权的，统一走SSOURL配置路径
                 if (response['data']['code'] == -401) {
+                    _clearLoading();
                     location.href = window._RS_SSOURL;
                 } else {
-                    location.href = window._TY_SSOURL;
+                    if (location.href.indexOf("?redirect") < 0) {
+                        _clearLoading();
+                        location.href = window._TY_SSOURL + "?redirect=" + encodeURIComponent(location.href);
+                    }
                 }
             } else {
                 resolve(response);
@@ -215,10 +233,11 @@ bb-list中的button group中execute-ds的按钮调用方法，util.getDSData(ds,
 util.getDSData = function(ds, inputValueObj, success, error) {
     const toast1 = inputValueObj.bb.$toast({
         type: 'loading',
-        duration: 30000
+        duration: 10000
     });
     var type = ds['type'] || "dynamic";
     if (type == "static") {
+        toast1.clear();
         success(ds['data']);
         return;
     }
@@ -228,6 +247,7 @@ util.getDSData = function(ds, inputValueObj, success, error) {
     var type = ds['category'] || 'config'; //默认是配置接口
     if (!api) {
         error(500, "请求参数无效");
+        toast1.clear();
         return;
     }
     var method = ds['method'] || 'post';
@@ -325,6 +345,8 @@ util.getDSData = function(ds, inputValueObj, success, error) {
         } else {
             error(data['code'], data['message']);
         }
+    }, function() {
+        toast1.clear();
     }).catch(function(err) {
         toast1.clear();
         error(err);
@@ -1380,7 +1402,7 @@ util.isAndroid = function() {
 
 //注册微信jssdk
 util.get_wx = function() {
-    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "openLocation"]
+    const apiArray = ["chooseImage", "uploadImage", "startRecord", "stopRecord", "onVoiceRecordEnd", "playVoice", "pauseVoice", "stopVoice", "onVoicePlayEnd", "uploadVoice", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "getLocation", "openLocation", "scanQRCode"]
     const appUrl = encodeURI(window.location.href);
     const configUrl = `${_TY_ENV.apiHost}/config/xlx_c_wx_get_config?sign_url=${appUrl}`;
     console.log("configUrl:", configUrl);
@@ -1407,6 +1429,16 @@ util.get_wx = function() {
 
             }, 'weixin-js-sdk');
         });
+}
+
+util.scanQRCode = function(successFn) {
+    window._TY_Tool.wx.scanQRCode({
+        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+        scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+        success: function(res) {
+            successFn(res);
+        }
+    })
 }
 
 

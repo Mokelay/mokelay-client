@@ -1,5 +1,5 @@
 <template>
-    <el-color-picker v-model="valueBase" :show-alpha="option.showAlpha" :size="option.size" :disabled="option.disabled" @change='change'></el-color-picker>
+    <el-color-picker v-model="valueBase" :show-alpha="option.showAlpha" :size="option.size" :disabled="option.disabled" @change='change' :color-format="option.colorFormat"></el-color-picker>
 </template>
 
 <script>
@@ -21,7 +21,8 @@
                     return {
                         disabled:false,
                         size:"",
-                        showAlpha:true
+                        showAlpha:true,
+                        colorFormat:"hex"
                     };
                 }
             }

@@ -4,7 +4,7 @@
             <!-- 基础属性 -->
             <bb-form ref="bb-config-form-base" size="mini" labelWidth="80px" :hideSubmitButton="true" :content="formItemFieldsBase" v-model="valueBase"></bb-form>
             <!-- 表单属性 -->
-            <bb-form ref="bb-config-form-ad-form" v-if="valueBase.type == 'Form' && showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
+            <bb-form ref="bb-config-form-ad-form" v-if="showBBSelect" size="mini" labelWidth="80px" :hideSubmitButton="true" :fields="formItemFields" :alias="alias" v-model="valueBase.attributes"></bb-form>
             <!-- 积木属性 -->
             <bb-form ref="bb-config-ad-form" size="mini" labelWidth="80px" :dsFields="attributesDs" :lazy="false" v-model="valueBase.attributes" @commit="contentChange" :on="bbInfo&&bbInfo.on"></bb-form>
         </el-tab-pane>
@@ -317,12 +317,18 @@
                     uuid:'interactive-fromContentUUID'+t.key,
                     alias:'bb-select',                   
                     aliasName:'事件积木',              
-                    //group:'交互事件',                   
+                    //group:'交互事件',        
                     attributes:{
                         attributeName:'fromContentUUID',
-                        fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}]
+                        fields:[{text:"当前积木",value:t.alias},{text:"页面容器",value:"Page_Ref_Root"}],
+                        value:t.alias
                     },
                     interactives:[{
+                        uuid:_TY_Tool.uuid(),
+                        fromContentEvent:'ready',
+                        executeType:'trigger_method',
+                        executeArgument:`t.$children[0].$children[1].setValue("${t.alias}")`,
+                    },{
                         uuid:'interactive-fromContentUUID_01',
                         fromContentEvent:'change',
                         executeType:'trigger_method',
@@ -775,7 +781,7 @@
                             interactives: [],
                             layout: {} //积木布局,
                         }]
-                if(t.bbType == "Container" || t.valueBase.type == 'Form' && t.showBBSelect){
+                if(t.bbType == "Container" || t.showBBSelect){
                     t.formItemFieldsBase.push({                       
                             uuid: _TY_Tool.uuid(),
                             alias: 'bb-input', //布局类积木 || 普通积木
@@ -805,6 +811,30 @@
                             props:{
                             },
                             rules:[{ required: true, message: '请输入字段别名', trigger: 'blur' }]
+                        },{                      
+                            attributeName:'dt',
+                            et:'bb-select',
+                            group:'表单选项',                   
+                            name:'内容类型',
+                            description:"",                               
+                            props:{
+                                fields:[{
+                                    value:"String",
+                                    text:"字符串"
+                                },{
+                                    value:"Number",
+                                    text:"数字"
+                                },{
+                                    value:"File",
+                                    text:"文件"
+                                },{
+                                    value:"Image",
+                                    text:"图片"
+                                },{
+                                    value:"default",
+                                    text:"其他"
+                                }]
+                            }
                         },{                      
                             attributeName:'display',
                             et:'bb-select',
@@ -887,29 +917,35 @@
                                     rules: [],
                                     props: {
                                         fields: [{
-                                            text: "整数",
+                                            text: "字符串",
+                                            value: "string"
+                                        },{
+                                            text: "数字",
                                             value: "number"
                                         }, {
+                                            text: "整数",
+                                            value: "integer"
+                                        }, {
                                             text: "浮点数",
-                                            value: "double"
+                                            value: "float"
                                         }, {
                                             text: "布尔值",
                                             value: "boolean"
                                         }, {
-                                            text: "字符串",
-                                            value: "string"
-                                        }, {
                                             text: "日期",
-                                            value: "date"
-                                        }, {
-                                            text: "日期时间",
-                                            value: "time"
+                                            value: "string"
                                         }, {
                                             text: "对象",
                                             value: "object"
                                         }, {
                                             text: "数组",
                                             value: "array"
+                                        }, {
+                                            text: "电子邮件",
+                                            value: "email"
+                                        }, {
+                                            text: "页面地址",
+                                            value: "url"
                                         }]
                                     }
                                 }, {

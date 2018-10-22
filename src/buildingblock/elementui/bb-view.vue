@@ -182,29 +182,39 @@
                                     },t.formData[attributeName]));
                                     break;
                                 case 'File':
+                                    debugger
+                                    let files = [];
                                     if(!t.formData[attributeName]){
-                                        t.formData[attributeName] = []
+                                        files = []
                                     }
-                                    t.formData[attributeName].forEach((val,index)=>{
+                                    if(typeof t.formData[attributeName] == "string"){
+                                        files = t.formData[attributeName].split(",");
+                                    }
+                                    files.forEach((val,index)=>{
+                                        let name = val['name'] || (val.split("=")[val.split('=').length-1]);
                                         const ele = createElement('a',{
                                             style:{color:'#0091ea',margin:'0 20px 0 0'},
                                             attrs:{
-                                                href:val['href'],
-                                                download:val['name'],
+                                                href:val['href'] || val,
+                                                download:val['name'] || val,
                                                 target:'_blank'
                                             }
-                                        },val['name']);
+                                        },name);
                                         content.push(ele);
                                     })
                                     break;
                                 case 'Image':
-                                    const images = [];
+                                    let images = [];
                                     if(!t.formData[attributeName]){
                                         t.formData[attributeName] = []
                                     }
-                                    t.formData[attributeName].forEach((val,index)=>{
-                                        images.push(val.href);
-                                    });
+                                    if(typeof t.formData[attributeName] == "string"){
+                                        images = t.formData[attributeName];
+                                    }else{
+                                        t.formData[attributeName].forEach((val,index)=>{
+                                            images.push(val.href);
+                                        });
+                                    }
                                     const ele = createElement('bb-picture-preview',{
                                             props:{
                                                 imgList:images

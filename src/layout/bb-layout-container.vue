@@ -117,13 +117,13 @@
                 <bb-layout-seriation ref="header" aliasName="header" :content="realHeader" style="height:100%" :horizontal="true"></bb-layout-seriation>
             </el-header>
             <el-container>
-                <el-aside  :width="p_layoutObject.leftAuto?'':'20%'" :style="p_layoutObject.leftStyle">
+                <el-aside :class="leftAsideClass" width="auto" :style="p_layoutObject.leftStyle">
                     <bb-layout-seriation ref="leftAside" aliasName="leftAside" :content="realLeftAside"></bb-layout-seriation>
                 </el-aside>
                 <el-main :style="p_layoutObject.mainStyle">
                     <bb-layout-seriation ref="main" aliasName="main" :content="realMain"></bb-layout-seriation>
                 </el-main>
-                <el-aside width="30%" :style="p_layoutObject.rightStyle">
+                <el-aside :class="rightAsideClass" width="auto" :style="p_layoutObject.rightStyle">
                     <bb-layout-seriation ref="rightAside" aliasName="rightAside" :content="realRightAside"></bb-layout-seriation>
                 </el-aside>
             </el-container>
@@ -254,7 +254,10 @@
                 realLeftAside:[],
                 realRightAside:[],
                 realMain:[],
-                realFooter:[]
+                realFooter:[],
+                leftAsideClass:"leftAsideShow",
+                rightAsideClass:"rightAsideShow",
+                layoutType:"h-l-m-r-f"
             }
         },
         watch: {
@@ -337,7 +340,58 @@
                         }
                     })
                 }
-            }
+            },
+            //隐藏元素
+            hideLeftElement:function(){
+                this.leftAsideClass = "leftAsideHide";
+                if(this.layoutType.indexOf("l") == -1 ){
+                    const arr = this.layoutType.split("-");
+                    arr.splice(1,0,"l");
+                    this.layoutType = arr.join("-");
+                }
+            },
+            //展示元素
+            showLeftElement:function(){
+                this.leftAsideClass = "leftAsideShow";
+            },
+            //隐藏元素
+            hideRightElement:function(){
+                this.rightAsideClass = "rightAsideHide";
+            },
+            showRightElement:function(){
+                this.rightAsideClass = "rightAsideShow";
+                if(this.layoutType.indexOf("r") == -1 ){
+                    const arr = this.layoutType.split("-");
+                    arr.splice(arr.length - 1,0,"r");
+                    this.layoutType = arr.join("-");
+                }
+            },
+            //隐藏元素
+            changeLayout:function(){
+                const t = this;
+                switch(t.layoutType){
+                    case "h-l-m-r-f":
+                        t.rightAsideClass = "rightAsideHide";
+                        t.leftAsideClass = "leftAsideShow";
+                        t.layoutType = "h-l-m-f";
+                        break;
+                    case "h-l-m-f":
+                        t.leftAsideClass = "leftAsideHide";
+                        t.rightAsideClass = "rightAsideHide";
+                        t.layoutType = "h-m-f";
+                        break;
+                    case "h-m-f":
+                        t.leftAsideClass = "leftAsideHide";
+                        t.rightAsideClass = "rightAsideShow";
+                        t.layoutType = "h-m-r-f";
+                        break;
+                    case "h-m-r-f":
+                        t.leftAsideClass = "leftAsideShow";
+                        t.rightAsideClass = "rightAsideShow";
+                        t.layoutType = "h-l-m-r-f";
+                        break;
+                }
+            },
         }
     }
 </script>
@@ -364,6 +418,34 @@
     }
     .bb-layout-container>.el-container{
         height:calc(~'100vh');
+    }
+    .leftAsideShow{
+        max-width: 20%;
+        transition: max-width .5s;
+        -moz-transition: max-width .5s; /* Firefox 4 */
+        -webkit-transition: max-width .5s; /* Safari 和 Chrome */
+        -o-transition: max-width .5s; /* Opera */
+    }
+    .leftAsideHide{
+        max-width: 0;
+        transition: max-width .5s;
+        -moz-transition: max-width .5s; /* Firefox 4 */
+        -webkit-transition: max-width .5s; /* Safari 和 Chrome */
+        -o-transition: max-width .5s; /* Opera */
+    }
+    .rightAsideShow{
+        max-width: 30%;
+        transition: max-width .5s;
+        -moz-transition: max-width .5s; /* Firefox 4 */
+        -webkit-transition: max-width .5s; /* Safari 和 Chrome */
+        -o-transition: max-width .5s; /* Opera */
+    }
+    .rightAsideHide{
+        max-width: 0;
+        transition: max-width .5s;
+        -moz-transition: max-width .5s; /* Firefox 4 */
+        -webkit-transition: max-width .5s; /* Safari 和 Chrome */
+        -o-transition: max-width .5s; /* Opera */
     }
 
 </style>

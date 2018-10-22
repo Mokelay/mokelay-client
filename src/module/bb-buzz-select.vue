@@ -14,7 +14,9 @@
                 <label style="width: 60px;display: inline-block;">巴斯名称: </label>
                 <bb-input style="width:240px" ref="buzzName"></bb-input>
             </div>
-            <div ref="frameBox"></div>
+            <div ref="frameBox">
+                <codemirror class="bb_codemirror" v-model="editorCode" :options="cmOptions"></codemirror>
+            </div>
             <span class="bbBottomButtons">
                 <!-- 放一个确认和一个取消按钮 -->
                 <bb-button :button="{type:'defalut',size:'normal'}" @click="selectCancel">取消</bb-button>
@@ -58,17 +60,28 @@ var fun = function() {
         item.text = item.label_Type;
         item.value = item.id;
     });
-    return realDataMap.dataList;
+    return realDataMap.data_list;
 }
 fun();`
     };
 
+     // require component
+    import { codemirror } from 'vue-codemirror'
+    // require styles
+    import 'codemirror/lib/codemirror.css'
+
+    require('codemirror/mode/javascript/javascript')
+    require('codemirror/mode/vue/vue')
+    
     export default {
         name: 'bb-buzz-select',
         props: {
             value:{
                 type:String
             }
+        },
+         components:{
+            "codemirror":codemirror
         },
         data() {
             return {
@@ -123,7 +136,16 @@ fun();`
                 templates:[{
                     text:'接口数据转换模板',
                     value:'api_data_transfer'
-                }]
+                }],
+                cmOptions:{
+                    tabSize: 4,//缩进
+                    mode: 'text/javascript',
+                    // theme: 'base16-dark',
+                    lineNumbers: true,
+                    line: true,
+                    matchBrackets:true
+                },
+                editorCode:""//代码编辑器内容
             }
         },
         watch: {
@@ -135,7 +157,6 @@ fun();`
         },
         mounted:function(){
              let t=this;
-             
         },
         methods: {
             //选择按钮点击
@@ -143,20 +164,21 @@ fun();`
                 //选择按钮点击
                 let t=this;
                 t.selectVisible = true;
+                t.editorCode="";
             },
             //新增按钮点击
             add:function(){
                 //添加按钮点击
                 let t = this;
+                t.editorCode="";
                 t.editVisible = true
                 t.currentRow = null;
-                //打开编辑弹窗
-                t._openIframe();
             },
             clear:function(){
                 let t=this;
                 t.currentRow = null;
                 t.valueBase = "";
+                t.editorCode="";
                 t.$emit('change',"");
                 t.$emit('input',"");
             },
@@ -165,8 +187,7 @@ fun();`
                 let t=this;
                 if(t.valueBase){
                     t.editVisible = true
-                    //打开编辑弹窗
-                    t._openIframe();
+                    t.editorCode="";
                     //调接口 获取巴斯详情
                     _TY_Tool.get(_TY_ContentPath+"/read-buzz-by-alias",{
                         alias:t.valueBase
@@ -176,9 +197,7 @@ fun();`
                             //请求成功
                             t.currentRow = data.data.data;
                             //设置代码
-                            setTimeout(()=>{
-                                t._setIframeValue(t.currentRow.code);
-                            },1000);
+                            t.editorCode = t.currentRow.code;
                         }else{
                             t.$message({
                                 type:'error',
@@ -194,6 +213,7 @@ fun();`
                 t.selectVisible = false;
                 t.editVisible = false;
                 t.currentRow = null;
+                t.editorCode="";
             },
             //选中确认
             selectConfirm:function(){
@@ -218,7 +238,7 @@ fun();`
             //编辑 添加 确认
             editConfirm:function(){
                 let t=this;
-                const code = t._getIframeValue();//获取编辑器值
+                const code = t.editorCode;//获取编辑器值
                 //获取数据调修改、添加接口
                 if(t.currentRow){
                     //编辑 更新代码
@@ -261,6 +281,7 @@ fun();`
                             //添加成功后，将别名返回
                             t.valueBase = buzzAlias;
                             t.editVisible = false;
+                            t.editorCode = "";
                             t.$emit('change',t.valueBase);
                             t.$emit('input',t.valueBase);
                         }else{
@@ -275,7 +296,7 @@ fun();`
             //模板change 事件
             templateChange:function(val){
                 let t =this;
-                const code = t._getIframeValue();//获取编辑器值
+                const code = t.editorCode;//获取编辑器值
                 if(code){
                     //如果code 有值, 提示是否替换
                     t.$confirm("改变模板会替换下面代码，是否确定?", "提示", {
@@ -295,148 +316,25 @@ fun();`
                 let t=this;
                 if(val&&TEMPLATE[val]){
                     //设置值
-                    t._setIframeValue(TEMPLATE[val]);
+                    t.editorCode = TEMPLATE[val]
                 }
-            },
-            /*
-                下面是 打开iframe 编辑器的代码部分
-            */
-            //iframe添加css外链
-            _addLink:function(doc,url) {
-                var link = doc.createElement("link");
-                link.type = "text/css";
-                link.rel = "stylesheet";
-                link.href = url;
-                var head = doc.getElementsByTagName("head")[0];
-                head.appendChild(link);
-            },
-            //添加css 样式
-            _addCss:function(doc) {
-                let t=this;
-                var style = doc.createElement("style");
-                style.type = "text/css";
-                var code =".CodeMirror {"+
-                            "   border: 1px solid #eee;"+
-                            "   height: 98%;"+
-                            "   min-height: 360px;"+
-                            "}"+
-                            ".CodeMirror-scroll {"+
-                            "   min-height: 360px;"+
-                            "    height:100%;"+
-                            "    overflow-y: hidden;"+
-                            "    overflow-x: auto;"+
-                            "}";
-                try {
-                    style.appendChild(doc.createTextNode(code));
-                } catch (ex) {
-                    style.text = code;
-                }
-                var head = doc.getElementsByTagName("head")[0];
-                head.appendChild(style);
-            },
-            //添加js
-            _addScript:function(doc,url) {
-                var script = doc.createElement("script");
-                script.type = "text/javascript";
-                script.src = url;
-                var head = doc.getElementsByTagName("head")[0];
-                head.appendChild(script);
-            },
-            //添加iframe内容
-            _addContent:function(doc,key){
-                let t=this;
-                var _div = doc.createElement("textarea");
-                _div.id = "codeContent_"+key;
-                doc.body.appendChild(_div);
-                var script = doc.createElement("script");
-                script.type = "text/javascript";
-                var code ="window.editor = CodeMirror.fromTextArea(document.getElementById('codeContent_"+key+"'), {"+
-                            "matchBrackets:true,"+
-                            "mode: 'text/typescript',"+
-                            "lineNumbers: true"+
-                          "});\n"+
-                            "function setEditorVal(data){window.editor.setValue(data);}";
-                try {
-                    script.appendChild(doc.createTextNode(code));
-                } catch (ex) {
-                    script.text = code;
-                }
-                doc.body.appendChild(script);
-                // setTimeout(function(){
-                //     let frame = document.getElementById('childFrame_'+t.key);
-                //     frame.contentWindow.setEditorVal("");
-
-                // },300);
-            },
-            _openIframe:function(){
-                let t=this;
-                let opened = false;
-                if(t.key){
-                    opened = true;
-                }else{
-                    t.key = _TY_Tool.uuid(8);
-                }
-                let _height="";
-                if(t.fullscreen){
-                    _height = "calc(100vh - 205px)";
-                }
-                setTimeout(function(){
-                    if(!opened){
-                        let iframe = document.createElement("iframe");
-                        iframe.id = "childFrame_"+t.key;
-                        iframe.width="100%";
-                        iframe.style['min-height']="380px";
-                        iframe.style['height']=_height;
-                        t.$refs['frameBox'].appendChild(iframe);
-                    }
-                    let frame = document.getElementById('childFrame_'+t.key);
-                    var childWindow = frame.contentWindow;
-                    var childDoc = childWindow.document;
-                    childDoc.body.innerHTML = '';
-
-                    t._addLink(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.min.css");
-                    t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/codemirror.min.js");
-                    //主codemirror.js要先加载完成
-                    setTimeout(function(){
-                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/edit/matchbrackets.min.js");
-                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/comment/continuecomment.min.js");
-                         t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/addon/comment/comment.min.js");
-                        t._addScript(childDoc,"https://cdn.bootcss.com/codemirror/5.36.0/mode/javascript/javascript.min.js");
-                        t._addCss(childDoc);
-                    },200);
-                    setTimeout(function(){
-                        t._addContent(childDoc,t.key);
-                    },1000);
-                },0);
             },
             //获取iframe的值
             _getIframeValue:function(){
                 let t=this;
-                let frame = document.getElementById('childFrame_'+t.key);
-                var childWindow = frame.contentWindow;
-                let editor = childWindow.editor;
-                let result = editor.getValue();
-                return result;
+                return t.editorCode;
             },
             //设置iframe value值
             _setIframeValue:function(val){
                 let t=this;
-                let frame = document.getElementById('childFrame_'+t.key);
-                if(frame){
-                    var childWindow = frame.contentWindow;
-                    let editor = childWindow.editor;
-                    editor.setValue(val);
-                }
+                t.editorCode = val;
             }
-            /*
-                iframe 编辑器的代码部分 end
-            */
 
         }
     }
 </script>
 
-<style lang="less" scoped>
+<style scoped>
     .bbBottomButtons{
         display: inline-block;
         width: 100%;
@@ -448,5 +346,24 @@ fun();`
     }
     .ml0{
         margin-left:0;
+    }
+    
+    .bb_codemirror{
+        height: calc(100vh - 305px);
+    }    
+
+</style>
+
+
+
+<style>
+    .vue-codemirror .CodeMirror {
+            border: 1px solid #eee;
+            height: 100%;
+        }
+    .CodeMirror .CodeMirror-scroll {
+        height: 100%;
+        overflow-y: hidden;
+        overflow-x: auto;
     }
 </style>

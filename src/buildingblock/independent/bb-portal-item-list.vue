@@ -95,7 +95,7 @@
         data() {
             return {
                 realFields:this.fields,
-                p_value:this.value
+                p_value:this.value,
             }
         },
         watch: {

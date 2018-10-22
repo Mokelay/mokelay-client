@@ -175,7 +175,8 @@ import Util from '../../libs/util';
                         appendToBody:true,
                         isShow:t.formVisible,
                         size:t.dialogSize||"middle"
-                    },on:{
+                    },
+                    on:{
                         'update:isShow':(isShow)=>{
                             t.formVisible = isShow;
                             if(!isShow){
@@ -184,7 +185,8 @@ import Util from '../../libs/util';
                             }
                         }
                     },
-                    key:t.dialogKey
+                    key:t.dialogKey,
+                    ref:"dialog"
                 },[form]);
                 return dialog;
             },
@@ -195,7 +197,21 @@ import Util from '../../libs/util';
             },
             loadChildBB(){
                 let t=this;
-                return _TY_Tool.loadChildBB(t);                
+                const childBB = [];
+                if(t.content){
+                    t.content.forEach((content,index)=>{
+                        const bb = {
+                            bbAlias: content.alias,
+                            children: null,
+                            name: content.aliasName,
+                            uuid: content.uuid
+                        }
+                        childBB.push(bb);
+                    });
+                    return childBB;
+                }else{
+                    return _TY_Tool.loadChildBB(t);
+                }               
             },
             //外部交互弹出弹窗
             showDialog(formData){

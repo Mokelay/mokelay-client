@@ -91,8 +91,8 @@ import Util from '../../libs/util';
                                 t.p_options = [];
                                 for (var i in list) {
                                     t.p_options.push({
-                                        text:list[i][t.optionText],
-                                        value:list[i][t.optionValue]
+                                        text:list[i][t.optionText]+"",
+                                        value:list[i][t.optionValue]+""
                                     });
                                 }
                             }); 
