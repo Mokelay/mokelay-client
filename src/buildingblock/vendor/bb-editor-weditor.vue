@@ -124,11 +124,12 @@
                 };
                 this.editor.customConfig.onchangeTimeout = 1000; // 单位 ms
                 this.editor.customConfig.onchange = function (html) {
-                    t.$emit("input",html);
+                    // t.$emit("input",html);
                     t.$emit("change",html);
                 };
                 this.editor.customConfig.onblur = function (html) {
                     t.$emit("input",html);
+                    t.$emit("change",html);
                 };
                 this.editor.customConfig.zIndex=1;
             },

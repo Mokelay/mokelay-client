@@ -10,9 +10,9 @@
               :fullscreen="fullscreen"
               :before-close="handleClose">
               <div ref="frameBox">
-                    <el-button type="primary" @click="jsonFormat(true)">JSON格式化</el-button>
+                    <el-button type="primary" @click="jsonFormat(true)">格式化(JSON/JS)</el-button>
               </div>
-              <codemirror class="bb_codemirror" v-model="p_value" :options="cmOptions"></codemirror>
+              <codemirror ref="mirror" class="bb_codemirror" v-model="p_value" :options="cmOptions"></codemirror>
               <!--   <iframe ref="childFrame" id="childFrame" width="100%" height="100%">
                 </iframe> -->
               <span slot="footer" class="dialog-footer">
@@ -27,6 +27,7 @@
 
     // require component
     import { codemirror } from 'vue-codemirror'
+    import _CodeMirror from 'codemirror'
     // require styles
     import 'codemirror/lib/codemirror.css'
 
@@ -107,11 +108,53 @@
             }
         },
         created: function () {
+            //初始化编辑器
+            this.initCodeMirror();
         },
         mounted: function () {
             var t =this;
+            t.jsonFormat(false);
         },
         methods: {
+            initCodeMirror:function(){
+                _CodeMirror.defineExtension("autoFormatRange", function (from, to) {
+                    var cm = this;
+                    var outer = cm.getMode(), text = cm.getRange(from, to).split("\n");
+                    var state = _CodeMirror.copyState(outer, cm.getTokenAt(from).state);
+                    var tabSize = cm.getOption("tabSize");
+
+                    var out = "", lines = 0, atSol = from.ch == 0;
+                    function newline() {
+                        out += "\n";
+                        atSol = true;
+                        ++lines;
+                    }
+
+                    for (var i = 0; i < text.length; ++i) {
+                        var stream = new _CodeMirror.StringStream(text[i], tabSize);
+                        while (!stream.eol()) {
+                            var inner = _CodeMirror.innerMode(outer, state);
+                            var style = outer.token(stream, state), cur = stream.current();
+                            stream.start = stream.pos;
+                            if (!atSol || /\S/.test(cur)) {
+                                out += cur;
+                                atSol = false;
+                            }
+                            if (!atSol && inner.mode.newlineAfterToken &&
+                                inner.mode.newlineAfterToken(style, cur, stream.string.slice(stream.pos) || text[i+1] || "", inner.state))
+                                newline();
+                        }
+                        if (!stream.pos && outer.blankLine) outer.blankLine(state);
+                        if (!atSol) newline();
+                    }
+
+                    cm.operation(function () {
+                        cm.replaceRange(out, from, to);
+                        for (var cur = from.line + 1, end = from.line + lines; cur <= end; ++cur)
+                            cm.indentLine(cur, "smart");
+                    });
+                });
+            },
             linkage:function(...data){
                 if(data){
                     this.external['linkage'] = data;
@@ -125,23 +168,28 @@
             //json格式化
             jsonFormat:function(showMessage){
                 let t=this;
-                t.cmOptions.mode = "application/ld+json";
-                t.cmOptions.lineWrapping = true;
-                t.cmOptions.autoCloseBrackets = true;
                 try{
                     JSON.parse(t.p_value);
+                    t.cmOptions.mode = "application/ld+json";
+                    t.cmOptions.lineWrapping = true;
+                    t.cmOptions.autoCloseBrackets = true;
                 }catch(e){
-                    if(showMessage){
-                        t.$message({
-                            type: 'info',
-                            message: "数据非JSON格式或者JSON有错!"
-                        });
-                    }
+                    t.jsFormat();
                     return;
                 }
                 t.p_value = _TY_Tool.jsonFormat(t.p_value);
             },
-            
+            jsFormat:function(){
+                let t=this;
+                t.cmOptions.mode = "javascript";//javascript  htmlmixed
+                t.cmOptions.lineWrapping = true;
+                t.cmOptions.autoCloseBrackets = true;
+                if(t.$refs['mirror']){
+                    const editor = t.$refs['mirror'].codemirror;
+                    var totalLines = editor.lineCount(); 
+                    editor.autoFormatRange({line:0, ch:0}, {line:totalLines});    
+                }
+            },
             //打开弹窗
             openDialog:function(){
                 let t=this;

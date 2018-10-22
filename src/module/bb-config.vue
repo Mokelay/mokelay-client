@@ -933,7 +933,7 @@
                                             value: "boolean"
                                         }, {
                                             text: "日期",
-                                            value: "string"
+                                            value: "date"
                                         }, {
                                             text: "对象",
                                             value: "object"
