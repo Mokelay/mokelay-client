@@ -265,7 +265,7 @@
             transition: opacity .1s;
             position: absolute;
             padding-right: 5px;
-            z-index: 100;
+            z-index: 1000;
             width: 100%;
             height: 100%;
             /*top: -10px;*/

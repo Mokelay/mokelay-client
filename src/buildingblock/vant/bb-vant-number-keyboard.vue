@@ -1,9 +1,12 @@
 <template>
     <van-number-keyboard
         :show="valueBase"
+        :title="option['title']"
         theme="custom"
         extra-key="."
         close-button-text="完成"
+        :show-delete-key="option['show-delete-key']"
+        :hide-on-click-outside="option['hide-on-click-outside']"
         @blur="onBlur"
         @input="onInput"
         @delete="onDelete"
