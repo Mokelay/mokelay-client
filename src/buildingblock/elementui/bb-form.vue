@@ -339,7 +339,7 @@
                         on:{
                             //为每一项添加默认的输入事件 配合defaultVmodel方法实现v-model语法糖
                             change: function (val) {
-                                formData[field['attributes']['attributeName']] = val;
+                                t.$set(t.formData,field['attributes']['attributeName'],val);
                             }
                         },
                         ref: ref,
