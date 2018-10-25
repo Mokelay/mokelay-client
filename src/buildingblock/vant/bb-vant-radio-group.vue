@@ -56,17 +56,7 @@ import 'vant/lib/radio/style';
             fields:{
                 type:Array,
                 default:function(){
-                	return [{
-                		text:'选项1',
-                        value:'1',
-                        subDescription:"默认值1",
-                        disabled:false
-                   },{
-                        text:'选项2',
-                        value:'2',
-                        subDescription:"默认值2",
-                        disabled:false
-                	}]
+                	return []
                 }
             },
             /*选项数据 动态
@@ -105,13 +95,35 @@ import 'vant/lib/radio/style';
         methods: {
             //获取数据
             getData() {
-                //var t = this;
+                const t = this;
                 if (this.fieldsDs) {
-                    _TY_Tool.getDSData(this.fieldsDs, _TY_Tool.buildTplParams(this), function (data) {
-                        data.forEach((item) => {
-                            const {dataKey, value} = item;
-                            this.realFields = value;
-                        });
+                    _TY_Tool.getDSData(this.fieldsDs, _TY_Tool.buildTplParams(this), function (map) {
+                        t.fieldsDs.type = t.fieldsDs.type?t.fieldsDs.type:"dynamic";
+                        if(t.fieldsDs.type == "dynamic"){
+                          map.forEach(function (item) {
+                            var list;
+                            if(item['value']&&item['value']['list']){
+                              list = item['value']['list'];
+                            }else{
+                              list = item['value'];
+                            }
+                            t.realFields = [];
+                            for (var i in list) {
+                                var ele = list[i][t.valueField];
+                                if(typeof(list[i][t.valueField]) != 'string'){
+                                  ele = JSON.stringify(list[i][t.valueField])
+                                }
+                                let option = {
+                                  value:ele,
+                                  text:list[i][t.textField]+(t.showValue?"("+ele+")":"")
+                                }
+                                t.realFields.push(option);
+                            }
+                            t.totalItems = item['value']['totalRecords'];
+                          });
+                        }else{
+                          t.realFields = map;
+                        }
                     }, function (code, msg) {
                     });
                 }
