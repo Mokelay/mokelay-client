@@ -109,7 +109,32 @@
                 let t=this;
                 if(t.realButtonDs){
                      _TY_Tool.getDSData(t.realButtonDs, _TY_Tool.buildTplParams(t), function (map) {
-                        t.realButtons = map[0].value;
+                        t.realButtonDs.type = t.realButtonDs.type?t.realButtonDs.type:"dynamic";
+                        if(t.realButtonDs.type == "dynamic"){
+                          map.forEach(function (item) {
+                            var list;
+                            if(item['value']&&item['value']['list']){
+                              list = item['value']['list'];
+                            }else{
+                              list = item['value'];
+                            }
+                            t.realButtons = [];
+                            for (var i in list) {
+                                var ele = list[i][t.valueField];
+                                if(typeof(list[i][t.valueField]) != 'string'){
+                                  ele = JSON.stringify(list[i][t.valueField])
+                                }
+                                let option = {
+                                  value:ele,
+                                  text:list[i][t.textField]+(t.showValue?"("+ele+")":"")
+                                }
+                                t.realButtons.push(option);
+                            }
+                            t.totalItems = item['value']['totalRecords'];
+                          });
+                        }else{
+                          t.realButtons = map
+                        }
                     }, function (code, msg) {
                     });
                 }
