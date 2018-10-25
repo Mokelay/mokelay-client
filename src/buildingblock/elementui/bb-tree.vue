@@ -25,8 +25,8 @@
                 @node-expand="nodeExpand"
                 @node-drop="nodeDrop"
                 :draggable="option.draggable"
-                :allow-drop="option.draggable"
-                :allow-drag="option.draggable"
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag"
         >
             <span class="custom-tree-node" slot-scope="{ node, data }">
                 <span>{{ node.label }}</span>
@@ -506,6 +506,12 @@
                     dropType:dropType,
                     ev:ev
                 })
+            },
+            allowDrop:function(){
+                return true;
+            },
+            allowDrag:function(){
+                return true;
             }
         }
     }
