@@ -196,7 +196,7 @@
                         const bb = {
                             bbAlias: content.alias,
                             children: null,
-                            name: content.aliasName,
+                            name: content.aliasName||content.alias,
                             uuid: content.uuid
                         }
                         childBB.push(bb);
