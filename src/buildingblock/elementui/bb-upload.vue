@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="showButtom != 'false'" :class="bb_uploader_class">
         <el-upload
             :action="uploadUrl"
             :before-upload="beforeUpload"
@@ -64,7 +64,8 @@
                         type:'primary', 按钮主题
                         text:'上传', 按钮文字
                         size:'mini' 按钮大小
-                    }
+                    },
+                    cover:true  //超出覆盖第一张
                 }
             */
             option:{
@@ -76,7 +77,8 @@
                             type:'primary',
                             text:'上传',
                             size:'mini'
-                        }
+                        },
+                        cover:true
                     };
                 }
             },
@@ -91,7 +93,9 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 uploadUrl:'',
-                realFileList:[]
+                realFileList:[],
+                showButtom:_TY_Tool.tpl(this.option.uploadButton.showValue, _TY_Tool.buildTplParams(this)),
+                bb_uploader_class:"bb-uploader"
             }
         },
         watch: {
@@ -131,6 +135,11 @@
             //移除图片
             handleRemove:function(file, fileList) {
                 const t = this;
+                if(fileList.length >= t.limit && !t.option.cover){
+                    t.bb_uploader_class = "bb-uploader-uncover";
+                }else{
+                    t.bb_uploader_class = "bb-uploader";
+                }
                 t.handleFileList('remove',fileList,file);
             },
             //预览图片
@@ -177,6 +186,9 @@
                     if(fileList instanceof Array && fileList.length<=0){
                         resultFileList='';
                     }
+
+                    // resultFileList = [{name: 'food.jpeg', url: "http://xlx.saiyachina.com/config/ty_oss_download?bucketName=ty-storage&fileName=6ad896008755c91c0a4aea3818bbbc35.jpg"}];
+                    // t.realFileList
                     t.$emit(emit,resultFileList);
                     t.$emit('input',resultFileList);
                 }
@@ -233,11 +245,30 @@
                 }else{
                     t.realFileList = list
                 }
+                if(t.realFileList.length >= t.limit && !t.option.cover){
+                    t.bb_uploader_class = "bb-uploader-uncover";
+                }else{
+                    t.bb_uploader_class = "bb-uploader";
+                }
             },
             //文件超出个数限制时的钩子
             onExceed:function(files, fileList){
-                this.$message.error('文件超出个数限制');
+                debugger
+                const t = this;
+                if(t.option.cover){
+                    t.realFileList.splice(0,1,files[0]);
+                }else{
+                    t.$message.error('文件超出个数限制');
+                    t.bb_uploader_class = "bb-uploader-uncover";
+                }
             }
         }
     }
 </script>
+<style lang="less">
+    .bb-uploader-uncover{
+        .el-upload--picture-card{
+            display:none;
+        }
+    }
+</style>
