@@ -199,7 +199,7 @@
                             name: content.aliasName,
                             uuid: content.uuid
                         }
-                        childBB.push(childrenBB);
+                        childBB.push(bb);
                     });
                     return childBB;
                 }else{
