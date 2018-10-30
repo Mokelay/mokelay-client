@@ -2,7 +2,7 @@
     <div class="bb_button_media">
         <bb-dialog title="积木设置" size="middle" :isShow.sync="showDialog">
             <bb-media :multiple="multiple" :uploadDs="uploadDs" :mediaDs="mediaDs" :pageSize="pageSize"
-                @commit="commit" :defaultSelected="p_value"
+                @commit="commit" :defaultSelected="p_value" :mediaProps="mediaProps"
             ></bb-media>
         </bb-dialog>
         
@@ -45,7 +45,24 @@
             pageSize:{
                 type:[Number,String],
                 default:15
-            }
+            },
+             //列表属性映射
+            mediaProps:{
+                type:Object,
+                default:function(){
+                    return {
+                        index:"index",
+                        src:'src',
+                        title:'title',
+                        desc:'desc',
+                        replaceText:'replaceText',
+                        fileName:'fileName',
+                        uploadDate:'uploadDate',
+                        length:'length',
+                        size:'size'
+                    };
+                }
+            },
         },
         data() {
             return {
