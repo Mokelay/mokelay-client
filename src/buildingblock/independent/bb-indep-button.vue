@@ -1,5 +1,5 @@
 <template>
-    <button v-if="isShow" :id="id" :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="realOptions.disabled?disabledStyle:relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':(relButton.text?relButton.text:relButton.selectText)}}<slot></slot></button>
+    <button v-if="isShow" :id="id" :class="['indep_btn',relButton.type,realOptions.disabled?'is-disabled':'']" :style="realOptions.disabled?disabledStyle:relButton.style" class="bb-indep-button" type="button" :disabled="realOptions.disabled" :size="relButton.size" :icon="relButton.icon" @click="click(relButton)"><i :class="relButton.icon"></i>{{$slots.default?'':(relButton.text?relButton.text:relButton.selectText)}}<slot></slot><sup v-if="badgeValue && badgeValue != ''" :style="badgeStyle" class="indep_btn_badge indep_btn_badge_fixed" @click="badgeClick">{{badgeValue}}</sup></button>
 </template>
 
 <script>
@@ -52,7 +52,11 @@
                     return {
                         disabled:false,
                         readonly:false,
-                        disabledStyle:{}
+                        disabledStyle:{},
+                        badge:{
+                            ds:{},
+                            style:{}
+                        }
                     };
                 }
             }
@@ -62,7 +66,9 @@
                 external:{},//外部参数
                 isShow:true,
                 realOptions:this.options,
-                id:_TY_Tool.uuid()
+                id:_TY_Tool.uuid(),
+                badgeValue:"",
+                badgeStyle:this.options.badge?_TY_Tool.setSimpleStyle(this.options.badge.style):""
             }
         },
         computed: {
@@ -92,6 +98,7 @@
         created: function () {
         },
         mounted:function(){
+            this.getBadgeData();
         },
         methods: {
             //外部参数，在button中存储
@@ -106,6 +113,7 @@
                 Util.resolveButton(button,_TY_Tool.buildTplParams(this));
                 this.$emit('buttonClick',button,this);
                 this.$emit('click',button,this);
+                this.getBadgeData();
             },
             loadChildBB(){
                 let t=this;
@@ -126,6 +134,30 @@
             //启用积木
             enabledFn(){
                 this.realOptions.disabled = false;
+            },
+            //获取角标数据
+            getBadgeData: function () {
+                var t = this;
+                if (t.options.badge && t.options.badge.ds) {
+                    t.loading = true;
+                    _TY_Tool.getDSData(t.options.badge.ds, _TY_Tool.buildTplParams(t), function (map) {
+                        t.options.badge.ds.type = t.options.badge.ds.type?t.options.badge.ds.type:"dynamic";
+                        if(t.options.badge.ds.type == "dynamic"){
+                            map.forEach(function (item) {
+                                t.badgeValue = item['value'];
+                            });
+                        }else{
+                            t.badgeValue = map;
+                        }
+                        t.loading = false;
+                    }, function (code, msg) {
+                        t.loading = false;
+                    });
+                }
+            },
+            //角标被点击
+            badgeClick(){
+                this.$emit("badge-click",this);
             }
         }
     }
@@ -157,6 +189,7 @@
         padding: 0.4rem 0.5rem;
         font-size: 0.5rem;
         border-radius: 0.2rem;
+        position: relative;
         &:hover,&:focus{
             background: #fff;
             border-color: #0091EA;
@@ -231,6 +264,25 @@
             border-color: transparent;
             background-color: transparent;
         }
+    }
+    .indep_btn_badge{
+        background-color: #f56c6c;
+        border-radius: 10px;
+        color: #fff;
+        display: inline-block;
+        font-size: 12px;
+        height: 18px;
+        line-height: 18px;
+        padding: 0 6px;
+        text-align: center;
+        white-space: nowrap;
+        border: 1px solid #fff;
+    }
+    .indep_btn_badge_fixed{
+        position: absolute;
+        top: 0;
+        right: 10px;
+        transform: translateY(-50%) translateX(100%);
     }
 
 
