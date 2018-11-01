@@ -324,7 +324,7 @@
             transition: opacity .1s;
             position: absolute;
             padding-right: 5px;
-            z-index: 1;
+            z-index: 1000;
             border:1px solid #cccccc;
             border:none;
             width: 100%;

@@ -64,7 +64,7 @@
         data() {
             return {
                 valueBase: this.value,
-                suggestionsBase:this.suggestions,
+                suggestionsBase:this.suggestions || [],
                 queryString:null
             }
         },

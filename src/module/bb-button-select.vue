@@ -100,7 +100,7 @@
                     props: {}
                 }, {
                     pbbId:"showValue",
-                    name: '隐藏控制',
+                    name: '显示隐藏',
                     show:true,
                     description:"返回true显示 返回false隐藏 <%=bb.key == 1?true:false%>",
                     attributeName: 'showValue',

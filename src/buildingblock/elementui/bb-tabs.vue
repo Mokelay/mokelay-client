@@ -63,9 +63,9 @@
             const paneArr = t.renderTabData(createElement);
 
             //模拟点击默认tab事件,避免已经渲染的dom重新渲染
-            setTimeout(function(){
-                t.tabClick({name:t.p_activeName});
-            },300);
+            // setTimeout(function(){
+            //     t.tabClick({name:t.p_activeName});
+            // },300);
             return createElement('el-tabs', {
                 props: {
                     value: t.p_activeName,
@@ -189,7 +189,7 @@
                 tabsData:[],//最终转换成tab识别的data数据
                 key:'',//当前组件标识，针对同一个页面由多个相同的组件
                 hasTransfer:false,//表示t.contentToTabData(); 方法是否已经执行了，这个方法只能执行一次
-                p_activeName:_TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this))
+                p_activeName: _TY_Tool.tpl(this.activeName,_TY_Tool.buildTplParams(this))
                 
             }
         },
@@ -210,9 +210,9 @@
         mounted:function(){
             let t=this;
             //将content属性转换成可以识别的tab组件
-            t.readActiveTab();
             t.key = ""+ +new Date();
             setTimeout(()=>{
+                t.readActiveTab();
                 t.$emit("mounted",t);
             },500);
         },
@@ -506,6 +506,7 @@
                     }
                 });
                 this.p_activeName = tempTab;
+                t.tabClick({name:t.p_activeName})
             }
         }
     }

@@ -141,6 +141,7 @@
                 this.tags.splice(key,1);
                 this.$emit('input', this.tags);
                 this.$emit('change', this.tags);
+                this.$emit('remove', this.tags);
             },
             //点击添加标签显示输入框并focus
             showInput() {
