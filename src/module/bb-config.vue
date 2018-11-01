@@ -1,5 +1,5 @@
 <template>
-    <el-tabs :key="key" :type="showBBSelect?'card':'border-card'">
+    <el-tabs v-if="show" :key="key" :type="showBBSelect?'card':'border-card'">
         <el-tab-pane label="属性">
             <!-- 基础属性 -->
             <bb-form ref="bb-config-form-base" size="mini" labelWidth="80px" :hideSubmitButton="true" :content="formItemFieldsBase" v-model="valueBase"></bb-form>
@@ -155,27 +155,13 @@
             },
             //载入当前积木的编辑内容
             editBB:function(content){
-                debugger
                 const t = this;
                 t.show = false
-                // if(!content.alias){
-                //     t.show = false
-                //     return;
-                // }
                 if(content.alias){
                    t.valueBase = content; 
                    t.bbChange(content.alias);
                    setTimeout(()=>{t.show = true;},10);
                 }
-                // t.alias = content.alias;
-                // t.key = _TY_Tool.uuid();
-                
-                
-                //选获取积木详情，获取交互
-                
-                // t.getBBInfo().then(()=>{
-                //     t.setEditor();
-                // })
             },
             //添加交互
             interactiveAdd:function(row){
