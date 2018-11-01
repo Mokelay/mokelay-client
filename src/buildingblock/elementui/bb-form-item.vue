@@ -162,6 +162,9 @@
             },
             label(val){
                 this.realLabel = val;
+            },
+            rules(val){
+                this.realRules = val;
             }
         },
         created: function () {
