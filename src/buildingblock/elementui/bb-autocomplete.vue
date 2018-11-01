@@ -30,6 +30,13 @@
                 type:[String,Number]
             },
             /*
+                valueKey 数据查询字段 返回数据中对应的值字段
+            */
+            valueKey:{
+                type:[String,Number],
+                default:"value"
+            },
+            /*
                 defaultValTpl 默认值支持模板
             */
             defaultValTpl:{
@@ -95,7 +102,10 @@
                         t.suggestionsDs.type = t.suggestionsDs.type?t.suggestionsDs.type:"dynamic";
                         if(t.suggestionsDs.type == "dynamic"){
                             map.forEach((val,key)=>{
-                                t.suggestionsBase = val.value.list;
+                                val.value.forEach((ele,index)=>{
+                                    ele.value = ele[t.valueKey];
+                                });
+                                t.suggestionsBase = val.value;
                                 t.getResults(queryString,cb);
                             })
                         }else{
@@ -120,8 +130,17 @@
             },
             //遍历查询输入字符是否在数据中
             createStateFilter:function(queryString) {
+                const t = this;
                 return (state) => {
-                    return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                    if(state.value){
+                        return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                    }else{
+                        t.$message({
+                            type: 'error',
+                            message: "请配置数据的检索字段！"
+                        });
+                        return false;
+                    }
                 };
             },
             //输出补全提示
