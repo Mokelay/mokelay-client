@@ -114,7 +114,7 @@
       },
       //文字内容，支持模板<%=params%>
       text: {
-        type: [String,Number]
+        type: [String,Array,Object,Number,Boolean]
       },
       /**====dom相关属性====*/
       //主题，选择了主题，默认填充对应的dom相关属性样式
