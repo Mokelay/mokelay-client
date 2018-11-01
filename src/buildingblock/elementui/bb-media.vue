@@ -133,6 +133,23 @@
                 type:[Number,String],
                 default:15
             },
+            //列表属性映射
+            mediaProps:{
+                type:Object,
+                default:function(){
+                    return {
+                        index:"index",
+                        src:'src',
+                        title:'title',
+                        desc:'desc',
+                        replaceText:'replaceText',
+                        fileName:'fileName',
+                        uploadDate:'uploadDate',
+                        length:'length',
+                        size:'size'
+                    };
+                }
+            },
             //默认选中 的图片
             defaultSelected:{
                 type:[Array,String],
@@ -257,7 +274,17 @@
                                         size:'1920 x 1109'
                                     }
                                 */
-                                t.fileList.push(list[i]);
+                                t.fileList.push({
+                                    title:list[i][t.mediaProps.title],
+                                    src:list[i][t.mediaProps.src],
+                                    desc:list[i][t.mediaProps.desc],
+                                    replaceText:list[i][t.mediaProps.replaceText],
+                                    fileName:list[i][t.mediaProps.fileName],
+                                    uploadDate:list[i][t.mediaProps.uploadDate],
+                                    length:list[i][t.mediaProps.length],
+                                    size:list[i][t.mediaProps.size]
+                                });
+                                // t.fileList.push(list[i]);
                             }
                             t.totalPages = item['value']['totalPages'];
                         });

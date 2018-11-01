@@ -1,5 +1,5 @@
 <template>
-    <el-radio-group v-if="isShow" :value="p_value" @input="radioChange" :size="realOption.size" :disabled="realOption.disabled" @change="radioChange">
+    <el-radio-group v-if="isShow" :value="p_value" @input="radioChange" :size="realOption.size" :disabled="realOption.disabled" @change="radioChange" :class="realOption.layout">
         <el-radio v-if="type == 'radio'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value">{{item.text}}</el-radio>
         <el-radio-button v-if="type == 'button'" v-for="item in p_options" :disabled="item.disabled" :label="item.value" :key="item.value" class="searchSelection">{{item.text}}</el-radio-button>
     </el-radio-group>
@@ -46,13 +46,18 @@ import Util from '../../libs/util';
             defaultValTpl:{
                 type:[String,Number,Boolean]
             },
-            //基础配置
+            /*基础配置
+                {
+                    layout:"bb-radio-group-vertical bb-radio-group-horizontal"
+                }
+            */
             option:{
                 type:Object,
                 default:function(){
                     return {
                         disabled:false,
-                        size:""
+                        size:"",
+                        layout:"bb-radio-group-horizontal"
                     };
                 }
             }
@@ -143,7 +148,13 @@ import Util from '../../libs/util';
     }
 </script>
 
-<style>
+<style lang="less">
+    .bb-radio-group-vertical{
+        .el-radio{
+            display: block;
+            margin:0 0 5px 0 !important;
+        }
+    }
     .searchSelection{
         margin:5px;
     }

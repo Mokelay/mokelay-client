@@ -618,10 +618,9 @@
     }
 
 
-
     .wx_platform{
         overflow-y: scroll;
-        padding:  calc(5% + 152px) calc(25% + 25px) calc(5% + 85px) ;
+        padding: calc(3% + 80px) calc(20% + 30px) calc(3% + 39px);
         height: 100%;
     }
     .wx_platform::-webkit-scrollbar {
@@ -630,17 +629,17 @@
     .wx_menu{
         z-index: 100;
         position: absolute;
-        left: calc(25% + 25px);
-        top: calc(5% + 85px);
+        left: calc(20% + 27px);
+        top: calc(3% + 43px);
         height: 28px;
-        width: calc(50% - 50px);
+        width: calc(60% - 52px);
     }
     .wx_exit{
         z-index: 100;
         position: absolute;
-        right: calc(25% + 25px);
-        top: calc(5% + 85px + 28px);
-        height: 36px;
+        right: calc(20% + 24px);
+        top: calc(3% + 45px + 28px);
+        height: 30px;
     }
 
 

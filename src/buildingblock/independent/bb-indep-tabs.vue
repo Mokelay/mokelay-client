@@ -409,7 +409,34 @@
             },
             loadChildBB(){
                 let t=this;
-                return _TY_Tool.loadChildBB(t);                
+                const childBB = [];
+                if(t.tabsData&&t.tabsData.length>0){
+                    t.tabsData.forEach((tab,index)=>{
+                        const content = tab.content;
+                        if(content&&content.length>0){
+                            content.forEach((item,index)=>{
+                                const bb = {
+                                    bbAlias: item.alias,
+                                    children: null,
+                                    isleaf:true,
+                                    name: item.aliasName||item.alias,
+                                    uuid: item.uuid
+                                }
+                                const currentBB = _TY_Tool.findBBByUuid(item.uuid);
+                                if(currentBB){
+                                    const tmpArr = Object.keys(currentBB.$refs);
+                                    if(tmpArr&&tmpArr.length>0){
+                                        bb.isleaf = false;
+                                    }
+                                }
+                                childBB.push(bb);
+                            }); 
+                        }
+                    });
+                    return childBB;
+                }else{
+                    return _TY_Tool.loadChildBB(t);
+                }     
             }
         }
     }
