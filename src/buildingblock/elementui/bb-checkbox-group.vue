@@ -87,7 +87,7 @@ import Util from '../../libs/util';
                         t.ds.type = t.ds.type?t.ds.type:"dynamic";
                         if(t.ds.type == "dynamic"){
                             map.forEach(function (item) {
-                                var list = item['value']['list'];
+                                var list = item['value'];
                                 t.p_options = [];
                                 for (var i in list) {
                                     t.p_options.push({

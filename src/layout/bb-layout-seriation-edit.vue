@@ -238,6 +238,7 @@
                     t.realContent.forEach((bbEle,index)=>{
                         //根据group 来区分是否这个item 可以编辑
                         const notCanOpt = bbEle.group&&bbEle.group==='notCanOpt';
+                        const isApiLego = bbEle.data && bbEle.data.apiAlias;
                         const tag = _TY_Tool.isPC()?'bb-seriation-item-edit':'bb-seriation-item-edit-h5'
                         const bbItem = createElement(tag, {
                             ref:'bb-seriation-item-edit-' + index,
@@ -246,10 +247,11 @@
                                 config:{
                                     horizontal:t.horizontal,
                                     pointer:(bbEle.attributes&&bbEle.attributes.pointer?bbEle.attributes.pointer:false),
-                                    buttons:notCanOpt?[]:['copy','up','down','remove'],
+                                    buttons:isApiLego?(notCanOpt?[]:['disable','copy','up','down','remove']):['copy','up','down','remove'],
                                     onFocus:notCanOpt?false:bbEle.onFocus,
                                     styleType:t.option.styleType
-                                }   
+                                },
+                                disable:bbEle.data&&bbEle.data.disabled||false
                             },
                             style:{flex:1},
                             on:{
@@ -257,6 +259,7 @@
                                 down:t.down.bind(null,index),
                                 remove:t.remove.bind(null,index),
                                 copy:t.copy.bind(null,index),
+                                disable:t.disableEvent.bind(null,index),
                                 onFocus:notCanOpt?false:t.onFocus.bind(null,index),
                                 onBlur:t.onBlur.bind(null,index)
                             },
@@ -270,7 +273,7 @@
                         //bbList.splice(bb.layout.sort - 1,1,bbItem);
                         bbEle.onFocus = false;
                     });
-                    return bbList; 
+                    return bbList;
                 }
             },
             loadChildBB(){
@@ -352,6 +355,16 @@
                     t.realContent.splice(index, 1);
                     t.$emit('change',t.realContent);
                 }
+            },
+            disableEvent:function(...params){
+                const t=this;
+                const index = params[0];
+                const disabledFlag = params[2];
+                const data = t.realContent[index].data;
+                if(data){
+                    data.disabled = disabledFlag;
+                }
+                t.$emit('change',t.realContent);
             },
             //积木选中状态
             onFocus:function(...params){
@@ -618,10 +631,9 @@
     }
 
 
-
     .wx_platform{
         overflow-y: scroll;
-        padding:  calc(5% + 152px) calc(25% + 25px) calc(5% + 85px) ;
+        padding: calc(3% + 80px) calc(20% + 30px) calc(3% + 39px);
         height: 100%;
     }
     .wx_platform::-webkit-scrollbar {
@@ -630,17 +642,17 @@
     .wx_menu{
         z-index: 100;
         position: absolute;
-        left: calc(25% + 25px);
-        top: calc(5% + 85px);
+        left: calc(20% + 27px);
+        top: calc(3% + 43px);
         height: 28px;
-        width: calc(50% - 50px);
+        width: calc(60% - 52px);
     }
     .wx_exit{
         z-index: 100;
         position: absolute;
-        right: calc(25% + 25px);
-        top: calc(5% + 85px + 28px);
-        height: 36px;
+        right: calc(20% + 24px);
+        top: calc(3% + 45px + 28px);
+        height: 30px;
     }
 
 

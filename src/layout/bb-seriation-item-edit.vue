@@ -13,6 +13,7 @@
             const upButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.up.icon},class:t.realStyle.up.class},on:{click:t.up}},[]);
             const downButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.down.icon},class:t.realStyle.down.class},on:{click:t.down}},[]);
             const removeButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.remove.icon},class:t.realStyle.remove.class},on:{click:t.remove}},[]);
+            const disableButton = createElement('bb-button',{props:{button:{type:'text',icon:t.realStyle.disable.icon},class:t.realStyle.disable.class},on:{click:t.disableEvent}},[]);
             const buttons = [];
             t.config.buttons.forEach((ele,key)=>{
                 switch(ele){
@@ -28,6 +29,9 @@
                     case 'copy':
                         buttons.push(copyButton);
                         break;
+                    case 'disable':
+                        buttons.push(disableButton);
+                        break;
                 }
             })
             const buttonElements = createElement('div',{props:{},attrs:{class:'bb-seriation-item-buttons'},on:{}},buttons);
@@ -36,7 +40,13 @@
             //生成箭头
             const pointer = t.config.pointer?createElement('i',{props:{},attrs:{class:t.realStyle.pointer.class},on:{}},[]):[];
 
-            return createElement('div',{attrs:{class:'bb-seriation-item-edit'}},[editorArea,pointer]); 
+            return createElement('div',{
+                attrs:{},
+                class:{
+                    'bb-seriation-item-edit':true,
+                    'bb-disabled':t.p_disable
+                }
+            },[editorArea,pointer]); 
         },
         props: {
             /*config 配置
@@ -108,6 +118,11 @@
             content:{
                 type:[Object,Array]
 
+            },
+            // 是否禁用
+            disable:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -129,6 +144,10 @@
                     copy:{
                         class:'ma fs16',
                         icon:'ty-wenjuan_fuzhi'
+                    },
+                    disable:{
+                        class:'ma fs16',
+                        icon:'ty-icon_shifang'
                     },
                     pointer:{
                         class:'ty-jiantou lh100'
@@ -152,6 +171,10 @@
                         class:'ma fs16',
                         icon:'ty-icon_lajitong'
                     },
+                    disable:{
+                        class:'ma fs16',
+                        icon:'ty-icon_shifang'
+                    },
                     copy:{
                         class:'ma fs16',
                         icon:'ty-wenjuan_fuzhi'
@@ -164,10 +187,14 @@
                     }
                 },
                 realStyle:{},
-                borderClass:'border'
+                borderClass:'border',
+                p_disable:this.disable//该节点是否禁用
             }
         },
         watch: {
+            disable(val){
+                this.p_disable = val;
+            }
         },
         created: function () {
             const  t = this;
@@ -210,6 +237,15 @@
             remove:function(){
                 this.$emit('remove',this);
             },
+            //禁用按钮点击  禁用或者解禁
+            disableEvent:function(){
+                if(this.p_disable){
+                    this.p_disable = false;
+                }else{
+                    this.p_disable = true;
+                }
+                this.$emit('disable',this,this.p_disable);
+            },
             //复制节点
             copy:function(){
                 this.$emit('copy',this);
@@ -222,6 +258,9 @@
     }
 </script>
 <style lang='less'>
+    .bb-seriation-item-edit.bb-disabled .content{
+        background: #e4e4e4;
+    }
     .bb-seriation-item-edit{
         .content{
             width: 100%;
