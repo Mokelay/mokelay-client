@@ -497,6 +497,7 @@
             //将当前激活标签记录到sessionstorage
             readActiveTab:function(){
                 const t=this;
+                //先走sessionStorage 
                 const storageTab = sessionStorage.getItem("bb-tabs")||'';
                 let tempTab = this.p_activeName;
                 t.realTabs.forEach((item,index)=>{
@@ -505,7 +506,20 @@
                         return false;
                     }
                 });
-                this.p_activeName = tempTab;
+                
+                //再走路由，如果路由有tab数，就显示该tab 路由比sessionStorage权值大  eg:  step=2   打开第三个tab,从0开始
+                const routeQuery = t.$route.query;
+                if(routeQuery && routeQuery.step){
+                    //查看路由的step 是否是在tabs中
+                    t.realTabs.forEach((item,index)=>{
+                        if(routeQuery.step==index){
+                            tempTab = item.name;
+                            return false;
+                        }
+                    });
+                }
+                t.p_activeName = tempTab;
+
                 t.tabClick({name:t.p_activeName})
             }
         }
