@@ -916,9 +916,9 @@
                 var t = this;
                 //this.treeParentId = row['id'];
                 var _parentId= row['id'];
-                if(t.treeConfig&&t.treeConfig.parentKey){
-                    _parentId=row[t.treeConfig.parentKey];
-                }
+                //if(t.treeConfig&&t.treeConfig.parentKey){
+                //    _parentId=row[t.treeConfig.parentKey];
+                //}
                 this.treeParentId = _parentId;
                 
                 this.getData(function(map){
