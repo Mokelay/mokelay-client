@@ -914,7 +914,13 @@
             },
             loadTreeChild : function(row,callback){
                 var t = this;
-                this.treeParentId = row['id'];
+                //this.treeParentId = row['id'];
+                var _parentId= row['id'];
+                if(treeConfig&&treeConfig.parentKey){
+                    _parentId=treeConfig.parentKey;
+                }
+                this.treeParentId = _parentId;
+                
                 this.getData(function(map){
                     var childList = [];
                     map.forEach(function (item) {
