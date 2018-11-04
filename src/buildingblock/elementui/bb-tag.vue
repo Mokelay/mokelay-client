@@ -11,7 +11,7 @@
             :close-transition="false"
             @close="handleClose(key)"
           >
-          {{tag.name || tag}}
+          <span class="tag-item" @click="click(key)">{{tag.name || tag}}</span>
           </el-tag>
         </el-tooltip>
         <div v-if="showButton" class="addButton">
@@ -166,14 +166,19 @@
               }
               this.inputVisible = false;
               this.inputValue = '';
+            },
+            //点击
+            click(key){
+              this.$emit('click', this.tags[key]);
             }
-
-
         }
     }
 </script>
 <style scoped>
 .addButton{
   display: inline-block;
+}
+.tag-item{
+  cursor:pointer;
 }
 </style>
