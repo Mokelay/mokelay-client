@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-tree dib" :id="id">
+    <div v-if="show" class="bb-tree dib" :id="id">
         <el-tree
                 class="bn horizontal"
                 :data="data"
@@ -23,7 +23,28 @@
                 @check-change="checkChange"
                 @node-click="nodeClick"
                 @node-expand="nodeExpand"
+                @node-drop="nodeDrop"
+                :draggable="option.draggable"
+                :allow-drop="allowDrop"
+                :allow-drag="allowDrag"
         >
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span @click="() => labelClick(data,node)">{{ node.label }}</span>
+                <span v-if="option.editable">
+                    <el-button
+                        type="text"
+                        size="mini"
+                    @click="() => append(data)">
+                        添加
+                    </el-button>
+                    <el-button
+                        type="text"
+                        size="mini"
+                        @click="() => remove(node, data)">
+                        删除
+                    </el-button>
+                </span>
+            </span>
         </el-tree>
     </div>
 </template>
@@ -89,37 +110,7 @@
             },
             //一次性获取全部静态数据
             staticData:{
-                type:Array,
-                default:function(){
-                    return [{
-                          id: 1,
-                          label: '一级 2',
-                          children: [{
-                            id: 3,
-                            label: '二级 2-1',
-                            children: [{
-                              id: 4,
-                              label: '三级 3-1-1'
-                            }, {
-                              id: 5,
-                              label: '三级 3-1-2',
-                              disabled: true
-                            }]
-                          }, {
-                            id: 2,
-                            label: '二级 2-2',
-                            disabled: true,
-                            children: [{
-                              id: 6,
-                              label: '三级 3-2-1'
-                            }, {
-                              id: 7,
-                              label: '三级 3-2-2',
-                              disabled: true
-                            }]
-                          }]
-                        }]
-                }
+                type:[Array,String]
             },
             external: {
                 type: Object
@@ -145,7 +136,10 @@
                 default:function(){
                     return {
                         itemStyle:"",
-                        rootParentId:0
+                        rootParentId:0,
+                        draggable:false,
+                        editable:false,
+                        editableTitle:"请添加标题"
                     }
                 }
             }
@@ -157,7 +151,9 @@
                 id:"bb-tree_" + _TY_Tool.uuid(),
                 valueBase:this.value || typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
                 realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
-                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys
+                realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys,
+                defaultId:1000,
+                show:true
             }
         },
         created: function () {
@@ -323,7 +319,6 @@
 
                                 list.push(item);
                             });
-
                             resolve(list);
                         }, function (code, msg) {
                         });
@@ -345,6 +340,7 @@
             //刷新
             refresh:function(){
                 let t=this;
+                t.show = false;
                 if(!this.lazy&&t.staticDs){
                     //静态资源不是懒加载
                     if(t.staticDs){
@@ -355,6 +351,9 @@
                 }else{
                     t.getRootData();
                 }
+                setTimeout(()=>{
+                    t.show = true;
+                },500);
             },
             //懒加载
             loadData: function (node, resolve) {
@@ -393,7 +392,7 @@
                 const t = this;
                 setTimeout(()=>{
                     const bbTree = document.getElementById(t.id);
-                    const isLeafs = bbTree.getElementsByClassName("is-leaf");
+                    const isLeafs = bbTree.getElementsByClassName("is-leaf") || [];
                     if(isLeafs.length && t.option.itemStyle){
                         //最小一级的样式
                         const itemStyle = _TY_Tool.setStyle({layout:t.option.itemStyle});
@@ -437,6 +436,83 @@
             //外部获取值
             getValue(){
                 return this.valueBase;
+            },
+            //新增节点
+            append(data) {
+                const t = this;
+                if(t.option.customDiaForm){
+                    t.nowEditData = data;
+                    t.$emit("addBefore",data);
+                }else{
+                    t.openDiaForm((val)=>{
+                        const newChild = { id: t.defaultId++, label: val, children: [] };
+                        if (!data.children) {
+                            t.$set(data, 'children', []);
+                        }
+                        data.children.push(newChild);
+                        data.newChild = newChild;
+                        t.$emit("addAfter",data);
+                    });
+                }
+            },
+            //删除节点
+            remove(node, data) {
+                const t = this;
+                t.$confirm("确认删除？", '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(() => {
+                    const parent = node.parent;
+                    const children = parent.data.children || parent.childNodes;
+                    let index = "";
+                    if(parent.data.children){
+                        index = children.findIndex(d => d.id === data.id);
+                    }else{
+                        index = children.findIndex(d => d.data.id === data.id);
+                    }
+                    children.splice(index, 1);
+                    t.$emit("remove",data);
+                }).catch(() => {
+                    t.$message({
+                        type: 'info',
+                        message: '取消删除'
+                    });       
+                });
+                
+            },
+            //新增节点弹窗
+            openDiaForm(fn) {
+                const t = this;
+                t.$prompt(t.option.editableTitle, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    fn(value)
+                }).catch(() => {
+                    t.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });       
+                });
+            },
+            //拖拽节点
+            nodeDrop(draggingNode, dropNode, dropType, ev){
+                this.$emit("nodeDrop",{
+                    draggingNode:draggingNode,
+                    dropNode:dropNode,
+                    dropType:dropType,
+                    ev:ev
+                })
+            },
+            allowDrop:function(){
+                return true;
+            },
+            allowDrag:function(){
+                return true;
+            },
+            //文本点击事件 区别node中添加按钮点击
+            labelClick:function(data,node){
+                this.$emit('labelClick', node,data);
             }
         }
     }
