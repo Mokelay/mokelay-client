@@ -51,6 +51,7 @@ import bbindeppay from './bb-indep-pay';
 import bbindepQR from './bb-indep-QR';
 import bbindepsms from './bb-indep-sms';
 import bbindeplist from './bb-indep-list';
+import bbdiv from './bb-div';
 
 import helloworld from './bb-hello-world';
 
@@ -111,6 +112,7 @@ export default {
 		Vue.component('bb-indep-QR', bbindepQR);
 		Vue.component('bb-indep-sms', bbindepsms);
 		Vue.component('bb-indep-list', bbindeplist);
+		Vue.component('bb-div', bbdiv);
 
 		Vue.component('bb-hello-world', helloworld);
 
