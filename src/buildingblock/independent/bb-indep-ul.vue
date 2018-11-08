@@ -398,6 +398,8 @@
                             return "<%="+arguments[1]+"%>"
                         })
                     }
+                    //去掉回车换行
+                    _content = _content.replace(/[\r\n]/g,"");
 
                     let clazz=  [];
                     let _style={}
@@ -492,6 +494,8 @@
                             return "<%="+arguments[1]+"%>"
                         })
                     }
+                    //去掉回车换行
+                    _content = _content.replace(/[\r\n]/g,"");
 
                     let _style={
                         "display":"block"
