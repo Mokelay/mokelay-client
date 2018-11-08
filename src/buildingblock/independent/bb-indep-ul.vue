@@ -398,6 +398,8 @@
                             return "<%="+arguments[1]+"%>"
                         })
                     }
+                    //去掉回车换行
+                    _content = _content.replace(/[\r\n]/g,"");
 
                     let clazz=  [];
                     let _style={}
@@ -420,9 +422,31 @@
                         //最后一个的样式
                         _cssStyle = Object.assign(_cssStyle,_TY_Tool.setSimpleStyle(t.lastItemStyle),_style);
                     }
-                    let liItem = createElement('li',{
-                        class:clazz,
-                        style:_cssStyle,
+                    // let liItem = createElement('li',{
+                    //     class:clazz,
+                    //     style:_cssStyle,
+                    //     on:{
+                    //         click:function(){
+                    //             if(t.itemClickConfig){
+                    //                 //如果配置了item的点击配置
+                    //                 _TY_Tool.resolveButton(t.itemClickConfig,_TY_Tool.buildTplParams(t,{
+                    //                     rowData:item
+                    //                 }));
+                    //             }
+                    //             t.$emit('itemClick',item,t);
+                    //         }
+                    //     }
+                    // },_TY_Tool.bbRender(JSON.parse(_content),createElement,t));
+                    
+                    //bb-div仅仅支持传递参数
+                    let liItem = createElement('bb-div',{
+                        props:{
+                            tag:'li',
+                            content:JSON.parse(_content),
+                            clazz:clazz,
+                            cssStyle:_cssStyle,
+                            params:item
+                        },
                         on:{
                             click:function(){
                                 if(t.itemClickConfig){
@@ -434,7 +458,7 @@
                                 t.$emit('itemClick',item,t);
                             }
                         }
-                    },_TY_Tool.bbRender(JSON.parse(_content),createElement,t));
+                    },[]);
                     result.push(liItem);
                 });
 
@@ -470,6 +494,8 @@
                             return "<%="+arguments[1]+"%>"
                         })
                     }
+                    //去掉回车换行
+                    _content = _content.replace(/[\r\n]/g,"");
 
                     let _style={
                         "display":"block"

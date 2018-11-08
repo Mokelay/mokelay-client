@@ -29,7 +29,10 @@
                 if (typeof val === 'object') {
                     this.valueBase = val;
                 } else if (typeof val === 'string') {
-                    this.valueBase = (val ? JSON.parse(val) : {});
+                    try{
+                        this.valueBase = (val ? JSON.parse(val) : {});
+                    }catch(e){
+                    }
                 }
             }
         },
