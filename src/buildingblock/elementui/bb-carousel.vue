@@ -1,5 +1,6 @@
 <template>
     <el-carousel 
+        class="bb-carousel"
         :type="realOption.type"
         :height="realOption.height"
         :interval="realOption.interval"
@@ -9,7 +10,15 @@
         :indicator-position="realOption.indicatorPosition" 
         @change="change">
         <el-carousel-item v-for="(item,key) in realItems" :key="key" :name="item.text" :label="item.text">
-            <img :src="item.src" alt="item.text" @click="itemClick">
+            <img 
+                class="bb-carousel-item"
+                :class="[{
+                            'verticle-center': realOption['verticleCenter'],
+                            'align-center': realOption['alignCenter'],
+                        }]"
+                :src="item.src" 
+                alt="item.text" 
+                @click="itemClick">
         </el-carousel-item>
     </el-carousel>
 </template>
@@ -51,6 +60,8 @@
                     interval:3000, 自动切换的时间间隔，单位为毫秒
                     indicatorPosition:'', outside/none 指示器的位置
                     arrow:"hover", always/hover/never  切换箭头的显示时机
+                    verticleCenter:true,  垂直居中
+                    alignCenter:true,     水平居中
                 }
             */
             option:{
@@ -64,6 +75,8 @@
                         interval:3000,
                         indicatorPosition:'',
                         arrow:"hover",
+                        verticleCenter:true,
+                        alignCenter:true,
                     }
                 }
             }
@@ -132,6 +145,24 @@
     }
 </script>
 
-<style scoped>
-   
+<style lang="less">
+    .bb-carousel{
+        .bb-carousel-item{
+            display:block;
+            max-height:100%;
+            max-width:100%;
+        }
+        .verticle-center{
+            position:absolute;
+            margin: auto;
+            top:0;
+            bottom:0;
+        }
+        .align-center{
+            position:absolute;
+            margin: auto;
+            left:0;
+            right:0;
+        }
+    }
 </style>

@@ -31,7 +31,8 @@
                             'text-color':t.textColor,
                             'background-color':t.backgroundColor
                         },
-                        style:Object.assign({},t.bbStyle,menuExternalStyle)
+                        style:Object.assign({},t.bbStyle,menuExternalStyle),
+                        class:t.realOption.alignCenter?"alignCenter":""
                     },
                     t.menuList
             );
@@ -110,6 +111,19 @@
             //用于根据路由 判断 active
             urlLevel:{
                 type:[Number,String]
+            },
+            /*其他属性
+                {
+                    alignCenter:false  居中
+                }
+            */
+            option:{
+                type:Object,
+                default:function(){
+                    return {
+                        alignCenter:true
+                    }
+                }
             }
         },
         data() {
@@ -120,7 +134,8 @@
                 newMenu: true,
                 menuList: [],
                 shouldUpdate: true,
-                defaultActive: null
+                defaultActive: null,
+                realOption:this.option
             };
         },
         watch: {
@@ -256,7 +271,7 @@
                     class: 'bb-menu-badge'
                 }, [])]);
                 var iconClass = item.icon;
-                var templateChild = item.icon ? createElement('i', {class: iconClass}, []) : '';
+                var templateChild = item.icon ? createElement('i', {class: iconClass,style:{"font-size":item.iconSize}}, []) : '';
                 var img = item.img? createElement('img',{
                     style:{
 
@@ -300,7 +315,7 @@
                 var t = this;
                 var child = [];
                 var iconClass = item.icon;
-                var icon = item.icon ? createElement('i', {class: iconClass}, []) : '';
+                var icon = item.icon ? createElement('i', {class: iconClass,style:{"font-size":item.iconSize}}, []) : '';
                 var img = item.img? createElement('img',{
                     style:{
                     },
@@ -402,6 +417,17 @@
 <style lang='less'>
     .el-menu .el-menu-item-group>.el-menu-item-group__title{
         padding:0;
+    }
+    .alignCenter{
+        text-align: center;
+        .el-submenu{
+            float: none !important;
+            display: inline-block !important;
+        }
+    }
+    .alignCenterItem{
+        float: none;
+        display: inline-block;
     }
 </style>
 
