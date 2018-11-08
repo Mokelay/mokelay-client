@@ -1,6 +1,7 @@
 <template>
     <div v-if="showButtom != 'false'" :class="bb_uploader_class">
         <el-upload
+            :class="{'bb-upload-disabled':option.disabled?true:false}"
             :action="uploadUrl"
             :before-upload="beforeUpload"
             :on-success="onSuccess"
@@ -94,7 +95,7 @@
                 dialogVisible: false,
                 uploadUrl:'',
                 realFileList:[],
-                showButtom:_TY_Tool.tpl(this.option.uploadButton.showValue, _TY_Tool.buildTplParams(this)),
+                showButtom:_TY_Tool.tpl((this.option.uploadButton&&this.option.uploadButton.showValue||''), _TY_Tool.buildTplParams(this)),
                 bb_uploader_class:"bb-uploader"
             }
         },
@@ -271,4 +272,9 @@
             display:none;
         }
     }
+    .bb-upload-disabled{
+            .el-upload.el-upload--picture-card{
+                display: none;
+            }
+        }
 </style>
