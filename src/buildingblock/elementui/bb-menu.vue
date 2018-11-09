@@ -121,7 +121,7 @@
                 type:Object,
                 default:function(){
                     return {
-                        alignCenter:true
+                        alignCenter:false
                     }
                 }
             }
