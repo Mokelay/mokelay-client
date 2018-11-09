@@ -42,7 +42,7 @@ util.invoke = function(options) {
                     //b端配置页登录失效
                     if (location.href.indexOf("?redirect") < 0) {
                         _clearLoading();
-                        location.href = window._TY_Home + "/#/ty_b_login?redirect=" + encodeURIComponent(location.href);
+                        location.href = window.location.protocol + "//" + window.location.host + "/#/ty_b_login?redirect=" + encodeURIComponent(location.href);
                     }
                 } else {
                     if (location.href.indexOf("?redirect") < 0) {
