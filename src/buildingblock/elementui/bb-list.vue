@@ -205,6 +205,7 @@
                     et:"bb-select", 表头编辑器 编辑状态有效
                     etProp:{}, 表头编辑器配置 编辑状态有效
                     onlyAddEditShow:false,//只有添加的时候显示编辑状态，修改不显示编辑状态
+                    align:center,//表头方向 居中
                     etOn:[{             //触发交互
                         uuid:'',
                         fromContentEvent:'',//事件
