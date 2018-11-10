@@ -28,7 +28,8 @@
                     callBackStaticWords:'' //请求接口成功提示语
                     dialogPage:'pageAlias',//弹窗中的页面名称   action:'dialog-page’时有效
                     method:fn , //需要执行的方法 action:'code’时有效
-                    buzz:'buzzName'  //巴斯方法名称  action:'buzz’时有效
+                    buzz:'buzzName',  //巴斯方法名称  action:'buzz’时有效
+                    noConfirm:true //去除确认框
                 }
             */
             button:{

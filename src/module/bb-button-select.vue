@@ -198,6 +198,14 @@
                     et: 'bb-input',
                     props: {}
                 }, {
+                    name: '去除提示框',
+                    show:true,
+                    description:"去除提示框",
+                    attributeName: 'noConfirm',
+                    hide:false,
+                    et: 'bb-editor-switch',
+                    props: {}
+                }, {
                     pbbId:"buzz",
                     name: '设置巴斯',
                     show:false,
