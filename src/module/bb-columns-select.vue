@@ -43,6 +43,25 @@
                         value:""
                     }
                 }, {
+                    name: '表头方向',
+                    attributeName: 'align',
+                    et: 'bb-select',
+                    description:'表头方向',
+                    rules: [],
+                    props: {
+                        value:"",
+                        fields: [{
+                            text: '靠左',
+                            value: 'left'
+                        }, {
+                            text: '居中',
+                            value: 'center'
+                        },{
+                            text: '靠右',
+                            value: 'right'
+                        }]
+                    }
+                }, {
                     name: '筛选条件',
                     attributeName: 'filter',
                     hide:true,

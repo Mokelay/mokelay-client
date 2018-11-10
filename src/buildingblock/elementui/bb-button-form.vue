@@ -6,7 +6,11 @@ import Util from '../../libs/util';
         render: function(createElement){
             const t = this;
             const dialog = t.renderForm(createElement);
-            const buttonEle = createElement('el-button',{props:{type:t.startButtonType,icon:t.startButtonIcon},on:{click:t.setting}},[t.settingText]);
+            const buttonEle = createElement('el-button',{
+                props:{type:t.startButtonType,icon:t.startButtonIcon},
+                on:{click:t.setting},
+                style:t.btnStyle
+            },[t.settingText]);
             const button = createElement('span',{class:this.buttonFormClass},[t.formDesc,buttonEle]);
             return createElement('span',{},[button,dialog]);
         },
@@ -84,6 +88,13 @@ import Util from '../../libs/util';
             dialogSize:{
                 type:String,
                 default:'middle'
+            },
+            //表单弹窗按钮样式
+            buttonStyle:{
+                type:Object,
+                default:function(){
+                    return {};
+                }
             }
         },
 
@@ -101,6 +112,10 @@ import Util from '../../libs/util';
                     return _TY_Tool.tpl(t.formDescTpl, _TY_Tool.buildTplParams(t,t.formData));
                 }
             },
+            btnStyle:function(){
+                //表单弹窗按钮样式转换
+                return _TY_Tool.setSimpleStyle(this.buttonStyle);
+            }
         },
         watch: {
             value(val){
