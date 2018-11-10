@@ -65,6 +65,11 @@ import Util from '../../libs/util';
             formButtonName:{
                 type:String
             },
+            //表单域标签的位置right/left/top
+            labelPosition:{
+                type:String,
+                default:'left'
+            },
             labelWidth:{
                 type:String
             },
@@ -148,6 +153,7 @@ import Util from '../../libs/util';
                         showCancelButton:t.showCancelButton,
                         showCleanButton:t.showCleanButton,
                         hideSubmitButton:t.hideSubmitButton,
+                        labelPosition:t.labelPosition,
                         on:t.on,
                         parentData:t.parentData,
                         labelWidth:t.labelWidth,

@@ -46,7 +46,7 @@
             <!-- 列表新增按钮 -->
             <el-button v-if="editConfig && addButton && !editAll" type="text" icon="ty-icon_faqi1" class="fr" @click="rowAdd"></el-button>
             <!-- 列表主体 -->
-            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click.self="rowClick" v-loading="loading" :element-loading-text="customLoading.text" :element-loading-spinner="customLoading.spinner" :element-loading-background="customLoading.background" @selection-change="selectionChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :max-height="maxHeight" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn">
+            <el-table :data="tableData" :highlight-current-row="highlightCurrent" :stripe="stripe" :border="border" style="width: 100%;" :class="popup?'popupClass':''" @row-click.self="rowClick" v-loading="loading" :element-loading-text="customLoading.text" :element-loading-spinner="customLoading.spinner" :element-loading-background="customLoading.background" @selection-change="selectionChange" :ref="alias"  :show-header="showHeader" :height="fixedColumn?fixedColumn:null" :max-height="maxHeight" :cell-style="realCellStyleFn" :header-cell-style="realHeaderCellStyleFn" :header-row-style="realHeaderRowStyle">
                 <el-table-column type="index" v-if="index" :fixed="true" width="55"></el-table-column>
                 <el-table-column type="selection" v-if="selection" width="55">
                 </el-table-column>
@@ -420,6 +420,10 @@
             headerCellStyleFn:{
                 type:String
             },
+            //表头样式
+            headerRowStyle:{
+                type:Object
+            },
             /*用户自定义loading样式
                 {
                     text:"拼命加载中",
@@ -473,6 +477,7 @@
                 validateMessageObj:{},
                 realCellStyleFn:this.cellStyleFn != ""?eval("("+this.cellStyleFn+")"):{},
                 realHeaderCellStyleFn:this.cellStyleFn != ""?eval("("+this.headerCellStyleFn+")"):{},
+                realHeaderRowStyle:{},
                 radioName:_TY_Tool.uuid(),
                 activeSelectedIndex:-1//默认选中的值
             }
@@ -520,6 +525,7 @@
                 }
             }
             console.log("t.realColumns:",t.realColumns);
+            t.realHeaderRowStyle = _TY_Tool.setSimpleStyle(t.headerRowStyle);
         },
         mounted:function(){
             this.$emit('bb-mounted');
