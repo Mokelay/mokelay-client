@@ -131,6 +131,7 @@
                     //初始化
                     newArr[0].icon = '';
                     newArr[0].img = t.userInfo&&t.userInfo['logo'];
+                    t.fieldsBanner.img = t.userInfo&&t.userInfo['logo'];
                 }else{
                     if(newArr[0].icon&&newArr[0].icon=="ty-icon_M ty-font"){
                         newArr[0].icon = '';
@@ -172,7 +173,7 @@
                         t.userInfo['logo']=data.logo||'';
                         t.userInfo['tenantSerialNumber']=data.tenantSerialNumber||'';
                         t.userInfo['supplierCommpanySerialNumber'] = data.supplierCommpanySerialNumber||'';
-                        t.userName = data.name
+                        t.userName = data.name||data.xingMing||'';
                         localStorage.setItem('userInfo', JSON.stringify(t.userInfo));
                         t.updateMenu(true);
                     }).catch(function (error) {
