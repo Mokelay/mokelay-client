@@ -97,7 +97,11 @@
               type:Boolean,
               default:true
             },
-            //基础配置
+            /*基础配置
+              {
+                lazy:false  懒加载 默认不从接口获取数据
+              }
+            */
             option:{
                 type:Object,
                 default:function(){
@@ -106,7 +110,8 @@
                         readonly:false,
                         defaultFirstOption:true,
                         size:"",
-                        placeholder:"请选择"
+                        placeholder:"请选择",
+                        lazy:false
                     };
                 }
             },
@@ -144,7 +149,9 @@
             }
         },
         created: function () {
-          this.getData();
+          if(!this.realOption.lazy){
+            this.getData();
+          }
         },
         mounted(){
             let t=this;
