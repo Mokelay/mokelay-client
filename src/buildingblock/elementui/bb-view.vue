@@ -73,6 +73,11 @@
                 type:String,
                 default:'left'
             },
+            //标签宽度
+            labelWidth:{
+                type:String,
+                default:"100px"
+            }
         },
         data() {
             return {
@@ -163,7 +168,6 @@
                         const type = field['attributes']['type'] || "content";
                         const attributeName = field['attributes']['attributeName'];
                         const show = field['attributes']['show'];
-                        t.labelWidth = field['attributes']['labelWidth'];
                         t.size = field['attributes']['size'];
                         if(custom == 'all' && realContent){
                             //自定义积木展示表单值
