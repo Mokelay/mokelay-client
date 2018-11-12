@@ -133,11 +133,6 @@ export default {
                 // })
             }else if(api && api.require){
                 //如果是 apiCloud 环境
-                t.$message({
-                    message:shareInfo?JSON.stringify(shareInfo):'null'
-                });
-                alert("alert="+JSON.stringify(shareInfo));
-
                 var wx = api.require('wx');
                 wx.shareWebpage({
                     apiKey: '',
