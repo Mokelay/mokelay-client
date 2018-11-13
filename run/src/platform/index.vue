@@ -39,9 +39,13 @@
 
 
 <script>
+    import bbmenu from '../../../src/buildingblock/elementui/bb-menu';
+
     export default {
         name: 'ty_index',
-        components: {},
+        components: {
+            'bb-menu':bbmenu
+        },
         props: {},
         data() {
             return {

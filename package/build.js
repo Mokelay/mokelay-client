@@ -39,7 +39,7 @@ if (appAliass) {
             var response = JSON.parse(content.join(''));
             if (response && response.ok && response['data']['data_list']) {
                 //应用列表
-                var bbAliass = []; //存储所有积木别名
+                var bbAliass = ['bb-indep-button']; //存储所有积木别名，初始化一些通用的组件
                 var list = response.data.data_list.list;
                 // console.log("list:", list);
                 list.forEach(function(item, index) {
@@ -50,7 +50,6 @@ if (appAliass) {
                     var regex = /\"alias\":\"(bb-[a-zA-Z_-]*)\"/ig;
                     var result = null;
                     while ((result = regex.exec(content)) != null) {
-                        console.log(result[1]);
                         if (bbAliass.indexOf(result[1]) < 0) {
                             bbAliass.push(result[1]);
                         }
@@ -58,11 +57,26 @@ if (appAliass) {
                     var regex2 = /\\"et\\":\\"(bb-[a-zA-Z_-]*)\\"/ig;
                     var result2 = null;
                     while ((result2 = regex2.exec(content)) != null) {
-                        console.log(result2[1]);
                         if (bbAliass.indexOf(result2[1]) < 0) {
                             bbAliass.push(result2[1]);
                         }
                     }
+                    var regex3 = /\"et\":\"(bb-[a-zA-Z_-]*)\"/ig;
+                    var result3 = null;
+                    while ((result3 = regex3.exec(content)) != null) {
+                        if (bbAliass.indexOf(result3[1]) < 0) {
+                            bbAliass.push(result3[1]);
+                        }
+                    }
+                    console.log("bbList:", bbAliass);
+
+                    //删除之前添加的测试页面 删除以-test结尾的页面alias. 所有积木以bb-开头，所有页面不能以bb-开头
+                    for (var i = 0; i < bbAliass.length; i++) {
+                        if (bbAliass[i].endsWith("-test")) {
+                            bbAliass.splice(i--, 1);
+                        }
+                    }
+
                 });
 
                 var code = `
@@ -70,9 +84,16 @@ if (appAliass) {
                 import './css/minireset.css';
                 import './css/theme-default/index.css';
                 import './css/iconfont/ty.css';
-                import 'animate.css/animate.min.css'
-                import './libs/touch.js'
-                import './libs/flexble.js'
+                import 'animate.css/animate.min.css';
+                import './libs/touch.js';
+                import './libs/flexble.js';
+                //公用组件
+                import { Toast } from 'vant';//用到了vant的toast
+
+                import bbtoast from './buildingblock/independent/bbToast';
+                import bbmodal from './buildingblock/independent/bbModal';
+                import bbreadbb from 'bb-read-bb';
+                import bb from './buildingblock/independent/bb';
                 `;
                 //添加应用中用到的积木
                 bbAliass.forEach(function(bb, index) {
@@ -90,6 +111,12 @@ if (appAliass) {
                 code = code + `
                             //布局积木安装
                             layoutBB.install(Vue);
+                            Vue.component('bb-read-bb', bbreadbb);
+                            Vue.component('bb', bb);
+                            Vue.use(Toast);
+                            //安装全局变量
+                            window._TY_Toast = bbtoast;
+                            window._TY_Modal = bbmodal;
                         }
                     };
                 `;

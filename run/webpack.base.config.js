@@ -224,7 +224,31 @@ module.exports = {
             "bb-layout-seriation": "./layout/bb-layout-seriation.vue",
             "bb-page-edit": "./layout/bb-page-edit.vue",
             "bb-page": "./layout/bb-page.vue",
-            "bb-seriation-item-edit": "./layout/bb-seriation-item-edit.vue"
+            "bb-seriation-item-edit": "./layout/bb-seriation-item-edit.vue",
+
+            "bb-api-info": "./module/bb-api-info.vue", //module类组件
+            "bb-apilego-config": "./module/bb-apilego-config.vue",
+            "bb-bb-select": "./module/bb-bb-select.vue",
+            "bb-bblist-select": "./module/bb-bblist-select.vue",
+            "bb-bbtype-select": "./module/bb-bbtype-select.vue",
+            "bb-button-select": "./module/bb-button-select.vue",
+            "bb-columns-select": "./module/bb-columns-select.vue",
+            "bb-config-array": "./module/bb-config-array.vue",
+            "bb-config": "./module/bb-config.vue",
+            "bb-ds-select": "./module/bb-ds-select.vue",
+            "bb-echarts-select": "./module/bb-echarts-select.vue",
+            "bb-field-select": "./module/bb-field-select.vue",
+            "bb-field-tree-pop-select": "./module/bb-field-tree-pop-select.vue",
+            "bb-field-tree-select": "./module/bb-field-tree-select.vue",
+            "bb-icon-select": "./module/bb-icon-select.vue",
+            "bb-icon": "./module/bb-icon.vue",
+            "bb-css-editor": "./module/bb-css-editor.vue",
+            "bb-button-css-editor": "./module/bb-button-css-editor.vue",
+            "bb-sms-verification": "./module/bb-sms-verification.vue",
+            "bb-module": "./module/bb-module.vue",
+            "bb-button-attribute-config": "./module/bb-button-attribute-config.vue",
+            "bb-ds-column-select": "./module/bb-ds-column-select.vue",
+            "bb-buzz-select": "./module/bb-buzz-select.vue"
         }
     }
 };

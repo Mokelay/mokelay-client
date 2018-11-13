@@ -46,7 +46,7 @@
 		},
 		  methods: {
 		    onChange(value) {
-		      this.$toast('当前值：' + value);
+		      _TY_Toast({content:'当前值：' + value});
 		      this.$emit('change',value);
 		    }
 		  }
