@@ -27,6 +27,9 @@
             let formItem;
             realContent.forEach((field,key)=>{
                 let itemClass = t.realShow?'ds':'dn'; //控制元素的隐藏显示
+                if(t.contentItem['attributes']['itemClass']){
+                    itemClass = itemClass +' '+ t.contentItem['attributes']['itemClass'];
+                }
                 let tip = t.contentItem['attributes']['tip'];
                 let mark = t.contentItem['attributes']['mark'];
                 let tipEle = "";
@@ -321,6 +324,15 @@
             }
         }
     }
+    .bb-form-item-w100-c20{
+      width:100% !important;
+      &>div{
+        &>div{
+            max-width:20% !important
+        }
+      }
+    }
+
     .childW80{
         &>div{
             &>div{

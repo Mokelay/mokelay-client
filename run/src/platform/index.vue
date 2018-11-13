@@ -127,6 +127,9 @@
                 let t=this;
                 const newArr = t.fieldsReady;
                 if(!newArr){
+                    if(t.userInfo&&t.userInfo['logo']){
+                        t.fieldsBanner.img = t.userInfo&&t.userInfo['logo'];    
+                    }
                     return;
                 }
                 // newArr[0].icon = newArr[0].icon == "ty-icon_M ty-font"?"ty-icon_M_b ty-font":"ty-icon_M ty-font";

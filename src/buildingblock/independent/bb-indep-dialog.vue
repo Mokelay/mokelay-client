@@ -226,6 +226,7 @@
 
 
                 }
+                t.customClass = customClass;
                 return createElement('el-dialog',{
                     props:{
                         'visible':t.active,
@@ -236,12 +237,10 @@
                         'show-close':t.showClose,//是否显示关闭按钮 右上角
                         'modal-append-to-body':true,//遮罩层插入到body元素上
                         'append-to-body':true,//弹窗自身插入到body元素上
-                        'width':dialogWidth,
+                        'width':"100%",
                         'top':realTop,
                         "fullscreen":t.fullscreen,
-                        "custom-class":customClass
-                    },
-                    style:{
+                        // "custom-class":customClass
                     },
                     key:t.key,
                     on:{
@@ -254,7 +253,7 @@
                     attrs:{
                         id:t.id
                     },
-                    class:'bb-indep-dialog'
+                    class:'bb-indep-dialog ' + customClass
                 },[childrens,this.$slots.default]);//this.$slots.default 使bb-indep-dialog支持van-dailog的slots
             },
             //el dialog 打开的回调
@@ -362,8 +361,13 @@
                 const t = this;
                 const dialogContent = document.getElementById(t.id);
                 const dialog = dialogContent.getElementsByClassName("el-dialog")[0];
-                dialog.style.width = t.realWidth||t.width
+                // dialog.style.width = t.realWidth||t.width
                 dialog.style.height = t.height;
+                dialogContent.style.height = t.height;
+                dialogContent.style.width = t.realWidth||t.width;
+                dialog.style.width = "99.5%";
+                
+
             }
             
         }
@@ -377,66 +381,70 @@
             max-height:calc(~"99vh - 25px");
             overflow: auto;
         }
-        .side-dialog-top{
-            position: absolute !important;
-            left:0;
-            right:0;
-            top:0;
-            margin: 0 auto;
-            max-height:100vh;
-            overflow:auto;
-            height:0;
-            transition: height 0.1s;
-            -moz-transition: height 0.1s; /* Firefox 4 */
-            -webkit-transition: height 0.1s; /* Safari 和 Chrome */
-            -o-transition: height 0.1s; /* Opera */
-        }
-        .side-dialog-bottom{
-            position: absolute !important;
-            bottom:0;
-            left:0;
-            right:0;
-            margin: 0 auto;
-            max-height:100vh;
-            overflow:auto;
-            height:0;
-            transition: height 0.1s;
-            -moz-transition: height 0.1s; /* Firefox 4 */
-            -webkit-transition: height 0.1s; /* Safari 和 Chrome */
-            -o-transition: height 0.1s; /* Opera */
-        }
-        .height-100vh{
-            height:100vh;
-        }
-        .side-dialog-left{
-            position: absolute !important;
-            top:0;
-            left:0;
-            max-width:100vh;
-            overflow:auto;
-            width:0;
-            height:100vh;
-            transition: width 0.1s;
-            -moz-transition: width 0.1s; /* Firefox 4 */
-            -webkit-transition: width 0.1s; /* Safari 和 Chrome */
-            -o-transition: width 0.1s; /* Opera */
-        }
-        .side-dialog-right{
-            position: absolute !important;
-            top:0;
-            right:0;
-            max-width:100vh;
-            overflow:auto;
-            width:0;
-            height:100vh;
-            transition: width 0.1s;
-            -moz-transition: width 0.1s; /* Firefox 4 */
-            -webkit-transition: width 0.1s; /* Safari 和 Chrome */
-            -o-transition: width 0.1s; /* Opera */
-        }
-        .width-100vw{
-            width:100vw;
-        }
+    }
+    .side-dialog-top{
+        position: absolute !important;
+        bottom:auto !important;
+        left:0;
+        right:0;
+        top:0;
+        margin: 0 auto;
+        max-height:100vh;
+        overflow:auto;
+        height:0;
+        transition: height .5s;
+        -moz-transition: height .5s; /* Firefox 4 */
+        -webkit-transition: height .5s; /* Safari 和 Chrome */
+        -o-transition: height .5s; /* Opera */
+    }
+    .side-dialog-bottom{
+        position: absolute !important;
+        top:auto !important;
+        bottom:0;
+        left:0;
+        right:0;
+        margin: 0 auto;
+        max-height:100vh;
+        overflow:auto;
+        height:0;
+        transition: height .5s;
+        -moz-transition: height .5s; /* Firefox 4 */
+        -webkit-transition: height .5s; /* Safari 和 Chrome */
+        -o-transition: height .5s; /* Opera */
+    }
+    .height-100vh{
+        height:100vh;
+    }
+    .side-dialog-left{
+        position: absolute !important;
+        top:0;
+        left:0;
+        right:auto !important;
+        max-width:100vh;
+        overflow:auto;
+        width:0;
+        height:100vh;
+        transition: width .5s;
+        -moz-transition: width .5s; /* Firefox 4 */
+        -webkit-transition: width .5s; /* Safari 和 Chrome */
+        -o-transition: width .5s; /* Opera */
+    }
+    .side-dialog-right{
+        position: absolute !important;
+        left:auto !important;
+        top:0;
+        right:0;
+        max-width:100vh;
+        overflow:auto;
+        width:0;
+        height:100vh;
+        transition: width .5s;
+        -moz-transition: width .5s; /* Firefox 4 */
+        -webkit-transition: width .5s; /* Safari 和 Chrome */
+        -o-transition: width .5s; /* Opera */
+    }
+    .width-100vw{
+        width:100vw;
     }
     
 </style>
