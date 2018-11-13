@@ -410,6 +410,7 @@
                         }
                         if(t.dialogKeys.length>0){
                           delete t.$refs[t.dialogKeys[t.dialogKeys.length-1]];
+                          t.dialogKeys.splice(t.dialogKeys.length-1,1);
                         }
                       },0);
                     }
