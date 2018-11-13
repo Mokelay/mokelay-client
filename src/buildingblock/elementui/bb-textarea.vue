@@ -1,5 +1,5 @@
 <template>
-    <div class="textarea_box" v-if="isShow">
+    <div class="textarea_box" :style="{display:inlineBlock?'inline-block':'block'}"  v-if="isShow">
           <el-input
             type="textarea"
             :rows="rows"
@@ -71,7 +71,13 @@
                         placeholder:"请输入内容"
                     };
                 }
+            },
+            //是否inline-block
+            inlineBlock:{
+                type:Boolean,
+                default:false
             }
+
         },
         data() {
             return {

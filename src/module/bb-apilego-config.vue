@@ -2,15 +2,34 @@
     <div>
         <el-tabs v-model="p_activeName" @tab-click="tabClick">
             <el-tab-pane label="基础" name="legoInfo">
-                <div class="form_item">
-                    模型:
-                    <bb-cascader ref="oi" :style="{display:'inline-block'}" 
-                                 :casProps="casProps" :dsList="dsList"
-                                 @change="oiChange"></bb-cascader>
+                <div class="clearfix">
+                    <div class="form_item base_form_item">
+                        创建人:<span>{{apiInfo.createrName}}</span>
+                    </div>
+                    <div class="form_item base_form_item">
+                        负责人:<span>{{apiInfo.owerName}}</span>
+                    </div>
+                    <div class="form_item base_form_item">
+                        创建时间:<span>{{apiInfo.createDate}}</span>
+                    </div>
+                    <div class="form_item base_form_item">
+                        更新时间:<span>{{apiInfo.updateDate}}</span>
+                    </div>
+                    <div class="form_item base_form_item">
+                        授权类型:<span>{{apiInfo.authType=='ty_auth'?'E端登录校验':(apiInfo.authType=='ty_b_session'?'B端登录校验':'无')}}</span>
+                    </div>
                 </div>
-                <div class="form_item">
-                    描述:
-                    <bb-textarea :bbStyle="{width: '75%'}" v-model="apiLegoDes" @change="desChange"></bb-textarea>
+                <div class="oi_form_item">
+                    <div class="form_item">
+                        模型:
+                        <bb-cascader ref="oi" :style="{display:'inline-block'}"
+                                     :casProps="casProps" :dsList="dsList"
+                                     @change="oiChange"></bb-cascader>
+                    </div>
+                    <div class="form_item">
+                        描述:
+                        <bb-textarea :bbStyle="{width: '75%'}" :inlineBlock="true" v-model="apiLegoDes" @change="desChange"></bb-textarea>
+                    </div>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="输入" name="inputField">
@@ -55,10 +74,15 @@
                 ifCollapseData: [],//输入 折叠面板内容
                 ofItemDs: {},//输入ift类型
                 ofCollapseData: [],//输入 折叠面板内容
+                apiInfo:{}//api基本信息
             }
         },
         computed: {},
         watch: {},
+        created(){
+            //初始化api基本信息
+            this.readApiInfo();
+        },
         mounted() {
         },
         methods: {
@@ -68,6 +92,17 @@
                 t._refreshBase(true);
                 t._refreshIf(true);
                 t._refreshOf(true);
+            },
+            //读取api信息
+            readApiInfo:function(){
+                const t=this;
+                _TY_Tool.get("/config/ty_read_api_base_info",{
+                    alias:t.$route.query.param
+                }).then(function(response){
+                    if(response['data']['ok']&&response['data']['data']&&response['data']['data']['data']){
+                        t.apiInfo = response['data']['data']['data']||{};
+                    }
+                });
             },
             //刷新 基础
             _refreshBase: function (clear) {
@@ -2554,6 +2589,14 @@
         margin-bottom: 22px;
         color: #666;
         vertical-align: middle
+    }
+    .form_item.base_form_item{
+        line-height: 28px;
+        font-size: 14px;
+        margin-bottom: 0;
+        padding: 0 10px;
+        display: inline-block;
+        float: left;
     }
 </style>
 
