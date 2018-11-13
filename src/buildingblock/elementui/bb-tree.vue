@@ -153,7 +153,8 @@
                 realCheckedField : typeof this.checkedField == 'string'?this.checkedField.split(","):this.checkedField,
                 realExpandedKeys : typeof this.expandedKeys == 'string'?this.expandedKeys.split(","):this.expandedKeys,
                 defaultId:1000,
-                show:true
+                show:true,
+                sortData:{}
             }
         },
         created: function () {
@@ -319,6 +320,7 @@
 
                                 list.push(item);
                             });
+                            t.sortData[_parentId] = list;
                             resolve(list);
                         }, function (code, msg) {
                         });
@@ -497,12 +499,61 @@
             },
             //拖拽节点
             nodeDrop(draggingNode, dropNode, dropType, ev){
-                this.$emit("nodeDrop",{
-                    draggingNode:draggingNode,
-                    dropNode:dropNode,
-                    dropType:dropType,
-                    ev:ev
-                })
+                const t = this;
+                t.$confirm("确认改变顺序", "提示", {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        let draggingNodeList = t.sortData[draggingNode.data.parentId];
+                        let draggingNodeData = {};
+                        draggingNodeList.forEach((node,key) => {
+                            if(node.id == draggingNode.data.id && dropType == "inner"){
+                                t.sortData[draggingNode.data.parentId].splice(key,1);
+                                draggingNodeData = node;
+                                t.sortData[dropNode.data.id] = t.sortData[dropNode.data.id]?t.sortData[dropNode.data.id]:[];
+                                t.sortData[dropNode.data.id].splice(0,0,draggingNodeData);
+                            }
+                            if(node.id == draggingNode.data.id && dropType == "before"){
+                                switch(dropType){
+                                    case "inner":
+                                        t.sortData[draggingNode.data.parentId].splice(key,1);
+                                        draggingNodeData = node;
+                                        t.sortData[dropNode.data.id] = t.sortData[dropNode.data.id]?t.sortData[dropNode.data.id]:[];
+                                        t.sortData[dropNode.data.id].splice(0,0,draggingNodeData);
+                                        break;
+                                    case "before":
+                                        t.sortData[dropNode.data.parentId] = t.sortData[dropNode.data.parentId]?t.sortData[dropNode.data.parentId]:[];
+                                        draggingNodeList.forEach((targetNode,index) => {
+                                            if(node.id == dropNode.data.id){
+                                                t.sortData[draggingNode.data.parentId].splice(index,0,node);
+                                            }
+                                        });
+                                        break;
+                                    case "after":
+                                        t.sortData[dropNode.data.parentId] = t.sortData[dropNode.data.parentId]?t.sortData[dropNode.data.parentId]:[];
+                                        draggingNodeList.forEach((targetNode,index) => {
+                                            if(node.id == dropNode.data.id){
+                                                t.sortData[draggingNode.data.parentId].splice(index + 1,0,node);
+                                            }
+                                        });
+                                }
+                            }
+                        })
+                        t.$emit("nodeDrop",{
+                            draggingNode:draggingNode,
+                            dropNode:dropNode,
+                            dropType:dropType,
+                            ev:ev,
+                            sortData:t.sortData
+                        });
+                    }).catch(() => {
+                        t.$message({
+                            type: 'info',
+                            message: '操作未完成'
+                        });
+                        reject();
+                    });
             },
             allowDrop:function(){
                 return true;

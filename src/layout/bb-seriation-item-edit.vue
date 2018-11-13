@@ -200,14 +200,14 @@
             const  t = this;
             t.realStyle = t.config.horizontal?t.horizontal:t.vertical;
             if(t.config.onFocus){
-                t.onFocus();
+                t.onFocus("created");
             }
         },
         mounted:function(){
         },
         methods: {
             //当前积木选中状态
-            onFocus:function(){
+            onFocus:function(type){
                 //不可编辑
                 const notCanOpt = this.content.group&&this.content.group==='notCanOpt';
                 if(notCanOpt){
@@ -216,7 +216,9 @@
                 if(this.borderClass == "border borderSelected"){
                     this.onBlur();
                 }else{
-                    this.$emit('onFocus',this);
+                    if(type != "created"){
+                        this.$emit('onFocus',this);
+                    }
                     this.borderClass = "border borderSelected";
                 }
             },
