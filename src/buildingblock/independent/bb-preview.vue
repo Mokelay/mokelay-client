@@ -7,8 +7,14 @@
   </div>
 </template>
 <script>
+
+  import bb from './bb.vue';
+
     export default {
         name: 'bb-preview',
+      components:{
+          "bb":bb
+      },
         props: {
             value:{
                 type:[String,Object]

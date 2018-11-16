@@ -34,6 +34,14 @@
     require('codemirror/mode/javascript/javascript')
     require('codemirror/mode/vue/vue')
 
+    import Vue from 'vue';
+    import {
+            Dialog,
+            Button
+    } from 'element-ui'
+    Vue.use(Dialog);
+    Vue.use(Button);
+
     export default {
         name: 'bb-editor-code',
         components: {

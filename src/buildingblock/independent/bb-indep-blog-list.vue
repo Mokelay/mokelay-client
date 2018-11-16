@@ -53,11 +53,17 @@
   	</div>
   </div>
 </template>
-<script>  
+<script>
 
+	import bbindepblogaction from './bb-indep-blog-action.vue';
+	import bblayoutseriation from '../../layout/bb-layout-seriation.vue';
 
 export default {
     name:"bb-indep-blog",
+	components:{
+    	"bb-indep-blog-action":bbindepblogaction,
+		"bb-layout-seriation":bblayoutseriation
+	},
     props:{
     	//发表日记用户头像样式
     	userImgStyleConfig:{

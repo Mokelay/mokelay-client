@@ -23,7 +23,9 @@
  	</div>
 </template>
 
-<script> 
+<script>
+
+	//indep组件不能饮用vant的组件库
 
 export default {
     name:"bb-indep-blog-post",
