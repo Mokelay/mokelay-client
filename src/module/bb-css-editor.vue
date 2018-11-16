@@ -7,8 +7,16 @@
 </template>
 
 <script>
+
+    import bbform from '../buildingblock/elementui/bb-form.vue';
+    import bbbuttonform from '../buildingblock/elementui/bb-button-form.vue';
+
     export default {
         name: 'bb-css-editor',
+        components:{
+            "bb-form":bbform,
+            "bb-button-form":bbbuttonform
+        },
         props: {
             /*支持v-model 
                 value:{//积木布局

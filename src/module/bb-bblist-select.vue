@@ -5,6 +5,8 @@
 </template>
 
 <script>
+    import bbselect from '../buildingblock/elementui/bb-select.vue';
+
     export default {
         name: 'bb-bblist-select',
         props: {
@@ -12,7 +14,9 @@
                 type:[Array,String]
             }
         },
-
+        components:{
+            "bb-select":bbselect
+        },
         data() {
             return {
                 selectDs:{

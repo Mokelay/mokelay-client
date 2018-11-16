@@ -26,8 +26,28 @@
 </template>
 
 <script>
+
+    import bbform from '../buildingblock/elementui/bb-form.vue';
+    import bbbuttonform from '../buildingblock/elementui/bb-button-form.vue';
+    import bbeditorcode from '../buildingblock/bb-editor-code.vue';
+    import bbcsseditor from './bb-css-editor.vue';
+
+    import Vue from 'vue';
+    import {
+            Tabs,
+            TabPane
+    } from 'element-ui'
+    Vue.use(Tabs);
+    Vue.use(TabPane);
+
     export default {
         name: 'bb-config',
+        components:{
+            "bb-form":bbform,
+            "bb-button-form":bbbuttonform,
+            "bb-editor-code":bbeditorcode,
+            "bb-css-editor":bbcsseditor
+        },
         props: {
             /*支持v-model 
                 value:{

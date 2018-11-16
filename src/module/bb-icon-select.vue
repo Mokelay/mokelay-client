@@ -13,8 +13,23 @@
 <script>
     import Vue from 'vue';
     import Util from '../libs/util.js'
+
+    import bbdialog from '../buildingblock/elementui/bb-dialog.vue';
+    import bbicon from './bb-icon.vue';
+
+    import {
+            Input,
+            Button
+    } from 'element-ui'
+    Vue.use(Input);
+    Vue.use(Button);
+
     export default {
         name: 'bb-icon-select',
+        components:{
+            "bb-dialog":bbdialog,
+            "bb-icon":bbicon
+        },
         props: {
             value: {
                 type: String

@@ -17,6 +17,14 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+    import {
+            Tree,
+            Button
+    } from 'element-ui'
+    Vue.use(Tree);
+    Vue.use(Button);
+
     export default {
         name: 'bb-field-tree-select',
         components: {},

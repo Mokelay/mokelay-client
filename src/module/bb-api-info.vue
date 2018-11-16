@@ -67,6 +67,20 @@
     
     import bbjson from "./../buildingblock/vendor/bb-json";
 
+    import Vue from 'vue';
+    import {
+            Form,
+            FormItem,
+            Table,
+            TableColumn,
+            Button
+    } from 'element-ui'
+    Vue.use(Form);
+    Vue.use(FormItem);
+    Vue.use(Table);
+    Vue.use(TableColumn);
+    Vue.use(Button);
+
     const validateDict = [{
         alias: 'dateTypeCheck',
         name: '日期类型检测'

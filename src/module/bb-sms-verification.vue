@@ -3,8 +3,14 @@
 </template>
 
 <script>
+
+    import bbmodule from './bb-module.vue';
+
     export default {
         name: 'bb-sms-verification',
+        components:{
+            "bb-module":bbmodule
+        },
         props: {
         },
         data() {

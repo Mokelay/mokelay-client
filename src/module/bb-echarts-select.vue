@@ -5,8 +5,14 @@
 </template>
 
 <script>
+
+    import bbbuttonform from '../buildingblock/elementui/bb-button-form.vue';
+
     export default {
         name: 'bb-echarts-select',
+        components:{
+            "bb-button-form":bbbuttonform
+        },
         props: {
             value:{
                 type:Object
