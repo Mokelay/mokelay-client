@@ -1,6 +1,12 @@
 <script>
+
+    import bbbutton from '../buildingblock/elementui/bb-button.vue';
+
     export default {
         name: 'bb-seriation-item-edit',
+        components:{
+            "bb-button":bbbutton
+        },
         render: function (createElement) {
             const t = this;          
             let realContent = Array.isArray(t.content)?t.content:[].concat(t.content);

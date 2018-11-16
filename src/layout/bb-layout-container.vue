@@ -134,8 +134,29 @@
     </div> 
 </template>
 <script>
+
+    import bblayoutseriation from './bb-layout-seriation.vue';
+
+    import Vue from 'vue';
+    import {
+            Container,
+            Aside,
+            Main,
+            Footer,
+            Header
+    } from 'element-ui'
+    Vue.use(Container);
+    Vue.use(Aside);
+    Vue.use(Main);
+    Vue.use(Footer);
+    Vue.use(Header);
+
+
     export default {
         name: 'bb-layout-container',
+        components:{
+            "bb-layout-seriation":bblayoutseriation
+        },
         props: {
             /*
                 layout 布局样式配置

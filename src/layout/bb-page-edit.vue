@@ -29,8 +29,19 @@
   import Vue from 'vue';
   var _PBB_PREFIX = "pbb_";
 
+  import bbcustom from '../../run/src/custom/bb-custom.vue';
+  import bblayoutseriationedit from './bb-layout-seriation-edit.vue';
+  import bblayoutcontaineredit from './bb-layout-container-edit.vue';
+  import bblayoutcanvasedit from './bb-layout-canvas-edit.vue';
+
   export default {
     name: 'bb-page-edit',
+      components:{
+          "bb-custom":bbcustom,
+          "bb-layout-seriation-edit":bblayoutseriationedit,
+          "bb-layout-container-edit":bblayoutcontaineredit,
+          "bb-layout-canvas-edit":bblayoutcanvasedit
+      },
     render: function (createElement) {
       var pbbElementList = [];
       //处理模板
