@@ -293,9 +293,9 @@
     .dn{
         display: none;
     }
-    .db{
+    /*.db{
         display: inline-block;
-    }
+    }*/
     .mark{
         float: left;
         color: #ccc;

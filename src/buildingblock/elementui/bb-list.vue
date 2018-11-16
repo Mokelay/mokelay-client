@@ -170,7 +170,6 @@
 
 <script>
     import Util from '../../libs/util';
-    import Vue from 'vue';
     import AsyncValidator from 'async-validator';
 
     import bbcheckboxgroup from './bb-checkbox-group.vue';

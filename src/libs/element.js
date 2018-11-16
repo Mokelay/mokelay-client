@@ -11,6 +11,8 @@ let el = {
     install: function(Vue) {
         console.log("开始加载element 通用组件....");
 
+        Vue.use(Loading.directive);
+
         Vue.prototype.$loading = Loading.service;
         Vue.prototype.$msgbox = MessageBox;
         Vue.prototype.$alert = MessageBox.alert;
