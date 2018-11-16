@@ -5,8 +5,20 @@
     </el-badge>
 </template>
 <script>
+
+    import bbbutton from './bb-button.vue';
+
+    import Vue from 'vue';
+    import {
+            Badge,
+    } from 'element-ui'
+    Vue.use(Badge);
+
     export default {
         name: 'bb-badge',
+        components: {
+            "bb-button":bbbutton
+        },
         props: {
             //红点内容
             value: {

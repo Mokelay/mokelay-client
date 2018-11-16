@@ -112,6 +112,23 @@
 </template>
 
 <script>
+
+    import Vue from 'vue';
+    import {
+            Input,
+            FormItem,
+            Form,
+            Upload,
+            TabPane,
+            Tabs
+    } from 'element-ui'
+    Vue.use(Input);
+    Vue.use(FormItem);
+    Vue.use(Form);
+    Vue.use(Upload);
+    Vue.use(TabPane);
+    Vue.use(Tabs);
+
     export default {
         name: 'bb-media',
         props: {

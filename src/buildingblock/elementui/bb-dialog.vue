@@ -1,4 +1,11 @@
 <script>
+
+    import Vue from 'vue';
+    import {
+            Dialog
+    } from 'element-ui'
+    Vue.use(Dialog);
+
     export default {
         name: 'bb-dialog',
         render: function (createElement) {

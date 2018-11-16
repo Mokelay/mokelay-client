@@ -10,8 +10,19 @@
 
 <script>
 
+    import bbreadbb from '../independent/bb-read-bb.vue';
+
+    import Vue from 'vue';
+    import {
+            Steps
+    } from 'element-ui'
+    Vue.use(Steps);
+
     export default {
         name: 'bb-steps',
+        components:{
+            "bb-read-bb":bbreadbb
+        },
         props: {
             space: {
                 type: Number,

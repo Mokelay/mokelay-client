@@ -14,6 +14,12 @@
 <script>
     import Util from '../../libs/util';
 
+    import Vue from 'vue';
+    import {
+            Autocomplete,
+    } from 'element-ui'
+    Vue.use(Autocomplete);
+
     export default {
         name: 'bb-autocomplete',
         props: {

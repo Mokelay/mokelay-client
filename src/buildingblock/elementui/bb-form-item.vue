@@ -5,6 +5,14 @@
 </template> -->
 
 <script>
+    import Vue from 'vue';
+    import {
+            FormItem,
+            Tooltip
+    } from 'element-ui'
+    Vue.use(FormItem);
+    Vue.use(Tooltip);
+
     //每个formItem 都有一个 input事件，实现v-model
     const FormItemInteractive = {
                 uuid:_TY_Tool.uuid(),

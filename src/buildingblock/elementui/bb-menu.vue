@@ -1,6 +1,20 @@
 <script>
     import Util from '../../libs/util.js';
 
+    import bbbadge from './bb-badge.vue';
+
+    import Vue from 'vue';
+    import {
+            Menu,
+            MenuItem,
+            MenuItemGroup,
+            Submenu
+    } from 'element-ui'
+    Vue.use(Menu);
+    Vue.use(MenuItem);
+    Vue.use(MenuItemGroup);
+    Vue.use(Submenu);
+
     export default {
         name: 'bb-menu',
         render: function (createElement) {
@@ -157,7 +171,9 @@
                 return _urlLevel
             }
         },
-        components: {},
+        components: {
+            "bb-badge":bbbadge
+        },
         created: function () {
             const t=this;
             this.getData();

@@ -7,6 +7,17 @@
 
 <script>
 import Util from '../../libs/util';
+
+import Vue from 'vue';
+import {
+        CheckboxGroup,
+        Checkbox,
+        CheckboxButton
+} from 'element-ui'
+Vue.use(CheckboxGroup);
+Vue.use(Checkbox);
+Vue.use(CheckboxButton);
+
     export default {
         name : 'bb-checkbox-group',
         props:{

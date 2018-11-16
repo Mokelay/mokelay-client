@@ -18,10 +18,21 @@
     
     import BBMedia from './bb-media';
 
+    import bbdialog from './bb-dialog.vue';
+
+    import Vue from 'vue';
+    import {
+            Input,
+            Button
+    } from 'element-ui'
+    Vue.use(Input);
+    Vue.use(Button);
+
     export default {
         name: 'bb-button-media',
         components: {
-          "bb-media":BBMedia
+          "bb-media":BBMedia,
+            "bb-dialog":bbdialog
         },
         props: {
             //文件地址

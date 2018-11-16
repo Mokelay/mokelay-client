@@ -19,8 +19,16 @@
 </template>
 
 <script>
+
+    import bbbutton from './bb-button.vue';
+    import bbreadbb from '../independent/bb-read-bb.vue';
+
     export default {
         name: 'bb-bar',
+        components: {
+            "bb-button":bbbutton,
+            "bb-read-bb":bbreadbb
+        },
         props: {
             /*
                 basicConfig 样式配置

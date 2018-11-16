@@ -5,6 +5,12 @@
 <script>
     import Util from '../../libs/util';
 
+    import Vue from 'vue';
+    import {
+            InputNumber
+    } from 'element-ui'
+    Vue.use(InputNumber);
+
     export default {
         name: 'bb-input-number',
         props: {

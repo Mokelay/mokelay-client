@@ -49,7 +49,17 @@
 
     //TODO 需要支持内容的Page渲染
     import Vue from 'vue';
-    import Util from '../../libs/util.js'
+    import Util from '../../libs/util.js';
+
+    import bbbadge from './bb-badge.vue';
+    import {
+            Tabs,
+            TabPane
+    } from 'element-ui'
+    Vue.use(Tabs);
+    Vue.use(TabPane);
+
+
     export default {
         name: 'bb-tabs',
         render: function (createElement) {
@@ -75,6 +85,9 @@
                     'tab-click': t.tabClick
                 },
             }, [paneArr]);
+        },
+        components:{
+            "bb-badge":bbbadge
         },
         props: {
             //tab的样式  border-card、card、默认

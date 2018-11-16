@@ -20,6 +20,12 @@
 <script>
     import Util from '../../libs/util';
 
+    import Vue from 'vue';
+    import {
+            Input
+    } from 'element-ui'
+    Vue.use(Input);
+
     export default {
         name: 'bb-input',
         props: {

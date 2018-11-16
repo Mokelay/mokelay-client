@@ -39,6 +39,11 @@ import './libs/touch.js'
 //引入移动端 rem组件
 import './libs/flexble.js'
 
+//引入Mokelay工具类
+import './libs/util.js'
+
+import elementInit from './libs/element.js'
+
 
 let ty = {
 	install: function(Vue) {
@@ -66,6 +71,9 @@ let ty = {
 
 		// Vant安装
 		vantBB.install(Vue);
+
+		//初始化element的部分组件
+		elementInit.install(Vue);
 
 		console.log("积木加载完成!!");
 	}

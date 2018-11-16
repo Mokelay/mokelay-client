@@ -8,6 +8,17 @@
 <script>
 import Util from '../../libs/util';
 
+
+import Vue from 'vue';
+import {
+        RadioGroup,
+        Radio,
+        RadioButton
+} from 'element-ui'
+Vue.use(RadioGroup);
+Vue.use(Radio);
+Vue.use(RadioButton);
+
     export default {
         name : 'bb-radio-group',
         props:{

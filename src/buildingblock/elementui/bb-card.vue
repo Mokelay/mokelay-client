@@ -18,6 +18,17 @@
 
 <script>
     import Util from '../../libs/util.js';
+
+    import Vue from 'vue';
+    import {
+            Row,
+            Col,
+            Card
+    } from 'element-ui'
+    Vue.use(Row);
+    Vue.use(Col);
+    Vue.use(Card);
+
     export default {
         name: 'bb-card',
         props: {

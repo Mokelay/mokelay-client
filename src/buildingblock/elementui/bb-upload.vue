@@ -24,8 +24,22 @@
     </div>
 </template>
 <script>
+    import bbbutton from './bb-button.vue';
+
+    import Vue from 'vue';
+    import {
+            Dialog,
+            Upload
+    } from 'element-ui'
+    Vue.use(Dialog);
+    Vue.use(Upload);
+
+
     export default {
         name: 'bb-upload',
+        components:{
+            "bb-button":bbbutton
+        },
         props: {
             //默认值
             value:{

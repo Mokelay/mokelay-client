@@ -1,6 +1,15 @@
 <script>
 import Vue from 'vue';
 import Util from '../../libs/util';
+
+import bbdialog from './bb-dialog.vue';
+import bbform from './bb-form.vue';
+
+import {
+        Button
+} from 'element-ui'
+Vue.use(Button);
+
     export default {
         name: 'bb-button-form',
         render: function(createElement){
@@ -13,6 +22,10 @@ import Util from '../../libs/util';
             },[t.settingText]);
             const button = createElement('span',{class:this.buttonFormClass},[t.formDesc,buttonEle]);
             return createElement('span',{},[button,dialog]);
+        },
+        components: {
+            "bb-form":bbform,
+            "bb-dialog":bbdialog
         },
         props: {
             value:{

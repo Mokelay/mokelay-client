@@ -1,3 +1,4 @@
+//用于完整加载
 //ElementUI积木
 import bbautocomplete from './bb-autocomplete';
 import bbbadge from './bb-badge';

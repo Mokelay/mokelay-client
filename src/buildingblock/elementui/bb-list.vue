@@ -173,8 +173,52 @@
     import Vue from 'vue';
     import AsyncValidator from 'async-validator';
 
+    import bbcheckboxgroup from './bb-checkbox-group.vue';
+    import bbradiogroup from './bb-radio-group.vue';
+    import bbform from './bb-form.vue';
+    import bbbuttonform from './bb-button-form.vue';
+    import bbpagination from './bb-pagination.vue';
+    import bblayoutseriation from '../../layout/bb-layout-seriation.vue';
+    import bbpicturepreview from '../bb-picture-preview.vue';
+    import bbwords from '../independent/bb-words.vue';
+    import bb from '../independent/bb.vue';
+
+    import bbcustom from '../../../run/src/custom/bb-custom.vue';
+    import bbpopupselection from '../../../run/src/bb/bb-popup-selection.vue';
+
+    import Vue from 'vue';
+    import {
+            Row,
+            Button,
+            Input,
+            Table,
+            TableColumn,
+            Tag,
+            Col
+    } from 'element-ui'
+    Vue.use(Row);
+    Vue.use(Button);
+    Vue.use(Input);
+    Vue.use(Table);
+    Vue.use(TableColumn);
+    Vue.use(Tag);
+    Vue.use(Col);
+
     export default {
         name: 'bb-list',
+        components:{
+            "bb-checkbox-group":bbcheckboxgroup,
+            "bb-radio-group":bbradiogroup,
+            "bb-form":bbform,
+            "bb-button-form":bbbuttonform,
+            "bb-pagination":bbpagination,
+            "bb-layout-serination":bblayoutseriation,
+            "bb-picture-preview":bbpicturepreview,
+            "bb-words":bbwords,
+            "bb":bb,
+            "bb-custom":bbcustom,
+            "bb-popup-selection":bbpopupselection
+        },
         props: {
             lazy:{//初始不加载数据
                 type:Boolean,

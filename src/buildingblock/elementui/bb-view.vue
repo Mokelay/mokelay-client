@@ -1,6 +1,17 @@
 <script>
+    import bbpicturepreview from '../bb-picture-preview.vue';
+
+    import Vue from 'vue';
+    import {
+            Form
+    } from 'element-ui'
+    Vue.use(Form);
+
     export default {
         name: 'bb-view',
+        components:{
+            "bb-picture-preview":bbpicturepreview
+        },
         render:function(createElement){
             const t = this;
             const itemList = t.renderItem(createElement);

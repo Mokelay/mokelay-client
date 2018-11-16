@@ -13,6 +13,12 @@
 <script>
     import Util from '../../libs/util';
 
+    import Vue from 'vue';
+    import {
+            Transfer
+    } from 'element-ui'
+    Vue.use(Transfer);
+
     export default {
         name: 'bb-transfer',
         props: {
