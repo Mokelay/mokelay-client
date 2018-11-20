@@ -1,26 +1,38 @@
 <template>
-    <el-carousel 
-        class="bb-carousel"
-        :type="realOption.type"
-        :height="realOption.height"
-        :interval="realOption.interval"
-        :trigger="realOption.trigger"
-        :arrow="realOption.arrow"
-        :initial-index="realOption.initialIndex"
-        :indicator-position="realOption.indicatorPosition" 
-        @change="change">
-        <el-carousel-item v-for="(item,key) in realItems" :key="key" :name="item.text" :label="item.text">
-            <img 
-                class="bb-carousel-item"
-                :class="[{
-                            'verticle-center': realOption['verticleCenter'],
-                            'align-center': realOption['alignCenter'],
-                        }]"
-                :src="item.src" 
-                alt="item.text" 
-                @click="itemClick">
-        </el-carousel-item>
-    </el-carousel>
+    <div :class="{'show_thumb':showThumb}">
+        <el-carousel
+            ref="bb-carousel"
+            class="bb-carousel"
+            :type="realOption.type"
+            :height="realOption.height"
+            :autoplay="realOption.autoplay"
+            :interval="realOption.interval"
+            :trigger="realOption.trigger"
+            :arrow="realOption.arrow"
+            :initial-index="realOption.initialIndex"
+            :indicator-position="realOption.indicatorPosition"
+            @change="change">
+            <el-carousel-item v-for="(item,key) in realItems" :key="key" :name="item.text" :label="item.text">
+                <img
+                    class="bb-carousel-item"
+                    :class="[{
+                                'verticle-center': realOption['verticleCenter'],
+                                'align-center': realOption['alignCenter'],
+                            }]"
+                    :src="item.src"
+                    alt="item.text"
+                    @click="itemClick">
+            </el-carousel-item>
+        </el-carousel>
+        <div class="bb_thumb">
+            <ul class="bb_thumb_ul clearfix" v-if="showThumb">
+                <li class="" v-for="(item,key) in realItems" @click="thumbClick(item,key)" :key="key">
+                    <img :src="item.src" alt="item.text"/>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 </template>
 
 <script>
@@ -79,6 +91,11 @@
                         alignCenter:true,
                     }
                 }
+            },
+            //是否显示缩略图
+            showThumb:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
@@ -93,7 +110,33 @@
             }
         },
         mounted:function(){
+            const t=this;
             this.getData();
+            //如果是显示缩略图，则自动轮播
+            if(t.showThumb){
+                let autoIndex = 0;
+                //3s轮播一次
+                this.time = window.setInterval(()=>{
+                    if(t.realItems&&t.realItems.length>0){
+                        const len = t.realItems.length;
+                        if(autoIndex>=len-1){
+                            autoIndex = 0;
+                        }else{
+                            autoIndex++;
+                        }
+                        const car = t.$refs['bb-carousel'];
+                        //切换幻灯片
+                        car.setActiveItem(autoIndex);
+                    }
+                },t.realOption.interval||3000);
+            }
+        },
+        //销毁前的处理逻辑
+        beforeDestroy:function(){
+            const t=this;
+            if(t.time){
+                window.clearInterval(t.time);
+            }
         },
         methods: {
            //获取动态数据
@@ -141,11 +184,35 @@
                 const newData = JSON.parse(newString);
                 return newData;
             },
+            //缩略图点击事件
+            thumbClick:function(item,index){
+                const t=this;
+                const car = t.$refs['bb-carousel'];
+                //切换幻灯片
+                car.setActiveItem(index);
+            }
         }
     }
 </script>
 
+<style scoped>
+    .bb_thumb{
+        width: 100%;
+        overflow-x: auto;
+    }
+    .bb_thumb_ul{
+        width: 2000px;
+    }
+    .bb_thumb .bb_thumb_ul li{
+        width: 114px;
+        float: left;
+    }
+</style>
 <style lang="less">
+    .show_thumb .el-carousel__indicators.el-carousel__indicators--labels{
+        display: none;
+    }
+
     .bb-carousel{
         .bb-carousel-item{
             display:block;
