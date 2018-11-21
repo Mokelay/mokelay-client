@@ -292,6 +292,10 @@
                 const item = t.realContent[index];
                 t.realContent.splice(index,1);
                 t.realContent.splice(index-1,0,item);
+                top.postMessage({
+                        type:"sort",
+                        data:t.realContent
+                      }, _TY_Root.parentPage.href);
             },
             //下移返回当前的积木数据
             down:function(...params){
@@ -313,6 +317,10 @@
                 const item = t.realContent[index]
                 t.realContent.splice(index,1);
                 t.realContent.splice(index+1,0,item);
+                top.postMessage({
+                        type:"sort",
+                        data:t.realContent
+                      }, _TY_Root.parentPage.href);
             },
             copy:function(...params){
                 const t=this;
@@ -322,6 +330,10 @@
                 const newContent = _TY_Tool.copyContent([contentItem]);
                 t.realContent.splice(index+1, 0,newContent[0]);
                 t.$emit('change',t.realContent);
+                top.postMessage({
+                        type:"copy",
+                        data:t.realContent
+                      }, _TY_Root.parentPage.href);
             },
             //删除返回当前的积木数据
             remove:function(...params){
@@ -340,6 +352,10 @@
                         }
                         t.realContent.splice(index, 1);
                         t.$emit('change',t.realContent);
+                        top.postMessage({
+                            type:"remove",
+                            data:t.realContent
+                        },_TY_Root.parentPage.href);
                     }).catch(() => {
                         t.$message({
                             type: 'info',
@@ -354,6 +370,10 @@
                     }
                     t.realContent.splice(index, 1);
                     t.$emit('change',t.realContent);
+                    top.postMessage({
+                        type:"remove",
+                        data:t.realContent
+                    },_TY_Root.parentPage.href);
                 }
             },
             disableEvent:function(...params){
@@ -381,12 +401,21 @@
                 // //将当前编辑的对象放到全局变量中
                 _TY_Root._TY_Current_Edit_Item = t.realContent[params[0]];
                 t.$emit('onFocus',t.realContent[params[0]],t.nowEdit,t);
+
+                top.postMessage({
+                    type:"onFocus",
+                    data:t.realContent[params[0]]
+                  },_TY_Root.parentPage.href)
             },
             //积木失焦状态
             onBlur:function(){
                 const t = this;
                 t.nowEdit = null;
                 t.$emit('onBlur');
+                top.postMessage({
+                    type:"onBlur",
+                    data:null
+                  },_TY_Root.parentPage.href)
             },
             /*积木新增方法 对外
                 @bbAlias:积木别名
