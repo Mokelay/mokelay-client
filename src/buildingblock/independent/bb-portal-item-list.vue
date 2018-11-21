@@ -17,8 +17,13 @@
     </div>
 </template>
 <script>
+    import bbindepbutton from './bb-indep-button.vue';
+
     export default {
         name: 'bb-portal-item-list',
+        components:{
+            "bb-indep-button":bbindepbutton
+        },
         props: {
             value:{
                 type:String,

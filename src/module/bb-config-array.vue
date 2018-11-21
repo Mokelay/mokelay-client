@@ -10,8 +10,19 @@
 </template>
 
 <script>
+    import bbdialog from '../buildingblock/elementui/bb-dialog.vue';
+    import bbbutton from '../buildingblock/elementui/bb-button.vue';
+    import bblist from '../buildingblock/elementui/bb-list.vue';
+    import bbconfig from './bb-config.vue';
+
     export default {
         name: 'bb-config-array',
+        components:{
+            "bb-dialog":bbdialog,
+            "bb-button":bbbutton,
+            "bb-list":bblist,
+            "bb-config":bbconfig
+        },
         props: {
             value:{
                 type:Array,

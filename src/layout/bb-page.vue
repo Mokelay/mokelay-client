@@ -23,8 +23,20 @@
   import Vue from 'vue';
   var _PBB_PREFIX = "pbb_";
 
+  import bbcustom from '../../run/src/custom/bb-custom.vue';
+  import bblayoutseriation from './bb-layout-seriation.vue';
+  import bblayoutcontainer from './bb-layout-container.vue';
+  import bblayoutcanvas from './bb-layout-canvas.vue';
+
+
   export default {
     name: 'bb-page',
+      components:{
+        "bb-custom":bbcustom,
+          "bb-layout-seriation":bblayoutseriation,
+          "bb-layout-container":bblayoutcontainer,
+          "bb-layout-canvas":bblayoutcanvas
+      },
     render: function (createElement) {
       var pbbElementList = [];
       //处理模板

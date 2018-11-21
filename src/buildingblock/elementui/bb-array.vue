@@ -30,7 +30,18 @@
 </template>
 
 <script>
-import Vue from 'vue';
+    import bbbuttonform from './bb-button-form.vue';
+    import bbbutton from './bb-button.vue';
+
+    import Vue from 'vue';
+    import {
+            Table,
+            TableColumn,
+            Button
+    } from 'element-ui'
+    Vue.use(Table);
+    Vue.use(TableColumn);
+    Vue.use(Button);
 
     export default {
         name: 'bb-array',
@@ -64,6 +75,10 @@ import Vue from 'vue';
                 type:Array
             }
         },
+        components:{
+            "bb-button-form":bbbuttonform,
+            "bb-button":bbbutton
+        },
         data() {
             return {
                 array:typeof(this.value)==='string'?eval(this.value):this.value,
@@ -72,7 +87,8 @@ import Vue from 'vue';
                 index:'add'
             }
         },
-        computed: {},
+        computed: {
+        },
         watch: {
             value: function (val) {
                 if (typeof val === 'object') {

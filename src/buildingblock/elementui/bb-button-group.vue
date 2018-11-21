@@ -15,8 +15,23 @@
 
 <script>
     import Util from '../../libs/util';
+
+    import bbbutton from './bb-button.vue';
+    import bbbadge from './bb-badge.vue';
+
+    import Vue from 'vue';
+    import {
+            ButtonGroup
+    } from 'element-ui'
+    Vue.use(ButtonGroup);
+
+
     export default {
         name: 'bb-button-group',
+        components:{
+            "bb-button":bbbutton,
+            "bb-badge":bbbadge
+        },
         props: {
             /* groupConfig按钮组设置
             {

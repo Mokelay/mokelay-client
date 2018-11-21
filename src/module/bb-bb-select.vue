@@ -5,8 +5,13 @@
 </template>
 
 <script>
+    import bbcascader from '../buildingblock/elementui/bb-cascader.vue';
+
     export default {
         name: 'bb-bb-select',
+        components:{
+            "bb-cascader":bbcascader
+        },
         props: {
             value:{
                 type:[String,Object,Array]

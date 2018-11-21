@@ -72,6 +72,20 @@ fun();`
 
     require('codemirror/mode/javascript/javascript')
     require('codemirror/mode/vue/vue')
+
+    import bbdialog from '../buildingblock/elementui/bb-dialog.vue';
+    import bbselect from '../buildingblock/elementui/bb-select.vue';
+    import bbinput from '../buildingblock/elementui/bb-input.vue';
+    import bbbutton from '../buildingblock/elementui/bb-button.vue';
+    import bblist from '../buildingblock/elementui/bb-list.vue';
+
+    import Vue from 'vue';
+    import {
+            Input,
+            Button
+    } from 'element-ui'
+    Vue.use(Input);
+    Vue.use(Button);
     
     export default {
         name: 'bb-buzz-select',
@@ -81,7 +95,12 @@ fun();`
             }
         },
          components:{
-            "codemirror":codemirror
+            "codemirror":codemirror,
+             "bb-dialog":bbdialog,
+             "bb-select":bbselect,
+             "bb-input":bbinput,
+             "bb-button":bbbutton,
+             "bb-list":bblist
         },
         data() {
             return {

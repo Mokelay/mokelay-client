@@ -5,8 +5,13 @@
 </template>
 
 <script>
+    import bbbuttonarray from '../buildingblock/elementui/bb-button-array.vue';
+
     export default {
         name: 'bb-columns-select',
+        components:{
+            "bb-button-array":bbbuttonarray
+        },
         props: {
             value:{
                 type:[Array,String]

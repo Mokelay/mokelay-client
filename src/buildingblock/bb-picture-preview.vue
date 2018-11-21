@@ -33,8 +33,24 @@
 </template>
 
 <script type="text/ecmascript-6">
+
+    import bbdialog from './elementui/bb-dialog.vue';
+
+    import Vue from 'vue';
+    import {
+            Row,
+            Col,
+            Button
+    } from 'element-ui'
+    Vue.use(Row);
+    Vue.use(Col);
+    Vue.use(Button);
+
     export default {
         name: 'bb-picture-preview',
+        components:{
+            "bb-dialog":bbdialog
+        },
         props: {
             imgList:{
                 type: [Array,String],

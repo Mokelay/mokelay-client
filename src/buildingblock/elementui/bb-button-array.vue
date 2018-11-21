@@ -1,6 +1,16 @@
 <script>
 import Vue from 'vue';
 import Util from '../../libs/util';
+
+import bbdialog from './bb-dialog.vue';
+import bbarray from './bb-array.vue';
+
+import {
+        Button
+} from 'element-ui'
+Vue.use(Button);
+
+
     export default {
         name: 'bb-button-array',
         render: function(createElement){
@@ -9,6 +19,10 @@ import Util from '../../libs/util';
             const buttonEle = createElement('el-button',{props:{type:t.startButtonType,icon:t.startButtonIcon},on:{click:t.setting}},[t.settingText]);
             const button = createElement('span',{class:this.buttonFormClass},[t.arrayDesc,buttonEle]);
             return createElement('span',{},[button,dialog]);
+        },
+        components: {
+            "bb-dialog":bbdialog,
+            "bb-array":bbarray
         },
         props: {
             value:{

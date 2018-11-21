@@ -17,8 +17,21 @@
     </div>
 </template>
 <script>
+    import bbview from './bb-view.vue';
+    import bbpagination from './bb-pagination.vue';
+
+    import Vue from 'vue';
+    import {
+            Row
+    } from 'element-ui'
+    Vue.use(Row);
+
     export default {
         name: 'bb-view-group',
+        components:{
+            "bb-view":bbview,
+            "bb-pagination":bbpagination
+        },
         props: {
             /*静态表单项
                 [{

@@ -30,6 +30,18 @@
 
 <script>
     import Vue from 'vue';
+    import {
+            ButtonGroup,
+            Button,
+            Table,
+            TableColumn
+    } from 'element-ui'
+    Vue.use(ButtonGroup);
+    Vue.use(Button);
+    Vue.use(Table);
+    Vue.use(TableColumn);
+
+
     export default {
         name: 'bb-editor-array',
         props: {

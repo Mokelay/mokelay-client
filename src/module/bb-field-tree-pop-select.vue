@@ -17,6 +17,17 @@
 
 <script>
     import bbFieldTreeSelect from "./bb-field-tree-select";
+
+    import Vue from 'vue';
+    import {
+            Input,
+            Popover,
+            Button
+    } from 'element-ui'
+    Vue.use(Input);
+    Vue.use(Popover);
+    Vue.use(Button);
+
     export default {
         name: 'bb-field-tree-pop-select',
         components: {

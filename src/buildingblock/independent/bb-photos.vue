@@ -27,8 +27,14 @@
 </template>
 
 <script>
+
+    import bbindepdialog from './bb-indep-dialog.vue';
+
     export default {
         name: 'bb-photos',
+        components:{
+            "bb-indep-dialog":bbindepdialog
+        },
         props: {
             /*  默认值 
                 [https://a.jpg,https://b.jpg]

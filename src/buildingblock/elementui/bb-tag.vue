@@ -31,6 +31,16 @@
 
 <script>
 
+    import Vue from 'vue';
+    import {
+            Tooltip,
+            Input,
+            Tag
+    } from 'element-ui'
+    Vue.use(Tooltip);
+    Vue.use(Input);
+    Vue.use(Tag);
+
     export default {
         name: 'bb-tag',
         props: {

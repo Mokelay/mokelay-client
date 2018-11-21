@@ -23,6 +23,12 @@
 
 <script>
 
+    import Vue from 'vue';
+    import {
+            Slider
+    } from 'element-ui'
+    Vue.use(Slider);
+
     export default {
         name: 'bb-slider',
         props: {

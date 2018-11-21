@@ -18,6 +18,18 @@
 </template>
 
 <script>
+    import bbbutton from './bb-button.vue';
+
+    import Vue from 'vue';
+    import {
+            Dropdown,
+            DropdownMenu,
+            DropdownItem
+    } from 'element-ui'
+    Vue.use(Dropdown);
+    Vue.use(DropdownMenu);
+    Vue.use(DropdownItem);
+
     export default {
         name: 'bb-dropdown',
         props: {

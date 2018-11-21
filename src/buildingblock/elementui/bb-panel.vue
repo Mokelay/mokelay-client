@@ -10,8 +10,22 @@
     </el-card>
 </template>
 <script>
+
+    import bblayoutseriation from '../../layout/bb-layout-seriation.vue';
+
+    import Vue from 'vue';
+    import {
+            Card,
+            Button
+    } from 'element-ui'
+    Vue.use(Card);
+    Vue.use(Button);
+
     export default {
         name: 'bb-panel',
+        components:{
+            "bb-layout-seriation":bblayoutseriation
+        },
         props: {
             /*面板标题
                 layoutObject:{

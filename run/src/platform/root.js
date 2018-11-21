@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import ElementUI from 'element-ui';
+// import ElementUI from 'element-ui';
 
 export default {
 	init: function() {
 		console.log("开始初始化TY Root内核...");
 		//初始化基础组件
 		Vue.use(VueRouter);
-		Vue.use(ElementUI);
+		// Vue.use(ElementUI);
 
 		// 路由配置
 		const router = new VueRouter({

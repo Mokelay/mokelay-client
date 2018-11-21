@@ -30,6 +30,14 @@
 <script>
     import Util from '../../libs/util';
 
+    import Vue from 'vue';
+    import {
+            DatePicker,
+            TimePicker
+    } from 'element-ui'
+    Vue.use(DatePicker);
+    Vue.use(TimePicker);
+
     export default {
         name: 'bb-date-picker',
         props: {

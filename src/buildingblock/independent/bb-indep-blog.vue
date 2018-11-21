@@ -31,11 +31,15 @@
 
   </div>
 </template>
-<script>  
+<script>
 
+	import bblayoutseriation from '../../layout/bb-layout-seriation.vue';
 
 export default {
     name:"bb-indep-blog",
+	components:{
+    	"bb-layout-seriation":bblayoutseriation
+	},
     props:{
     	
 

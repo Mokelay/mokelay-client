@@ -11,8 +11,15 @@
 </template>
 
 <script>
+    import bbindepbutton from './bb-indep-button.vue';
+    import bblayoutseriationedit from '../../layout/bb-layout-seriation-edit.vue';
+
     export default {
         name: 'bb-h5-config',
+        components:{
+            "bb-indep-button":bbindepbutton,
+            "bb-layout-seriation-edit":bblayoutseriationedit
+        },
         props: {
             /*支持v-model 
                 value:{

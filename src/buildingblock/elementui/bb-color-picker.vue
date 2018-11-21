@@ -5,6 +5,12 @@
 <script>
     import Util from '../../libs/util';
 
+    import Vue from 'vue';
+    import {
+            ColorPicker
+    } from 'element-ui'
+    Vue.use(ColorPicker);
+
     export default {
         name: 'bb-color-picker',
         props: {

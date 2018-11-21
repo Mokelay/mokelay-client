@@ -33,6 +33,19 @@
 </template>
 
 <script>
+
+    import Vue from 'vue';
+    import {
+            Row,
+            Col,
+            Input,
+            Button
+    } from 'element-ui'
+    Vue.use(Row);
+    Vue.use(Col);
+    Vue.use(Input);
+    Vue.use(Button);
+
     export default {
         name: 'ty-login',
         components: {},

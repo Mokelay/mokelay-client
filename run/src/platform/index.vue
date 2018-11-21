@@ -41,6 +41,20 @@
 <script>
     import bbmenu from '../../../src/buildingblock/elementui/bb-menu';
 
+    import Vue from 'vue';
+    import {
+            Row,
+            Col,
+            Dropdown,
+            DropdownMenu,
+            DropdownItem
+    } from 'element-ui'
+    Vue.use(Row);
+    Vue.use(Col);
+    Vue.use(Dropdown);
+    Vue.use(DropdownMenu);
+    Vue.use(DropdownItem);
+
     export default {
         name: 'ty_index',
         components: {

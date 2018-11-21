@@ -8,6 +8,15 @@
 </template>
 
 <script>
+
+    import Vue from 'vue';
+    import {
+            Breadcrumb,
+            BreadcrumbItem
+    } from 'element-ui'
+    Vue.use(Breadcrumb);
+    Vue.use(BreadcrumbItem);
+
     export default {
         name: 'bb-breadcrumb',
         props: {

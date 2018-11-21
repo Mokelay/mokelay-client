@@ -1,5 +1,23 @@
 <script>
     import Util from '../../libs/util';
+
+    import bbbutton from './bb-button.vue';
+    import bbformitem from './bb-form-item.vue';
+
+    import Vue from 'vue';
+    import {
+            Form,
+            FormItem,
+            Collapse,
+            CollapseItem,
+            Button
+    } from 'element-ui'
+    Vue.use(Form);
+    Vue.use(FormItem);
+    Vue.use(Collapse);
+    Vue.use(CollapseItem);
+    Vue.use(Button);
+
     export default {
         name: 'bb-form',
         render: function (createElement) {
@@ -21,6 +39,10 @@
                 _form = newForm; 
             }
             return _form;
+        },
+        components:{
+            "bb-button":bbbutton,
+            "bb-form-item":bbformitem
         },
         props: {
             //不在使用，被content代替

@@ -19,8 +19,24 @@
 </template>
 
 <script>
+
+    import bbdialog from '../buildingblock/elementui/bb-dialog.vue';
+    import bbform from '../buildingblock/elementui/bb-form.vue';
+    import bbbutton from '../buildingblock/elementui/bb-button.vue';
+
+    import Vue from 'vue';
+    import {
+            Button
+    } from 'element-ui'
+    Vue.use(Button);
+
     export default {
         name: 'bb-button-attribute-config',
+        components:{
+            "bb-dialog":bbdialog,
+            "bb-form":bbform,
+            "bb-button":bbbutton
+        },
         props: {
             value:{
                 type:[Object,String],

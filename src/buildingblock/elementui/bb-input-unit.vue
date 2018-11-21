@@ -13,6 +13,15 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+    import {
+            InputNumber,
+            Option,
+            Select
+    } from 'element-ui'
+    Vue.use(InputNumber);
+    Vue.use(Select);
+    Vue.use(Option);
 
     export default {
         name: 'bb-input-unit',

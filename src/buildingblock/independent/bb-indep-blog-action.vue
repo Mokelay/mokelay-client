@@ -46,11 +46,14 @@
   	</div>  	
 
 </template>
-<script>  
-
+<script>
+	import bbindepshare from './bb-indep-share.vue';
 
 export default {
     name:"bb-indep-blog-action",
+	components:{
+    	"bb-indep-share":bbindepshare
+	},
     props:{
     	
     	blogData:{

@@ -29,10 +29,28 @@
 </template>
 
 <script>
+
+    import bbcascader from '../buildingblock/elementui/bb-cascader.vue';
+    import bbtextarea from '../buildingblock/elementui/bb-textarea.vue';
+    import bbcollapse from '../buildingblock/elementui/bb-collapse.vue';
+
+    import Vue from 'vue';
+    import {
+            Tabs,
+            TabPane
+    } from 'element-ui'
+    Vue.use(Tabs);
+    Vue.use(TabPane);
+
     const IOFT = ['common', 'read', 'create', 'update', 'condition', 'cache', 'memory','unstructured']
 
     export default {
         name: 'bb-apilego-config',
+        components:{
+           "bb-cascader":bbcascader,
+            "bb-textarea":bbtextarea,
+            "bb-collapse":bbcollapse
+        },
         props: {
             activeName: {
                 type: String,

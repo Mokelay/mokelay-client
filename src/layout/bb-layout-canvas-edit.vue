@@ -86,6 +86,8 @@
     import Vue from 'vue';
     import '../css/iconfont/rotatefont.css';
 
+    import bblayoutcanvas from './bb-layout-canvas.vue';
+
     Vue.directive('dragRotate', {
             bind: function (el, binding) {
                 let rotateX = 0;
@@ -277,6 +279,9 @@
 
     export default {
         name: 'bb-layout-canvas-edit',
+        components:{
+            "bb-layout-canvas":bblayoutcanvas
+        },
         props: {
             content: {
                 type: Array,

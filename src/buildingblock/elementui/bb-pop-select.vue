@@ -37,8 +37,20 @@
 </template>
 
 <script>
+    import bbbutton from './bb-button.vue';
+    import bbdialog from './bb-dialog.vue';
+    import bblist from './bb-list.vue';
+
+    import bbwords from '../independent/bb-words.vue';
+
     export default {
         name: 'bb-pop-select',
+        components:{
+            "bb-button":bbbutton,
+            "bb-dialog":bbdialog,
+            "bb-list":bblist,
+            "bb-words":bbwords
+        },
         props: {
             /*支持v-model*/
             value:{

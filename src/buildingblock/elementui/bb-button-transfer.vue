@@ -23,8 +23,23 @@
 
 <script>
 
+    import bbtransfer from './bb-transfer.vue';
+
+    import Vue from 'vue';
+    import {
+            Popover,
+            Input,
+            Button
+    } from 'element-ui'
+    Vue.use(Popover);
+    Vue.use(Input);
+    Vue.use(Button);
+
     export default {
         name: 'bb-button-transfer',
+        components:{
+            "bb-transfer":bbtransfer
+        },
         props: {
             value: {
                 type: [String, Number]

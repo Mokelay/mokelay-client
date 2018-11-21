@@ -37,8 +37,22 @@
 <script>
     import Util from '../../libs/util.js'
 
+    import bbtree from './bb-tree.vue';
+    import Vue from 'vue';
+    import {
+            Input,
+            Popover,
+            Button
+    } from 'element-ui'
+    Vue.use(Input);
+    Vue.use(Popover);
+    Vue.use(Button);
+
     export default {
         name: 'bb-tree-select',
+        components:{
+            "bb-tree":bbtree
+        },
         props: {
             value: {
                 type: [String, Number]

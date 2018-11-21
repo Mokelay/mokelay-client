@@ -32,6 +32,18 @@
         }]
     }
 **/
+
+
+    import Vue from 'vue';
+    import {
+            Collapse,
+            CollapseItem,
+            Checkbox
+    } from 'element-ui'
+    Vue.use(Collapse);
+    Vue.use(CollapseItem);
+    Vue.use(Checkbox);
+
     export default {
         name: 'bb-collapse',
         render: function (createElement) {
