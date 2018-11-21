@@ -24,7 +24,136 @@
       ds:[],
       content:[]
     }
-  */
+
+
+
+
+  支持iframe 区域编辑：
+
+    /*配置层与iframe之间的交互逻辑
+    渲染逻辑
+      1.子页面渲染完毕  遍历所有积木的宽高 并 通过 postMessage 给到父级页面
+      2.父页面bb-page-edit 读取积木的宽高并渲染编辑框到相应位置
+
+    //渲染编辑框
+    message={
+      type:"layout",
+      data:[{
+        uuid:123,
+        alias:"bb-input",
+        editLayout:{  //编辑框的布局样式
+          width:100,
+          height:100
+        }
+      }]
+    }
+
+    交互逻辑 
+      1.父页面bb-page-edit 捕获编辑动作 通过 document.getElementById('iframe').contentWindow.postMessage(message, "http://ty.dev.rs.com:8080/#/home_ln"),通知 子页面更新
+      2.子页面在bb-page中 添加对postMessage的监听 接收并更新被编辑积木
+
+    积木添加
+    message = {
+      type:"add",
+      data:"bbAlias"
+    }
+
+    积木删除
+    message = {
+      type:"remove",
+      data:{ //当前被删除积木的content
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      } 
+    }
+
+    积木排序
+    message = {
+      type:"sort",
+      data:[{ //排序后页面的contents
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      }]
+    }
+
+    积木编辑
+    message = {
+      type:"change",
+      data:{   //当前被编辑积木的content
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      } 
+    }
+
+    积木聚焦
+    message = {
+      type:"onFocus",
+      data:{   //当前被编辑积木的content
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      } 
+    }
+
+    积木失焦
+    message = {
+      type:"onBlur",
+      data:{   //当前被编辑积木的content
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      } 
+    }
+
+    积木复制
+    message = {
+      type:"copy",
+      data:[{   //当前被编辑积木的content
+        uuid: '',
+        alias: 'bb-layout-canvas', //布局类积木 || 普通积木
+        aliasName: '自由式布局', //中文名称
+        attributes: {}, //积木属性
+        animation: [{ //动画
+        }],
+        interactives: [{ //触发交互
+        }],
+        layout: {} //积木布局
+      }]
+    }
+*/
   import Util from '../libs/util';
   import Vue from 'vue';
   var _PBB_PREFIX = "pbb_";
@@ -32,6 +161,14 @@
   export default {
     name: 'bb-page-edit',
     render: function (createElement) {
+      //如果有嵌套页面地址 则 按iframe渲染  否则正常渲染
+      if(this.iframeSrc){
+        return createElement('bb-indep-iframe',{props:{src:this.realIframeSrc},on:{
+          onFocus:this.onFocus,
+          onBlur:this.onBlur,
+          change:this.change
+        }},[]);
+      }
       var pbbElementList = [];
       //处理模板
       if(this.templatePageAlias){
@@ -114,7 +251,7 @@
         layout:cssStyle
       };
       const pageStyle = _TY_Tool.setStyle(pageBB,this);
-      return createElement('div',{style:pageStyle},pbbElementList);
+      return createElement('div',{style:pageStyle},[pbbElementList]);
     },
     props: {
       root:{
@@ -136,6 +273,11 @@
       },
       params:{
         type:[String,Object,Array]
+      },
+      //嵌套页面地址  不填写则按正常积木渲染
+      iframeSrc:{
+        type:String,
+        default:`http://localhost:5000/#/ty-bb-config-iframe?pageAlias=<%=bb.$route.query.pageAlias%>`
       }
     },
     data() {
@@ -146,7 +288,8 @@
         layoutObject:null,
         content:null,
         ds:null,
-        platform:''//页面所属平台
+        platform:'',//页面所属平台
+        realIframeSrc:_TY_Tool.tpl(this.iframeSrc, _TY_Tool.buildTplParams(this))
       };
     },
     watch:{
@@ -179,7 +322,11 @@
       this.loadData();
     },
     mounted:function(){
-      this.$emit('mounted',this);
+      const t = this;
+      t.$emit('mounted',t);
+      window.addEventListener('message',function(e){
+        t.doMessage(e);
+      },false);
     },
     destroyed:function(){
 
@@ -431,6 +578,10 @@
                 if(t.layoutType == 'canvas'){
                   newBB.layout = layout;
                 }
+                document.getElementById('child').contentWindow.postMessage({
+                  type:"add",
+                  data:newBB
+                }, t.realIframeSrc);
                 t.content = t.content?t.content:[];
                 t.content.push(newBB);
                 //返回新的积木数组
@@ -464,6 +615,11 @@
           t.content = newContent;
           t.$emit('afterEdit',t.content);
           t.$emit('change',t.content);
+          t.postMessageFn("change",contentItem);
+          document.getElementById('child').contentWindow.postMessage({
+            type:"change",
+            data:contentItem
+          }, 'http://localhost:5000/#/wmj-h5');
       },
       //提交当前页面配置
       updatePage:function(){
@@ -484,7 +640,15 @@
       change:function(content){
         const t = this;
         t.key = _TY_Tool.uuid(16);
-        t.content = content;
+        if(Array.isArray(content)){
+          t.content = content;
+        }else{
+          t.content.forEach((ele,key)=>{
+            if(ele.uuid == content.uuid){
+              t.$set(t.content,key,content)
+            }
+          })
+        }
         t.$emit('change',t.content);
       },
       //初始化Window相关业务
@@ -569,8 +733,37 @@
         }else{
           history.back(-1);
         }
+      },
+      postMessageFn:function(type,data){
+        const t = this;
+        document.getElementById('child').contentWindow.postMessage({
+          type:type,
+          data:data
+        }, t.realIframeSrc);
+      },
+      doMessage(e){
+        const t =this;
+        const data = e.data;
+        switch(data.type){
+          case "change":
+            t.change(data.data);
+            break;
+           case "add":
+            t.$set(t.content,t.content.length,data.data);
+            // t.add(data.data);
+            break;
+          case "sort":
+            t.change(data.data);
+            break;
+          case "remove":
+            t.change(data.data);
+            break;
+          case "parentPage":
+            _TY_Root.parentPage = data.data
+            break;
+        }
       }
-    }
+    },
   }
 </script>
 <style scoped>
