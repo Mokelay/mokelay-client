@@ -162,18 +162,20 @@
   import bblayoutseriationedit from './bb-layout-seriation-edit.vue';
   import bblayoutcontaineredit from './bb-layout-container-edit.vue';
   import bblayoutcanvasedit from './bb-layout-canvas-edit.vue';
+  import bbindepiframe from '../buildingblock/independent/bb-indep-iframe.vue';
 
   export default {
     name: 'bb-page-edit',
-      components:{
-          "bb-custom":bbcustom,
-          "bb-layout-seriation-edit":bblayoutseriationedit,
-          "bb-layout-container-edit":bblayoutcontaineredit,
-          "bb-layout-canvas-edit":bblayoutcanvasedit
-      },
+    components:{
+        "bb-custom":bbcustom,
+        "bb-layout-seriation-edit":bblayoutseriationedit,
+        "bb-layout-container-edit":bblayoutcontaineredit,
+        "bb-layout-canvas-edit":bblayoutcanvasedit,
+        "bb-indep-iframe":bbindepiframe
+    },
     render: function (createElement) {
       //如果有嵌套页面地址 则 按iframe渲染  否则正常渲染
-      if(this.iframeSrc){
+      if(this.realIframeSrc){
         return createElement('bb-indep-iframe',{props:{src:this.realIframeSrc},on:{
           onFocus:this.onFocus,
           onBlur:this.onBlur,
@@ -288,7 +290,7 @@
       //嵌套页面地址  不填写则按正常积木渲染
       iframeSrc:{
         type:String,
-        default:`http://localhost:5000/#/ty-bb-config-iframe?pageAlias=<%=bb.$route.query.pageAlias%>`
+        default:`http://ty.saiyachina.com/#/ty-bb-config-iframe?pageAlias=<%=bb.$route.query.pageAlias%>`
       }
     },
     data() {
