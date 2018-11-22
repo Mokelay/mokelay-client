@@ -50,13 +50,15 @@
 				const t = this;
 				const iframe = document.getElementById('child');
 				iframe.onload = function(){
-					iframe.contentWindow.postMessage({
-			            type:"parentPage",
-			            data:{
-			            	href:window.location.href
-			            }
-			         	}, t.realSrc);  
-					}
+					setTimeout(()=>{
+						iframe.contentWindow.postMessage({
+				            type:"parentPage",
+				            data:{
+				            	href:window.location.href
+				            }
+				         }, t.realSrc); 
+					},500); 
+				}
 			}
 		},
 	}

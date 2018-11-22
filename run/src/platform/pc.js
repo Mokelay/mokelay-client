@@ -10,7 +10,7 @@ import bbcustom from '../custom/bb-custom';
 Vue.component('bb-custom', bbcustom);
 
 //引用TY核心
-import TY from '../../../src';
+import TY from '../../../src/pc.js';
 Vue.use(TY);
 
 //注册项目BB
