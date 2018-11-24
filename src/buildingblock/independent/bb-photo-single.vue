@@ -104,5 +104,8 @@
             width: 100%;
             height: 100%;
         }
+        img[src=""]{
+            opacity: 0;
+        }
     }
 </style>
