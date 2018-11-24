@@ -7,6 +7,7 @@ import bbrelationchart from './bb-relation-chart';
 // import bbmap from './map/bb-map.vue';
 import bbcalendar from './bb-calendar/bb-calendar';
 import bbpdf from './bb-pdf/bb-pdf';
+import bbeditormobile from './bb-editor-mobile/bb-editor-mobile.vue';
 
 export default {
 	install: function(Vue) {
@@ -18,6 +19,7 @@ export default {
 		// Vue.component('bb-map', bbmap);
 		Vue.component('bb-calendar', bbcalendar);
 		Vue.component('bb-pdf', bbpdf);
+		Vue.component('bb-editor-mobile', bbeditormobile);
 
 		console.log("成功加载Vendor类库积木;");
 	}
