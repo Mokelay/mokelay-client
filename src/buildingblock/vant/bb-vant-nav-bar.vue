@@ -117,7 +117,7 @@ export default {
               bar__right_icon.style.color = t.color.rightIcon;
             }
             if(bar__right_text){
-              bar__right_text.color = t.color.rightText;
+              bar__right_text.style.color = t.color.rightText;
             }
           }
         }    
