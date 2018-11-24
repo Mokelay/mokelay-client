@@ -175,7 +175,7 @@
     },
     render: function (createElement) {
       //如果有嵌套页面地址 则 按iframe渲染  否则正常渲染
-      if(this.realIframeSrc){
+      if(this.realIframeSrc && this.realIframeSrc != window.location.href){
         return createElement('bb-indep-iframe',{props:{src:this.realIframeSrc},on:{
           onFocus:this.onFocus,
           onBlur:this.onBlur,
@@ -290,7 +290,7 @@
       //嵌套页面地址  不填写则按正常积木渲染
       iframeSrc:{
         type:String,
-        default:`http://ty.saiyachina.com/#/ty-bb-config-iframe?pageAlias=<%=bb.$route.query.pageAlias%>`
+        default:`${window.location.origin}/#/ty-bb-config-iframe?pageAlias=<%=bb.$route.query.pageAlias%>`
       }
     },
     data() {
