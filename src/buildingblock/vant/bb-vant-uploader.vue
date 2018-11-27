@@ -231,8 +231,8 @@ export default {
         const vantUpload = createElement('vant-uploader',{props:{
             "resultType":t.resultType,
             "accept":t.accept,
-            "disabled":t.disabled,      
-            "maxSize":t.maxSizet,
+            "disabled":t.disabled,
+            "maxSize":t.maxSize,
             "before-read":t.beforeRead,
             "after-read":t.afterRead,
         },on:{

@@ -150,7 +150,8 @@
         },
         data() {
             return {
-                content:this.value || ""
+                content:_TY_Tool.tpl(this.value, _TY_Tool.buildTplParams(this)) || "",
+                valueBase:_TY_Tool.tpl(this.value, _TY_Tool.buildTplParams(this)) || "",
             };
         },
         watch: {},
@@ -179,8 +180,9 @@
             },
             //更新数据
             updateData(val){
-                this.$eimt("change",val);
-                this.$eimt("input",val);
+                this.$emit("change",val);
+                this.$emit("input",val);
+                this.valueBase = val;
             }
         }
     }
