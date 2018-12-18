@@ -88,7 +88,7 @@
 					width:"0%"
 				},
 				total:50,
-				progressTotal:this.total*this.percentage || 25,
+				progressTotal:this.total*this.percentage || 0,
 				progressOpacity:0
 
 			};
