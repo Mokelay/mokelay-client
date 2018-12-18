@@ -14,7 +14,6 @@ import 'vant/lib/steps/style';
         render: function (createElement) {
             const t = this;
             //当可以渲染的时候才能渲染
-            const popupContent = _TY_Tool.bbRender(t.realContent, createElement, t);
             const steps = {};
             t.content.forEach((ele,key)=>{
                 steps[ele.group] = steps[ele.group]?steps[ele.group]:[];
@@ -121,7 +120,7 @@ import 'vant/lib/steps/style';
         },
         watch:{
             value:function(val){
-                this.valueBase = _TY_Tool.tpl(val, _TY_Tool.buildTplParams(this))
+                this.valueBase = _TY_Tool.tpl(val, _TY_Tool.buildTplParams(this));
             }
         },
         mounted(){
