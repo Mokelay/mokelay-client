@@ -1,2 +1,2 @@
-# ty-client-core
-TY Client For Core
+# mokelay-core
+Mokelay Client For Core
